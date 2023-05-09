@@ -3,7 +3,7 @@ import "../../Style/Card.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { motion, AnimateSharedLayout } from "framer-motion";
-import { FaRegCalendarTimes } from "@react-icons/all-files/fa/FaRegCalendarTimes";
+import { MdCancel } from "@react-icons/all-files/md/MdCancel";
 import Chart from "react-apexcharts";
 
 // parent Card
@@ -113,7 +113,7 @@ function ExpandedCard({ param, setExpanded }) {
       layoutId="expandableCard"
     >
       <div style={{ alignSelf: "flex-end", cursor: "pointer", color: "white" }}>
-        <FaRegCalendarTimes onClick={setExpanded} />
+        <MdCancel onClick={setExpanded} />
       </div>
         <span>{param.title}</span>
       <div className="chartContainer">

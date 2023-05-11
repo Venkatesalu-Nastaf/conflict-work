@@ -50,7 +50,7 @@
     transition: all 300ms ease;
     border-radius: 0.7rem;
     font-size: 18px;
-    color: rgb(54, 54, 54);
+    color: rgb(253, 251, 251);
     font-weight: 600;
 }
 
@@ -74,6 +74,9 @@
     height: 100%;
     background: var(--pink);
     margin-right: calc(1rem - 8px);
+  }
+  .bars{
+
   }
   
 /* Tablets */

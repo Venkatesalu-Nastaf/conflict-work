@@ -37,7 +37,7 @@ const Login = () => {
     // setsuccessMessage('Successfully Validated');
     if (input.username !== 'admin@gmail.com' || input.password !== 'Admin@321') return seterrorMessage('Invalid user id');
 
-    navigate("/");
+    navigate("/home/dashboard");
     localStorage.setItem('auth', true)
 
   }

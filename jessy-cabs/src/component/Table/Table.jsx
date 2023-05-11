@@ -13,10 +13,12 @@ function createData(name, trackingId, date, status) {
 }
 
 const rows = [
-  createData("Lasania Chiken Fri", 18908424, "2 March 2022", "Approved"),
-  createData("Big Baza Bang ", 18908424, "2 March 2022", "Pending"),
-  createData("Mouth Freshner", 18908424, "2 March 2022", "Approved"),
-  createData("Cupcake", 18908421, "2 March 2022", "Delivered"),
+  createData("thiru", 18908424, "2 March 2022", "Approved"),
+  createData("muthu ", 18908424, "2 March 2022", "Pending"),
+  createData("presanth", 18908424, "2 March 2022", "Approved"),
+  createData("navin ", 18908421, "2 March 2022", "Delivered"),
+  createData("navin ", 18908421, "2 March 2022", "Delivered"),
+  createData("navin ", 18908421, "2 March 2022", "Delivered"),
 ];
 
 
@@ -53,7 +55,7 @@ export default function BasicTable() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Product</TableCell>
+                <TableCell>Driver</TableCell>
                 <TableCell align="left">Tracking ID</TableCell>
                 <TableCell align="left">Date</TableCell>
                 <TableCell align="left">Status</TableCell>

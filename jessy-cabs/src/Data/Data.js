@@ -14,7 +14,7 @@ export const Sidebardata = [
     {
         icon:BiHomeAlt,
         heading:"Dashboard",
-        key:'/home/dashboard/',
+        key:'/home/dashboard',
     },
     {
         icon:BiNotepad,

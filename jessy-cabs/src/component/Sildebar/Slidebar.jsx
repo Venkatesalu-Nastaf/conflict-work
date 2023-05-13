@@ -1,7 +1,7 @@
 // import React from 'react';
 import React, { useState } from "react";
 import "../../Style/Sidebar.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Logo from "../../assets/img/logo.png";
 import { Sidebardata } from "../../Data/Data";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
@@ -31,7 +31,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [logout, setlogout] = useState(false);
   React.useEffect(() => {
-    if (!localStorage.getItem("auth")) navigate("/login");
+    if (!localStorage.getItem("auth")) navigate("/");
   }, [logout]);
 
   const logouHandler = (e) => {
@@ -62,15 +62,16 @@ const Sidebar = () => {
         <div className="menu">
           {Sidebardata.map((item, index) => {
             return (
-              <div
+              <Link
                 className={selected === index ? "menuItem active" : "menuItem"}
                 key={item.key}
+                to={item.key}
                 onClick={() => main(index, item.key)}
                 // onClick={() => setSelected(index)}
               >
                 <item.icon />
                 <span>{item.heading}</span>
-              </div>
+              </Link>
             );
           })}
           {/* signoutIcon */}

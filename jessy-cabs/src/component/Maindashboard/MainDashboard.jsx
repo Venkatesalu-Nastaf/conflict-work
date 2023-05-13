@@ -1,8 +1,7 @@
 import React from "react";
-import "../Style/dashboard.css";
-import Sidebar from "./Sildebar/Slidebar";
-import Rightside from "./RightSide/RightSide";
-// import MainDash from "./MainDash/MainDash";
+import "./dashboard.css";
+import Sidebar from "../Sildebar/Slidebar";
+import Rightside from "../RightSide/RightSide";
 import { Outlet } from "react-router-dom";
 
 const MainDashboard = () => {
@@ -15,6 +14,7 @@ const MainDashboard = () => {
             <Outlet />
             {/* <MainDash /> */}
           </div>
+          
           <Rightside />
         </div>
       </section>

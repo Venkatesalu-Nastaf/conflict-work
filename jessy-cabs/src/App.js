@@ -1,8 +1,9 @@
 import React from "react";
 import Login from "./component/form/LoginForm";
 import { Route, Routes } from "react-router-dom";
-import MainDashboard from "./component/MainDashboard";
 import MainDash from "./component/MainDash/MainDash";
+import Orders from "./component/Orders/Orders";
+import MainDashboard from "./component/Maindashboard/MainDashboard";
 
 function App() {
   return (
@@ -11,7 +12,12 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<MainDashboard />}>
           <Route path="/home/dashboard" element={<MainDash />} />
-          <Route path="/home/orders" element={<h1>Orders</h1>} />
+          <Route path="/home/orders" element={<Orders />}>
+            <Route path="/home/orders/customer" element={<h1>custmer</h1>} />
+            <Route path="/home/orders/supplier" element={<h1>supplier</h1>} />
+            <Route path="/home/orders/booking" element={<h1>booking</h1>} />
+            <Route path="/home/orders/tripsheet" element={<h1>custmer</h1>} />
+          </Route>
           <Route path="/home/customers" element={<h1>Customers</h1>} />
           <Route path="/home/products" element={<h1>Producs</h1>} />
           <Route path="/home/chart" element={<h1>Charts</h1>} />

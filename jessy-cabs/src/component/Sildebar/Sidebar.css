@@ -76,9 +76,6 @@
   background: var(--pink);
   margin-right: calc(1rem - 8px);
 }
-.bars {
-}
-
 /* Tablets */
 @media screen and (max-width: 1200px) {
   .menuItem > span {

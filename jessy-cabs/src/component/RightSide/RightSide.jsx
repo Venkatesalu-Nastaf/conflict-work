@@ -1,7 +1,7 @@
 import React from "react";
 import CustomerReview from "../CustomerReview/CustomerReview";
 import Updates from "../Updates/Updates";
-import "../../Style/RightSide.css";
+import "./RightSide.css";
 
 const RightSide = () => {
   return (

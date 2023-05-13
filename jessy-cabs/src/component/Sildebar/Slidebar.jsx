@@ -1,6 +1,5 @@
-// import React from 'react';
 import React, { useState } from "react";
-import "../../Style/Sidebar.css";
+import "./Sidebar.css";
 import { useNavigate, Link } from "react-router-dom";
 import Logo from "../../assets/img/logo.png";
 import { Sidebardata } from "../../Data/Data";
@@ -67,14 +66,12 @@ const Sidebar = () => {
                 key={item.key}
                 to={item.key}
                 onClick={() => main(index, item.key)}
-                // onClick={() => setSelected(index)}
               >
                 <item.icon />
                 <span>{item.heading}</span>
               </Link>
             );
           })}
-          {/* signoutIcon */}
           <div className="menuItem">
             <FiLogOut onClick={logouHandler} />
           </div>

@@ -1,8 +1,7 @@
 import React from "react";
-import "../../Style/MainDash.css";
+import "./MainDash.css";
 import Cards from "../Cards/Cards";
 import Table from "../Table/Table";
-// import { Outlet } from "react-router-dom";
 
 const MainDash = () => {
   return (

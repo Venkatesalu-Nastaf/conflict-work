@@ -1,5 +1,5 @@
 import React from "react";
-import "../../Style/Update.css"
+import "./Update.css"
 import { CgProfile } from "@react-icons/all-files/cg/CgProfile";
 import { UpdatesData } from "../../Data/Data.js";
 

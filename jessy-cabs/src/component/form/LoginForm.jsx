@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { emailValidator, passwordValidator } from "../regexValidator";
-import "../../Style/Form.css";
+import { emailValidator, passwordValidator } from "./regexValidator";
+import "./Form.css";
 import portalimg from "../../assets/img/portal-img.jpg";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";

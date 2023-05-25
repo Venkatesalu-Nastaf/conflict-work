@@ -40,7 +40,7 @@ export const Sidebardata = [
   {
     icon: BiBarChartSquare,
     heading: "settings",
-    key: "/home/chart",
+    key: "/home/settings",
   },
 ];
 

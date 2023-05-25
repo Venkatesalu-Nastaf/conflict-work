@@ -1,0 +1,99 @@
+.form-container .Title-Name {
+  font-size: 20px;
+  font-weight: 500;
+}
+.form-container {
+  display: flex;
+  border-radius: 10px;
+}
+.form-container form::-webkit-scrollbar {
+  width: 5px;
+  height: 1px;
+  overflow-x: hidden;
+}
+
+.form-container form::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.form-container form::-webkit-scrollbar-thumb {
+  background-color: rgb(217, 212, 212);
+  outline: 1px solid slategrey;
+}
+.form-container form {
+  height: 400px;
+  overflow: scroll;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 10px;
+  color: #000;
+  background-color: var(--glass);
+}
+.input-field {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.input-field .input {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+.input-field .radio {
+  font-size: 20px !important;
+}
+.checkbox {
+  color: rgb(69, 62, 62);
+  margin-top: 10px;
+}
+.css-1hbvpl3-MuiSvgIcon-root {
+  height: 18px !important;
+}
+.css-ahj2mt-MuiTypography-root {
+  font-size: 13px !important;
+}
+.input-field .input option {
+  text-transform: uppercase;
+}
+.input-field .input .icone {
+  padding: 15px 10px 0px;
+}
+.select-field {
+  border: #000;
+}
+
+/* TextBox */
+.textbox {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+}
+.textbox .textboxlist,
+.textboxupdate p::-webkit-scrollbar {
+  width: 5px;
+  height: 1px;
+  overflow-x: hidden;
+}
+.textbox .textboxlist,
+.textboxupdate p::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.textbox .textboxlist,
+.textboxupdate p::-webkit-scrollbar-thumb {
+  background-color: rgb(217, 212, 212);
+  outline: 1px solid slategrey;
+}
+.textbox .textboxlist,
+.textboxupdate p {
+  border-radius: 5px;
+  color: #3d3b3b;
+  padding: 5px;
+  font-weight: 500;
+  background-color: #fff;
+  height: 200px;
+  width: 300px;
+}

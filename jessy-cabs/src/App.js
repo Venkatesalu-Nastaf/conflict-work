@@ -4,6 +4,9 @@ import { Route, Routes } from "react-router-dom";
 import MainDash from "./component/MainDash/MainDash";
 import Orders from "./component/Orders/Orders";
 import MainDashboard from "./component/Maindashboard/MainDashboard";
+import Customer from "./component/Orders/Customer/Customer";
+import Suppliers from "./component/Orders/Supplier/Suppliers";
+import Booking from "./component/Orders/Booking/Booking";
 
 function App() {
   return (
@@ -13,9 +16,9 @@ function App() {
         <Route path="/home" element={<MainDashboard />}>
           <Route path="/home/dashboard" element={<MainDash />} />
           <Route path="/home/orders" element={<Orders />}>
-            <Route path="/home/orders/customer" element={<h1>custmer</h1>} />
-            <Route path="/home/orders/supplier" element={<h1>supplier</h1>} />
-            <Route path="/home/orders/booking" element={<h1>booking</h1>} />
+            <Route path="/home/orders/customer" element={<Customer/>} />
+            <Route path="/home/orders/supplier" element={<Suppliers/>} />
+            <Route path="/home/orders/booking" element={<Booking/>} />
             <Route path="/home/orders/tripsheet" element={<h1>custmer</h1>} />
           </Route>
           <Route path="/home/customers" element={<h1>Customers</h1>} />

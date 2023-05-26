@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import { useNavigate, Link } from "react-router-dom";
-import Logo from "../../assets/img/logo.png";
-import { Sidebardata } from "../../Data/Data";
+import Logo from "../../../assets/img/logo.png";
+import { Sidebardata } from "../../../Data/Data";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { AiOutlineBars } from "@react-icons/all-files/ai/AiOutlineBars";
 import { motion } from "framer-motion";

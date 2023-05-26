@@ -1,9 +1,9 @@
 import React from "react";
 import Login from "./component/form/LoginForm";
 import { Route, Routes } from "react-router-dom";
-import MainDash from "./component/MainDash/MainDash";
+import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Orders from "./component/Orders/Orders";
-import MainDashboard from "./component/Maindashboard/MainDashboard";
+import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import Customer from "./component/Orders/Customer/Customer";
 import Suppliers from "./component/Orders/Supplier/Suppliers";
 import Booking from "./component/Orders/Booking/Booking";
@@ -23,7 +23,7 @@ function App() {
           </Route>
           <Route path="/home/customers" element={<h1>Customers</h1>} />
           <Route path="/home/products" element={<h1>Producs</h1>} />
-          <Route path="/home/chart" element={<h1>Charts</h1>} />
+          <Route path="/home/settings" element={<h1>Settings</h1>} />
         </Route>
         <Route
           path="*"

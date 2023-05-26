@@ -1,7 +1,7 @@
 import React from "react";
 import "./Update.css"
 import { CgProfile } from "@react-icons/all-files/cg/CgProfile";
-import { UpdatesData } from "../../Data/Data.js";
+import { UpdatesData } from "../../../Data/Data.js";
 
 const Updates = () => {
   return (

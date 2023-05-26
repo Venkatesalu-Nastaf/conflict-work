@@ -32,11 +32,11 @@ export const Sidebardata = [
     heading: "Products",
     key: "/home/products",
   },
-  {
-    icon: BiBarChartSquare,
-    heading: "Chart",
-    key: "/home/chart",
-  },
+  // {
+  //   icon: BiBarChartSquare,
+  //   heading: "Chart",
+  //   key: "/home/chart",
+  // },
   {
     icon: BiBarChartSquare,
     heading: "settings",

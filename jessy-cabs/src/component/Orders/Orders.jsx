@@ -48,7 +48,7 @@ const Orders = () => {
           </Link>
           <Link
             className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Booking' ? 'actives' : ''}`}
-            to='/home/orders/booking'
+            to='/home/orders/bookings'
             onClick={() => handleMenuItemClick('Booking')}
           >
             Booking

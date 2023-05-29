@@ -12,7 +12,7 @@ import OnlineUserPassword from './Online_User_Password/OnlineUserPassword.jsx';
 
 
 const Suppliers = () => {
-    const [value, setValue] = React.useState("1");
+    const [value, setValue] = React.useState("accounting_info");
 
     const handleChange = (event, newValue) => {
         setValue(newValue);

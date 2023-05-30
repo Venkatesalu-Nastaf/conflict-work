@@ -150,6 +150,7 @@
 /* Booking Update side box */
 .container-right {
   margin: 30px 20px 20px;
+  width: 33%;
 }
 .booking-update-main {
   border-radius: 10px;
@@ -188,4 +189,9 @@
 }
 .booking-update .booking-update-content {
   padding: 10px;
+}
+.input-field .input-btn .btn{
+  cursor: pointer;
+  margin: 20px;
+  padding: 3px 10px;
 }

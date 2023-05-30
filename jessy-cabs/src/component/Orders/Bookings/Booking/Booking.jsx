@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 import './Booking.css'
 import { Duty, PayType, PickUp, Report } from './Booking'
 import { Link, Outlet, useLocation } from 'react-router-dom';
@@ -8,6 +8,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
 import Autocomplete from '@mui/material/Autocomplete';
+import InputAdornment from '@mui/material/InputAdornment';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from '@mui/material';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
@@ -77,7 +78,14 @@ const Booking = () => {
         // Store the clicked menu item in localStorage
         localStorage.setItem('activeMenuItem', menuItem);
     };
+    const [currentYear, setCurrentYear] = useState('');
 
+    useEffect(() => {
+        const current = new Date().getFullYear();
+        const pastYear = current - 1;
+        const value = `JESSY CABS ${pastYear}-${current}`;
+        setCurrentYear(value);
+    }, []);
     return (
         <form action="" className='booking-form'>
 
@@ -435,6 +443,45 @@ const Booking = () => {
                             />
                         </div>
                     </div>
+                    <div className="input-field">
+                        <div className='input'>
+                            <div className='icone'>
+                                <PermIdentityIcon color='action' />
+                            </div>
+                            <TextField
+                                name="remarks"
+                                label="Remarks"
+                                id="remarks"
+                                variant="standard"
+                            />
+                        </div>
+                        <div className='input'>
+                            <div className='icone'>
+                                <PermIdentityIcon color='action' />
+                            </div>
+                            <Autocomplete fullWidth
+                                id="free-solo-demo"
+                                freeSolo
+                                value={PickUp.map((option) => option.optionvalue)}
+                                options={PickUp.map((option) => option.Option)}
+                                renderInput={(params) => <TextField {...params} label="Service Station" />}
+                            />
+                        </div>
+                        <div className='input'>
+                            <div className='icone'>
+                                <PermIdentityIcon color='action' />
+                            </div>
+                            <TextField
+                                type='number'
+                                label="Advance"
+                                id="advance"
+                                sx={{ m: 1, width: '25ch' }}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                                }}
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div className="container-right">
                     <div className='booking-update-main'>
@@ -513,16 +560,54 @@ const Booking = () => {
                             />
                         </div>
                         <div className='input'>
-                            <div className='icone'>
-                                <LocationCityIcon color='action' />
-                            </div>
-                            <Autocomplete fullWidth
+                            <Autocomplete
+                                size="small"
                                 id="free-solo-demo"
-                                freeSolo
-                                value="JESSY CABS 2019-2020"
-                                options="JESSY CABS 2019-2020"
+                                value={currentYear}
+                                options={[currentYear]}
                                 renderInput={(params) => <TextField {...params} label="Fin Years" />}
                             />
+                        </div>
+                        <div className="input">
+                            <TextField
+                                margin="normal"
+                                size="small"
+                                id="bookingno"
+                                label="Booking No"
+                                name="bookingno"
+                                autoFocus
+                            />
+                        </div>
+                    </div>
+                    <div className="input-field">
+                        <div className="input">
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoItem label="Trip Date">
+                                    <DatePicker
+                                        size="small"
+                                        defaultValue={today}
+                                        minDate={tomorrow}
+                                        views={['year', 'month', 'day']}
+                                    />
+                                </DemoItem>
+                            </LocalizationProvider>
+                        </div>
+                        <div className='input'>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={["TimePicker", "MobileTimePicker"]}>
+                                    <DemoItem
+                                        size="small"
+                                        label="Trip Time">
+                                        <MobileTimePicker defaultValue={dayjs()} />
+                                    </DemoItem>
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </div>
+                    </div>
+                    <div className="input-field">
+                        <div className="input-btn">
+                            <button className='btn'>Hide</button>
+                            <button className='btn'>Copy</button>
                         </div>
                     </div>
                 </div>

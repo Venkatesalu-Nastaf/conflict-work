@@ -150,7 +150,7 @@
 /* Booking Update side box */
 .container-right {
   margin: 30px 20px 20px;
-  width: 33%;
+  width: 35%;
 }
 .booking-update-main {
   border-radius: 10px;
@@ -190,8 +190,23 @@
 .booking-update .booking-update-content {
   padding: 10px;
 }
-.input-field .input-btn .btn{
+.input-field .input-btn .btn {
   cursor: pointer;
   margin: 20px;
   padding: 3px 10px;
+}
+.input-field .input-btn .btn:hover {
+  color: #456ddc;
+}
+.block {
+  display: block;
+}
+
+.none {
+  display: none;
+}
+.vehicle-confirm {
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
 }

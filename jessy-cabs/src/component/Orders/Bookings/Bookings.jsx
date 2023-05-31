@@ -7,7 +7,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import Booking from './Booking/Booking.jsx';
 const Bookings = () => {
   const [value, setValue] = React.useState('booking');
-
+  
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

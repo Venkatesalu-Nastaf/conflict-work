@@ -27,15 +27,15 @@ export const Report = [
   },
   {
     Option: "TBM.STN",
-    optionvalue: "tbm.stn",
+    optionvalue: "tbmstn",
   },
   {
     Option: "W.MAM",
-    optionvalue: "w.mam",
+    optionvalue: "wmam",
   },
   {
     Option: "Gus.Hu",
-    optionvalue: "gus hu",
+    optionvalue: "gushu",
   },
   {
     Option: "Mcity",

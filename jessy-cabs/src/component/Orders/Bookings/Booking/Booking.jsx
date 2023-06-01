@@ -85,6 +85,31 @@ const Booking = () => {
   const handleClickHide = () => {
     setDisplayCopy(false);
   };
+  // display vehicle confirm div
+  // const [isChecked, setIsChecked] = useState(false);
+  // const handleCheckboxChange = (event) => {
+  //   setIsChecked(event.target.checked);
+  // };
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 116) {
+      // F5 key code is 116
+      event.preventDefault();
+      setIsChecked(!isChecked);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isChecked]);
   const actions = [
     { icon: <LocalPostOfficeIcon />, name: "Email" },
     { icon: <CancelPresentationIcon />, name: "Clear" },
@@ -487,6 +512,7 @@ const Booking = () => {
                 fullWidth
                 id="free-solo-demo"
                 freeSolo
+                name={Service_Station.map((option) => option.optionvalue)}
                 value={Service_Station.map((option) => option.optionvalue)}
                 options={Service_Station.map((option) => option.Option)}
                 renderInput={(params) => (
@@ -562,6 +588,7 @@ const Booking = () => {
                 control={<Checkbox size="small" />}
                 label="Vehicle Confirm"
                 labelPlacement="right"
+                onChange={handleCheckboxChange}
               />
               <FormControlLabel
                 value="vehiclechanges"
@@ -655,106 +682,109 @@ const Booking = () => {
             </div>
             <div className="input-field">
               <div className="input-btn">
-                <a onClick={handleClickHide} className="btn">
+                <span onClick={handleClickHide} className="btn">
                   Hide
-                </a>
-                <a className="btn">Copy</a>
+                </span>
+                <span className="btn">Copy</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="vehicle-confirm">
-        <div className="input-field">
-          <div className="input">
-            <div className="icone">
-              <AirportShuttleIcon color="action" />
+
+      {isChecked ? (
+        <div className="vehicle-confirm">
+          <div className="input-field">
+            <div className="input">
+              <div className="icone">
+                <AirportShuttleIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                id="free-solo-demo"
+                freeSolo
+                value={Duty.map((option) => option.optionvalue)}
+                options={Duty.map((option) => option.Option)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Hire Types" />
+                )}
+              />
             </div>
-            <Autocomplete
-              fullWidth
-              id="free-solo-demo"
-              freeSolo
-              value={Duty.map((option) => option.optionvalue)}
-              options={Duty.map((option) => option.Option)}
-              renderInput={(params) => (
-                <TextField {...params} label="Hire Types" />
-              )}
-            />
+            <div className="input">
+              <div className="icone">
+                <AltRouteIcon color="action" />
+              </div>
+              <TextField
+                name="travelsname"
+                label="Travels Name"
+                id="travelsname"
+                variant="standard"
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <CarCrashIcon color="action" />
+              </div>
+              <TextField
+                name="vehicleregisterno"
+                label="Vehicle Register No"
+                id="vehicleregisterno"
+                variant="standard"
+              />
+            </div>
           </div>
-          <div className="input">
-            <div className="icone">
-              <AltRouteIcon color="action" />
+          <div className="input-field">
+            <div className="input">
+              <div className="icone">
+                <CommuteIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                id="free-solo-demo"
+                freeSolo
+                value={Duty.map((option) => option.optionvalue)}
+                options={Duty.map((option) => option.Option)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Vehicle Module" />
+                )}
+              />
             </div>
-            <TextField
-              name="travelsname"
-              label="Travels Name"
-              id="travelsname"
-              variant="standard"
-            />
-          </div>
-          <div className="input">
-            <div className="icone">
-              <CarCrashIcon color="action" />
+            <div className="input">
+              <div className="icone">
+                <NoCrashIcon color="action" />
+              </div>
+              <TextField
+                name="drivername"
+                label="Driver Name"
+                id="drivername"
+                variant="standard"
+              />
             </div>
-            <TextField
-              name="vehicleregisterno"
-              label="Vehicle Register No"
-              id="vehicleregisterno"
-              variant="standard"
-            />
+            <div className="input">
+              <div className="icone">
+                <AddIcCallTwoToneIcon color="action" />
+              </div>
+              <TextField
+                name="driverphone"
+                label="Driver Phone"
+                id="driverphone"
+                variant="standard"
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <AttachEmailIcon color="action" />
+              </div>
+              <TextField
+                name="travelsemail"
+                label="Travels Email"
+                id="travelsemail"
+                variant="standard"
+              />
+            </div>
           </div>
         </div>
-        <div className="input-field">
-          <div className="input">
-            <div className="icone">
-              <CommuteIcon color="action" />
-            </div>
-            <Autocomplete
-              fullWidth
-              id="free-solo-demo"
-              freeSolo
-              value={Duty.map((option) => option.optionvalue)}
-              options={Duty.map((option) => option.Option)}
-              renderInput={(params) => (
-                <TextField {...params} label="Vehicle Module" />
-              )}
-            />
-          </div>
-          <div className="input">
-            <div className="icone">
-              <NoCrashIcon color="action" />
-            </div>
-            <TextField
-              name="drivername"
-              label="Driver Name"
-              id="drivername"
-              variant="standard"
-            />
-          </div>
-          <div className="input">
-            <div className="icone">
-              <AddIcCallTwoToneIcon color="action" />
-            </div>
-            <TextField
-              name="driverphone"
-              label="Driver Phone"
-              id="driverphone"
-              variant="standard"
-            />
-          </div>
-          <div className="input">
-            <div className="icone">
-              <AttachEmailIcon color="action" />
-            </div>
-            <TextField
-              name="travelsemail"
-              label="Travels Email"
-              id="travelsemail"
-              variant="standard"
-            />
-          </div>
-        </div>
-      </div>
+      ) : null}
       <Box sx={{ position: "relative", mt: 3, height: 320 }}>
         <StyledSpeedDial
           ariaLabel="SpeedDial playground example"

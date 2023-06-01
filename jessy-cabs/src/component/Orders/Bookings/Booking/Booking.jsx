@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Booking.css";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
+import Button from '@mui/material/Button';
 import CommuteIcon from "@mui/icons-material/Commute";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
@@ -512,7 +513,6 @@ const Booking = () => {
                 fullWidth
                 id="free-solo-demo"
                 freeSolo
-                name={Service_Station.map((option) => option.optionvalue)}
                 value={Service_Station.map((option) => option.optionvalue)}
                 options={Service_Station.map((option) => option.Option)}
                 renderInput={(params) => (
@@ -687,6 +687,40 @@ const Booking = () => {
                 </span>
                 <span className="btn">Copy</span>
               </div>
+            </div>
+          </div>
+          <div className="inpu-field">
+            <div className="input radio">
+              <FormControl>
+                <FormLabel id="demo-row-radio-buttons-group-label">
+                  Email
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                >
+                  <FormControlLabel
+                    value="Local"
+                    control={<Radio />}
+                    label="Local"
+                  />
+                  <FormControlLabel
+                    value="service"
+                    control={<Radio />}
+                    label="Service"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </div>
+            <div className="input">
+              <Button
+                color="primary"
+                disabled={false}
+                onClick={function(){}}
+                size="md"
+                variant="outlined"
+              >Attach File</Button>
             </div>
           </div>
         </div>

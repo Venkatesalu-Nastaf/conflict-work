@@ -192,6 +192,7 @@
 }
 .booking-update .booking-update-content .list-update{
   overflow: scroll;
+  /* overflow: scroll; */
   
 }
 .input-field .input-btn .btn {

@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Booking.css";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import CommuteIcon from "@mui/icons-material/Commute";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
@@ -24,7 +28,7 @@ import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceT
 import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
 import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { Duty, PayType, PickUp, Report, Service_Station } from "./Booking";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -86,11 +90,7 @@ const Booking = () => {
   const handleClickHide = () => {
     setDisplayCopy(false);
   };
-  // display vehicle confirm div
-  // const [isChecked, setIsChecked] = useState(false);
-  // const handleCheckboxChange = (event) => {
-  //   setIsChecked(event.target.checked);
-  // };
+
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxChange = (event) => {
@@ -139,11 +139,6 @@ const Booking = () => {
     }
   }, [location]);
 
-  // Function to handle menu item clicks
-  const handleMenuItemClick = (menuItem) => {
-    // Store the clicked menu item in localStorage
-    localStorage.setItem("activeMenuItem", menuItem);
-  };
   const [currentYear, setCurrentYear] = useState("");
 
   useEffect(() => {
@@ -152,6 +147,12 @@ const Booking = () => {
     const value = `JESSY CABS ${pastYear}-${current}`;
     setCurrentYear(value);
   }, []);
+  //
+  const [value, setValue] = React.useState("list");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return (
     <form action="" className="booking-form">
       <span className="Title-Name">Booking</span>
@@ -540,46 +541,110 @@ const Booking = () => {
         </div>
         <div className="container-right">
           <div className="booking-update-main">
-            <nav>
-              <Link
-                className={`update-link ${
-                  localStorage.getItem("activeMenuItem") === "Customer Master"
-                    ? "actives"
-                    : ""
-                }`}
-                to="/home/orders/bookings/list"
-                onClick={() => handleMenuItemClick("Customer Master")}
-              >
-                List
-              </Link>
-              <Link
-                className={`update-link ${
-                  localStorage.getItem("activeMenuItem") === "Customer Master"
-                    ? "actives"
-                    : ""
-                }`}
-                to="/home/orders/bookings/billingaddress"
-                onClick={() => handleMenuItemClick("Customer Master")}
-              >
-                Billing Address
-              </Link>
-              <Link
-                className={`update-link ${
-                  localStorage.getItem("activeMenuItem") === "Customer Master"
-                    ? "actives"
-                    : ""
-                }`}
-                to="/home/orders/bookings/email"
-                onClick={() => handleMenuItemClick("Customer Master")}
-              >
-                Email
-              </Link>
-            </nav>
-            <div className="booking-update">
-              <div className="booking-update-content">
-                <Outlet />
-              </div>
-            </div>
+            <Box sx={{ width: "100%", typography: "body1" }}>
+              <TabContext value={value}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                  <TabList
+                    onChange={handleChange}
+                    aria-label="lab API tabs example"
+                  >
+                    <Tab label="List" value="list" />
+                    <Tab label="Billing Address" value="billingaddress" />
+                    <Tab label="Email" value="email" />
+                  </TabList>
+                </Box>
+                <TabPanel value="list">
+                  <div className="booking-update">
+                    <div className="booking-update-content">
+                      <span className="list-update">
+                        List Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit. Harum veniam quos laborum. Dicta suscipit voluptas
+                        laboriosam rem alias praesentium, facere aliquam sed
+                        iste, officia excepturi quos corporis. Facilis,
+                        reiciendis et.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum nostrum nihil minima debitis, nobis incidunt temporibus velit accusantium dolore assumenda iusto quod ratione praesentium maxime eveniet voluptas enim animi laudantium.
+                      </span>
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel value="billingaddress">
+                  <div className="booking-update">
+                    <div className="booking-update-content">
+                      <form action="" style={{ margin: "-10px" }}>
+                        <div className="input-field billing">
+                          <div className="input">
+                            <div className="icone">
+                              <PermIdentityIcon color="action" />
+                            </div>
+                            <TextField
+                              margin="normal"
+                              size="small"
+                              name="nameupdate"
+                              label="Name"
+                              id="name"
+                              autoFocus
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <AddHomeWorkIcon color="action" />
+                            </div>
+                            <TextField
+                              margin="normal"
+                              size="small"
+                              id="streetnameupdate"
+                              label="No.Street Name"
+                              name="address"
+                              autoFocus
+                            />
+                          </div>
+                        </div>
+                        <div className="input-field billing">
+                          <div className="input">
+                            <div className="icone">
+                              <HomeTwoToneIcon color="action" />
+                            </div>
+                            <TextField
+                              name="addressupdate"
+                              label="Address"
+                              id="address"
+                              variant="standard"
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <LocationCityIcon color="action" />
+                            </div>
+                            <TextField
+                              name="cityupdate"
+                              label="City"
+                              id="cityupdate"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+                        <div className="input-field billing">
+                          <Button
+                            color="primary"
+                            disabled={false}
+                            onClick={function() {}}
+                            size="md"
+                            variant="outlined"
+                          >
+                            Update Address
+                          </Button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel value="email">
+                  <div className="booking-update">
+                    <div className="booking-update-content">Email</div>
+                  </div>
+                </TabPanel>
+              </TabContext>
+            </Box>
           </div>
           <div className="inpu-field">
             <div className="input">
@@ -717,15 +782,16 @@ const Booking = () => {
               <Button
                 color="primary"
                 disabled={false}
-                onClick={function(){}}
+                onClick={function() {}}
                 size="md"
                 variant="outlined"
-              >Attach File</Button>
+              >
+                Attach File
+              </Button>
             </div>
           </div>
         </div>
       </div>
-
       {isChecked ? (
         <div className="vehicle-confirm">
           <div className="input-field">

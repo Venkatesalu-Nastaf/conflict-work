@@ -154,7 +154,8 @@ const Booking = () => {
     setValue(newValue);
   };
   return (
-    <form action="" className="booking-form">
+    <div className="booking-form">
+    <form action="" >
       <span className="Title-Name">Booking</span>
       <div className="detail-container-main">
         <div className="container-left">
@@ -555,14 +556,17 @@ const Booking = () => {
                 </Box>
                 <TabPanel value="list">
                   <div className="booking-update">
-                    <div className="booking-update-content">
-                      <span className="list-update">
+                    <div className="booking-update-content list-update">
+                      <span>
                         List Lorem ipsum dolor sit amet, consectetur adipisicing
                         elit. Harum veniam quos laborum. Dicta suscipit voluptas
                         laboriosam rem alias praesentium, facere aliquam sed
                         iste, officia excepturi quos corporis. Facilis,
-                        reiciendis et.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum nostrum nihil minima debitis, nobis incidunt temporibus velit accusantium dolore assumenda iusto quod ratione praesentium maxime eveniet voluptas enim animi laudantium.
+                        reiciendis et. Lorem ipsum dolor sit amet consectetur
+                        adipisicing elit. Cum nostrum nihil minima debitis,
+                        nobis incidunt temporibus velit accusantium dolore
+                        assumenda iusto quod ratione praesentium maxime eveniet
+                        voluptas enim animi laudantium.
                       </span>
                     </div>
                   </div>
@@ -640,7 +644,22 @@ const Booking = () => {
                 </TabPanel>
                 <TabPanel value="email">
                   <div className="booking-update">
-                    <div className="booking-update-content">Email</div>
+                    <div className="booking-update-content list-update">
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                      <p className="bottom-line">demo@gmail.com</p>
+                    </div>
                   </div>
                 </TabPanel>
               </TabContext>
@@ -901,6 +920,7 @@ const Booking = () => {
         </StyledSpeedDial>
       </Box>
     </form>
+    </div>
   );
 };
 

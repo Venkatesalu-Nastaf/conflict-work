@@ -80,7 +80,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const Booking = () => {
   //// copy button
-
   const [displayCopy, setDisplayCopy] = useState(false);
 
   const handleClickShow = () => {
@@ -97,20 +96,28 @@ const Booking = () => {
     setIsChecked(event.target.checked);
   };
 
-  const handleKeyDown = (event) => {
-    if (event.keyCode === 116) {
-      // F5 key code is 116
-      event.preventDefault();
-      setIsChecked(!isChecked);
-    }
-  };
-
   useEffect(() => {
+    const handleKeyPress = (event) => {
+      // Handle key press logic
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.keyCode === 116) {
+        // F5 key code is 116
+        event.preventDefault();
+        setIsChecked(!isChecked);
+      }
+    };
+
     document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keypress", handleKeyPress);
+
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keypress", handleKeyPress);
     };
   }, [isChecked]);
+
   const actions = [
     { icon: <LocalPostOfficeIcon />, name: "Email" },
     { icon: <CancelPresentationIcon />, name: "Clear" },
@@ -155,580 +162,15 @@ const Booking = () => {
   };
   return (
     <div className="booking-form">
-    <form action="" >
-      <span className="Title-Name">Booking</span>
-      <div className="detail-container-main">
-        <div className="container-left">
-          <div className="input-field">
-            <div className="input">
-              <div className="icone">
-                <SwitchAccountIcon color="action" />
-              </div>
-              <TextField
-                margin="normal"
-                size="small"
-                id="bookingno"
-                label="Booking No"
-                name="bookingno"
-                autoFocus
-              />
-            </div>
-            <div className="input">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoItem label="Booking Date">
-                  <DatePicker
-                    defaultValue={today}
-                    minDate={tomorrow}
-                    views={["year", "month", "day"]}
-                  />
-                </DemoItem>
-              </LocalizationProvider>
-            </div>
-            <div className="input">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["TimePicker", "MobileTimePicker"]}>
-                  <DemoItem label="Booking Time">
-                    <MobileTimePicker defaultValue={dayjs()} />
-                  </DemoItem>
-                </DemoContainer>
-              </LocalizationProvider>
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input radio">
-              <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">
-                  Status
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                >
-                  <FormControlLabel
-                    value="pending"
-                    control={<Radio />}
-                    label="Pending"
-                  />
-                  <FormControlLabel
-                    value="cancelled"
-                    control={<Radio />}
-                    label="Cancelled"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </div>
-            <div className="input">
-              <div className="icone">
-                <SellIcon color="action" />
-              </div>
-              <TextField
-                name="tripid"
-                label="Trip Id"
-                id="standard-size-normal"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <PermIdentityIcon color="action" />
-              </div>
-              <TextField
-                name="customer"
-                label="Customer"
-                id="customer"
-                variant="standard"
-              />
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input">
-              <div className="icone">
-                <HomeRepairServiceTwoToneIcon color="action" />
-              </div>
-              <TextField
-                name="orderedby"
-                label="Ordered by"
-                id="orderedby"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <AddIcCallTwoToneIcon color="action" />
-              </div>
-              <TextField
-                name="mobileno"
-                label="Mobile No"
-                id="mobileno"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <AccountCircleTwoToneIcon color="action" />
-              </div>
-              <TextField
-                name="guestname"
-                label="Guest Name"
-                id="guestname"
-                variant="standard"
-              />
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input">
-              <div className="icone">
-                <ContactPhoneIcon color="action" />
-              </div>
-              <TextField
-                name="guestmobileno"
-                label="Guest Mobile No"
-                id="guestmobileno"
-                variant="standard"
-              />
-            </div>
-            <div className="input radio">
-              <div className="icone">
-                <AttachEmailIcon color="action" />
-              </div>
-              <TextField
-                name="email"
-                label="Email"
-                id="email"
-                variant="standard"
-              />
-            </div>
-            <div className="input radio">
-              <div className="icone">
-                <RateReviewIcon color="action" />
-              </div>
-              <TextField
-                name="employeeno"
-                label="Employee No"
-                id="employeeno"
-                variant="standard"
-              />
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input">
-              <div className="icone">
-                <AddHomeWorkIcon color="action" />
-              </div>
-              <TextField
-                margin="normal"
-                size="small"
-                id="streetname"
-                label="No.Street Name"
-                name="address"
-                autoFocus
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <HomeTwoToneIcon color="action" />
-              </div>
-              <TextField
-                name="address"
-                label="Address"
-                id="address"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <LocationCityIcon color="action" />
-              </div>
-              <TextField
-                name="city"
-                label="City"
-                id="standard-size-normal"
-                variant="standard"
-              />
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input">
-              <Autocomplete
-                fullWidth
-                id="free-solo-demo"
-                freeSolo
-                value={Report.map((option) => option.optionvalue)}
-                options={Report.map((option) => option.Option)}
-                renderInput={(params) => (
-                  <TextField {...params} label="Report" />
-                )}
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <TaxiAlertTwoToneIcon color="action" />
-              </div>
-              <TextField
-                name="vehicaltype"
-                label="Vehical Type"
-                id="vehicaltype"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <AccountBalanceWalletTwoToneIcon color="action" />
-              </div>
-              <Autocomplete
-                fullWidth
-                id="free-solo-demo"
-                freeSolo
-                value={PayType.map((option) => option.optionvalue)}
-                options={PayType.map((option) => option.Option)}
-                renderInput={(params) => (
-                  <TextField {...params} label="Payment Type" />
-                )}
-              />
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoItem label="Report Date">
-                  <DatePicker
-                    defaultValue={today}
-                    minDate={tomorrow}
-                    views={["year", "month", "day"]}
-                  />
-                </DemoItem>
-              </LocalizationProvider>
-            </div>
-            <div className="input">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["TimePicker", "MobileTimePicker"]}>
-                  <DemoItem label="Start Time">
-                    <MobileTimePicker defaultValue={dayjs()} />
-                  </DemoItem>
-                </DemoContainer>
-              </LocalizationProvider>
-            </div>
-            <div className="input">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["TimePicker", "MobileTimePicker"]}>
-                  <DemoItem label="RegisterTime">
-                    <MobileTimePicker defaultValue={dayjs()} />
-                  </DemoItem>
-                </DemoContainer>
-              </LocalizationProvider>
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input">
-              <div className="icone">
-                <EngineeringIcon color="action" />
-              </div>
-              <Autocomplete
-                fullWidth
-                id="free-solo-demo"
-                freeSolo
-                value={Duty.map((option) => option.optionvalue)}
-                options={Duty.map((option) => option.Option)}
-                renderInput={(params) => <TextField {...params} label="Duty" />}
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <LocationCityIcon color="action" />
-              </div>
-              <Autocomplete
-                fullWidth
-                id="free-solo-demo"
-                freeSolo
-                value={PickUp.map((option) => option.optionvalue)}
-                options={PickUp.map((option) => option.Option)}
-                renderInput={(params) => (
-                  <TextField {...params} label="PickUp" />
-                )}
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <QrCodeIcon color="action" />
-              </div>
-              <TextField
-                name="costcode"
-                label="Cost Code"
-                id="costcode"
-                variant="standard"
-              />
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input">
-              <div className="icone">
-                <AppRegistrationIcon color="action" />
-              </div>
-              <TextField
-                name="registerno"
-                label="Register No"
-                id="registerno"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <AirplaneTicketIcon color="action" />
-              </div>
-              <TextField
-                name="flightno"
-                label="Flight No"
-                id="flight"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <ForwardToInboxIcon color="action" />
-              </div>
-              <TextField
-                name="orderbyemail"
-                label="Order By Email"
-                id="orederbyemail"
-                variant="standard"
-              />
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input">
-              <div className="icone">
-                <FmdBadIcon color="action" />
-              </div>
-              <TextField
-                name="remarks"
-                label="Remarks"
-                id="remarks"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <DomainAddIcon color="action" />
-              </div>
-              <Autocomplete
-                fullWidth
-                id="free-solo-demo"
-                freeSolo
-                value={Service_Station.map((option) => option.optionvalue)}
-                options={Service_Station.map((option) => option.Option)}
-                renderInput={(params) => (
-                  <TextField {...params} label="Service Station" />
-                )}
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <InfoIcon color="action" />
-              </div>
-              <TextField
-                type="number"
-                label="Advance"
-                id="advance"
-                sx={{ m: 1, width: "25ch" }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">₹</InputAdornment>
-                  ),
-                }}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="container-right">
-          <div className="booking-update-main">
-            <Box sx={{ width: "100%", typography: "body1" }}>
-              <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <TabList
-                    onChange={handleChange}
-                    aria-label="lab API tabs example"
-                  >
-                    <Tab label="List" value="list" />
-                    <Tab label="Billing Address" value="billingaddress" />
-                    <Tab label="Email" value="email" />
-                  </TabList>
-                </Box>
-                <TabPanel value="list">
-                  <div className="booking-update">
-                    <div className="booking-update-content list-update">
-                      <span>
-                        List Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit. Harum veniam quos laborum. Dicta suscipit voluptas
-                        laboriosam rem alias praesentium, facere aliquam sed
-                        iste, officia excepturi quos corporis. Facilis,
-                        reiciendis et. Lorem ipsum dolor sit amet consectetur
-                        adipisicing elit. Cum nostrum nihil minima debitis,
-                        nobis incidunt temporibus velit accusantium dolore
-                        assumenda iusto quod ratione praesentium maxime eveniet
-                        voluptas enim animi laudantium.
-                      </span>
-                    </div>
-                  </div>
-                </TabPanel>
-                <TabPanel value="billingaddress">
-                  <div className="booking-update">
-                    <div className="booking-update-content">
-                      <form action="" style={{ margin: "-10px" }}>
-                        <div className="input-field billing">
-                          <div className="input">
-                            <div className="icone">
-                              <PermIdentityIcon color="action" />
-                            </div>
-                            <TextField
-                              margin="normal"
-                              size="small"
-                              name="nameupdate"
-                              label="Name"
-                              id="name"
-                              autoFocus
-                            />
-                          </div>
-                          <div className="input">
-                            <div className="icone">
-                              <AddHomeWorkIcon color="action" />
-                            </div>
-                            <TextField
-                              margin="normal"
-                              size="small"
-                              id="streetnameupdate"
-                              label="No.Street Name"
-                              name="address"
-                              autoFocus
-                            />
-                          </div>
-                        </div>
-                        <div className="input-field billing">
-                          <div className="input">
-                            <div className="icone">
-                              <HomeTwoToneIcon color="action" />
-                            </div>
-                            <TextField
-                              name="addressupdate"
-                              label="Address"
-                              id="address"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="input">
-                            <div className="icone">
-                              <LocationCityIcon color="action" />
-                            </div>
-                            <TextField
-                              name="cityupdate"
-                              label="City"
-                              id="cityupdate"
-                              variant="standard"
-                            />
-                          </div>
-                        </div>
-                        <div className="input-field billing">
-                          <Button
-                            color="primary"
-                            disabled={false}
-                            onClick={function() {}}
-                            size="md"
-                            variant="outlined"
-                          >
-                            Update Address
-                          </Button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </TabPanel>
-                <TabPanel value="email">
-                  <div className="booking-update">
-                    <div className="booking-update-content list-update">
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                      <p className="bottom-line">demo@gmail.com</p>
-                    </div>
-                  </div>
-                </TabPanel>
-              </TabContext>
-            </Box>
-          </div>
-          <div className="inpu-field">
-            <div className="input">
-              <FormControlLabel
-                value="vehicleconfirm"
-                control={<Checkbox size="small" />}
-                label="Vehicle Confirm"
-                labelPlacement="right"
-                onChange={handleCheckboxChange}
-              />
-              <FormControlLabel
-                value="vehiclechanges"
-                control={<Checkbox size="small" />}
-                label="Vehicle Changes"
-                labelPlacement="right"
-              />
-            </div>
-            <div className="input">
-              <FormControlLabel
-                value="guestsms"
-                control={<Checkbox size="small" />}
-                label="Guest SMS"
-                labelPlacement="right"
-              />
-              <FormControlLabel
-                value="bookingsms"
-                control={<Checkbox size="small" />}
-                label="Booking SMS"
-                labelPlacement="right"
-              />
-              <FormControlLabel
-                value="sendemail"
-                control={<Checkbox size="small" />}
-                label="Send Email"
-                labelPlacement="right"
-              />
-            </div>
-            <div className="input">
-              <TextField
-                margin="normal"
-                size="small"
-                id="usage"
-                label="Usage"
-                name="useage"
-                autoFocus
-              />
-            </div>
-          </div>
-          <div className={`copy-item ${displayCopy ? "block" : "none"}`}>
-            <div className="input-field">
-              <div className="input" style={{ width: "300px" }}>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  value={currentYear}
-                  options={[currentYear]}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Fin Years" />
-                  )}
-                />
-              </div>
-            </div>
+      <form action="">
+        <span className="Title-Name">Booking</span>
+        <div className="detail-container-main">
+          <div className="container-left">
             <div className="input-field">
               <div className="input">
+                <div className="icone">
+                  <SwitchAccountIcon color="action" />
+                </div>
                 <TextField
                   margin="normal"
                   size="small"
@@ -738,13 +180,10 @@ const Booking = () => {
                   autoFocus
                 />
               </div>
-            </div>
-            <div className="input-field">
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Trip Date">
+                  <DemoItem label="Booking Date">
                     <DatePicker
-                      size="small"
                       defaultValue={today}
                       minDate={tomorrow}
                       views={["year", "month", "day"]}
@@ -757,7 +196,7 @@ const Booking = () => {
                   <DemoContainer
                     components={["TimePicker", "MobileTimePicker"]}
                   >
-                    <DemoItem size="small" label="Trip Time">
+                    <DemoItem label="Booking Time">
                       <MobileTimePicker defaultValue={dayjs()} />
                     </DemoItem>
                   </DemoContainer>
@@ -765,161 +204,745 @@ const Booking = () => {
               </div>
             </div>
             <div className="input-field">
-              <div className="input-btn">
-                <span onClick={handleClickHide} className="btn">
-                  Hide
-                </span>
-                <span className="btn">Copy</span>
+              <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Status
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="pending"
+                      control={<Radio />}
+                      label="Pending"
+                      labelPlacement="end"
+                    />
+
+                    <FormControlLabel
+                      value="cancelled"
+                      control={<Radio />}
+                      label="Cancelled"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <SellIcon color="action" />
+                </div>
+                <TextField
+                  name="tripid"
+                  label="Trip Id"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <PermIdentityIcon color="action" />
+                </div>
+                <TextField
+                  name="customer"
+                  label="Customer"
+                  id="customer"
+                  variant="standard"
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <HomeRepairServiceTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  name="orderedby"
+                  label="Ordered by"
+                  id="orderedby"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <AddIcCallTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  name="mobileno"
+                  label="Mobile No"
+                  id="mobileno"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <AccountCircleTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  name="guestname"
+                  label="Guest Name"
+                  id="guestname"
+                  variant="standard"
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <ContactPhoneIcon color="action" />
+                </div>
+                <TextField
+                  name="guestmobileno"
+                  label="Guest Mobile No"
+                  id="guestmobileno"
+                  variant="standard"
+                />
+              </div>
+              <div className="input radio">
+                <div className="icone">
+                  <AttachEmailIcon color="action" />
+                </div>
+                <TextField
+                  name="email"
+                  label="Email"
+                  id="email"
+                  variant="standard"
+                />
+              </div>
+              <div className="input radio">
+                <div className="icone">
+                  <RateReviewIcon color="action" />
+                </div>
+                <TextField
+                  name="employeeno"
+                  label="Employee No"
+                  id="employeeno"
+                  variant="standard"
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <AddHomeWorkIcon color="action" />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="streetname"
+                  label="No.Street Name"
+                  name="address"
+                  autoFocus
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <HomeTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  name="address"
+                  label="Address"
+                  id="address"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <LocationCityIcon color="action" />
+                </div>
+                <TextField
+                  name="city"
+                  label="City"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  value={Report.map((option) => option.optionvalue)}
+                  options={Report.map((option) => ({ label: option.Option }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Report" />
+                  )}
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <TaxiAlertTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  name="vehicaltype"
+                  label="Vehical Type"
+                  id="vehicaltype"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <AccountBalanceWalletTwoToneIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  value={PayType.map((option) => option.optionvalue)}
+                  options={PayType.map((option) => ({ label: option.Option }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Payment Type" />
+                  )}
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Report Date">
+                    <DatePicker
+                      defaultValue={today}
+                      minDate={tomorrow}
+                      views={["year", "month", "day"]}
+                    />
+                  </DemoItem>
+                </LocalizationProvider>
+              </div>
+              <div className="input">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    components={["TimePicker", "MobileTimePicker"]}
+                  >
+                    <DemoItem label="Start Time">
+                      <MobileTimePicker defaultValue={dayjs()} />
+                    </DemoItem>
+                  </DemoContainer>
+                </LocalizationProvider>
+              </div>
+              <div className="input">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    components={["TimePicker", "MobileTimePicker"]}
+                  >
+                    <DemoItem label="RegisterTime">
+                      <MobileTimePicker defaultValue={dayjs()} />
+                    </DemoItem>
+                  </DemoContainer>
+                </LocalizationProvider>
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <EngineeringIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  value={Duty.map((option) => option.optionvalue)}
+                  options={Duty.map((option) => ({ label: option.Option }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Duty" />
+                  )}
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <LocationCityIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  value={PickUp.map((option) => option.optionvalue)}
+                  options={PickUp.map((option) => ({ label: option.Option }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="PickUp" />
+                  )}
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <QrCodeIcon color="action" />
+                </div>
+                <TextField
+                  name="costcode"
+                  label="Cost Code"
+                  id="costcode"
+                  variant="standard"
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <AppRegistrationIcon color="action" />
+                </div>
+                <TextField
+                  name="registerno"
+                  label="Register No"
+                  id="registerno"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <AirplaneTicketIcon color="action" />
+                </div>
+                <TextField
+                  name="flightno"
+                  label="Flight No"
+                  id="flight"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <ForwardToInboxIcon color="action" />
+                </div>
+                <TextField
+                  name="orderbyemail"
+                  label="Order By Email"
+                  id="orederbyemail"
+                  variant="standard"
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <FmdBadIcon color="action" />
+                </div>
+                <TextField
+                  name="remarks"
+                  label="Remarks"
+                  id="remarks"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <DomainAddIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  value={Service_Station.map((option) => option.optionvalue)}
+                  options={Service_Station.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Service Station" />
+                  )}
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <InfoIcon color="action" />
+                </div>
+                <TextField
+                  type="number"
+                  label="Advance"
+                  id="advance"
+                  sx={{ m: 1, width: "25ch" }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">₹</InputAdornment>
+                    ),
+                  }}
+                />
               </div>
             </div>
           </div>
-          <div className="inpu-field">
-            <div className="input radio">
-              <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">
-                  Email
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
+          <div className="container-right">
+            <div className="booking-update-main">
+              <Box sx={{ width: "100%", typography: "body1" }}>
+                <TabContext value={value}>
+                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="lab API tabs example"
+                    >
+                      <Tab label="List" value="list" />
+                      <Tab label="Billing Address" value="billingaddress" />
+                      <Tab label="Email" value="email" />
+                    </TabList>
+                  </Box>
+                  <TabPanel value="list">
+                    <div className="booking-update">
+                      <div className="booking-update-content list-update">
+                        <span>
+                          List Lorem ipsum dolor sit amet, consectetur
+                          adipisicing elit. Harum veniam quos laborum. Dicta
+                          suscipit voluptas laboriosam rem alias praesentium,
+                          facere aliquam sed iste, officia excepturi quos
+                          corporis. Facilis, reiciendis et. Lorem ipsum dolor
+                          sit amet consectetur adipisicing elit. Cum nostrum
+                          nihil minima debitis, nobis incidunt temporibus velit
+                          accusantium dolore assumenda iusto quod ratione
+                          praesentium maxime eveniet voluptas enim animi
+                          laudantium.
+                        </span>
+                      </div>
+                    </div>
+                  </TabPanel>
+                  <TabPanel value="billingaddress">
+                    <div className="booking-update">
+                      <div className="booking-update-content">
+                        <form action="" style={{ margin: "-10px" }}>
+                          <div className="input-field billing">
+                            <div className="input">
+                              <div className="icone">
+                                <PermIdentityIcon color="action" />
+                              </div>
+                              <TextField
+                                margin="normal"
+                                size="small"
+                                name="nameupdate"
+                                label="Name"
+                                id="name"
+                                autoFocus
+                              />
+                            </div>
+                            <div className="input">
+                              <div className="icone">
+                                <AddHomeWorkIcon color="action" />
+                              </div>
+                              <TextField
+                                margin="normal"
+                                size="small"
+                                id="streetnameupdate"
+                                label="No.Street Name"
+                                name="address"
+                                autoFocus
+                              />
+                            </div>
+                          </div>
+                          <div className="input-field billing">
+                            <div className="input">
+                              <div className="icone">
+                                <HomeTwoToneIcon color="action" />
+                              </div>
+                              <TextField
+                                name="addressupdate"
+                                label="Address"
+                                id="address"
+                                variant="standard"
+                              />
+                            </div>
+                            <div className="input">
+                              <div className="icone">
+                                <LocationCityIcon color="action" />
+                              </div>
+                              <TextField
+                                name="cityupdate"
+                                label="City"
+                                id="cityupdate"
+                                variant="standard"
+                              />
+                            </div>
+                          </div>
+                          <div className="input-field billing">
+                            <Button
+                              color="primary"
+                              disabled={false}
+                              onClick={function () {}}
+                              size="md"
+                              variant="outlined"
+                            >
+                              Update Address
+                            </Button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </TabPanel>
+                  <TabPanel value="email">
+                    <div className="booking-update">
+                      <div className="booking-update-content list-update">
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                        <p className="bottom-line">demo@gmail.com</p>
+                      </div>
+                    </div>
+                  </TabPanel>
+                </TabContext>
+              </Box>
+            </div>
+            <div className="inpu-field">
+              <div className="input">
+                <FormControlLabel
+                  value="vehicleconfirm"
+                  control={<Checkbox size="small" />}
+                  label="Vehicle Confirm"
+                  onChange={handleCheckboxChange}
+                />
+                <FormControlLabel
+                  value="vehiclechanges"
+                  control={<Checkbox size="small" />}
+                  label="Vehicle Changes"
+                />
+              </div>
+              <div className="input">
+                <FormControlLabel
+                  value="guestsms"
+                  control={<Checkbox size="small" />}
+                  label="Guest SMS"
+                />
+                <FormControlLabel
+                  value="bookingsms"
+                  control={<Checkbox size="small" />}
+                  label="Booking SMS"
+                />
+                <FormControlLabel
+                  value="sendemail"
+                  control={<Checkbox size="small" />}
+                  label="Send Email"
+                />
+              </div>
+              <div className="input">
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="usage"
+                  label="Usage"
+                  name="useage"
+                  autoFocus
+                />
+              </div>
+            </div>
+            <div className={`copy-item ${displayCopy ? "block" : "none"}`}>
+              <div className="input-field">
+                <div className="input" style={{ width: "300px" }}>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-demo"
+                    value={currentYear}
+                    options={[currentYear]}
+                    getOptionLabel={(option) => option.label || ""}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Fin Years" />
+                    )}
+                  />
+                </div>
+              </div>
+              <div className="input-field">
+                <div className="input">
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id="bookingno"
+                    label="Booking No"
+                    name="bookingno"
+                    autoFocus
+                  />
+                </div>
+              </div>
+              <div className="input-field">
+                <div className="input">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoItem label="Trip Date">
+                      <DatePicker
+                        size="small"
+                        defaultValue={today}
+                        minDate={tomorrow}
+                        views={["year", "month", "day"]}
+                      />
+                    </DemoItem>
+                  </LocalizationProvider>
+                </div>
+                <div className="input">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer
+                      components={["TimePicker", "MobileTimePicker"]}
+                    >
+                      <DemoItem size="small" label="Trip Time">
+                        <MobileTimePicker defaultValue={dayjs()} />
+                      </DemoItem>
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+              </div>
+              <div className="input-field">
+                <div className="input-btn">
+                  <span onClick={handleClickHide} className="btn">
+                    Hide
+                  </span>
+                  <span className="btn">Copy</span>
+                </div>
+              </div>
+            </div>
+            <div className="inpu-field">
+              <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Email
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="Local"
+                      control={<Radio />}
+                      label="Local"
+                    />
+                    <FormControlLabel
+                      value="service"
+                      control={<Radio />}
+                      label="Service"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <div className="input">
+                <Button
+                  color="primary"
+                  disabled={false}
+                  onClick={function () {}}
+                  size="md"
+                  variant="outlined"
                 >
-                  <FormControlLabel
-                    value="Local"
-                    control={<Radio />}
-                    label="Local"
-                  />
-                  <FormControlLabel
-                    value="service"
-                    control={<Radio />}
-                    label="Service"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </div>
-            <div className="input">
-              <Button
-                color="primary"
-                disabled={false}
-                onClick={function() {}}
-                size="md"
-                variant="outlined"
-              >
-                Attach File
-              </Button>
+                  Attach File
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      {isChecked ? (
-        <div className="vehicle-confirm">
-          <div className="input-field">
-            <div className="input">
-              <div className="icone">
-                <AirportShuttleIcon color="action" />
+        {isChecked ? (
+          <div className="vehicle-confirm">
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <AirportShuttleIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  value={Duty.map((option) => option.optionvalue)}
+                  options={Duty.map((option) => ({ label: option.Option }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Hire Types" />
+                  )}
+                />
               </div>
-              <Autocomplete
-                fullWidth
-                id="free-solo-demo"
-                freeSolo
-                value={Duty.map((option) => option.optionvalue)}
-                options={Duty.map((option) => option.Option)}
-                renderInput={(params) => (
-                  <TextField {...params} label="Hire Types" />
-                )}
-              />
+              <div className="input">
+                <div className="icone">
+                  <AltRouteIcon color="action" />
+                </div>
+                <TextField
+                  name="travelsname"
+                  label="Travels Name"
+                  id="travelsname"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <CarCrashIcon color="action" />
+                </div>
+                <TextField
+                  name="vehicleregisterno"
+                  label="Vehicle Register No"
+                  id="vehicleregisterno"
+                  variant="standard"
+                />
+              </div>
             </div>
-            <div className="input">
-              <div className="icone">
-                <AltRouteIcon color="action" />
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <CommuteIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  value={Duty.map((option) => option.optionvalue)}
+                  options={Duty.map((option) => ({ label: option.Option }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Vehicle Module" />
+                  )}
+                />
               </div>
-              <TextField
-                name="travelsname"
-                label="Travels Name"
-                id="travelsname"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <CarCrashIcon color="action" />
+              <div className="input">
+                <div className="icone">
+                  <NoCrashIcon color="action" />
+                </div>
+                <TextField
+                  name="drivername"
+                  label="Driver Name"
+                  id="drivername"
+                  variant="standard"
+                />
               </div>
-              <TextField
-                name="vehicleregisterno"
-                label="Vehicle Register No"
-                id="vehicleregisterno"
-                variant="standard"
-              />
+              <div className="input">
+                <div className="icone">
+                  <AddIcCallTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  name="driverphone"
+                  label="Driver Phone"
+                  id="driverphone"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <AttachEmailIcon color="action" />
+                </div>
+                <TextField
+                  name="travelsemail"
+                  label="Travels Email"
+                  id="travelsemail"
+                  variant="standard"
+                />
+              </div>
             </div>
           </div>
-          <div className="input-field">
-            <div className="input">
-              <div className="icone">
-                <CommuteIcon color="action" />
-              </div>
-              <Autocomplete
-                fullWidth
-                id="free-solo-demo"
-                freeSolo
-                value={Duty.map((option) => option.optionvalue)}
-                options={Duty.map((option) => option.Option)}
-                renderInput={(params) => (
-                  <TextField {...params} label="Vehicle Module" />
-                )}
+        ) : null}
+        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <StyledSpeedDial
+            ariaLabel="SpeedDial playground example"
+            icon={<SpeedDialIcon />}
+          >
+            {actions.map((action) => (
+              <SpeedDialAction
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={action.name}
+                onClick={action.onClick}
               />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <NoCrashIcon color="action" />
-              </div>
-              <TextField
-                name="drivername"
-                label="Driver Name"
-                id="drivername"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <AddIcCallTwoToneIcon color="action" />
-              </div>
-              <TextField
-                name="driverphone"
-                label="Driver Phone"
-                id="driverphone"
-                variant="standard"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <AttachEmailIcon color="action" />
-              </div>
-              <TextField
-                name="travelsemail"
-                label="Travels Email"
-                id="travelsemail"
-                variant="standard"
-              />
-            </div>
-          </div>
-        </div>
-      ) : null}
-      <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-        <StyledSpeedDial
-          ariaLabel="SpeedDial playground example"
-          icon={<SpeedDialIcon />}
-        >
-          {actions.map((action) => (
-            <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.name}
-              onClick={action.onClick}
-            />
-          ))}
-        </StyledSpeedDial>
-      </Box>
-    </form>
+            ))}
+          </StyledSpeedDial>
+        </Box>
+      </form>
     </div>
   );
 };

@@ -70,265 +70,313 @@ const Accuntinfo = () => {
     setValue(newValue);
   };
   return (
-    <>
+    <div className="account-form">
       <form action="">
         <span className="Title-Name">Accounting Info</span>
-        <div className="input-field">
-          <div className="input">
-            <div className="icone">
-              <SwitchAccountIcon color="action" />
-            </div>
-            <TextField
-              margin="normal"
-              size="small"
-              id="accountno"
-              label="Account No"
-              name="accountno"
-              autoFocus
-            />
-          </div>
-          <div className="input">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoItem label="DatePicker">
-                <DatePicker
-                  defaultValue={today}
-                  minDate={tomorrow}
-                  views={["year", "month", "day"]}
+        <div className="detail-container-main-account">
+          <div className="container-left-account">
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <SwitchAccountIcon color="action" />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="accountno"
+                  label="Account No"
+                  name="accountno"
+                  autoFocus
                 />
-              </DemoItem>
-            </LocalizationProvider>
-          </div>
-          <div className="input">
-            <div className="icone">
-              <MinorCrashIcon color="action" />
+              </div>
+              <div className="input">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="DatePicker">
+                    <DatePicker
+                      defaultValue={today}
+                      minDate={tomorrow}
+                      views={["year", "month", "day"]}
+                    />
+                  </DemoItem>
+                </LocalizationProvider>
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <MinorCrashIcon color="action" />
+                </div>
+                <TextField
+                  name="vehicle_travels"
+                  label="Vehicle/Travels"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
             </div>
-            <TextField
-              name="vehicle_travels"
-              label="Vehicle/Travels"
-              id="standard-size-normal"
-              variant="standard"
-            />
-          </div>
-        </div>
-        <div className="input-field">
-          <div className="input">
-            <div className="icone">
-              <AddHomeWorkIcon color="action" />
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <AddHomeWorkIcon color="action" />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="address1"
+                  label="Address 1"
+                  name="address1"
+                  autoFocus
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <LocationCityIcon color="action" />
+                </div>
+                <TextField
+                  name="city"
+                  label="City"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <PermIdentityIcon color="action" />
+                </div>
+                <TextField
+                  name="cperson"
+                  label="C Person"
+                  id="cperson"
+                  variant="standard"
+                />
+              </div>
             </div>
-            <TextField
-              margin="normal"
-              size="small"
-              id="address1"
-              label="Address 1"
-              name="address1"
-              autoFocus
-            />
-          </div>
-          <div className="input">
-            <div className="icone">
-              <LocationCityIcon color="action" />
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <AttachEmailIcon color="action" />
+                </div>
+                <TextField
+                  name="email"
+                  label="Email"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <ContactPhoneIcon color="action" />
+                </div>
+                <TextField
+                  name="phone"
+                  label="Phone"
+                  id="phone"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <TextField
+                  type="number"
+                  label="Veh.Commission"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "25ch" }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">%</InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
             </div>
-            <TextField
-              name="city"
-              label="City"
-              id="standard-size-normal"
-              variant="standard"
-            />
-          </div>
-          <div className="input">
-            <div className="icone">
-              <PermIdentityIcon color="action" />
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <RateReviewIcon color="action" />
+                </div>
+                <TextField
+                  name="ratetype"
+                  label="Rate Type"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <div className="input radio">
+                <FormControlLabel
+                  value="Printbill"
+                  control={<Checkbox size="small" />}
+                  label="Rate"
+                />
+              </div>
+              <div className="input radio">
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  value={Undergroup.map((option) => option.optionvalue)}
+                  options={Undergroup.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Under Group" />
+                  )}
+                />
+              </div>
             </div>
-            <TextField
-              name="cperson"
-              label="C Person"
-              id="cperson"
-              variant="standard"
-            />
-          </div>
-        </div>
-        <div className="input-field">
-          <div className="input">
-            <div className="icone">
-              <AttachEmailIcon color="action" />
+            <div className="input-field">
+              <div className="input">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Is Runing
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <div className="input radio">
+                <div className="icone">
+                  <StoreIcon color="action" />
+                </div>
+                <TextField
+                  name="entity"
+                  label="Opening Balance"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    A/C Type
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="Dr"
+                      control={<Radio />}
+                      label="Dr"
+                    />
+                    <FormControlLabel
+                      value="Cr"
+                      control={<Radio />}
+                      label="Cr"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
             </div>
-            <TextField
-              name="email"
-              label="Email"
-              id="standard-size-normal"
-              variant="standard"
-            />
-          </div>
-          <div className="input">
-            <div className="icone">
-              <ContactPhoneIcon color="action" />
+            <div className="input-field">
+              <div className="input">
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  value={Vehicleinfo.map((option) => option.optionvalue)}
+                  options={Vehicleinfo.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Vehicle Info" />
+                  )}
+                />
+              </div>
+              <div className="input">
+                <FormControlLabel
+                  value="Printbill"
+                  control={<Checkbox size="small" />}
+                  label="Auto Refreash"
+                />
+              </div>
             </div>
-            <TextField
-              name="phone"
-              label="Phone"
-              id="phone"
-              variant="standard"
-            />
-          </div>
-          <div className="input">
-            <TextField
-              type="number"
-              label="Veh.Commission"
-              id="outlined-start-adornment"
-              sx={{ m: 1, width: "25ch" }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">%</InputAdornment>
-                ),
-              }}
-            />
-          </div>
-        </div>
-        <div className="input-field">
-          <div className="input">
-            <div className="icone">
-              <RateReviewIcon color="action" />
-            </div>
-            <TextField
-              name="ratetype"
-              label="Rate Type"
-              id="standard-size-normal"
-              variant="standard"
-            />
-          </div>
-          <div className="input radio">
-            <FormControlLabel
-              value="Printbill"
-              control={<Checkbox size="small" />}
-              label="Rate"
-            />
-          </div>
-          <div className="input radio">
-            <Autocomplete
-              fullWidth
-              id="free-solo-demo"
-              freeSolo
-              value={Undergroup.map((option) => option.optionvalue)}
-              options={Undergroup.map((option) => ({ label: option.Option }))}
-              getOptionLabel={(option) => option.label || ""}
-              renderInput={(params) => (
-                <TextField {...params} label="Under Group" />
-              )}
-            />
-          </div>
-        </div>
-        <div className="input-field">
-          <div className="input">
-            <FormControl>
-              <FormLabel id="demo-row-radio-buttons-group-label">
-                Is Runing
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
+            <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+              <StyledSpeedDial
+                ariaLabel="SpeedDial playground example"
+                icon={<SpeedDialIcon />}
               >
-                <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-                <FormControlLabel value="no" control={<Radio />} label="No" />
-              </RadioGroup>
-            </FormControl>
+                {actions.map((action) => (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                  />
+                ))}
+              </StyledSpeedDial>
+            </Box>
           </div>
-          <div className="input radio">
-            <div className="icone">
-              <StoreIcon color="action" />
+          <div className="container-right-account">
+            <div className="textbox-account">
+              {/* <div className="textboxlist-account"> */}
+                <div>
+                  <Box sx={{ width: "100%", typography: "body1" }}>
+                    <TabContext value={value}>
+                      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <TabList
+                          onChange={handleChange}
+                          aria-label="lab API tabs example"
+                        >
+                          <Tab label="List" value="list" />
+                          <Tab
+                            label="Online Password"
+                            value="online_password"
+                          />
+                        </TabList>
+                      </Box>
+                      <TabPanel value="list">
+                      <div className="booking-update">
+                      <div className="booking-update-content list-update">
+                        <span>
+                          List Lorem ipsum dolor sit amet, consectetur
+                          adipisicing elit. Harum veniam quos laborum. Dicta
+                          suscipit voluptas laboriosam rem alias praesentium,
+                          facere aliquam sed iste, officia excepturi quos
+                          corporis. Facilis, reiciendis et. Lorem ipsum dolor
+                          sit amet consectetur adipisicing elit. Cum nostrum
+                          nihil minima debitis, nobis incidunt temporibus velit
+                          accusantium dolore assumenda iusto quod ratione
+                          praesentium maxime eveniet voluptas enim animi
+                          laudantium.
+                        </span>
+                      </div>
+                    </div>
+                        </TabPanel>
+                      <TabPanel value="online_password">
+                        Online Password
+                      </TabPanel>
+                    </TabContext>
+                  </Box>
+                </div>
+              {/* </div> */}
+              <div className="textboxupdate">
+                <div className="textbox-container">
+                  <div className="icon">
+                    <IconButton aria-label="delete">
+                      <DescriptionIcon />
+                    </IconButton>
+                  </div>
+                  <span></span>
+                </div>
+              </div>
             </div>
-            <TextField
-              name="entity"
-              label="Opening Balance"
-              id="standard-size-normal"
-              variant="standard"
-            />
-          </div>
-          <div className="input radio">
-            <FormControl>
-              <FormLabel id="demo-row-radio-buttons-group-label">
-                A/C Type
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-              >
-                <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
-                <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
-              </RadioGroup>
-            </FormControl>
           </div>
         </div>
-        <div className="input-field">
-          <div className="input">
-            <Autocomplete
-              fullWidth
-              id="free-solo-demo"
-              freeSolo
-              value={Vehicleinfo.map((option) => option.optionvalue)}
-              options={Vehicleinfo.map((option) => ({ label: option.Option }))}
-              getOptionLabel={(option) => option.label || ""}
-              renderInput={(params) => (
-                <TextField {...params} label="Vehicle Info" />
-              )}
-            />
-          </div>
-          <div className="input">
-            <FormControlLabel
-              value="Printbill"
-              control={<Checkbox size="small" />}
-              label="Auto Refreash"
-            />
-          </div>
-        </div>
-
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-          <StyledSpeedDial
-            ariaLabel="SpeedDial playground example"
-            // hidden={hidden}
-            icon={<SpeedDialIcon />}
-            // direction={direction}
-          >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-              />
-            ))}
-          </StyledSpeedDial>
-        </Box>
       </form>
-      <div className="textbox">
-        <div className="textboxlist">
-          <div>
-          <Box sx={{ width: '100%', typography: 'body1' }}>
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="List" value="list" />
-            <Tab label="Online Password" value="online_password" />
-          </TabList>
-        </Box>
-        <TabPanel value="list">List</TabPanel>
-        <TabPanel value="online_password">Online Password</TabPanel>
-      </TabContext>
-    </Box>
-          </div>
-        </div>
-        <div className="textboxupdate">
-          <div className="textbox-container">
-            <div className="icon">
-              <IconButton aria-label="delete">
-                <DescriptionIcon />
-              </IconButton>
-            </div>
-            <span></span>
-          </div>
-        </div>
-      </div>
-    </>
+    </div>
   );
 };
 

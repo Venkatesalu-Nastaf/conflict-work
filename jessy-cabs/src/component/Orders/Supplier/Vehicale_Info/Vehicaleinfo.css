@@ -11,8 +11,8 @@
     border-radius: 10px;
   }
   .form-container .container-main::-webkit-scrollbar {
-    width: 5px;
-    height: 1px;
+    width: 0px;
+    height: 0px;
     overflow-x: hidden;
   }
   
@@ -25,14 +25,14 @@
     outline: 1px solid slategrey;
   }
   .form-container .container-main {
-    width: 970px;
-    height: 420px;
+    border: 2px solid #ccc;
     overflow: scroll;
-    overflow-x: hidden;
+    height: 77vh;
+    width: 81vw;
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    border-radius: 10px;
+    padding-top: 20px;
+    border-radius: 20px;
     color: #000;
     background-color: var(--glass);
   }

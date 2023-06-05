@@ -2,6 +2,16 @@
     display: flex;
     padding: 0px !important;
   }
+  .account-form{
+    width: 100%;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    /* border-radius: 10px; */
+    color: #000;
+    background-color: var(--glass);
+  }
   .form-container .Title-Name {
     font-size: 20px;
     font-weight: 500;
@@ -25,16 +35,23 @@
     outline: 1px solid slategrey;
   }
   .form-container .container-main {
-    width: 970px;
-    height: 420px;
+    border: 2px solid #ccc;
     overflow: scroll;
-    overflow-x: hidden;
+    height: 77vh;
+    width: 81vw;
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    border-radius: 10px;
+    padding-top: 20px;
+    border-radius: 20px;
     color: #000;
     background-color: var(--glass);
+  }
+  .detail-container-main-account{
+   display: flex; 
+  }
+  .detail-container-main-account .container-right-account{
+    margin: 30px 20px 20px;
+    width: 39%;
   }
   .input-field {
     display: flex;
@@ -72,11 +89,14 @@
   }
   
   /* TextBox */
-  .textbox {
+  .textbox-account{
+    border-radius: 10px;
+    border: 2px solid #ccc;
     display: flex;
     flex-direction: column;
-    padding-left: 20px;
-    gap: 1rem;
+  }
+  .textboxlist-account{
+
   }
   .textboxlist p::-webkit-scrollbar {
     width: 5px;

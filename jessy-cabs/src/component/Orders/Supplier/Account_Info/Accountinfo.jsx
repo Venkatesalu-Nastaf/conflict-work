@@ -1,5 +1,6 @@
 import React from "react";
 import "./Accountinfo.css";
+import Button from "@mui/material/Button";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import IconButton from "@mui/material/IconButton";
@@ -322,54 +323,106 @@ const Accuntinfo = () => {
           <div className="container-right-account">
             <div className="textbox-account">
               {/* <div className="textboxlist-account"> */}
-                <div>
-                  <Box sx={{ width: "100%", typography: "body1" }}>
-                    <TabContext value={value}>
-                      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                        <TabList
-                          onChange={handleChange}
-                          aria-label="lab API tabs example"
-                        >
-                          <Tab label="List" value="list" />
-                          <Tab
-                            label="Online Password"
-                            value="online_password"
-                          />
-                        </TabList>
-                      </Box>
-                      <TabPanel value="list">
+              <div>
+                <Box sx={{ width: "100%", typography: "body1" }}>
+                  <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                      <TabList
+                        onChange={handleChange}
+                        aria-label="lab API tabs example"
+                      >
+                        <Tab label="List" value="list" />
+                        <Tab label="Online Password" value="online_password" />
+                      </TabList>
+                    </Box>
+                    <TabPanel value="list">
                       <div className="booking-update">
-                      <div className="booking-update-content list-update">
-                        <span>
-                          List Lorem ipsum dolor sit amet, consectetur
-                          adipisicing elit. Harum veniam quos laborum. Dicta
-                          suscipit voluptas laboriosam rem alias praesentium,
-                          facere aliquam sed iste, officia excepturi quos
-                          corporis. Facilis, reiciendis et. Lorem ipsum dolor
-                          sit amet consectetur adipisicing elit. Cum nostrum
-                          nihil minima debitis, nobis incidunt temporibus velit
-                          accusantium dolore assumenda iusto quod ratione
-                          praesentium maxime eveniet voluptas enim animi
-                          laudantium.
-                        </span>
+                        <div className="booking-update-content list-update">
+                          <span>
+                            List Lorem ipsum dolor sit amet, consectetur
+                            adipisicing elit. Harum veniam quos laborum. Dicta
+                            suscipit voluptas laboriosam rem alias praesentium,
+                            facere aliquam sed iste, officia excepturi quos
+                            corporis. Facilis, reiciendis et. Lorem ipsum dolor
+                            sit amet consectetur adipisicing elit. Cum nostrum
+                            nihil minima debitis, nobis incidunt temporibus
+                            velit accusantium dolore assumenda iusto quod
+                            ratione praesentium maxime eveniet voluptas enim
+                            animi laudantium.
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                        </TabPanel>
-                      <TabPanel value="online_password">
-                        Online Password
-                      </TabPanel>
-                    </TabContext>
-                  </Box>
-                </div>
+                    </TabPanel>
+                    <TabPanel value="online_password">
+                      <div
+                        className="booking-update"
+                        style={{
+                          position: "relative",
+                        }}
+                      >
+                        <div
+                          className="booking-update-content list-update"
+                          style={{ overflow: "hidden" }}
+                        >
+                          <span className="temp-pass">
+                            <div className="input-field">
+                              <div className="input">
+                                <div className="icone">
+                                  <RateReviewIcon color="action" />
+                                </div>
+                                <TextField
+                                  name="temporary_password"
+                                  label="Temporary Password"
+                                  id="standard-size-normal"
+                                  variant="standard"
+                                />
+                              </div>
+                            </div>
+                            <div
+                              className="input-field"
+                              style={{ display: "block" }}
+                            >
+                              <div className="input">
+                                <Button variant="outlined">Update</Button>
+                              </div>
+                            </div>
+                          </span>
+                        </div>
+                      </div>
+                    </TabPanel>
+                  </TabContext>
+                </Box>
+              </div>
               {/* </div> */}
-              <div className="textboxupdate">
-                <div className="textbox-container">
-                  <div className="icon">
-                    <IconButton aria-label="delete">
+            </div>
+            <div className="print-excel">
+              <div
+                className="booking-update"
+                style={{
+                  position: "relative",
+                  border: "2px solid #ccc",
+                  borderRadius: "10px",
+                }}
+              >
+                <div className="booking-update-content list-update">
+                  <span>
+                    List Lorem ipsum dolor sit amet, consectetur adipisicing
+                    elit. Harum veniam quos laborum. Dicta suscipit voluptas
+                    laboriosam rem alias praesentium, facere aliquam sed iste,
+                    officia excepturi quos corporis. Facilis, reiciendis et.
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
+                    nostrum nihil minima debitis, nobis incidunt temporibus
+                    velit accusantium dolore assumenda iusto quod ratione
+                    praesentium maxime eveniet voluptas enim animi laudantium.
+                  </span>
+                  <span className="print-excel-btn">
+                    <IconButton
+                      aria-label="delete"
+                      style={{ color: "#456ddc" }}
+                    >
                       <DescriptionIcon />
                     </IconButton>
-                  </div>
-                  <span></span>
+                  </span>
                 </div>
               </div>
             </div>

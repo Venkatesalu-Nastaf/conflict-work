@@ -66,14 +66,17 @@
 }
 
 .active {
-  background: var(--activeItem);
+  /* background: var(--activeItem); */
+  background: #1c9bac62;
+  /* background: #1c9bac62; */
   margin-left: 0;
 }
 .active::before {
   content: "";
   width: 8px;
   height: 100%;
-  background: var(--pink);
+  background: #1c9cac;
+  /* background: var(--pink); */
   margin-right: calc(1rem - 8px);
 }
 /* Tablets */

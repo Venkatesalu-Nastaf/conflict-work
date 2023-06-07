@@ -95,9 +95,6 @@
     display: flex;
     flex-direction: column;
   }
-  .textboxlist-account{
-
-  }
   .textboxlist p::-webkit-scrollbar {
     width: 5px;
     height: 1px;
@@ -119,7 +116,16 @@
     background-color: rgb(217, 212, 212);
     outline: 1px solid slategrey;
   }
-  
+  .print-excel{
+    margin-top: 15px;
+    width: 93%;
+  }
+  .print-excel-btn{
+    position: absolute;
+    right: 25px;
+    bottom: 10px;
+    transition: .4s;
+  }
   .textboxupdate .textbox-container {
     /* position: relative; */
     border-radius: 5px;
@@ -131,7 +137,11 @@
     height: 200px;
     width: 300px;
   }
-  
+  .temp-pass{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   .textbox-container .icon {
     position: fixed;
     bottom: 50px;

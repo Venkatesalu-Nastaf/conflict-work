@@ -187,7 +187,6 @@
 .booking-update .list-update::-webkit-scrollbar {
   width: 5px;
   height: 0px;
-  /* overflow-x: hidden; */
   cursor: pointer;
   position: absolute;
 }

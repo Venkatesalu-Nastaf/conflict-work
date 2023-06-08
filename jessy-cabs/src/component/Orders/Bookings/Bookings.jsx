@@ -6,6 +6,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Booking from './Booking/Booking.jsx';
 import BookingCopy from './BookingCopy/BookingCopy.jsx';
+import Excelimport from '../Excelimport/Excelimport.jsx';
 const Bookings = () => {
   const [value, setValue] = React.useState('booking');
   
@@ -22,12 +23,12 @@ const Bookings = () => {
                 <TabList onChange={handleChange} aria-label="lab API tabs example">
                   <Tab label="Booking" value="booking" />
                   <Tab label="Booking Copy" value="bookingcopy" />
-                  <Tab label="Item Three" value="3" />
+                  <Tab label="Excel Import" value="excelimport" />
                 </TabList>
               </Box>
               <TabPanel value="booking"><Booking/></TabPanel>
               <TabPanel value="bookingcopy"><BookingCopy/></TabPanel>
-              <TabPanel value="3">Item Three</TabPanel>
+              <TabPanel value="excelimport"><Excelimport/></TabPanel>
             </TabContext>
           </Box>
         </div>

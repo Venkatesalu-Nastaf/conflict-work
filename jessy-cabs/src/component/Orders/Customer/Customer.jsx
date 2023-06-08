@@ -182,11 +182,9 @@ const Customer = () => {
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
-                    value={UnderGroup.map((option) => option.optionvalue)}
-                    options={UnderGroup.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
+                    value={UnderGroup.map((option) => option.optionvalue)}  
+                    options={UnderGroup.map((option) => ({ label: option.optionvalue }))}
+                    getOptionLabel={(option) => option.label || ''}
                     renderInput={(params) => (
                       <TextField {...params} label="Under Group" />
                     )}
@@ -384,9 +382,7 @@ const Customer = () => {
                     id="free-solo-demo"
                     freeSolo
                     value={BillingGroup.map((option) => option.optionvalue)}
-                    options={BillingGroup.map((option) => ({
-                      label: option.Option,
-                    }))}
+                    options={BillingGroup.map((option) => ({ label: option.optionvalue }))}
                     getOptionLabel={(option) => option.label || ""}
                     renderInput={(params) => (
                       <TextField {...params} label="Billing Group" />

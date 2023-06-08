@@ -599,7 +599,7 @@ const Booking = () => {
                   <TabPanel value="billingaddress">
                     <div className="booking-update">
                       <div className="booking-update-content">
-                        <form action="" style={{ margin: "-10px" }}>
+                        <form action="">
                           <div className="input-field billing">
                             <div className="input">
                               <div className="icone">

@@ -182,9 +182,11 @@ const Customer = () => {
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
-                    value={UnderGroup.map((option) => option.optionvalue)}  
-                    options={UnderGroup.map((option) => ({ label: option.optionvalue }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    value={UnderGroup.map((option) => option.optionvalue)}
+                    options={UnderGroup.map((option) => ({
+                      label: option.optionvalue,
+                    }))}
+                    getOptionLabel={(option) => option.label || ""}
                     renderInput={(params) => (
                       <TextField {...params} label="Under Group" />
                     )}
@@ -333,7 +335,9 @@ const Customer = () => {
                     id="free-solo-demo"
                     freeSolo
                     value={states.map((option) => option.statevalue)}
-                    options={states.map((option) => ({ label: option.Option }))}
+                    options={states.map((option) => ({
+                      label: option.statevalue,
+                    }))}
                     getOptionLabel={(option) => option.label || ""}
                     renderInput={(params) => (
                       <TextField {...params} label="State" />
@@ -382,7 +386,9 @@ const Customer = () => {
                     id="free-solo-demo"
                     freeSolo
                     value={BillingGroup.map((option) => option.optionvalue)}
-                    options={BillingGroup.map((option) => ({ label: option.optionvalue }))}
+                    options={BillingGroup.map((option) => ({
+                      label: option.optionvalue,
+                    }))}
                     getOptionLabel={(option) => option.label || ""}
                     renderInput={(params) => (
                       <TextField {...params} label="Billing Group" />
@@ -424,7 +430,7 @@ const Customer = () => {
                 </div>
                 <div className="textboxlist">
                   <div className="textboxupdate list-update">
-                  <span>
+                    <span>
                       List Lorem ipsum dolor sit amet, consectetur adipisicing
                       elit. Harum veniam quos laborum. Dicta suscipit voluptas
                       laboriosam rem alias praesentium, facere aliquam sed iste,

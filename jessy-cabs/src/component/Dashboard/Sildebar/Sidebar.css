@@ -3,7 +3,9 @@
   flex-direction: column;
   position: relative;
   padding-top: 4rem;
+  padding-right: 10px;
   transition: all 300ms ease;
+  border-right: 1px solid #ccc;
 }
 
 /* logo */
@@ -52,7 +54,6 @@
   color: rgb(253, 251, 251);
   font-weight: 600;
   text-decoration: none;
-
 }
 
 .menuItem:hover {
@@ -66,17 +67,16 @@
 }
 
 .active {
-  /* background: var(--activeItem); */
-  background: #1c9bac62;
-  /* background: #1c9bac62; */
+  background: rgba(255, 255, 255, 0.708);
+  color: #303030;
   margin-left: 0;
 }
 .active::before {
   content: "";
   width: 8px;
   height: 100%;
-  background: #1c9cac;
-  /* background: var(--pink); */
+  background: rgb(54, 164, 172);
+  color: #000;
   margin-right: calc(1rem - 8px);
 }
 /* Tablets */

@@ -7,6 +7,8 @@ import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import Customer from "./component/Orders/Customer/Customer";
 import Suppliers from "./component/Orders/Supplier/Suppliers";
 import Bookings from "./component/Orders/Bookings/Bookings";
+import TripSheet from "./component/TripSheet/TripSheet";
+import Page404 from "./component/Page404/page404";
 
 function App() {
   return (
@@ -16,14 +18,23 @@ function App() {
         <Route path="/home" element={<MainDashboard />}>
           <Route path="/home/dashboard" element={<MainDash />} />
           <Route path="/home/orders" element={<Orders />}>
-            <Route path="/home/orders/customer" element={<Customer/>} />
+            <Route path="/home/orders/customer" element={<Customer />} />
             <Route path="/home/orders/supplier" element={<Suppliers />} />
             <Route path="/home/orders/bookings" element={<Bookings />}>
-              <Route path="/home/orders/bookings/list" element={<h1>list</h1>} />
-              <Route path="/home/orders/bookings/billingaddress" element={<h1>billing</h1>} />
-              <Route path="/home/orders/bookings/email" element={<h1>email</h1>} />
+              <Route
+                path="/home/orders/bookings/list"
+                element={<h1>list</h1>}
+              />
+              <Route
+                path="/home/orders/bookings/billingaddress"
+                element={<h1>billing</h1>}
+              />
+              <Route
+                path="/home/orders/bookings/email"
+                element={<h1>email</h1>}
+              />
             </Route>
-            <Route path="/home/orders/tripsheet" element={<h1>custmer</h1>} />
+            <Route path="/home/orders/tripsheet" element={<TripSheet />} />
           </Route>
           <Route path="/home/customers" element={<h1>Customers</h1>} />
           <Route path="/home/products" element={<h1>Producs</h1>} />
@@ -32,15 +43,12 @@ function App() {
         <Route
           path="*"
           element={
-            <main>
-              <p>There's no data in this page 404 </p>
+            <main className="page404main">
+              {/* <p>There's no data in this page 404 </p> */}
+              <Page404 />
             </main>
           }
         />
-        {/* <Route exact path="/home/orders" element={<Centerdashboard />} />
-        <Route exact path="/home/customers" element={<h1>customer</h1>} />
-        <Route exact path="/home/products" element={<h1>products</h1>} />
-        <Route exact path="/home/chart" element={<h1>products</h1>} /> */}
       </Routes>
     </>
   );

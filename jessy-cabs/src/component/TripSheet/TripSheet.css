@@ -11,6 +11,12 @@
     flex-direction: column;
     color: #000;
   }
+  .Tripsheet-header{
+    background: var(--glass);
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: -10px;
+  }
   .detail-container-main-customer {
     border-top:1px solid #ccc ;
     display: flex;

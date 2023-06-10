@@ -1,23 +1,20 @@
 import React from "react";
 import {
-  UnderGroup,
-  states,
-  Customertype,
-  Select,
-  BillingGroup,
+  Apps,
+  VehicleRate,
+  Status,
+  HireTypes,
+  Department,
 } from "./TripSheetdata";
 import "./TripSheet.css";
 import {
   TextField,
   FormControlLabel,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
   Checkbox,
 } from "@mui/material";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import StoreIcon from "@mui/icons-material/Store";
@@ -62,46 +59,133 @@ const TripSheet = () => {
     <div className="form-container">
       <div className="customer-form">
         <form action="">
-          <span className="Title-Name">Customer Master</span>
+          <span className="Title-Name">Trip Sheet</span>
+          <div className="Tripsheet-header">
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <BadgeIcon color="action" />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="tripsheetno"
+                  label="Tirp Sheet No"
+                  name="tripsheetno"
+                  autoFocus
+                />
+              </div>
+              <div className="input">
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="bookingid"
+                  label="Booking ID"
+                  name="bookingid"
+                  autoFocus
+                />
+              </div>
+              <div className="input">
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  value={Status.map((option) => option.optionvalue)}
+                  options={Status.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Status" />
+                  )}
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <AddHomeWorkIcon color="action" />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="billingno"
+                  label="Billing No"
+                  name="billingno"
+                  autoFocus
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input-field checkbox">
+                <div className="input">
+                  <div className="icone">
+                    <AddHomeWorkIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    value={Apps.map((option) => option.optionvalue)}
+                    options={Apps.map((option) => ({
+                      label: option.Option,
+                    }))}
+                    getOptionLabel={(option) => option.label || ""}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Apps" />
+                    )}
+                  />
+                </div>
+                <FormControlLabel
+                  value="smsguest"
+                  control={<Checkbox size="small" />}
+                  label="SMS Guest"
+                />
+                <FormControlLabel
+                  value="booker"
+                  control={<Checkbox size="small" />}
+                  label="Booker"
+                />
+                <FormControlLabel
+                  value="email"
+                  control={<Checkbox size="small" />}
+                  label="Email"
+                />
+              </div>
+            </div>
+          </div>
           <div className="detail-container-main-customer">
             <div className="container-left-customer">
               <div className="input-field">
                 <div className="input">
                   <div className="icone">
-                    <BadgeIcon color="action" />
+                    <AttachEmailIcon color="action" />
                   </div>
                   <TextField
-                    margin="normal"
-                    size="small"
-                    id="email"
-                    label="Name"
-                    name="email"
-                    autoFocus
+                    name="customer"
+                    label="Customer"
+                    id="standard-size-normal"
+                    variant="standard"
                   />
                 </div>
                 <div className="input">
+                  <div className="icone">
+                    <RateReviewIcon color="action" />
+                  </div>
                   <TextField
-                    margin="normal"
-                    size="small"
-                    id="Print Name"
-                    label="Print Name"
-                    name="Print Name"
-                    autoFocus
+                    name="orderedby"
+                    label="Ordered By"
+                    id="standard-size-normal"
+                    variant="standard"
                   />
                 </div>
                 <div className="input">
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    value={Customertype.map((option) => option.optionvalue)}
-                    options={Customertype.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Customer Type " />
-                    )}
+                  <div className="icone">
+                    <AccountBalanceWalletIcon color="action" />
+                  </div>
+                  <TextField
+                    name="mobile"
+                    label="Mobile"
+                    id="standard-size-normal"
+                    variant="standard"
                   />
                 </div>
               </div>
@@ -113,20 +197,58 @@ const TripSheet = () => {
                   <TextField
                     margin="normal"
                     size="small"
-                    id="address1"
-                    label="Address 1"
-                    name="address1"
+                    id="username"
+                    label="User Name"
+                    name="username"
                     autoFocus
                   />
                 </div>
                 <div className="input">
+                  <div className="icone">
+                    <AccountBalanceWalletIcon color="action" />
+                  </div>
+                  <TextField
+                    name="Phoencell"
+                    label="Phone (Cell)"
+                    id="Phoencell"
+                    variant="standard"
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <AccountBalanceWalletIcon color="action" />
+                  </div>
+                  <TextField
+                    name="email"
+                    label="Email"
+                    id="email"
+                    variant="standard"
+                  />
+                </div>
+              </div>
+              <div className="input-field">
+                <div className="input">
+                  <div className="icone">
+                    <AddHomeWorkIcon color="action" />
+                  </div>
                   <TextField
                     margin="normal"
                     size="small"
-                    id="address2"
-                    label="Address 2"
-                    name="address2"
+                    id="streetname"
+                    label="No.Street Name"
+                    name="address"
                     autoFocus
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <HomeTwoToneIcon color="action" />
+                  </div>
+                  <TextField
+                    name="address"
+                    label="Address"
+                    id="address"
+                    variant="standard"
                   />
                 </div>
                 <div className="input">
@@ -143,204 +265,62 @@ const TripSheet = () => {
               </div>
               <div className="input-field">
                 <div className="input">
-                  <div className="icone">
-                    <AttachEmailIcon color="action" />
-                  </div>
-                  <TextField
-                    name="email"
-                    label="Email"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <RateReviewIcon color="action" />
-                  </div>
-                  <TextField
-                    name="ratetype"
-                    label="Rate Type"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <AccountBalanceWalletIcon color="action" />
-                  </div>
-                  <TextField
-                    name="opbalanace"
-                    label="OP Balanace"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input">
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
-                    value={UnderGroup.map((option) => option.optionvalue)}
-                    options={UnderGroup.map((option) => ({
-                      label: option.optionvalue,
+                    value={HireTypes.map((option) => option.option)}
+                    options={HireTypes.map((option) => ({
+                      label: option.option,
                     }))}
                     getOptionLabel={(option) => option.label || ""}
                     renderInput={(params) => (
-                      <TextField {...params} label="Under Group" />
+                      <TextField {...params} label="Hire Types" />
                     )}
                   />
                 </div>
-                <div className="input radio">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      GST Tax
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="no"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
-                <div className="input radio">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      A/C Type
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="Dr"
-                        control={<Radio />}
-                        label="Dr"
-                      />
-                      <FormControlLabel
-                        value="Cr"
-                        control={<Radio />}
-                        label="Cr"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
-              </div>
-              <div className="input-field checkbox">
-                <FormControlLabel
-                  value="Printbill"
-                  control={<Checkbox size="small" />}
-                  label="Print Bill"
-                />
-                <FormControlLabel
-                  value="Username"
-                  control={<Checkbox size="small" />}
-                  label="User Name"
-                />
-                <FormControlLabel
-                  value="Bookname"
-                  control={<Checkbox size="small" />}
-                  label="Book Name"
-                />
-                <FormControlLabel
-                  value="Divistion"
-                  control={<Checkbox size="small" />}
-                  label="Divistion"
-                />
-                <FormControlLabel
-                  size="small"
-                  value="Hourroundedoff"
-                  control={<Checkbox size="small" />}
-                  label="Hour Roundedoff"
-                />
-              </div>
-              <div className="input-field">
                 <div className="input">
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
-                    value={Select.map((option) => option.optionvalue)}
-                    options={Select.map((option) => ({ label: option.Option }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Select" />
-                    )}
-                  />
-                </div>
-                <div className="input radio">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Incl. Addres?
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="no"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
-                <div className="input radio">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Active
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="no"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input">
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    value={states.map((option) => option.statevalue)}
-                    options={states.map((option) => ({
-                      label: option.statevalue,
+                    value={Department.map((option) => option.option)}
+                    options={Department.map((option) => ({
+                      label: option.option,
                     }))}
                     getOptionLabel={(option) => option.label || ""}
                     renderInput={(params) => (
-                      <TextField {...params} label="State" />
+                      <TextField {...params} label="Department" />
+                    )}
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <LocationCityIcon color="action" />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id="vehiclerigsterno"
+                    label="Vehicle Rigster No"
+                    name="vehiclerigsterno"
+                    autoFocus
+                  />
+                </div>
+              </div>
+              <div className="input-field">
+                <div className="input">
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    value={VehicleRate.map((option) => option.optionvalue)}
+                    options={VehicleRate.map((option) => ({
+                      label: option.option,
+                    }))}
+                    getOptionLabel={(option) => option.label || ""}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Vehicle Rate" />
                     )}
                   />
                 </div>
@@ -349,54 +329,45 @@ const TripSheet = () => {
                     <StoreIcon color="action" />
                   </div>
                   <TextField
-                    name="entity"
-                    label="Entity"
-                    id="standard-size-normal"
+                    name="drivername"
+                    label="Driver Name"
+                    id="drivername"
+                    variant="standard"
+                  />
+                </div>
+                <div className="input">
+                  <div className="icone">
+                    <StoreIcon color="action" />
+                  </div>
+                  <TextField
+                    name="cell"
+                    label="Cell"
+                    id="cell"
                     variant="standard"
                   />
                 </div>
               </div>
               <div className="input-field">
                 <div className="input radio">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Enable Driver App
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="no"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
+                  <FormControlLabel
+                    value="GST"
+                    control={<Checkbox size="small" />}
+                    label="GST"
+                  />
                 </div>
                 <div className="input">
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    value={BillingGroup.map((option) => option.optionvalue)}
-                    options={BillingGroup.map((option) => ({
-                      label: option.optionvalue,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Billing Group" />
-                    )}
+                  <div className="icone">
+                    <StoreIcon color="action" />
+                  </div>
+                  <TextField
+                    name="cell"
+                    label="Driver SMS Ex Betta"
+                    id="cell"
+                    variant="standard"
                   />
                 </div>
               </div>
-              <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+              <Box sx={{ position: "relative", mt:3, height: 320 }}>
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"
                   icon={<SpeedDialIcon />}

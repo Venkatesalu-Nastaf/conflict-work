@@ -10,7 +10,7 @@ import {
 } from "./TripSheetdata";
 import "./TripSheet.css";
 import Button from "@mui/material/Button";
-import BorderColorIcon from '@mui/icons-material/BorderColor';
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
@@ -25,6 +25,7 @@ import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import StoreIcon from "@mui/icons-material/Store";
+import { Table } from "@mui/joy";
 import BadgeIcon from "@mui/icons-material/Badge";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -41,6 +42,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
+// TABLE
+function createData(name, address1, address2) {
+  return { name, address1, address2 };
+}
+
+const rows = [
+  createData("John Doe", "123 Main St", "Apt 4"),
+  createData("Jane Smith", "456 Elm St", "Unit 7"),
+  createData("Michael Johnson", "789 Oak Ave", "Suite 10"),
+  createData("Sarah Davis", "321 Pine St", "Floor 2"),
+  createData("Robert Wilson", "987 Maple Dr", "Building B"),
+];
+
+// TABLE END
 // date
 const today = dayjs();
 const tomorrow = dayjs().add(1, "day");
@@ -240,6 +255,22 @@ const TripSheet = () => {
                 </div>
               </div>
               <div className="input-field">
+                <div className="input" style={{ width: "450px" }}>
+                  <div className="icone">
+                    <StoreIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    name="remark"
+                    label="Remark"
+                    id="remark"
+                    sx={{ m: 1, width: "300ch" }}
+                    variant="standard"
+                  />
+                </div>
+              </div>
+
+              <div className="input-field">
                 <div className="input">
                   <div className="icone">
                     <AddHomeWorkIcon color="action" />
@@ -329,15 +360,24 @@ const TripSheet = () => {
                 <div className="textboxlist">
                   <div className="textboxlist-customer list-update">
                     <span>
-                      List Lorem ipsum dolor sit amet, consectetur adipisicing
-                      elit. Harum veniam quos laborum. Dicta suscipit voluptas
-                      laboriosam rem alias praesentium, facere aliquam sed iste,
-                      officia excepturi quos corporis. Facilis, reiciendis et.
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Cum nostrum nihil minima debitis, nobis incidunt
-                      temporibus velit accusantium dolore assumenda iusto quod
-                      ratione praesentium maxime eveniet voluptas enim animi
-                      laudantium.
+                      <Table stickyHeader hoverRow borderAxis="y">
+                        <thead>
+                          <tr>
+                            <th style={{ width: "40%" }}>User Name</th>
+                            <th>Address</th>
+                            <th>Address</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {rows.map((row) => (
+                            <tr key={row.name}>
+                              <td>{row.name}</td>
+                              <td>{row.address1}</td>
+                              <td>{row.address2}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
                     </span>
                   </div>
                 </div>

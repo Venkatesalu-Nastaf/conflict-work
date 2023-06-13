@@ -329,7 +329,7 @@ export const VehicleRate = [
     optionvalue: "SWARAJ-MAZDA",
   },
   {
-    option: "SWARAJ MAZDA NON A/C",
+    option: 'SWARAJ MAZDA NON A/C',
     optionvalue: "SWARAJ-MAZDA-NON-A/C",
   },
   {

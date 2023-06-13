@@ -99,7 +99,6 @@
 .select-field {
   border: #000;
 }
-
 /* TextBox */
 .textbox-TripSheet {
   width: 90%;
@@ -110,8 +109,8 @@
   width: 530px;
   padding: 10px;
   padding-top: 0px;
-  margin-left:15px ;
-  margin-top:15px ;
+  margin-left: 15px;
+  margin-top: 15px;
   background-color: #fff;
   border-radius: 10px;
   border: 2px solid #ccc;
@@ -139,7 +138,7 @@
   border-radius: 20px;
 }
 
-.secend-container{
+.secend-container {
   border-top: solid 1px #ccc;
   background-color: var(--glass);
   padding: 20px 20px;

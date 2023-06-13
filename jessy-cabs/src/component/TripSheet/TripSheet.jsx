@@ -7,18 +7,39 @@ import {
   Department,
   Duty,
   Pickup,
+  Email,
 } from "./TripSheetdata";
 import "./TripSheet.css";
+import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
+import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
+import CurrencyRupeeTwoToneIcon from "@mui/icons-material/CurrencyRupeeTwoTone";
+import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
+import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
+import RecentActorsIcon from "@mui/icons-material/RecentActors";
+import StreamIcon from "@mui/icons-material/Stream";
+import DataUsageIcon from "@mui/icons-material/DataUsage";
+import SmsIcon from "@mui/icons-material/Sms";
+import EngineeringIcon from "@mui/icons-material/Engineering";
 import Button from "@mui/material/Button";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import CarCrashIcon from "@mui/icons-material/CarCrash";
+import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
+import NoCrashIcon from "@mui/icons-material/NoCrash";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TextField, FormControlLabel, Checkbox } from "@mui/material";
+import CallIcon from "@mui/icons-material/Call";
+import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
@@ -31,9 +52,11 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Autocomplete from "@mui/material/Autocomplete";
 
 //
+import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
+import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -41,6 +64,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 
 // TABLE
 function createData(name, address1, address2) {
@@ -56,6 +80,7 @@ const rows = [
 ];
 
 // TABLE END
+
 // date
 const today = dayjs();
 const tomorrow = dayjs().add(1, "day");
@@ -90,7 +115,7 @@ const TripSheet = () => {
             <div className="input-field">
               <div className="input">
                 <div className="icone">
-                  <BadgeIcon color="action" />
+                  <ListAltIcon color="action" />
                 </div>
                 <TextField
                   margin="normal"
@@ -102,6 +127,9 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
+                <div className="icone">
+                  <BadgeIcon color="action" />
+                </div>
                 <TextField
                   margin="normal"
                   size="small"
@@ -112,6 +140,9 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
+                <div className="icone">
+                  <QuizOutlinedIcon color="action" />
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -129,7 +160,7 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <AddHomeWorkIcon color="action" />
+                  <AccountBalanceWalletIcon color="action" />
                 </div>
                 <TextField
                   margin="normal"
@@ -141,231 +172,174 @@ const TripSheet = () => {
                 />
               </div>
             </div>
-            <div className="input-field">
-              <div className="input-field checkbox">
-                <div className="input">
-                  <div className="icone">
-                    <AddHomeWorkIcon color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo"
-                    freeSolo
-                    value={Apps.map((option) => option.optionvalue)}
-                    options={Apps.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Apps" />
-                    )}
-                  />
+            <div className="input-field checkbox">
+              <div className="input">
+                <div className="icone">
+                  <AppsOutageOutlinedIcon color="action" />
                 </div>
-                <FormControlLabel
-                  value="smsguest"
-                  control={<Checkbox size="small" />}
-                  label="SMS Guest"
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  value={Apps.map((option) => option.optionvalue)}
+                  options={Apps.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Apps" />
+                  )}
                 />
-                <FormControlLabel
-                  value="booker"
-                  control={<Checkbox size="small" />}
-                  label="Booker"
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <HailOutlinedIcon color="action" />
+                </div>
+                <TextField
+                  name="customer"
+                  label="Customer"
+                  id="standard-size-normal"
+                  variant="standard"
                 />
-                <FormControlLabel
-                  value="email"
-                  control={<Checkbox size="small" />}
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <RateReviewIcon color="action" />
+                </div>
+                <TextField
+                  name="orderedby"
+                  label="Ordered By"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <FormControlLabel
+                value="smsguest"
+                control={<Checkbox size="small" />}
+                label="SMS Guest"
+              />
+              <FormControlLabel
+                value="booker"
+                control={<Checkbox size="small" />}
+                label="Booker"
+              />
+              <FormControlLabel
+                value="email"
+                control={<Checkbox size="small" />}
+                label="Email"
+              />
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <PhoneIphoneIcon color="action" />
+                </div>
+                <TextField
+                  name="mobile"
+                  label="Mobile"
+                  id="standard-size-normal"
+                  size="small"
+                  autoFocus
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <AssignmentIndIcon color="action" />
+                </div>
+                <TextField
+                  margin="normal"
+                  id="username"
+                  label="User Name"
+                  name="username"
+                  size="small"
+                  autoFocus
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <CallIcon color="action" />
+                </div>
+                <TextField
+                  name="Phoencell"
+                  label="Phone (Cell)"
+                  id="Phoencell"
+                  size="small"
+                  autoFocus
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <AttachEmailIcon color="action" />
+                </div>
+                <TextField
+                  name="email"
                   label="Email"
+                  id="email"
+                  size="small"
+                  autoFocus
                 />
               </div>
             </div>
           </div>
+
           <div className="detail-container-main-Tripsheet">
             <div className="container-left-Tripsheet">
               <div className="input-field">
-                <div className="input">
-                  <div className="icone">
-                    <AttachEmailIcon color="action" />
-                  </div>
-                  <TextField
-                    name="customer"
-                    label="Customer"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <RateReviewIcon color="action" />
-                  </div>
-                  <TextField
-                    name="orderedby"
-                    label="Ordered By"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <AccountBalanceWalletIcon color="action" />
-                  </div>
-                  <TextField
-                    name="mobile"
-                    label="Mobile"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input">
+                <div className="input" style={{ width: "400px" }}>
                   <div className="icone">
                     <AddHomeWorkIcon color="action" />
                   </div>
                   <TextField
-                    margin="normal"
                     size="small"
-                    id="username"
-                    label="User Name"
-                    name="username"
-                    autoFocus
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <AccountBalanceWalletIcon color="action" />
-                  </div>
-                  <TextField
-                    name="Phoencell"
-                    label="Phone (Cell)"
-                    id="Phoencell"
-                    variant="standard"
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <AccountBalanceWalletIcon color="action" />
-                  </div>
-                  <TextField
-                    name="email"
-                    label="Email"
-                    id="email"
-                    variant="standard"
-                  />
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "450px" }}>
-                  <div className="icone">
-                    <StoreIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="remark"
-                    label="Remark"
+                    name="address1"
+                    label="Address"
                     id="remark"
-                    sx={{ m: 1, width: "300ch" }}
+                    sx={{ m: 1, width: "200ch" }}
                     variant="standard"
                   />
                 </div>
               </div>
-
               <div className="input-field">
-                <div className="input">
-                  <div className="icone">
-                    <AddHomeWorkIcon color="action" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    id="streetname"
-                    label="No.Street Name"
-                    name="address"
-                    autoFocus
-                  />
-                </div>
-                <div className="input">
+                <div className="input" style={{ width: "400px" }}>
                   <div className="icone">
                     <HomeTwoToneIcon color="action" />
                   </div>
                   <TextField
-                    name="address"
-                    label="Address"
-                    id="address"
-                    variant="standard"
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <LocationCityIcon color="action" />
-                  </div>
-                  <TextField
-                    name="city"
-                    label="City"
-                    id="standard-size-normal"
+                    size="small"
+                    name="streetno"
+                    id="remark"
+                    sx={{ m: 1, width: "200ch" }}
                     variant="standard"
                   />
                 </div>
               </div>
               <div className="input-field">
-                <div className="input">
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo"
-                    freeSolo
-                    value={HireTypes.map((option) => option.option)}
-                    options={HireTypes.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Hire Types" />
-                    )}
-                  />
-                </div>
-                <div className="input">
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo"
-                    freeSolo
-                    value={Department.map((option) => option.option)}
-                    options={Department.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Department" />
-                    )}
-                  />
-                </div>
-                <div className="input">
+                <div className="input" style={{ width: "400px" }}>
                   <div className="icone">
                     <LocationCityIcon color="action" />
                   </div>
                   <TextField
-                    margin="normal"
                     size="small"
-                    id="vehiclerigsterno"
-                    label="Vehicle Rigster No"
-                    name="vehiclerigsterno"
-                    autoFocus
+                    name="city"
+                    id="address3"
+                    sx={{ m: 1, width: "200ch" }}
+                    variant="standard"
                   />
                 </div>
               </div>
             </div>
             <div className="container-right-Tripsheet">
-              <div className="textbox">
-                <div className="textboxlist">
+              <div className="textbox-TripSheet">
+                <div className="textboxlist-TripSheet">
                   <div className="textboxlist-customer list-update">
                     <span>
                       <Table stickyHeader hoverRow borderAxis="y">
                         <thead>
                           <tr>
-                            <th style={{ width: "40%" }}>User Name</th>
-                            <th>Address</th>
-                            <th>Address</th>
+                            <th style={{ width: "20%" }}>User Name</th>
+                            <th style={{ width: "35%" }}>Address</th>
+                            <th style={{ width: "35%" }}>Address</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -387,6 +361,62 @@ const TripSheet = () => {
           <div className="secend-container">
             <div className="input-field">
               <div className="input">
+                <div className="icone">
+                  <HowToRegIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  value={HireTypes.map((option) => option.option)}
+                  options={HireTypes.map((option) => ({
+                    label: option.option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Hire Types" />
+                  )}
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <StoreIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  value={Department.map((option) => option.option)}
+                  options={Department.map((option) => ({
+                    label: option.option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Department" />
+                  )}
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <CarCrashIcon color="action" />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="vehiclerigsterno"
+                  label="Vehicle Rigster No"
+                  name="vehiclerigsterno"
+                  autoFocus
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <NoCrashIcon color="action" />
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -404,7 +434,7 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <StoreIcon color="action" />
+                  <SensorOccupiedIcon color="action" />
                 </div>
                 <TextField
                   name="drivername"
@@ -415,7 +445,7 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <StoreIcon color="action" />
+                  <PhoneIphoneIcon color="action" />
                 </div>
                 <TextField
                   name="cell"
@@ -435,7 +465,7 @@ const TripSheet = () => {
             <div className="input-field">
               <div className="input">
                 <div className="icone">
-                  <StoreIcon color="action" />
+                  <SmsIcon color="action" />
                 </div>
                 <TextField
                   name="cell"
@@ -445,6 +475,9 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
+                <div className="icone">
+                  <EngineeringIcon color="action" />
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -461,6 +494,9 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
+                <div className="icone">
+                  <AirlineStopsIcon color="action" />
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -478,7 +514,7 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <LocationCityIcon color="action" />
+                  <DataUsageIcon color="action" />
                 </div>
                 <TextField
                   margin="normal"
@@ -525,7 +561,7 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <StoreIcon color="action" />
+                  <StreamIcon color="action" />
                 </div>
                 <TextField
                   size="small"
@@ -561,7 +597,7 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <StoreIcon color="action" />
+                  <RecentActorsIcon color="action" />
                 </div>
                 <TextField
                   size="small"
@@ -573,7 +609,7 @@ const TripSheet = () => {
               </div>
               <div className="input" style={{ width: "300px" }}>
                 <div className="icone">
-                  <LocationCityIcon color="action" />
+                  <CurrencyRupeeTwoToneIcon color="action" />
                 </div>
                 <TextField
                   margin="normal"
@@ -606,12 +642,12 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <StoreIcon color="action" />
+                  <BadgeIcon color="action" />
                 </div>
                 <TextField
-                  name="ccode"
-                  label="C Code"
-                  id="ccode"
+                  name="customer-code"
+                  label="Customer Code"
+                  id="customer-code"
                   variant="standard"
                 />
               </div>
@@ -619,11 +655,27 @@ const TripSheet = () => {
                 <div className="icone">
                   <StoreIcon color="action" />
                 </div>
-                <TextField name="per" label="Per" id="per" variant="standard" />
+                <TextField
+                  name="permit"
+                  label="Permit"
+                  id="permit"
+                  variant="standard"
+                />
               </div>
               <div className="input">
                 <div className="icone">
                   <StoreIcon color="action" />
+                </div>
+                <TextField
+                  name="parking"
+                  label="Parking"
+                  id="parking"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <TollTwoToneIcon color="action" />
                 </div>
                 <TextField
                   name="Toll"
@@ -636,7 +688,7 @@ const TripSheet = () => {
             <div className="input-field">
               <div className="input">
                 <div className="icone">
-                  <LocationCityIcon color="action" />
+                  <BackupTableSharpIcon color="action" />
                 </div>
                 <TextField
                   margin="normal"
@@ -649,20 +701,20 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <LocationCityIcon color="action" />
+                  <MinorCrashSharpIcon color="action" />
                 </div>
                 <TextField
                   margin="normal"
                   size="small"
-                  name="v-toll"
-                  label="V-Toll"
-                  id="v-toll"
+                  name="vendor-toll"
+                  label="Vendor-Toll"
+                  id="vendor-toll"
                   autoFocus
                 />
               </div>
               <div className="input">
                 <div className="icone">
-                  <StoreIcon color="action" />
+                  <PaymentsIcon color="action" />
                 </div>
                 <TextField
                   size="small"
@@ -673,13 +725,16 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
+                <div className="icone">
+                  <AttachEmailIcon color="action" />
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
                   freeSolo
-                  value={Duty.map((option) => option.optionvalue)}
-                  options={Duty.map((option) => ({
+                  value={Email.map((option) => option.optionvalue)}
+                  options={Email.map((option) => ({
                     label: option.option,
                   }))}
                   getOptionLabel={(option) => option.label || ""}
@@ -688,18 +743,11 @@ const TripSheet = () => {
                   )}
                 />
               </div>
-              <div className="input">
-                <FormControlLabel
-                  value="smsguest"
-                  control={<Checkbox size="small" />}
-                  label="Value & Print"
-                />
-              </div>
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "450px" }}>
                 <div className="icone">
-                  <StoreIcon color="action" />
+                  <MarkChatReadIcon color="action" />
                 </div>
                 <TextField
                   size="small"
@@ -708,6 +756,13 @@ const TripSheet = () => {
                   id="remark"
                   sx={{ m: 1, width: "300ch" }}
                   variant="standard"
+                />
+              </div>
+              <div className="input">
+                <FormControlLabel
+                  value="smsguest"
+                  control={<Checkbox size="small" />}
+                  label="Value & Print"
                 />
               </div>
               <div className="input">

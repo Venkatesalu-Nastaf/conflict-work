@@ -363,6 +363,7 @@ const Booking = () => {
               <div className="input">
                 <Autocomplete
                   fullWidth
+                  size="small"
                   id="free-solo-demo"
                   freeSolo
                   value={Report.map((option) => option.optionvalue)}
@@ -390,6 +391,7 @@ const Booking = () => {
                 </div>
                 <Autocomplete
                   fullWidth
+                  size="small"
                   id="free-solo-demo"
                   freeSolo
                   value={PayType.map((option) => option.optionvalue)}
@@ -443,6 +445,7 @@ const Booking = () => {
                 </div>
                 <Autocomplete
                   fullWidth
+                  size="small"
                   id="free-solo-demo"
                   freeSolo
                   value={Duty.map((option) => option.optionvalue)}
@@ -459,6 +462,7 @@ const Booking = () => {
                 </div>
                 <Autocomplete
                   fullWidth
+                  size="small"
                   id="free-solo-demo"
                   freeSolo
                   value={PickUp.map((option) => option.optionvalue)}
@@ -536,6 +540,7 @@ const Booking = () => {
                   fullWidth
                   id="free-solo-demo"
                   freeSolo
+                  size="small"
                   value={Service_Station.map((option) => option.optionvalue)}
                   options={Service_Station.map((option) => ({
                     label: option.Option,
@@ -843,6 +848,7 @@ const Booking = () => {
                   fullWidth
                   id="free-solo-demo"
                   freeSolo
+                  size="small"
                   value={Duty.map((option) => option.optionvalue)}
                   options={Duty.map((option) => ({ label: option.Option }))}
                   getOptionLabel={(option) => option.label || ""}
@@ -883,6 +889,7 @@ const Booking = () => {
                   fullWidth
                   id="free-solo-demo"
                   freeSolo
+                  size="small"
                   value={Duty.map((option) => option.optionvalue)}
                   options={Duty.map((option) => ({ label: option.Option }))}
                   getOptionLabel={(option) => option.label || ""}

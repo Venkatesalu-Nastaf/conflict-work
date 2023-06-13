@@ -92,7 +92,7 @@ const Accuntinfo = () => {
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="DatePicker">
+                  <DemoItem label="DatePicker" >
                     <DatePicker
                       defaultValue={today}
                       minDate={tomorrow}
@@ -177,6 +177,7 @@ const Accuntinfo = () => {
                 <TextField
                   type="number"
                   label="Veh.Commission"
+                  size="small"
                   id="outlined-start-adornment"
                   sx={{ m: 1, width: "25ch" }}
                   InputProps={{
@@ -209,6 +210,7 @@ const Accuntinfo = () => {
               <div className="input radio">
                 <Autocomplete
                   fullWidth
+                  size="small"
                   id="free-solo-demo"
                   freeSolo
                   value={Undergroup.map((option) => option.optionvalue)}
@@ -285,6 +287,7 @@ const Accuntinfo = () => {
               <div className="input">
                 <Autocomplete
                   fullWidth
+                  size="small"
                   id="free-solo-demo"
                   freeSolo
                   value={Vehicleinfo.map((option) => option.optionvalue)}

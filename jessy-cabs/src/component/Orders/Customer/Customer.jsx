@@ -92,6 +92,7 @@ const Customer = () => {
                 <div className="input">
                   <Autocomplete
                     fullWidth
+                    size="small"
                     id="free-solo-demo"
                     freeSolo
                     value={Customertype.map((option) => option.optionvalue)}
@@ -180,6 +181,7 @@ const Customer = () => {
                 <div className="input">
                   <Autocomplete
                     fullWidth
+                    size="small"
                     id="free-solo-demo"
                     freeSolo
                     value={UnderGroup.map((option) => option.optionvalue)}
@@ -273,6 +275,7 @@ const Customer = () => {
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
+                    size="small"
                     value={Select.map((option) => option.optionvalue)}
                     options={Select.map((option) => ({ label: option.Option }))}
                     getOptionLabel={(option) => option.label || ""}
@@ -334,6 +337,7 @@ const Customer = () => {
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
+                    size="small"
                     value={states.map((option) => option.statevalue)}
                     options={states.map((option) => ({
                       label: option.statevalue,
@@ -385,6 +389,7 @@ const Customer = () => {
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
+                    size="small"
                     value={BillingGroup.map((option) => option.optionvalue)}
                     options={BillingGroup.map((option) => ({
                       label: option.optionvalue,

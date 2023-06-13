@@ -50,6 +50,10 @@ import { Table } from "@mui/joy";
 import BadgeIcon from "@mui/icons-material/Badge";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Autocomplete from "@mui/material/Autocomplete";
+// FontAwesomeIcon Link
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStamp } from '@fortawesome/free-solid-svg-icons'
+import { faSquareParking } from '@fortawesome/free-solid-svg-icons'
 
 //
 import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
@@ -653,7 +657,7 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <StoreIcon color="action" />
+              <FontAwesomeIcon icon={faStamp} />
                 </div>
                 <TextField
                   name="permit"
@@ -664,7 +668,7 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <StoreIcon color="action" />
+                <FontAwesomeIcon icon={faSquareParking} />
                 </div>
                 <TextField
                   name="parking"

@@ -12,7 +12,7 @@ import {
 import "./TripSheet.css";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
-import Tab from "@mui/joy/Tab";
+import Tab, { tabClasses } from "@mui/joy/Tab";
 import TabPanel from "@mui/joy/TabPanel";
 import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
 import PaymentsIcon from "@mui/icons-material/Payments";
@@ -795,44 +795,81 @@ const TripSheet = () => {
             </StyledSpeedDial>
           </Box>
           <div className="Tipsheet-content-table-main">
-            <div className="Tipsheet-content-table">
-              <Tabs
-                aria-label="Basic tabs"
-                defaultValue={0}
-                sx={{ borderRadius: "lg" }}
+            <Tabs
+              size="sm"
+              aria-label="Pricing plan"
+              defaultValue={0}
+              sx={(theme) => ({
+                width: "100%",
+                "--Tabs-gap": "0px",
+                borderRadius: "lg",
+                boxShadow: "sm",
+                overflow: "auto",
+                border: `2px solid #ccc`,
+              })}
+            >
+              <TabList
+                sx={{
+                  "--ListItem-radius": "0px",
+                  borderRadius: 0,
+                  [`& .${tabClasses.root}`]: {
+                    fontWeight: "lg",
+                    flex: 1,
+                    bgcolor: "background.body",
+                    position: "relative",
+                    [`&.${tabClasses.selected}`]: {
+                      color: "primary.500",
+                    },
+                    [`&.${tabClasses.selected}:before`]: {
+                      content: '""',
+                      display: "block",
+                      position: "absolute",
+                      bottom: -1,
+                      width: "100%",
+                      height: 2,
+                      bgcolor: "primary.400",
+                    },
+                    [`&.${tabClasses.focusVisible}`]: {
+                      outlineOffset: "-3px",
+                    },
+                  },
+                }}
               >
-                <TabList>
-                  <Tab>First tab</Tab>
-                  <Tab>Second tab</Tab>
-                  <Tab>Third tab</Tab>
-                  <Tab>Third tab</Tab>
-                  <Tab>Third tab</Tab>
-                  <Tab>Third tab</Tab>
-                  <Tab>Third tab</Tab>
-                </TabList>
-                <TabPanel value={0} sx={{ p: 2 }}>
-                  <b>First</b> tab panel
-                </TabPanel>
-                <TabPanel value={1} sx={{ p: 2 }}>
-                  <b>Second</b> tab panel
-                </TabPanel>
-                <TabPanel value={2} sx={{ p: 2 }}>
-                  <b>Third</b> tab panel
-                </TabPanel>
-                <TabPanel value={3} sx={{ p: 2 }}>
-                  <b>Third</b> tab panel
-                </TabPanel>
-                <TabPanel value={4} sx={{ p: 2 }}>
-                  <b>Third</b> tab panel
-                </TabPanel>
-                <TabPanel value={5} sx={{ p: 2 }}>
-                  <b>Third</b> tab panel
-                </TabPanel>
-                <TabPanel value={6} sx={{ p: 2 }}>
-                  <b>Third</b> tab panel
-                </TabPanel>
-              </Tabs>
-            </div>
+                <Tab>First tab</Tab>
+                <Tab>Second tab</Tab>
+                <Tab>Third tab</Tab>
+                <Tab>Third tab</Tab>
+                <Tab>Third tab</Tab>
+                <Tab>Third tab</Tab>
+                <Tab>Third tab</Tab>
+              </TabList>
+              <TabPanel value={0} sx={{ p: 2 }}>
+                <b>First</b> tab panel
+                <b>First</b> tab panel
+                <b>First</b> tab panel
+                <b>First</b> tab panel
+                <b>First</b> tab panel
+                <b>First</b> tab panel
+              </TabPanel>
+              <TabPanel value={1} sx={{ p: 2 }}>
+                <b>Second</b> tab panel
+              </TabPanel>
+              <TabPanel value={2} sx={{ p: 2 }}>
+                <b>Third</b> tab panel
+              </TabPanel>
+              <TabPanel value={3} sx={{ p: 2 }}>
+                <b>Third</b> tab panel
+              </TabPanel>
+              <TabPanel value={4} sx={{ p: 2 }}>
+                <b>Third</b> tab panel
+              </TabPanel>
+              <TabPanel value={5} sx={{ p: 2 }}>
+                <b>Third</b> tab panel
+              </TabPanel>
+              <TabPanel value={6} sx={{ p: 2 }}>
+                <b>Third</b> tab panel
+              </TabPanel>
+            </Tabs>
           </div>
         </form>
       </div>

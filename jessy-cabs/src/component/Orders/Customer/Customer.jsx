@@ -16,6 +16,7 @@ import {
   RadioGroup,
   Checkbox,
 } from "@mui/material";
+import dayjs from "dayjs";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
@@ -24,7 +25,10 @@ import StoreIcon from "@mui/icons-material/Store";
 import BadgeIcon from "@mui/icons-material/Badge";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Autocomplete from "@mui/material/Autocomplete";
-
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 //
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -57,44 +61,59 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
+// date
+const today = dayjs();
+const tomorrow = dayjs().add(1, "day");
 const Customer = () => {
   return (
     <div className="form-container">
       <div className="customer-form">
         <form action="">
           <span className="Title-Name">Customer Master</span>
-          <div className="detail-container-main-customer">
-            <div className="container-left-customer">
-              <div className="input-field">
-                <div className="input">
-                  <div className="icone">
-                    <BadgeIcon color="action" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    id="email"
-                    label="Name"
-                    name="email"
-                    autoFocus
-                  />
+          <div className="Customer-page-header">
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <AccountBalanceWalletIcon color="action" />
                 </div>
-                <div className="input">
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    id="Print Name"
-                    label="Print Name"
-                    name="Print Name"
-                    autoFocus
-                  />
+                <TextField
+                  name="customerid"
+                  label="Customer ID"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <BadgeIcon color="action" />
                 </div>
-                <div className="input">
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="email"
+                  label="Name"
+                  name="email"
+                  autoFocus
+                />
+              </div>
+              <div className="input">
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="Print Name"
+                  label="Print Name"
+                  name="Print Name"
+                  autoFocus
+                />
+              </div>
+              <div className="input">
+                <DemoItem label="Start Date">
                   <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo"
                     freeSolo
+                    sx={{ width: "20ch" }}
                     value={Customertype.map((option) => option.optionvalue)}
                     options={Customertype.map((option) => ({
                       label: option.Option,
@@ -104,143 +123,175 @@ const Customer = () => {
                       <TextField {...params} label="Customer Type " />
                     )}
                   />
-                </div>
+                </DemoItem>
               </div>
+              <div className="input">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Start Date">
+                    <DatePicker
+                      defaultValue={today}
+                      minDate={tomorrow}
+                      views={["year", "month", "day"]}
+                    />
+                  </DemoItem>
+                </LocalizationProvider>
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <AttachEmailIcon color="action" />
+                </div>
+                <TextField
+                  name="email"
+                  label="Email"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <RateReviewIcon color="action" />
+                </div>
+                <TextField
+                  name="ratetype"
+                  label="Rate Type"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <AccountBalanceWalletIcon color="action" />
+                </div>
+                <TextField
+                  name="opbalanace"
+                  label="OP Balanace"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    GST Tax
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    A/C Type
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="Dr"
+                      control={<Radio />}
+                      label="Dr"
+                    />
+                    <FormControlLabel
+                      value="Cr"
+                      control={<Radio />}
+                      label="Cr"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+            </div>
+          </div>
+          <div className="Customer-page-secend-container">
+            <div className="Customer-page-secend-container-left">
               <div className="input-field">
-                <div className="input">
+                <div className="input" style={{ width: "400px" }}>
                   <div className="icone">
                     <AddHomeWorkIcon color="action" />
                   </div>
                   <TextField
-                    margin="normal"
                     size="small"
-                    id="address1"
-                    label="Address 1"
                     name="address1"
-                    autoFocus
+                    label="Address"
+                    id="remark"
+                    sx={{ m: 1, width: "200ch" }}
+                    variant="standard"
                   />
                 </div>
-                <div className="input">
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    id="address2"
-                    label="Address 2"
-                    name="address2"
-                    autoFocus
-                  />
-                </div>
-                <div className="input">
+              </div>
+              <div className="input-field">
+                <div className="input" style={{ width: "400px" }}>
                   <div className="icone">
                     <LocationCityIcon color="action" />
                   </div>
                   <TextField
-                    name="city"
-                    label="City"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input">
-                  <div className="icone">
-                    <AttachEmailIcon color="action" />
-                  </div>
-                  <TextField
-                    name="email"
-                    label="Email"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <RateReviewIcon color="action" />
-                  </div>
-                  <TextField
-                    name="ratetype"
-                    label="Rate Type"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <AccountBalanceWalletIcon color="action" />
-                  </div>
-                  <TextField
-                    name="opbalanace"
-                    label="OP Balanace"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input">
-                  <Autocomplete
-                    fullWidth
                     size="small"
-                    id="free-solo-demo"
-                    freeSolo
-                    value={UnderGroup.map((option) => option.optionvalue)}
-                    options={UnderGroup.map((option) => ({
-                      label: option.optionvalue,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Under Group" />
-                    )}
+                    name="streetno"
+                    id="remark"
+                    sx={{ m: 1, width: "200ch" }}
+                    variant="standard"
                   />
                 </div>
-                <div className="input radio">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      GST Tax
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="no"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
-                <div className="input radio">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      A/C Type
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="Dr"
-                        control={<Radio />}
-                        label="Dr"
-                      />
-                      <FormControlLabel
-                        value="Cr"
-                        control={<Radio />}
-                        label="Cr"
-                      />
-                    </RadioGroup>
-                  </FormControl>
+              </div>
+              <div className="input-field">
+                <div className="input" style={{ width: "400px" }}>
+                  <div className="icone">
+                    <LocationCityIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    name="city"
+                    id="address3"
+                    sx={{ m: 1, width: "200ch" }}
+                    variant="standard"
+                  />
                 </div>
               </div>
+            </div>
+            <div className="Customer-page-secend-container-right">
+              <div className="textboxlist">
+                <div className="textboxlist-customer list-update">
+                  <span>
+                    List Lorem ipsum dolor sit amet, consectetur adipisicing
+                    elit. Harum veniam quos laborum. Dicta suscipit voluptas
+                    laboriosam rem alias praesentium, facere aliquam sed iste,
+                    officia excepturi quos corporis. Facilis, reiciendis et.
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
+                    nostrum nihil minima debitis, nobis incidunt temporibus
+                    velit accusantium dolore assumenda iusto quod ratione
+                    praesentium maxime eveniet voluptas enim animi laudantium.
+                    List Lorem ipsum dolor sit amet, consectetur adipisicing
+                    elit. Harum veniam quos laborum. Dicta suscipit voluptas
+                    laboriosam rem alias praesentium, facere aliquam sed iste,
+                    officia excepturi quos corporis. Facilis, reiciendis et.
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
+                    nostrum nihil minima debitis, nobis incidunt temporibus
+                    velit accusantium dolore assumenda iusto quod ratione
+                    praesentium maxime eveniet voluptas enim animi laudantium.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="detail-container-main-customer">
+            <div className="container-left-customer">
               <div className="input-field checkbox">
                 <FormControlLabel
                   value="Printbill"
@@ -287,7 +338,7 @@ const Customer = () => {
                 <div className="input radio">
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
-                      Incl. Addres?
+                      Incl. Address
                     </FormLabel>
                     <RadioGroup
                       row
@@ -359,6 +410,22 @@ const Customer = () => {
                     variant="standard"
                   />
                 </div>
+                <div className="input">
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-demo"
+                    freeSolo
+                    value={UnderGroup.map((option) => option.optionvalue)}
+                    options={UnderGroup.map((option) => ({
+                      label: option.optionvalue,
+                    }))}
+                    getOptionLabel={(option) => option.label || ""}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Under Group" />
+                    )}
+                  />
+                </div>
               </div>
               <div className="input-field">
                 <div className="input radio">
@@ -401,7 +468,7 @@ const Customer = () => {
                   />
                 </div>
               </div>
-              <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+              <Box sx={{ position: "relative", mt: -35,pt: 0, height: 320 }}>
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"
                   icon={<SpeedDialIcon />}
@@ -418,21 +485,6 @@ const Customer = () => {
             </div>
             <div className="container-right-customer">
               <div className="textbox">
-                <div className="textboxlist">
-                  <div className="textboxlist-customer list-update">
-                    <span>
-                      List Lorem ipsum dolor sit amet, consectetur adipisicing
-                      elit. Harum veniam quos laborum. Dicta suscipit voluptas
-                      laboriosam rem alias praesentium, facere aliquam sed iste,
-                      officia excepturi quos corporis. Facilis, reiciendis et.
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Cum nostrum nihil minima debitis, nobis incidunt
-                      temporibus velit accusantium dolore assumenda iusto quod
-                      ratione praesentium maxime eveniet voluptas enim animi
-                      laudantium.
-                    </span>
-                  </div>
-                </div>
                 <div className="textboxlist">
                   <div className="textboxupdate list-update">
                     <span>

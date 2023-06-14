@@ -1,3 +1,29 @@
+/* HEADER CONTAINER */
+.Customer-page-header {
+  border-top: solid 1px #ccc;
+  background: var(--glass);
+  padding: 20px;
+  margin-top: 10px;
+  margin-bottom: -10px;
+}
+/*SECEND-CONTAINER  */
+.Customer-page-secend-container {
+  border-top: solid 1px #ccc;
+  background-color: var(--glass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  width: 100%;
+  margin-top: 10px; 
+}
+.Customer-page-secend-container-left{
+  width: 40%;
+  padding: 10px;
+}
+.Customer-page-secend-container-right{
+  width: 50%;
+}
 .form-container .Title-Name {
   font-size: 20px;
   padding-left: 20px;
@@ -12,11 +38,10 @@
   color: #000;
 }
 .detail-container-main-customer {
-  border-top:1px solid #ccc ;
+  border-top: 1px solid #ccc;
   display: flex;
   background-color: var(--glass);
   padding: 20px;
-  margin-top: 10px;
 }
 .form-container .customer-form::-webkit-scrollbar {
   width: 0px;
@@ -98,7 +123,7 @@
   display: flex;
   flex-direction: column;
 }
-.textbox .textboxlist {
+ .textboxlist {
   width: 100%;
   padding: 10px;
   background-color: #fff;

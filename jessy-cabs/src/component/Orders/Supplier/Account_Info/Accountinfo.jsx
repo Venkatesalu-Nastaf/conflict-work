@@ -5,6 +5,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import IconButton from "@mui/material/IconButton";
 import DescriptionIcon from "@mui/icons-material/Description";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import {
   TextField,
   FormControlLabel,
@@ -92,7 +93,7 @@ const Accuntinfo = () => {
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="DatePicker" >
+                  <DemoItem label="DatePicker">
                     <DatePicker
                       defaultValue={today}
                       minDate={tomorrow}
@@ -114,27 +115,16 @@ const Accuntinfo = () => {
               </div>
             </div>
             <div className="input-field">
-              <div className="input">
+              <div className="input" style={{ width: "400px" }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
                 <TextField
-                  margin="normal"
                   size="small"
-                  id="address1"
-                  label="Address 1"
                   name="address1"
-                  autoFocus
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <LocationCityIcon color="action" />
-                </div>
-                <TextField
-                  name="city"
-                  label="City"
-                  id="standard-size-normal"
+                  label="Address"
+                  id="remark"
+                  sx={{ m: 1, width: "200ch" }}
                   variant="standard"
                 />
               </div>
@@ -151,6 +141,18 @@ const Accuntinfo = () => {
               </div>
             </div>
             <div className="input-field">
+              <div className="input" style={{ width: "400px" }}>
+                <div className="icone">
+                  <HomeTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  size="small"
+                  name="streetno"
+                  id="remark"
+                  sx={{ m: 1, width: "200ch" }}
+                  variant="standard"
+                />
+              </div>
               <div className="input">
                 <div className="icone">
                   <AttachEmailIcon color="action" />
@@ -159,6 +161,20 @@ const Accuntinfo = () => {
                   name="email"
                   label="Email"
                   id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input" style={{ width: "400px" }}>
+                <div className="icone">
+                  <LocationCityIcon color="action" />
+                </div>
+                <TextField
+                  size="small"
+                  name="city"
+                  id="address3"
+                  sx={{ m: 1, width: "200ch" }}
                   variant="standard"
                 />
               </div>
@@ -173,6 +189,8 @@ const Accuntinfo = () => {
                   variant="standard"
                 />
               </div>
+            </div>
+            <div className="input-field">
               <div className="input">
                 <TextField
                   type="number"
@@ -187,8 +205,6 @@ const Accuntinfo = () => {
                   }}
                 />
               </div>
-            </div>
-            <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <RateReviewIcon color="action" />
@@ -207,6 +223,8 @@ const Accuntinfo = () => {
                   label="Rate"
                 />
               </div>
+            </div>
+            <div className="input-field">
               <div className="input radio">
                 <Autocomplete
                   fullWidth
@@ -223,8 +241,6 @@ const Accuntinfo = () => {
                   )}
                 />
               </div>
-            </div>
-            <div className="input-field">
               <div className="input">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -259,6 +275,8 @@ const Accuntinfo = () => {
                   variant="standard"
                 />
               </div>
+            </div>
+            <div className="input-field">
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -282,8 +300,6 @@ const Accuntinfo = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-            </div>
-            <div className="input-field">
               <div className="input">
                 <Autocomplete
                   fullWidth
@@ -308,10 +324,11 @@ const Accuntinfo = () => {
                 />
               </div>
             </div>
-            <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+            <Box sx={{ position: "relative", mt: -30,pt: 0, height: 320 }}>
               <StyledSpeedDial
                 ariaLabel="SpeedDial playground example"
                 icon={<SpeedDialIcon />}
+                direction="left"
               >
                 {actions.map((action) => (
                   <SpeedDialAction
@@ -323,6 +340,7 @@ const Accuntinfo = () => {
               </StyledSpeedDial>
             </Box>
           </div>
+
           <div className="container-right-account">
             <div className="textbox-account">
               {/* <div className="textboxlist-account"> */}

@@ -17,6 +17,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import dayjs from "dayjs";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
@@ -239,7 +240,7 @@ const Customer = () => {
               <div className="input-field">
                 <div className="input" style={{ width: "400px" }}>
                   <div className="icone">
-                    <LocationCityIcon color="action" />
+                    <HomeTwoToneIcon color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -468,7 +469,7 @@ const Customer = () => {
                   />
                 </div>
               </div>
-              <Box sx={{ position: "relative", mt: -35,pt: 0, height: 320 }}>
+              <Box sx={{ position: "relative", mt: -35, pt: 0, height: 320 }}>
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"
                   icon={<SpeedDialIcon />}

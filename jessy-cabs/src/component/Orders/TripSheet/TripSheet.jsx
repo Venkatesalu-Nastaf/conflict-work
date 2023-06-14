@@ -790,6 +790,22 @@ const TripSheet = () => {
               ))}
             </StyledSpeedDial>
           </Box>
+          <div>
+          <Box sx={{ width: '100%', typography: 'body1' }}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                  <Tab label="Booking" value="booking" />
+                  <Tab label="Booking Copy" value="bookingcopy" />
+                  <Tab label="Excel Import" value="excelimport" />
+                </TabList>
+              </Box>
+              <TabPanel value="booking"><Booking/></TabPanel>
+              <TabPanel value="bookingcopy"><BookingCopy/></TabPanel>
+              <TabPanel value="excelimport"><Excelimport/></TabPanel>
+            </TabContext>
+          </Box>
+          </div>
         </form>
       </div>
     </div>

@@ -13,6 +13,7 @@ import "./TripSheet.css";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab, { tabClasses } from "@mui/joy/Tab";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TabPanel from "@mui/joy/TabPanel";
 import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
 import PaymentsIcon from "@mui/icons-material/Payments";
@@ -419,8 +420,6 @@ const TripSheet = () => {
                   autoFocus
                 />
               </div>
-            </div>
-            <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <NoCrashIcon color="action" />
@@ -440,6 +439,8 @@ const TripSheet = () => {
                   )}
                 />
               </div>
+            </div>
+            <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <SensorOccupiedIcon color="action" />
@@ -462,15 +463,6 @@ const TripSheet = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input radio">
-                <FormControlLabel
-                  value="GST"
-                  control={<Checkbox size="small" />}
-                  label="GST"
-                />
-              </div>
-            </div>
-            <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <SmsIcon color="action" />
@@ -482,6 +474,15 @@ const TripSheet = () => {
                   variant="standard"
                 />
               </div>
+              <div className="input radio">
+                <FormControlLabel
+                  value="GST"
+                  control={<Checkbox size="small" />}
+                  label="GST"
+                />
+              </div>
+            </div>
+            <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <EngineeringIcon color="action" />
@@ -533,6 +534,17 @@ const TripSheet = () => {
                   autoFocus
                 />
               </div>
+              <div className="input">
+                <div className="icone">
+                  <StreamIcon color="action" />
+                </div>
+                <TextField
+                  size="small"
+                  name="request"
+                  label="Request"
+                  id="request"
+                />
+              </div>
             </div>
             <div className="input-field">
               <div className="input">
@@ -558,25 +570,27 @@ const TripSheet = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <DemoItem label="Total Days">
+                <div className="icone">
+                  <CalendarMonthIcon color="action" />
+                </div>
+                <DemoItem>
                   <TextField
+                    label="Total Days"
                     size="small"
                     type="number"
                     id="outlined-start-adornment"
-                    sx={{ m: 1, width: "23ch" }}
                   />
                 </DemoItem>
               </div>
               <div className="input">
                 <div className="icone">
-                  <StreamIcon color="action" />
+                  <RecentActorsIcon color="action" />
                 </div>
                 <TextField
                   size="small"
-                  name="request"
-                  label="Request"
-                  id="request"
-                  variant="standard"
+                  name="empolyeeno"
+                  label="Empolyee No"
+                  id="empolyeeno"
                 />
               </div>
             </div>
@@ -603,18 +617,7 @@ const TripSheet = () => {
                   </DemoContainer>
                 </LocalizationProvider>
               </div>
-              <div className="input">
-                <div className="icone">
-                  <RecentActorsIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  name="empolyeeno"
-                  label="Empolyee No"
-                  id="empolyeeno"
-                  variant="standard"
-                />
-              </div>
+
               <div className="input" style={{ width: "300px" }}>
                 <div className="icone">
                   <CurrencyRupeeTwoToneIcon color="action" />
@@ -626,6 +629,17 @@ const TripSheet = () => {
                   label="Advance-Paid-To-Vendor"
                   id="advance-paid-to-vendor"
                   autoFocus
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <BadgeIcon color="action" />
+                </div>
+                <TextField
+                  size="small"
+                  name="customer-code"
+                  label="Customer Code"
+                  id="customer-code"
                 />
               </div>
             </div>
@@ -648,17 +662,7 @@ const TripSheet = () => {
                   sx={{ m: 1, width: "23ch" }}
                 />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
-                </div>
-                <TextField
-                  name="customer-code"
-                  label="Customer Code"
-                  id="customer-code"
-                  variant="standard"
-                />
-              </div>
+
               <div className="input">
                 <div className="icone">
                   <FontAwesomeIcon icon={faStamp} />
@@ -835,21 +839,54 @@ const TripSheet = () => {
                   },
                 }}
               >
-                <Tab>First tab</Tab>
-                <Tab>Second tab</Tab>
-                <Tab>Third tab</Tab>
-                <Tab>Third tab</Tab>
-                <Tab>Third tab</Tab>
-                <Tab>Third tab</Tab>
-                <Tab>Third tab</Tab>
+                <Tab>Booking</Tab>
+                <Tab>Vendor Info</Tab>
+                <Tab>Vendor Bill</Tab>
+                <Tab>Customer Bill</Tab>
+                <Tab>Alert</Tab>
+                <Tab>GPS Att</Tab>
+                <Tab>Message</Tab>
               </TabList>
               <TabPanel value={0} sx={{ p: 2 }}>
-                <b>First</b> tab panel
-                <b>First</b> tab panel
-                <b>First</b> tab panel
-                <b>First</b> tab panel
-                <b>First</b> tab panel
-                <b>First</b> tab panel
+                <div className="Customer-Booking-Slider">
+                  <div className="input-field">
+                    <div className="input">
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          bgcolor: "#9fed64",
+                          color: "#fff",
+                          border: `2px solid #fff`,
+                          "&:hover": {
+                            bgcolor: "transparent", // Change the background color on hover
+                            color: "#9fed64", // Change the text color on hover
+                            border: `2px solid #9fed64`, // Change the border color on hover
+                          },
+                        }}
+                      >
+                        SMS Waiting
+                      </Button>
+                    </div>
+                    <div className="input">
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          bgcolor: "#ed6464",
+                          color: "#fff", // Change the text color on hover
+                          border: `2px solid #fff`, // Change the border color on hover
+
+                          "&:hover": {
+                            bgcolor: "transparent", // Change the background color on hover
+                            color: "#ed6464", // Change the text color on hover
+                            border: `2px solid #ed6464`, // Change the border color on hover
+                          },
+                        }}
+                      >
+                        Failed
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </TabPanel>
               <TabPanel value={1} sx={{ p: 2 }}>
                 <b>Second</b> tab panel

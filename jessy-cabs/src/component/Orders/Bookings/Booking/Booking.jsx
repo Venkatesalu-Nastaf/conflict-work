@@ -746,7 +746,7 @@ const Booking = () => {
                     id="free-solo-demo"
                     value={currentYear}
                     options={[currentYear]}
-                    getOptionLabel={(option) => option.label || ""}
+
                     renderInput={(params) => (
                       <TextField {...params} label="Fin Years" />
                     )}

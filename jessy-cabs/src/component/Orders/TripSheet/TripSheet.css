@@ -143,3 +143,13 @@
   background-color: var(--glass);
   padding: 20px 20px;
 }
+/* TRIPSHEET CONETNT */
+.Tipsheet-content-table-main {
+  background: var(--glass);
+  padding: 40px;
+}
+.Tipsheet-content-table-main .Tipsheet-content-table {
+  border: 2px solid #ccc;
+  border-radius: 17px;
+  padding: 2px;
+}

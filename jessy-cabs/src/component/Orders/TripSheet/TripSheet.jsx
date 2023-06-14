@@ -10,6 +10,10 @@ import {
   Email,
 } from "./TripSheetdata";
 import "./TripSheet.css";
+import Tabs from "@mui/joy/Tabs";
+import TabList from "@mui/joy/TabList";
+import Tab from "@mui/joy/Tab";
+import TabPanel from "@mui/joy/TabPanel";
 import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
@@ -51,9 +55,9 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Autocomplete from "@mui/material/Autocomplete";
 // FontAwesomeIcon Link
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStamp } from '@fortawesome/free-solid-svg-icons'
-import { faSquareParking } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStamp } from "@fortawesome/free-solid-svg-icons";
+import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 
 //
 import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
@@ -189,7 +193,7 @@ const TripSheet = () => {
                   value={Apps.map((option) => option.optionvalue)}
                   options={Apps.map((option) => ({
                     label: option.Option,
-                  }))} 
+                  }))}
                   getOptionLabel={(option) => option.label || ""}
                   renderInput={(params) => (
                     <TextField {...params} label="Apps" />
@@ -657,7 +661,7 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-              <FontAwesomeIcon icon={faStamp} />
+                  <FontAwesomeIcon icon={faStamp} />
                 </div>
                 <TextField
                   name="permit"
@@ -668,7 +672,7 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                <FontAwesomeIcon icon={faSquareParking} />
+                  <FontAwesomeIcon icon={faSquareParking} />
                 </div>
                 <TextField
                   name="parking"
@@ -790,21 +794,45 @@ const TripSheet = () => {
               ))}
             </StyledSpeedDial>
           </Box>
-          <div>
-          <Box sx={{ width: '100%', typography: 'body1' }}>
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <TabList onChange={handleChange} aria-label="lab API tabs example">
-                  <Tab label="Booking" value="booking" />
-                  <Tab label="Booking Copy" value="bookingcopy" />
-                  <Tab label="Excel Import" value="excelimport" />
+          <div className="Tipsheet-content-table-main">
+            <div className="Tipsheet-content-table">
+              <Tabs
+                aria-label="Basic tabs"
+                defaultValue={0}
+                sx={{ borderRadius: "lg" }}
+              >
+                <TabList>
+                  <Tab>First tab</Tab>
+                  <Tab>Second tab</Tab>
+                  <Tab>Third tab</Tab>
+                  <Tab>Third tab</Tab>
+                  <Tab>Third tab</Tab>
+                  <Tab>Third tab</Tab>
+                  <Tab>Third tab</Tab>
                 </TabList>
-              </Box>
-              <TabPanel value="booking"><Booking/></TabPanel>
-              <TabPanel value="bookingcopy"><BookingCopy/></TabPanel>
-              <TabPanel value="excelimport"><Excelimport/></TabPanel>
-            </TabContext>
-          </Box>
+                <TabPanel value={0} sx={{ p: 2 }}>
+                  <b>First</b> tab panel
+                </TabPanel>
+                <TabPanel value={1} sx={{ p: 2 }}>
+                  <b>Second</b> tab panel
+                </TabPanel>
+                <TabPanel value={2} sx={{ p: 2 }}>
+                  <b>Third</b> tab panel
+                </TabPanel>
+                <TabPanel value={3} sx={{ p: 2 }}>
+                  <b>Third</b> tab panel
+                </TabPanel>
+                <TabPanel value={4} sx={{ p: 2 }}>
+                  <b>Third</b> tab panel
+                </TabPanel>
+                <TabPanel value={5} sx={{ p: 2 }}>
+                  <b>Third</b> tab panel
+                </TabPanel>
+                <TabPanel value={6} sx={{ p: 2 }}>
+                  <b>Third</b> tab panel
+                </TabPanel>
+              </Tabs>
+            </div>
           </div>
         </form>
       </div>

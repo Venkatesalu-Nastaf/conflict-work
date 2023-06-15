@@ -413,6 +413,25 @@ export const VehicleRate = [
     optionvalue: "XYLO-A/C",
   },
 ];
+// Document Type
+export const DocumentType = [
+  {
+    option: "TripSheet",
+    optionvalue: "tripsheet",
+  },
+  {
+    option: "Parking",
+    optionvalue: "parking",
+  },
+  {
+    option: "Toll",
+    optionvalue: "toll",
+  },
+  {
+    option: "Permit",
+    optionvalue: "permit",
+  },
+]
 // Email
 export const Email = [
   {

@@ -5,6 +5,7 @@ import {
   Status,
   HireTypes,
   Department,
+  DocumentType,
   Duty,
   Pickup,
   Email,
@@ -13,7 +14,7 @@ import "./TripSheet.css";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab, { tabClasses } from "@mui/joy/Tab";
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import TabPanel from "@mui/joy/TabPanel";
 import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
 import PaymentsIcon from "@mui/icons-material/Payments";
@@ -74,7 +75,33 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import { DataGrid } from "@mui/x-data-grid";
 
+// Update Table
+const UpdateTbaleColumns = [
+  { field: "id", headerName: "Sno", width: 70 },
+  { field: "document", headerName: "Document", width: 130 },
+  { field: "documentname", headerName: "Document Name", width: 130 },
+  { field: "filename", headerName: "File Name", width: 90 },
+  
+];
+
+const UpdateTbaleRows = [
+  {
+    id: 1,
+    document: 1,
+    documentname: "Employee 1",
+    filename: "John Doe",
+  },
+  {
+    id: 2,
+    document: 2,
+    documentname: "Band 2",
+    filename: "Employee 2",
+  },
+  // Add more rows as needed
+];
+// UPDATE TABLE END
 // TABLE
 function createData(name, address1, address2) {
   return { name, address1, address2 };
@@ -805,6 +832,7 @@ const TripSheet = () => {
               defaultValue={0}
               sx={(theme) => ({
                 width: "100%",
+                height: "330px",
                 "--Tabs-gap": "0px",
                 borderRadius: "lg",
                 boxShadow: "sm",
@@ -850,7 +878,7 @@ const TripSheet = () => {
               <TabPanel value={0} sx={{ p: 2 }}>
                 <div className="Customer-Booking-Slider">
                   <div className="input-field">
-                    <div className="input">
+                    <div className="input" style={{ width: "200px" }}>
                       <Button
                         variant="outlined"
                         sx={{
@@ -858,32 +886,79 @@ const TripSheet = () => {
                           color: "#fff",
                           border: `2px solid #fff`,
                           "&:hover": {
-                            bgcolor: "transparent", // Change the background color on hover
-                            color: "#9fed64", // Change the text color on hover
-                            border: `2px solid #9fed64`, // Change the border color on hover
+                            bgcolor: "transparent",
+                            color: "#9fed64",
+                            border: `2px solid #9fed64`,
                           },
                         }}
                       >
                         SMS Waiting
                       </Button>
                     </div>
-                    <div className="input">
+                    <div className="input" style={{ width: "90px" }}>
                       <Button
                         variant="outlined"
                         sx={{
                           bgcolor: "#ed6464",
-                          color: "#fff", // Change the text color on hover
-                          border: `2px solid #fff`, // Change the border color on hover
-
+                          color: "#fff",
+                          border: `2px solid #fff`,
                           "&:hover": {
-                            bgcolor: "transparent", // Change the background color on hover
-                            color: "#ed6464", // Change the text color on hover
-                            border: `2px solid #ed6464`, // Change the border color on hover
+                            bgcolor: "transparent",
+                            color: "#ed6464",
+                            border: `2px solid #ed6464`,
                           },
                         }}
                       >
                         Failed
                       </Button>
+                    </div>
+                  </div>
+                  <div className="input-field">
+                    <div className="input">
+                      <div className="icone">
+                        <AirlineStopsIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-demo"
+                        freeSolo
+                        value={DocumentType.map((option) => option.optionvalue)}
+                        options={DocumentType.map((option) => ({
+                          label: option.option,
+                        }))}
+                        getOptionLabel={(option) => option.label || ""}
+                        renderInput={(params) => (
+                          <TextField {...params} label="Document Type" />
+                        )}
+                      />
+                    </div>
+                    <div className="input">
+                      <div className="icone">
+                        <TollTwoToneIcon color="action" />
+                      </div>
+                      <TextField
+                        name="document-notes"
+                        label="Document Notes"
+                        id="document-notes"
+                        variant="standard"
+                      />
+                    </div>
+                    <div className="input" style={{ width: "90px" }}>
+                      <Button variant="outlined">Select</Button>
+                    </div>
+                    <div className="input" style={{ width: "90px" }}>
+                      <Button variant="contained">Refresh</Button>
+                    </div>
+                  </div>
+                  <div className="table-TripSheet">
+                    <div style={{ height: 400, width: "100%" }}>
+                      <DataGrid
+                        rows={UpdateTbaleRows}
+                        columns={UpdateTbaleColumns}
+                        pageSize={5}
+                        checkboxSelection
+                      />
                     </div>
                   </div>
                 </div>

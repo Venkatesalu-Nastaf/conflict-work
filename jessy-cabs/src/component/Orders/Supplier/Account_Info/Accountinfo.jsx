@@ -324,21 +324,23 @@ const Accuntinfo = () => {
                 />
               </div>
             </div>
-            <Box sx={{ position: "relative", mt: -30,pt: 0, height: 320 }}>
-              <StyledSpeedDial
-                ariaLabel="SpeedDial playground example"
-                icon={<SpeedDialIcon />}
-                direction="left"
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                  />
-                ))}
-              </StyledSpeedDial>
-            </Box>
+            <div className="SpeedDial" style={{ 'padding-top': "96px" }}>
+              <Box sx={{ position: "relative",mt: 3, height: 320 }}>
+                <StyledSpeedDial
+                  ariaLabel="SpeedDial playground example"
+                  icon={<SpeedDialIcon />}
+                  direction="left"
+                >
+                  {actions.map((action) => (
+                    <SpeedDialAction
+                      key={action.name}
+                      icon={action.icon}
+                      tooltipTitle={action.name}
+                    />
+                  ))}
+                </StyledSpeedDial>
+              </Box>
+            </div>
           </div>
 
           <div className="container-right-account">

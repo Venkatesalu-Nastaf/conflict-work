@@ -413,6 +413,21 @@ export const VehicleRate = [
     optionvalue: "XYLO-A/C",
   },
 ];
+// Select
+export const Select=[
+  {
+    option: "Don't Allow",
+    optionvalue: "dont-allow",
+  },
+  {
+    option: "Allow Once",
+    optionvalue: "allow-once",
+  },
+  {
+    option: "Always Allow",
+    optionvalue: "always-allow",
+  },
+]
 // Document Type
 export const DocumentType = [
   {
@@ -430,6 +445,10 @@ export const DocumentType = [
   {
     option: "Permit",
     optionvalue: "permit",
+  },
+  {
+    option: "Sign",
+    optionvalue: "sign",
   },
 ]
 // Email

@@ -135,6 +135,7 @@ const Excelimport = () => {
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
+                    size="small"
                     value={sheets.map((option) => option)}
                     options={sheets.map((option) => ({ label: option }))}
                     getOptionLabel={(option) => option.label || ""}
@@ -151,6 +152,7 @@ const Excelimport = () => {
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
+                    size="small"
                     value={CustomerName.map((option) => option.optionvalue)}
                     options={CustomerName.map((option) => ({
                       label: option.Option,

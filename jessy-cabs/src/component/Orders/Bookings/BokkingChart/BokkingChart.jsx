@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { VehicleRate } from "./BokkingChart";
+import { VehicleModel } from "./BokkingChart";
 // TABLE
 
 // TABLE END
@@ -15,26 +15,18 @@ const BokkingChart = () => {
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "registerno", headerName: "Register No", width: 130 },
+    { field: "length", headerName: "Today booking", width: 130 },
     { field: "vehicalename", headerName: "Vehicle Name", width: 130 },
   ];
 
-  const rows = [];
+  const vehicles = VehicleModel.map((vehicle, index) => ({
+    id: index + 1,
+    registerno: index + 1,
+    vehicalename: vehicle.carmodel,
+  }));
 
-  [
-    { id: 1, registerno: 1 },
-    { id: 2, registerno: 2 },
-    // Add more rows as needed
-  ].forEach((row) => {
-    const foundVehicle = VehicleRate.find(
-      (vehicle) => vehicle.optionvalue
-    );
-    const vehicalename = foundVehicle ? foundVehicle.option : "";
-
-    rows.push({
-      id: row.id,
-      registerno: row.registerno,
-      vehicalename: vehicalename,
-    });
+  vehicles.forEach((vehicle) => {
+    vehicle.length = vehicle.vehicalename.length;
   });
 
   return (
@@ -79,7 +71,7 @@ const BokkingChart = () => {
         <div className="table-bookingCopy">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              rows={vehicles}
               columns={columns}
               pageSize={5}
               checkboxSelection

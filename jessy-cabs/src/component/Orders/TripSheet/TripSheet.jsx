@@ -14,6 +14,7 @@ import {
 import "./TripSheet.css";
 import IconButton from "@mui/material/IconButton";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab, { tabClasses } from "@mui/joy/Tab";
@@ -60,12 +61,23 @@ import { Table } from "@mui/joy";
 import BadgeIcon from "@mui/icons-material/Badge";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Autocomplete from "@mui/material/Autocomplete";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStamp } from "@fortawesome/free-solid-svg-icons";
 import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faEquals } from "@fortawesome/free-solid-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faRoad } from "@fortawesome/free-solid-svg-icons";
+import { faStopwatch } from "@fortawesome/free-solid-svg-icons";
+import { faCloudMoon } from "@fortawesome/free-solid-svg-icons";
+import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
+import { faTags } from "@fortawesome/free-solid-svg-icons";
+import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
+import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
+import { faFileLines } from "@fortawesome/free-solid-svg-icons";
+import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 
 //
 import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
@@ -943,8 +955,11 @@ const TripSheet = () => {
                   </div>
                   <div className="input-field">
                     <div className="input">
-                      <div className="icone">
-                        <AirlineStopsIcon color="action" />
+                      <div
+                        className="icone"
+                        style={{ padding: "0px 10px 0px 5px" }}
+                      >
+                        <FontAwesomeIcon icon={faFolderOpen} size="lg" />
                       </div>
                       <Autocomplete
                         fullWidth
@@ -963,7 +978,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faFileLines} size="lg" />
                       </div>
                       <TextField
                         name="document-notes"
@@ -996,7 +1011,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faSuitcaseRolling} size="lg" />
                       </div>
                       <TextField
                         name="Vendor-Trip-No"
@@ -1128,7 +1143,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <CurrencyRupeeTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faStopwatch} size="lg" />
                       </div>
                       <TextField
                         margin="normal"
@@ -1164,7 +1179,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
                       </div>
                       <TextField
                         name="total-km"
@@ -1177,7 +1192,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <EditNoteIcon color="action" />
                       </div>
                       <TextField
                         name="remark"
@@ -1188,7 +1203,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faMoneyBill1Wave} />
                       </div>
                       <TextField
                         name="car-amount"
@@ -1220,8 +1235,11 @@ const TripSheet = () => {
                 <div className="Customer-Vendor-Bill-Slider">
                   <div className="input-field">
                     <div className="input">
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                      <div
+                        className="icone"
+                        style={{ padding: "0px 10px 0px 5px" }}
+                      >
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
                       </div>
                       <TextField
                         name="min-km"
@@ -1231,8 +1249,11 @@ const TripSheet = () => {
                       />
                     </div>
                     <div className="input">
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                      <div
+                        className="icone"
+                        style={{ padding: "0px 10px 0px 5px" }}
+                      >
+                        <FontAwesomeIcon icon={faStopwatch} size="lg" />
                       </div>
                       <TextField
                         name="min-hrs"
@@ -1245,7 +1266,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "390px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <Inventory2Icon color="action" />
                       </div>
                       <TextField
                         name="package"
@@ -1258,7 +1279,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
                         name="amount"
@@ -1272,7 +1293,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faRoad} />
                       </div>
                       <TextField
                         name="ex-km"
@@ -1290,7 +1311,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
                         name="amount"
@@ -1304,7 +1325,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faStopwatch} />
                       </div>
                       <TextField
                         name="ex-Hrs"
@@ -1322,7 +1343,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
                         name="amount"
@@ -1336,7 +1357,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faCloudMoon} />
                       </div>
                       <TextField
                         name="night"
@@ -1354,7 +1375,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
                         name="amount"
@@ -1368,7 +1389,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faMoneyBill1Wave} />
                       </div>
                       <TextField
                         name="driver-convenience"
@@ -1386,7 +1407,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
                         name="amount"
@@ -1405,8 +1426,11 @@ const TripSheet = () => {
                       <Button variant="contained">Update</Button>
                     </div>
                     <div className="input">
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                      <div
+                        className="icone"
+                        style={{ padding: "0px 10px 0px 10px" }}
+                      >
+                        <FontAwesomeIcon icon={faMoneyBillTrendUp} size="lg" />
                       </div>
                       <TextField
                         name="net-amount"
@@ -1417,17 +1441,6 @@ const TripSheet = () => {
                     </div>
                   </div>
                   <div className="input-field">
-                    <div className="input">
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
-                      </div>
-                      <TextField
-                        name="net-amount"
-                        size="small"
-                        label="Net Amount"
-                        id="net-amount"
-                      />
-                    </div>
                     <div className="input">
                       <TextField
                         type="number"
@@ -1443,9 +1456,6 @@ const TripSheet = () => {
                       />
                     </div>
                     <div className="input">
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
-                      </div>
                       <TextField
                         name="car-amount"
                         size="small"
@@ -1468,7 +1478,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "390px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <Inventory2Icon color="action" />
                       </div>
                       <TextField
                         name="pack"
@@ -1495,7 +1505,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faRoad} />
                       </div>
                       <TextField
                         name="ex-km"
@@ -1527,7 +1537,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faStopwatch} />
                       </div>
                       <TextField
                         name="ex-Hrs"
@@ -1559,7 +1569,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faCloudMoon} />
                       </div>
                       <TextField
                         name="night"
@@ -1591,7 +1601,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faMoneyBill1Wave} />
                       </div>
                       <TextField
                         name="driver-convenience"
@@ -1650,7 +1660,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <FontAwesomeIcon icon={faTags} />
                       </div>
                       <TextField
                         name="discount"
@@ -1689,7 +1699,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                        <AccountBalanceWalletIcon color="action" />
                       </div>
                       <TextField
                         name="balance"
@@ -1861,7 +1871,7 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input">
                       <div className="icone">
-                        <EngineeringIcon color="action" />
+                        <FontAwesomeIcon icon={faFolderOpen} size="lg" />
                       </div>
                       <Autocomplete
                         fullWidth
@@ -1954,7 +1964,10 @@ const TripSheet = () => {
                     </div>
                     <div className="input" style={{ width: "50px" }}>
                       <IconButton color="primary" aria-label="delete">
-                        <WhatsAppIcon fontSize="inherit"  sx={{ color: "#47dc53" }} />
+                        <WhatsAppIcon
+                          fontSize="inherit"
+                          sx={{ color: "#47dc53" }}
+                        />
                       </IconButton>
                     </div>
                   </div>

@@ -1,13 +1,12 @@
 import React from "react";
-import "./BokkingChart.css";
-
+import "./BookingChart.css";
 import dayjs from "dayjs";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { VehicleModel } from "./BokkingChart";
+import { VehicleModel } from "./BookingChart";
 // TABLE
 
 // TABLE END

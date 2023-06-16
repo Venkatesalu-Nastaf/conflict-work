@@ -7,7 +7,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import Booking from "./Booking/Booking.jsx";
 import BookingCopy from "./BookingCopy/BookingCopy.jsx";
 import Excelimport from "./Excelimport/Excelimport.jsx";
-import BokkingChart from "./BokkingChart/BokkingChart.jsx";
+import BokkingChart from "./BookingChart/BookingChart.jsx";
 const Bookings = () => {
   const [value, setValue] = React.useState("booking");
 

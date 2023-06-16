@@ -1890,7 +1890,7 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
+                        <FontAwesomeIcon icon={faFileLines} size="lg" />
                       </div>
                       <TextField
                         name="on"

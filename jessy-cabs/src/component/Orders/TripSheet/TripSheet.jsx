@@ -40,8 +40,6 @@ import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -1120,33 +1118,21 @@ const TripSheet = () => {
                     </div>
                   </div>
                   <div className="input-field">
-                    <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoContainer
-                          components={["TimePicker", "MobileTimePicker"]}
-                        >
-                          <DemoItem>
-                            <MobileTimePicker
-                              defaultValue={dayjs()}
-                              label="Start time"
-                            />
-                          </DemoItem>
-                        </DemoContainer>
-                      </LocalizationProvider>
+                    <div className="input time">
+                      <label>Start Time</label>
+                      <input
+                        type="time"
+                        value={currentTime}
+                        onChange={(e) => setCurrentTime(e.target.value)}
+                      />
                     </div>
-                    <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoContainer
-                          components={["TimePicker", "MobileTimePicker"]}
-                        >
-                          <DemoItem>
-                            <MobileTimePicker
-                              defaultValue={dayjs()}
-                              label="Close Time"
-                            />
-                          </DemoItem>
-                        </DemoContainer>
-                      </LocalizationProvider>
+                    <div className="input time">
+                      <label>Close Time</label>
+                      <input
+                        type="time"
+                        value={currentTime}
+                        onChange={(e) => setCurrentTime(e.target.value)}
+                      />
                     </div>
                     <div className="input">
                       <div className="icone">

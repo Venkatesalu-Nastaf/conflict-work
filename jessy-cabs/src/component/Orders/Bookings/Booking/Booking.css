@@ -88,6 +88,8 @@
   display: flex;
   position: relative;
   flex-direction: column;
+  cursor: pointer;
+
 }
 .input-field .time input {
   width: 181px;

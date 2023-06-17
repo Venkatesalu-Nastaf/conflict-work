@@ -90,12 +90,12 @@
   flex-direction: column;
 }
 .input-field .time input {
-  width: 164px;
+  width: 181px;
   margin-top: 28px;
   background: transparent;
   text-align: inherit;
   border: 1px solid #457cdc;
-  padding: 17px 23px 17px 10px;
+  padding: 17px 8px 16px 10px;
   border-radius: 4px;
   font-size: 17px;
 }

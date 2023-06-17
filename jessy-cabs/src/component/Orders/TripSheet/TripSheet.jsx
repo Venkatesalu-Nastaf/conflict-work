@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Apps,
   VehicleRate,
@@ -182,6 +182,20 @@ const actions = [
 ];
 
 const TripSheet = () => {
+  // TIMER START
+  const [currentTime, setCurrentTime] = useState("");
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, "0");
+      const minutes = now.getMinutes().toString().padStart(2, "0");
+      setCurrentTime(`${hours}:${minutes}`);
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+  // TIMER END
   return (
     <div className="form-container">
       <div className="Tripsheet-form">
@@ -662,29 +676,22 @@ const TripSheet = () => {
               </div>
             </div>
             <div className="input-field">
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer
-                    components={["TimePicker", "MobileTimePicker"]}
-                  >
-                    <DemoItem label="Start time">
-                      <MobileTimePicker defaultValue={dayjs()} />
-                    </DemoItem>
-                  </DemoContainer>
-                </LocalizationProvider>
+              <div className="input time">
+                <label>Start Time</label>
+                <input
+                  type="time"
+                  value={currentTime}
+                  onChange={(e) => setCurrentTime(e.target.value)}
+                />
               </div>
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer
-                    components={["TimePicker", "MobileTimePicker"]}
-                  >
-                    <DemoItem label="Close Time">
-                      <MobileTimePicker defaultValue={dayjs()} />
-                    </DemoItem>
-                  </DemoContainer>
-                </LocalizationProvider>
+              <div className="input time">
+                <label>Close Time</label>
+                <input
+                  type="time"
+                  value={currentTime}
+                  onChange={(e) => setCurrentTime(e.target.value)}
+                />
               </div>
-
               <div className="input" style={{ width: "300px" }}>
                 <div className="icone">
                   <CurrencyRupeeTwoToneIcon color="action" />

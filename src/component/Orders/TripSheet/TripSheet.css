@@ -1,0 +1,170 @@
+.form-container .Title-Name {
+  font-size: 20px;
+  padding-left: 20px;
+  font-weight: 500;
+}
+.form-container.form-container {
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  border-radius: 10px;
+  flex-direction: column;
+  color: #000;
+}
+.Tripsheet-header {
+  border-top: solid 1px #ccc;
+  background: var(--glass);
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: -10px;
+}
+.detail-container-main-Tripsheet {
+  border-top: 1px solid #ccc;
+  display: flex;
+  background-color: var(--glass);
+  padding: 20px 30px;
+  margin-top: 10px;
+}
+.form-container .Tripsheet-form::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  overflow-x: hidden;
+}
+.form-container .Title-Name {
+  position: relative;
+}
+
+.form-container .Title-Name::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 10px;
+  width: 100%;
+  border-radius: 20px;
+  height: 3px;
+  background-color: #457cdc; /* Adjust color as needed */
+}
+.form-container .Tripsheet-form::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.form-container .Tripsheet-form::-webkit-scrollbar-thumb {
+  background-color: rgb(217, 212, 212);
+  outline: 1px solid slategrey;
+}
+.form-container .Tripsheet-form {
+  border: 2px solid #ccc;
+  overflow: scroll;
+  height: 75vh;
+  width: 81vw;
+  display: flex;
+  flex-direction: column;
+  padding-top: 28px;
+  border-radius: 20px;
+  color: #000;
+  background-color: var(--glass);
+}
+.input-field {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.input-field .input {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+.input-field .radio {
+  font-size: 20px !important;
+}
+.checkbox {
+  color: rgb(69, 62, 62);
+  margin-top: 10px;
+}
+.css-1hbvpl3-MuiSvgIcon-root {
+  height: 18px !important;
+}
+.css-ahj2mt-MuiTypography-root {
+  font-size: 13px !important;
+}
+.input-field .input option {
+  text-transform: uppercase;
+}
+.input-field .input .icone {
+  padding: 15px 10px 0px;
+  color: #6c6868;
+}
+.select-field {
+  border: #000;
+}
+/* TextBox */
+.textbox-TripSheet {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+}
+.textbox-TripSheet .textboxlist-TripSheet {
+  width: 530px;
+  padding: 10px;
+  padding-top: 0px;
+  margin-left: 15px;
+  margin-top: 15px;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  height: 220px;
+}
+.list-update {
+  margin-top: 10px;
+  overflow: scroll;
+  height: 90%;
+}
+.textboxlist-TripSheet .list-update::-webkit-scrollbar {
+  width: 5px;
+  height: 0px;
+  cursor: pointer;
+  position: absolute;
+}
+
+.textboxlist-TripSheet .list-update::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.textboxlist-TripSheet .list-update::-webkit-scrollbar-thumb {
+  background-color: #457cdc;
+  width: 50px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.secend-container {
+  border-top: solid 1px #ccc;
+  background-color: var(--glass);
+  padding: 20px 20px;
+}
+/* TRIPSHEET CONETNT */
+.Tipsheet-content-table-main {
+  background: var(--glass);
+  padding: 40px;
+}
+.Tipsheet-content-table-main .Tipsheet-content-table {
+  border: 2px solid #ccc;
+  border-radius: 17px;
+  padding: 2px;
+}
+/* BOOKING SLIDER CONTENT*/
+/* Customer-Booking-Slider */
+.Customer-Booking-Slider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* table-TripSheet */
+.table-TripSheet {
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  margin-top: 30px;
+}
+/* VENDOR INFO CONTENT */

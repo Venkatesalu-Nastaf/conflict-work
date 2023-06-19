@@ -1,0 +1,275 @@
+.css-13xfq8m-MuiTabPanel-root {
+  display: flex;
+  padding: 0px !important;
+}
+.detail-container-main {
+  display: flex;
+}
+.form-container-booking .Title-Name {
+  font-size: 20px;
+  font-weight: 500;
+}
+.form-container-booking .booking-form {
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  /* border-radius: 10px; */
+  color: #000;
+  background-color: var(--glass);
+}
+.form-container-booking {
+  display: flex;
+  border-radius: 10px;
+}
+.form-container-booking .container-main::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  overflow-x: hidden;
+}
+
+/* .form-container-booking .container-main::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+} */
+
+.form-container-booking .container-main::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  outline: 1px solid transparent;
+}
+.form-container-booking .container-main {
+  border: 2px solid #ccc;
+  overflow: scroll;
+  height: 77vh;
+  width: 81vw;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  border-radius: 20px;
+  color: #000;
+  background-color: var(--glass);
+}
+.input-field {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.input-field .input {
+  /* width: 200px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+.input-field .radio {
+  font-size: 20px !important;
+}
+.input-field .radio .css-j204z7-MuiFormControlLabel-root {
+  margin-right: 5px;
+}
+.checkbox {
+  color: rgb(69, 62, 62);
+  margin-top: 10px;
+}
+.css-1hbvpl3-MuiSvgIcon-root {
+  height: 18px !important;
+}
+.css-ahj2mt-MuiTypography-root {
+  font-size: 13px !important;
+}
+.input-field .input option {
+  text-transform: uppercase;
+}
+.input-field .input .icone {
+  padding: 15px 10px 0px;
+}
+/* TIMER START */
+.input-field .time {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+}
+.input-field .time input {
+  width: 181px;
+  margin-top: 28px;
+  background: transparent;
+  text-align: inherit;
+  border: 1px solid #457cdc;
+  padding: 17px 8px 16px 10px;
+  border-radius: 4px;
+  font-size: 17px;
+}
+.input-field .time label {
+  position: absolute;
+  color: #272626;
+  font-size: 14px;
+  top: 0px;
+  font-weight: 500;
+  left: 5px;
+}
+/* TIMER END */
+.select-field {
+  border: #000;
+}
+
+/* TextBox */
+.textbox {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  gap: 1rem;
+}
+.textboxlist p::-webkit-scrollbar {
+  width: 5px;
+  height: 1px;
+  overflow-x: hidden;
+}
+
+.textboxupdate .textbox-container::-webkit-scrollbar {
+  width: 5px;
+  height: 1px;
+  overflow-x: hidden;
+}
+
+.textboxupdate .textbox-container::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.textboxupdate .textbox-container::-webkit-scrollbar-thumb {
+  background-color: rgb(217, 212, 212);
+  outline: 1px solid slategrey;
+}
+
+.textboxupdate .textbox-container {
+  /* position: relative; */
+  border-radius: 5px;
+  overflow: scroll;
+  color: #3d3b3b;
+  padding: 5px;
+  font-weight: 500;
+  background-color: #fff;
+  height: 200px;
+  width: 300px;
+}
+
+.textbox-container .icon {
+  position: fixed;
+  bottom: 50px;
+  right: 80px;
+  border-radius: 50%;
+  background-color: #f8f8f8;
+  z-index: +9999;
+}
+.css-1c4hl6u {
+  position: relative;
+  margin-top: 0px !important;
+  height: 0px !important;
+}
+/* Date */
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-error
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #456ddc !important;
+}
+
+/* Booking Update side box */
+.container-right {
+  margin: 30px 20px 20px;
+  width: 50%;
+}
+.booking-update-main {
+  width: 120%;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+}
+
+.booking-update {
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 250px;
+}
+.booking-update .booking-update-content {
+  padding: 10px;
+}
+.booking-update .booking-update-content p.bottom-line {
+  position: relative;
+}
+
+.booking-update .booking-update-content p.bottom-line::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(105, 100, 100, 0.527); /* Adjust color as needed */
+}
+.booking-update .list-update {
+  overflow: scroll;
+  height: 90%;
+}
+.booking-update .list-update::-webkit-scrollbar {
+  width: 5px;
+  height: 0px;
+  cursor: pointer;
+  position: absolute;
+}
+
+.booking-update .list-update::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.booking-update .list-update::-webkit-scrollbar-thumb {
+  background-color: #457cdc;
+  width: 50px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+.input-field .input-btn .btn {
+  cursor: pointer;
+  margin: 20px;
+  padding: 3px 10px;
+}
+.billing {
+  width: 280px;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+}
+.billing button {
+  margin-top: 25px;
+}
+.billing button:hover {
+  color: #fff;
+  background: #457cdc;
+}
+.input-field .input-btn .btn:hover {
+  color: #456ddc;
+}
+.block {
+  display: block;
+}
+
+.none {
+  display: none;
+}
+.vehicle-confirm {
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+}
+.booking-form .Title-Name {
+  position: relative;
+}
+
+.booking-form .Title-Name::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  border-radius: 20px;
+  height: 3px;
+  background-color: #457cdc; /* Adjust color as needed */
+}

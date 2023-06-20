@@ -1,7 +1,7 @@
 import React from "react";
 import "./Cards.css";
 import { cardsData } from "../../../Data/Data.js";
-import Card from "../Card/Card";
+import Card from "./Card/Card";
 const Cards = () => {
   return (
     <div className="Cards">

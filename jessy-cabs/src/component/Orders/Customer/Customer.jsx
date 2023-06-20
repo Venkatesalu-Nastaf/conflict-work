@@ -31,6 +31,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 //
+import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -61,7 +62,49 @@ const actions = [
   { icon: <ModeEditIcon />, name: "Edit" },
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
+// Table Start
+const columns = [
+  { field: "id", headerName: "Sno", width: 70 },
+  { field: "Customer_Name", headerName: "Customer_Name", width: 130 },
+  { field: "Address", headerName: "Address", width: 130 },
+  { field: "Phone", headerName: "Phone", width: 90 },
+  { field: "Active", headerName: "Active", width: 160 },
+  { field: "ID", headerName: "ID", width: 130 },
+  { field: "Rate_Type", headerName: "Rate_Type", width: 130 },
+  { field: "GST_NO", headerName: "GST_NO", width: 130 },
+  { field: "State", headerName: "State", width: 130 },
+  { field: "Driver_App", headerName: "Driver_App", width: 130 },
+];
 
+const rows = [
+  {
+    id: 1,
+    Customer_Name: 1,
+    Address: "Address 1",
+    Phone: "Employee 1",
+    Active: "John Doe",
+    ID: "2023-06-07",
+    Rate_Type: "Morning",
+    GST_NO: "9:00 AM",
+    State: "123 Street, Apt 4B, City",
+    Driver_App: "ABC Car",
+  },
+  {
+    id: 2,
+    Customer_Name: 2,
+    Address: "Address 2",
+    Phone: "Employee 2",
+    Active: "Jane Smith",
+    ID: "2023-06-08",
+    Rate_Type: "Evening",
+    GST_NO: "2:00 PM",
+    State: "456 Avenue, Unit 8, Town",
+    Driver_App: "XYZ Car",
+  },
+  
+  // Add more rows as needed
+];
+// Table End
 // date
 const today = dayjs();
 const tomorrow = dayjs().add(1, "day");
@@ -155,7 +198,7 @@ const Customer = () => {
                   <RateReviewIcon color="action" />
                 </div>
                 <TextField
-                  name="ratetype"
+                  name="rate_type"
                   label="Rate Type"
                   id="standard-size-normal"
                   variant="standard"
@@ -292,218 +335,210 @@ const Customer = () => {
             </div>
           </div>
           <div className="detail-container-main-customer">
-            <div className="container-left-customer">
-              <div className="input-field checkbox">
-                <FormControlLabel
-                  value="Printbill"
-                  control={<Checkbox size="small" />}
-                  label="Print Bill"
-                />
-                <FormControlLabel
-                  value="Username"
-                  control={<Checkbox size="small" />}
-                  label="User Name"
-                />
-                <FormControlLabel
-                  value="Bookname"
-                  control={<Checkbox size="small" />}
-                  label="Book Name"
-                />
-                <FormControlLabel
-                  value="Divistion"
-                  control={<Checkbox size="small" />}
-                  label="Divistion"
-                />
-                <FormControlLabel
+            <div className="input-field checkbox">
+              <FormControlLabel
+                value="Printbill"
+                control={<Checkbox size="small" />}
+                label="Print Bill"
+              />
+              <FormControlLabel
+                value="Username"
+                control={<Checkbox size="small" />}
+                label="User Name"
+              />
+              <FormControlLabel
+                value="Bookname"
+                control={<Checkbox size="small" />}
+                label="Book Name"
+              />
+              <FormControlLabel
+                value="Divistion"
+                control={<Checkbox size="small" />}
+                label="Divistion"
+              />
+              <FormControlLabel
+                size="small"
+                value="Hourroundedoff"
+                control={<Checkbox size="small" />}
+                label="Hour Roundedoff"
+              />
+              <div className="input">
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
                   size="small"
-                  value="Hourroundedoff"
-                  control={<Checkbox size="small" />}
-                  label="Hour Roundedoff"
+                  value={Select.map((option) => option.optionvalue)}
+                  options={Select.map((option) => ({ label: option.Option }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Select" />
+                  )}
                 />
-              </div>
-              <div className="input-field">
-                <div className="input">
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={Select.map((option) => option.optionvalue)}
-                    options={Select.map((option) => ({ label: option.Option }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Select" />
-                    )}
-                  />
-                </div>
-                <div className="input radio">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Incl. Address
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="no"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
-                <div className="input radio">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Active
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="no"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input">
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={states.map((option) => option.statevalue)}
-                    options={states.map((option) => ({
-                      label: option.statevalue,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="State" />
-                    )}
-                  />
-                </div>
-                <div className="input">
-                  <div className="icone">
-                    <StoreIcon color="action" />
-                  </div>
-                  <TextField
-                    name="entity"
-                    label="Entity"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-                <div className="input">
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo"
-                    freeSolo
-                    value={UnderGroup.map((option) => option.optionvalue)}
-                    options={UnderGroup.map((option) => ({
-                      label: option.optionvalue,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Under Group" />
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input radio">
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Enable Driver App
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                    >
-                      <FormControlLabel
-                        value="yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="no"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
-                <div className="input">
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={BillingGroup.map((option) => option.optionvalue)}
-                    options={BillingGroup.map((option) => ({
-                      label: option.optionvalue,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Billing Group" />
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="SpeedDial" style={{padding: '26px',}}>
-                <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-                  <StyledSpeedDial
-                    ariaLabel="SpeedDial playground example"
-                    icon={<SpeedDialIcon />}
-                  >
-                    {actions.map((action) => (
-                      <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                      />
-                    ))}
-                  </StyledSpeedDial>
-                </Box>
               </div>
             </div>
-            <div className="container-right-customer">
-              <div className="textbox">
-                <div className="textboxlist">
-                  <div className="textboxupdate list-update">
-                    <span>
-                      List Lorem ipsum dolor sit amet, consectetur adipisicing
-                      elit. Harum veniam quos laborum. Dicta suscipit voluptas
-                      laboriosam rem alias praesentium, facere aliquam sed iste,
-                      officia excepturi quos corporis. Facilis, reiciendis et.
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Cum nostrum nihil minima debitis, nobis incidunt
-                      temporibus velit accusantium dolore assumenda iusto quod
-                      ratione praesentium maxime eveniet voluptas enim animi
-                      laudantium.
-                    </span>
-                  </div>
-                </div>
+            <div className="input-field">
+              <div className="input">
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  size="small"
+                  value={states.map((option) => option.statevalue)}
+                  options={states.map((option) => ({
+                    label: option.statevalue,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="State" />
+                  )}
+                />
               </div>
+              <div className="input">
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  value={UnderGroup.map((option) => option.optionvalue)}
+                  options={UnderGroup.map((option) => ({
+                    label: option.optionvalue,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Under Group" />
+                  )}
+                />
+              </div>
+              <div className="input">
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  size="small"
+                  value={BillingGroup.map((option) => option.optionvalue)}
+                  options={BillingGroup.map((option) => ({
+                    label: option.optionvalue,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Billing Group" />
+                  )}
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <StoreIcon color="action" />
+                </div>
+                <TextField
+                  name="entity"
+                  label="Entity"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Incl. Address
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Active
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Enable Driver App
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+            </div>
+            <div className="SpeedDial" style={{ padding: "26px" }}>
+              <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+                <StyledSpeedDial
+                  ariaLabel="SpeedDial playground example"
+                  icon={<SpeedDialIcon />}
+                >
+                  {actions.map((action) => (
+                    <SpeedDialAction
+                      key={action.name}
+                      icon={action.icon}
+                      tooltipTitle={action.name}
+                    />
+                  ))}
+                </StyledSpeedDial>
+              </Box>
+            </div>
+          </div>
+          <div className="customer-list-table-container">
+            <div className="table-customer-list">
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+              />
             </div>
           </div>
         </form>

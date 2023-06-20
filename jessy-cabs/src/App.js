@@ -10,6 +10,9 @@ import Bookings from "./component/Orders/Bookings/Bookings";
 
 import Page404 from "./component/Page404/page404";
 import TripSheet from "./component/Orders/TripSheet/TripSheet";
+import Settings from "./component/Settings/Settings";
+import UserCreation from "./component/Settings/UserCreation/UserCreation";
+
 
 function App() {
   return (
@@ -21,25 +24,14 @@ function App() {
           <Route path="/home/orders" element={<Orders />}>
             <Route path="/home/orders/customer" element={<Customer />} />
             <Route path="/home/orders/supplier" element={<Suppliers />} />
-            <Route path="/home/orders/bookings" element={<Bookings />}>
-              <Route
-                path="/home/orders/bookings/list"
-                element={<h1>list</h1>}
-              />
-              <Route
-                path="/home/orders/bookings/billingaddress"
-                element={<h1>billing</h1>}
-              />
-              <Route
-                path="/home/orders/bookings/email"
-                element={<h1>email</h1>}
-              />
-            </Route>
+            <Route path="/home/orders/bookings" element={<Bookings />} />
             <Route path="/home/orders/tripsheet" element={<TripSheet />} />
           </Route>
           <Route path="/home/customers" element={<h1>Customers</h1>} />
           <Route path="/home/products" element={<h1>Producs</h1>} />
-          <Route path="/home/settings" element={<h1>Settings</h1>} />
+          <Route path="/home/settings" element={<Settings />}>
+            <Route path="/home/settings/usercreation" element={<UserCreation/>} />
+          </Route>
         </Route>
         <Route
           path="*"

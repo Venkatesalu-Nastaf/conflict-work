@@ -3,8 +3,6 @@ import "./Accountinfo.css";
 import Button from "@mui/material/Button";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import IconButton from "@mui/material/IconButton";
-import DescriptionIcon from "@mui/icons-material/Description";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import {
   TextField,
@@ -30,6 +28,7 @@ import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import Box from "@mui/material/Box";
 import Autocomplete from "@mui/material/Autocomplete";
+import { DataGrid } from "@mui/x-data-grid";
 import { Undergroup, Vehicleinfo } from "./Accountinfo";
 import SpeedDial from "@mui/material/SpeedDial";
 import ChecklistIcon from "@mui/icons-material/Checklist";
@@ -71,6 +70,49 @@ const Accuntinfo = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  // Table Start
+  const columns = [
+    { field: "id", headerName: "Sno", width: 70 },
+    { field: "Supplier_Name", headerName: "Supplier_Name", width: 130 },
+    { field: "Vehicle_No", headerName: "Vehicle_No", width: 130 },
+    { field: "Address", headerName: "Address", width: 130 },
+    { field: "Phone", headerName: "Phone", width: 90 },
+    { field: "Active", headerName: "Active", width: 160 },
+    { field: "Owner_Type", headerName: "Owner_Type", width: 130 },
+    { field: "Percentage", headerName: "Percentage", width: 130 },
+    { field: "Rate_Type", headerName: "Rate_Type", width: 130 },
+    { field: "Driver_App", headerName: "Driver_App", width: 130 },
+  ];
+
+  const rows = [
+    {
+      id: 1,
+      Supplier_Name: 1,
+      Vehicle_No: "Travels",
+      Address: "Address 1",
+      Phone: "Employee 1",
+      Active: "John Doe",
+      Owner_Type: "2023-06-07",
+      Percentage: 9,
+      Rate_Type: "Morning",
+      Driver_App: "ABC Car",
+    },
+    {
+      id: 2,
+      Supplier_Name: 2,
+      Vehicle_No: "Travels",
+      Address: "Address 2",
+      Phone: "Employee 2",
+      Active: "Jane Smith",
+      Owner_Type: "2023-06-08",
+      Percentage: 9,
+      Rate_Type: "Evening",
+      Driver_App: "XYZ Car",
+    },
+
+    // Add more rows as needed
+  ];
+  // Table End
   return (
     <div className="account-form">
       <form action="">
@@ -190,162 +232,9 @@ const Accuntinfo = () => {
                 />
               </div>
             </div>
-            <div className="input-field">
-              <div className="input">
-                <TextField
-                  type="number"
-                  label="Veh.Commission"
-                  size="small"
-                  id="outlined-start-adornment"
-                  sx={{ m: 1, width: "25ch" }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">%</InputAdornment>
-                    ),
-                  }}
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <RateReviewIcon color="action" />
-                </div>
-                <TextField
-                  name="ratetype"
-                  label="Rate Type"
-                  id="standard-size-normal"
-                  variant="standard"
-                />
-              </div>
-              <div className="input radio">
-                <FormControlLabel
-                  value="Printbill"
-                  control={<Checkbox size="small" />}
-                  label="Rate"
-                />
-              </div>
-            </div>
-            <div className="input-field">
-              <div className="input radio">
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  freeSolo
-                  value={Undergroup.map((option) => option.optionvalue)}
-                  options={Undergroup.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) => option.label || ""}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Under Group" />
-                  )}
-                />
-              </div>
-              <div className="input">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    Is Runing
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div>
-              <div className="input radio">
-                <div className="icone">
-                  <StoreIcon color="action" />
-                </div>
-                <TextField
-                  name="entity"
-                  label="Opening Balance"
-                  id="standard-size-normal"
-                  variant="standard"
-                />
-              </div>
-            </div>
-            <div className="input-field">
-              <div className="input radio">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    A/C Type
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <FormControlLabel
-                      value="Dr"
-                      control={<Radio />}
-                      label="Dr"
-                    />
-                    <FormControlLabel
-                      value="Cr"
-                      control={<Radio />}
-                      label="Cr"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div>
-              <div className="input">
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  freeSolo
-                  value={Vehicleinfo.map((option) => option.optionvalue)}
-                  options={Vehicleinfo.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) => option.label || ""}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Vehicle Info" />
-                  )}
-                />
-              </div>
-              <div className="input">
-                <FormControlLabel
-                  value="Printbill"
-                  control={<Checkbox size="small" />}
-                  label="Auto Refreash"
-                />
-              </div>
-            </div>
-            <div className="SpeedDial" style={{ 'padding-top': "96px" }}>
-              <Box sx={{ position: "relative",mt: 3, height: 320 }}>
-                <StyledSpeedDial
-                  ariaLabel="SpeedDial playground example"
-                  icon={<SpeedDialIcon />}
-                  direction="left"
-                >
-                  {actions.map((action) => (
-                    <SpeedDialAction
-                      key={action.name}
-                      icon={action.icon}
-                      tooltipTitle={action.name}
-                    />
-                  ))}
-                </StyledSpeedDial>
-              </Box>
-            </div>
           </div>
-
           <div className="container-right-account">
             <div className="textbox-account">
-              {/* <div className="textboxlist-account"> */}
               <div>
                 <Box sx={{ width: "100%", typography: "body1" }}>
                   <TabContext value={value}>
@@ -416,40 +305,160 @@ const Accuntinfo = () => {
                   </TabContext>
                 </Box>
               </div>
-              {/* </div> */}
-            </div>
-            <div className="print-excel">
-              <div
-                className="booking-update"
-                style={{
-                  position: "relative",
-                  border: "2px solid #ccc",
-                  borderRadius: "10px",
-                }}
-              >
-                <div className="booking-update-content list-update">
-                  <span>
-                    List Lorem ipsum dolor sit amet, consectetur adipisicing
-                    elit. Harum veniam quos laborum. Dicta suscipit voluptas
-                    laboriosam rem alias praesentium, facere aliquam sed iste,
-                    officia excepturi quos corporis. Facilis, reiciendis et.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
-                    nostrum nihil minima debitis, nobis incidunt temporibus
-                    velit accusantium dolore assumenda iusto quod ratione
-                    praesentium maxime eveniet voluptas enim animi laudantium.
-                  </span>
-                  <span className="print-excel-btn">
-                    <IconButton
-                      aria-label="delete"
-                      style={{ color: "#456ddc" }}
-                    >
-                      <DescriptionIcon />
-                    </IconButton>
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
+        </div>
+        <div>
+          <div className="input-field">
+            <div className="input">
+              <TextField
+                type="number"
+                label="Veh.Commission"
+                size="small"
+                id="outlined-start-adornment"
+                sx={{ m: 1, width: "25ch" }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">%</InputAdornment>
+                  ),
+                }}
+              />
+            </div>
+            <div className="input radio">
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo"
+                freeSolo
+                value={Undergroup.map((option) => option.optionvalue)}
+                options={Undergroup.map((option) => ({
+                  label: option.Option,
+                }))}
+                getOptionLabel={(option) => option.label || ""}
+                renderInput={(params) => (
+                  <TextField {...params} label="Under Group" />
+                )}
+              />
+            </div>
+            <div className="input">
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo"
+                freeSolo
+                value={Vehicleinfo.map((option) => option.optionvalue)}
+                options={Vehicleinfo.map((option) => ({
+                  label: option.Option,
+                }))}
+                getOptionLabel={(option) => option.label || ""}
+                renderInput={(params) => (
+                  <TextField {...params} label="Vehicle Info" />
+                )}
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <RateReviewIcon color="action" />
+              </div>
+              <TextField
+                name="ratetype"
+                label="Rate Type"
+                id="standard-size-normal"
+                variant="standard"
+              />
+            </div>
+            <div className="input radio">
+              <div className="icone">
+                <StoreIcon color="action" />
+              </div>
+              <TextField
+                name="entity"
+                label="Opening Balance"
+                id="standard-size-normal"
+                variant="standard"
+              />
+            </div>
+          </div>
+          <div className="input-field">
+            <div className="input">
+              <FormControl>
+                <FormLabel id="demo-row-radio-buttons-group-label">
+                  Is Runing
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                >
+                  <FormControlLabel
+                    value="yes"
+                    control={<Radio />}
+                    label="Yes"
+                  />
+                  <FormControlLabel value="no" control={<Radio />} label="No" />
+                </RadioGroup>
+              </FormControl>
+            </div>
+            <div className="input radio">
+              <FormControl>
+                <FormLabel id="demo-row-radio-buttons-group-label">
+                  A/C Type
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                >
+                  <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
+                  <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
+                </RadioGroup>
+              </FormControl>
+            </div>
+            <div className="input radio">
+              <FormControlLabel
+                value="Printbill"
+                control={<Checkbox size="small" />}
+                label="Rate"
+              />
+            </div>
+            <div className="input">
+              <FormControlLabel
+                value="Printbill"
+                control={<Checkbox size="small" />}
+                label="Auto Refreash"
+              />
+            </div>
+          </div>
+          <div className="SpeedDial" style={{ "padding-top": "96px" }}>
+            <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+              <StyledSpeedDial
+                ariaLabel="SpeedDial playground example"
+                icon={<SpeedDialIcon />}
+                direction="left"
+              >
+                {actions.map((action) => (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                  />
+                ))}
+              </StyledSpeedDial>
+            </Box>
+          </div>
+        </div>
+        <div className="table-customer-list">
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+          />
         </div>
       </form>
     </div>

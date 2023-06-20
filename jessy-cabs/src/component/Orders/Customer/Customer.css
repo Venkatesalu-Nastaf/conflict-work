@@ -13,17 +13,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  width: 100%;
+  padding: 20px 30px;
   margin-top: 10px; 
 }
-.Customer-page-secend-container-left{
-  width: 40%;
-  padding: 10px;
+/* TABLE */
+.customer-list-table-container{
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: var(--glass);
 }
-.Customer-page-secend-container-right{
-  width: 50%;
+.table-customer-list{
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  height: 400px;
+  width: 100%;
+  overflow: scroll;
 }
+
 .form-container .Title-Name {
   font-size: 20px;
   padding-left: 20px;
@@ -39,7 +45,6 @@
 }
 .detail-container-main-customer {
   border-top: 1px solid #ccc;
-  display: flex;
   background-color: var(--glass);
   padding: 20px;
 }

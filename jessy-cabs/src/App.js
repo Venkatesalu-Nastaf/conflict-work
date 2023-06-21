@@ -12,7 +12,8 @@ import Page404 from "./component/Page404/page404";
 import TripSheet from "./component/Orders/TripSheet/TripSheet";
 import Settings from "./component/Settings/Settings";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
-
+import StationCreartion from "./component/Settings/StationCreartion/StationCreartion";
+import Permission from "./component/Settings/Permission/Permission";
 
 function App() {
   return (
@@ -30,7 +31,15 @@ function App() {
           <Route path="/home/customers" element={<h1>Customers</h1>} />
           <Route path="/home/products" element={<h1>Producs</h1>} />
           <Route path="/home/settings" element={<Settings />}>
-            <Route path="/home/settings/usercreation" element={<UserCreation/>} />
+            <Route
+              path="/home/settings/usercreation"
+              element={<UserCreation />}
+            />
+            <Route
+              path="/home/settings/stationcreation"
+              element={<StationCreartion />}
+            />
+            <Route path="/home/settings/permission" element={<Permission />} />
           </Route>
         </Route>
         <Route

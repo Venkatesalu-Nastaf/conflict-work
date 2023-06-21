@@ -32,18 +32,25 @@ const Settings = () => {
       <div className="Settings-main">
       <div className='menu-bar'>
           <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Customer Master' ? 'actives' : ''}`}
+            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'User Creation' ? 'actives' : ''}`}
             to='/home/settings/usercreation'
             onClick={() => handleMenuItemClick('User Creation')}
           >
             User Creation
           </Link>
           <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Supplier Master' ? 'actives' : ''}`}
-            to='/home/orders/supplier'
-            onClick={() => handleMenuItemClick('Supplier Master')}
+            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Permission' ? 'actives' : ''}`}
+            to='/home/settings/permission'
+            onClick={() => handleMenuItemClick('Permission')}
           >
-            Supplier Master
+            Permission
+          </Link>
+          <Link
+            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Staton Creation' ? 'actives' : ''}`}
+            to='/home/settings/stationcreation'
+            onClick={() => handleMenuItemClick('Station Creation')}
+          >
+            Station Creation
           </Link>
           <Link
             className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Booking' ? 'actives' : ''}`}

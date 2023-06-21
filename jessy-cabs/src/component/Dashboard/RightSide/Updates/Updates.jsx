@@ -1,7 +1,7 @@
 import React from "react";
-import "./Update.css"
+import "./Update.css";
 import { CgProfile } from "@react-icons/all-files/cg/CgProfile";
-import { UpdatesData } from "../../../../Data/Data.js";
+import { UpdatesData } from "./Update-Data.js";
 
 const Updates = () => {
   return (
@@ -10,13 +10,15 @@ const Updates = () => {
         return (
           <div className="update">
             {/* <img src={CgProfile} alt="profile" /> */}
-            <span className="img"><CgProfile/></span>
+            <span className="img">
+              <CgProfile />
+            </span>
             <div className="noti">
-              <div  style={{marginBottom: '0.5rem'}}>
+              <div style={{ marginBottom: "0.5rem" }}>
                 <span>{update.name}</span>
                 <span> {update.noti}</span>
               </div>
-                <span>{update.time}</span>
+              <span>{update.time}</span>
             </div>
           </div>
         );

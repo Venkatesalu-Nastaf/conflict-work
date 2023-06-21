@@ -1,5 +1,5 @@
 import React from "react";
-import "./StationCreartion.css";
+import "./StationCreation.css";
 import {
   TextField,
   FormControlLabel,
@@ -74,7 +74,7 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 //
-const StationCreartion = () => {
+const StationCreation = () => {
   return (
     <div className="stationcreation-main">
       <div className="stationcreation-form-container">
@@ -207,4 +207,4 @@ const StationCreartion = () => {
   );
 };
 
-export default StationCreartion;
+export default StationCreation;

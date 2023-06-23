@@ -134,7 +134,7 @@ const StationCreation = () => {
                     name="row-radio-buttons-group"
                   >
                     <FormControlLabel
-                      value="no"
+                      value="yes"
                       control={<Radio />}
                       label="Yes"
                     />
@@ -157,7 +157,7 @@ const StationCreation = () => {
                     name="row-radio-buttons-group"
                   >
                     <FormControlLabel
-                      value="no"
+                      value="yes"
                       control={<Radio />}
                       label="Yes"
                     />

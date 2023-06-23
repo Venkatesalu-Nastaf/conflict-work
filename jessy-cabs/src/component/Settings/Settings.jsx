@@ -53,18 +53,11 @@ const Settings = () => {
             Station Creation
           </Link>
           <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Booking' ? 'actives' : ''}`}
-            to='/home/orders/bookings'
-            onClick={() => handleMenuItemClick('Booking')}
+            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Main setting' ? 'actives' : ''}`}
+            to='/home/settings/mainsetting'
+            onClick={() => handleMenuItemClick('Main setting')}
           >
-            Booking
-          </Link>
-          <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Trip Sheet' ? 'actives' : ''}`}
-            to='/home/orders/tripsheet'
-            onClick={() => handleMenuItemClick('Trip Sheet')}
-          >
-            Trip Sheet
+            Main setting
           </Link>
         </div>
         <Outlet />

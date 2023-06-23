@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from "react-router-dom";
+// import { useState, useEffect } from "react";
+import axios from "axios";
 import {
   UnderGroup,
   states,
@@ -65,54 +68,134 @@ const actions = [
 // Table Start
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "Customer_Name", headerName: "Customer_Name", width: 130 },
-  { field: "Address", headerName: "Address", width: 130 },
-  { field: "Phone", headerName: "Phone", width: 90 },
-  { field: "Active", headerName: "Active", width: 160 },
-  { field: "ID", headerName: "ID", width: 130 },
-  { field: "Rate_Type", headerName: "Rate_Type", width: 130 },
-  { field: "GST_NO", headerName: "GST_NO", width: 130 },
-  { field: "State", headerName: "State", width: 130 },
-  { field: "Driver_App", headerName: "Driver_App", width: 130 },
+  { field: "printName", headerName: "Customer_Name", width: 130 },
+  { field: "address1", headerName: "Address", width: 130 },
+  { field: "email", headerName: "Phone", width: 90 },
+  { field: "active", headerName: "Active", width: 160 },
+  { field: "customerId", headerName: "ID", width: 130 },
+  { field: "rateType", headerName: "Rate_Type", width: 130 },
+  { field: "gstTax", headerName: "GST_NO", width: 130 },
+  { field: "state", headerName: "State", width: 130 },
+  { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
 ];
 
-const rows = [
-  {
-    id: 1,
-    Customer_Name: 1,
-    Address: "Address 1",
-    Phone: "Employee 1",
-    Active: "John Doe",
-    ID: "2023-06-07",
-    Rate_Type: "Morning",
-    GST_NO: "9:00 AM",
-    State: "123 Street, Apt 4B, City",
-    Driver_App: "ABC Car",
-  },
-  {
-    id: 2,
-    Customer_Name: 2,
-    Address: "Address 2",
-    Phone: "Employee 2",
-    Active: "Jane Smith",
-    ID: "2023-06-08",
-    Rate_Type: "Evening",
-    GST_NO: "2:00 PM",
-    State: "456 Avenue, Unit 8, Town",
-    Driver_App: "XYZ Car",
-  },
-  
-  // Add more rows as needed
-];
-// Table End
+
+
 // date
 const today = dayjs();
-const tomorrow = dayjs().add(1, "day");
+
 const Customer = () => {
+  const [selectedCustomerId, setSelectedCustomerId] = useState('');
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [rows, setRows] = useState([]);
+  const [actionName] = useState('');
+
+
+  const [book, setBook] = useState({
+    customerId: '',
+    name: '',
+    printName: '',
+    customerType: '',
+    date: '',
+    address1: '',
+    address2: '',
+    city: '',
+    email: '',
+    rateType: '',
+    opBalance: '',
+    underGroup: '',
+    gstTax: '',
+    acType: '',
+    printBill: '',
+    userName: '',
+    bookName: '',
+    division: '',
+    hourRoundedOff: '',
+    selectOption: '',
+    inclAddress: '',
+    active: '',
+    state: '',
+    entity: '',
+    enableDriverApp: '',
+    billingGroup: '',
+  });
+
+  const [error, setError] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: value,
+    }));
+  };
+
+  const handleAutocompleteChange = (event, value, name) => {
+    const selectedOption = value?.label || '';
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: selectedOption,
+    }));
+  };
+
+  const handleDateChange = (date) => {
+    const startOfDay = dayjs(date).startOf('day').format();
+    setBook((prevBook) => ({
+      ...prevBook,
+      date: startOfDay,
+    }));
+  };
+
+  const handleClick = async (event, actionName) => {
+    event.preventDefault();
+  
+    try {
+      if (actionName === "List") {
+        console.log("List button clicked");
+        const response = await axios.get('http://localhost:8081/customers');
+        const data = response.data;
+        setRows(data);
+      } else if (actionName === "Cancel") {
+        console.log("Cancel button clicked");
+        // Perform the desired action when the "Cancel" button is clicked
+      } else if (actionName === "Delete") {
+        console.log("Delete button clicked");
+        // Perform the desired action when the "Delete" button is clicked
+      } else if (actionName === "Edit") {
+        console.log("Edit button clicked");
+        // Perform the desired action when the "Edit" button is clicked
+      } else if (actionName === "Add") {
+        await axios.post('http://localhost:8081/customers', book);
+        console.log(book);
+        navigate('/home/orders/customer');
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+  };
+  
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  }, [actionName]);
+
+  const handleRowClick = useCallback((params) => {
+    const customerId = params.row.customerId;
+    const customerData = params.row;
+    setSelectedCustomerId(customerId);
+    setSelectedCustomerData(customerData);
+  }, []);
+
+  const updateItems = ["Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id.  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id.Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id. "]; // Example data for update items
+
   return (
     <div className="form-container">
       <div className="customer-form">
-        <form action="">
+        <form onSubmit={handleClick}>
           <span className="Title-Name">Customer Master</span>
           <div className="Customer-page-header">
             <div className="input-field">
@@ -121,9 +204,12 @@ const Customer = () => {
                   <AccountBalanceWalletIcon color="action" />
                 </div>
                 <TextField
-                  name="customerid"
+                  name="customerId"
                   label="Customer ID"
                   id="standard-size-normal"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.customerId || ''}
+                  onChange={handleChange}
                   variant="standard"
                 />
               </div>
@@ -136,7 +222,10 @@ const Customer = () => {
                   size="small"
                   id="email"
                   label="Name"
-                  name="email"
+                  value={selectedCustomerData.name || ''}
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  name="name"
                   autoFocus
                 />
               </div>
@@ -146,37 +235,44 @@ const Customer = () => {
                   size="small"
                   id="Print Name"
                   label="Print Name"
-                  name="Print Name"
+                  value={selectedCustomerData.printName || ''}
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  name="printName"
                   autoFocus
                 />
               </div>
               <div className="input">
-                <DemoItem label="Start Date">
+                {/* <DemoItem label="Start Date"> */}
                   <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo"
                     freeSolo
                     sx={{ width: "20ch" }}
-                    value={Customertype.map((option) => option.optionvalue)}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
+                    value={Customertype.find((option) => option.optionvalue)?.label || ''}
                     options={Customertype.map((option) => ({
                       label: option.Option,
                     }))}
-                    getOptionLabel={(option) => option.label || ""}
+                    getOptionLabel={(option) => option.label || ''}
                     renderInput={(params) => (
-                      <TextField {...params} label="Customer Type " />
+                      <TextField {...params} label="Customer Type" name="customerType" value={selectedCustomerData.customerType || ''} inputRef={params.inputRef} />
                     )}
                   />
-                </DemoItem>
+                {/* </DemoItem> */}
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Start Date">
+                  <DemoItem label="Date">
                     <DatePicker
-                      defaultValue={today}
-                      minDate={tomorrow}
-                      views={["year", "month", "day"]}
-                    />
+                      // defaultValue={today}
+                      onChange={handleDateChange}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData.date || ''} />
+                      )}
+                    </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
               </div>
@@ -189,6 +285,9 @@ const Customer = () => {
                 <TextField
                   name="email"
                   label="Email"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.email || ''}
+                  onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
                 />
@@ -198,8 +297,11 @@ const Customer = () => {
                   <RateReviewIcon color="action" />
                 </div>
                 <TextField
-                  name="rate_type"
+                  name="rateType"
                   label="Rate Type"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.rateType || ''}
+                  onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
                 />
@@ -209,8 +311,11 @@ const Customer = () => {
                   <AccountBalanceWalletIcon color="action" />
                 </div>
                 <TextField
-                  name="opbalanace"
+                  name="opBalance"
                   label="OP Balanace"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.opBalance || ''}
+                  onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
                 />
@@ -223,7 +328,10 @@ const Customer = () => {
                   <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
+                    name="gstTax"
+                    autoComplete="new-password"
+                    onChange={handleChange}
+                    // value={selectedCustomerData.gstTax || ''}
                   >
                     <FormControlLabel
                       value="yes"
@@ -246,7 +354,9 @@ const Customer = () => {
                   <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
+                    name="acType"
+                    autoComplete="new-password"
+                    onChange={handleChange}
                   >
                     <FormControlLabel
                       value="Dr"
@@ -273,7 +383,10 @@ const Customer = () => {
                   <TextField
                     size="small"
                     name="address1"
+                    value={selectedCustomerData.address1 || ''}
                     label="Address"
+                    autoComplete="new-password"
+                    onChange={handleChange}
                     id="remark"
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
@@ -287,8 +400,11 @@ const Customer = () => {
                   </div>
                   <TextField
                     size="small"
-                    name="streetno"
+                    name="address2"
+                    value={selectedCustomerData.address2 || ''}
                     id="remark"
+                    autoComplete="new-password"
+                    onChange={handleChange}
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
                   />
@@ -303,6 +419,9 @@ const Customer = () => {
                     size="small"
                     name="city"
                     id="address3"
+                    value={selectedCustomerData.city || ''}
+                    autoComplete="new-password"
+                    onChange={handleChange}
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
                   />
@@ -311,68 +430,72 @@ const Customer = () => {
             </div>
             <div className="Customer-page-secend-container-right">
               <div className="textboxlist">
-                <div className="textboxlist-customer list-update">
-                  <span>
-                    List Lorem ipsum dolor sit amet, consectetur adipisicing
-                    elit. Harum veniam quos laborum. Dicta suscipit voluptas
-                    laboriosam rem alias praesentium, facere aliquam sed iste,
-                    officia excepturi quos corporis. Facilis, reiciendis et.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
-                    nostrum nihil minima debitis, nobis incidunt temporibus
-                    velit accusantium dolore assumenda iusto quod ratione
-                    praesentium maxime eveniet voluptas enim animi laudantium.
-                    List Lorem ipsum dolor sit amet, consectetur adipisicing
-                    elit. Harum veniam quos laborum. Dicta suscipit voluptas
-                    laboriosam rem alias praesentium, facere aliquam sed iste,
-                    officia excepturi quos corporis. Facilis, reiciendis et.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
-                    nostrum nihil minima debitis, nobis incidunt temporibus
-                    velit accusantium dolore assumenda iusto quod ratione
-                    praesentium maxime eveniet voluptas enim animi laudantium.
-                  </span>
-                </div>
+                {updateItems.map((item, index) => (
+                  <div className="textboxlist-customer list-update" key={`update-item-${index}`}>
+                    <span>{item}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
           <div className="detail-container-main-customer">
             <div className="input-field checkbox">
               <FormControlLabel
+                name="printBill"
                 value="Printbill"
                 control={<Checkbox size="small" />}
                 label="Print Bill"
+                autoComplete="new-password"
+                onChange={handleChange}
               />
               <FormControlLabel
+                name="userName"
                 value="Username"
                 control={<Checkbox size="small" />}
                 label="User Name"
+                autoComplete="new-password"
+                onChange={handleChange}
               />
               <FormControlLabel
+                name="bookName"
                 value="Bookname"
                 control={<Checkbox size="small" />}
                 label="Book Name"
+                autoComplete="new-password"
+                onChange={handleChange}
               />
               <FormControlLabel
+                name="division"
                 value="Divistion"
                 control={<Checkbox size="small" />}
                 label="Divistion"
+                autoComplete="new-password"
+                onChange={handleChange}
               />
               <FormControlLabel
                 size="small"
+                name="hourRoundedOff"
                 value="Hourroundedoff"
                 control={<Checkbox size="small" />}
                 label="Hour Roundedoff"
+                autoComplete="new-password"
+                onChange={handleChange}
               />
               <div className="input">
                 <Autocomplete
                   fullWidth
-                  id="free-solo-demo"
-                  freeSolo
                   size="small"
-                  value={Select.map((option) => option.optionvalue)}
-                  options={Select.map((option) => ({ label: option.Option }))}
-                  getOptionLabel={(option) => option.label || ""}
+                  id="free-solo-demo-select"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "selectOption")}
+                  value={Select.find((option) => option.Option)?.label || ''}
+                  options={Select.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => (
-                    <TextField {...params} label="Select" />
+                    <TextField {...params} label="Select" name="selectOption" value={selectedCustomerData.selectOption || ''} inputRef={params.inputRef} />
                   )}
                 />
               </div>
@@ -381,16 +504,18 @@ const Customer = () => {
               <div className="input">
                 <Autocomplete
                   fullWidth
-                  id="free-solo-demo"
-                  freeSolo
                   size="small"
-                  value={states.map((option) => option.statevalue)}
+                  id="free-solo-demo-state"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "state")}
+                  value={states.find((option) => option.state)?.label || ''}
                   options={states.map((option) => ({
-                    label: option.statevalue,
+                    label: option.state,
                   }))}
-                  getOptionLabel={(option) => option.label || ""}
+                  getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => (
-                    <TextField {...params} label="State" />
+                    <TextField {...params} label="State" name="state" value={selectedCustomerData.state || ''} inputRef={params.inputRef} />
                   )}
                 />
               </div>
@@ -398,31 +523,35 @@ const Customer = () => {
                 <Autocomplete
                   fullWidth
                   size="small"
-                  id="free-solo-demo"
+                  id="free-solo-demo-underGroup"
                   freeSolo
-                  value={UnderGroup.map((option) => option.optionvalue)}
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
+                  value={UnderGroup.find((option) => option.option)?.label || ''}
                   options={UnderGroup.map((option) => ({
-                    label: option.optionvalue,
+                    label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ""}
+                  getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => (
-                    <TextField {...params} label="Under Group" />
+                    <TextField {...params} label="Under Group" name="underGroup" value={selectedCustomerData.underGroup || ''} inputRef={params.inputRef} />
                   )}
                 />
               </div>
               <div className="input">
                 <Autocomplete
                   fullWidth
-                  id="free-solo-demo"
-                  freeSolo
                   size="small"
-                  value={BillingGroup.map((option) => option.optionvalue)}
+                  id="free-solo-demo-billingGroup"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "billingGroup")}
+                  value={BillingGroup.find((option) => option.option)?.label || ''}
                   options={BillingGroup.map((option) => ({
-                    label: option.optionvalue,
+                    label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ""}
+                  getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => (
-                    <TextField {...params} label="Billing Group" />
+                    <TextField {...params} label="Billing Group" name="billingGroup" value={selectedCustomerData.billingGroup || ''} inputRef={params.inputRef} />
                   )}
                 />
               </div>
@@ -432,6 +561,9 @@ const Customer = () => {
                 </div>
                 <TextField
                   name="entity"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.entity || ''}
+                  onChange={handleChange}
                   label="Entity"
                   id="standard-size-normal"
                   variant="standard"
@@ -447,7 +579,9 @@ const Customer = () => {
                   <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
+                    name="inclAddress"
+                    autoComplete="new-password"
+                    onChange={handleChange}
                   >
                     <FormControlLabel
                       value="yes"
@@ -470,7 +604,9 @@ const Customer = () => {
                   <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
+                    name="active"
+                    autoComplete="new-password"
+                    onChange={handleChange}
                   >
                     <FormControlLabel
                       value="yes"
@@ -493,7 +629,9 @@ const Customer = () => {
                   <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
+                    name="enableDriverApp"
+                    autoComplete="new-password"
+                    onChange={handleChange}
                   >
                     <FormControlLabel
                       value="yes"
@@ -509,7 +647,10 @@ const Customer = () => {
                 </FormControl>
               </div>
             </div>
-            <div className="SpeedDial" style={{ padding: "26px" }}>
+
+            {error && <p>Something went wrong!</p>}
+
+            <div className="SpeedDial" style={{ padding: '26px', }}>
               <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"
@@ -520,6 +661,7 @@ const Customer = () => {
                       key={action.name}
                       icon={action.icon}
                       tooltipTitle={action.name}
+                      onClick={(event) => handleClick(event, action.name)}
                     />
                   ))}
                 </StyledSpeedDial>
@@ -531,6 +673,7 @@ const Customer = () => {
               <DataGrid
                 rows={rows}
                 columns={columns}
+                onRowClick={handleRowClick}
                 initialState={{
                   pagination: {
                     paginationModel: { page: 0, pageSize: 5 },

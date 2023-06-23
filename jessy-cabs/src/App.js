@@ -14,6 +14,8 @@ import Settings from "./component/Settings/Settings";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import Permission from "./component/Settings/Permission/Permission";
+import MainSetting from "./component/Settings/MainSetting/MainSetting";
+
 
 function App() {
   return (
@@ -40,6 +42,7 @@ function App() {
               element={<StationCreation />}
             />
             <Route path="/home/settings/permission" element={<Permission />} />
+            <Route path="/home/settings/mainsetting" element={<MainSetting />} />
           </Route>
         </Route>
         <Route

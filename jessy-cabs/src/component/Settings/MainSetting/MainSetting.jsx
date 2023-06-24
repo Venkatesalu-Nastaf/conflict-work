@@ -24,18 +24,27 @@ const MainSetting = () => {
                 aria-label="lab API tabs example"
               >
                 <Tab label="Fuel Rate" value="fuel_rate" />
-                <Tab label="Vehicle Info" value="vehicle_info" />
-                <Tab label="Online User Account" value="online_user_account" />
+                <Tab label="BackUp" value="Back_Up" />
+                <Tab label="SMS Format" value="SMS_Format" />
+                <Tab label="Year End Process" value="Year_End_Process" />
+                <Tab label="Tax Setting" value="Tax_Setting" />
+
               </TabList>
             </Box>
             <TabPanel value="fuel_rate">
-             <FuelRate/>
+              <FuelRate />
             </TabPanel>
-            <TabPanel value="vehicle_info">
-              hello
+            <TabPanel value="Back_Up">
+              BackUp
             </TabPanel>
-            <TabPanel value="online_user_account">
-              helo
+            <TabPanel value="SMS_Format">
+              SMS Format
+            </TabPanel>
+            <TabPanel value="Year_End_Processt">
+              Year_End_Process
+            </TabPanel>
+            <TabPanel value="Tax_Setting">
+              Tax Setting
             </TabPanel>
           </TabContext>
         </Box>

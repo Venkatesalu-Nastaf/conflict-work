@@ -19,6 +19,7 @@ import {
 import dayjs from "dayjs";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import RateReviewIcon from "@mui/icons-material/RateReview";
@@ -101,7 +102,7 @@ const rows = [
     State: "456 Avenue, Unit 8, Town",
     Driver_App: "XYZ Car",
   },
-  
+
   // Add more rows as needed
 ];
 // Table End
@@ -151,23 +152,21 @@ const Customer = () => {
                 />
               </div>
               <div className="input">
-                <DemoItem label="Start Date">
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo"
-                    freeSolo
-                    sx={{ width: "20ch" }}
-                    value={Customertype.map((option) => option.optionvalue)}
-                    options={Customertype.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Customer Type " />
-                    )}
-                  />
-                </DemoItem>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ mt: 1,width: "20ch" }}
+                  value={Customertype.map((option) => option.optionvalue)}
+                  options={Customertype.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Customer Type " />
+                  )}
+                />
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -215,28 +214,16 @@ const Customer = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input radio">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    GST Tax
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
+              <div className="input">
+                <div className="icone">
+                  <LocalPhoneIcon color="action" />
+                </div>
+                <TextField
+                  name="Phone"
+                  label="Phone"
+                  id="Phone"
+                  variant="standard"
+                />
               </div>
               <div className="input radio">
                 <FormControl>
@@ -489,6 +476,29 @@ const Customer = () => {
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Enable Driver App
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    GST Tax
                   </FormLabel>
                   <RadioGroup
                     row

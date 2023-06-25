@@ -236,6 +236,7 @@ const TripSheet = () => {
                   size="small"
                   id="free-solo-demo"
                   freeSolo
+                  sx={{ mt: 1, width: "200ch" }}
                   value={Status.map((option) => option.optionvalue)}
                   options={Status.map((option) => ({
                     label: option.Option,

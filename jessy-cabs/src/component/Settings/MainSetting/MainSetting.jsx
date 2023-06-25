@@ -8,6 +8,8 @@ import TabPanel from "@mui/lab/TabPanel";
 import FuelRate from "./FuelRate/FuelRate";
 import BackUp from "./BackUp/BackUp";
 import SMSFormat from "./SMSFromat/SMSFormat";
+import YearEndProcess from "./YearEndProcess/YearEndProcess";
+import TaxSetting from "./TaxSetting/TaxSetting";
 
 
 const MainSetting = () => {
@@ -43,11 +45,11 @@ const MainSetting = () => {
             <TabPanel value="SMS_Format">
               <SMSFormat/>
             </TabPanel>
-            <TabPanel value="Year_End_Processt">
-              Year_End_Process
+            <TabPanel value="Year_End_Process">
+              <YearEndProcess/>
             </TabPanel>
             <TabPanel value="Tax_Setting">
-              Tax Setting
+              <TaxSetting/>
             </TabPanel>
           </TabContext>
         </Box>

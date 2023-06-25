@@ -179,20 +179,18 @@ const Vehicaleinfo = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-              <div className="input radio">
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoItem label="Tax Date">
-                      <DatePicker
-                        defaultValue={today}
-                        minDate={tomorrow}
-                        views={["day", "month", "year"]}
-                      />
-                    </DemoItem>
-                  </LocalizationProvider>
-                </div>
+              <div className="input">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Tax Date">
+                    <DatePicker
+                      defaultValue={today}
+                      minDate={tomorrow}
+                      views={["day", "month", "year"]}
+                    />
+                  </DemoItem>
+                </LocalizationProvider>
               </div>
-              <div className="input radio">
+              <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="NP Date">
                     <DatePicker
@@ -216,7 +214,7 @@ const Vehicaleinfo = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-              <div className="input radio">
+              <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="St.Permit">
                     <DatePicker
@@ -227,7 +225,7 @@ const Vehicaleinfo = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-              <div className="input radio">
+              <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Due Date">
                     <DatePicker
@@ -374,7 +372,7 @@ const Vehicaleinfo = () => {
                 ariaLabel="SpeedDial playground example"
                 // hidden={hidden}
                 icon={<SpeedDialIcon />}
-                // direction={direction}
+              // direction={direction}
               >
                 {actions.map((action) => (
                   <SpeedDialAction

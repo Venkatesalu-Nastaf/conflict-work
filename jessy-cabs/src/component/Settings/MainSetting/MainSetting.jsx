@@ -6,6 +6,9 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import FuelRate from "./FuelRate/FuelRate";
+import BackUp from "./BackUp/BackUp";
+import SMSFormat from "./SMSFromat/SMSFormat";
+
 
 const MainSetting = () => {
   const [value, setValue] = React.useState("fuel_rate");
@@ -35,10 +38,10 @@ const MainSetting = () => {
               <FuelRate />
             </TabPanel>
             <TabPanel value="Back_Up">
-              BackUp
+              <BackUp/>
             </TabPanel>
             <TabPanel value="SMS_Format">
-              SMS Format
+              <SMSFormat/>
             </TabPanel>
             <TabPanel value="Year_End_Processt">
               Year_End_Process

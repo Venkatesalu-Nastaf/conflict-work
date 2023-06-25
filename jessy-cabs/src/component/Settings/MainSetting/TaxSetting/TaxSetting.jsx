@@ -1,9 +1,10 @@
 import React from 'react'
+import './TaxSetting.css'
 import { TaxType } from './TaxSettingData.js'
 import { DataGrid } from "@mui/x-data-grid";
 import dayjs from "dayjs";
-import BadgeIcon from "@mui/icons-material/Badge";
 import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -16,6 +17,8 @@ import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons"
 import { faNewspaper } from "@fortawesome/free-solid-svg-icons"
+import { faSave } from "@fortawesome/free-solid-svg-icons"
+
 // date
 const today = dayjs();
 const tomorrow = dayjs().add(1, "day");
@@ -68,9 +71,9 @@ const rows = [
 // Table End
 const TaxSetting = () => {
     return (
-        <div className="FuelRate-form">
+        <div className="TaxSetting-form">
             <form action="">
-                <div className="FuelRate-header">
+                <div className="TaxSetting-header">
                     <div className="input-field" style={{ padding: '0px 15px' }}>
                         <div className="input">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -188,15 +191,28 @@ const TaxSetting = () => {
                         </div>
                     </div>
                 </div>
-            </form>
-            <div className="FuelRate-table-container">
-                <div className="table-FuelRate">
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                    />
+                <div className="TaxSetting-table-container">
+                    <div className="table-TaxSetting">
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                        />
+                    </div>
+                    <div className="input-field" style={{ 'margin-top': '-20px', 'margin-left': '-25px','margin-bottom': '25px' }}>
+                        <div className="input" style={{ 'margin-top': '40px' }}>
+                            <Button>
+                                Refresh
+                            </Button>
+                        </div>
+                        <div className="input" style={{ 'margin-top': '40px' }}>
+                            <Button startIcon={<FontAwesomeIcon icon={faSave} size="lg" />} variant="contained">
+                                Update
+                            </Button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
+
         </div>
     )
 }

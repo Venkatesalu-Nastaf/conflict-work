@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./UserCreation.css";
 import {
   TextField,
@@ -24,6 +24,13 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import { styled } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
@@ -84,6 +91,24 @@ const rows = [
 ];
 // Table End
 const UserCreation = () => {
+  const [showPasswords, setShowPasswords] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPasswords = () => {
+    setShowPasswords((show) => !show);
+  };
+
+  const handleMouseDownPasswords = (event) => {
+    event.preventDefault();
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword((show) => !show);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   return (
     <div className="usercreation-main">
       <div className="usercreation-form-container">
@@ -93,7 +118,7 @@ const UserCreation = () => {
             <div className="input-field">
               <div className="input">
                 <div className="icone">
-                <BadgeIcon color="action" />
+                  <BadgeIcon color="action" />
                 </div>
                 <TextField
                   margin="normal"
@@ -151,11 +176,29 @@ const UserCreation = () => {
               </div>
             </div>
             <div className="input-field">
-              <div className="input">
+              <div className="input" style={{ width: "240px" }}>
                 <div className="icone">
-                <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
+                  <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                 </div>
-                <TextField
+                <FormControl sx={{ m: 1, width: '35ch' }} variant="standard">
+                  <InputLabel htmlFor="password">Password</InputLabel>
+                  <Input
+                    id="password"
+                    type={showPasswords ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPasswords}
+                          onMouseDown={handleMouseDownPasswords}
+                        >
+                          {showPasswords ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                {/* <TextField
                   margin="normal"
                   size="small"
                   type="password"
@@ -163,13 +206,31 @@ const UserCreation = () => {
                   label="Temporary Password"
                   name="temporary-password"
                   variant="standard"
-                />
+                /> */}
               </div>
-              <div className="input">
+              <div className="input" style={{ width: "240px" }}>
                 <div className="icone">
-                <FontAwesomeIcon icon={faLock} size="lg" />
+                  <FontAwesomeIcon icon={faLock} size="lg" />
                 </div>
-                <TextField
+                <FormControl sx={{ m: 1, width: '35ch' }} variant="standard">
+                  <InputLabel htmlFor="confirm-password">Confirm Password</InputLabel>
+                  <Input
+                    id="confirm-password"
+                    type={showPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="confirm-password"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                {/* <TextField
                   margin="normal"
                   size="small"
                   type="password"
@@ -177,7 +238,7 @@ const UserCreation = () => {
                   label="Confirm Password"
                   name="confirm-password"
                   variant="standard"
-                />
+                /> */}
               </div>
               <div className="input radio">
                 <FormControl>

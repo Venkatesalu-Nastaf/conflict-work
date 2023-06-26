@@ -91,7 +91,7 @@ const SMSFormat = () => {
                             'align-items': 'center',
                             'justify-content': 'center',
                         }}>
-                            <span className="Title-Name">URL Trip Closing</span>
+                            <span className="Title-Name">Key-Words</span>
                             <TextField
                                 fullWidth
                                 id="outlined-multiline-static"

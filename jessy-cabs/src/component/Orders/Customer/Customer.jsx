@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from "react-router-dom";
-// import { useState, useEffect } from "react";
 import axios from "axios";
 import {
   UnderGroup,
@@ -34,7 +33,6 @@ import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-//
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -66,16 +64,11 @@ const actions = [
   { icon: <ModeEditIcon />, name: "Edit" },
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
-// Table Start
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "printName", headerName: "Customer_Name", width: 130 },
   { field: "address1", headerName: "Address", width: 130 },
-<<<<<<< HEAD
   { field: "phoneno", headerName: "Phone", width: 90 },
-=======
-  { field: "email", headerName: "Phone", width: 90 },
->>>>>>> origin/back-end
   { field: "active", headerName: "Active", width: 160 },
   { field: "customerId", headerName: "ID", width: 130 },
   { field: "rateType", headerName: "Rate_Type", width: 130 },
@@ -84,19 +77,7 @@ const columns = [
   { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
 ];
 
-
-
-// date
-<<<<<<< HEAD
-// const today = dayjs();
-
 const Customer = () => {
-=======
-const today = dayjs();
-
-const Customer = () => {
-  const [selectedCustomerId, setSelectedCustomerId] = useState('');
->>>>>>> origin/back-end
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
@@ -114,10 +95,7 @@ const Customer = () => {
     email: '',
     rateType: '',
     opBalance: '',
-<<<<<<< HEAD
     phoneno: '',
-=======
->>>>>>> origin/back-end
     underGroup: '',
     gstTax: '',
     acType: '',
@@ -140,20 +118,34 @@ const Customer = () => {
   const navigate = useNavigate();
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, checked } = event.target;
+    const { value } = event.target;
     setBook((prevBook) => ({
       ...prevBook,
       [name]: value,
     }));
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: checked,
+    }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: checked,
+    }));
   };
 
   const handleAutocompleteChange = (event, value, name) => {
-    const selectedOption = value?.label || '';
+    const selectedOption = value ? value.label : '';
     setBook((prevBook) => ({
       ...prevBook,
       [name]: selectedOption,
     }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
   };
+
 
   const handleDateChange = (date) => {
     const startOfDay = dayjs(date).startOf('day').format();
@@ -163,7 +155,6 @@ const Customer = () => {
     }));
   };
 
-<<<<<<< HEAD
   const handleCancel = () => {
     setBook((prevBook) => ({
       ...prevBook,
@@ -196,6 +187,7 @@ const Customer = () => {
       billingGroup: '',
     }));
     setSelectedCustomerData({});
+
   };
 
   const handleRowClick = useCallback((params) => {
@@ -205,8 +197,7 @@ const Customer = () => {
 
   const handleClick = async (event, actionName) => {
     event.preventDefault();
-    
-  
+
     try {
       if (actionName === 'List') {
         console.log('List button clicked');
@@ -223,27 +214,6 @@ const Customer = () => {
         console.log('Edit button clicked');
         // Perform the desired action when the "Edit" button is clicked
       } else if (actionName === 'Add') {
-=======
-  const handleClick = async (event, actionName) => {
-    event.preventDefault();
-  
-    try {
-      if (actionName === "List") {
-        console.log("List button clicked");
-        const response = await axios.get('http://localhost:8081/customers');
-        const data = response.data;
-        setRows(data);
-      } else if (actionName === "Cancel") {
-        console.log("Cancel button clicked");
-        // Perform the desired action when the "Cancel" button is clicked
-      } else if (actionName === "Delete") {
-        console.log("Delete button clicked");
-        // Perform the desired action when the "Delete" button is clicked
-      } else if (actionName === "Edit") {
-        console.log("Edit button clicked");
-        // Perform the desired action when the "Edit" button is clicked
-      } else if (actionName === "Add") {
->>>>>>> origin/back-end
         await axios.post('http://localhost:8081/customers', book);
         console.log(book);
         navigate('/home/orders/customer');
@@ -253,31 +223,14 @@ const Customer = () => {
       setError(true);
     }
   };
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> origin/back-end
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
-<<<<<<< HEAD
   });
 
-
-=======
-  }, [actionName]);
-
-  const handleRowClick = useCallback((params) => {
-    const customerId = params.row.customerId;
-    const customerData = params.row;
-    setSelectedCustomerId(customerId);
-    setSelectedCustomerData(customerData);
-  }, []);
->>>>>>> origin/back-end
-
-  const updateItems = ["Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id.  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id.Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id. "]; // Example data for update items
+  const updateItems = ["Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id.  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id."]; // Example data for update items
 
   return (
     <div className="form-container">
@@ -296,16 +249,11 @@ const Customer = () => {
                   label="Customer ID"
                   id="standard-size-normal"
                   autoComplete="new-password"
-<<<<<<< HEAD
-                  value={selectedCustomerData.customerId}
-=======
-                  value={selectedCustomerData.customerId || ''}
->>>>>>> origin/back-end
+                  value={selectedCustomerData.customerId || book.customerId}
                   onChange={handleChange}
                   variant="standard"
                   InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   autoFocus
-                  // readOnly={false}
                 />
               </div>
 
@@ -318,15 +266,10 @@ const Customer = () => {
                   size="small"
                   id="email"
                   label="Name"
-<<<<<<< HEAD
-                  value={selectedCustomerData.name}
-                  InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.name, }}
+                  value={selectedCustomerData.name || book.name}
+                  InputLabelProps={{ shrink: !!selectedCustomerData.name || !!book.name, }}
                   autoComplete="new-password"
                   variant="standard"
-=======
-                  value={selectedCustomerData.name || ''}
-                  autoComplete="new-password"
->>>>>>> origin/back-end
                   onChange={handleChange}
                   name="name"
                   autoFocus
@@ -338,14 +281,10 @@ const Customer = () => {
                   size="small"
                   id="Print Name"
                   label="Print Name"
-<<<<<<< HEAD
-                  value={selectedCustomerData.printName}
+                  value={selectedCustomerData.printName || book.printName}
                   InputLabelProps={{
-                    shrink: !!selectedCustomerData.customerId || !!book.printName,
+                    shrink: !!selectedCustomerData.printName || !!book.printName,
                   }}
-=======
-                  value={selectedCustomerData.printName || ''}
->>>>>>> origin/back-end
                   autoComplete="new-password"
                   onChange={handleChange}
                   name="printName"
@@ -353,57 +292,34 @@ const Customer = () => {
                 />
               </div>
               <div className="input">
-<<<<<<< HEAD
                 <Autocomplete
                   fullWidth
                   size="small"
-                  // id="free-solo-demo"
+                  id="free-solo-demo-customerType"
                   freeSolo
-                  sx={{ mt:1, width: "20ch" }}
+                  sx={{ mt: 1, width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
-                  value={Customertype.find((option) => option.optionvalue)?.label || ''}
+                  value={book.customerType || ''}
                   options={Customertype.map((option) => ({
                     label: option.Option,
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => (
-                    <TextField {...params} label="Customer Type" name="customerType" value={selectedCustomerData.customerType} inputRef={params.inputRef} />
+                    <TextField {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
                   )}
                 />
-=======
-                {/* <DemoItem label="Start Date"> */}
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo"
-                    freeSolo
-                    sx={{ width: "20ch" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
-                    value={Customertype.find((option) => option.optionvalue)?.label || ''}
-                    options={Customertype.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ''}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Customer Type" name="customerType" value={selectedCustomerData.customerType || ''} inputRef={params.inputRef} />
-                    )}
-                  />
-                {/* </DemoItem> */}
->>>>>>> origin/back-end
               </div>
+
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Date">
                     <DatePicker
                       // defaultValue={today}
+                      value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
                       onChange={handleDateChange}
                     >
                       {({ inputProps, inputRef }) => (
-<<<<<<< HEAD
                         <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData.date} />
-=======
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData.date || ''} />
->>>>>>> origin/back-end
                       )}
                     </DatePicker>
                   </DemoItem>
@@ -419,14 +335,10 @@ const Customer = () => {
                   name="email"
                   label="Email"
                   autoComplete="new-password"
-<<<<<<< HEAD
-                  value={selectedCustomerData.email}
+                  value={selectedCustomerData.email || book.email}
                   InputLabelProps={{
-                    shrink: !!selectedCustomerData.customerId || !!book.email,
+                    shrink: !!selectedCustomerData.email || !!book.email,
                   }}
-=======
-                  value={selectedCustomerData.email || ''}
->>>>>>> origin/back-end
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
@@ -440,14 +352,10 @@ const Customer = () => {
                   name="rateType"
                   label="Rate Type"
                   autoComplete="new-password"
-<<<<<<< HEAD
-                  value={selectedCustomerData.rateType}
+                  value={selectedCustomerData.rateType || book.rateType}
                   InputLabelProps={{
-                    shrink: !!selectedCustomerData.customerId || !!book.rateType,
+                    shrink: !!selectedCustomerData.rateType || !!book.rateType,
                   }}
-=======
-                  value={selectedCustomerData.rateType || ''}
->>>>>>> origin/back-end
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
@@ -461,20 +369,15 @@ const Customer = () => {
                   name="opBalance"
                   label="OP Balanace"
                   autoComplete="new-password"
-<<<<<<< HEAD
-                  value={selectedCustomerData.opBalance}
+                  value={selectedCustomerData.opBalance || book.opBalance}
                   InputLabelProps={{
-                    shrink: !!selectedCustomerData.customerId || !!book.opBalance,
+                    shrink: !!selectedCustomerData.opBalance || !!book.opBalance,
                   }}
-=======
-                  value={selectedCustomerData.opBalance || ''}
->>>>>>> origin/back-end
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
                 />
               </div>
-<<<<<<< HEAD
               <div className="input">
                 <div className="icone">
                   <LocalPhoneIcon color="action" />
@@ -483,44 +386,17 @@ const Customer = () => {
                   name="phoneno"
                   label="Phone"
                   autoComplete="new-password"
-                  value={selectedCustomerData.phoneno}
+                  value={selectedCustomerData.phoneno || book.phoneno}
                   InputLabelProps={{
-                    shrink: !!selectedCustomerData.customerId || !!book.phoneno,
+                    shrink: !!selectedCustomerData.phoneno || !!book.phoneno,
                   }}
                   onChange={handleChange}
                   id="Phone"
                   variant="standard"
                 />
-=======
-              <div className="input radio">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    GST Tax
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="gstTax"
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    // value={selectedCustomerData.gstTax || ''}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
->>>>>>> origin/back-end
               </div>
 
-              
+
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -532,6 +408,7 @@ const Customer = () => {
                     name="acType"
                     autoComplete="new-password"
                     onChange={handleChange}
+                    value={selectedCustomerData.acType || book.acType}
                   >
                     <FormControlLabel
                       value="Dr"
@@ -558,14 +435,10 @@ const Customer = () => {
                   <TextField
                     size="small"
                     name="address1"
-<<<<<<< HEAD
-                    value={selectedCustomerData.address1}
+                    value={selectedCustomerData.address1 || book.address1}
                     InputLabelProps={{
-                      shrink: !!selectedCustomerData.customerId || !!book.address1,
+                      shrink: !!selectedCustomerData.address1 || !!book.address1,
                     }}
-=======
-                    value={selectedCustomerData.address1 || ''}
->>>>>>> origin/back-end
                     label="Address"
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -583,11 +456,7 @@ const Customer = () => {
                   <TextField
                     size="small"
                     name="address2"
-<<<<<<< HEAD
-                    value={selectedCustomerData.address2}
-=======
-                    value={selectedCustomerData.address2 || ''}
->>>>>>> origin/back-end
+                    value={selectedCustomerData.address2 || book.address2}
                     id="remark"
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -605,11 +474,7 @@ const Customer = () => {
                     size="small"
                     name="city"
                     id="address3"
-<<<<<<< HEAD
-                    value={selectedCustomerData.city}
-=======
-                    value={selectedCustomerData.city || ''}
->>>>>>> origin/back-end
+                    value={selectedCustomerData.city || book.city}
                     autoComplete="new-password"
                     onChange={handleChange}
                     sx={{ m: 1, width: "200ch" }}
@@ -637,6 +502,7 @@ const Customer = () => {
                 label="Print Bill"
                 autoComplete="new-password"
                 onChange={handleChange}
+                checked={Boolean(selectedCustomerData.printBill || book.printBill)}
               />
               <FormControlLabel
                 name="userName"
@@ -645,6 +511,8 @@ const Customer = () => {
                 label="User Name"
                 autoComplete="new-password"
                 onChange={handleChange}
+                checked={Boolean(selectedCustomerData.userName || book.userName)}
+
               />
               <FormControlLabel
                 name="bookName"
@@ -653,6 +521,8 @@ const Customer = () => {
                 label="Book Name"
                 autoComplete="new-password"
                 onChange={handleChange}
+                checked={Boolean(selectedCustomerData.bookName || book.bookName)}
+
               />
               <FormControlLabel
                 name="division"
@@ -661,6 +531,8 @@ const Customer = () => {
                 label="Divistion"
                 autoComplete="new-password"
                 onChange={handleChange}
+                checked={Boolean(selectedCustomerData.division || book.division)}
+
               />
               <FormControlLabel
                 size="small"
@@ -670,6 +542,8 @@ const Customer = () => {
                 label="Hour Roundedoff"
                 autoComplete="new-password"
                 onChange={handleChange}
+                checked={Boolean(selectedCustomerData.hourRoundedOff || book.hourRoundedOff)}
+
               />
               <div className="input">
                 <Autocomplete
@@ -685,11 +559,7 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => (
-<<<<<<< HEAD
                     <TextField {...params} label="Select" name="selectOption" value={selectedCustomerData.selectOption} inputRef={params.inputRef} />
-=======
-                    <TextField {...params} label="Select" name="selectOption" value={selectedCustomerData.selectOption || ''} inputRef={params.inputRef} />
->>>>>>> origin/back-end
                   )}
                 />
               </div>
@@ -709,11 +579,7 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => (
-<<<<<<< HEAD
                     <TextField {...params} label="State" name="state" value={selectedCustomerData.state} inputRef={params.inputRef} />
-=======
-                    <TextField {...params} label="State" name="state" value={selectedCustomerData.state || ''} inputRef={params.inputRef} />
->>>>>>> origin/back-end
                   )}
                 />
               </div>
@@ -731,11 +597,7 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => (
-<<<<<<< HEAD
                     <TextField {...params} label="Under Group" name="underGroup" value={selectedCustomerData.underGroup} inputRef={params.inputRef} />
-=======
-                    <TextField {...params} label="Under Group" name="underGroup" value={selectedCustomerData.underGroup || ''} inputRef={params.inputRef} />
->>>>>>> origin/back-end
                   )}
                 />
               </div>
@@ -753,11 +615,7 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => (
-<<<<<<< HEAD
-                    <TextField {...params} label="Billing Group" name="billingGroup" value={selectedCustomerData.billingGroup} inputRef={params.inputRef} />
-=======
-                    <TextField {...params} label="Billing Group" name="billingGroup" value={selectedCustomerData.billingGroup || ''} inputRef={params.inputRef} />
->>>>>>> origin/back-end
+                    <TextField {...params} label="Billing Group" name="billingGroup" inputRef={params.inputRef} />
                   )}
                 />
               </div>
@@ -768,14 +626,10 @@ const Customer = () => {
                 <TextField
                   name="entity"
                   autoComplete="new-password"
-<<<<<<< HEAD
-                  value={selectedCustomerData.entity}
+                  value={selectedCustomerData.entity || book.entity}
                   InputLabelProps={{
-                    shrink: !!selectedCustomerData.customerId || !!book.entity,
+                    shrink: !!selectedCustomerData.entity || !!book.entity,
                   }}
-=======
-                  value={selectedCustomerData.entity || ''}
->>>>>>> origin/back-end
                   onChange={handleChange}
                   label="Entity"
                   id="standard-size-normal"
@@ -795,6 +649,8 @@ const Customer = () => {
                     name="inclAddress"
                     autoComplete="new-password"
                     onChange={handleChange}
+                    value={selectedCustomerData.inclAddress || book.inclAddress}
+
                   >
                     <FormControlLabel
                       value="yes"
@@ -820,6 +676,8 @@ const Customer = () => {
                     name="active"
                     autoComplete="new-password"
                     onChange={handleChange}
+                    value={selectedCustomerData.active || book.active}
+
                   >
                     <FormControlLabel
                       value="yes"
@@ -845,7 +703,8 @@ const Customer = () => {
                     name="enableDriverApp"
                     autoComplete="new-password"
                     onChange={handleChange}
-<<<<<<< HEAD
+                    value={selectedCustomerData.enableDriverApp || book.enableDriverApp}
+
                   >
                     <FormControlLabel
                       value="yes"
@@ -872,9 +731,9 @@ const Customer = () => {
                     name="gstTax"
                     autoComplete="new-password"
                     onChange={handleChange}
-                  // value={selectedCustomerData.gstTax || ''}
-=======
->>>>>>> origin/back-end
+                    // value={selectedCustomerData.gstTax || ''}
+                    value={selectedCustomerData.gstTax || book.gstTax}
+
                   >
                     <FormControlLabel
                       value="yes"
@@ -923,7 +782,7 @@ const Customer = () => {
                   },
                 }}
                 pageSizeOptions={[5, 10]}
-                checkboxSelection
+              // checkboxSelection
               />
             </div>
           </div>

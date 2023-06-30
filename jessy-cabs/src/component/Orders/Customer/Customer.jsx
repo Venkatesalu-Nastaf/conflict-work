@@ -216,7 +216,7 @@ const Customer = () => {
       } else if (actionName === 'Add') {
         await axios.post('http://localhost:8081/customers', book);
         console.log(book);
-        navigate('/home/orders/customer');
+        // navigate('/home/orders/supplier');
       }
     } catch (err) {
       console.log(err);
@@ -251,8 +251,8 @@ const Customer = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData.customerId || book.customerId}
                   onChange={handleChange}
-                  variant="standard"
                   InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
+                  variant="standard"
                   autoFocus
                 />
               </div>
@@ -299,7 +299,7 @@ const Customer = () => {
                   freeSolo
                   sx={{ mt: 1, width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
-                  value={book.customerType || ''}
+                  value={selectedCustomerData.customerType ? selectedCustomerData.customerType : null}
                   options={Customertype.map((option) => ({
                     label: option.Option,
                   }))}
@@ -310,11 +310,11 @@ const Customer = () => {
                 />
               </div>
 
+
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Date">
                     <DatePicker
-                      // defaultValue={today}
                       value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
                       onChange={handleDateChange}
                     >

@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Accountinfo.css";
 import Button from "@mui/material/Button";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -44,8 +46,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-const today = dayjs();
-const tomorrow = dayjs().add(1, "day");
+// const today = dayjs();
+// const tomorrow = dayjs().add(1, "day");
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -66,56 +68,164 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 const Accuntinfo = () => {
-  const [value, setValue] = React.useState("list");
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  
+  const [value] = React.useState("list");
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [rows, setRows] = useState([]);
+  const [actionName] = useState('');
+
   // Table Start
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },
-    { field: "Supplier_Name", headerName: "Supplier_Name", width: 130 },
-    { field: "Vehicle_No", headerName: "Vehicle_No", width: 130 },
-    { field: "Address", headerName: "Address", width: 130 },
+    { field: "cperson", headerName: "Supplier_Name", width: 130 },
+    { field: "accountNo", headerName: "Vehicle_No", width: 130 },
+    { field: "address1", headerName: "Address", width: 130 },
     { field: "Phone", headerName: "Phone", width: 90 },
-    { field: "Active", headerName: "Active", width: 160 },
-    { field: "Owner_Type", headerName: "Owner_Type", width: 130 },
-    { field: "Percentage", headerName: "Percentage", width: 130 },
-    { field: "Rate_Type", headerName: "Rate_Type", width: 130 },
-    { field: "Driver_App", headerName: "Driver_App", width: 130 },
+    { field: "isRunning", headerName: "Active", width: 160 },
+    { field: "rateType", headerName: "Owner_Type", width: 130 },
+    { field: "vehcommission", headerName: "Percentage", width: 130 },
+    { field: "printBill", headerName: "Rate_Type", width: 130 },
+    { field: "autoRefresh", headerName: "Driver_App", width: 130 },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      Supplier_Name: 1,
-      Vehicle_No: "Travels",
-      Address: "Address 1",
-      Phone: "Employee 1",
-      Active: "John Doe",
-      Owner_Type: "2023-06-07",
-      Percentage: 9,
-      Rate_Type: "Morning",
-      Driver_App: "ABC Car",
-    },
-    {
-      id: 2,
-      Supplier_Name: 2,
-      Vehicle_No: "Travels",
-      Address: "Address 2",
-      Phone: "Employee 2",
-      Active: "Jane Smith",
-      Owner_Type: "2023-06-08",
-      Percentage: 9,
-      Rate_Type: "Evening",
-      Driver_App: "XYZ Car",
-    },
+  const [book, setBook] = useState({
+    accountNo: '',
+    date: '',
+    vehicleTravels: '',
+    address1: '',
+    cperson: '',
+    streetNo: '',
+    email: '',
+    city: '',
+    phone: '',
+    vehCommission: '',
+    rateType: '',
+    printBill: '',
+    underGroup: '',
+    isRunning: '',
+    entity: '',
+    acType: '',
+    vehicleInfo: '',
+    autoRefresh: '',
+  });
 
-    // Add more rows as needed
-  ];
-  // Table End
+  const [error, setError] = useState(false);
+
+  const handleChange = (event) => {
+    const { name, value, checked } = event.target;
+  
+    if (event.target.type === 'checkbox') {
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+  
+
+  const handleAutocompleteChange = (event, value, name) => {
+    const selectedOption = value ? value.label : '';
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: selectedOption,
+    }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
+  };
+
+
+  const handleDateChange = (date) => {
+    const startOfDay = dayjs(date).startOf('day').format();
+    setBook((prevBook) => ({
+      ...prevBook,
+      date: startOfDay,
+    }));
+  };
+
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      accountNo: '',
+      date: '',
+      vehicleTravels: '',
+      address1: '',
+      cperson: '',
+      streetNo: '',
+      email: '',
+      city: '',
+      phone: '',
+      vehCommission: '',
+      rateType: '',
+      printBill: '',
+      underGroup: '',
+      isRunning: '',
+      entity: '',
+      acType: '',
+      vehicleInfo: '',
+      autoRefresh: '',
+    }));
+    setSelectedCustomerData({});
+
+  };
+
+  const handleRowClick = useCallback((params) => {
+    const customerData = params.row;
+    setSelectedCustomerData(customerData);
+  }, []);
+
+  const handleClick = async (event, actionName) => {
+    event.preventDefault();
+
+    try {
+      if (actionName === 'List') {
+        console.log('List button clicked');
+        const response = await axios.get('http://localhost:8081/accountinfo');
+        const data = response.data;
+        setRows(data);
+      } else if (actionName === 'Cancel') {
+        console.log('Cancel button clicked');
+        handleCancel();
+      } else if (actionName === 'Delete') {
+        console.log('Delete button clicked');
+        // Perform the desired action when the "Delete" button is clicked
+      } else if (actionName === 'Edit') {
+        console.log('Edit button clicked');
+        // Perform the desired action when the "Edit" button is clicked
+      } else if (actionName === 'Add') {
+        await axios.post('http://localhost:8081/accountinfo', book);
+        console.log(book);
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+  };
+
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  });
+
+
   return (
     <div className="account-form">
-      <form action="">
+      <form onSubmit={handleClick}>
         <span className="Title-Name">Accounting Info</span>
         <div className="detail-container-main-account">
           <div className="container-left-account">
@@ -124,23 +234,32 @@ const Accuntinfo = () => {
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
+                
                 <TextField
+                  name="accountNo"
+                  label="Account No"
                   margin="normal"
                   size="small"
-                  id="accountno"
-                  label="Account No"
-                  name="accountno"
+                  id="accountno1"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.accountNo || book.accountNo}
+                  onChange={handleChange}
+                  InputLabelProps={{ shrink: !!selectedCustomerData.accountNo || !!book.accountNo, }}
+                  variant="standard"
                   autoFocus
                 />
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="DatePicker">
+                  <DemoItem label="Date">
                     <DatePicker
-                      defaultValue={today}
-                      minDate={tomorrow}
-                      views={["year", "month", "day"]}
-                    />
+                      value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
+                      onChange={handleDateChange}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='date' value={selectedCustomerData.date} />
+                      )}
+                    </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
               </div>
@@ -149,7 +268,10 @@ const Accuntinfo = () => {
                   <MinorCrashIcon color="action" />
                 </div>
                 <TextField
-                  name="vehicle_travels"
+                  name="vehicleTravels"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.vehicleTravels || book.vehicleTravels}
+                  onChange={handleChange}
                   label="Vehicle/Travels"
                   id="standard-size-normal"
                   variant="standard"
@@ -164,6 +286,10 @@ const Accuntinfo = () => {
                 <TextField
                   size="small"
                   name="address1"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.address1 || book.address1}
+                  onChange={handleChange}
+                  InputLabelProps={{ shrink: !!selectedCustomerData.address1 || !!book.address1, }}
                   label="Address"
                   id="remark"
                   sx={{ m: 1, width: "200ch" }}
@@ -176,6 +302,10 @@ const Accuntinfo = () => {
                 </div>
                 <TextField
                   name="cperson"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.cperson || book.cperson}
+                  onChange={handleChange}
+                  InputLabelProps={{ shrink: !!selectedCustomerData.cperson || !!book.cperson, }}
                   label="C Person"
                   id="cperson"
                   variant="standard"
@@ -189,7 +319,11 @@ const Accuntinfo = () => {
                 </div>
                 <TextField
                   size="small"
-                  name="streetno"
+                  name="streetNo"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.streetNo || book.streetNo}
+                  onChange={handleChange}
+                  InputLabelProps={{ shrink: !!selectedCustomerData.streetNo || !!book.streetNo, }}
                   id="remark"
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
@@ -201,6 +335,10 @@ const Accuntinfo = () => {
                 </div>
                 <TextField
                   name="email"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.email || book.email}
+                  onChange={handleChange}
+                  InputLabelProps={{ shrink: !!selectedCustomerData.email || !!book.email, }}
                   label="Email"
                   id="standard-size-normal"
                   variant="standard"
@@ -215,6 +353,10 @@ const Accuntinfo = () => {
                 <TextField
                   size="small"
                   name="city"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.city || book.city}
+                  onChange={handleChange}
+                  InputLabelProps={{ shrink: !!selectedCustomerData.city || !!book.city, }}
                   id="address3"
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
@@ -226,6 +368,10 @@ const Accuntinfo = () => {
                 </div>
                 <TextField
                   name="phone"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.phone || book.phone}
+                  onChange={handleChange}
+                  InputLabelProps={{ shrink: !!selectedCustomerData.phone || !!book.phone, }}
                   label="Phone"
                   id="phone"
                   variant="standard"
@@ -284,6 +430,10 @@ const Accuntinfo = () => {
                                 </div>
                                 <TextField
                                   name="temporary_password"
+                                  autoComplete="new-password"
+                                  value={selectedCustomerData.customerId || book.customerId}
+                                  onChange={handleChange}
+                                  InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                                   label="Temporary Password"
                                   id="standard-size-normal"
                                   variant="standard"
@@ -313,6 +463,7 @@ const Accuntinfo = () => {
             <div className="input">
               <TextField
                 type="number"
+                name='vehCommission'
                 label="Veh.Commission"
                 size="small"
                 id="outlined-start-adornment"
@@ -330,13 +481,14 @@ const Accuntinfo = () => {
                 size="small"
                 id="free-solo-demo"
                 freeSolo
+                onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
                 value={Undergroup.map((option) => option.optionvalue)}
                 options={Undergroup.map((option) => ({
                   label: option.Option,
                 }))}
                 getOptionLabel={(option) => option.label || ""}
                 renderInput={(params) => (
-                  <TextField {...params} label="Under Group" />
+                  <TextField {...params} name='underGroup' label="Under Group" />
                 )}
               />
             </div>
@@ -346,13 +498,14 @@ const Accuntinfo = () => {
                 size="small"
                 id="free-solo-demo"
                 freeSolo
+                onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
                 value={Vehicleinfo.map((option) => option.optionvalue)}
                 options={Vehicleinfo.map((option) => ({
                   label: option.Option,
                 }))}
                 getOptionLabel={(option) => option.label || ""}
                 renderInput={(params) => (
-                  <TextField {...params} label="Vehicle Info" />
+                  <TextField {...params} name='vehicleInfo' label="Vehicle Info" />
                 )}
               />
             </div>
@@ -361,7 +514,11 @@ const Accuntinfo = () => {
                 <RateReviewIcon color="action" />
               </div>
               <TextField
-                name="ratetype"
+                name="rateType"
+                autoComplete="new-password"
+                value={selectedCustomerData.rateType || book.rateType}
+                onChange={handleChange}
+                InputLabelProps={{ shrink: !!selectedCustomerData.rateType || !!book.rateType, }}
                 label="Rate Type"
                 id="standard-size-normal"
                 variant="standard"
@@ -373,6 +530,10 @@ const Accuntinfo = () => {
               </div>
               <TextField
                 name="entity"
+                autoComplete="new-password"
+                value={selectedCustomerData.entity || book.entity}
+                onChange={handleChange}
+                InputLabelProps={{ shrink: !!selectedCustomerData.entity || !!book.entity, }}
                 label="Opening Balance"
                 id="standard-size-normal"
                 variant="standard"
@@ -388,7 +549,7 @@ const Accuntinfo = () => {
                 <RadioGroup
                   row
                   aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
+                  name="isRunning"
                 >
                   <FormControlLabel
                     value="yes"
@@ -416,19 +577,23 @@ const Accuntinfo = () => {
             </div>
             <div className="input radio">
               <FormControlLabel
-                value="Printbill"
+                name='printBill'
+                value="Rate"
                 control={<Checkbox size="small" />}
                 label="Rate"
               />
             </div>
             <div className="input">
               <FormControlLabel
-                value="Printbill"
+                name='autoRefresh'
+                value="Auto Refresh"
                 control={<Checkbox size="small" />}
-                label="Auto Refreash"
+                label="Auto Refresh"
               />
             </div>
           </div>
+          {error && <p>Something went wrong!</p>}
+
           <div className="SpeedDial" style={{ "padding-top": "96px" }}>
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>
               <StyledSpeedDial
@@ -441,6 +606,7 @@ const Accuntinfo = () => {
                     key={action.name}
                     icon={action.icon}
                     tooltipTitle={action.name}
+                    onClick={(event) => handleClick(event, action.name)}
                   />
                 ))}
               </StyledSpeedDial>
@@ -451,13 +617,14 @@ const Accuntinfo = () => {
           <DataGrid
             rows={rows}
             columns={columns}
+            onRowClick={handleRowClick}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 5 },
               },
             }}
             pageSizeOptions={[5, 10]}
-            checkboxSelection
+          // checkboxSelection
           />
         </div>
       </form>

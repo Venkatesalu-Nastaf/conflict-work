@@ -54,6 +54,19 @@ app.post('/accountinfo', (req, res) => {
   });
 });
 
+
+// collect data for account Info
+
+app.get('/accountinfo', (req, res) => {
+  db.query('SELECT * FROM accountinfo', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
 // vehicle_info database
 
 app.post('/vehicleinfo', (req, res) => {

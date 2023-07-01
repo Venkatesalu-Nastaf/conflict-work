@@ -251,7 +251,7 @@ const Customer = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData.customerId || book.customerId}
                   onChange={handleChange}
-                  InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   variant="standard"
                   autoFocus
                 />
@@ -267,7 +267,7 @@ const Customer = () => {
                   id="email"
                   label="Name"
                   value={selectedCustomerData.name || book.name}
-                  InputLabelProps={{ shrink: !!selectedCustomerData.name || !!book.name, }}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.name || !!book.name, }}
                   autoComplete="new-password"
                   variant="standard"
                   onChange={handleChange}
@@ -282,9 +282,9 @@ const Customer = () => {
                   id="Print Name"
                   label="Print Name"
                   value={selectedCustomerData.printName || book.printName}
-                  InputLabelProps={{
-                    shrink: !!selectedCustomerData.printName || !!book.printName,
-                  }}
+                  // InputLabelProps={{
+                  //   shrink: !!selectedCustomerData.printName || !!book.printName,
+                  // }}
                   autoComplete="new-password"
                   onChange={handleChange}
                   name="printName"
@@ -292,7 +292,7 @@ const Customer = () => {
                 />
               </div>
               <div className="input">
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-customerType"
@@ -307,7 +307,25 @@ const Customer = () => {
                   renderInput={(params) => (
                     <TextField {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
                   )}
-                />
+                /> */}
+
+
+<Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo-customerType"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
+                value={Customertype.find((option) => option.Option)?.label || ''}
+                options={Customertype.map((option) => ({
+                  label: option.Option,
+                }))}
+                getOptionLabel={(option) => option.label || ''}
+                renderInput={(params) => (
+                  <TextField {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
+                )}
+              />
               </div>
 
 
@@ -336,9 +354,9 @@ const Customer = () => {
                   label="Email"
                   autoComplete="new-password"
                   value={selectedCustomerData.email || book.email}
-                  InputLabelProps={{
-                    shrink: !!selectedCustomerData.email || !!book.email,
-                  }}
+                  // InputLabelProps={{
+                  //   shrink: !!selectedCustomerData.email || !!book.email,
+                  // }}
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
@@ -353,9 +371,9 @@ const Customer = () => {
                   label="Rate Type"
                   autoComplete="new-password"
                   value={selectedCustomerData.rateType || book.rateType}
-                  InputLabelProps={{
-                    shrink: !!selectedCustomerData.rateType || !!book.rateType,
-                  }}
+                  // InputLabelProps={{
+                  //   shrink: !!selectedCustomerData.rateType || !!book.rateType,
+                  // }}
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
@@ -370,9 +388,9 @@ const Customer = () => {
                   label="OP Balanace"
                   autoComplete="new-password"
                   value={selectedCustomerData.opBalance || book.opBalance}
-                  InputLabelProps={{
-                    shrink: !!selectedCustomerData.opBalance || !!book.opBalance,
-                  }}
+                  // InputLabelProps={{
+                  //   shrink: !!selectedCustomerData.opBalance || !!book.opBalance,
+                  // }}
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
@@ -387,9 +405,9 @@ const Customer = () => {
                   label="Phone"
                   autoComplete="new-password"
                   value={selectedCustomerData.phoneno || book.phoneno}
-                  InputLabelProps={{
-                    shrink: !!selectedCustomerData.phoneno || !!book.phoneno,
-                  }}
+                  // InputLabelProps={{
+                  //   shrink: !!selectedCustomerData.phoneno || !!book.phoneno,
+                  // }}
                   onChange={handleChange}
                   id="Phone"
                   variant="standard"
@@ -436,9 +454,9 @@ const Customer = () => {
                     size="small"
                     name="address1"
                     value={selectedCustomerData.address1 || book.address1}
-                    InputLabelProps={{
-                      shrink: !!selectedCustomerData.address1 || !!book.address1,
-                    }}
+                    // InputLabelProps={{
+                    //   shrink: !!selectedCustomerData.address1 || !!book.address1,
+                    // }}
                     label="Address"
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -627,9 +645,9 @@ const Customer = () => {
                   name="entity"
                   autoComplete="new-password"
                   value={selectedCustomerData.entity || book.entity}
-                  InputLabelProps={{
-                    shrink: !!selectedCustomerData.entity || !!book.entity,
-                  }}
+                  // InputLabelProps={{
+                  //   shrink: !!selectedCustomerData.entity || !!book.entity,
+                  // }}
                   onChange={handleChange}
                   label="Entity"
                   id="standard-size-normal"

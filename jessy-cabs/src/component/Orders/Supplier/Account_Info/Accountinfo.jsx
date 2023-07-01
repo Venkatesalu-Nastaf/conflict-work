@@ -68,7 +68,7 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 const Accuntinfo = () => {
-  
+
   const [value] = React.useState("list");
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
@@ -80,7 +80,7 @@ const Accuntinfo = () => {
     { field: "cperson", headerName: "Supplier_Name", width: 130 },
     { field: "accountNo", headerName: "Vehicle_No", width: 130 },
     { field: "address1", headerName: "Address", width: 130 },
-    { field: "Phone", headerName: "Phone", width: 90 },
+    { field: "phone", headerName: "Phone", width: 130 },
     { field: "isRunning", headerName: "Active", width: 160 },
     { field: "rateType", headerName: "Owner_Type", width: 130 },
     { field: "vehcommission", headerName: "Percentage", width: 130 },
@@ -113,7 +113,7 @@ const Accuntinfo = () => {
 
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
-  
+
     if (event.target.type === 'checkbox') {
       setBook((prevBook) => ({
         ...prevBook,
@@ -134,7 +134,7 @@ const Accuntinfo = () => {
       }));
     }
   };
-  
+
 
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
@@ -234,20 +234,33 @@ const Accuntinfo = () => {
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
-                
+
                 <TextField
                   name="accountNo"
                   label="Account No"
                   margin="normal"
                   size="small"
-                  id="accountno1"
+                  id="standard-size-normal"
                   autoComplete="new-password"
                   value={selectedCustomerData.accountNo || book.accountNo}
                   onChange={handleChange}
-                  InputLabelProps={{ shrink: !!selectedCustomerData.accountNo || !!book.accountNo, }}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.accountNo || !!book.accountNo, }}
                   variant="standard"
                   autoFocus
                 />
+
+
+                {/* <TextField
+                  name="accountNo"
+                  autoComplete="new-password"
+                  value={selectedCustomerData.accountNo || book.accountNo}
+                  onChange={handleChange}
+                  label="Account No"
+                  size="small"
+                  id="accountno1"
+                  variant="standard"
+                  margin="normal"
+                /> */}
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -289,7 +302,7 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData.address1 || book.address1}
                   onChange={handleChange}
-                  InputLabelProps={{ shrink: !!selectedCustomerData.address1 || !!book.address1, }}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.address1 || !!book.address1, }}
                   label="Address"
                   id="remark"
                   sx={{ m: 1, width: "200ch" }}
@@ -305,7 +318,7 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData.cperson || book.cperson}
                   onChange={handleChange}
-                  InputLabelProps={{ shrink: !!selectedCustomerData.cperson || !!book.cperson, }}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.cperson || !!book.cperson, }}
                   label="C Person"
                   id="cperson"
                   variant="standard"
@@ -323,7 +336,7 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData.streetNo || book.streetNo}
                   onChange={handleChange}
-                  InputLabelProps={{ shrink: !!selectedCustomerData.streetNo || !!book.streetNo, }}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.streetNo || !!book.streetNo, }}
                   id="remark"
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
@@ -338,7 +351,7 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData.email || book.email}
                   onChange={handleChange}
-                  InputLabelProps={{ shrink: !!selectedCustomerData.email || !!book.email, }}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.email || !!book.email, }}
                   label="Email"
                   id="standard-size-normal"
                   variant="standard"
@@ -356,7 +369,7 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData.city || book.city}
                   onChange={handleChange}
-                  InputLabelProps={{ shrink: !!selectedCustomerData.city || !!book.city, }}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.city || !!book.city, }}
                   id="address3"
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
@@ -371,7 +384,7 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData.phone || book.phone}
                   onChange={handleChange}
-                  InputLabelProps={{ shrink: !!selectedCustomerData.phone || !!book.phone, }}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.phone || !!book.phone, }}
                   label="Phone"
                   id="phone"
                   variant="standard"
@@ -433,7 +446,7 @@ const Accuntinfo = () => {
                                   autoComplete="new-password"
                                   value={selectedCustomerData.customerId || book.customerId}
                                   onChange={handleChange}
-                                  InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
+                                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                                   label="Temporary Password"
                                   id="standard-size-normal"
                                   variant="standard"
@@ -476,7 +489,7 @@ const Accuntinfo = () => {
               />
             </div>
             <div className="input radio">
-              <Autocomplete
+              {/* <Autocomplete
                 fullWidth
                 size="small"
                 id="free-solo-demo"
@@ -490,24 +503,49 @@ const Accuntinfo = () => {
                 renderInput={(params) => (
                   <TextField {...params} name='underGroup' label="Under Group" />
                 )}
-              />
-            </div>
-            <div className="input">
+              /> */}
+
+
               <Autocomplete
                 fullWidth
                 size="small"
-                id="free-solo-demo"
+                id="free-solo-demo-vehicleInfo"
                 freeSolo
+                sx={{ width: "20ch" }}
                 onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
-                value={Vehicleinfo.map((option) => option.optionvalue)}
+                value={Undergroup.find((option) => option.Option)?.label || ''}
+                options={Undergroup.map((option) => ({
+                  label: option.Option,
+                }))}
+                getOptionLabel={(option) => option.label || ''}
+                renderInput={(params) => (
+                  <TextField {...params} label="Under Group" name="underGroup" inputRef={params.inputRef} />
+                )}
+              />
+            </div>
+            <div className="input">
+
+
+
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo-vehicleInfo"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleInfo")}
+                value={Vehicleinfo.find((option) => option.Option)?.label || ''}
                 options={Vehicleinfo.map((option) => ({
                   label: option.Option,
                 }))}
-                getOptionLabel={(option) => option.label || ""}
+                getOptionLabel={(option) => option.label || ''}
                 renderInput={(params) => (
-                  <TextField {...params} name='vehicleInfo' label="Vehicle Info" />
+                  <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
                 )}
               />
+
+
+
             </div>
             <div className="input">
               <div className="icone">
@@ -518,7 +556,7 @@ const Accuntinfo = () => {
                 autoComplete="new-password"
                 value={selectedCustomerData.rateType || book.rateType}
                 onChange={handleChange}
-                InputLabelProps={{ shrink: !!selectedCustomerData.rateType || !!book.rateType, }}
+                // InputLabelProps={{ shrink: !!selectedCustomerData.rateType || !!book.rateType, }}
                 label="Rate Type"
                 id="standard-size-normal"
                 variant="standard"
@@ -533,7 +571,7 @@ const Accuntinfo = () => {
                 autoComplete="new-password"
                 value={selectedCustomerData.entity || book.entity}
                 onChange={handleChange}
-                InputLabelProps={{ shrink: !!selectedCustomerData.entity || !!book.entity, }}
+                // InputLabelProps={{ shrink: !!selectedCustomerData.entity || !!book.entity, }}
                 label="Opening Balance"
                 id="standard-size-normal"
                 variant="standard"
@@ -550,6 +588,9 @@ const Accuntinfo = () => {
                   row
                   aria-labelledby="demo-row-radio-buttons-group-label"
                   name="isRunning"
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  value={selectedCustomerData.isRunning || book.isRunning}
                 >
                   <FormControlLabel
                     value="yes"
@@ -568,7 +609,10 @@ const Accuntinfo = () => {
                 <RadioGroup
                   row
                   aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
+                  name="acType"
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  value={selectedCustomerData.acType || book.acType}
                 >
                   <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
                   <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
@@ -578,8 +622,11 @@ const Accuntinfo = () => {
             <div className="input radio">
               <FormControlLabel
                 name='printBill'
-                value="Rate"
+                onChange={handleChange}
+                checked={Boolean(selectedCustomerData.printBill || book.printBill)}
                 control={<Checkbox size="small" />}
+                value="Rate"
+                // control={<Checkbox size="small" />}
                 label="Rate"
               />
             </div>
@@ -587,6 +634,9 @@ const Accuntinfo = () => {
               <FormControlLabel
                 name='autoRefresh'
                 value="Auto Refresh"
+                autoComplete="new-password"
+                onChange={handleChange}
+                checked={Boolean(selectedCustomerData.autoRefresh || book.autoRefresh)}
                 control={<Checkbox size="small" />}
                 label="Auto Refresh"
               />

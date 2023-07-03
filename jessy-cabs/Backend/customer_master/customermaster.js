@@ -82,6 +82,20 @@ app.post('/vehicleinfo', (req, res) => {
 });
 
 
+// booking page database\
+
+app.post('/booking', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO booking SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
 const port = 8081;
 app.listen(port, () => {
   console.log(`Connected to backend on port ${port}`);

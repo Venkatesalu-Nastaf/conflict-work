@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   UnderGroup,
@@ -8,6 +8,12 @@ import {
   Select,
   BillingGroup,
 } from "./Customerdata";
+
+import Button from "@mui/material/Button";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
 import "./Customer.css";
 import {
   TextField,
@@ -79,6 +85,8 @@ const columns = [
 
 const Customer = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  // const [showOptions, setShowOptions] = useState(false);
+
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
 
@@ -115,7 +123,16 @@ const Customer = () => {
 
   const [error, setError] = useState(false);
 
-  const navigate = useNavigate();
+  // const handleButtonClick = () => {
+  //   setShowOptions(!showOptions);
+  // };
+
+  // const handleOptionClick = (option) => {
+  //   // Implement your logic for handling the option (e.g., downloading the corresponding file)
+  //   console.log(`Downloading ${option} file...`);
+  // };
+
+  // const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, checked } = event.target;
@@ -191,6 +208,7 @@ const Customer = () => {
   };
 
   const handleRowClick = useCallback((params) => {
+    console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
   }, []);
@@ -309,23 +327,26 @@ const Customer = () => {
                   )}
                 /> */}
 
-
-<Autocomplete
-                fullWidth
-                size="small"
-                id="free-solo-demo-customerType"
-                freeSolo
-                sx={{ width: "20ch" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
-                value={Customertype.find((option) => option.Option)?.label || ''}
-                options={Customertype.map((option) => ({
-                  label: option.Option,
-                }))}
-                getOptionLabel={(option) => option.label || ''}
-                renderInput={(params) => (
-                  <TextField {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
-                )}
-              />
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo-customerType"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
+                  value={Customertype.find((option) => option.Option)?.label || ''}
+                  options={Customertype.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.customerType || ''
+                    return (
+                      <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
               </div>
 
 
@@ -564,7 +585,7 @@ const Customer = () => {
 
               />
               <div className="input">
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-select"
@@ -579,7 +600,29 @@ const Customer = () => {
                   renderInput={(params) => (
                     <TextField {...params} label="Select" name="selectOption" value={selectedCustomerData.selectOption} inputRef={params.inputRef} />
                   )}
+                /> */}
+
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo-select"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "selectOption")}
+                  value={Select.find((option) => option.Option)?.label || ''}
+                  options={Select.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.selectOption || ''
+                    return (
+                      <TextField   {...params} label="Select" name="selectOption" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
+
               </div>
             </div>
             <div className="input-field">
@@ -596,9 +639,13 @@ const Customer = () => {
                     label: option.state,
                   }))}
                   getOptionLabel={(option) => option.label || ''}
-                  renderInput={(params) => (
-                    <TextField {...params} label="State" name="state" value={selectedCustomerData.state} inputRef={params.inputRef} />
-                  )}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.state || ''
+                    return (
+                      <TextField {...params} label="State" name="state" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
@@ -614,9 +661,13 @@ const Customer = () => {
                     label: option.option,
                   }))}
                   getOptionLabel={(option) => option.label || ''}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Under Group" name="underGroup" value={selectedCustomerData.underGroup} inputRef={params.inputRef} />
-                  )}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.underGroup || ''
+                    return (
+                      <TextField {...params} label="UnderGroup" name="underGroup" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
@@ -632,9 +683,13 @@ const Customer = () => {
                     label: option.option,
                   }))}
                   getOptionLabel={(option) => option.label || ''}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Billing Group" name="billingGroup" inputRef={params.inputRef} />
-                  )}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.billingGroup || ''
+                    return (
+                      <TextField {...params} label="Billing Group" name="billingGroup" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
@@ -789,7 +844,28 @@ const Customer = () => {
             </div>
           </div>
           <div className="customer-list-table-container">
+            {/* <div className="input" style={{ width: "70px" }}>
+              <Button variant="contained">Download</Button>
+            </div> */}
+
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" {...bindTrigger(popupState)}>
+                    Dashboard
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={popupState.close}>Excel</MenuItem>
+                    <MenuItem onClick={popupState.close}>PDF</MenuItem>
+                    {/* <Button variant="contained">excel</Button>
+            <Button variant="contained">PDF</Button> */}
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+
             <div className="table-customer-list">
+
               <DataGrid
                 rows={rows}
                 columns={columns}

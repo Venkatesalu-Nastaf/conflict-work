@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Accountinfo.css";
 import Button from "@mui/material/Button";
@@ -69,7 +69,7 @@ const actions = [
 ];
 const Accuntinfo = () => {
 
-  const [value] = React.useState("list");
+  const [value, setValue] = React.useState("list");
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
@@ -134,7 +134,35 @@ const Accuntinfo = () => {
       }));
     }
   };
+  const handleTabChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
+  // const handleChange = (event, newValue) => {
+  //   const { name, value, checked, type } = event.target || {};
+
+  //   if (type === "checkbox") {
+  //     setBook((prevBook) => ({
+  //       ...prevBook,
+  //       [name]: checked,
+  //     }));
+  //     setSelectedCustomerData((prevData) => ({
+  //       ...prevData,
+  //       [name]: checked,
+  //     }));
+  //   } else if (typeof newValue !== "undefined") {
+  //     setValue(newValue);
+  //   } else {
+  //     setBook((prevBook) => ({
+  //       ...prevBook,
+  //       [name]: value,
+  //     }));
+  //     setSelectedCustomerData((prevData) => ({
+  //       ...prevData,
+  //       [name]: value,
+  //     }));
+  //   }
+  // };
 
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
@@ -399,7 +427,7 @@ const Accuntinfo = () => {
                   <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                       <TabList
-                        onChange={handleChange}
+                        onChange={handleTabChange}
                         aria-label="lab API tabs example"
                       >
                         <Tab label="List" value="list" />
@@ -477,6 +505,10 @@ const Accuntinfo = () => {
               <TextField
                 type="number"
                 name='vehCommission'
+                autoComplete="new-password"
+                value={selectedCustomerData.vehCommission || book.vehCommission}
+                onChange={handleChange}
+                // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                 label="Veh.Commission"
                 size="small"
                 id="outlined-start-adornment"
@@ -489,23 +521,6 @@ const Accuntinfo = () => {
               />
             </div>
             <div className="input radio">
-              {/* <Autocomplete
-                fullWidth
-                size="small"
-                id="free-solo-demo"
-                freeSolo
-                onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
-                value={Undergroup.map((option) => option.optionvalue)}
-                options={Undergroup.map((option) => ({
-                  label: option.Option,
-                }))}
-                getOptionLabel={(option) => option.label || ""}
-                renderInput={(params) => (
-                  <TextField {...params} name='underGroup' label="Under Group" />
-                )}
-              /> */}
-
-
               <Autocomplete
                 fullWidth
                 size="small"
@@ -518,15 +533,16 @@ const Accuntinfo = () => {
                   label: option.Option,
                 }))}
                 getOptionLabel={(option) => option.label || ''}
-                renderInput={(params) => (
-                  <TextField {...params} label="Under Group" name="underGroup" inputRef={params.inputRef} />
-                )}
+                renderInput={(params) => {
+                  params.inputProps.value = selectedCustomerData.underGroup || ''
+                  return (
+                    <TextField {...params} label="Under Group" name="underGroup" inputRef={params.inputRef} />
+                  )
+                }
+                }
               />
             </div>
             <div className="input">
-
-
-
               <Autocomplete
                 fullWidth
                 size="small"
@@ -539,13 +555,14 @@ const Accuntinfo = () => {
                   label: option.Option,
                 }))}
                 getOptionLabel={(option) => option.label || ''}
-                renderInput={(params) => (
-                  <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
-                )}
+                renderInput={(params) => {
+                  params.inputProps.value = selectedCustomerData.vehicleInfo || ''
+                  return (
+                    <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
+                  )
+                }
+                }
               />
-
-
-
             </div>
             <div className="input">
               <div className="icone">

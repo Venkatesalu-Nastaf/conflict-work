@@ -32,6 +32,7 @@
     "flowbite": "^1.6.5",
     "framer-motion": "^4.1.17",
     "lord-icon-element": "^4.1.1",
+    "material-ui-popup-state": "^5.0.9",
     "mysql": "^2.18.1",
     "node-modules": "^0.0.1",
     "ntd": "^0.0.2",

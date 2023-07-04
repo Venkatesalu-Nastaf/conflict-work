@@ -1302,18 +1302,18 @@ const Booking = () => {
                     </DemoItem>
                   </LocalizationProvider> */}
 
-<LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Trip Date">
-                    <DatePicker
-                      value={selectedCustomerData.tripdate ? dayjs(selectedCustomerData.tripdate) : null}
-                      onChange={(date) => handleDateChange(date, 'tripdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='tripdate' value={selectedCustomerData.tripdate || ''} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
-                </LocalizationProvider>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoItem label="Trip Date">
+                      <DatePicker
+                        value={selectedCustomerData.tripdate ? dayjs(selectedCustomerData.tripdate) : null}
+                        onChange={(date) => handleDateChange(date, 'tripdate')}
+                      >
+                        {({ inputProps, inputRef }) => (
+                          <TextField {...inputProps} inputRef={inputRef} name='tripdate' value={selectedCustomerData.tripdate || ''} />
+                        )}
+                      </DatePicker>
+                    </DemoItem>
+                  </LocalizationProvider>
                 </div>
                 {/* <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>

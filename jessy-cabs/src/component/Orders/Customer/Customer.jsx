@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 // import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { saveAs } from 'file-saver';
+import { ExportToCsv } from 'export-to-csv';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+
 import {
   UnderGroup,
   states,
@@ -89,6 +94,42 @@ const Customer = () => {
 
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
+
+
+  const handleDownload = (format) => {
+    // Perform data conversion and export based on the selected format
+    if (format === 'excel') {
+      const csvExporter = new ExportToCsv({
+        filename: 'table-data.csv',
+        useKeysAsHeaders: true, // Include header row
+      });
+      const csvData = rows.map(row => {
+        // Customize this logic to match your table's column structure
+        return {
+          Sno: row.id,
+          Customer_Name: row.printName,
+          Address: row.address1,
+          Phone: row.phoneno,
+          Active: row.active,
+          ID: row.customerId,
+          Rate_Type: row.rateType,
+          GST_NO: row.gstTax,
+          State: row.state,
+          Driver_App: row.enableDriverApp,
+        };
+      });
+      const csvFormattedData = csvExporter.generateCsv(csvData, true);
+      const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
+      saveAs(blob, 'table-data.csv');
+    } else if (format === 'pdf') {
+      const doc = new jsPDF();
+      doc.autoTable({
+        head: [columns.map(column => column.headerName)],
+        body: rows.map(row => columns.map(column => row[column.field])),
+      });
+      doc.save('table-data.pdf');
+    }
+  };
 
 
   const [book, setBook] = useState({
@@ -855,11 +896,10 @@ const Customer = () => {
                     Dashboard
                   </Button>
                   <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={popupState.close}>Excel</MenuItem>
-                    <MenuItem onClick={popupState.close}>PDF</MenuItem>
-                    {/* <Button variant="contained">excel</Button>
-            <Button variant="contained">PDF</Button> */}
+                    <MenuItem onClick={() => { handleDownload('excel'); popupState.close(); }}>Excel</MenuItem>
+                    <MenuItem onClick={() => { handleDownload('pdf'); popupState.close(); }}>PDF</MenuItem>
                   </Menu>
+
                 </React.Fragment>
               )}
             </PopupState>

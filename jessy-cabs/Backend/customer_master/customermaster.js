@@ -24,6 +24,24 @@ app.post('/customers', (req, res) => {
   });
 });
 
+// delete customer data
+app.delete('/customers/:customerId', (req, res) => {
+  const customerId = req.params.customerId;
+  console.log('Customer ID:', customerId); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM customers WHERE customerId = ?', customerId);
+  db.query('DELETE FROM customers WHERE customerId = ?', customerId, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
 
 // collect data for custamer table
 

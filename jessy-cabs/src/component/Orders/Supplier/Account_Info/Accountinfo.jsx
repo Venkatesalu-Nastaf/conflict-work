@@ -272,7 +272,6 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData.accountNo || book.accountNo}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.accountNo || !!book.accountNo, }}
                   variant="standard"
                   autoFocus
                 />

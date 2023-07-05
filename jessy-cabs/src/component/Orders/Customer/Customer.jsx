@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { saveAs } from 'file-saver';
 import { ExportToCsv } from 'export-to-csv';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
-
 import {
   UnderGroup,
   states,
@@ -13,12 +11,10 @@ import {
   Select,
   BillingGroup,
 } from "./Customerdata";
-
 import Button from "@mui/material/Button";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-
 import "./Customer.css";
 import {
   TextField,
@@ -56,6 +52,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
+// speed dial button function
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -67,7 +65,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-
 const actions = [
   { icon: <ChecklistIcon />, name: "List" },
   { icon: <CancelPresentationIcon />, name: "Cancel" },
@@ -75,6 +72,9 @@ const actions = [
   { icon: <ModeEditIcon />, name: "Edit" },
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
+
+// Data grid table function
+
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "printName", headerName: "Customer_Name", width: 130 },
@@ -87,15 +87,12 @@ const columns = [
   { field: "state", headerName: "State", width: 130 },
   { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
 ];
-
 const Customer = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
-  // const [showOptions, setShowOptions] = useState(false);
-
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
-
-
+  const [error, setError] = useState(false);
   const handleDownload = (format) => {
     // Perform data conversion and export based on the selected format
     if (format === 'excel') {
@@ -103,35 +100,32 @@ const Customer = () => {
         filename: 'table-data.csv',
         useKeysAsHeaders: true, // Include header row
       });
-      const csvData = rows.map(row => {
-        // Customize this logic to match your table's column structure
-        return {
-          Sno: row.id,
-          Customer_Name: row.printName,
-          Address: row.address1,
-          Phone: row.phoneno,
-          Active: row.active,
-          ID: row.customerId,
-          Rate_Type: row.rateType,
-          GST_NO: row.gstTax,
-          State: row.state,
-          Driver_App: row.enableDriverApp,
-        };
-      });
-      const csvFormattedData = csvExporter.generateCsv(csvData, true);
+      const csvRows = rows.map(({ id, printName, address1, phoneno, active, customerId, rateType, gstTax, state, enableDriverApp }) => ({
+        Sno: id,
+        Customer_Name: printName,
+        Address: address1,
+        Phone: phoneno,
+        Active: active,
+        ID: customerId,
+        Rate_Type: rateType,
+        GST_NO: gstTax,
+        State: state,
+        Driver_App: enableDriverApp,
+      }));
+      const csvFormattedData = csvExporter.generateCsv(csvRows, true);
       const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
       saveAs(blob, 'table-data.csv');
     } else if (format === 'pdf') {
       const doc = new jsPDF();
+      const headerNames = columns.map(column => column.headerName);
+      const bodyData = rows.map(row => columns.map(column => row[column.field]));
       doc.autoTable({
-        head: [columns.map(column => column.headerName)],
-        body: rows.map(row => columns.map(column => row[column.field])),
+        head: [headerNames],
+        body: bodyData,
       });
       doc.save('table-data.pdf');
     }
   };
-
-
   const [book, setBook] = useState({
     customerId: '',
     name: '',
@@ -161,37 +155,32 @@ const Customer = () => {
     enableDriverApp: '',
     billingGroup: '',
   });
-
-  const [error, setError] = useState(false);
-
-  // const handleButtonClick = () => {
-  //   setShowOptions(!showOptions);
-  // };
-
-  // const handleOptionClick = (option) => {
-  //   // Implement your logic for handling the option (e.g., downloading the corresponding file)
-  //   console.log(`Downloading ${option} file...`);
-  // };
-
-  // const navigate = useNavigate();
-
   const handleChange = (event) => {
-    const { name, checked } = event.target;
-    const { value } = event.target;
-    setBook((prevBook) => ({
-      ...prevBook,
-      [name]: value,
-    }));
-    setBook((prevBook) => ({
-      ...prevBook,
-      [name]: checked,
-    }));
-    setSelectedCustomerData((prevData) => ({
-      ...prevData,
-      [name]: checked,
-    }));
+    const { name, value, checked, type } = event.target;
+  
+    if (type === 'checkbox') {
+      // For checkboxes, update the state based on the checked value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      // For other input fields, update the state based on the value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
-
+  
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
     setBook((prevBook) => ({
@@ -203,8 +192,6 @@ const Customer = () => {
       [name]: selectedOption,
     }));
   };
-
-
   const handleDateChange = (date) => {
     const startOfDay = dayjs(date).startOf('day').format();
     setBook((prevBook) => ({
@@ -212,7 +199,6 @@ const Customer = () => {
       date: startOfDay,
     }));
   };
-
   const handleCancel = () => {
     setBook((prevBook) => ({
       ...prevBook,
@@ -245,18 +231,15 @@ const Customer = () => {
       billingGroup: '',
     }));
     setSelectedCustomerData({});
-
   };
-
   const handleRowClick = useCallback((params) => {
     console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
+    setSelectedCustomerId(params.row.customerId);
   }, []);
-
-  const handleClick = async (event, actionName) => {
+  const handleClick = async (event, actionName, customerId) => {
     event.preventDefault();
-
     try {
       if (actionName === 'List') {
         console.log('List button clicked');
@@ -268,29 +251,30 @@ const Customer = () => {
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        // Perform the desired action when the "Delete" button is clicked
+        await axios.delete(`http://localhost:8081/customers/${customerId}`);
+        console.log('Customer deleted');
+        setSelectedCustomerData(null);
+        setBook((prevBook) => ({
+          ...prevBook,
+          address2: '',
+        }));
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
-        // Perform the desired action when the "Edit" button is clicked
       } else if (actionName === 'Add') {
         await axios.post('http://localhost:8081/customers', book);
         console.log(book);
-        // navigate('/home/orders/supplier');
       }
     } catch (err) {
       console.log(err);
       setError(true);
     }
   };
-
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
   });
-
   const updateItems = ["Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id.  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id."]; // Example data for update items
-
   return (
     <div className="form-container">
       <div className="customer-form">
@@ -302,20 +286,18 @@ const Customer = () => {
                 <div className="icone">
                   <AccountBalanceWalletIcon color="action" />
                 </div>
-
                 <TextField
                   name="customerId"
                   label="Customer ID"
                   id="standard-size-normal"
                   autoComplete="new-password"
-                  value={selectedCustomerData.customerId || book.customerId}
+                  value={selectedCustomerData?.customerId || book.customerId}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   variant="standard"
                   autoFocus
                 />
+                
               </div>
-
               <div className="input">
                 <div className="icone">
                   <BadgeIcon color="action" />
@@ -325,8 +307,7 @@ const Customer = () => {
                   size="small"
                   id="email"
                   label="Name"
-                  value={selectedCustomerData.name || book.name}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.name || !!book.name, }}
+                  value={selectedCustomerData?.name || book.name}
                   autoComplete="new-password"
                   variant="standard"
                   onChange={handleChange}
@@ -340,10 +321,7 @@ const Customer = () => {
                   size="small"
                   id="Print Name"
                   label="Print Name"
-                  value={selectedCustomerData.printName || book.printName}
-                  // InputLabelProps={{
-                  //   shrink: !!selectedCustomerData.printName || !!book.printName,
-                  // }}
+                  value={selectedCustomerData?.printName || book.printName}
                   autoComplete="new-password"
                   onChange={handleChange}
                   name="printName"
@@ -351,23 +329,6 @@ const Customer = () => {
                 />
               </div>
               <div className="input">
-                {/* <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo-customerType"
-                  freeSolo
-                  sx={{ mt: 1, width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
-                  value={selectedCustomerData.customerType ? selectedCustomerData.customerType : null}
-                  options={Customertype.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) => option.label || ''}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
-                  )}
-                /> */}
-
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -381,7 +342,7 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData.customerType || ''
+                    params.inputProps.value = selectedCustomerData?.customerType || ''
                     return (
                       <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
                     )
@@ -395,11 +356,11 @@ const Customer = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Date">
                     <DatePicker
-                      value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
+                      value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
                       onChange={handleDateChange}
                     >
                       {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData.date} />
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
                       )}
                     </DatePicker>
                   </DemoItem>
@@ -415,10 +376,7 @@ const Customer = () => {
                   name="email"
                   label="Email"
                   autoComplete="new-password"
-                  value={selectedCustomerData.email || book.email}
-                  // InputLabelProps={{
-                  //   shrink: !!selectedCustomerData.email || !!book.email,
-                  // }}
+                  value={selectedCustomerData?.email || book.email}
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
@@ -432,10 +390,7 @@ const Customer = () => {
                   name="rateType"
                   label="Rate Type"
                   autoComplete="new-password"
-                  value={selectedCustomerData.rateType || book.rateType}
-                  // InputLabelProps={{
-                  //   shrink: !!selectedCustomerData.rateType || !!book.rateType,
-                  // }}
+                  value={selectedCustomerData?.rateType || book.rateType}
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
@@ -449,10 +404,7 @@ const Customer = () => {
                   name="opBalance"
                   label="OP Balanace"
                   autoComplete="new-password"
-                  value={selectedCustomerData.opBalance || book.opBalance}
-                  // InputLabelProps={{
-                  //   shrink: !!selectedCustomerData.opBalance || !!book.opBalance,
-                  // }}
+                  value={selectedCustomerData?.opBalance || book.opBalance}
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
@@ -466,17 +418,12 @@ const Customer = () => {
                   name="phoneno"
                   label="Phone"
                   autoComplete="new-password"
-                  value={selectedCustomerData.phoneno || book.phoneno}
-                  // InputLabelProps={{
-                  //   shrink: !!selectedCustomerData.phoneno || !!book.phoneno,
-                  // }}
+                  value={selectedCustomerData?.phoneno || book.phoneno}
                   onChange={handleChange}
                   id="Phone"
                   variant="standard"
                 />
               </div>
-
-
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -488,7 +435,7 @@ const Customer = () => {
                     name="acType"
                     autoComplete="new-password"
                     onChange={handleChange}
-                    value={selectedCustomerData.acType || book.acType}
+                    value={selectedCustomerData?.acType || book.acType}
                   >
                     <FormControlLabel
                       value="Dr"
@@ -515,10 +462,7 @@ const Customer = () => {
                   <TextField
                     size="small"
                     name="address1"
-                    value={selectedCustomerData.address1 || book.address1}
-                    // InputLabelProps={{
-                    //   shrink: !!selectedCustomerData.address1 || !!book.address1,
-                    // }}
+                    value={selectedCustomerData?.address1 || book.address1}
                     label="Address"
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -536,7 +480,7 @@ const Customer = () => {
                   <TextField
                     size="small"
                     name="address2"
-                    value={selectedCustomerData.address2 || book.address2}
+                    value={selectedCustomerData?.address2 || book.address2}
                     id="remark"
                     autoComplete="new-password"
                     onChange={handleChange}
@@ -554,7 +498,7 @@ const Customer = () => {
                     size="small"
                     name="city"
                     id="address3"
-                    value={selectedCustomerData.city || book.city}
+                    value={selectedCustomerData?.city || book.city}
                     autoComplete="new-password"
                     onChange={handleChange}
                     sx={{ m: 1, width: "200ch" }}
@@ -582,7 +526,7 @@ const Customer = () => {
                 label="Print Bill"
                 autoComplete="new-password"
                 onChange={handleChange}
-                checked={Boolean(selectedCustomerData.printBill || book.printBill)}
+                checked={Boolean(selectedCustomerData?.printBill || book.printBill)}
               />
               <FormControlLabel
                 name="userName"
@@ -591,8 +535,7 @@ const Customer = () => {
                 label="User Name"
                 autoComplete="new-password"
                 onChange={handleChange}
-                checked={Boolean(selectedCustomerData.userName || book.userName)}
-
+                checked={Boolean(selectedCustomerData?.userName || book.userName)}
               />
               <FormControlLabel
                 name="bookName"
@@ -601,8 +544,7 @@ const Customer = () => {
                 label="Book Name"
                 autoComplete="new-password"
                 onChange={handleChange}
-                checked={Boolean(selectedCustomerData.bookName || book.bookName)}
-
+                checked={Boolean(selectedCustomerData?.bookName || book.bookName)}
               />
               <FormControlLabel
                 name="division"
@@ -611,8 +553,7 @@ const Customer = () => {
                 label="Divistion"
                 autoComplete="new-password"
                 onChange={handleChange}
-                checked={Boolean(selectedCustomerData.division || book.division)}
-
+                checked={Boolean(selectedCustomerData?.division || book.division)}
               />
               <FormControlLabel
                 size="small"
@@ -622,27 +563,9 @@ const Customer = () => {
                 label="Hour Roundedoff"
                 autoComplete="new-password"
                 onChange={handleChange}
-                checked={Boolean(selectedCustomerData.hourRoundedOff || book.hourRoundedOff)}
-
+                checked={Boolean(selectedCustomerData?.hourRoundedOff || book.hourRoundedOff)}
               />
               <div className="input">
-                {/* <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo-select"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "selectOption")}
-                  value={Select.find((option) => option.Option)?.label || ''}
-                  options={Select.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) => option.label || ''}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Select" name="selectOption" value={selectedCustomerData.selectOption} inputRef={params.inputRef} />
-                  )}
-                /> */}
-
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -656,14 +579,13 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData.selectOption || ''
+                    params.inputProps.value = selectedCustomerData?.selectOption || ''
                     return (
                       <TextField   {...params} label="Select" name="selectOption" inputRef={params.inputRef} />
                     )
                   }
                   }
                 />
-
               </div>
             </div>
             <div className="input-field">
@@ -681,7 +603,7 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData.state || ''
+                    params.inputProps.value = selectedCustomerData?.state || ''
                     return (
                       <TextField {...params} label="State" name="state" inputRef={params.inputRef} />
                     )
@@ -703,7 +625,7 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData.underGroup || ''
+                    params.inputProps.value = selectedCustomerData?.underGroup || ''
                     return (
                       <TextField {...params} label="UnderGroup" name="underGroup" inputRef={params.inputRef} />
                     )
@@ -725,7 +647,7 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData.billingGroup || ''
+                    params.inputProps.value = selectedCustomerData?.billingGroup || ''
                     return (
                       <TextField {...params} label="Billing Group" name="billingGroup" inputRef={params.inputRef} />
                     )
@@ -740,10 +662,7 @@ const Customer = () => {
                 <TextField
                   name="entity"
                   autoComplete="new-password"
-                  value={selectedCustomerData.entity || book.entity}
-                  // InputLabelProps={{
-                  //   shrink: !!selectedCustomerData.entity || !!book.entity,
-                  // }}
+                  value={selectedCustomerData?.entity || book.entity}
                   onChange={handleChange}
                   label="Entity"
                   id="standard-size-normal"
@@ -763,8 +682,7 @@ const Customer = () => {
                     name="inclAddress"
                     autoComplete="new-password"
                     onChange={handleChange}
-                    value={selectedCustomerData.inclAddress || book.inclAddress}
-
+                    value={selectedCustomerData?.inclAddress || book.inclAddress}
                   >
                     <FormControlLabel
                       value="yes"
@@ -790,8 +708,7 @@ const Customer = () => {
                     name="active"
                     autoComplete="new-password"
                     onChange={handleChange}
-                    value={selectedCustomerData.active || book.active}
-
+                    value={selectedCustomerData?.active || book.active}
                   >
                     <FormControlLabel
                       value="yes"
@@ -817,8 +734,7 @@ const Customer = () => {
                     name="enableDriverApp"
                     autoComplete="new-password"
                     onChange={handleChange}
-                    value={selectedCustomerData.enableDriverApp || book.enableDriverApp}
-
+                    value={selectedCustomerData?.enableDriverApp || book.enableDriverApp}
                   >
                     <FormControlLabel
                       value="yes"
@@ -833,7 +749,6 @@ const Customer = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -846,8 +761,7 @@ const Customer = () => {
                     autoComplete="new-password"
                     onChange={handleChange}
                     // value={selectedCustomerData.gstTax || ''}
-                    value={selectedCustomerData.gstTax || book.gstTax}
-
+                    value={selectedCustomerData?.gstTax || book.gstTax}
                   >
                     <FormControlLabel
                       value="yes"
@@ -863,9 +777,7 @@ const Customer = () => {
                 </FormControl>
               </div>
             </div>
-
             {error && <p>Something went wrong!</p>}
-
             <div className="SpeedDial" style={{ padding: '26px', }}>
               <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                 <StyledSpeedDial
@@ -877,23 +789,20 @@ const Customer = () => {
                       key={action.name}
                       icon={action.icon}
                       tooltipTitle={action.name}
-                      onClick={(event) => handleClick(event, action.name)}
+                      onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                     />
+
                   ))}
                 </StyledSpeedDial>
               </Box>
             </div>
           </div>
           <div className="customer-list-table-container">
-            {/* <div className="input" style={{ width: "70px" }}>
-              <Button variant="contained">Download</Button>
-            </div> */}
-
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>
                   <Button variant="contained" {...bindTrigger(popupState)}>
-                    Dashboard
+                    Download
                   </Button>
                   <Menu {...bindMenu(popupState)}>
                     <MenuItem onClick={() => { handleDownload('excel'); popupState.close(); }}>Excel</MenuItem>

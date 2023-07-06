@@ -127,10 +127,10 @@ const Accuntinfo = () => {
     { field: "address1", headerName: "Address", width: 130 },
     { field: "phone", headerName: "Phone", width: 130 },
     { field: "isRunning", headerName: "Active", width: 160 },
-    { field: "rateType", headerName: "Owner_Type", width: 130 },
-    { field: "vehcommission", headerName: "Percentage", width: 130 },
-    { field: "printBill", headerName: "Rate_Type", width: 130 },
-    { field: "autoRefresh", headerName: "Driver_App", width: 130 },
+    { field: "vehicleInfo", headerName: "Owner_Type", width: 130 },
+    { field: "vehCommission", headerName: "Percentage", width: 130 },
+    { field: "rateType", headerName: "Rate_Type", width: 130 },
+    { field: "autoRefresh", headerName: "Driver", width: 130 },
   ];
 
   const [book, setBook] = useState({
@@ -260,12 +260,11 @@ const Accuntinfo = () => {
     console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
-    setSelectedCustomerId(params.row.customerId);
+    setSelectedCustomerId(params.row.accountNo);
   }, []);
 
-  const handleClick = async (event, actionName, customerId) => {
+  const handleClick = async (event, actionName, accountNo) => {
     event.preventDefault();
-
     try {
       if (actionName === 'List') {
         console.log('List button clicked');
@@ -277,29 +276,32 @@ const Accuntinfo = () => {
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/customers/${customerId}`);
+        await axios.delete(`http://localhost:8081/accountinfo/${accountNo}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
         handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
-        // Perform the desired action when the "Edit" button is clicked
+        const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/accountinfo/${accountNo}`, updatedCustomer);
+        console.log('Customer updated');
+        handleCancel();
       } else if (actionName === 'Add') {
         await axios.post('http://localhost:8081/accountinfo', book);
         console.log(book);
+        handleCancel();
       }
     } catch (err) {
       console.log(err);
       setError(true);
     }
   };
-
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
   });
-
 
   return (
     <div className="account-form">
@@ -320,7 +322,7 @@ const Accuntinfo = () => {
                   size="small"
                   id="standard-size-normal"
                   autoComplete="new-password"
-                  value={selectedCustomerData.accountNo || book.accountNo}
+                  value={selectedCustomerData?.accountNo || book.accountNo}
                   onChange={handleChange}
                   variant="standard"
                   autoFocus
@@ -340,14 +342,26 @@ const Accuntinfo = () => {
                 /> */}
               </div>
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Date">
                     <DatePicker
-                      value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
+                      value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
                       onChange={handleDateChange}
                     >
                       {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='date' value={selectedCustomerData.date} />
+                        <TextField {...inputProps} inputRef={inputRef} name='date' value={selectedCustomerData?.date} />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Date">
+                    <DatePicker
+                      value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
+                      onChange={handleDateChange}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
                       )}
                     </DatePicker>
                   </DemoItem>
@@ -360,7 +374,7 @@ const Accuntinfo = () => {
                 <TextField
                   name="vehicleTravels"
                   autoComplete="new-password"
-                  value={selectedCustomerData.vehicleTravels || book.vehicleTravels}
+                  value={selectedCustomerData?.vehicleTravels || book.vehicleTravels}
                   onChange={handleChange}
                   label="Vehicle/Travels"
                   id="standard-size-normal"
@@ -377,7 +391,7 @@ const Accuntinfo = () => {
                   size="small"
                   name="address1"
                   autoComplete="new-password"
-                  value={selectedCustomerData.address1 || book.address1}
+                  value={selectedCustomerData?.address1 || book.address1}
                   onChange={handleChange}
                   // InputLabelProps={{ shrink: !!selectedCustomerData.address1 || !!book.address1, }}
                   label="Address"
@@ -393,7 +407,7 @@ const Accuntinfo = () => {
                 <TextField
                   name="cperson"
                   autoComplete="new-password"
-                  value={selectedCustomerData.cperson || book.cperson}
+                  value={selectedCustomerData?.cperson || book.cperson}
                   onChange={handleChange}
                   // InputLabelProps={{ shrink: !!selectedCustomerData.cperson || !!book.cperson, }}
                   label="C Person"
@@ -411,7 +425,7 @@ const Accuntinfo = () => {
                   size="small"
                   name="streetNo"
                   autoComplete="new-password"
-                  value={selectedCustomerData.streetNo || book.streetNo}
+                  value={selectedCustomerData?.streetNo || book.streetNo}
                   onChange={handleChange}
                   // InputLabelProps={{ shrink: !!selectedCustomerData.streetNo || !!book.streetNo, }}
                   id="remark"
@@ -426,7 +440,7 @@ const Accuntinfo = () => {
                 <TextField
                   name="email"
                   autoComplete="new-password"
-                  value={selectedCustomerData.email || book.email}
+                  value={selectedCustomerData?.email || book.email}
                   onChange={handleChange}
                   // InputLabelProps={{ shrink: !!selectedCustomerData.email || !!book.email, }}
                   label="Email"
@@ -444,7 +458,7 @@ const Accuntinfo = () => {
                   size="small"
                   name="city"
                   autoComplete="new-password"
-                  value={selectedCustomerData.city || book.city}
+                  value={selectedCustomerData?.city || book.city}
                   onChange={handleChange}
                   // InputLabelProps={{ shrink: !!selectedCustomerData.city || !!book.city, }}
                   id="address3"
@@ -459,7 +473,7 @@ const Accuntinfo = () => {
                 <TextField
                   name="phone"
                   autoComplete="new-password"
-                  value={selectedCustomerData.phone || book.phone}
+                  value={selectedCustomerData?.phone || book.phone}
                   onChange={handleChange}
                   // InputLabelProps={{ shrink: !!selectedCustomerData.phone || !!book.phone, }}
                   label="Phone"
@@ -521,7 +535,7 @@ const Accuntinfo = () => {
                                 <TextField
                                   name="temporary_password"
                                   autoComplete="new-password"
-                                  value={selectedCustomerData.customerId || book.customerId}
+                                  value={selectedCustomerData?.customerId || book.customerId}
                                   onChange={handleChange}
                                   // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                                   label="Temporary Password"
@@ -555,7 +569,7 @@ const Accuntinfo = () => {
                 type="number"
                 name='vehCommission'
                 autoComplete="new-password"
-                value={selectedCustomerData.vehCommission || book.vehCommission}
+                value={selectedCustomerData?.vehCommission || book.vehCommission}
                 onChange={handleChange}
                 // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                 label="Veh.Commission"
@@ -583,7 +597,7 @@ const Accuntinfo = () => {
                 }))}
                 getOptionLabel={(option) => option.label || ''}
                 renderInput={(params) => {
-                  params.inputProps.value = selectedCustomerData.underGroup || ''
+                  params.inputProps.value = selectedCustomerData?.underGroup || ''
                   return (
                     <TextField {...params} label="Under Group" name="underGroup" inputRef={params.inputRef} />
                   )
@@ -605,7 +619,7 @@ const Accuntinfo = () => {
                 }))}
                 getOptionLabel={(option) => option.label || ''}
                 renderInput={(params) => {
-                  params.inputProps.value = selectedCustomerData.vehicleInfo || ''
+                  params.inputProps.value = selectedCustomerData?.vehicleInfo || ''
                   return (
                     <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
                   )
@@ -620,7 +634,7 @@ const Accuntinfo = () => {
               <TextField
                 name="rateType"
                 autoComplete="new-password"
-                value={selectedCustomerData.rateType || book.rateType}
+                value={selectedCustomerData?.rateType || book.rateType}
                 onChange={handleChange}
                 // InputLabelProps={{ shrink: !!selectedCustomerData.rateType || !!book.rateType, }}
                 label="Rate Type"
@@ -635,7 +649,7 @@ const Accuntinfo = () => {
               <TextField
                 name="entity"
                 autoComplete="new-password"
-                value={selectedCustomerData.entity || book.entity}
+                value={selectedCustomerData?.entity || book.entity}
                 onChange={handleChange}
                 // InputLabelProps={{ shrink: !!selectedCustomerData.entity || !!book.entity, }}
                 label="Opening Balance"
@@ -656,7 +670,7 @@ const Accuntinfo = () => {
                   name="isRunning"
                   autoComplete="new-password"
                   onChange={handleChange}
-                  value={selectedCustomerData.isRunning || book.isRunning}
+                  value={selectedCustomerData?.isRunning || book.isRunning}
                 >
                   <FormControlLabel
                     value="yes"
@@ -678,7 +692,7 @@ const Accuntinfo = () => {
                   name="acType"
                   autoComplete="new-password"
                   onChange={handleChange}
-                  value={selectedCustomerData.acType || book.acType}
+                  value={selectedCustomerData?.acType || book.acType}
                 >
                   <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
                   <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
@@ -689,7 +703,7 @@ const Accuntinfo = () => {
               <FormControlLabel
                 name='printBill'
                 onChange={handleChange}
-                checked={Boolean(selectedCustomerData.printBill || book.printBill)}
+                checked={Boolean(selectedCustomerData?.printBill || book.printBill)}
                 control={<Checkbox size="small" />}
                 value="Rate"
                 // control={<Checkbox size="small" />}
@@ -702,7 +716,7 @@ const Accuntinfo = () => {
                 value="Auto Refresh"
                 autoComplete="new-password"
                 onChange={handleChange}
-                checked={Boolean(selectedCustomerData.autoRefresh || book.autoRefresh)}
+                checked={Boolean(selectedCustomerData?.autoRefresh || book.autoRefresh)}
                 control={<Checkbox size="small" />}
                 label="Auto Refresh"
               />

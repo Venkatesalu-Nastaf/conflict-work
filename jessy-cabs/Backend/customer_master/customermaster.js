@@ -93,6 +93,46 @@ app.post('/accountinfo', (req, res) => {
   });
 });
 
+// delete account info
+
+app.delete('/accountinfo/:accountNo', (req, res) => {
+  const accountNo = req.params.accountNo;
+  // console.log('Customer ID:', accountNo); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM accountinfo WHERE accountNo = ?', accountNo);
+  db.query('DELETE FROM accountinfo WHERE accountNo = ?', accountNo, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update customer details
+
+app.put('/accountinfo/:accountNo', (req, res) => {
+  const accountNo = req.params.accountNo;
+  const updatedCustomerData = req.body;
+  console.log('Customer ID:', accountNo); // Log the customer ID
+  console.log('Updated customer data:', updatedCustomerData);
+
+  // Update the customer data in the database
+  db.query('UPDATE accountinfo SET ? WHERE accountNo = ?', [updatedCustomerData, accountNo], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
 
 // collect data for account Info
 
@@ -121,7 +161,7 @@ app.post('/vehicleinfo', (req, res) => {
 });
 
 
-// booking page database\
+// booking page database
 
 app.post('/booking', (req, res) => {
   const bookData = req.body;
@@ -132,6 +172,33 @@ app.post('/booking', (req, res) => {
     }
     console.log('Data inserted into MySQL');
     return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// collect details from booking
+
+// app.get('/booking/:bookingno', (req, res) => {
+//   const bookingno = req.params.bookingno;
+  
+//   db.query('SELECT * FROM bookings WHERE booking = ?', bookingno, (err, result) => {
+//     if (err) {
+//       console.error('Error retrieving booking details from MySQL:', err);
+//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//     }
+//     if (result.length === 0) {
+//       return res.status(404).json({ error: 'Booking not found' });
+//     }
+//     const bookingDetails = result[0]; // Assuming there is only one matching booking
+//     return res.status(200).json(bookingDetails);
+//   });
+// });
+app.get('/booking', (req, res) => {
+  db.query('SELECT * FROM booking', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
   });
 });
 

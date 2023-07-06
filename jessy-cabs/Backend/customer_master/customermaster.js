@@ -177,30 +177,30 @@ app.post('/booking', (req, res) => {
 
 // collect details from booking
 
-// app.get('/booking/:bookingno', (req, res) => {
-//   const bookingno = req.params.bookingno;
+app.get('/booking/:bookingno', (req, res) => {
+  const bookingno = req.params.bookingno;
   
-//   db.query('SELECT * FROM bookings WHERE booking = ?', bookingno, (err, result) => {
-//     if (err) {
-//       console.error('Error retrieving booking details from MySQL:', err);
-//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-//     }
-//     if (result.length === 0) {
-//       return res.status(404).json({ error: 'Booking not found' });
-//     }
-//     const bookingDetails = result[0]; // Assuming there is only one matching booking
-//     return res.status(200).json(bookingDetails);
-//   });
-// });
-app.get('/booking', (req, res) => {
-  db.query('SELECT * FROM booking', (err, results) => {
+  db.query('SELECT * FROM booking WHERE bookingno = ?', bookingno, (err, result) => {
     if (err) {
-      console.error('Error fetching data from MySQL:', err);
-      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
-    return res.status(200).json(results);
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    const bookingDetails = result[0]; // Assuming there is only one matching booking
+    return res.status(200).json(bookingDetails);
   });
 });
+// app.get('/booking', (req, res) => {
+//   db.query('SELECT * FROM booking', (err, results) => {
+//     if (err) {
+//       console.error('Error fetching data from MySQL:', err);
+//       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+//     }
+//     return res.status(200).json(results);
+//   });
+// });
 
 const port = 8081;
 app.listen(port, () => {

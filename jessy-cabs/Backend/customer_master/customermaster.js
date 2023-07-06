@@ -42,6 +42,27 @@ app.delete('/customers/:customerId', (req, res) => {
   });
 });
 
+// update customer details
+
+app.put('/customers/:customerId', (req, res) => {
+  const customerId = req.params.customerId;
+  const updatedCustomerData = req.body;
+  console.log('Customer ID:', customerId); // Log the customer ID
+  console.log('Updated customer data:', updatedCustomerData);
+
+  // Update the customer data in the database
+  db.query('UPDATE customers SET ? WHERE customerId = ?', [updatedCustomerData, customerId], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
 
 // collect data for custamer table
 

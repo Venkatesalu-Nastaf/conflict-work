@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
+// eslint-disable-next-line
 import { saveAs } from 'file-saver';
 import { ExportToCsv } from 'export-to-csv';
 import { jsPDF } from 'jspdf';
@@ -77,14 +78,14 @@ const actions = [
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "printName", headerName: "Customer_Name", width: 130 },
+  { field: "customerId", headerName: "Customer ID", width: 130 },
+  { field: "printName", headerName: "Name", width: 160 },
   { field: "address1", headerName: "Address", width: 130 },
-  { field: "phoneno", headerName: "Phone", width: 90 },
-  { field: "active", headerName: "Active", width: 160 },
-  { field: "customerId", headerName: "ID", width: 130 },
+  { field: "phoneno", headerName: "Phone", width: 160 },
+  { field: "active", headerName: "Active", width: 80 },
   { field: "rateType", headerName: "Rate_Type", width: 130 },
   { field: "gstTax", headerName: "GST_NO", width: 130 },
-  { field: "state", headerName: "State", width: 130 },
+  { field: "state", headerName: "State", width: 160 },
   { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
 ];
 const Customer = () => {
@@ -93,20 +94,21 @@ const Customer = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [error, setError] = useState(false);
+  // download function
   const handleDownload = (format) => {
     // Perform data conversion and export based on the selected format
     if (format === 'excel') {
       const csvExporter = new ExportToCsv({
-        filename: 'table-data.csv',
+        filename: 'Customer_details.csv',
         useKeysAsHeaders: true, // Include header row
       });
       const csvRows = rows.map(({ id, printName, address1, phoneno, active, customerId, rateType, gstTax, state, enableDriverApp }) => ({
         Sno: id,
+        ID: customerId,
         Customer_Name: printName,
         Address: address1,
         Phone: phoneno,
         Active: active,
-        ID: customerId,
         Rate_Type: rateType,
         GST_NO: gstTax,
         State: state,
@@ -114,7 +116,7 @@ const Customer = () => {
       }));
       const csvFormattedData = csvExporter.generateCsv(csvRows, true);
       const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
-      saveAs(blob, 'table-data.csv');
+      saveAs(blob, 'Customer_details.csv');
     } else if (format === 'pdf') {
       const doc = new jsPDF();
       const headerNames = columns.map(column => column.headerName);
@@ -123,9 +125,10 @@ const Customer = () => {
         head: [headerNames],
         body: bodyData,
       });
-      doc.save('table-data.pdf');
+      doc.save('Customer_details.pdf');
     }
   };
+  // End
   const [book, setBook] = useState({
     customerId: '',
     name: '',
@@ -157,7 +160,7 @@ const Customer = () => {
   });
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
-  
+
     if (type === 'checkbox') {
       // For checkboxes, update the state based on the checked value
       setBook((prevBook) => ({
@@ -180,7 +183,7 @@ const Customer = () => {
       }));
     }
   };
-  
+
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
     setBook((prevBook) => ({
@@ -254,15 +257,18 @@ const Customer = () => {
         await axios.delete(`http://localhost:8081/customers/${customerId}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
-        setBook((prevBook) => ({
-          ...prevBook,
-          address2: '',
-        }));
+        handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
+        const selectedCustomer = rows.find((row) => row.customerId === customerId);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/customers/${customerId}`, updatedCustomer);
+        console.log('Customer updated');
+        handleCancel();
       } else if (actionName === 'Add') {
         await axios.post('http://localhost:8081/customers', book);
         console.log(book);
+        handleCancel();
       }
     } catch (err) {
       console.log(err);
@@ -296,7 +302,7 @@ const Customer = () => {
                   variant="standard"
                   autoFocus
                 />
-                
+
               </div>
               <div className="input">
                 <div className="icone">

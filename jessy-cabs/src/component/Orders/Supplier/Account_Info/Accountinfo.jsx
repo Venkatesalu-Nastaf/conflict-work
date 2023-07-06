@@ -1,8 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 // import { useNavigate } from "react-router-dom";
 import axios from "axios";
+// eslint-disable-next-line
+import { saveAs } from 'file-saver';
+import { ExportToCsv } from 'export-to-csv';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 import "./Accountinfo.css";
 import Button from "@mui/material/Button";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
@@ -68,11 +76,48 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 const Accuntinfo = () => {
-
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [value, setValue] = React.useState("list");
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
+
+ // download function
+ const handleDownload = (format) => {
+  // Perform data conversion and export based on the selected format
+  if (format === 'excel') {
+    const csvExporter = new ExportToCsv({
+      filename: 'Customer_details.csv',
+      useKeysAsHeaders: true, // Include header row
+    });
+    const csvRows = rows.map(({ id, printName, address1, phoneno, active, customerId, rateType, gstTax, state, enableDriverApp }) => ({
+      Sno: id,
+      ID: customerId,
+      Customer_Name: printName,
+      Address: address1,
+      Phone: phoneno,
+      Active: active,
+      Rate_Type: rateType,
+      GST_NO: gstTax,
+      State: state,
+      Driver_App: enableDriverApp,
+    }));
+    const csvFormattedData = csvExporter.generateCsv(csvRows, true);
+    const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
+    saveAs(blob, 'Customer_details.csv');
+  } else if (format === 'pdf') {
+    const doc = new jsPDF();
+    const headerNames = columns.map(column => column.headerName);
+    const bodyData = rows.map(row => columns.map(column => row[column.field]));
+    doc.autoTable({
+      head: [headerNames],
+      body: bodyData,
+    });
+    doc.save('Customer_details.pdf');
+  }
+};
+// End
+
 
   // Table Start
   const columns = [
@@ -212,11 +257,13 @@ const Accuntinfo = () => {
   };
 
   const handleRowClick = useCallback((params) => {
+    console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
+    setSelectedCustomerId(params.row.customerId);
   }, []);
 
-  const handleClick = async (event, actionName) => {
+  const handleClick = async (event, actionName, customerId) => {
     event.preventDefault();
 
     try {
@@ -230,7 +277,10 @@ const Accuntinfo = () => {
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        // Perform the desired action when the "Delete" button is clicked
+        await axios.delete(`http://localhost:8081/customers/${customerId}`);
+        console.log('Customer deleted');
+        setSelectedCustomerData(null);
+        handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
         // Perform the desired action when the "Edit" button is clicked
@@ -660,7 +710,7 @@ const Accuntinfo = () => {
           </div>
           {error && <p>Something went wrong!</p>}
 
-          <div className="SpeedDial" style={{ "padding-top": "96px" }}>
+          <div className="SpeedDial" style={{ "paddingTop": "96px" }}>
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>
               <StyledSpeedDial
                 ariaLabel="SpeedDial playground example"
@@ -672,13 +722,27 @@ const Accuntinfo = () => {
                     key={action.name}
                     icon={action.icon}
                     tooltipTitle={action.name}
-                    onClick={(event) => handleClick(event, action.name)}
+                    onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                   />
                 ))}
               </StyledSpeedDial>
             </Box>
           </div>
         </div>
+        <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" {...bindTrigger(popupState)}>
+                    Download
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={() => { handleDownload('excel'); popupState.close(); }}>Excel</MenuItem>
+                    <MenuItem onClick={() => { handleDownload('pdf'); popupState.close(); }}>PDF</MenuItem>
+                  </Menu>
+
+                </React.Fragment>
+              )}
+            </PopupState>
         <div className="table-customer-list">
           <DataGrid
             rows={rows}

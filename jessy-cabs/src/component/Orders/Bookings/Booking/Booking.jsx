@@ -83,14 +83,11 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 const Booking = () => {
   const [error, setError] = useState(false);
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
-  // const [showOptions, setShowOptions] = useState(false);
-  // const [rows, setRows] = useState([]);
   const [actionName] = useState('');
-  //// copy button
+  const [rows, setRows] = useState([]);
   const [displayCopy, setDisplayCopy] = useState(false);
   const [value, setValue] = React.useState("list");
   const [currentTime, setCurrentTime] = useState("");
-  // const [selectedTime, setSelectedTime] = useState('');
   const [triptime, setTripTime] = useState('');
   const [registertime, setRegisterTime] = useState('');
   const [starttime, setStartTime] = useState('');
@@ -195,9 +192,33 @@ const Booking = () => {
     setSelectedCustomerData({});
   };
 
+  // const handleChange = (event) => {
+  //   const { name, value, checked } = event.target;
+
+  //   if (event.target.type === 'checkbox') {
+  //     setBook((prevBook) => ({
+  //       ...prevBook,
+  //       [name]: checked,
+  //     }));
+  //     setSelectedCustomerData((prevData) => ({
+  //       ...prevData,
+  //       [name]: checked,
+  //     }));
+  //   } else {
+  //     setBook((prevBook) => ({
+  //       ...prevBook,
+  //       [name]: value,
+  //     }));
+  //     setSelectedCustomerData((prevData) => ({
+  //       ...prevData,
+  //       [name]: value,
+  //     }));
+  //   }
+  // };
+
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
-
+  
     if (event.target.type === 'checkbox') {
       setBook((prevBook) => ({
         ...prevBook,
@@ -208,16 +229,30 @@ const Booking = () => {
         [name]: checked,
       }));
     } else {
-      setBook((prevBook) => ({
-        ...prevBook,
-        [name]: value,
-      }));
-      setSelectedCustomerData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+      // Check if the field is the time field
+      if (name === 'bookingtime') {
+        const formattedTime = value; // Modify the time value if needed
+        setBook((prevBook) => ({
+          ...prevBook,
+          [name]: formattedTime,
+        }));
+        setSelectedCustomerData((prevData) => ({
+          ...prevData,
+          [name]: formattedTime,
+        }));
+      } else {
+        setBook((prevBook) => ({
+          ...prevBook,
+          [name]: value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      }
     }
   };
+  
 
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
@@ -243,28 +278,34 @@ const Booking = () => {
     }));
   };
 
-  const handleClick = async (event, actionName) => {
+  const handleClick = async (event, actionName, bookingno) => {
     event.preventDefault();
 
     try {
-      if (actionName === 'List') {
+      if (actionName === 'Email') {
         console.log('List button clicked');
         // const response = await axios.get('http://localhost:8081/booking');
         // const data = response.data;
         // setRows(data);
-      } else if (actionName === 'Cancel') {
+      } else if (actionName === 'Clear') {
         console.log('Cancel button clicked');
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        // Perform the desired action when the "Delete" button is clicked
-      } else if (actionName === 'Edit') {
+        await axios.delete(`http://localhost:8081/booking/${book.bookingno}`);
+        console.log('Customer deleted');
+        setSelectedCustomerData(null);
+        handleCancel();
+      } else if (actionName === 'Modify') {
         console.log('Edit button clicked');
-        // Perform the desired action when the "Edit" button is clicked
+        const selectedCustomer = rows.find((row) => row.bookingno === bookingno);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/booking/${book.bookingno}`, updatedCustomer);
+        console.log('Customer updated');
+        handleCancel();
       } else if (actionName === 'Copy This') {
         console.log('Copy This button clicked');
         handleClickShow();
-        // Perform the desired action when the "Edit" button is clicked
       } else if (actionName === 'Add') {
         const updatedBook = {
           ...book,
@@ -332,7 +373,7 @@ const Booking = () => {
     { icon: <CancelPresentationIcon />, name: "Clear" },
     { icon: <DeleteIcon />, name: "Delete" },
     { icon: <ModeEditIcon />, name: "Modify" },
-    { icon: <ContentCopyIcon />, name: "Copy This", onClick: handleClickShow },
+    { icon: <ContentCopyIcon />, name: "Copy This" },
     { icon: <BookmarkAddedIcon />, name: "Add" },
   ];
   // Local Storage
@@ -476,15 +517,25 @@ const Booking = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
+              {/*               
               <div className="input time">
                 <label>Booking Time</label>
                 <input
                   type="time"
-                  defaultValue={currentTime}
                   value={bookingtime}
                   onChange={(event) => setBookingTime(event.target.value)}
                 />
+              </div> */}
+              <div className="input time">
+                <label>Booking Time</label>
+                <input
+                  type="time"
+                  value={book.bookingtime || ''}
+                  onChange={(event) => setBook({ ...book, bookingtime: event.target.value })}
+                  name="bookingtime"
+                />
               </div>
+
             </div>
             <div className="input-field">
               <div className="input radio">
@@ -755,7 +806,7 @@ const Booking = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-              <div className="input time">
+              {/* <div className="input time">
                 <label>Start Time</label>
                 <input
                   type="time"
@@ -764,12 +815,30 @@ const Booking = () => {
                   value={starttime}
                   onChange={(event) => setStartTime(event.target.value)}
                 />
-              </div>
+              </div> */}
               <div className="input time">
+                <label>Start Time</label>
+                <input
+                  type="time"
+                  value={starttime}
+                  name='starttime'
+                  onChange={(event) => setStartTime(event.target.value)}
+                />
+              </div>
+              {/* <div className="input time">
                 <label>Register Time</label>
                 <input
                   type="time"
                   defaultValue={currentTime}
+                  name='registertime'
+                  value={registertime}
+                  onChange={(event) => setRegisterTime(event.target.value)}
+                />
+              </div> */}
+              <div className="input time">
+                <label>Register Time</label>
+                <input
+                  type="time"
                   name='registertime'
                   value={registertime}
                   onChange={(event) => setRegisterTime(event.target.value)}
@@ -1174,11 +1243,20 @@ const Booking = () => {
                     </DemoItem>
                   </LocalizationProvider>
                 </div>
-                <div className="input time">
+                {/* <div className="input time">
                   <label>Trip Time</label>
                   <input
                     type="time"
                     defaultValue={currentTime}
+                    name='triptime'
+                    value={triptime}
+                    onChange={(event) => setTripTime(event.target.value)}
+                  />
+                </div> */}
+                <div className="input time">
+                  <label>Trip Time</label>
+                  <input
+                    type="time"
                     name='triptime'
                     value={triptime}
                     onChange={(event) => setTripTime(event.target.value)}

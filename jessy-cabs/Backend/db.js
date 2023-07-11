@@ -1,19 +1,12 @@
 const mysql = require('mysql');
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: 'root',
-  password: '',
-  database: 'taaf_application',
+  host: '162.214.81.14',
+  user: 'dzupsnmy_taaf_user',
+  password: 'taafapplicationusers',
+  database: 'dzupsnmy_taaf_application',
   port: 3306
 });
-// const db = mysql.createConnection({
-//   host: "124.123.70.27",
-//   user: 'dzupsnmy_taafuser',
-//   password: 'taafappicationuser',
-//   database: 'dzupsnmy_taaf_application',
-//   port: 3306
-// });
 
 db.connect((err) => {
   if (err) {

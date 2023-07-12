@@ -16,6 +16,7 @@ const Login = () => {
   };
   const [input, setInput] = React.useState({ username: "", password: "" });
   const [errorMessage, seterrorMessage] = useState("");
+  const [warningMessage, setwarningMessage] = useState("");
   const [successMessage, setsuccessMessage] = useState("");
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -29,7 +30,7 @@ const Login = () => {
     e.preventDefault();
     setsuccessMessage("");
     if (!emailValidator(input.username))
-      return seterrorMessage("Please enter valid user id");
+      return setwarningMessage("Please enter valid user id");
 
     if (!passwordValidator(input.password))
       return seterrorMessage(
@@ -52,12 +53,19 @@ const Login = () => {
           <form className="portal" onSubmit={formSumitter}>
             <div className="title">login</div>
             {errorMessage.length > 0 && (
-              <div style={{ marginBottom: "10px", color: "red" }}>
+              <div className="password-alert" style={{ marginBottom: "10px" }}>
+                <div className="headering-war">Alert</div>
                 {errorMessage}
               </div>
             )}
+             {warningMessage.length > 0 && (
+              <div className="password-alert-warning" style={{ marginBottom: "10px" }}>
+                <div className="headering-war">Warning</div>
+                {warningMessage}
+              </div>
+            )}
             {successMessage.length > 0 && (
-              <div style={{ marginBottom: "10px", color: "green" }}>
+              <div className="password-alert" style={{ marginBottom: "10px" }}>
                 {successMessage}
               </div>
             )}

@@ -1,16 +1,15 @@
 .portal-container {
   /* ba */
   height: 100vh;
-  background: linear-gradient(
-    106.37deg,
-    #aeb3ca 29.63%,
-    #7e31d6 51.55%,
-    #a3e792 90.85%
-  );
+  background: linear-gradient(106.37deg,
+      #aeb3ca 29.63%,
+      #7e31d6 51.55%,
+      #a3e792 90.85%);
   background-image: url("https://images.pexels.com/photos/712618/pexels-photo-712618.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
   background-repeat: no-repeat, repeat;
   background-size: 100%;
 }
+
 .glasses {
   height: 100%;
   width: 100%;
@@ -55,18 +54,20 @@
   pointer-events: none;
 }
 
-.user-input input:focus ~ label,
-.user-input input:valid ~ label {
+.user-input input:focus~label,
+.user-input input:valid~label {
   transform: translateY(-20px);
   font-size: 18px;
   color: #a3e792;
 }
+
 .user-input .under-line {
   position: absolute;
   bottom: 15px;
   height: 2px;
   width: 100%;
 }
+
 .user-input .under-line::before {
   position: absolute;
   content: "";
@@ -76,8 +77,8 @@
   transform: scaleX(0);
 }
 
-.user-input input:focus ~ .under-line::before,
-.user-input input:valid ~ .under-line::before {
+.user-input input:focus~.under-line::before,
+.user-input input:valid~.under-line::before {
   transform: scaleX(1);
 }
 
@@ -90,13 +91,16 @@
   bottom: 19px;
   right: 10px;
 }
+
 .forget-link {
   text-align: center;
 }
+
 .forget-link a {
   text-transform: capitalize;
   text-decoration: none;
 }
+
 .portal .user-input input {
   padding: 5px;
   color: #f5f5f5;
@@ -252,5 +256,35 @@ a.social .icons {
   height: 95%;
   border-radius: 0.6rem;
 }
-@media screen and (max-width: 1200px) {
+
+@media screen and (max-width: 1200px) {}
+
+.password-alert {
+  background-color: #FEE;
+  border: 1px solid #EDD;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  transition: background-color 0.8s ease, border-color 0.8s ease, color 0.8s ease;
+}
+
+.password-alert .headering-war {
+  color: #A66;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.password-alert-warning {
+  background-color: #FDF7DF;
+  border: 1px solid #FEEC6F;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  transition: background-color 0.8s ease, border-color 0.8s ease, color 0.8s ease;
+}
+
+.password-alert-warning .headering-war {
+  color: #C9971C;
+  font-size: 20px;
+  font-weight: bold;
 }

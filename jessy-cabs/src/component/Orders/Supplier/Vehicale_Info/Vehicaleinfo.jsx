@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+// import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Vehicaleinfo.css";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -40,8 +42,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-const today = dayjs();
-const tomorrow = dayjs().add(1, "day");
+// const today = dayjs();
+// const tomorrow = dayjs().add(1, "day");
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -62,6 +64,180 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 const Vehicaleinfo = () => {
+  // const [value] = React.useState("list");
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  // const [rows, setRows] = useState([]);
+  const [actionName] = useState('');
+
+  // Table Start
+  // const columns = [
+  //   { field: "id", headerName: "Sno", width: 70 },
+  //   { field: "cperson", headerName: "Supplier_Name", width: 130 },
+  //   { field: "accountNo", headerName: "Vehicle_No", width: 130 },
+  //   { field: "address1", headerName: "Address", width: 130 },
+  //   { field: "phone", headerName: "Phone", width: 130 },
+  //   { field: "isRunning", headerName: "Active", width: 160 },
+  //   { field: "rateType", headerName: "Owner_Type", width: 130 },
+  //   { field: "vehcommission", headerName: "Percentage", width: 130 },
+  //   { field: "printBill", headerName: "Rate_Type", width: 130 },
+  //   { field: "autoRefresh", headerName: "Driver_App", width: 130 },
+  // ];
+
+  const [book, setBook] = useState({
+    vehicleId: '',
+    doadate: '',
+    vehRegNo: '',
+    costCenter: '',
+    vehType: '',
+    yearModel: '',
+    owner: '',
+    mobileNo: '',
+    fcdate: '',
+    taxdate: '',
+    npdate: '',
+    insdate: '',
+    stpermit: '',
+    duedate: '',
+    financer: '',
+    avgmileage: '',
+    routeno: '',
+    driverName: '',
+    dueAmount: '',
+    tankCap: '',
+    remarks: '',
+    OwnerType: '',
+    active: '',
+  });
+
+  const [error, setError] = useState(false);
+
+  const handleChange = (event) => {
+    const { name, value, checked } = event.target;
+
+    if (event.target.type === 'checkbox') {
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+
+  // const handleAutocompleteChange = (event, value, name) => {
+  //   const selectedOption = value ? value.label : '';
+  //   setBook((prevBook) => ({
+  //     ...prevBook,
+  //     [name]: selectedOption,
+  //   }));
+  //   setSelectedCustomerData((prevData) => ({
+  //     ...prevData,
+  //     [name]: selectedOption,
+  //   }));
+  // };
+
+
+  // const handleDateChange = (date, name) => {
+  //   const startOfDay = dayjs(date).startOf('day').format();
+  //   setBook((prevBook) => ({
+  //     ...prevBook,
+  //     [name]: startOfDay,
+  //   }));
+  // };
+
+  const handleDateChange = (date, name) => {
+    const startOfDay = dayjs(date).startOf('day').format();
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: startOfDay,
+    }));
+  };
+
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      vehicleId: '',
+      doadate: '',
+      vehRegNo: '',
+      costCenter: '',
+      vehType: '',
+      yearModel: '',
+      owner: '',
+      mobileNo: '',
+      fcdate: '',
+      taxdate: '',
+      npdate: '',
+      insdate: '',
+      stpermit: '',
+      duedate: '',
+      financer: '',
+      avgmileage: '',
+      routeno: '',
+      driverName: '',
+      dueAmount: '',
+      tankCap: '',
+      remarks: '',
+      OwnerType: '',
+      active: '',
+    }));
+    setSelectedCustomerData({});
+
+  };
+
+  // const handleRowClick = useCallback((params) => {
+  //   const customerData = params.row;
+  //   setSelectedCustomerData(customerData);
+  // }, []);
+
+  const handleClick = async (event, actionName) => {
+    event.preventDefault();
+
+    try {
+      if (actionName === 'List') {
+        console.log('List button clicked');
+        // const response = await axios.get('http://localhost:8081/vehicleinfo');
+        // const data = response.data;
+        // setRows(data);
+      } else if (actionName === 'Cancel') {
+        console.log('Cancel button clicked');
+        handleCancel();
+      } else if (actionName === 'Delete') {
+        console.log('Delete button clicked');
+        // Perform the desired action when the "Delete" button is clicked
+      } else if (actionName === 'Edit') {
+        console.log('Edit button clicked');
+        // Perform the desired action when the "Edit" button is clicked
+      } else if (actionName === 'Add') {
+        await axios.post('http://localhost:8081/vehicleinfo', book);
+        console.log(book);
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+  };
+
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  });
+
+
+
+
   return (
     <div className="vehicale-form">
       <form action="">
@@ -74,20 +250,35 @@ const Vehicaleinfo = () => {
                   <MinorCrashIcon color="action" />
                 </div>
                 <TextField
-                  name="vehicaleid"
-                  label="Vehicale ID"
+                  name="vehicleId"
+                  value={selectedCustomerData.vehicleId || book.vehicleId}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
+                  label="Vehicle ID"
                   id="standard-size-normal"
                   variant="standard"
                 />
               </div>
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="D.O.A Date">
                     <DatePicker
                       defaultValue={today}
                       minDate={tomorrow}
                       views={["year", "month", "day"]}
                     />
+                  </DemoItem>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="D.O.A Date">
+                    <DatePicker
+                      value={selectedCustomerData.doadate ? dayjs(selectedCustomerData.doadate) : null}
+                      onChange={(date) => handleDateChange(date, 'doadate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='doadate' value={selectedCustomerData.doadate} />
+                      )}
+                    </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
               </div>
@@ -102,7 +293,10 @@ const Vehicaleinfo = () => {
                   size="small"
                   id="veh_reg_no"
                   label="Veh.Reg.No"
-                  name="veh_reg_no"
+                  name="vehRegNo"
+                  value={selectedCustomerData.vehRegNo || book.vehRegNo}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   autoFocus
                 />
               </div>
@@ -111,7 +305,10 @@ const Vehicaleinfo = () => {
                   <PriceChangeIcon color="action" />
                 </div>
                 <TextField
-                  name="cost_center"
+                  name="costCenter"
+                  value={selectedCustomerData.costCenter || book.costCenter}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Cost Center"
                   id="standard-size-normal"
                   variant="standard"
@@ -122,7 +319,10 @@ const Vehicaleinfo = () => {
                   <CommuteIcon color="action" />
                 </div>
                 <TextField
-                  name="veh_type"
+                  name="vehType"
+                  value={selectedCustomerData.vehType || book.vehType}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Veh.Type"
                   id="veh_type"
                   variant="standard"
@@ -138,8 +338,11 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   id="year_model"
-                  value={"2012"}
-                  name="year_model"
+                  // value={"2012"}
+                  name="yearModel"
+                  value={selectedCustomerData.yearModel || book.yearModel}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Year Model"
                   autoFocus
                 />
@@ -150,6 +353,9 @@ const Vehicaleinfo = () => {
                 </div>
                 <TextField
                   name="owner"
+                  value={selectedCustomerData.owner || book.owner}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Owner"
                   id="owner"
                   variant="standard"
@@ -160,7 +366,10 @@ const Vehicaleinfo = () => {
                   <ContactPhoneIcon color="action" />
                 </div>
                 <TextField
-                  name="mobile_no"
+                  name="mobileNo"
+                  value={selectedCustomerData.mobileNo || book.mobileNo}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Mobile No"
                   id="mobile_no"
                   variant="standard"
@@ -172,10 +381,13 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="FC Date">
                     <DatePicker
-                      defaultValue={today}
-                      minDate={tomorrow}
-                      views={["day", "month", "year"]}
-                    />
+                      value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
+                      onChange={(date) => handleDateChange(date, 'fcdate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='fcdate' value={selectedCustomerData.fcdate} />
+                      )}
+                    </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
               </div>
@@ -183,10 +395,13 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Tax Date">
                     <DatePicker
-                      defaultValue={today}
-                      minDate={tomorrow}
-                      views={["day", "month", "year"]}
-                    />
+                      value={selectedCustomerData.taxdate ? dayjs(selectedCustomerData.taxdate) : null}
+                      onChange={(date) => handleDateChange(date, 'taxdate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='taxdate' value={selectedCustomerData.taxdate} />
+                      )}
+                    </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
               </div>
@@ -194,45 +409,93 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="NP Date">
                     <DatePicker
-                      defaultValue={today}
-                      minDate={tomorrow}
-                      views={["day", "month", "year"]}
-                    />
+                      value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
+                      onChange={(date) => handleDateChange(date, 'npdate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData.npdate} />
+                      )}
+                    </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
               </div>
             </div>
             <div className="input-field">
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Ins.Date">
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Ins. Date">
                     <DatePicker
-                      defaultValue={today}
-                      minDate={tomorrow}
-                      views={["day", "month", "year"]}
-                    />
+                      value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
+                      onChange={handleDateChange}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='insdate' value={selectedCustomerData.date} />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Ins. Date">
+                    <DatePicker
+                      value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null}
+                      onChange={(date) => handleDateChange(date, 'insdate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='insdate' value={selectedCustomerData.insdate} />
+                      )}
+                    </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="St.Permit">
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="St Permit">
                     <DatePicker
-                      defaultValue={today}
-                      minDate={tomorrow}
-                      views={["day", "month", "year"]}
-                    />
+                      value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
+                      onChange={handleDateChange}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='stpermit' value={selectedCustomerData.date} />
+                      )}
+                    </DatePicker>
                   </DemoItem>
-                </LocalizationProvider>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+  <DemoItem label="St. permit">
+    <DatePicker
+      value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
+      onChange={(date) => handleDateChange(date, 'stpermit')}
+    >
+      {({ inputProps, inputRef }) => (
+        <TextField {...inputProps} inputRef={inputRef} name='stpermit' value={selectedCustomerData.stpermit || ''} />
+      )}
+    </DatePicker>
+  </DemoItem>
+</LocalizationProvider>
               </div>
               <div className="input">
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Due Date">
+                    <DatePicker
+                      value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
+                      onChange={handleDateChange}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.date} />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
+                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Due Date">
                     <DatePicker
-                      defaultValue={today}
-                      minDate={tomorrow}
-                      views={["day", "month", "year"]}
-                    />
+                      value={selectedCustomerData.duedate ? dayjs(selectedCustomerData.duedate) : null}
+                      onChange={(date) => handleDateChange(date, 'duedate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
+                      )}
+                    </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
               </div>
@@ -244,6 +507,9 @@ const Vehicaleinfo = () => {
                 </div>
                 <TextField
                   name="financer"
+                  value={selectedCustomerData.financer || book.financer}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Financer"
                   id="financer"
                   variant="standard"
@@ -255,6 +521,9 @@ const Vehicaleinfo = () => {
                 </div>
                 <TextField
                   name="avgmileage"
+                  value={selectedCustomerData.avgmileage || book.avgmileage}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="AVG Mileage"
                   id="avgmileage"
                   variant="standard"
@@ -268,6 +537,9 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="routeno"
+                  value={selectedCustomerData.routeno || book.routeno}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Route No"
                   id="routeno"
                   autoFocus
@@ -280,7 +552,10 @@ const Vehicaleinfo = () => {
                   <AirlineSeatReclineExtraIcon color="action" />
                 </div>
                 <TextField
-                  name="driver_name"
+                  name="driverName"
+                  value={selectedCustomerData.driverName || book.driverName}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Driver Name"
                   id="driver_name"
                   variant="standard"
@@ -291,7 +566,10 @@ const Vehicaleinfo = () => {
                   <FaMoneyBillWave color="action" />
                 </div>
                 <TextField
-                  name="due_amount"
+                  name="dueAmount"
+                  value={selectedCustomerData.dueAmount || book.dueAmount}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Due Amount"
                   id="due_amount"
                   variant="standard"
@@ -304,7 +582,10 @@ const Vehicaleinfo = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  name="tank_cap"
+                  name="tankCap"
+                  value={selectedCustomerData.tankCap || book.tankCap}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Tank Cap"
                   id="tank_cap"
                   autoFocus
@@ -320,6 +601,9 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="remarks"
+                  value={selectedCustomerData.remarks || book.remarks}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Remarks"
                   id="remarks"
                   autoFocus
@@ -330,7 +614,10 @@ const Vehicaleinfo = () => {
                   <AssignmentIndTwoToneIcon color="action" />
                 </div>
                 <TextField
-                  name="Owner Type"
+                  name="OwnerType"
+                  value={selectedCustomerData.OwnerType || book.OwnerType}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="owner_Type"
                   id="owner_type"
                   variant="standard"
@@ -346,7 +633,10 @@ const Vehicaleinfo = () => {
                   <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
+                    name="active"
+                    autoComplete="new-password"
+                    onChange={handleChange}
+                    value={selectedCustomerData.active || book.active}
                   >
                     <FormControlLabel
                       value="yes"
@@ -367,6 +657,8 @@ const Vehicaleinfo = () => {
                 </Button>
               </div>
             </div>
+            {error && <p>Something went wrong!</p>}
+
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>
               <StyledSpeedDial
                 ariaLabel="SpeedDial playground example"
@@ -379,6 +671,7 @@ const Vehicaleinfo = () => {
                     key={action.name}
                     icon={action.icon}
                     tooltipTitle={action.name}
+                    onClick={(event) => handleClick(event, action.name)}
                   />
                 ))}
               </StyledSpeedDial>

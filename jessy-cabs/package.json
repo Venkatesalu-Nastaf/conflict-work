@@ -26,6 +26,7 @@
     "apexcharts": "^3.41.0",
     "axios": "^1.4.0",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.9",
     "electron": "^25.0.1",
     "emotion": "^11.0.0",
     "export-to-csv": "^0.2.1",

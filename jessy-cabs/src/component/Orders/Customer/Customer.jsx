@@ -195,6 +195,7 @@ const Customer = () => {
       [name]: selectedOption,
     }));
   };
+
   const handleDateChange = (date) => {
     const startOfDay = dayjs(date).startOf('day').format();
     setBook((prevBook) => ({
@@ -349,7 +350,7 @@ const Customer = () => {
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
                     params.inputProps.value = selectedCustomerData?.customerType || ''
-                    return (
+                    return (        
                       <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
                     )
                   }

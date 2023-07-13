@@ -1,6 +1,6 @@
 import React from "react";
 import "./Received.css";
-import { CustomerName } from "./Received.Data";
+import { ReceivedStatus } from "./ReceivedData";
 import Autocomplete from "@mui/material/Autocomplete";
 
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -14,34 +14,34 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 
 const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "billno", headerName: "Bill No", width: 130 },
+  { field: "sno", headerName: "Sno", width: 70 },
+  { field: "id", headerName: "Id", width: 70 },
+  { field: "time", headerName: "Time", width: 130 },
   { field: "date", headerName: "Date", width: 130 },
-  { field: "customerName", headerName: "Customer Name", width: 130 },
-  { field: "billamount", headerName: "Bill Amount", width: 130 },
-  { field: "collected", headerName: "Collected", width: 130 },
-  { field: "balance", headerName: "Balance", width: 130 },
+  { field: "Customer", headerName: "Customer", width: 130 },
+  { field: "Guestname", headerName: "Guest Name", width: 130 },
+  { field: "Status", headerName: "Status", width: 130 },
 ];
 
 const rows = [
   {
+    sno: 1,
     id: 1,
-    billno: 1,
+    time: "9:00 AM",
     date: "2023-06-07",
-    customerName: "Morning",
-    billamount: "9:00 AM",
-    collected: "123 Street, Apt 4B, City",
-    balance: "ABC Car",
+    Customer: "123 Street, Apt 4B, City",
+    Guestname: "ABC Car",
+    Status: "received",
 
   },
   {
+    sno: 2,
     id: 2,
-    billno: 2,
+    time: "2:00 PM",
     date: "2023-06-08",
-    customerName: "Evening",
-    billamount: "2:00 PM",
-    collected: "456 Avenue, Unit 8, Town",
-    balance: "XYZ Car",
+    Customer: "456 Avenue, Unit 8, Town",
+    Guestname: "XYZ Car",
+    Status: "booking",
   },
   // Add more rows as needed
 ];
@@ -57,42 +57,39 @@ const Received = () => {
           <div className="container-left">
             <div className="copy-title-btn">
               <div className="input-field">
-                <div className="input" style={{ width: "50%" }}>
+                <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker label="From Date" defaultValue={dayjs()} />
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "50%" }}>
+                <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker label="To Date" defaultValue={dayjs()} />
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "80px" }}>
+                <div className="input">
                   <Button variant="contained">Show</Button>
-                </div>
-                <div className="input" style={{ width: "80px" }}>
-                  <Button variant="outlined">Pending</Button>
                 </div>
               </div>
               <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
-                  <div className="icone">
-                    {/* <AirportShuttleIcon color="action" /> */}
-                  </div>
+                <div className="input" >
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={CustomerName.map((option) => option.optionvalue)}
-                    options={CustomerName.map((option) => ({
+                    value={ReceivedStatus.map((option) => option.optionvalue)}
+                    options={ReceivedStatus.map((option) => ({
                       label: option.Option,
                     }))}
                     getOptionLabel={(option) => option.label || ""}
                     renderInput={(params) => (
-                      <TextField {...params} label="Customer Name" />
+                      <TextField {...params} label="Received Status" />
                     )}
                   />
+                </div>
+                <div className="input" style={{ width: "200px" }}>
+                  <Button variant="contained">Accept Selected</Button>
                 </div>
                 <div className="input" style={{ width: "110px" }}>
                   <Button
@@ -107,9 +104,6 @@ const Received = () => {
                       style={{ display: "none" }}
                     />
                   </Button>
-                </div>
-                <div className="input" style={{ width: "160px" }}>
-                  <Button variant="contained">New Receipts</Button>
                 </div>
               </div>
             </div>

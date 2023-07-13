@@ -18,7 +18,7 @@ export const Sidebardata = [
     {
       icon: HiOutlineUsers,
       heading: "Customers",
-      key: "/home/customers",
+      key: "/home/customers/received",
     },
     {
       icon: AiOutlineFileProtect,

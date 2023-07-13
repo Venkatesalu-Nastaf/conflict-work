@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Booking.css";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
@@ -29,10 +28,8 @@ import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
 import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
 import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
-import { Duty, Hire, PayType, PickUp, Report, VehicleModel, Service_Station } from "./Booking";
+import { Duty, Hire, PayType, Report, VehicleModel, Service_Station } from "./Booking";
 import { useLocation } from "react-router-dom";
-// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-// import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
@@ -66,8 +63,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-// const today = dayjs();
-// const tomorrow = dayjs().add(1, "day");
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -132,6 +127,8 @@ const Booking = () => {
     cityupdate: '',
     useage: '',
     username: '',
+    tripdate: '',
+    triptime: '',
     emaildoggle: '',
     hiretypes: '',
     travelsname: '',
@@ -181,6 +178,8 @@ const Booking = () => {
       cityupdate: '',
       useage: '',
       username: '',
+      tripdate: '',
+      triptime: '',
       emaildoggle: '',
       hiretypes: '',
       travelsname: '',
@@ -192,31 +191,6 @@ const Booking = () => {
     }));
     setSelectedCustomerData({});
   };
-
-  // const handleChange = (event) => {
-  //   const { name, value, checked } = event.target;
-
-  //   if (event.target.type === 'checkbox') {
-  //     setBook((prevBook) => ({
-  //       ...prevBook,
-  //       [name]: checked,
-  //     }));
-  //     setSelectedCustomerData((prevData) => ({
-  //       ...prevData,
-  //       [name]: checked,
-  //     }));
-  //   } else {
-  //     setBook((prevBook) => ({
-  //       ...prevBook,
-  //       [name]: value,
-  //     }));
-  //     setSelectedCustomerData((prevData) => ({
-  //       ...prevData,
-  //       [name]: value,
-  //     }));
-  //   }
-  // };
-
 
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
@@ -410,64 +384,65 @@ const Booking = () => {
     }
   }, []);
 
+  // const handleBookingDetails = async () => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:8081/booking/${book.bookingno}`);
+  //     const bookingDetails = response.data;
+  //     console.log(response.data);
 
-  const handleBookingDetails = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8081/booking/${book.bookingno}`);
-      const bookingDetails = response.data;
-      console.log(response.data);
-
-      setBook((prevBook) => ({
-        ...prevBook,
-        bookingno: bookingDetails.bookingno,
-        bookingdate: bookingDetails.bookingdate,
-        // bookingdate: dayjs(bookingDetails.bookingdate).toDate(),
-        status: bookingDetails.status,
-        customer: bookingDetails.customer,
-        orderedby: bookingDetails.orderedby,
-        mobileno: bookingDetails.mobileno,
-        guestname: bookingDetails.guestname,
-        guestmobileno: bookingDetails.guestmobileno,
-        email: bookingDetails.email,
-        employeeno: bookingDetails.employeeno,
-        address1: bookingDetails.address1,
-        address2: bookingDetails.address2,
-        city: bookingDetails.city,
-        report: bookingDetails.report,
-        vehicaltype: bookingDetails.vehicaltype,
-        paymenttype: bookingDetails.paymenttype,
-        reportdate: bookingDetails.reportdate,
-        starttime: bookingDetails.starttime,
-        registertime: bookingDetails.registertime,
-        duty: bookingDetails.duty,
-        pickup: bookingDetails.pickup,
-        costcode: bookingDetails.costcode,
-        registerno: bookingDetails.registerno,
-        flightno: bookingDetails.flightno,
-        orderbyemail: bookingDetails.orderbyemail,
-        remarks: bookingDetails.remarks,
-        servicestation: bookingDetails.servicestation,
-        advance: bookingDetails.advance,
-        nameupdate: bookingDetails.nameupdate,
-        tripid: bookingDetails.tripid,
-        address3: bookingDetails.address3,
-        address4: bookingDetails.address4,
-        cityupdate: bookingDetails.cityupdate,
-        useage: bookingDetails.useage,
-        username: bookingDetails.username,
-        emaildoggle: bookingDetails.emaildoggle,
-        hiretypes: bookingDetails.hiretypes,
-        travelsname: bookingDetails.travelsname,
-        vehicleregisterno: bookingDetails.vehicleregisterno,
-        vehiclemodule: bookingDetails.vehiclemodule,
-        drivername: bookingDetails.drivername,
-        driverphone: bookingDetails.driverphone,
-        travelsemail: bookingDetails.travelsemail,
-      }));
-    } catch (error) {
-      console.error('Error retrieving booking details:', error);
-    }
-  };
+  //     setBook((prevBook) => ({
+  //       ...prevBook,
+  //       bookingno: bookingDetails.bookingno,
+  //       bookingdate: bookingDetails.bookingdate,
+  //       bookingtime: bookingDetails.bookingtime,
+  //       status: bookingDetails.status,
+  //       tripid: bookingDetails.tripid,
+  //       customer: bookingDetails.customer,
+  //       orderedby: bookingDetails.orderedby,
+  //       mobileno: bookingDetails.mobileno,
+  //       guestname: bookingDetails.guestname,
+  //       guestmobileno: bookingDetails.guestmobileno,
+  //       email: bookingDetails.email,
+  //       employeeno: bookingDetails.employeeno,
+  //       address1: bookingDetails.address1,
+  //       address2: bookingDetails.address2,
+  //       city: bookingDetails.city,
+  //       report: bookingDetails.report,
+  //       vehicaltype: bookingDetails.vehicaltype,
+  //       paymenttype: bookingDetails.paymenttype,
+  //       reportdate: bookingDetails.reportdate,
+  //       starttime: bookingDetails.starttime,
+  //       registertime: bookingDetails.registertime,
+  //       duty: bookingDetails.duty,
+  //       pickup: bookingDetails.pickup,
+  //       costcode: bookingDetails.costcode,
+  //       registerno: bookingDetails.registerno,
+  //       flightno: bookingDetails.flightno,
+  //       orderbyemail: bookingDetails.orderbyemail,
+  //       remarks: bookingDetails.remarks,
+  //       servicestation: bookingDetails.servicestation,
+  //       advance: bookingDetails.advance,
+  //       nameupdate: bookingDetails.nameupdate,
+  //       address3: bookingDetails.address3,
+  //       address4: bookingDetails.address4,
+  //       cityupdate: bookingDetails.cityupdate,
+  //       useage: bookingDetails.useage,
+  //       username: bookingDetails.username,
+  //       tripdate: bookingDetails.tripdate,
+  //       triptime: bookingDetails.triptime,
+  //       emaildoggle: bookingDetails.emaildoggle,
+  //       hiretypes: bookingDetails.hiretypes,
+  //       travelsname: bookingDetails.travelsname,
+  //       vehicleregisterno: bookingDetails.vehicleregisterno,
+  //       vehiclemodule: bookingDetails.vehiclemodule,
+  //       drivername: bookingDetails.drivername,
+  //       driverphone: bookingDetails.driverphone,
+  //       travelsemail: bookingDetails.travelsemail
+  //     }));
+  //   } catch (error) {
+  //     console.error('Error retrieving booking details:', error);
+  //   }
+  // };
 
   const [currentYear, setCurrentYear] = useState("");
 
@@ -532,21 +507,17 @@ const Booking = () => {
                 </LocalizationProvider>
 
               </div>
-              {/*               
+             
               <div className="input time">
                 <label>Booking Time</label>
                 <input
                   type="time"
-                  value={bookingtime}
-                  onChange={(event) => setBookingTime(event.target.value)}
-                />
-              </div> */}
-              <div className="input time">
-                <label>Booking Time</label>
-                <input
-                  type="time"
-                  value={selectedCustomerData.bookingtime || ''}
-                  onChange={(event) => setBook({ ...book, bookingtime: event.target.value })}
+                  value={selectedCustomerData.bookingtime || book.bookingtime}
+                  // onChange={(event) => setBook({ ...book, bookingtime: event.target.value })}
+                  onChange={(event) => {
+                    setBook({ ...book, bookingtime: event.target.value });
+                    setBookingTime(event.target.value);
+                  }}
                   name="bookingtime"
                 />
               </div>
@@ -834,8 +805,12 @@ const Booking = () => {
                 <label>Start Time</label>
                 <input
                   type="time"
-                  value={selectedCustomerData.starttime || ''}
-                  onChange={(event) => setBook({ ...book, starttime: event.target.value })}
+                  value={selectedCustomerData.starttime || book.starttime}
+                  // onChange={(event) => setBook({ ...book, starttime: event.target.value })}
+                  onChange={(event) => {
+                    setBook({ ...book, starttime: event.target.value });
+                    setStartTime(event.target.value);
+                  }}
                   name='starttime'
                 // onChange={(event) => setStartTime(event.target.value)}
                 />
@@ -855,8 +830,12 @@ const Booking = () => {
                 <input
                   type="time"
                   name='registertime'
-                  value={selectedCustomerData.registertime || ''}
-                  onChange={(event) => setBook({ ...book, registertime: event.target.value })}
+                  value={selectedCustomerData.registertime || book.registertime}
+                  // onChange={(event) => setBook({ ...book, registertime: event.target.value })}
+                  onChange={(event) => {
+                    setBook({ ...book, registertime: event.target.value });
+                    setRegisterTime(event.target.value);
+                  }}
                 />
               </div>
             </div>
@@ -890,7 +869,7 @@ const Booking = () => {
                 <div className="icone">
                   <LocationCityIcon color="action" />
                 </div>
-                
+
                 <TextField
                   margin="normal"
                   size="small"
@@ -1265,8 +1244,11 @@ const Booking = () => {
                   <input
                     type="time"
                     name='triptime'
-                    value={selectedCustomerData.triptime || ''}
-                    onChange={(event) => setBook({ ...book, triptime: event.target.value })}
+                    value={selectedCustomerData.triptime || book.triptime}
+                    onChange={(event) => {
+                      setBook({ ...book, triptime: event.target.value });
+                      setTripTime(event.target.value);
+                    }}
                   />
                 </div>
               </div>

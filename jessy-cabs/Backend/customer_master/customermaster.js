@@ -193,6 +193,36 @@ app.get('/booking/:bookingno', (req, res) => {
   });
 });
 
+
+// booking copy data collect
+
+app.get('/booking', (req, res) => {
+  const { bookingno, fromDate, toDate } = req.query;
+  
+  let query = 'SELECT * FROM booking WHERE 1=1';
+  let params = [];
+
+  if (bookingno) {
+    query += ' AND bookingno = ?';
+    params.push(bookingno);
+  }
+
+  if (fromDate && toDate) {
+    query += ' AND bookingdate BETWEEN ? AND ?';
+    params.push(fromDate);
+    params.push(toDate);
+  }
+  
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
+
 // delete booking details
 
 app.delete('/booking/:bookingno', (req, res) => {

@@ -5,6 +5,7 @@ import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Orders from "./component/Orders/Orders";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import Customer from "./component/Orders/Customer/Customer";
+import Customers from "./component/Customers/Customers";
 import Suppliers from "./component/Orders/Supplier/Suppliers";
 import Bookings from "./component/Orders/Bookings/Bookings";
 
@@ -15,6 +16,10 @@ import UserCreation from "./component/Settings/UserCreation/UserCreation";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import Permission from "./component/Settings/Permission/Permission";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
+import Received from "./component/Customers/Receiveds/Receiveds";
+import Dispatcheds from "./component/Customers/Dispatcheds/Dispatcheds";
+import Collecteds from "./component/Customers/Collecteds/Collecteds";
+import DriverMasters from "./component/Customers/DriverMasters/DriverMasters";
 
 
 function App() {
@@ -30,7 +35,12 @@ function App() {
             <Route path="/home/orders/bookings" element={<Bookings />} />
             <Route path="/home/orders/tripsheet" element={<TripSheet />} />
           </Route>
-          <Route path="/home/customers" element={<h1>Customers</h1>} />
+          <Route path="/home/customers" element={<Customers />} >
+            <Route path="/home/customers/received" element={<Received/>} />
+            <Route path="/home/customers/dispatched" element={<Dispatcheds/>} />
+            <Route path="/home/customers/collected" element={<Collecteds/>} />
+            <Route path="/home/customers/drivermaster" element={<DriverMasters/>} />
+          </Route>
           <Route path="/home/products" element={<h1>Producs</h1>} />
           <Route path="/home/settings" element={<Settings />}>
             <Route

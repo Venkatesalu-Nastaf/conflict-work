@@ -179,7 +179,7 @@ app.post('/booking', (req, res) => {
 
 app.get('/booking/:bookingno', (req, res) => {
   const bookingno = req.params.bookingno;
-  
+
   db.query('SELECT * FROM booking WHERE bookingno = ?', bookingno, (err, result) => {
     if (err) {
       console.error('Error retrieving booking details from MySQL:', err);
@@ -192,6 +192,68 @@ app.get('/booking/:bookingno', (req, res) => {
     return res.status(200).json(bookingDetails);
   });
 });
+
+
+// booking copy data collect
+
+app.get('/booking', (req, res) => {
+  const { bookingno, fromDate, toDate } = req.query;
+
+  let query = 'SELECT * FROM booking WHERE 1=1';
+  let params = [];
+
+  if (bookingno) {
+    query += ' AND bookingno = ?';
+    params.push(bookingno);
+  }
+
+  if (fromDate && toDate) {
+    query += ' AND bookingdate BETWEEN ? AND ?';
+    params.push(fromDate);
+    params.push(toDate);
+  }
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
+// booking CHART data collect
+
+app.get('/booking', (req, res) => {
+  const { fromDate, toDate } = req.query;
+
+  const query = `
+    SELECT vehiclemodule, COUNT(*) AS count
+    FROM booking
+    WHERE bookingdate BETWEEN ? AND ?
+    GROUP BY vehiclemodule
+  `;
+  const values = [fromDate, toDate];
+
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error('Error establishing database connection:', err);
+      res.status(500).json({ error: 'Failed to connect to the database' });
+      return;
+    }
+    connection.query(query, values, (err, results) => {
+      connection.release(); // Release the connection back to the pool
+      if (err) {
+        console.error('Error executing SQL query:', err);
+        res.status(500).json({ error: 'Failed to retrieve booking data' });
+        return;
+      }
+
+      res.json(results); // Send the booking data as JSON response
+    });
+  });
+});
+
 
 // delete booking details
 

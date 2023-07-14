@@ -1,0 +1,43 @@
+import React from 'react';
+import './Collecteds.css'
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import Collected from './Collected/Collected';
+import SMSDtails from './SMSDtails/SMSDtails';
+import SMSReport from './SMSReport/SMSReport';
+const Collecteds = () => {
+
+    const [value, setValue] = React.useState("collected");
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    return (
+        <>
+            <div className="form-container-collected">
+                <div className="container-main">
+                    <Box sx={{ width: "100%", typography: "body1" }}>
+                        <TabContext value={value}>
+                            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                    <Tab label="Collected" value="collected" />
+                                    <Tab label="SMS Dtails" value="SMSDtails" />
+                                    <Tab label="SMS Report" value="SMSReport" />
+                                </TabList>
+                            </Box>
+                            <TabPanel value="collected"><Collected/></TabPanel>
+                            <TabPanel value="SMSDtails"><SMSDtails/></TabPanel>
+                            <TabPanel value="SMSReport"><SMSReport/></TabPanel>
+                        </TabContext>
+                    </Box>
+                </div>
+            </div >
+        </>
+    )
+}
+
+export default Collecteds

@@ -107,7 +107,7 @@ const Login = () => {
                 <span>Login</span>
               </button>
             </div>
-            <div className="social__media__container">
+            <div className="social_media_container">
               <a href="/" className="social facebook">
                 <i>
                   <RiFacebookCircleFill />

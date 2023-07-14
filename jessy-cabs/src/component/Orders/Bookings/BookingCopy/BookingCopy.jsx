@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useCallback } from 'react';
 import "./BookingCopy.css";
+import axios from "axios";
 import { TextField } from "@mui/material";
 import AutoModeIcon from "@mui/icons-material/AutoMode";
 import dayjs from "dayjs";
@@ -12,49 +13,47 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "bookingId", headerName: "Booking ID", width: 130 },
-  { field: "date", headerName: "Date", width: 130 },
-  { field: "time", headerName: "Time", width: 90 },
-  { field: "guestName", headerName: "Guest Name", width: 160 },
-  { field: "mobile", headerName: "Mobile", width: 130 },
-  { field: "rAddress", headerName: "R.Address", width: 130 },
-  { field: "rAddress1", headerName: "R.Address1", width: 130 },
-  { field: "rAddress2", headerName: "R.Address2", width: 130 },
-  { field: "company", headerName: "Company", width: 130 },
-  { field: "bookingID", headerName: "BookingID", width: 130 },
-];
-
-const rows = [
-  {
-    id: 1,
-    bookingId: 1,
-    date: "2023-06-07",
-    time: "10:00 AM",
-    guestName: "John Doe",
-    mobile: "1234567890",
-    rAddress: "123 Street",
-    rAddress1: "Apt 4B",
-    rAddress2: "City",
-    company: "ABC Company",
-    bookingID: "XYZ123",
-  },
-  {
-    id: 2,
-    bookingId: 2,
-    date: "2023-06-08",
-    time: "2:00 PM",
-    guestName: "Jane Smith",
-    mobile: "9876543210",
-    rAddress: "456 Avenue",
-    rAddress1: "Unit 8",
-    rAddress2: "Town",
-    company: "XYZ Corp",
-    bookingID: "ABC456",
-  },
-  // Add more rows as needed
+  { field: "bookingno", headerName: "Booking ID", width: 130 },
+  { field: "bookingdate", headerName: "Date", width: 130 },
+  { field: "bookingtime", headerName: "Time", width: 90 },
+  { field: "guestname", headerName: "Guest Name", width: 160 },
+  { field: "mobileno", headerName: "Mobile", width: 130 },
+  { field: "address1", headerName: "R.Address", width: 130 },
+  { field: "address2", headerName: "R.Address1", width: 130 },
+  { field: "city", headerName: "R.Address2", width: 130 },
+  { field: "customer", headerName: "Company", width: 130 },
+  { field: "tripid", headerName: "BookingID", width: 130 },
 ];
 
 const BookingCopy = () => {
+  const [rows, setRows] = useState([]);
+  const [bookingno, setBookingNo] = useState("");
+  const [fromDate, setFromDate] = useState(dayjs());
+  const [toDate, setToDate] = useState(dayjs());
+
+  const handleInputChange = (event) => {
+    setBookingNo(event.target.value);
+  };
+
+  const handleDateChange = (date, dateType) => {
+    if (dateType === "fromDate") {
+      setFromDate(date);
+    } else {
+      setToDate(date);
+    }
+  };
+
+  const handleShow = useCallback(async () => {
+    try {
+      const response = await axios.get(`http://localhost:8081/booking?bookingno=${bookingno}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+      const data = response.data;
+      setRows(data);
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      setRows([]);
+    }
+  }, [bookingno, fromDate, toDate]);
+
   return (
     <div className="bookingcopy-form">
       <form action="">
@@ -71,20 +70,30 @@ const BookingCopy = () => {
                   size="small"
                   name="bookingno"
                   label="Booking No"
-                  id="booingno"
+                  id="bookingno"
                   autoFocus
+                  value={bookingno}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="input" style={{ width: "60%" }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={["DatePicker", "DatePicker"]}>
-                    <DatePicker label="From Date" defaultValue={dayjs()} />
-                    <DatePicker label="To Date" defaultValue={dayjs()} />
+                    <DatePicker
+                      label="From Date"
+                      value={fromDate}
+                      onChange={(date) => setFromDate(date)}
+                    />
+                    <DatePicker
+                      label="To Date"
+                      value={toDate}
+                      onChange={(date) => setToDate(date)}
+                    />
                   </DemoContainer>
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "70px" }}>
-                <Button variant="outlined">Show</Button>
+                <Button variant="outlined" onClick={handleShow}>Show</Button>
               </div>
               <div className="input" style={{ width: "70px" }}>
                 <Button variant="contained">Save</Button>
@@ -97,13 +106,8 @@ const BookingCopy = () => {
             <DataGrid
               rows={rows}
               columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                },
-              }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
+              pageSize={5}
+              // checkboxSelection
             />
           </div>
         </div>

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useCallback } from 'react';
+import axios from "axios";
 import "./BookingChart.css";
 import dayjs from "dayjs";
 import { DataGrid } from "@mui/x-data-grid";
@@ -7,27 +8,96 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { VehicleModel } from "./BookingChart";
-// TABLE
 
-// TABLE END
-const BokkingChart = () => {
-  const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "registerno", headerName: "Register No", width: 130 },
-    { field: "length", headerName: "Today booking", width: 130 },
-    { field: "vehicalename", headerName: "Vehicle Name", width: 130 },
-  ];
+const BookingChart = () => {
+  const [fromDate, setFromDate] = useState(dayjs());
+  const [toDate, setToDate] = useState(dayjs());
+  const [vehicles, setVehicles] = useState(() => {
+    const initialVehicles = VehicleModel.map((vehicle, index) => ({
+      id: index + 1,
+      registerno: index + 1,
+      vehicleName: vehicle.carmodel,
+      bookings: {},
+    }));
 
-  const vehicles = VehicleModel.map((vehicle, index) => ({
-    id: index + 1,
-    registerno: index + 1,
-    vehicalename: vehicle.carmodel,
-  }));
+    initialVehicles.forEach((vehicle) => {
+      vehicle.length = vehicle.vehicleName.length;
+    });
 
-  vehicles.forEach((vehicle) => {
-    vehicle.length = vehicle.vehicalename.length;
+    return initialVehicles;
   });
 
+  
+  
+  const showBookedStatusAll = useCallback(async (from, to) => {
+    try {
+      const response = await axios.get(`http://localhost:8081/booking`, {
+        params: {
+          fromDate: from.format('YYYY-MM-DD'),
+          toDate: to.format('YYYY-MM-DD'),
+        },
+      });
+      const bookingData = response.data;
+      console.log('Booking Data:', bookingData);
+      const bookingCounts = {};
+      bookingData.forEach((booking) => {
+        const vehicleName = booking.vehiclemodule;
+        if (!bookingCounts[vehicleName]) {
+          bookingCounts[vehicleName] = {
+            count: 0,
+          };
+        }
+        bookingCounts[vehicleName].count++;
+      });
+      console.log('Booking Counts:', bookingCounts);
+      const updatedVehicles = vehicles.map((vehicle) => ({
+        ...vehicle,
+        bookings: {
+          ...vehicle.bookings,
+          count: bookingCounts[vehicle.vehicleName]?.count || 0,
+        },
+      }));
+      console.log('Updated Vehicles:', updatedVehicles);
+      setVehicles(updatedVehicles);
+    } catch (error) {
+      console.error('Error fetching booking data:', error);
+    }
+  }, [vehicles]);
+
+
+
+  const generateColumns = () => {
+    const columns = [
+      { field: "id", headerName: "Sno", width: 70 },
+      { field: "vehicleName", headerName: "Vehicle Name", width: 130 },
+    ];
+  
+    let currentDate = dayjs(fromDate);
+    const lastDate = dayjs(toDate);
+  
+    while (currentDate.isBefore(lastDate) || currentDate.isSame(lastDate, "day")) {
+      const formattedDate = currentDate.format("YYYY-MM-DD");
+      columns.push({
+        field: formattedDate,
+        headerName: formattedDate,
+        width: 130,
+        // valueGetter: (params) => params.row.bookings.count || 0,
+        valueGetter: (params) => {
+          const vehicleBookings = params.row.bookings;
+          return vehicleBookings = params.row.bookings.count || 0;
+        },//wrong value
+      });
+  
+      currentDate = currentDate.add(1, "day");
+    }
+  
+    return columns;
+  };
+  
+
+  const columns = generateColumns();
+
+  
   return (
     <div className="bookingcopy-form">
       <form action="">
@@ -38,16 +108,29 @@ const BokkingChart = () => {
               <div className="input-field">
                 <div className="input" style={{ width: "50%" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="From Date" defaultValue={dayjs()} />
+                    <DatePicker
+                      label="From Date"
+                      value={fromDate}
+                      onChange={(date) => setFromDate(date)}
+                    />
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: "50%" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="To Date" defaultValue={dayjs()} />
+                    <DatePicker
+                      label="To Date"
+                      value={toDate}
+                      onChange={(date) => setToDate(date)}
+                    />
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: "460px" }}>
-                  <Button variant="contained">Show Booked Status All</Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => showBookedStatusAll(fromDate, toDate)}
+                  >
+                    Show Booked Status All
+                  </Button>
                 </div>
               </div>
               <div className="input-field">
@@ -73,7 +156,6 @@ const BokkingChart = () => {
               rows={vehicles}
               columns={columns}
               pageSize={5}
-              checkboxSelection
             />
           </div>
         </div>
@@ -82,4 +164,4 @@ const BokkingChart = () => {
   );
 };
 
-export default BokkingChart;
+export default BookingChart;

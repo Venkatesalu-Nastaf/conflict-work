@@ -247,7 +247,7 @@ const Booking = () => {
   };
 
   const handleDateChange = (date, name) => {
-    const formattedDate = date ? dayjs(date).format('YYYY-MM-DDTHH:mm:ss.SSSZ') : null;
+    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
     setBook((prevBook) => ({
       ...prevBook,
       [name]: formattedDate,
@@ -384,65 +384,7 @@ const Booking = () => {
     }
   }, []);
 
-  // const handleBookingDetails = async () => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:8081/booking/${book.bookingno}`);
-  //     const bookingDetails = response.data;
-  //     console.log(response.data);
-
-  //     setBook((prevBook) => ({
-  //       ...prevBook,
-  //       bookingno: bookingDetails.bookingno,
-  //       bookingdate: bookingDetails.bookingdate,
-  //       bookingtime: bookingDetails.bookingtime,
-  //       status: bookingDetails.status,
-  //       tripid: bookingDetails.tripid,
-  //       customer: bookingDetails.customer,
-  //       orderedby: bookingDetails.orderedby,
-  //       mobileno: bookingDetails.mobileno,
-  //       guestname: bookingDetails.guestname,
-  //       guestmobileno: bookingDetails.guestmobileno,
-  //       email: bookingDetails.email,
-  //       employeeno: bookingDetails.employeeno,
-  //       address1: bookingDetails.address1,
-  //       address2: bookingDetails.address2,
-  //       city: bookingDetails.city,
-  //       report: bookingDetails.report,
-  //       vehicaltype: bookingDetails.vehicaltype,
-  //       paymenttype: bookingDetails.paymenttype,
-  //       reportdate: bookingDetails.reportdate,
-  //       starttime: bookingDetails.starttime,
-  //       registertime: bookingDetails.registertime,
-  //       duty: bookingDetails.duty,
-  //       pickup: bookingDetails.pickup,
-  //       costcode: bookingDetails.costcode,
-  //       registerno: bookingDetails.registerno,
-  //       flightno: bookingDetails.flightno,
-  //       orderbyemail: bookingDetails.orderbyemail,
-  //       remarks: bookingDetails.remarks,
-  //       servicestation: bookingDetails.servicestation,
-  //       advance: bookingDetails.advance,
-  //       nameupdate: bookingDetails.nameupdate,
-  //       address3: bookingDetails.address3,
-  //       address4: bookingDetails.address4,
-  //       cityupdate: bookingDetails.cityupdate,
-  //       useage: bookingDetails.useage,
-  //       username: bookingDetails.username,
-  //       tripdate: bookingDetails.tripdate,
-  //       triptime: bookingDetails.triptime,
-  //       emaildoggle: bookingDetails.emaildoggle,
-  //       hiretypes: bookingDetails.hiretypes,
-  //       travelsname: bookingDetails.travelsname,
-  //       vehicleregisterno: bookingDetails.vehicleregisterno,
-  //       vehiclemodule: bookingDetails.vehiclemodule,
-  //       drivername: bookingDetails.drivername,
-  //       driverphone: bookingDetails.driverphone,
-  //       travelsemail: bookingDetails.travelsemail
-  //     }));
-  //   } catch (error) {
-  //     console.error('Error retrieving booking details:', error);
-  //   }
-  // };
+  
 
   const [currentYear, setCurrentYear] = useState("");
 
@@ -513,7 +455,6 @@ const Booking = () => {
                 <input
                   type="time"
                   value={selectedCustomerData.bookingtime || book.bookingtime}
-                  // onChange={(event) => setBook({ ...book, bookingtime: event.target.value })}
                   onChange={(event) => {
                     setBook({ ...book, bookingtime: event.target.value });
                     setBookingTime(event.target.value);

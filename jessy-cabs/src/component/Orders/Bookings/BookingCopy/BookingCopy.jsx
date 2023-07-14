@@ -17,7 +17,7 @@ const columns = [
   { field: "bookingdate", headerName: "Date", width: 130 },
   { field: "bookingtime", headerName: "Time", width: 90 },
   { field: "guestname", headerName: "Guest Name", width: 160 },
-  { field: "mobile", headerName: "Mobile", width: 130 },
+  { field: "mobileno", headerName: "Mobile", width: 130 },
   { field: "address1", headerName: "R.Address", width: 130 },
   { field: "address2", headerName: "R.Address1", width: 130 },
   { field: "city", headerName: "R.Address2", width: 130 },
@@ -53,10 +53,6 @@ const BookingCopy = () => {
       setRows([]);
     }
   }, [bookingno, fromDate, toDate]);
-  
-  
-  
-  
 
   return (
     <div className="bookingcopy-form">
@@ -111,7 +107,7 @@ const BookingCopy = () => {
               rows={rows}
               columns={columns}
               pageSize={5}
-              checkboxSelection
+              // checkboxSelection
             />
           </div>
         </div>

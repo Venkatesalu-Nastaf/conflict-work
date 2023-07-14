@@ -61,12 +61,22 @@ const rows = [
     Station: "Mumbai",
     employeno: "C2333",
     customercode: "t3-5420",
-    
+
   },
   // Add more rows as needed
 ];
 
 const Pending = () => {
+
+  const handleButtonClickBooking = () => {
+    window.location.href = '/home/orders/bookings';
+
+  }
+
+  const handleButtonClick = () => {
+    window.location.href = '/home/orders/tripsheet';
+  };
+
   return (
     <div className="pending-form">
       <form action="">
@@ -104,7 +114,7 @@ const Pending = () => {
                     }))}
                     getOptionLabel={(option) => option.label || ""}
                     renderInput={(params) => (
-                      <TextField {...params} label="UserName" />
+                      <TextField {...params} label="Stations" />
                     )}
                   />
                 </div>
@@ -123,10 +133,12 @@ const Pending = () => {
                   </Button>
                 </div>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained">New Booking</Button>
+                  <Button variant="contained" onClick={handleButtonClickBooking}>New Booking</Button>
                 </div>
-                <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained">Trip Sheet</Button>
+                <div className="input" style={{ width: '170px' }}>
+                  <Button variant="contained" onClick={handleButtonClick}>
+                    New TripSheet
+                  </Button>
                 </div>
               </div>
             </div>

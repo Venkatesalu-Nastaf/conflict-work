@@ -49,81 +49,78 @@ const rows = [
 const Collected = () => {
   return (
     <div className="collected-form">
-    <form action="">
-      <div className="detail-container-main">
-        <div className="container-left">
-          <div className="copy-title-btn">
-            <div className="input-field">
-              <div className="input" style={{ width: "50%" }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker label="From Date" defaultValue={dayjs()} />
-                </LocalizationProvider>
-              </div>
-              <div className="input" style={{ width: "50%" }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker label="To Date" defaultValue={dayjs()} />
-                </LocalizationProvider>
-              </div>
-              <div className="input" style={{ width: "80px" }}>
-                <Button variant="contained">Show</Button>
-              </div>
-              <div className="input" style={{ width: "80px" }}>
-                <Button variant="outlined">Pending</Button>
-              </div>
-            </div>
-            <div className="input-field">
-              <div className="input" style={{ width: "300px" }}>
-                <div className="icone">
-                  {/* <AirportShuttleIcon color="action" /> */}
+      <form action="">
+        <div className="detail-container-main">
+          <div className="container-left">
+            <div className="copy-title-btn">
+              <div className="input-field">
+                <div className="input" style={{ width: "50%" }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker label="From Date" defaultValue={dayjs()} />
+                  </LocalizationProvider>
                 </div>
-                <Autocomplete
-                  fullWidth
-                  id="free-solo-demo"
-                  freeSolo
-                  size="small"
-                  value={CustomerName.map((option) => option.optionvalue)}
-                  options={CustomerName.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) => option.label || ""}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Customer Name" />
-                  )}
-                />
+                <div className="input" style={{ width: "50%" }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker label="To Date" defaultValue={dayjs()} />
+                  </LocalizationProvider>
+                </div>
+                <div className="input" style={{ width: "80px" }}>
+                  <Button variant="contained">Show</Button>
+                </div>
+                <div className="input" style={{ width: "80px" }}>
+                  <Button variant="outlined">Pending</Button>
+                </div>
               </div>
-              <div className="input" style={{ width: "110px" }}>
-                <Button
-                  variant="outlined"
-                  component="label"
-                  startIcon={<DescriptionIcon />}
-                >
-                  Excel
-                  <input
-                    type="file"
-
-                    style={{ display: "none" }}
+              <div className="input-field">
+                <div className="input" style={{ width: "300px" }}>
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={CustomerName.map((option) => option.optionvalue)}
+                    options={CustomerName.map((option) => ({
+                      label: option.Option,
+                    }))}
+                    getOptionLabel={(option) => option.label || ""}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Customer Name" />
+                    )}
                   />
-                </Button>
-              </div>
-              <div className="input" style={{ width: "160px" }}>
-                <Button variant="contained">New Receipts</Button>
+                </div>
+                <div className="input" style={{ width: "110px" }}>
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    startIcon={<DescriptionIcon />}
+                  >
+                    Excel
+                    <input
+                      type="file"
+
+                      style={{ display: "none" }}
+                    />
+                  </Button>
+                </div>
+                <div className="input" style={{ width: "160px" }}>
+                  <Button variant="contained">New Receipts</Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="table-bookingCopy">
-        <div style={{ height: 400, width: "100%" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            checkboxSelection
-          />
+        <div className="table-bookingCopy">
+          <div style={{ height: 400, width: "100%" }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={5}
+              checkboxSelection
+            />
+          </div>
         </div>
-      </div>
-    </form>
-  </div>
+      </form>
+    </div>
   )
 }
 

@@ -1,8 +1,7 @@
 import React from 'react'
-import './Sumbited.css'
-import { SumbitStatus } from './SumbitData.js'
+import "./SMSReport.css";
+import { Status } from "./SMSReportData";
 import Autocomplete from "@mui/material/Autocomplete";
-
 import DescriptionIcon from "@mui/icons-material/Description";
 import { TextField } from "@mui/material";
 import dayjs from "dayjs";
@@ -12,89 +11,59 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-
 const columns = [
-  { field: "sno", headerName: "Sno", width: 70 },
-  { field: "id", headerName: "Id", width: 70 },
-  { field: "time", headerName: "Time", width: 130 },
+  { field: "id", headerName: "Sno", width: 70 },
+  { field: "serialid", headerName: "Serial Id", width: 130 },
   { field: "date", headerName: "Date", width: 130 },
-  { field: "Customer", headerName: "Customer", width: 130 },
-  { field: "Guestname", headerName: "Guest Name", width: 130 },
+  { field: "time", headerName: "Time", width: 130 },
+  { field: "Phone", headerName: "Phone", width: 130 },
+  { field: "Message", headerName: "Message", width: 130 },
   { field: "Status", headerName: "Status", width: 130 },
 ];
 
 const rows = [
   {
-    sno: 1,
     id: 1,
-    time: "9:00 AM",
+    serialid: 222,
     date: "2023-06-07",
-    Customer: "123 Street, Apt 4B, City",
-    Guestname: "ABC Car",
-    Status: "received",
+    time: "9:00 AM",
+    Phone: "Morning",
+    Message: "9:00 AM",
+    Status: "123 Street, Apt 4B, City",
 
   },
   {
-    sno: 2,
     id: 2,
-    time: "2:00 PM",
+    serialid: 223,
     date: "2023-06-08",
-    Customer: "456 Avenue, Unit 8, Town",
-    Guestname: "XYZ Car",
-    Status: "booking",
+    time: "9:00 AM",
+    Phone: "Evening",
+    Message: "2:00 PM",
+    Status: "456 Avenue, Unit 8, Town",
   },
   // Add more rows as needed
 ];
 
-const Sumbited = () => {
-
-  const handleButtonClickBooking = () => {
-    window.location.href = '/home/orders/bookings';
-
-  }
+const SMSReport = () => {
 
   return (
-    <div className="submit-form">
+    <div className="smsreport-form">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn">
               <div className="input-field">
-                <div className="input" >
+                <div className="input" style={{ width: "50%" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker label="From Date" defaultValue={dayjs()} />
                   </LocalizationProvider>
                 </div>
-                <div className="input" >
+                <div className="input" style={{ width: "50%" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker label="To Date" defaultValue={dayjs()} />
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained">Show</Button>
-                </div>
-                <div className="input" style={{ width: "200px" }}>
-                  <Button variant="outlined">Cancel Selected</Button>
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={SumbitStatus.map((option) => option.optionvalue)}
-                    options={SumbitStatus.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Sumbit Status" />
-                    )}
-                  />
-                </div>
-                <div className="input" style={{ width: "110px" }}>
+                <div className="input" style={{ width: "120px" }}>
                   <Button
                     variant="outlined"
                     component="label"
@@ -108,8 +77,29 @@ const Sumbited = () => {
                     />
                   </Button>
                 </div>
-                <div className="input" style={{ width: "160px" }}>
-                  <Button variant="contained" onClick={handleButtonClickBooking}>New Booking</Button>
+              </div>
+              <div className="input-field">
+                <div className="input" style={{ width: "300px" }}>
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={Status.map((option) => option.optionvalue)}
+                    options={Status.map((option) => ({
+                      label: option.Option,
+                    }))}
+                    getOptionLabel={(option) => option.label || ""}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Status" />
+                    )}
+                  />
+                </div>
+                <div className="input" style={{ width: "120px" }}>
+                  <Button variant="contained">Show</Button>
+                </div>
+                <div className="input" style={{ width: "120px" }}>
+                  <Button variant="outlined">Show All</Button>
                 </div>
               </div>
             </div>
@@ -130,4 +120,4 @@ const Sumbited = () => {
   )
 }
 
-export default Sumbited
+export default SMSReport

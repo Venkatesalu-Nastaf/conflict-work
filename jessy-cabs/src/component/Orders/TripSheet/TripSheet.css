@@ -140,6 +140,7 @@
 
 .secend-container {
   border-top: solid 1px #ccc;
+  border-bottom: solid 1px #ccc;
   background-color: var(--glass);
   padding: 20px 20px;
 }

@@ -7,7 +7,6 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { TextField } from "@mui/material";
 import CallIcon from "@mui/icons-material/Call";
-import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
@@ -25,6 +24,11 @@ import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
+
+
+// FontAwesomeIcon Link
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileInvoice, faKey, faSheetPlastic } from "@fortawesome/free-solid-svg-icons";
 
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
@@ -86,11 +90,22 @@ const MasterEnter = () => {
                   <BadgeIcon color="action" />
                 </div>
                 <TextField
-                  margin="normal"
                   size="small"
                   id="id"
                   label="ID"
                   name="id"
+                  autoFocus
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <AssignmentIndIcon color="action" />
+                </div>
+                <TextField
+                  id="username"
+                  label="User Name"
+                  name="username"
+                  size="small"
                   autoFocus
                 />
               </div>
@@ -101,7 +116,7 @@ const MasterEnter = () => {
               </div>
             </div>
             <div className="input-field ">
-              <div className="input" style={{ width: "300px" }}>
+              <div className="input">
                 <div className="icone">
                   <CallIcon color="action" />
                 </div>
@@ -110,20 +125,18 @@ const MasterEnter = () => {
                   name="Phoencell"
                   label="Phone (Cell)"
                   id="Phoencell"
-                  sx={{ m: 1, width: "300ch" }}
                   size="small"
                   autoFocus
                 />
               </div>
               <div className="input">
                 <div className="icone">
-                  <AssignmentIndIcon color="action" />
+                  <AttachEmailIcon color="action" />
                 </div>
                 <TextField
-                  margin="normal"
-                  id="username"
-                  label="User Name"
-                  name="username"
+                  name="email"
+                  label="Email"
+                  id="email"
                   size="small"
                   autoFocus
                 />
@@ -188,12 +201,13 @@ const MasterEnter = () => {
                     size="small"
                     name="streetno"
                     id="remark"
-                    sx={{ m: 1, width: "200ch" }}
+                    sx={{ m: 1, width: "200ch" }} 
+                    variant="standard"
                   />
                 </div>
                 <div className="input">
                   <div className="icone">
-                    <RateReviewIcon color="action" />
+                    <FontAwesomeIcon icon={faSheetPlastic} size="lg" />
                   </div>
                   <TextField
                     size="small"
@@ -259,6 +273,33 @@ const MasterEnter = () => {
                   />
                 </div>
               </div>
+              <div className="input-field">
+                <div className="input" >
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faFileInvoice} size="lg" />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id="durationofyears"
+                    label="Duration Of Years"
+                    name="durationofyears"
+                  />
+                </div>
+                <div className="input" >
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faKey} size="lg" />
+                  </div>
+                  <TextField
+                    type="password"
+                    margin="normal"
+                    size="small"
+                    id="apppassword"
+                    label="App Password"
+                    name="apppassword"
+                  />
+                </div>
+              </div>
             </div>
             <div className="container-right-masterEntery">
               <div className="textbox-masterEntery">
@@ -287,67 +328,11 @@ const MasterEnter = () => {
               </div>
             </div>
           </div>
-          <div className="masterEntery-header">
-            <div className="input-field">
-              <div className="input" style={{ width: "260px" }}>
-                <div className="icone">
-                  <AccountBalanceWalletIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="durationofworkingyears"
-                  label="Duration Of Working Years"
-                  name="durationofworkingyears"
-                  sx={{ m: 1, width: "200ch" }}
-                  variant="standard"
-                />
-              </div>
-            </div>
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <PhoneIphoneIcon color="action" />
-                </div>
-                <TextField
-                  name="mobile"
-                  label="Mobile"
-                  id="standard-size-normal"
-                  size="small"
-                  autoFocus
-                />
-              </div>
-
-              <div className="input">
-                <div className="icone">
-                  <CallIcon color="action" />
-                </div>
-                <TextField
-                  name="Phoencell"
-                  label="Phone (Cell)"
-                  id="Phoencell"
-                  size="small"
-                  autoFocus
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <AttachEmailIcon color="action" />
-                </div>
-                <TextField
-                  name="email"
-                  label="Email"
-                  id="email"
-                  size="small"
-                  autoFocus
-                />
-              </div>
-            </div>
-          </div>
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
+              direction="left"
             >
               {actions.map((action) => (
                 <SpeedDialAction

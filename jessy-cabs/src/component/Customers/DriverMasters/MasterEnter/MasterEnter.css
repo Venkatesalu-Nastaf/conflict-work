@@ -5,7 +5,7 @@
 }
 
 .masterEntery-form-container {
-    width: 100%;
+    background: var(--glass);
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
@@ -13,17 +13,17 @@
 }
 
 .masterEntery-header {
-    background: var(--glass);
+    margin: 20px;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    width: 65%;
     padding: 10px;
-    margin-bottom: -10px;
 }
 
 .detail-container-main-masterEntery {
     border-top: 1px solid #ccc;
     display: flex;
-    background-color: var(--glass);
     padding: 20px 30px;
-    margin-top: 10px;
 }
 
 .masterEntery-form-container .masterEntery-form::-webkit-scrollbar {
@@ -43,8 +43,6 @@
 
 .masterEntery-form-container .masterEntery-form {
     overflow: scroll;
-    height: 75vh;
-    width: 81vw;
     display: flex;
     flex-direction: column;
     color: #000;

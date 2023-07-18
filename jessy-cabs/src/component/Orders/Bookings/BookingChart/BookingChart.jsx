@@ -27,8 +27,6 @@ const BookingChart = () => {
     return initialVehicles;
   });
 
-  
-  
   const showBookedStatusAll = useCallback(async (from, to) => {
     try {
       const response = await axios.get(`http://localhost:8081/booking`, {
@@ -37,34 +35,33 @@ const BookingChart = () => {
           toDate: to.format('YYYY-MM-DD'),
         },
       });
-      const bookingData = response.data;
-      console.log('Booking Data:', bookingData);
+      const bookingData = response.data; // Fetch the booking data from the API response
       const bookingCounts = {};
       bookingData.forEach((booking) => {
         const vehicleName = booking.vehiclemodule;
+        const formattedDate = dayjs(booking.bookingdate).format("YYYY-MM-DD");
         if (!bookingCounts[vehicleName]) {
-          bookingCounts[vehicleName] = {
-            count: 0,
-          };
+          bookingCounts[vehicleName] = {};
         }
-        bookingCounts[vehicleName].count++;
+        bookingCounts[vehicleName][formattedDate] = {
+          count: (bookingCounts[vehicleName][formattedDate]?.count || 0) + 1,
+        };
       });
-      console.log('Booking Counts:', bookingCounts);
-      const updatedVehicles = vehicles.map((vehicle) => ({
-        ...vehicle,
-        bookings: {
-          ...vehicle.bookings,
-          count: bookingCounts[vehicle.vehicleName]?.count || 0,
-        },
-      }));
-      console.log('Updated Vehicles:', updatedVehicles);
-      setVehicles(updatedVehicles);
+
+      setVehicles((prevVehicles) => {
+        const updatedVehicles = prevVehicles.map((vehicle) => ({
+          ...vehicle,
+          bookings: {
+            ...vehicle.bookings,
+            ...bookingCounts[vehicle.vehicleName],
+          },
+        }));
+        return updatedVehicles;
+      });
     } catch (error) {
       console.error('Error fetching booking data:', error);
     }
-  }, [vehicles]);
-
-
+  }, []);
 
   const generateColumns = () => {
     const columns = [
@@ -81,11 +78,7 @@ const BookingChart = () => {
         field: formattedDate,
         headerName: formattedDate,
         width: 130,
-        // valueGetter: (params) => params.row.bookings.count || 0,
-        valueGetter: (params) => {
-          const vehicleBookings = params.row.bookings;
-          return vehicleBookings = params.row.bookings.count || 0;
-        },//wrong value
+        valueGetter: createValueGetter(formattedDate),
       });
   
       currentDate = currentDate.add(1, "day");
@@ -94,9 +87,12 @@ const BookingChart = () => {
     return columns;
   };
   
+  const createValueGetter = (bookingDate) => (params) => {
+    return params.row.bookings[bookingDate]?.count || 0;
+  };
+  
 
   const columns = generateColumns();
-
   
   return (
     <div className="bookingcopy-form">

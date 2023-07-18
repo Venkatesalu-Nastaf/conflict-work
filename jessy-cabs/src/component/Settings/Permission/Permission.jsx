@@ -82,7 +82,7 @@ const Permission = () => {
             </div>
             <div className="secondary-table">
               <span className="Title-Name">Permission Table</span>
-              <div className="table-TripSheet">
+              <div className="table-Permission">
                 <table>
                   <thead>
                     <tr>

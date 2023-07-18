@@ -198,15 +198,6 @@ const UserCreation = () => {
                     }
                   />
                 </FormControl>
-                {/* <TextField
-                  margin="normal"
-                  size="small"
-                  type="password"
-                  id="temporary-password"
-                  label="Temporary Password"
-                  name="temporary-password"
-                  variant="standard"
-                /> */}
               </div>
               <div className="input" style={{ width: "240px" }}>
                 <div className="icone">
@@ -230,15 +221,6 @@ const UserCreation = () => {
                     }
                   />
                 </FormControl>
-                {/* <TextField
-                  margin="normal"
-                  size="small"
-                  type="password"
-                  id="confirm-password"
-                  label="Confirm Password"
-                  name="confirm-password"
-                  variant="standard"
-                /> */}
               </div>
               <div className="input radio">
                 <FormControl>
@@ -284,7 +266,6 @@ const UserCreation = () => {
               </div>
             </div>
           </div>
-
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -301,7 +282,7 @@ const UserCreation = () => {
             </StyledSpeedDial>
           </Box>
           <div className="usercreation-table-container">
-            <div className="table-usercreation">
+            <div className="table-usercreations">
               <DataGrid
                 rows={rows}
                 columns={columns}

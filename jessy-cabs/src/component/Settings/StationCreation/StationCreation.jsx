@@ -186,8 +186,8 @@ const StationCreation = () => {
               ))}
             </StyledSpeedDial>
           </Box>
-          <div className="usercreation-table-container">
-            <div className="table-usercreation">
+          <div className="stationcreation-table-container">
+            <div className="table-stationcreation">
               <DataGrid
                 rows={rows}
                 columns={columns}

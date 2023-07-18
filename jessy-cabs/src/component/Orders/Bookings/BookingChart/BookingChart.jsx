@@ -129,7 +129,7 @@ const BookingChart = () => {
                   </Button>
                 </div>
               </div>
-              <div className="input-field">
+              {/* <div className="input-field">
                 <div className="input">
                   <Button>Economy</Button>
                 </div>
@@ -142,7 +142,7 @@ const BookingChart = () => {
                 <div className="input">
                   <Button>Midsize</Button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

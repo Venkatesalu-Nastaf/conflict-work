@@ -102,6 +102,7 @@ const YearEndProcess = () => {
               'justify-content': 'center',
             }}>
               <TextField
+                className='sms-box'
                 id="outlined-multiline-static"
                 multiline
                 sx={{ mt: '7', width: "110ch", }}

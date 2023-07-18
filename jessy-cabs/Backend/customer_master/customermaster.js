@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
   return res.json({ message: "Hello from the backend side" });
 });
 
-// customer database
+// add customer database
 
 app.post('/customers', (req, res) => {
   const bookData = req.body;
@@ -291,6 +291,83 @@ app.put('/booking/:bookingno', (req, res) => {
     return res.status(200).json({ message: "Data updated successfully" });
   });
 });
+
+// trip sheet database
+
+// add customer database
+
+app.post('/tripsheet', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO tripsheet SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete tripsheet data
+
+app.delete('/tripsheet/:tripsheetno', (req, res) => {
+  const tripsheetno = req.params.tripsheetno;
+  
+  db.query('DELETE FROM tripsheet WHERE tripsheetno = ?', tripsheetno, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update customer details
+
+app.put('/tripsheet/:tripsheetno', (req, res) => {
+  const tripsheetno = req.params.tripsheetno;
+  const updatedCustomerData = req.body;
+  console.log('Customer ID:', tripsheetno); // Log the customer ID
+  console.log('Updated customer data:', updatedCustomerData);
+
+  // Update the customer data in the database
+  db.query('UPDATE tripsheet SET ? WHERE tripsheetno = ?', [updatedCustomerData, tripsheetno], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data from tripsheet database
+
+app.get('/tripsheet/:tripsheetno', (req, res) => {
+  const tripsheetno = req.params.tripsheetno;
+
+  db.query('SELECT * FROM tripsheet WHERE tripsheetno = ?', tripsheetno, (err, result) => {
+    if (err) {
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    const bookingDetails = result[0]; // Assuming there is only one matching booking
+    return res.status(200).json(bookingDetails);
+  });
+});
+
+
+
 
 const port = 8081;
 app.listen(port, () => {

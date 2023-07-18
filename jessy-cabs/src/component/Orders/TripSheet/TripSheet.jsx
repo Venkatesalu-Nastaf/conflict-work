@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from "axios";
 import {
   Apps,
   VehicleRate,
@@ -141,23 +142,23 @@ const UpdateTbaleRows = [
 ];
 // UPDATE TABLE END
 // TABLE
-function createData(name, address1, address2) {
-  return { name, address1, address2 };
-}
+// function createData(name, address1, address2) {
+//   return { name, address1, address2 };
+// }
 
-const rows = [
-  createData("John Doe", "123 Main St", "Apt 4"),
-  createData("Jane Smith", "456 Elm St", "Unit 7"),
-  createData("Michael Johnson", "789 Oak Ave", "Suite 10"),
-  createData("Sarah Davis", "321 Pine St", "Floor 2"),
-  createData("Robert Wilson", "987 Maple Dr", "Building B"),
-];
+// const rows = [
+//   createData("John Doe", "123 Main St", "Apt 4"),
+//   createData("Jane Smith", "456 Elm St", "Unit 7"),
+//   createData("Michael Johnson", "789 Oak Ave", "Suite 10"),
+//   createData("Sarah Davis", "321 Pine St", "Floor 2"),
+//   createData("Robert Wilson", "987 Maple Dr", "Building B"),
+// ];
 
 // TABLE END
 
 // date
-const today = dayjs();
-const tomorrow = dayjs().add(1, "day");
+// const today = dayjs();
+// const tomorrow = dayjs().add(1, "day");
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -172,7 +173,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
+  // { icon: <ChecklistIcon />, name: "List" },
   { icon: <CancelPresentationIcon />, name: "Cancel" },
   { icon: <DeleteIcon />, name: "Delete" },
   { icon: <ModeEditIcon />, name: "Edit" },
@@ -180,8 +181,396 @@ const actions = [
 ];
 
 const TripSheet = () => {
-  // TIMER START
+  const [error, setError] = useState(false);
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [selectedCustomerId, setSelectedCustomerId] = useState({});
+  const [actionName] = useState('');
+  const [rows, setRows] = useState([]);
+  // const [displayCopy, setDisplayCopy] = useState(false);
+  // const [value, setValue] = React.useState("list");
   const [currentTime, setCurrentTime] = useState("");
+  const [starttime, setStartTime] = useState('');
+  const [closetime, setCloseTime] = useState('');
+  const [starttime2, setStartTime2] = useState('');
+  const [closetime2, setCloseTime2] = useState('');
+  // const [tripsheetno, setTripsheetno] = useState(null);
+
+  const [book, setBook] = useState({
+    tripsheetno: '',
+    bookingid: '',
+    status: '',
+    billingno: '',
+    apps: '',
+    customer: '',
+    orderedby: '',
+    mobile: '',
+    username: '',
+    phonecell: '',
+    email: '',
+    address1: '',
+    streetno: '',
+    city: '',
+    hireTypes: '',
+    department: '',
+    vehiclerigsterno: '',
+    vehicleRate: '',
+    drivername: '',
+    cell: '',
+    driversmsexbetta: '',
+    gps: '',
+    duty: '',
+    pickup: '',
+    usages: '',
+    request: '',
+    startdate: '',
+    closedate: '',
+    empolyeeno: '',
+    starttime: '',
+    closetime: '',
+    advancepaidtovendor: '',
+    customercode: '',
+    startkm: '',
+    closekm: '',
+    permit: '',
+    parking: '',
+    toll: '',
+    vpermettovendor: '',
+    vendortoll: '',
+    customeradvance: '',
+    email1: '',
+    documentnotes: '',
+    VendorTripNo: '',
+    vehicles: '',
+    duty1: '',
+    startdate1: '',
+    closedate1: '',
+    totaldays: '',
+    starttime2: '',
+    closetime2: '',
+    totaltime: '',
+    startkm1: '',
+    closekm1: '',
+    totalkm1: '',
+    remark: '',
+    caramount: '',
+    minkm: '',
+    minhrs: '',
+    package: '',
+    amount: '',
+    exkm: '',
+    amount1: '',
+    exHrs: '',
+    amount2: '',
+    night: '',
+    amount3: '',
+    driverconvenience: '',
+    amount4: '',
+    netamount: '',
+    vehcommission: '',
+    manualbills: '',
+    pack: '',
+    amount5: '',
+    exkm1: '',
+    amount6: '',
+    exHrs1: '',
+    amount7: '',
+    night1: '',
+    amount8: '',
+    driverconvenience1: '',
+    amount9: '',
+    rud: '',
+    netamount1: '',
+    discount: '',
+    ons: '',
+    balance: '',
+    fcdate: '',
+    taxdate: '',
+    insdate: '',
+    stpermit: '',
+    maintenancetype: '',
+    kilometer: '',
+    selects: '',
+    documenttype: '',
+    on1: '',
+    smsguest: '',
+    booker: '',
+    emailcheck: '',
+    valueprint: '',
+    manualbillss: '',
+    reload: '',
+    locks: '',
+  });
+
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      tripsheetno: '',
+      bookingid: '',
+      status: '',
+      billingno: '',
+      apps: '',
+      customer: '',
+      orderedby: '',
+      mobile: '',
+      username: '',
+      phonecell: '',
+      email: '',
+      address1: '',
+      streetno: '',
+      city: '',
+      hireTypes: '',
+      department: '',
+      vehiclerigsterno: '',
+      vehicleRate: '',
+      drivername: '',
+      cell: '',
+      driversmsexbetta: '',
+      gps: '',
+      duty: '',
+      pickup: '',
+      usages: '',
+      request: '',
+      startdate: '',
+      closedate: '',
+      empolyeeno: '',
+      starttime: '',
+      closetime: '',
+      advancepaidtovendor: '',
+      customercode: '',
+      startkm: '',
+      closekm: '',
+      permit: '',
+      parking: '',
+      toll: '',
+      vpermettovendor: '',
+      vendortoll: '',
+      customeradvance: '',
+      email1: '',
+      documentnotes: '',
+      VendorTripNo: '',
+      vehicles: '',
+      duty1: '',
+      startdate1: '',
+      closedate1: '',
+      totaldays: '',
+      starttime2: '',
+      closetime2: '',
+      totaltime: '',
+      startkm1: '',
+      closekm1: '',
+      totalkm1: '',
+      remark: '',
+      caramount: '',
+      minkm: '',
+      minhrs: '',
+      package: '',
+      amount: '',
+      exkm: '',
+      amount1: '',
+      exHrs: '',
+      amount2: '',
+      night: '',
+      amount3: '',
+      driverconvenience: '',
+      amount4: '',
+      netamount: '',
+      vehcommission: '',
+      manualbills: '',
+      pack: '',
+      amount5: '',
+      exkm1: '',
+      amount6: '',
+      exHrs1: '',
+      amount7: '',
+      night1: '',
+      amount8: '',
+      driverconvenience1: '',
+      amount9: '',
+      rud: '',
+      netamount1: '',
+      discount: '',
+      ons: '',
+      balance: '',
+      fcdate: '',
+      taxdate: '',
+      insdate: '',
+      stpermit: '',
+      maintenancetype: '',
+      kilometer: '',
+      selects: '',
+      documenttype: '',
+      on1: '',
+      smsguest: '',
+      booker: '',
+      emailcheck: '',
+      valueprint: '',
+      manualbillss: '',
+      reload: '',
+      locks: '',
+    }));
+    setSelectedCustomerData({});
+  };
+
+  const handleDelete = async () => {
+    if (!selectedCustomerData.tripsheetno) {
+      console.log('No tripsheet number provided for deletion.');
+      return;
+    }
+    try {
+      console.log('Delete button clicked');
+      await axios.delete(`http://localhost:8081/tripsheet/${selectedCustomerData.tripsheetno}`);
+      console.log('Customer deleted');
+      setSelectedCustomerData({}); // Clear the selected customer data
+      handleCancel(); // Assuming you have a function named handleCancel to handle cancellation
+    } catch (error) {
+      console.error('Error deleting customer:', error);
+    }
+  };
+
+  const handleEdit = async () => {
+    if (!selectedCustomerData.tripsheetno) {
+      console.log('No tripsheet number provided for editing.');
+      return;
+    }
+  
+    try {
+      console.log('Edit button clicked');
+      const selectedCustomer = rows.find((row) => row.tripsheetno === selectedCustomerData.tripsheetno);
+      const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+      await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripsheetno}`, updatedCustomer);
+      console.log('Customer updated');
+      handleCancel();
+    } catch (error) {
+      console.error('Error updating customer:', error);
+      // Handle error state here, show a notification, or perform any other actions
+      // For example, you can update a state to display an error message on the UI
+      // setError('Failed to update customer. Please try again later.');
+    }
+  };
+  
+
+
+  const handleAutocompleteChange = (event, value, name) => {
+    const selectedOption = value ? value.label : '';
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: selectedOption,
+    }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
+  };
+
+  const handleDateChange = (date, name) => {
+    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: formattedDate,
+    }));
+  };
+  const handleClick = async (event, actionName, tripsheetno) => {
+    event.preventDefault();
+    try {
+      if (actionName === 'List') {
+        console.log('List button clicked');
+        
+      } else if (actionName === 'Cancel') {
+        console.log('Cancel button clicked');
+        handleCancel();
+      } else if (actionName === 'Delete') {
+        console.log('Delete button clicked');
+        // await axios.delete(`http://localhost:8081/tripsheet/${tripsheetno}`);
+        // console.log('Customer deleted');
+        // setSelectedCustomerData(null);
+        handleDelete();
+        handleCancel();
+      } else if (actionName === 'Edit') {
+        console.log('Edit button clicked');
+        // const selectedCustomer = rows.find((row) => row.tripsheetno === tripsheetno);
+        // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        // await axios.put(`http://localhost:8081/tripsheet/${tripsheetno}`, updatedCustomer);
+        // console.log('Customer updated');
+        handleEdit();
+        // handleCancel();
+      } else if (actionName === 'Add') {
+        const updatedBook = {
+          ...book,
+          starttime: starttime,
+          closetime: closetime,
+          starttime2: starttime2,
+          closetime2: closetime2,
+        };
+        await axios.post('http://localhost:8081/tripsheet', updatedBook);
+        console.log(updatedBook);
+        handleCancel();
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+  };
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  });
+
+
+  const handleChange = (event) => {
+    const { name, value, checked } = event.target;
+
+    if (event.target.type === 'checkbox') {
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      // Check if the field is the time field
+      if (name === 'starttime') {
+        const formattedTime = value; // Modify the time value if needed
+        setBook((prevBook) => ({
+          ...prevBook,
+          [name]: formattedTime,
+        }));
+        setSelectedCustomerData((prevData) => ({
+          ...prevData,
+          [name]: formattedTime,
+        }));
+      } else {
+        setBook((prevBook) => ({
+          ...prevBook,
+          [name]: value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      }
+    }
+  };
+
+  const handleKeyDown = useCallback(async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      try {
+        const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
+        const bookingDetails = response.data;
+        console.log(bookingDetails);
+
+        setSelectedCustomerData(bookingDetails);
+        setSelectedCustomerId(bookingDetails.tripsheetno);
+      } catch (error) {
+        console.error('Error retrieving booking details:', error);
+      }
+    }
+  }, []);
+  // TIMER START
+  // const [currentTime, setCurrentTime] = useState("");
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -211,6 +600,9 @@ const TripSheet = () => {
                   id="tripsheetno"
                   label="Tirp Sheet No"
                   name="tripsheetno"
+                  value={selectedCustomerData.tripsheetno || book.tripsheetno}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   autoFocus
                 />
               </div>
@@ -224,6 +616,9 @@ const TripSheet = () => {
                   id="bookingid"
                   label="Booking ID"
                   name="bookingid"
+                  value={selectedCustomerData.bookingid || book.bookingid}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   autoFocus
                 />
               </div>
@@ -231,7 +626,7 @@ const TripSheet = () => {
                 <div className="icone">
                   <QuizOutlinedIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -243,8 +638,28 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ""}
                   renderInput={(params) => (
-                    <TextField {...params} label="Status" />
+                    <TextField {...params} name="status" label="Status" />
                   )}
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
+                  value={Status.find((option) => option.optionvalue)?.label || ''}
+                  options={Status.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.status || ''
+                    return (
+                      <TextField {...params} label="Status" name="status" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
@@ -257,6 +672,9 @@ const TripSheet = () => {
                   id="billingno"
                   label="Billing No"
                   name="billingno"
+                  value={selectedCustomerData.billingno || book.billingno}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   autoFocus
                 />
               </div>
@@ -266,7 +684,7 @@ const TripSheet = () => {
                 <div className="icone">
                   <AppsOutageOutlinedIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -277,8 +695,28 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ""}
                   renderInput={(params) => (
-                    <TextField {...params} label="Apps" />
+                    <TextField {...params} name="apps" label="Apps" />
                   )}
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "apps")}
+                  value={Apps.find((option) => option.optionvalue)?.label || ''}
+                  options={Apps.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.apps || ''
+                    return (
+                      <TextField {...params} label="Apps" name="apps" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
@@ -287,6 +725,9 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="customer"
+                  value={selectedCustomerData.customer || book.customer}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   label="Customer"
                   id="standard-size-normal"
                   variant="standard"
@@ -298,25 +739,51 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="orderedby"
+                  value={selectedCustomerData.orderedby || book.orderedby}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   label="Ordered By"
                   id="standard-size-normal"
                   variant="standard"
                 />
               </div>
-              <FormControlLabel
+              {/* <FormControlLabel
                 value="smsguest"
                 control={<Checkbox size="small" />}
                 label="SMS Guest"
+              /> */}
+              <FormControlLabel
+                name="smsguest"
+                value="smsguest"
+                control={<Checkbox size="small" />}
+                label="SMS Guest"
+                autoComplete="new-password"
+                onChange={handleChange}
+                checked={Boolean(selectedCustomerData?.smsguest || book.smsguest)}
               />
               <FormControlLabel
+                // value="booker"
+                // control={<Checkbox size="small" />}
+                // label="Booker"
+                name="booker"
                 value="booker"
                 control={<Checkbox size="small" />}
                 label="Booker"
+                autoComplete="new-password"
+                onChange={handleChange}
+                checked={Boolean(selectedCustomerData?.booker || book.booker)}
               />
               <FormControlLabel
+                // value="email"
+                // control={<Checkbox size="small" />}
+                // label="Email"
+                name="emailcheck"
                 value="email"
                 control={<Checkbox size="small" />}
                 label="Email"
+                autoComplete="new-password"
+                onChange={handleChange}
+                checked={Boolean(selectedCustomerData?.emailcheck || book.emailcheck)}
               />
             </div>
             <div className="input-field">
@@ -326,6 +793,9 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="mobile"
+                  value={selectedCustomerData.mobile || book.mobile}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   label="Mobile"
                   id="standard-size-normal"
                   size="small"
@@ -341,6 +811,9 @@ const TripSheet = () => {
                   id="username"
                   label="User Name"
                   name="username"
+                  value={selectedCustomerData.username || book.username}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   size="small"
                   autoFocus
                 />
@@ -350,9 +823,12 @@ const TripSheet = () => {
                   <CallIcon color="action" />
                 </div>
                 <TextField
-                  name="Phoencell"
+                  name="phonecell"
+                  value={selectedCustomerData.phonecell || book.phonecell}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   label="Phone (Cell)"
-                  id="Phoencell"
+                  id="Phonecell"
                   size="small"
                   autoFocus
                 />
@@ -363,6 +839,9 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="email"
+                  value={selectedCustomerData.email || book.email}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   label="Email"
                   id="email"
                   size="small"
@@ -382,6 +861,9 @@ const TripSheet = () => {
                   <TextField
                     size="small"
                     name="address1"
+                    value={selectedCustomerData.address1 || book.address1}
+                    onChange={handleChange}
+                    // onKeyDown={handleKeyDown}
                     label="Address"
                     id="remark"
                     sx={{ m: 1, width: "200ch" }}
@@ -397,6 +879,9 @@ const TripSheet = () => {
                   <TextField
                     size="small"
                     name="streetno"
+                    value={selectedCustomerData.streetno || book.streetno}
+                    onChange={handleChange}
+                    // onKeyDown={handleKeyDown}
                     id="remark"
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
@@ -411,6 +896,9 @@ const TripSheet = () => {
                   <TextField
                     size="small"
                     name="city"
+                    value={selectedCustomerData.city || book.city}
+                    onChange={handleChange}
+                    // onKeyDown={handleKeyDown}
                     id="address3"
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
@@ -453,7 +941,7 @@ const TripSheet = () => {
                 <div className="icone">
                   <HowToRegIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -464,15 +952,35 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ""}
                   renderInput={(params) => (
-                    <TextField {...params} label="Hire Types" />
+                    <TextField {...params} name="hireTypes" label="Hire Types" />
                   )}
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
+                  value={HireTypes.find((option) => option.option)?.label || ''}
+                  options={HireTypes.map((option) => ({
+                    label: option.option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.hireTypes || ''
+                    return (
+                      <TextField {...params} label="Hire Types" name="hireTypes" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
                 <div className="icone">
                   <StoreIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -483,8 +991,28 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ""}
                   renderInput={(params) => (
-                    <TextField {...params} label="Department" />
+                    <TextField {...params} name="department" label="Department" />
                   )}
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
+                  value={Department.find((option) => option.optionvalue)?.label || ''}
+                  options={Department.map((option) => ({
+                    label: option.option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.department || ''
+                    return (
+                      <TextField {...params} label="Department" name="department" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
@@ -497,6 +1025,9 @@ const TripSheet = () => {
                   id="vehiclerigsterno"
                   label="Vehicle Rigster No"
                   name="vehiclerigsterno"
+                  value={selectedCustomerData.vehiclerigsterno || book.vehiclerigsterno}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   autoFocus
                 />
               </div>
@@ -504,7 +1035,7 @@ const TripSheet = () => {
                 <div className="icone">
                   <NoCrashIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -515,8 +1046,28 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ""}
                   renderInput={(params) => (
-                    <TextField {...params} label="Vehicle Rate" />
+                    <TextField {...params} name="vehicleRate" label="Vehicle Rate" />
                   )}
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleRate")}
+                  value={VehicleRate.find((option) => option.optionvalue)?.label || ''}
+                  options={VehicleRate.map((option) => ({
+                    label: option.option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.vehicleRate || ''
+                    return (
+                      <TextField {...params} label="Vehicle Rate" name="vehicleRate" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
             </div>
@@ -527,6 +1078,9 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="drivername"
+                  value={selectedCustomerData.drivername || book.drivername}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   label="Driver Name"
                   id="drivername"
                   variant="standard"
@@ -538,6 +1092,9 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="cell"
+                  value={selectedCustomerData.cell || book.cell}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   label="Cell"
                   id="cell"
                   variant="standard"
@@ -548,7 +1105,10 @@ const TripSheet = () => {
                   <SmsIcon color="action" />
                 </div>
                 <TextField
-                  name="cell"
+                  name="driversmsexbetta"
+                  value={selectedCustomerData.driversmsexbetta || book.driversmsexbetta}
+                  onChange={handleChange}
+                  // onKeyDown={handleKeyDown}
                   label="Driver SMS Ex Betta"
                   id="cell"
                   variant="standard"
@@ -556,9 +1116,19 @@ const TripSheet = () => {
               </div>
               <div className="input radio">
                 <FormControlLabel
+                  // value="GPS"
+                  // name="gps"
+
+                  // // onKeyDown={handleKeyDown}
+                  // control={<Checkbox size="small" />}
+                  // label="GPS"
+                  name="gps"
                   value="GPS"
                   control={<Checkbox size="small" />}
                   label="GPS"
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  checked={Boolean(selectedCustomerData?.gps || book.gps)}
                 />
               </div>
             </div>
@@ -567,7 +1137,7 @@ const TripSheet = () => {
                 <div className="icone">
                   <EngineeringIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -578,15 +1148,35 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ""}
                   renderInput={(params) => (
-                    <TextField {...params} label="Duty" />
+                    <TextField {...params} name="duty" label="Duty" />
                   )}
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
+                  value={Duty.find((option) => option.optionvalue)?.label || ''}
+                  options={Duty.map((option) => ({
+                    label: option.option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.duty || ''
+                    return (
+                      <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
                 <div className="icone">
                   <AirlineStopsIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -597,8 +1187,28 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ""}
                   renderInput={(params) => (
-                    <TextField {...params} label="Pickup" />
+                    <TextField {...params} name="pickup" label="Pickup" />
                   )}
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "pickup")}
+                  value={Pickup.find((option) => option.optionvalue)?.label || ''}
+                  options={Pickup.map((option) => ({
+                    label: option.option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.pickup || ''
+                    return (
+                      <TextField {...params} label="Pickup" name="pickup" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
@@ -608,7 +1218,9 @@ const TripSheet = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  name="usage"
+                  name="usages"
+                  value={selectedCustomerData.usages || book.usages}
+                  onChange={handleChange}
                   label="Usage"
                   id="usage"
                   autoFocus
@@ -621,6 +1233,8 @@ const TripSheet = () => {
                 <TextField
                   size="small"
                   name="request"
+                  value={selectedCustomerData.request || book.request}
+                  onChange={handleChange}
                   label="Request"
                   id="request"
                 />
@@ -628,23 +1242,57 @@ const TripSheet = () => {
             </div>
             <div className="input-field">
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Start Date">
                     <DatePicker
+                      name="startdate"
                       defaultValue={today}
                       minDate={tomorrow}
                       views={["year", "month", "day"]}
                     />
                   </DemoItem>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Start Date">
+                    <DatePicker
+                      value={selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
+                      onChange={(date) => handleDateChange(date, 'startdate')}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          name="startdate"
+                          value={selectedCustomerData.startdate || ''}
+                          inputRef={params.inputRef}
+                        />
+                      )}
+                    />
+                  </DemoItem>
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Close Date">
                     <DatePicker
+                      name="closedate"
                       defaultValue={today}
                       minDate={tomorrow}
                       views={["year", "month", "day"]}
+                    />
+                  </DemoItem>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Close Date">
+                    <DatePicker
+                      value={selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null}
+                      onChange={(date) => handleDateChange(date, 'closedate')}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          name="closedate"
+                          value={selectedCustomerData.closedate || ''}
+                          inputRef={params.inputRef}
+                        />
+                      )}
                     />
                   </DemoItem>
                 </LocalizationProvider>
@@ -655,6 +1303,9 @@ const TripSheet = () => {
                 </div>
                 <DemoItem>
                   <TextField
+                    name="totaldays"
+                    value={selectedCustomerData.totaldays || book.totaldays}
+                    onChange={handleChange}
                     label="Total Days"
                     size="small"
                     type="number"
@@ -668,6 +1319,8 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   size="small"
+                  value={selectedCustomerData.empolyeeno || book.empolyeeno}
+                  onChange={handleChange}
                   name="empolyeeno"
                   label="Empolyee No"
                   id="empolyeeno"
@@ -677,18 +1330,38 @@ const TripSheet = () => {
             <div className="input-field">
               <div className="input time">
                 <label>Start Time</label>
-                <input
+                {/* <input
+                  name="starttime"
                   type="time"
                   value={currentTime}
                   onChange={(e) => setCurrentTime(e.target.value)}
+                /> */}
+                <input
+                  type="time"
+                  value={selectedCustomerData.starttime || book.starttime}
+                  onChange={(event) => {
+                    setBook({ ...book, starttime: event.target.value });
+                    setStartTime(event.target.value);
+                  }}
+                  name="starttime"
                 />
               </div>
               <div className="input time">
                 <label>Close Time</label>
-                <input
+                {/* <input
+                  name="closetime"
                   type="time"
                   value={currentTime}
                   onChange={(e) => setCurrentTime(e.target.value)}
+                /> */}
+                <input
+                  type="time"
+                  value={selectedCustomerData.closetime || book.closetime}
+                  onChange={(event) => {
+                    setBook({ ...book, closetime: event.target.value });
+                    setCloseTime(event.target.value);
+                  }}
+                  name="closetime"
                 />
               </div>
               <div className="input" style={{ width: "300px" }}>
@@ -698,7 +1371,9 @@ const TripSheet = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  name="advance-paid-to-vendor"
+                  name="advancepaidtovendor"
+                  value={selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor}
+                  onChange={handleChange}
                   label="Advance-Paid-To-Vendor"
                   id="advance-paid-to-vendor"
                   autoFocus
@@ -710,7 +1385,9 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   size="small"
-                  name="customer-code"
+                  name="customercode"
+                  value={selectedCustomerData.customercode || book.customercode}
+                  onChange={handleChange}
                   label="Customer Code"
                   id="customer-code"
                 />
@@ -719,6 +1396,9 @@ const TripSheet = () => {
             <div className="input-field">
               <div className="input">
                 <TextField
+                  name="startkm"
+                  value={selectedCustomerData.startkm || book.startkm}
+                  onChange={handleChange}
                   size="small"
                   label="Start KM"
                   type="number"
@@ -728,6 +1408,9 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <TextField
+                  name="closekm"
+                  value={selectedCustomerData.closekm || book.closekm}
+                  onChange={handleChange}
                   label="Close KM"
                   size="small"
                   type="number"
@@ -742,6 +1425,8 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="permit"
+                  value={selectedCustomerData.permit || book.permit}
+                  onChange={handleChange}
                   label="Permit"
                   id="permit"
                   variant="standard"
@@ -753,6 +1438,8 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="parking"
+                  value={selectedCustomerData.parking || book.parking}
+                  onChange={handleChange}
                   label="Parking"
                   id="parking"
                   variant="standard"
@@ -763,7 +1450,9 @@ const TripSheet = () => {
                   <TollTwoToneIcon color="action" />
                 </div>
                 <TextField
-                  name="Toll"
+                  name="toll"
+                  value={selectedCustomerData.toll || book.toll}
+                  onChange={handleChange}
                   label="Toll"
                   id="Toll"
                   variant="standard"
@@ -778,7 +1467,9 @@ const TripSheet = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  name="v-permet-to-vendor"
+                  name="vpermettovendor"
+                  value={selectedCustomerData.vpermettovendor || book.vpermettovendor}
+                  onChange={handleChange}
                   label="v-permet-To-Vendor"
                   id="v-permet-to-vendor"
                   autoFocus
@@ -791,7 +1482,9 @@ const TripSheet = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  name="vendor-toll"
+                  name="vendortoll"
+                  value={selectedCustomerData.vendortoll || book.vendortoll}
+                  onChange={handleChange}
                   label="Vendor-Toll"
                   id="vendor-toll"
                   autoFocus
@@ -803,7 +1496,9 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   size="small"
-                  name="customer-advance"
+                  name="customeradvance"
+                  value={selectedCustomerData.customeradvance || book.customeradvance}
+                  onChange={handleChange}
                   label="Customer-Advance"
                   id="customer-advance"
                   autoFocus
@@ -813,7 +1508,7 @@ const TripSheet = () => {
                 <div className="icone">
                   <AttachEmailIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -824,8 +1519,28 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ""}
                   renderInput={(params) => (
-                    <TextField {...params} label="Email" />
+                    <TextField {...params} name="email1" label="Email" />
                   )}
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "email1")}
+                  value={Email.find((option) => option.optionvalue)?.label || ''}
+                  options={Email.map((option) => ({
+                    label: option.option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.email1 || ''
+                    return (
+                      <TextField {...params} label="Email" name="email1" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
             </div>
@@ -837,6 +1552,8 @@ const TripSheet = () => {
                 <TextField
                   size="small"
                   name="remark"
+                  value={selectedCustomerData.remark || book.remark}
+                  onChange={handleChange}
                   label="Remark"
                   id="remark"
                   sx={{ m: 1, width: "300ch" }}
@@ -845,9 +1562,18 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <FormControlLabel
-                  value="smsguest"
+                  // name="smsguest"
+
+                  // value="smsguest"
+                  // control={<Checkbox size="small" />}
+                  // label="Value & Print"
+                  name="valueprint"
+                  value="value&print"
                   control={<Checkbox size="small" />}
                   label="Value & Print"
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  checked={Boolean(selectedCustomerData?.valueprint || book.valueprint)}
                 />
               </div>
               <div className="input">
@@ -857,6 +1583,8 @@ const TripSheet = () => {
               </div>
             </div>
           </div>
+          {error && <p>Something went wrong!</p>}
+
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -867,6 +1595,8 @@ const TripSheet = () => {
                   key={action.name}
                   icon={action.icon}
                   tooltipTitle={action.name}
+                  onClick={(event) => handleClick(event, action.name)}
+
                 />
               ))}
             </StyledSpeedDial>
@@ -967,7 +1697,7 @@ const TripSheet = () => {
                       >
                         <FontAwesomeIcon icon={faFolderOpen} size="lg" />
                       </div>
-                      <Autocomplete
+                      {/* <Autocomplete
                         fullWidth
                         size="small"
                         id="free-solo-demo"
@@ -978,8 +1708,28 @@ const TripSheet = () => {
                         }))}
                         getOptionLabel={(option) => option.label || ""}
                         renderInput={(params) => (
-                          <TextField {...params} label="Document Type" />
+                          <TextField {...params} name="documenttype" label="Document Type" />
                         )}
+                      /> */}
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-demo"
+                        freeSolo
+                        sx={{ width: "20ch" }}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
+                        value={DocumentType.find((option) => option.optionvalue)?.label || ''}
+                        options={DocumentType.map((option) => ({
+                          label: option.option,
+                        }))}
+                        getOptionLabel={(option) => option.label || ''}
+                        renderInput={(params) => {
+                          params.inputProps.value = selectedCustomerData.documenttype || ''
+                          return (
+                            <TextField {...params} label="Document Type" name="documenttype" inputRef={params.inputRef} />
+                          )
+                        }
+                        }
                       />
                     </div>
                     <div className="input">
@@ -987,7 +1737,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faFileLines} size="lg" />
                       </div>
                       <TextField
-                        name="document-notes"
+                        name="documentnotes"
+                        value={selectedCustomerData.documentnotes || book.documentnotes}
+                        onChange={handleChange}
                         label="Document Notes"
                         id="document-notes"
                         variant="standard"
@@ -1020,7 +1772,10 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faSuitcaseRolling} size="lg" />
                       </div>
                       <TextField
-                        name="Vendor-Trip-No"
+                        name="VendorTripNo"
+                        // value={selectedCustomerData.VendorTripNo || book.VendorTripNo}
+                        value={selectedCustomerData.tripsheetno || book.tripsheetno}
+                        onChange={handleChange}
                         label="Vendor Trip No"
                         id="Vendor-Trip-No"
                         variant="standard"
@@ -1030,7 +1785,7 @@ const TripSheet = () => {
                       <div className="icone">
                         <NoCrashIcon color="action" />
                       </div>
-                      <Autocomplete
+                      {/* <Autocomplete
                         fullWidth
                         size="small"
                         id="free-solo-demo"
@@ -1043,18 +1798,41 @@ const TripSheet = () => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
+                            name="vehicles"
                             label="Vehicle"
                             variant="standard"
                             sx={{ m: 1, width: "25ch" }}
                           />
                         )}
+                      /> */}
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-demo"
+                        freeSolo
+                        sx={{ width: "20ch" }}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "vehicles")}
+                        value={VehicleRate.find((option) => option.optionvalue)?.label || ''}
+                        
+                        options={VehicleRate.map((option) => ({
+                          label: option.option,
+                        }))}
+                        getOptionLabel={(option) => option.label || ''}
+                        renderInput={(params) => {
+                          // params.inputProps.value = selectedCustomerData.vehicles || ''
+                          params.inputProps.value = selectedCustomerData.vehicleRate || ''
+                          return (
+                            <TextField {...params} label="Vehicle" name="vehicles" inputRef={params.inputRef} />
+                          )
+                        }
+                        }
                       />
                     </div>
                     <div className="input">
                       <div className="icone">
                         <EngineeringIcon color="action" />
                       </div>
-                      <Autocomplete
+                      {/* <Autocomplete
                         fullWidth
                         size="small"
                         id="free-solo-demo"
@@ -1067,32 +1845,88 @@ const TripSheet = () => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
+                            name="duty1"
                             label="Duty"
                             variant="standard"
                           />
                         )}
+                      /> */}
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-demo"
+                        freeSolo
+                        sx={{ width: "20ch" }}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "duty1")}
+                        value={Duty.find((option) => option.optionvalue)?.label || ''}
+                        options={Duty.map((option) => ({
+                          label: option.option,
+                        }))}
+                        getOptionLabel={(option) => option.label || ''}
+                        renderInput={(params) => {
+                          // params.inputProps.value = selectedCustomerData.duty1 || ''
+                          params.inputProps.value = selectedCustomerData.duty || ''
+                          return (
+                            <TextField {...params} label="Duty" name="duty1" inputRef={params.inputRef} />
+                          )
+                        }
+                        }
                       />
                     </div>
                   </div>
                   <div className="input-field">
                     <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoItem label="Start Date">
                           <DatePicker
+                            name="startdate1"
                             defaultValue={today}
                             minDate={tomorrow}
                             views={["year", "month", "day"]}
                           />
                         </DemoItem>
+                      </LocalizationProvider> */}
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoItem label="Start Date">
+                          <DatePicker
+                            value={selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
+                            onChange={(date) => handleDateChange(date, 'startdate1')}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                name="startdate1"
+                                value={selectedCustomerData.startdate || ''}
+                                inputRef={params.inputRef}
+                              />
+                            )}
+                          />
+                        </DemoItem>
                       </LocalizationProvider>
                     </div>
                     <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoItem label="Close Date">
                           <DatePicker
+                            name="closedate1"
                             defaultValue={today}
                             minDate={tomorrow}
                             views={["year", "month", "day"]}
+                          />
+                        </DemoItem>
+                      </LocalizationProvider> */}
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoItem label="Close Date">
+                          <DatePicker
+                            value={selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null}
+                            onChange={(date) => handleDateChange(date, 'closedate1')}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                name="closedate1"
+                                value={selectedCustomerData.closedate || ''}
+                                inputRef={params.inputRef}
+                              />
+                            )}
                           />
                         </DemoItem>
                       </LocalizationProvider>
@@ -1103,6 +1937,9 @@ const TripSheet = () => {
                       </div>
                       <DemoItem>
                         <TextField
+                          name="totaldays"
+                          value={selectedCustomerData.totaldays || book.totaldays}
+                          onChange={handleChange}
                           label="Total Days"
                           size="small"
                           type="number"
@@ -1112,27 +1949,55 @@ const TripSheet = () => {
                     </div>
                     <div className="input radio">
                       <FormControlLabel
+                        // name="locks"
+                        // value="lock"
+                        // control={<Checkbox size="small" />}
+                        // label="Lock"
+                        name="locks"
                         value="lock"
                         control={<Checkbox size="small" />}
                         label="Lock"
+                        autoComplete="new-password"
+                        onChange={handleChange}
+                        checked={Boolean(selectedCustomerData?.locks || book.locks)}
                       />
                     </div>
                   </div>
                   <div className="input-field">
                     <div className="input time">
                       <label>Start Time</label>
-                      <input
+                      {/* <input
+                        name="starttime2"
                         type="time"
                         value={currentTime}
                         onChange={(e) => setCurrentTime(e.target.value)}
+                      /> */}
+                      <input
+                        type="time"
+                        value={selectedCustomerData.starttime2 || book.starttime2}
+                        onChange={(event) => {
+                          setBook({ ...book, starttime2: event.target.value });
+                          setStartTime2(event.target.value);
+                        }}
+                        name="starttime2"
                       />
                     </div>
                     <div className="input time">
                       <label>Close Time</label>
-                      <input
+                      {/* <input
+                        name="closetime2"
                         type="time"
                         value={currentTime}
                         onChange={(e) => setCurrentTime(e.target.value)}
+                      /> */}
+                      <input
+                        type="time"
+                        value={selectedCustomerData.closetime2 || book.closetime2}
+                        onChange={(event) => {
+                          setBook({ ...book, closetime2: event.target.value });
+                          setCloseTime2(event.target.value);
+                        }}
+                        name="closetime2"
                       />
                     </div>
                     <div className="input">
@@ -1142,7 +2007,9 @@ const TripSheet = () => {
                       <TextField
                         margin="normal"
                         size="small"
-                        name="total-time"
+                        name="totaltime"
+                        value={selectedCustomerData.totaltime || book.totaltime}
+                        onChange={handleChange}
                         label="Total Time"
                         id="total-time"
                         variant="standard"
@@ -1155,6 +2022,9 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input">
                       <TextField
+                        name="startkm1"
+                        value={selectedCustomerData.startkm1 || book.startkm1}
+                        onChange={handleChange}
                         size="small"
                         label="Start KM"
                         type="number"
@@ -1164,6 +2034,9 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <TextField
+                        name="closekm1"
+                        value={selectedCustomerData.closekm1 || book.closekm1}
+                        onChange={handleChange}
                         label="Close KM"
                         size="small"
                         type="number"
@@ -1176,7 +2049,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faRoad} size="lg" />
                       </div>
                       <TextField
-                        name="total-km"
+                        name="totalkm1"
+                        value={selectedCustomerData.totalkm1 || book.totalkm1}
+                        onChange={handleChange}
                         label="Total KM"
                         id="total-km"
                         variant="standard"
@@ -1190,6 +2065,8 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="remark"
+                        value={selectedCustomerData.remark || book.remark}
+                        onChange={handleChange}
                         label="Remarks"
                         id="remark"
                         variant="standard"
@@ -1200,7 +2077,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faMoneyBill1Wave} />
                       </div>
                       <TextField
-                        name="car-amount"
+                        name="caramount"
+                        value={selectedCustomerData.caramount || book.caramount}
+                        onChange={handleChange}
                         label="Car Amount"
                         id="car-amount"
                         variant="standard"
@@ -1236,7 +2115,7 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faRoad} size="lg" />
                       </div>
                       <TextField
-                        name="min-km"
+                        name="minkm"
                         label="Min.Km"
                         id="min-km"
                         size="small"
@@ -1250,7 +2129,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faStopwatch} size="lg" />
                       </div>
                       <TextField
-                        name="min-hrs"
+                        name="minhrs"
+                        value={selectedCustomerData.minhrs || book.minhrs}
+                        onChange={handleChange}
                         label="Min.Hrs"
                         id="min-hrs"
                         size="small"
@@ -1264,6 +2145,8 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="package"
+                        value={selectedCustomerData.package || book.package}
+                        onChange={handleChange}
                         label="Package"
                         id="package"
                         size="small"
@@ -1277,6 +2160,8 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount"
+                        value={selectedCustomerData.amount || book.amount}
+                        onChange={handleChange}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -1290,7 +2175,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faRoad} />
                       </div>
                       <TextField
-                        name="ex-km"
+                        name="exkm"
+                        value={selectedCustomerData.exkm || book.exkm}
+                        onChange={handleChange}
                         label="Ex.Km"
                         id="ex-km"
                         size="small"
@@ -1308,7 +2195,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="amount"
+                        name="amount1"
+                        value={selectedCustomerData.amount1 || book.amount1}
+                        onChange={handleChange}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -1322,7 +2211,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faStopwatch} />
                       </div>
                       <TextField
-                        name="ex-Hrs"
+                        name="exHrs"
+                        value={selectedCustomerData.exHrs || book.exHrs}
+                        onChange={handleChange}
                         label="Ex.Hrs"
                         id="ex-Hrs"
                         size="small"
@@ -1340,7 +2231,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="amount"
+                        name="amount2"
+                        value={selectedCustomerData.amount2 || book.amount2}
+                        onChange={handleChange}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -1355,6 +2248,8 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="night"
+                        value={selectedCustomerData.night || book.night}
+                        onChange={handleChange}
                         label="Night"
                         id="night"
                         size="small"
@@ -1372,7 +2267,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="amount"
+                        name="amount3"
+                        value={selectedCustomerData.amount3 || book.amount3}
+                        onChange={handleChange}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -1386,7 +2283,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faMoneyBill1Wave} />
                       </div>
                       <TextField
-                        name="driver-convenience"
+                        name="driverconvenience"
+                        value={selectedCustomerData.driverconvenience || book.driverconvenience}
+                        onChange={handleChange}
                         label="Driver Convenience"
                         id="driver-convenience"
                         size="small"
@@ -1404,7 +2303,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="amount"
+                        name="amount4"
+                        value={selectedCustomerData.amount4 || book.amount4}
+                        onChange={handleChange}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -1427,7 +2328,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faMoneyBillTrendUp} size="lg" />
                       </div>
                       <TextField
-                        name="net-amount"
+                        name="netamount"
+                        value={selectedCustomerData.netamount || book.netamount}
+                        onChange={handleChange}
                         size="small"
                         label="Net Amount"
                         id="net-amount"
@@ -1437,6 +2340,9 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input">
                       <TextField
+                        name="vehcommission"
+                        value={selectedCustomerData.vehcommission || book.vehcommission}
+                        onChange={handleChange}
                         type="number"
                         label="Veh.Commission"
                         size="small"
@@ -1451,7 +2357,9 @@ const TripSheet = () => {
                     </div>
                     <div className="input">
                       <TextField
-                        name="car-amount"
+                        name="caramount"
+                        value={selectedCustomerData.caramount || book.caramount}
+                        onChange={handleChange}
                         size="small"
                         label="Car Amount"
                         id="car-amount"
@@ -1459,9 +2367,17 @@ const TripSheet = () => {
                     </div>
                     <div className="input radio">
                       <FormControlLabel
+                        // name="manualbills"
+                        // value="manual-bills"
+                        // control={<Checkbox size="small" />}
+                        // label="Manual Bills"
+                        name="manualbillss"
                         value="manual-bills"
                         control={<Checkbox size="small" />}
                         label="Manual Bills"
+                        autoComplete="new-password"
+                        onChange={handleChange}
+                        checked={Boolean(selectedCustomerData?.manualbillss || book.manualbillss)}
                       />
                     </div>
                   </div>
@@ -1476,6 +2392,8 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="pack"
+                        value={selectedCustomerData.pack || book.pack}
+                        onChange={handleChange}
                         label="Pack"
                         id="pack"
                         size="small"
@@ -1488,7 +2406,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="amount"
+                        name="amount5"
+                        value={selectedCustomerData.amount5 || book.amount5}
+                        onChange={handleChange}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -1502,7 +2422,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faRoad} />
                       </div>
                       <TextField
-                        name="ex-km"
+                        name="exkm1"
+                        value={selectedCustomerData.exkm1 || book.exkm1}
+                        onChange={handleChange}
                         label="Ex.Km"
                         id="ex-km"
                         size="small"
@@ -1520,7 +2442,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="amount"
+                        name="amount6"
+                        value={selectedCustomerData.amount6 || book.amount6}
+                        onChange={handleChange}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -1534,7 +2458,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faStopwatch} />
                       </div>
                       <TextField
-                        name="ex-Hrs"
+                        name="exHrs1"
+                        value={selectedCustomerData.exHrs1 || book.exHrs1}
+                        onChange={handleChange}
                         label="Ex.Hrs"
                         id="ex-Hrs"
                         size="small"
@@ -1552,7 +2478,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="amount"
+                        name="amount7"
+                        value={selectedCustomerData.amount7 || book.amount7}
+                        onChange={handleChange}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -1566,7 +2494,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faCloudMoon} />
                       </div>
                       <TextField
-                        name="night"
+                        name="night1"
+                        value={selectedCustomerData.night1 || book.night1}
+                        onChange={handleChange}
                         label="Night"
                         id="night"
                         size="small"
@@ -1584,7 +2514,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="amount"
+                        name="amount8"
+                        value={selectedCustomerData.amount8 || book.amount8}
+                        onChange={handleChange}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -1598,7 +2530,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faMoneyBill1Wave} />
                       </div>
                       <TextField
-                        name="driver-convenience"
+                        name="driverconvenience1"
+                        value={selectedCustomerData.driverconvenience1 || book.driverconvenience1}
+                        onChange={handleChange}
                         label="Driver Convenience"
                         id="driver-convenience"
                         size="small"
@@ -1616,7 +2550,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="amount"
+                        name="amount9"
+                        value={selectedCustomerData.amount9 || book.amount9}
+                        onChange={handleChange}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -1631,6 +2567,8 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="rud"
+                        value={selectedCustomerData.rud || book.rud}
+                        onChange={handleChange}
                         label="Rud"
                         id="rud"
                         size="small"
@@ -1643,7 +2581,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="net-amount"
+                        name="netamount1"
+                        value={selectedCustomerData.netamount1 || book.netamount1}
+                        onChange={handleChange}
                         size="small"
                         label="Net Amount"
                         id="net-amount"
@@ -1658,6 +2598,8 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="discount"
+                        value={selectedCustomerData.discount || book.discount}
+                        onChange={handleChange}
                         label="Discount"
                         id="discount"
                         size="small"
@@ -1675,7 +2617,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
                       <TextField
-                        name="on"
+                        name="ons"
+                        value={selectedCustomerData.ons || book.ons}
+                        onChange={handleChange}
                         size="small"
                         label="On"
                         id="on"
@@ -1686,9 +2630,17 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input radio">
                       <FormControlLabel
-                        value="manual-bills"
+                        // name="manualbills"
+                        // value="manual-bills"
+                        // control={<Checkbox size="small" />}
+                        // label="Manual Bills"
+                        name="manualbills"
+                        value="manualbills"
                         control={<Checkbox size="small" />}
                         label="Manual Bills"
+                        autoComplete="new-password"
+                        onChange={handleChange}
+                        checked={Boolean(selectedCustomerData?.manualbills || book.manualbills)}
                       />
                     </div>
                     <div className="input">
@@ -1697,6 +2649,8 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="balance"
+                        value={selectedCustomerData.balance || book.balance}
+                        onChange={handleChange}
                         size="small"
                         label="Balance"
                         id="balance"
@@ -1726,23 +2680,57 @@ const TripSheet = () => {
                 <div className="Customer-Alert-Slider">
                   <div className="input-field">
                     <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoItem label="FC">
                           <DatePicker
+                            name="fcdate"
                             defaultValue={today}
                             minDate={tomorrow}
                             views={["year", "month", "day"]}
                           />
                         </DemoItem>
+                      </LocalizationProvider> */}
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoItem label="FC">
+                          <DatePicker
+                            value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
+                            onChange={(date) => handleDateChange(date, 'fcdate')}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                name="fcdate"
+                                value={selectedCustomerData.fcdate || ''}
+                                inputRef={params.inputRef}
+                              />
+                            )}
+                          />
+                        </DemoItem>
                       </LocalizationProvider>
                     </div>
                     <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoItem label="Tax Date">
                           <DatePicker
+                            name="taxdate"
                             defaultValue={today}
                             minDate={tomorrow}
                             views={["year", "month", "day"]}
+                          />
+                        </DemoItem>
+                      </LocalizationProvider> */}
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoItem label="Tax Date">
+                          <DatePicker
+                            value={selectedCustomerData.taxdate ? dayjs(selectedCustomerData.taxdate) : null}
+                            onChange={(date) => handleDateChange(date, 'taxdate')}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                name="taxdate"
+                                value={selectedCustomerData.taxdate || ''}
+                                inputRef={params.inputRef}
+                              />
+                            )}
                           />
                         </DemoItem>
                       </LocalizationProvider>
@@ -1750,23 +2738,57 @@ const TripSheet = () => {
                   </div>
                   <div className="input-field">
                     <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoItem label="Ins">
                           <DatePicker
+                          name="insdate"
                             defaultValue={today}
                             minDate={tomorrow}
                             views={["year", "month", "day"]}
                           />
                         </DemoItem>
+                      </LocalizationProvider> */}
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoItem label="Ins">
+                          <DatePicker
+                            value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null}
+                            onChange={(date) => handleDateChange(date, 'insdate')}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                name="insdate"
+                                value={selectedCustomerData.insdate || ''}
+                                inputRef={params.inputRef}
+                              />
+                            )}
+                          />
+                        </DemoItem>
                       </LocalizationProvider>
                     </div>
                     <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoItem label="St.Permit">
                           <DatePicker
+                          name="stpermit"
                             defaultValue={today}
                             minDate={tomorrow}
                             views={["year", "month", "day"]}
+                          />
+                        </DemoItem>
+                      </LocalizationProvider> */}
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoItem label="St.Permit">
+                          <DatePicker
+                            value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
+                            onChange={(date) => handleDateChange(date, 'stpermit')}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                name="stpermit"
+                                value={selectedCustomerData.stpermit || ''}
+                                inputRef={params.inputRef}
+                              />
+                            )}
                           />
                         </DemoItem>
                       </LocalizationProvider>
@@ -1775,7 +2797,9 @@ const TripSheet = () => {
                   <div className="input-field">
                     <div className="input" style={{ width: "390px" }}>
                       <TextField
-                        name="maintenance-type"
+                        name="maintenancetype"
+                        value={selectedCustomerData.maintenancetype || book.maintenancetype}
+                        onChange={handleChange}
                         label="Maintenance Type"
                         id="maintenance-type"
                         size="small"
@@ -1785,6 +2809,8 @@ const TripSheet = () => {
                     <div className="input">
                       <TextField
                         name="kilometer"
+                        value={selectedCustomerData.kilometer || book.kilometer}
+                        onChange={handleChange}
                         size="small"
                         label="Kilometer"
                         id="kilometer"
@@ -1828,7 +2854,7 @@ const TripSheet = () => {
                       <div className="icone">
                         <EngineeringIcon color="action" />
                       </div>
-                      <Autocomplete
+                      {/* <Autocomplete
                         fullWidth
                         size="small"
                         id="free-solo-demo"
@@ -1839,8 +2865,28 @@ const TripSheet = () => {
                         }))}
                         getOptionLabel={(option) => option.label || ""}
                         renderInput={(params) => (
-                          <TextField {...params} label="Select" />
+                          <TextField {...params} name="selects" label="Select" />
                         )}
+                      /> */}
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-demo"
+                        freeSolo
+                        sx={{ width: "20ch" }}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "selects")}
+                        value={Select.find((option) => option.optionvalue)?.label || ''}
+                        options={Select.map((option) => ({
+                          label: option.option,
+                        }))}
+                        getOptionLabel={(option) => option.label || ''}
+                        renderInput={(params) => {
+                          params.inputProps.value = selectedCustomerData.selects || ''
+                          return (
+                            <TextField {...params} label="Select" name="selects" inputRef={params.inputRef} />
+                          )
+                        }
+                        }
                       />
                     </div>
                   </div>
@@ -1867,7 +2913,7 @@ const TripSheet = () => {
                       <div className="icone">
                         <FontAwesomeIcon icon={faFolderOpen} size="lg" />
                       </div>
-                      <Autocomplete
+                      {/* <Autocomplete
                         fullWidth
                         size="small"
                         id="free-solo-demo"
@@ -1878,8 +2924,28 @@ const TripSheet = () => {
                         }))}
                         getOptionLabel={(option) => option.label || ""}
                         renderInput={(params) => (
-                          <TextField {...params} label="Document Type" />
+                          <TextField {...params} name="documenttype" label="Document Type" />
                         )}
+                      /> */}
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-demo"
+                        freeSolo
+                        sx={{ width: "20ch" }}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
+                        value={DocumentType.find((option) => option.optionvalue)?.label || ''}
+                        options={DocumentType.map((option) => ({
+                          label: option.option,
+                        }))}
+                        getOptionLabel={(option) => option.label || ''}
+                        renderInput={(params) => {
+                          params.inputProps.value = selectedCustomerData.documenttype || ''
+                          return (
+                            <TextField {...params} label="Document Type" name="documenttype" inputRef={params.inputRef} />
+                          )
+                        }
+                        }
                       />
                     </div>
                     <div className="input">
@@ -1887,7 +2953,9 @@ const TripSheet = () => {
                         <FontAwesomeIcon icon={faFileLines} size="lg" />
                       </div>
                       <TextField
-                        name="on"
+                        name="on1"
+                        value={selectedCustomerData.on1 || book.on1}
+                        onChange={handleChange}
                         size="document-notes"
                         label="Document Notes"
                         id="document-notes"
@@ -1922,9 +2990,16 @@ const TripSheet = () => {
                     </div>
                     <div className="input radio">
                       <FormControlLabel
+                        // value="reload"
+                        // control={<Checkbox size="small" />}
+                        // label="Reload"
+                        name="reload"
                         value="reload"
                         control={<Checkbox size="small" />}
                         label="Reload"
+                        autoComplete="new-password"
+                        onChange={handleChange}
+                        checked={Boolean(selectedCustomerData?.reload || book.reload)}
                       />
                     </div>
                   </div>

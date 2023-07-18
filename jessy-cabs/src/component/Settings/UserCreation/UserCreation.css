@@ -117,10 +117,11 @@
   padding: 20px;
   background-color: var(--glass);
 }
-.table-usercreation {
+.table-usercreations {
+  background: var(--glass);
   border: 2px solid #ccc;
   border-radius: 10px;
   height: 400px;
   width: 100%;
-  overflow: scroll;
+  overflow: hidden;
 }

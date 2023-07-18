@@ -6,8 +6,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Collected from './Collected/Collected';
-import SMSDetails from './SMSDetails/SMSDetails';
 import SMSReport from './SMSReport/SMSReport';
+import MailDetails from './MailDetails/MailDetails';
 const Collecteds = () => {
 
     const [value, setValue] = React.useState("collected");
@@ -25,12 +25,12 @@ const Collecteds = () => {
                             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                                 <TabList onChange={handleChange} aria-label="lab API tabs example">
                                     <Tab label="Collected" value="collected" />
-                                    <Tab label="SMS Details" value="SMSDetails" />
+                                    <Tab label="Mail Details" value="MailDetails" />
                                     <Tab label="SMS Report" value="SMSReport" />
                                 </TabList>
                             </Box>
                             <TabPanel value="collected"><Collected/></TabPanel>
-                            <TabPanel value="SMSDetails"><SMSDetails/></TabPanel>
+                            <TabPanel value="MailDetails"><MailDetails/></TabPanel>
                             <TabPanel value="SMSReport"><SMSReport/></TabPanel>
                         </TabContext>
                     </Box>

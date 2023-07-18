@@ -30,6 +30,7 @@
     overflow-x: hidden;
   }
   .table-bookingCopy {
+    background: var(--glass);
     border: 2px solid #ccc;
     border-radius: 10px;
     margin-top: 30px;
@@ -55,6 +56,7 @@
     position: relative;
   }
   .copy-title-btn {
+    background: var(--glass);
     width: 100%;
     margin-top: 30px;
     padding: 10px;

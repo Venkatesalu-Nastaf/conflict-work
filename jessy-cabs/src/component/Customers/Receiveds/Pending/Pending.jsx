@@ -34,13 +34,15 @@ const columns = [
 
 
 const Pending = () => {
-
-
   const [rows, setRows] = useState([]);
-  const [bookingno, setBookingNo] = useState("");
+  const [serviceStation, setServiceStation] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
+  // const [data, setData] = useState([]);
 
+  // useEffect(() => {
+  //   handleShow([]); // Fetch initial data on component mount
+  // }, []);
 
   const handleDownload = () => {
     const format = 'excel'; // Set the format to 'excel'
@@ -68,30 +70,36 @@ const Pending = () => {
       saveAs(blob, 'Customer_details.csv');
     }
   };
-  
 
   const handleInputChange = (event) => {
-    setBookingNo(event.target.value);
-  };
-
-  const handleDateChange = (date, dateType) => {
-    if (dateType === "fromDate") {
-      setFromDate(date);
-    } else {
-      setToDate(date);
-    }
+    setServiceStation(event.target.value);
   };
 
   const handleShow = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/booking?bookingno=${bookingno}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+      // console.log('Selected Service Station:', serviceStation);
+      const response = await axios.get(
+        `http://localhost:8081/booking?servicestation=${serviceStation}&fromDate=${fromDate.format(
+          'YYYY-MM-DD'
+        )}&toDate=${toDate.format('YYYY-MM-DD')}`
+      );
+      // const response = await axios.get(
+      //   `http://localhost:8081/booking/${serviceStation}?fromDate=${fromDate.format(
+      //     'YYYY-MM-DD'
+      //   )}&toDate=${toDate.format('YYYY-MM-DD')}`
+      // );
       const data = response.data;
+      // console.log(response.data); 
       setRows(data);
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
     }
-  }, [bookingno, fromDate, toDate]);
+  }, [serviceStation, fromDate, toDate]);
+
+  const handleShowAll = () => {
+    handleShow(); // Call handleShow to get all data
+  };
 
   const handleButtonClickBooking = () => {
     window.location.href = '/home/orders/bookings';
@@ -110,26 +118,26 @@ const Pending = () => {
             <div className="copy-title-btn">
               <div className="input-field">
                 <div className="input" style={{ width: "50%" }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker", "DatePicker"]}>
-                    <DatePicker
-                      label="From Date"
-                      value={fromDate}
-                      onChange={(date) => setFromDate(date)}
-                    />
-                    <DatePicker
-                      label="To Date"
-                      value={toDate}
-                      onChange={(date) => setToDate(date)}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="From Date"
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
+                      />
+                      <DatePicker
+                        label="To Date"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
                 </div>
                 <div className="input" >
-                <Button variant="outlined" onClick={handleShow}>Show</Button>
+                  <Button variant="outlined" onClick={handleShow}>Show</Button>
                 </div>
                 <div className="input">
-                <Button variant="outlined" onClick={handleShow}>Show</Button>
+                  <Button variant="outlined" onClick={handleShowAll}>Show All</Button>
                 </div>
               </div>
               <div className="input-field">
@@ -139,22 +147,33 @@ const Pending = () => {
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={Stations.map((option) => option.optionvalue)}
+                    value={serviceStation}
                     options={Stations.map((option) => ({
-                      label: option.Option,
+                      label: option.optionvalue,
                     }))}
                     getOptionLabel={(option) => option.label || ""}
+                    onChange={(event, newValue) => setServiceStation(newValue)}
                     renderInput={(params) => (
-                      <TextField {...params} label="Stations" />
+                      <TextField {...params} onChange={handleInputChange} label="Stations" />
                     )}
                   />
+                  {/* <TextField
+                  margin="normal"
+                  size="small"
+                  name="bookingno"
+                  label="Booking No"
+                  id="bookingno"
+                  autoFocus
+                  value={servicestation}
+                  onChange={handleInputChange}
+                /> */}
                 </div>
                 <div className="input" style={{ width: "110px" }}>
                   <Button
                     variant="outlined"
                     component="label"
                     startIcon={<DescriptionIcon />}
-                    onClick={() => { handleDownload('excel')}}
+                    onClick={() => { handleDownload('excel') }}
                   >
                     Excel
                     <input
@@ -182,7 +201,7 @@ const Pending = () => {
               rows={rows}
               columns={columns}
               pageSize={5}
-              // checkboxSelection
+              checkboxSelection
             />
           </div>
         </div>

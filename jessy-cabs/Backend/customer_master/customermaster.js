@@ -25,6 +25,7 @@ app.post('/customers', (req, res) => {
 });
 
 // delete customer data
+
 app.delete('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   console.log('Customer ID:', customerId); // Log the customer ID
@@ -196,15 +197,46 @@ app.get('/booking/:bookingno', (req, res) => {
 
 // booking copy data collect
 
-app.get('/booking', (req, res) => {
-  const { bookingno, fromDate, toDate } = req.query;
+// app.get('/booking', (req, res) => {
+//   const { bookingno, fromDate, toDate } = req.query;
 
+//   let query = 'SELECT * FROM booking WHERE 1=1';
+//   let params = [];
+
+//   if (bookingno) {
+//     query += ' AND bookingno = ?';
+//     params.push(bookingno);
+//   }
+
+//   if (fromDate && toDate) {
+//     query += ' AND bookingdate BETWEEN ? AND ?';
+//     params.push(fromDate);
+//     params.push(toDate);
+//   }
+
+//   db.query(query, params, (err, result) => {
+//     if (err) {
+//       console.error('Error retrieving booking details from MySQL:', err);
+//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//     }
+//     return res.status(200).json(result);
+//   });
+// });
+app.get('/booking', (req, res) => {
+  const { bookingno, servicestation, fromDate, toDate } = req.query;
+
+  // Query and parameters for fetching booking details based on the query parameters
   let query = 'SELECT * FROM booking WHERE 1=1';
   let params = [];
 
   if (bookingno) {
     query += ' AND bookingno = ?';
     params.push(bookingno);
+  }
+
+  if (servicestation) {
+    query += ' AND servicestation = ?';
+    params.push(servicestation);
   }
 
   if (fromDate && toDate) {
@@ -221,6 +253,7 @@ app.get('/booking', (req, res) => {
     return res.status(200).json(result);
   });
 });
+
 
 // booking CHART data collect
 
@@ -312,7 +345,7 @@ app.post('/tripsheet', (req, res) => {
 
 app.delete('/tripsheet/:tripsheetno', (req, res) => {
   const tripsheetno = req.params.tripsheetno;
-  
+
   db.query('DELETE FROM tripsheet WHERE tripsheetno = ?', tripsheetno, (err, result) => {
     if (err) {
       console.error('Error deleting data from MySQL:', err);
@@ -363,6 +396,91 @@ app.get('/tripsheet/:tripsheetno', (req, res) => {
     }
     const bookingDetails = result[0]; // Assuming there is only one matching booking
     return res.status(200).json(bookingDetails);
+  });
+});
+
+// customers/recieveed/pending data collect from database
+
+
+// app.get('/booking', (req, res) => {
+//   const { servicestation, fromDate, toDate } = req.query;
+
+//   let query = 'SELECT * FROM booking WHERE 1=1';
+//   let params = [];
+
+//   if (servicestation) {
+//     query += ' AND servicestation = ?';
+//     params.push(servicestation);
+//   }
+
+//   if (fromDate && toDate) {
+//     query += ' AND bookingdate BETWEEN ? AND ?';
+//     params.push(fromDate);
+//     params.push(toDate);
+//   }
+
+//   db.query(query, params, (err, result) => {
+//     if (err) {
+//       console.error('Error retrieving booking details from MySQL:', err);
+//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//     }
+//     return res.status(200).json(result);
+//   });
+// });
+// app.get('/booking', (req, res) => {
+//   const { servicestation, fromDate, toDate } = req.params;
+
+//   // Query and parameters for fetching booking details based on the service station
+//   let query = 'SELECT * FROM booking WHERE 1=1';
+//   let params = [];
+
+//   if (servicestation) {
+//     query += ' AND servicestation = ?';
+//     params.push(servicestation);
+//   }
+
+//   if (fromDate && toDate) {
+//     query += ' AND bookingdate BETWEEN ? AND ?';
+//     params.push(fromDate);
+//     params.push(toDate);
+//   }
+
+//   db.query(query, params, (err, result) => {
+//     if (err) {
+//       console.error('Error retrieving booking details from MySQL:', err);
+//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//     }
+//     return res.status(200).json(result);
+//   });
+// });
+
+
+
+// customers/Dispatch/closed data collect from database
+
+app.get('/tripsheet', (req, res) => {
+  const { department, fromDate, toDate } = req.query;
+
+  let query = 'SELECT * FROM tripsheet WHERE 1=1';
+  let params = [];
+
+  if (department) {
+    query += ' AND department = ?';
+    params.push(department);
+  }
+
+  if (fromDate && toDate) {
+    query += ' AND startdate BETWEEN ? AND ?';
+    params.push(fromDate);
+    params.push(toDate);
+  }
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
   });
 });
 

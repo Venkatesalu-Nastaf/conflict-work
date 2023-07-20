@@ -43,7 +43,7 @@ const columns = [
 const Closed = () => {
 
   const [rows, setRows] = useState([]);
-  const [tripsheetno, setTripsheetNo] = useState("");
+  const [department, setDepartment] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
 
@@ -89,9 +89,10 @@ const Closed = () => {
   };
   // End
 
-  const handleInputChange = (event) => {
-    setTripsheetNo(event.target.value);
+  const handleInputChange = (event, newValue) => {
+    setDepartment(newValue.label || ""); // Assuming the label field contains the station name
   };
+
 
   const handleDateChange = (date, dateType) => {
     if (dateType === "fromDate") {
@@ -101,16 +102,48 @@ const Closed = () => {
     }
   };
 
+  // const handleShow = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:8081/tripsheet?tripsheetno=${tripsheetno}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+  //     const data = response.data;
+  //     setRows(data);
+  //   } catch (error) {
+  //     console.error('Error retrieving data:', error);
+  //     setRows([]);
+  //   }
+  // }, [tripsheetno, fromDate, toDate]);
+
   const handleShow = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/tripsheet?tripsheetno=${tripsheetno}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+      const response = await axios.get(
+        `http://localhost:8081/tripsheet?department=${encodeURIComponent(
+          department
+        )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+          toDate.toISOString()
+        )}`
+      );
       const data = response.data;
       setRows(data);
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
     }
-  }, [tripsheetno, fromDate, toDate]);
+  }, [department, fromDate, toDate]);
+
+  const handleShowAll = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/tripsheet?fromDate=${encodeURIComponent(
+          fromDate.toISOString()
+        )}&toDate=${encodeURIComponent(toDate.toISOString())}`
+      );
+      const data = response.data;
+      setRows(data);
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      setRows([]);
+    }
+  }, [fromDate, toDate]);
 
 
   const handleButtonClick = () => {
@@ -144,38 +177,30 @@ const Closed = () => {
                 <Button variant="contained" onClick={handleShow}>Show</Button>
                 </div>
                 <div className="input">
-                <Button variant="outlined" onClick={handleShow}>Show All</Button>
+                <Button variant="outlined" onClick={handleShowAll}>Show All</Button>
                 </div>
               </div>
               <div className="input-field">
                 <div className="input" style={{ width: "300px" }}>
-                  <Autocomplete
+                
+                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={Stations.map((option) => option.optionvalue)}
+                    value={department}
                     options={Stations.map((option) => ({
-                      label: option.Option,
+                      label: option.optionvalue,
                     }))}
                     getOptionLabel={(option) => option.label || ""}
+                    onChange={handleInputChange}
                     renderInput={(params) => (
                       <TextField {...params} label="Stations" />
                     )}
                   />
                 </div>
                 <div className="input" >
-                  {/* <Button
-                    variant="outlined"
-                    component="label"
-                    startIcon={<DescriptionIcon />}
-                  >
-                    Download
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                    />
-                  </Button> */}
+                 
                    <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>
@@ -193,7 +218,7 @@ const Closed = () => {
                 </div>
                 <div className="input" style={{ width: '170px' }}>
                   <Button variant="contained" onClick={handleButtonClick}>
-                    New Billing
+                    Tripsheet
                   </Button>
                 </div>
               </div>

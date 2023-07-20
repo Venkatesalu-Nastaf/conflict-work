@@ -193,6 +193,7 @@ const TripSheet = () => {
   const [closetime, setCloseTime] = useState('');
   const [starttime2, setStartTime2] = useState('');
   const [closetime2, setCloseTime2] = useState('');
+  
   // const [tripsheetno, setTripsheetno] = useState(null);
 
   const [book, setBook] = useState({
@@ -500,6 +501,10 @@ const TripSheet = () => {
           closetime: closetime,
           starttime2: starttime2,
           closetime2: closetime2,
+          totaldays: calculateTotalDays(), // Add the totaldays field here
+          totalkm1: calculateTotalKilometers(), // Add the totaldays field here
+          totaltime: calculateTotalTime(), // Add the totaldays field here
+
         };
         await axios.post('http://localhost:8081/tripsheet', updatedBook);
         console.log(updatedBook);
@@ -510,11 +515,7 @@ const TripSheet = () => {
       setError(true);
     }
   };
-  useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
-    }
-  });
+
 
 
   // Function to calculate total time
@@ -535,31 +536,59 @@ const TripSheet = () => {
   };
 
   // Function to calculate total days
+  // const calculateTotalDays = () => {
+  //   const startDate = selectedCustomerData.startdate || book.startdate;
+  //   const closeDate = selectedCustomerData.closedate || book.closedate;
+
+  //   if (startDate && closeDate) {
+  //     const startDateObj = dayjs(startDate);
+  //     const closeDateObj = dayjs(closeDate);
+  //     const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
+  //     return totalDays;
+  //   }
+
+  //   return '';
+  // };
   const calculateTotalDays = () => {
     const startDate = selectedCustomerData.startdate || book.startdate;
     const closeDate = selectedCustomerData.closedate || book.closedate;
-
+  
     if (startDate && closeDate) {
       const startDateObj = dayjs(startDate);
       const closeDateObj = dayjs(closeDate);
       const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-      return totalDays;
+      console.log('Total Days:', totalDays); // Add this line to log the totalDays value
+      return totalDays; 
     }
-
-    return '';
+  
+    return 0;
   };
-
+  
+  // In the form submission function
+  
   // Function to calculate total kilometers
+  // const calculateTotalKilometers = () => {
+  //   const startKm = selectedCustomerData.startkm || book.startkm;
+  //   const closeKm = selectedCustomerData.closekm || book.closekm;
+
+  //   if (startKm !== undefined && closeKm !== undefined) {
+  //     const totalKm = closeKm - startKm;
+  //     return totalKm;
+  //   }
+
+  //   return 0;
+  // };
   const calculateTotalKilometers = () => {
     const startKm = selectedCustomerData.startkm || book.startkm;
     const closeKm = selectedCustomerData.closekm || book.closekm;
-
+  
     if (startKm !== undefined && closeKm !== undefined) {
       const totalKm = closeKm - startKm;
+      console.log('Total Kilometers:', totalKm); // Add this line to log the totalKm value
       return totalKm;
     }
-
-    return '';
+  
+    return 0;
   };
 
   const handleChange = (event) => {
@@ -720,7 +749,6 @@ const TripSheet = () => {
                   name="billingno"
                   value={selectedCustomerData.billingno || book.billingno}
                   onChange={handleChange}
-                  onKeyDown={handleKeyDown}
                   autoFocus
                 />
               </div>
@@ -1359,13 +1387,12 @@ const TripSheet = () => {
                   /> */}
                   <TextField
                     name="totaldays"
-                    value={calculateTotalDays()}
+                    value={calculateTotalDays() || book.totaldays}
                     label="Total Days"
                     size="small"
                     type="number"
                     id="total-days"
                     variant="standard"
-                    disabled
                   />
                 </DemoItem>
               </div>
@@ -2001,16 +2028,16 @@ const TripSheet = () => {
                           type="number"
                           id="outlined-start-adornment"
                         /> */}
-                         <TextField
-                    name="totaldays"
-                    value={calculateTotalDays()}
-                    label="Total Days"
-                    size="small"
-                    type="number"
-                    id="total-days"
-                    variant="standard"
-                    disabled
-                  />
+                        <TextField
+                          name="totaldays"
+                          value={calculateTotalDays()}
+                          label="Total Days"
+                          size="small"
+                          type="number"
+                          id="total-days"
+                          variant="standard"
+                          // disabled
+                        />
                       </DemoItem>
                     </div>
                     <div className="input radio">
@@ -2040,7 +2067,7 @@ const TripSheet = () => {
                       /> */}
                       <input
                         type="time"
-                        value={selectedCustomerData.starttime2 || book.starttime2}
+                        value={selectedCustomerData.starttime || book.starttime}
                         onChange={(event) => {
                           setBook({ ...book, starttime2: event.target.value });
                           setStartTime2(event.target.value);
@@ -2058,7 +2085,7 @@ const TripSheet = () => {
                       /> */}
                       <input
                         type="time"
-                        value={selectedCustomerData.closetime2 || book.closetime2}
+                        value={selectedCustomerData.closetime || book.closetime}
                         onChange={(event) => {
                           setBook({ ...book, closetime2: event.target.value });
                           setCloseTime2(event.target.value);
@@ -2082,11 +2109,11 @@ const TripSheet = () => {
                       /> */}
                       <TextField
                         name="totaltime"
-                        value={calculateTotalTime()}
+                        value={calculateTotalTime() || book.totaltime}
                         label="Total Time"
                         id="total-time"
                         variant="standard"
-                        disabled
+                        
                       />
                     </div>
                     <div className="input">
@@ -2132,11 +2159,10 @@ const TripSheet = () => {
                       /> */}
                       <TextField
                         name="totalkm1"
-                        value={calculateTotalKilometers()}
+                        value={calculateTotalKilometers() || book.totalkm1}
                         label="Total KM"
                         id="total-km"
                         variant="standard"
-                        disabled
                       />
                     </div>
                   </div>

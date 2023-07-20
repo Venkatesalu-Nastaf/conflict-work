@@ -35,7 +35,7 @@ const columns = [
 
 const Pending = () => {
   const [rows, setRows] = useState([]);
-  const [serviceStation, setServiceStation] = useState("");
+  const [servicestation, setServiceStation] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   // const [data, setData] = useState([]);
@@ -71,36 +71,43 @@ const Pending = () => {
     }
   };
 
-  const handleInputChange = (event) => {
-    setServiceStation(event.target.value);
+  const handleInputChange = (event, newValue) => {
+    setServiceStation(newValue.label || ""); // Assuming the label field contains the station name
   };
+
 
   const handleShow = useCallback(async () => {
     try {
-      // console.log('Selected Service Station:', serviceStation);
       const response = await axios.get(
-        `http://localhost:8081/booking?servicestation=${serviceStation}&fromDate=${fromDate.format(
-          'YYYY-MM-DD'
-        )}&toDate=${toDate.format('YYYY-MM-DD')}`
+        `http://localhost:8081/booking?servicestation=${encodeURIComponent(
+          servicestation
+        )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+          toDate.toISOString()
+        )}`
       );
-      // const response = await axios.get(
-      //   `http://localhost:8081/booking/${serviceStation}?fromDate=${fromDate.format(
-      //     'YYYY-MM-DD'
-      //   )}&toDate=${toDate.format('YYYY-MM-DD')}`
-      // );
       const data = response.data;
-      // console.log(response.data); 
       setRows(data);
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
     }
-  }, [serviceStation, fromDate, toDate]);
+  }, [servicestation, fromDate, toDate]);
 
-  const handleShowAll = () => {
-    handleShow(); // Call handleShow to get all data
-  };
-
+  const handleShowAll = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/booking?fromDate=${encodeURIComponent(
+          fromDate.toISOString()
+        )}&toDate=${encodeURIComponent(toDate.toISOString())}`
+      );
+      const data = response.data;
+      setRows(data);
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      setRows([]);
+    }
+  }, [fromDate, toDate]);
+  
   const handleButtonClickBooking = () => {
     window.location.href = '/home/orders/bookings';
 
@@ -147,26 +154,17 @@ const Pending = () => {
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={serviceStation}
+                    value={servicestation}
                     options={Stations.map((option) => ({
                       label: option.optionvalue,
                     }))}
                     getOptionLabel={(option) => option.label || ""}
-                    onChange={(event, newValue) => setServiceStation(newValue)}
+                    onChange={handleInputChange}
                     renderInput={(params) => (
-                      <TextField {...params} onChange={handleInputChange} label="Stations" />
+                      <TextField {...params} label="Stations" />
                     )}
                   />
-                  {/* <TextField
-                  margin="normal"
-                  size="small"
-                  name="bookingno"
-                  label="Booking No"
-                  id="bookingno"
-                  autoFocus
-                  value={servicestation}
-                  onChange={handleInputChange}
-                /> */}
+
                 </div>
                 <div className="input" style={{ width: "110px" }}>
                   <Button
@@ -176,11 +174,6 @@ const Pending = () => {
                     onClick={() => { handleDownload('excel') }}
                   >
                     Excel
-                    <input
-                      type="file"
-
-                      style={{ display: "none" }}
-                    />
                   </Button>
                 </div>
                 <div className="input" style={{ width: "140px" }}>

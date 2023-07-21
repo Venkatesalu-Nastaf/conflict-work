@@ -96,19 +96,7 @@ const Pending = () => {
   const handleShowAll = useCallback(async () => {
     try {
       const response = await axios.get(
-<<<<<<< HEAD
-<<<<<<< HEAD
         `http://localhost:8081/booking`
-=======
-        `http://localhost:8081/booking?fromDate=${encodeURIComponent(
-          fromDate.toISOString()
-        )}&toDate=${encodeURIComponent(toDate.toISOString())}`
->>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
-=======
-        `http://localhost:8081/booking?fromDate=${encodeURIComponent(
-          fromDate.toISOString()
-        )}&toDate=${encodeURIComponent(toDate.toISOString())}`
->>>>>>> origin/back-end
       );
       const data = response.data;
       setRows(data);
@@ -116,15 +104,7 @@ const Pending = () => {
       console.error('Error retrieving data:', error);
       setRows([]);
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
   }, []);
-=======
-  }, [fromDate, toDate]);
->>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
-=======
-  }, [fromDate, toDate]);
->>>>>>> origin/back-end
   
   const handleButtonClickBooking = () => {
     window.location.href = '/home/orders/bookings';

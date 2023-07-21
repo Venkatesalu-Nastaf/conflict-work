@@ -20,6 +20,10 @@ import Received from "./component/Customers/Receiveds/Receiveds";
 import Dispatcheds from "./component/Customers/Dispatcheds/Dispatcheds";
 import Collecteds from "./component/Customers/Collecteds/Collecteds";
 import DriverMasters from "./component/Customers/DriverMasters/DriverMasters";
+import Options from "./component/Options/Options";
+import RateTypes from "./component/Options/RateTypes/RateTypes";
+import RateManagement from "./component/Options/RateManagement/RateManagement";
+import FuelDetails from "./component/Options/FuelDetails/FuelDetails";
 
 
 function App() {
@@ -36,12 +40,17 @@ function App() {
             <Route path="/home/orders/tripsheet" element={<TripSheet />} />
           </Route>
           <Route path="/home/customers" element={<Customers />} >
-            <Route path="/home/customers/received" element={<Received/>} />
-            <Route path="/home/customers/dispatched" element={<Dispatcheds/>} />
-            <Route path="/home/customers/collected" element={<Collecteds/>} />
-            <Route path="/home/customers/drivermaster" element={<DriverMasters/>} />
+            <Route path="/home/customers/received" element={<Received />} />
+            <Route path="/home/customers/dispatched" element={<Dispatcheds />} />
+            <Route path="/home/customers/collected" element={<Collecteds />} />
+            <Route path="/home/customers/drivermaster" element={<DriverMasters />} />
           </Route>
-          <Route path="/home/products" element={<h1>Producs</h1>} />
+          <Route path="/home/options" element={<Options />} >
+            <Route path="/home/options/ratetype" element={<RateTypes />} />
+            <Route path="/home/options/ratemanagement" element={<RateManagement />} />
+            <Route path="/home/options/fuledetails" element={<FuelDetails />} />
+            <Route path="/home/options/ratetype" element={<RateTypes />} />
+          </Route>
           <Route path="/home/settings" element={<Settings />}>
             <Route
               path="/home/settings/usercreation"

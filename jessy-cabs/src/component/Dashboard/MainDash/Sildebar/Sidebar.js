@@ -22,8 +22,8 @@ export const Sidebardata = [
     },
     {
       icon: AiOutlineFileProtect,
-      heading: "Products",
-      key: "/home/products",
+      heading: "Options",
+      key: "/home/options/ratetype",
     },
     // {
     //   icon: BiBarChartSquare,

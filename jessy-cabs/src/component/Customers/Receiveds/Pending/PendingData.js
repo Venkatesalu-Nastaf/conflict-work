@@ -3,71 +3,87 @@
 export const Stations = [
   {
     Option: "All Station",
-    optionvalue: "All Station",
+    optionvalue: "allstation",
   },
   {
     Option: "Ahmedabad",
-    optionvalue: "Ahmedabad",
+    optionvalue: "ahmedabad",
   },
   {
     Option: "Bangalore",
-    optionvalue: "Bangalore",
+    optionvalue: "bangalore",
   },
   {
     Option: "Chennai",
-    optionvalue: "Chennai",
+    optionvalue: "chennai",
   },
   {
     Option: "Coimbatore",
-    optionvalue: "Coimbatore",
+    optionvalue: "coimbatore",
   },
   {
     Option: "Delhi",
-    optionvalue: "Delhi",
+    optionvalue: "delhi",
   },
   {
-    Option: "ERODE",
-    optionvalue: "ERODE",
+    Option: "Erode",
+    optionvalue: "erode",
   },
   {
-    Option: "GOA",
-    optionvalue: "GOA",
+    Option: "Goa",
+    optionvalue: "goa",
   },
   {
     Option: "Hyderabad",
-    optionvalue: "Hyderabad",
+    optionvalue: "hyderabad",
   },
   {
-    Option: "INDORE",
-    optionvalue: "INDORE",
+    Option: "Indore",
+    optionvalue: "indore",
+  },
+  {
+    Option: "Jaipur",
+    optionvalue: "jaipur",
   },
   {
     Option: "Kerala",
-    optionvalue: "Kerala",
+    optionvalue: "kerala",
   },
   {
     Option: "Kolkata",
-    optionvalue: "Kolkata",
+    optionvalue: "kolkata",
+  },
+  {
+    Option: "Lucknow",
+    optionvalue: "lucknow",
   },
   {
     Option: "Madurai",
-    optionvalue: "Madurai",
+    optionvalue: "madurai",
   },
   {
     Option: "Mangalore",
-    optionvalue: "Mangalore",
+    optionvalue: "mangalore",
   },
   {
     Option: "Mumbai",
-    optionvalue: "Mumbai",
+    optionvalue: "mumbai",
+  },
+  {
+    Option: "Nagpur",
+    optionvalue: "nagpur",
+  },
+  {
+    Option: "New one",
+    optionvalue: "new one",
   },
   {
     Option: "Pune",
-    optionvalue: "Pune",
+    optionvalue: "pune",
   },
   {
     Option: "Tiruchi",
-    optionvalue: "Tiruchi",
+    optionvalue: "tiruchi",
   },
   {
     Option: "Vijayawada",

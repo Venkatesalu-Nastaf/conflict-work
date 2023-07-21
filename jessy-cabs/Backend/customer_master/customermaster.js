@@ -1,3 +1,5 @@
+//Database connection for TAAF Appliction this file contain Add, Delete, Collect data from mysql, and Update functions:  
+
 const express = require('express');
 const cors = require('cors');
 const db = require('../db');
@@ -9,8 +11,11 @@ app.use(express.json());
 app.get('/', (req, res) => {
   return res.json({ message: "Hello from the backend side" });
 });
+// -----------------------------------------------------------------------------------------------------------
 
-// add customer database
+// Customer Master Database
+
+// Add Customer Master database
 
 app.post('/customers', (req, res) => {
   const bookData = req.body;
@@ -24,7 +29,8 @@ app.post('/customers', (req, res) => {
   });
 });
 
-// delete customer data
+// delete Customer Master data
+
 app.delete('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   console.log('Customer ID:', customerId); // Log the customer ID
@@ -42,7 +48,7 @@ app.delete('/customers/:customerId', (req, res) => {
   });
 });
 
-// update customer details
+// update Customer Master details
 
 app.put('/customers/:customerId', (req, res) => {
   const customerId = req.params.customerId;
@@ -50,7 +56,6 @@ app.put('/customers/:customerId', (req, res) => {
   console.log('Customer ID:', customerId); // Log the customer ID
   console.log('Updated customer data:', updatedCustomerData);
 
-  // Update the customer data in the database
   db.query('UPDATE customers SET ? WHERE customerId = ?', [updatedCustomerData, customerId], (err, result) => {
     if (err) {
       console.error('Error updating data in MySQL:', err);
@@ -64,7 +69,7 @@ app.put('/customers/:customerId', (req, res) => {
   });
 });
 
-// collect data for custamer table
+// collect data for Customer Master table
 
 app.get('/customers', (req, res) => {
   db.query('SELECT * FROM customers', (err, results) => {
@@ -76,10 +81,14 @@ app.get('/customers', (req, res) => {
   });
 });
 
+// End Customer Master database
 
-// supplier
+// -----------------------------------------------------------------------------------------------------------
 
-// account_info database
+// Supplier Master Database:
+
+// account_info database:-
+// Add account_info database
 
 app.post('/accountinfo', (req, res) => {
   const bookData = req.body;
@@ -93,7 +102,7 @@ app.post('/accountinfo', (req, res) => {
   });
 });
 
-// delete account info
+// delete account_info database
 
 app.delete('/accountinfo/:accountNo', (req, res) => {
   const accountNo = req.params.accountNo;
@@ -112,7 +121,7 @@ app.delete('/accountinfo/:accountNo', (req, res) => {
   });
 });
 
-// update customer details
+// update account_info database
 
 app.put('/accountinfo/:accountNo', (req, res) => {
   const accountNo = req.params.accountNo;
@@ -134,7 +143,7 @@ app.put('/accountinfo/:accountNo', (req, res) => {
   });
 });
 
-// collect data for account Info
+// collect data for account_info
 
 app.get('/accountinfo', (req, res) => {
   db.query('SELECT * FROM accountinfo', (err, results) => {
@@ -146,7 +155,12 @@ app.get('/accountinfo', (req, res) => {
   });
 });
 
-// vehicle_info database
+// End account_info database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// vehicle_info database:-
+// Add vehicle_info database
 
 app.post('/vehicleinfo', (req, res) => {
   const bookData = req.body;
@@ -160,8 +174,14 @@ app.post('/vehicleinfo', (req, res) => {
   });
 });
 
+// end vehicle_info database
 
-// booking page database
+// -----------------------------------------------------------------------------------------------------------
+
+// Booking database:
+
+// Booking page database:-
+// Add Booking page database
 
 app.post('/booking', (req, res) => {
   const bookData = req.body;
@@ -175,7 +195,7 @@ app.post('/booking', (req, res) => {
   });
 });
 
-// collect details from booking
+// collect details from Booking
 
 app.get('/booking/:bookingno', (req, res) => {
   const bookingno = req.params.bookingno;
@@ -192,68 +212,6 @@ app.get('/booking/:bookingno', (req, res) => {
     return res.status(200).json(bookingDetails);
   });
 });
-
-
-// booking copy data collect
-
-app.get('/booking', (req, res) => {
-  const { bookingno, fromDate, toDate } = req.query;
-
-  let query = 'SELECT * FROM booking WHERE 1=1';
-  let params = [];
-
-  if (bookingno) {
-    query += ' AND bookingno = ?';
-    params.push(bookingno);
-  }
-
-  if (fromDate && toDate) {
-    query += ' AND bookingdate BETWEEN ? AND ?';
-    params.push(fromDate);
-    params.push(toDate);
-  }
-
-  db.query(query, params, (err, result) => {
-    if (err) {
-      console.error('Error retrieving booking details from MySQL:', err);
-      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-    }
-    return res.status(200).json(result);
-  });
-});
-
-// booking CHART data collect
-
-app.get('/booking', (req, res) => {
-  const { fromDate, toDate } = req.query;
-
-  const query = `
-    SELECT vehiclemodule, COUNT(*) AS count
-    FROM booking
-    WHERE bookingdate BETWEEN ? AND ?
-    GROUP BY vehiclemodule
-  `;
-  const values = [fromDate, toDate];
-
-  pool.getConnection((err, connection) => {
-    if (err) {
-      console.error('Error establishing database connection:', err);
-      res.status(500).json({ error: 'Failed to connect to the database' });
-      return;
-    }
-    connection.query(query, values, (err, results) => {
-      connection.release(); // Release the connection back to the pool
-      if (err) {
-        console.error('Error executing SQL query:', err);
-        res.status(500).json({ error: 'Failed to retrieve booking data' });
-        return;
-      }
-
-      res.json(results); // Send the booking data as JSON response
-    });
-  });
-});
-
 
 // delete booking details
 
@@ -292,9 +250,87 @@ app.put('/booking/:bookingno', (req, res) => {
   });
 });
 
-// trip sheet database
+//End booking page database 
 
-// add customer database
+// -----------------------------------------------------------------------------------------------------------
+
+// booking copy data collect:
+
+app.get('/booking', (req, res) => {
+  const { bookingno, servicestation, fromDate, toDate } = req.query;
+
+  // Query and parameters for fetching booking details based on the query parameters
+  let query = 'SELECT * FROM booking WHERE 1=1';
+  let params = [];
+
+  if (bookingno) {
+    query += ' AND bookingno = ?';
+    params.push(bookingno);
+  }
+
+  if (servicestation) {
+    query += ' AND servicestation = ?';
+    params.push(servicestation);
+  }
+
+  if (fromDate && toDate) {
+    query += ' AND bookingdate BETWEEN ? AND ?';
+    params.push(fromDate);
+    params.push(toDate);
+  }
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
+// End booking copy page database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// booking CHART data collect
+
+app.get('/booking', (req, res) => {
+  const { fromDate, toDate } = req.query;
+
+  const query = `
+    SELECT vehiclemodule, COUNT(*) AS count
+    FROM booking
+    WHERE bookingdate BETWEEN ? AND ?
+    GROUP BY vehiclemodule
+  `;
+  const values = [fromDate, toDate];
+
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error('Error establishing database connection:', err);
+      res.status(500).json({ error: 'Failed to connect to the database' });
+      return;
+    }
+    connection.query(query, values, (err, results) => {
+      connection.release(); // Release the connection back to the pool
+      if (err) {
+        console.error('Error executing SQL query:', err);
+        res.status(500).json({ error: 'Failed to retrieve booking data' });
+        return;
+      }
+
+      res.json(results); // Send the booking data as JSON response
+    });
+  });
+});
+
+// End booking CHART database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// trip sheet database:
+
+// add tripsheet database
 
 app.post('/tripsheet', (req, res) => {
   const bookData = req.body;
@@ -312,7 +348,7 @@ app.post('/tripsheet', (req, res) => {
 
 app.delete('/tripsheet/:tripsheetno', (req, res) => {
   const tripsheetno = req.params.tripsheetno;
-  
+
   db.query('DELETE FROM tripsheet WHERE tripsheetno = ?', tripsheetno, (err, result) => {
     if (err) {
       console.error('Error deleting data from MySQL:', err);
@@ -326,7 +362,7 @@ app.delete('/tripsheet/:tripsheetno', (req, res) => {
   });
 });
 
-// update customer details
+// update tripsheet details
 
 app.put('/tripsheet/:tripsheetno', (req, res) => {
   const tripsheetno = req.params.tripsheetno;
@@ -334,7 +370,6 @@ app.put('/tripsheet/:tripsheetno', (req, res) => {
   console.log('Customer ID:', tripsheetno); // Log the customer ID
   console.log('Updated customer data:', updatedCustomerData);
 
-  // Update the customer data in the database
   db.query('UPDATE tripsheet SET ? WHERE tripsheetno = ?', [updatedCustomerData, tripsheetno], (err, result) => {
     if (err) {
       console.error('Error updating data in MySQL:', err);
@@ -366,7 +401,460 @@ app.get('/tripsheet/:tripsheetno', (req, res) => {
   });
 });
 
+// End tripsheet database
 
+// -----------------------------------------------------------------------------------------------------------
+
+// customers/Dispatch/closed data collect from database
+
+app.get('/tripsheet', (req, res) => {
+  const { department, fromDate, toDate } = req.query;
+
+  let query = 'SELECT * FROM tripsheet WHERE 1=1';
+  let params = [];
+
+  if (department) {
+    query += ' AND department = ?';
+    params.push(department);
+  }
+
+  if (fromDate && toDate) {
+    query += ' AND startdate BETWEEN ? AND ?';
+    params.push(fromDate);
+    params.push(toDate);
+  }
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
+// End customers/Dispatch/closed database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// driver master database
+
+// add driver master database
+
+app.post('/drivermaster', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO drivermaster SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete driver master data
+
+app.delete('/drivermaster/:driverid', (req, res) => {
+  const driverid = req.params.driverid;
+  console.log('Customer ID:', driverid); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM drivermaster WHERE driverid = ?', driverid);
+  db.query('DELETE FROM drivermaster WHERE driverid = ?', driverid, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update driver master details
+
+app.put('/drivermaster/:driverid', (req, res) => {
+  const driverid = req.params.driverid;
+  const updatedCustomerData = req.body;
+  console.log('Customer ID:', driverid); // Log the customer ID
+  console.log('Updated customer data:', updatedCustomerData);
+
+  db.query('UPDATE drivermaster SET ? WHERE driverid = ?', [updatedCustomerData, driverid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data for driver master table
+
+app.get('/drivermaster', (req, res) => {
+  db.query('SELECT * FROM drivermaster', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
+// End driver master database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// Settings page database:
+
+// user creation database
+// add user creation database
+
+app.post('/usercreation', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO usercreation SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete user creation data
+
+app.delete('/usercreation/:userid', (req, res) => {
+  const userid = req.params.userid;
+  console.log('Customer ID:', userid); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM usercreation WHERE userid = ?', userid);
+  db.query('DELETE FROM usercreation WHERE userid = ?', userid, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update user creation details
+
+app.put('/usercreation/:userid', (req, res) => {
+  const userid = req.params.userid;
+  const updatedCustomerData = req.body;
+  console.log('Customer ID:', userid); // Log the customer ID
+  console.log('Updated customer data:', updatedCustomerData);
+
+  db.query('UPDATE usercreation SET ? WHERE userid = ?', [updatedCustomerData, userid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data for user creation table
+
+app.get('/usercreation', (req, res) => {
+  db.query('SELECT * FROM usercreation', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
+// End user creation database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// login page databse fetch:
+
+app.post('/login', (req, res) => {
+  const { username, userpassword } = req.body;
+
+  if (!username || !userpassword) {
+    return res.status(400).json({ error: 'Username and userpassword are required.' });
+  }
+
+  db.query('SELECT * FROM usercreation WHERE username = ? AND userpassword = ?', [username, userpassword], (err, result) => {
+    if (err) {
+      console.error('Error retrieving user details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve user details from MySQL' });
+    }
+
+    if (result.length === 0) {
+      return res.status(401).json({ error: 'Invalid credentials. Please check your username and userpassword.' });
+    }
+
+    return res.status(200).json({ message: 'Login successful', user: result[0] });
+  });
+});
+
+// -----------------------------------------------------------------------------------------------------------
+
+// Station Creation Database
+
+// Add Station Creation database
+
+app.post('/stationcreation', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO stationcreation SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete Station Creation data
+
+app.delete('/stationcreation/:stationid', (req, res) => {
+  const stationid = req.params.stationid;
+  
+  db.query('DELETE FROM stationcreation WHERE customerId = ?', stationid, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update  Station Creation details
+
+app.put('/stationcreation/:customerId', (req, res) => {
+  const stationid = req.params.stationid;
+  const updatedCustomerData = req.body;
+  console.log('Customer ID:', stationid); // Log the customer ID
+  console.log('Updated customer data:', updatedCustomerData);
+
+  db.query('UPDATE stationcreation SET ? WHERE stationid = ?', [updatedCustomerData, stationid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data for  Station Creation table
+
+app.get('/stationcreation', (req, res) => {
+  db.query('SELECT * FROM stationcreation', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
+// End  Station Creation database
+
+// -----------------------------------------------------------------------------------------------------------
+
+
+// -----------------------------------------------------------------------------------------------------------
+
+// customers/Dispatch/closed data collect from database
+
+app.get('/tripsheet', (req, res) => {
+  const { department, fromDate, toDate } = req.query;
+
+  let query = 'SELECT * FROM tripsheet WHERE 1=1';
+  let params = [];
+
+  if (department) {
+    query += ' AND department = ?';
+    params.push(department);
+  }
+
+  if (fromDate && toDate) {
+    query += ' AND startdate BETWEEN ? AND ?';
+    params.push(fromDate);
+    params.push(toDate);
+  }
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
+// End customers/Dispatch/closed database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// driver master database
+
+// add driver master database
+
+app.post('/drivermaster', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO drivermaster SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete driver master data
+
+app.delete('/drivermaster/:driverid', (req, res) => {
+  const driverid = req.params.driverid;
+  console.log('Customer ID:', driverid); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM drivermaster WHERE driverid = ?', driverid);
+  db.query('DELETE FROM drivermaster WHERE driverid = ?', driverid, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update driver master details
+
+app.put('/drivermaster/:driverid', (req, res) => {
+  const driverid = req.params.driverid;
+  const updatedCustomerData = req.body;
+  console.log('Customer ID:', driverid); // Log the customer ID
+  console.log('Updated customer data:', updatedCustomerData);
+
+  db.query('UPDATE drivermaster SET ? WHERE driverid = ?', [updatedCustomerData, driverid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data for driver master table
+
+app.get('/drivermaster', (req, res) => {
+  db.query('SELECT * FROM drivermaster', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
+// End driver master database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// Settings page database:
+
+// user creation database
+// add user creation database
+
+app.post('/usercreation', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO usercreation SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete user creation data
+
+app.delete('/usercreation/:userid', (req, res) => {
+  const userid = req.params.userid;
+  console.log('Customer ID:', userid); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM usercreation WHERE userid = ?', userid);
+  db.query('DELETE FROM usercreation WHERE userid = ?', userid, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update user creation details
+
+app.put('/usercreation/:userid', (req, res) => {
+  const userid = req.params.userid;
+  const updatedCustomerData = req.body;
+  console.log('Customer ID:', userid); // Log the customer ID
+  console.log('Updated customer data:', updatedCustomerData);
+
+  db.query('UPDATE usercreation SET ? WHERE userid = ?', [updatedCustomerData, userid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data for user creation table
+
+app.get('/usercreation', (req, res) => {
+  db.query('SELECT * FROM usercreation', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
+// End user creation database
 
 
 const port = 8081;

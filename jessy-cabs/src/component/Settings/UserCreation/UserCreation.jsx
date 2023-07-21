@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
 import "./UserCreation.css";
+import axios from "axios";
 import {
   TextField,
   FormControlLabel,
@@ -30,7 +31,7 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+// import dayjs from "dayjs";
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
@@ -57,42 +58,157 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 // Table Start
-const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "User_Name", headerName: "User_Name", width: 130 },
-  { field: "Password", headerName: "Password", width: 130 },
-  { field: "Active", headerName: "Active", width: 160 },
-  { field: "Station", headerName: "Station", width: 130 },
-  { field: "Access", headerName: "Access", width: 130 },
-  { field: "Designation", headerName: "Designation", width: 130 },
-];
 
-const rows = [
-  {
-    id: 1,
-    User_Name: 1,
-    Password: "Password 1",
-    Active: "John Doe",
-    Station: "Morning",
-    Access: "9:00 AM",
-    Designation: "ABC Car",
-  },
-  {
-    id: 2,
-    User_Name: 2,
-    Password: "Password 2",
-    Active: "Jane Smith",
-    Station: "Evening",
-    Access: "2:00 PM",
-    Designation: "XYZ Car",
-  },
 
-  // Add more rows as needed
-];
-// Table End
 const UserCreation = () => {
   const [showPasswords, setShowPasswords] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [actionName] = useState('');
+  const [error, setError] = useState(false);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+  const columns = [
+    { field: "id", headerName: "Sno", width: 70 },
+    { field: "username", headerName: "User_Name", width: 130 },
+    { field: "userpassword", headerName: "Password", width: 130 },
+    { field: "active", headerName: "Active", width: 160 },
+    { field: "stationname", headerName: "Station", width: 130 },
+    { field: "viewfor", headerName: "Access", width: 130 },
+    { field: "designation", headerName: "Designation", width: 130 },
+  ];
+
+  const [book, setBook] = useState({
+    userid: '',
+    username: '',
+    stationname: '',
+    designation: '',
+    userpassword: '',
+    userconfirmpassword: '',
+    active: '',
+    viewfor: '',
+  });
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+
+    if (type === 'checkbox') {
+      // For checkboxes, update the state based on the checked value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      // For other input fields, update the state based on the value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+      if (name === 'userpassword') {
+        setPassword(value);
+      } else if (name === 'userconfirmpassword') {
+        setConfirmPassword(value);
+      }
+    }
+  };
+
+  const handleAutocompleteChange = (event, value, name) => {
+    const selectedOption = value ? value.label : '';
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: selectedOption,
+    }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
+  };
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      userid: '',
+      username: '',
+      stationname: '',
+      designation: '',
+      userpassword: '',
+      userconfirmpassword: '',
+      active: '',
+      viewfor: '',
+    }));
+    setSelectedCustomerData({});
+  };
+
+  const handleAdd = async () => {
+    if (password === confirmPassword) {
+      setPasswordsMatch(true);
+      try {
+        await axios.post('http://localhost:8081/usercreation', book);
+        console.log(book);
+        handleCancel();
+        validatePasswordMatch();
+      } catch (error) {
+        console.error('Error adding user:', error);
+      }
+    } else {
+      setPasswordsMatch(false);
+    }
+  };
+
+  const handleClick = async (event, actionName, userid) => {
+    event.preventDefault();
+    try {
+      if (actionName === 'List') {
+        console.log('List button clicked');
+        const response = await axios.get('http://localhost:8081/usercreation');
+        const data = response.data;
+        setRows(data);
+      } else if (actionName === 'Cancel') {
+        console.log('Cancel button clicked');
+        handleCancel();
+      } else if (actionName === 'Delete') {
+        console.log('Delete button clicked');
+        await axios.delete(`http://localhost:8081/usercreation/${userid}`);
+        console.log('Customer deleted');
+        setSelectedCustomerData(null);
+        handleCancel();
+      } else if (actionName === 'Edit') {
+        console.log('Edit button clicked');
+        const selectedCustomer = rows.find((row) => row.userid === userid);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/usercreation/${userid}`, updatedCustomer);
+        console.log('Customer updated');
+        handleCancel();
+      } else if (actionName === 'Add') {
+        handleAdd();
+        handleCancel();
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+  };
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  });
+  const handleRowClick = useCallback((params) => {
+    console.log(params.row);
+    const customerData = params.row;
+    setSelectedCustomerData(customerData);
+    setSelectedCustomerId(params.row.customerId);
+  }, []);
 
   const handleClickShowPasswords = () => {
     setShowPasswords((show) => !show);
@@ -109,10 +225,17 @@ const UserCreation = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const validatePasswordMatch = () => {
+    const password = selectedCustomerData?.userpassword || book.userpassword;
+    const confirmPassword = selectedCustomerData?.userconfirmpassword || book.userconfirmpassword;
+    setPasswordsMatch(password === confirmPassword);
+  };
+
   return (
     <div className="usercreation-main">
       <div className="usercreation-form-container">
-        <form action="">
+        <form onSubmit={handleClick}>
           <span className="Title-Name">User Creation</span>
           <div className="usercreation-header">
             <div className="input-field">
@@ -125,7 +248,9 @@ const UserCreation = () => {
                   size="small"
                   id="id"
                   label="ID"
-                  name="id"
+                  name="userid"
+                  value={selectedCustomerData?.userid || book.userid}
+                  onChange={handleChange}
                   variant="standard"
                 />
               </div>
@@ -137,8 +262,10 @@ const UserCreation = () => {
                   margin="normal"
                   size="small"
                   id="user-name"
-                  label="User Name"
-                  name="user-name"
+                  label="User Mail-Id"
+                  name="username"
+                  value={selectedCustomerData?.username || book.username}
+                  onChange={handleChange}
                   autoFocus
                 />
               </div>
@@ -149,16 +276,22 @@ const UserCreation = () => {
                 <Autocomplete
                   fullWidth
                   size="small"
-                  id="free-solo-demo"
+                  id="free-solo-demo-stationname"
                   freeSolo
-                  value={StationName.map((option) => option.optionvalue)}
+                  sx={{ width: "20ch" }}
+                  value={selectedCustomerData?.stationname || ''}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
                   options={StationName.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ""}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Station Name" />
-                  )}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData?.stationname || ''
+                    return (
+                      <TextField {...params} label="Station Name" name="stationname" />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input" style={{ width: "330px" }}>
@@ -168,6 +301,8 @@ const UserCreation = () => {
                 <TextField
                   size="small"
                   name="designation"
+                  value={selectedCustomerData?.designation || book.designation}
+                  onChange={handleChange}
                   label="Designation"
                   id="designation"
                   sx={{ m: 1, width: "200ch" }}
@@ -183,6 +318,9 @@ const UserCreation = () => {
                 <FormControl sx={{ m: 1, width: '35ch' }} variant="standard">
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <Input
+                    name="userpassword"
+                    value={selectedCustomerData?.userpassword || book.userpassword}
+                    onChange={handleChange}
                     id="password"
                     type={showPasswords ? 'text' : 'password'}
                     endAdornment={
@@ -206,6 +344,9 @@ const UserCreation = () => {
                 <FormControl sx={{ m: 1, width: '35ch' }} variant="standard">
                   <InputLabel htmlFor="confirm-password">Confirm Password</InputLabel>
                   <Input
+                    name="userconfirmpassword"
+                    value={selectedCustomerData?.userconfirmpassword || book.userconfirmpassword}
+                    onChange={handleChange}
                     id="confirm-password"
                     type={showPassword ? 'text' : 'password'}
                     endAdornment={
@@ -221,6 +362,7 @@ const UserCreation = () => {
                     }
                   />
                 </FormControl>
+
               </div>
               <div className="input radio">
                 <FormControl>
@@ -230,7 +372,9 @@ const UserCreation = () => {
                   <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
+                    name="active"
+                    onChange={handleChange}
+                    value={selectedCustomerData?.active || book.active}
                   >
                     <FormControlLabel
                       value="yes"
@@ -252,20 +396,28 @@ const UserCreation = () => {
                 <Autocomplete
                   fullWidth
                   size="small"
-                  id="free-solo-demo"
+                  id="free-solo-demo-viewfor"
                   freeSolo
-                  value={ViewFor.map((option) => option.optionvalue)}
+                  sx={{ width: "20ch" }}
+                  value={selectedCustomerData?.viewfor || ''}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "viewfor")}
                   options={ViewFor.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ""}
-                  renderInput={(params) => (
-                    <TextField {...params} label="View For" />
-                  )}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData?.viewfor || ''
+                    return (
+                      <TextField {...params} label="View For" name="viewfor" />
+                    )
+                  }
+                  }
                 />
               </div>
             </div>
           </div>
+          {error && <p>Something went wrong!</p>}
+          {!passwordsMatch && <p>Passwords do not match. Please try again.</p>}
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -277,6 +429,7 @@ const UserCreation = () => {
                   key={action.name}
                   icon={action.icon}
                   tooltipTitle={action.name}
+                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                 />
               ))}
             </StyledSpeedDial>
@@ -286,13 +439,14 @@ const UserCreation = () => {
               <DataGrid
                 rows={rows}
                 columns={columns}
+                onRowClick={handleRowClick}
                 initialState={{
                   pagination: {
                     paginationModel: { page: 0, pageSize: 5 },
                   },
                 }}
                 pageSizeOptions={[5, 10]}
-                checkboxSelection
+              // checkboxSelection
               />
             </div>
           </div>

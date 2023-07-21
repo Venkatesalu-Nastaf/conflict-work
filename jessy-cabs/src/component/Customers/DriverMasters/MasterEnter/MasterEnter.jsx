@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from "axios";
 import {
   CabDriver,
 } from "./MasterEnteryData";
@@ -12,12 +13,13 @@ import LocationCityIcon from "@mui/icons-material/LocationCity";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import RateReviewIcon from "@mui/icons-material/RateReview";
-import { Table } from "@mui/joy";
+// import { Table } from "@mui/joy";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import BadgeIcon from "@mui/icons-material/Badge";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import Autocomplete from "@mui/material/Autocomplete";
+import { DataGrid } from "@mui/x-data-grid";
 
 //
 import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
@@ -42,17 +44,13 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 
 // TABLE
-function createData(driverName, mobile) {
-  return { driverName, mobile };
-}
+const columns = [
+  { field: "driverid", headerName: "Driver ID", width: 70 },
+  { field: "username", headerName: "Driver Name", width: 130 },
+  { field: "Phoencell", headerName: "Mobile", width: 130 },
 
-const rows = [
-  createData("John Doe", "9912277222"),
-  createData("Jane Smith", "9123317892"),
-  createData("Michael Johnson", "73421288938"),
-  createData("Sarah Davis", "62779165285"),
-  createData("Robert Wilson", "7729734456"),
 ];
+
 
 // TABLE END
 
@@ -79,10 +77,153 @@ const actions = [
 
 const MasterEnter = () => {
 
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [actionName] = useState('');
+  const [error, setError] = useState(false);
+
+  const [book, setBook] = useState({
+    driverid: '',
+    username: '',
+    ddate: '',
+    Phoencell: '',
+    email: '',
+    cabdriver: '',
+    address1: '',
+    basicsalary: '',
+    streetno: '',
+    pfno: '',
+    city: '',
+    esino: '',
+    dlno: '',
+    dlexpdate: '',
+    accountno: '',
+    durationofyears: '',
+    apppassword: '',
+
+  });
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+
+    if (type === 'checkbox') {
+      // For checkboxes, update the state based on the checked value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      // For other input fields, update the state based on the value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleAutocompleteChange = (event, value, name) => {
+    const selectedOption = value ? value.label : '';
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: selectedOption,
+    }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
+  };
+
+  const handleDateChange = (date, name) => {
+    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: formattedDate,
+    }));
+  };
+
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      driverid: '',
+      username: '',
+      ddate: '',
+      Phoencell: '',
+      email: '',
+      cabdriver: '',
+      address1: '',
+      basicsalary: '',
+      streetno: '',
+      pfno: '',
+      city: '',
+      esino: '',
+      dlno: '',
+      dlexpdate: '',
+      accountno: '',
+      durationofyears: '',
+      apppassword: '',
+
+    }));
+    setSelectedCustomerData({});
+  };
+
+  const handleClick = async (event, actionName, driverid) => {
+    event.preventDefault();
+    try {
+      if (actionName === 'List') {
+        console.log('List button clicked');
+        const response = await axios.get('http://localhost:8081/drivermaster');
+        const data = response.data;
+        setRows(data);
+      } else if (actionName === 'Cancel') {
+        console.log('Cancel button clicked');
+        handleCancel();
+      } else if (actionName === 'Delete') {
+        console.log('Delete button clicked');
+        await axios.delete(`http://localhost:8081/drivermaster/${driverid}`);
+        console.log('Customer deleted');
+        setSelectedCustomerData(null);
+        handleCancel();
+      } else if (actionName === 'Edit') {
+        console.log('Edit button clicked');
+        const selectedCustomer = rows.find((row) => row.driverid === driverid);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/drivermaster/${driverid}`, updatedCustomer);
+        console.log('Customer updated');
+        handleCancel();
+      } else if (actionName === 'Add') {
+        await axios.post('http://localhost:8081/drivermaster', book);
+        console.log(book);
+        handleCancel();
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+  };
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  });
+  const handleRowClick = useCallback((params) => {
+    console.log(params.row);
+    const customerData = params.row;
+    setSelectedCustomerData(customerData);
+    setSelectedCustomerId(params.row.customerId);
+  }, []);
+
   return (
     <div className="masterEntery-form-container">
       <div className="masterEntery-form">
-        <form action="">
+        <form onSubmit={handleClick}>
           <div className="masterEntery-header">
             <div className="input-field">
               <div className="input">
@@ -93,7 +234,9 @@ const MasterEnter = () => {
                   size="small"
                   id="id"
                   label="ID"
-                  name="id"
+                  value={selectedCustomerData?.driverid || book.driverid}
+                  onChange={handleChange}
+                  name="driverid"
                   autoFocus
                 />
               </div>
@@ -105,13 +248,28 @@ const MasterEnter = () => {
                   id="username"
                   label="User Name"
                   name="username"
+                  value={selectedCustomerData?.username || book.username}
+                  onChange={handleChange}
                   size="small"
                   autoFocus
                 />
               </div>
               <div className="input">
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker name="ddate" label="Date" defaultValue={dayjs()} />
+                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker label="Date" defaultValue={dayjs()} />
+                  {/* <DemoItem label="Date"> */}
+                  <DatePicker
+                    label="Date"
+                    value={selectedCustomerData.ddate ? dayjs(selectedCustomerData.ddate) : null}
+                    onChange={(date) => handleDateChange(date, 'ddate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='ddate' value={selectedCustomerData.ddate} />
+                    )}
+                  </DatePicker>
+                  {/* </DemoItem> */}
                 </LocalizationProvider>
               </div>
             </div>
@@ -123,6 +281,8 @@ const MasterEnter = () => {
                 <TextField
                   type="number"
                   name="Phoencell"
+                  value={selectedCustomerData?.Phoencell || book.Phoencell}
+                  onChange={handleChange}
                   label="Phone (Cell)"
                   id="Phoencell"
                   size="small"
@@ -135,6 +295,8 @@ const MasterEnter = () => {
                 </div>
                 <TextField
                   name="email"
+                  value={selectedCustomerData?.email || book.email}
+                  onChange={handleChange}
                   label="Email"
                   id="email"
                   size="small"
@@ -145,7 +307,7 @@ const MasterEnter = () => {
                 <div className="icone">
                   <AppsOutageOutlinedIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -156,9 +318,50 @@ const MasterEnter = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ""}
                   renderInput={(params) => (
-                    <TextField {...params} label="Cab Driver" />
+                    <TextField {...params} name="cabdriver" label="Cab Driver" />
                   )}
+                /> */}
+                {/* <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo-customerType"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "cabdriver")}
+                  value={CabDriver.find((option) => option.Option)?.label || ''}
+                  options={CabDriver.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData?.cabdriver || ''
+                    return (        
+                      <TextField   {...params} label="Cab Driver" name="cabdriver" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo-customerType"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  value={selectedCustomerData?.cabdriver || ''}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "cabdriver")}
+                  options={CabDriver.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData?.cabdriver || ''
+                    return ( 
+                    <TextField {...params} label="Cab Driver" name="cabdriver" />
+                    )
+                  }
+                  }
                 />
+
               </div>
             </div>
           </div>
@@ -172,6 +375,8 @@ const MasterEnter = () => {
                   <TextField
                     size="small"
                     name="address1"
+                    value={selectedCustomerData?.address1 || book.address1}
+                    onChange={handleChange}
                     label="Address"
                     id="remark"
                     sx={{ m: 1, width: "200ch" }}
@@ -187,6 +392,8 @@ const MasterEnter = () => {
                     size="small"
                     id="basicsalary"
                     label="Basic Salary"
+                    value={selectedCustomerData?.basicsalary || book.basicsalary}
+                    onChange={handleChange}
                     name="basicsalary"
                     autoFocus
                   />
@@ -200,8 +407,10 @@ const MasterEnter = () => {
                   <TextField
                     size="small"
                     name="streetno"
+                    value={selectedCustomerData?.streetno || book.streetno}
+                    onChange={handleChange}
                     id="remark"
-                    sx={{ m: 1, width: "200ch" }} 
+                    sx={{ m: 1, width: "200ch" }}
                     variant="standard"
                   />
                 </div>
@@ -211,7 +420,9 @@ const MasterEnter = () => {
                   </div>
                   <TextField
                     size="small"
-                    name="PFNo"
+                    name="pfno"
+                    value={selectedCustomerData?.pfno || book.pfno}
+                    onChange={handleChange}
                     label="PF No"
                     id="PFNo"
                   />
@@ -225,6 +436,8 @@ const MasterEnter = () => {
                   <TextField
                     size="small"
                     name="city"
+                    value={selectedCustomerData?.city || book.city}
+                    onChange={handleChange}
                     id="address3"
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
@@ -236,7 +449,9 @@ const MasterEnter = () => {
                   </div>
                   <TextField
                     size="small"
-                    name="ESINo"
+                    name="esino"
+                    value={selectedCustomerData?.esino || book.esino}
+                    onChange={handleChange}
                     label="ESI No"
                     id="ESINo"
                   />
@@ -252,13 +467,28 @@ const MasterEnter = () => {
                     size="small"
                     id="d.l.no"
                     label="D.L.No"
-                    name="d.l.no"
+                    value={selectedCustomerData?.dlno || book.dlno}
+                    onChange={handleChange}
+                    name="dlno"
                     autoFocus
                   />
                 </div>
                 <div className="input" style={{ width: "185px" }}>
+                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker name="dlexpdate" label="D.L.Exp Date" defaultValue={dayjs()} />
+                  </LocalizationProvider> */}
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="D.L.Exp Date" defaultValue={dayjs()} />
+                    {/* <DemoItem label="Date"> */}
+                    <DatePicker
+                      label="D.L.Exp Date"
+                      value={selectedCustomerData.dlexpdate ? dayjs(selectedCustomerData.dlexpdate) : null}
+                      onChange={(date) => handleDateChange(date, 'dlexpdate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='dlexpdate' value={selectedCustomerData.dlexpdate} />
+                      )}
+                    </DatePicker>
+                    {/* </DemoItem> */}
                   </LocalizationProvider>
                 </div>
                 <div className="input">
@@ -267,7 +497,9 @@ const MasterEnter = () => {
                   </div>
                   <TextField
                     size="small"
-                    name="AccountNo"
+                    name="accountno"
+                    value={selectedCustomerData?.accountno || book.accountno}
+                    onChange={handleChange}
                     label="Account No"
                     id="standard-size-normal"
                   />
@@ -283,6 +515,8 @@ const MasterEnter = () => {
                     size="small"
                     id="durationofyears"
                     label="Duration Of Years"
+                    value={selectedCustomerData?.durationofyears || book.durationofyears}
+                    onChange={handleChange}
                     name="durationofyears"
                   />
                 </div>
@@ -297,6 +531,8 @@ const MasterEnter = () => {
                     id="apppassword"
                     label="App Password"
                     name="apppassword"
+                    value={selectedCustomerData?.apppassword || book.apppassword}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -306,7 +542,23 @@ const MasterEnter = () => {
                 <div className="textboxlist-masterEntery">
                   <div className="textboxlist-customer list-update">
                     <span>
-                      <Table stickyHeader hoverRow borderAxis="y">
+                    {/* <TableHead>
+    <TableRow>
+      <TableCell style={{ width: "70px" }}>Driver ID</TableCell>
+      <TableCell style={{ width: "130px" }}>Driver Name</TableCell>
+      <TableCell style={{ width: "130px" }}>Mobile</TableCell>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    {rows.map((row) => (
+      <TableRow key={row.driverid} onClick={() => handleRowClick(row)}>
+        <TableCell>{row.driverid}</TableCell>
+        <TableCell>{row.username}</TableCell>
+        <TableCell>{row.Phoencell}</TableCell>
+      </TableRow>
+    ))}
+  </TableBody> */}
+                      {/* <Table stickyHeader hoverRow borderAxis="y">
                         <thead>
                           <tr>
                             <th style={{ width: "20%" }}>Driver Name</th>
@@ -321,13 +573,26 @@ const MasterEnter = () => {
                             </tr>
                           ))}
                         </tbody>
-                      </Table>
+                      </Table> */}
+                      <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        onRowClick={handleRowClick}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                          },
+                        }}
+                        pageSizeOptions={[5, 10]}
+                      // checkboxSelection
+                      />
                     </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          {error && <p>Something went wrong!</p>}
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -339,6 +604,7 @@ const MasterEnter = () => {
                   key={action.name}
                   icon={action.icon}
                   tooltipTitle={action.name}
+                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                 />
               ))}
             </StyledSpeedDial>

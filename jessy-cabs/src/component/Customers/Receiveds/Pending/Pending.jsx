@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useState, useCallback } from 'react';
 import "./Pending.css";
+import axios from "axios";
+// eslint-disable-next-line
+import { saveAs } from 'file-saver';
+import { ExportToCsv } from 'export-to-csv';
+
 import { Stations } from "./PendingData";
 import Autocomplete from "@mui/material/Autocomplete";
-
 import DescriptionIcon from "@mui/icons-material/Description";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { TextField } from "@mui/material";
 import dayjs from "dayjs";
 import { DataGrid } from "@mui/x-data-grid";
@@ -15,59 +20,92 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "BookingId", headerName: "Booking Id", width: 130 },
-  { field: "date", headerName: "Date", width: 130 },
-  { field: "Time", headerName: "Time", width: 130 },
-  { field: "UserName", headerName: "User Name", width: 130 },
-  { field: "CustomerName", headerName: "Customer Name", width: 130 },
-  { field: "VehicleType", headerName: "Vehicle Type", width: 130 },
-  { field: "RAddress", headerName: "R Address", width: 130 },
-  { field: "Status", headerName: "Status", width: 130 },
-  { field: "VehicleRegistrationNo", headerName: "Vehicle Registration No", width: 170 },
-  { field: "Station", headerName: "Station", width: 130 },
-  { field: "employeno", headerName: "Employe No", width: 130 },
-  { field: "customercode", headerName: "Customer Code", width: 130 },
+  { field: "bookingno", headerName: "Booking ID", width: 130 },
+  { field: "bookingdate", headerName: "Date", width: 130 },
+  { field: "bookingtime", headerName: "Time", width: 90 },
+  { field: "guestname", headerName: "Guest Name", width: 160 },
+  { field: "mobileno", headerName: "Mobile", width: 130 },
+  { field: "address1", headerName: "R.Address", width: 130 },
+  { field: "address2", headerName: "R.Address1", width: 130 },
+  { field: "city", headerName: "R.Address2", width: 130 },
+  { field: "customer", headerName: "Company", width: 130 },
+  { field: "tripid", headerName: "BookingID", width: 130 },
 ];
 
-const rows = [
-  {
-    id: 1,
-    BookingId: 1,
-    date: "2023-06-07",
-    Time: "9:00 AM",
-    UserName: "Morning",
-    CustomerName: "123 Street, Apt 4B, City",
-    VehicleType: "ABC Car",
-    RAddress: "no/2 street nobody",
-    Status: "booking",
-    VehicleRegistrationNo: "2312",
-    Station: "Chennai",
-    employeno: "C2332",
-    customercode: "f3-2332",
-
-
-  },
-  {
-    id: 2,
-    BookingId: 2,
-    date: "2023-06-08",
-    Time: "7:00 PM",
-    UserName: "Evening",
-    CustomerName: "456 Avenue, Unit 8, Town",
-    VehicleType: "XYZ Car",
-    RAddress: "no/2 street nobody",
-    Status: "pending",
-    VehicleRegistrationNo: "2313",
-    Station: "Mumbai",
-    employeno: "C2333",
-    customercode: "t3-5420",
-
-  },
-  // Add more rows as needed
-];
 
 const Pending = () => {
+  const [rows, setRows] = useState([]);
+  const [servicestation, setServiceStation] = useState("");
+  const [fromDate, setFromDate] = useState(dayjs());
+  const [toDate, setToDate] = useState(dayjs());
+  // const [data, setData] = useState([]);
 
+  // useEffect(() => {
+  //   handleShow([]); // Fetch initial data on component mount
+  // }, []);
+
+  const handleDownload = () => {
+    const format = 'excel'; // Set the format to 'excel'
+    // Perform data conversion and export based on the selected format
+    if (format === 'excel') {
+      const csvExporter = new ExportToCsv({
+        filename: 'Customer_details.csv',
+        useKeysAsHeaders: true, // Include header row
+      });
+      const csvRows = rows.map(({ id, bookingno, bookingdate, bookingtime, guestname, mobileno, address1, address2, city, customer, tripid }) => ({
+        Sno: id,
+        Booking_ID: bookingno,
+        Date: bookingdate,
+        Time: bookingtime,
+        Guest_Name: guestname,
+        Mobile: mobileno,
+        R_Address: address1,
+        R_Address1: address2,
+        R_Address2: city,
+        Company: customer,
+        TripID: tripid,
+      }));
+      const csvFormattedData = csvExporter.generateCsv(csvRows, true);
+      const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
+      saveAs(blob, 'Customer_details.csv');
+    }
+  };
+
+  const handleInputChange = (event, newValue) => {
+    setServiceStation(newValue.label || ""); // Assuming the label field contains the station name
+  };
+
+
+  const handleShow = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/booking?servicestation=${encodeURIComponent(
+          servicestation
+        )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+          toDate.toISOString()
+        )}`
+      );
+      const data = response.data;
+      setRows(data);
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      setRows([]);
+    }
+  }, [servicestation, fromDate, toDate]);
+
+  const handleShowAll = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/booking`
+      );
+      const data = response.data;
+      setRows(data);
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      setRows([]);
+    }
+  }, []);
+  
   const handleButtonClickBooking = () => {
     window.location.href = '/home/orders/bookings';
 
@@ -86,19 +124,25 @@ const Pending = () => {
               <div className="input-field">
                 <div className="input" style={{ width: "50%" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="From Date" defaultValue={dayjs()} />
-                  </LocalizationProvider>
-                </div>
-                <div className="input" style={{ width: "50%" }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="To Date" defaultValue={dayjs()} />
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="From Date"
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
+                      />
+                      <DatePicker
+                        label="To Date"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
+                      />
+                    </DemoContainer>
                   </LocalizationProvider>
                 </div>
                 <div className="input" >
-                  <Button variant="contained">Show</Button>
+                  <Button variant="outlined" onClick={handleShow}>Show</Button>
                 </div>
                 <div className="input">
-                  <Button variant="outlined">Show All</Button>
+                  <Button variant="outlined" onClick={handleShowAll}>Show All</Button>
                 </div>
               </div>
               <div className="input-field">
@@ -108,28 +152,26 @@ const Pending = () => {
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={Stations.map((option) => option.optionvalue)}
+                    value={servicestation}
                     options={Stations.map((option) => ({
-                      label: option.Option,
+                      label: option.optionvalue,
                     }))}
                     getOptionLabel={(option) => option.label || ""}
+                    onChange={handleInputChange}
                     renderInput={(params) => (
                       <TextField {...params} label="Stations" />
                     )}
                   />
+
                 </div>
                 <div className="input" style={{ width: "110px" }}>
                   <Button
                     variant="outlined"
                     component="label"
                     startIcon={<DescriptionIcon />}
+                    onClick={() => { handleDownload('excel') }}
                   >
                     Excel
-                    <input
-                      type="file"
-
-                      style={{ display: "none" }}
-                    />
                   </Button>
                 </div>
                 <div className="input" style={{ width: "140px" }}>

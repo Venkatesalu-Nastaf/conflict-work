@@ -31,7 +31,11 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+<<<<<<< HEAD
 // import dayjs from "dayjs";
+=======
+import dayjs from "dayjs";
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
@@ -58,6 +62,18 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 // Table Start
+<<<<<<< HEAD
+=======
+const columns = [
+  { field: "id", headerName: "Sno", width: 70 },
+  { field: "username", headerName: "User_Name", width: 130 },
+  { field: "userpassword", headerName: "Password", width: 130 },
+  { field: "active", headerName: "Active", width: 160 },
+  { field: "stationname", headerName: "Station", width: 130 },
+  { field: "viewfor", headerName: "Access", width: 130 },
+  { field: "designation", headerName: "Designation", width: 130 },
+];
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
 
 
 const UserCreation = () => {
@@ -210,6 +226,130 @@ const UserCreation = () => {
     setSelectedCustomerId(params.row.customerId);
   }, []);
 
+
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [actionName] = useState('');
+  const [error, setError] = useState(false);
+
+  const [book, setBook] = useState({
+    userid: '',
+    username: '',
+    stationname: '',
+    designation: '',
+    userpassword: '',
+    userconfirmpassword: '',
+    active: '',
+    viewfor: '',
+  });
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+
+    if (type === 'checkbox') {
+      // For checkboxes, update the state based on the checked value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      // For other input fields, update the state based on the value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleAutocompleteChange = (event, value, name) => {
+    const selectedOption = value ? value.label : '';
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: selectedOption,
+    }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
+  };
+
+  // const handleDateChange = (date, name) => {
+  //   const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+  //   setBook((prevBook) => ({
+  //     ...prevBook,
+  //     [name]: formattedDate,
+  //   }));
+  // };
+
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      userid: '',
+      username: '',
+      stationname: '',
+      designation: '',
+      userpassword: '',
+      userconfirmpassword: '',
+      active: '',
+      viewfor: '',
+    }));
+    setSelectedCustomerData({});
+  };
+
+  const handleClick = async (event, actionName, userid) => {
+    event.preventDefault();
+    try {
+      if (actionName === 'List') {
+        console.log('List button clicked');
+        const response = await axios.get('http://localhost:8081/usercreation');
+        const data = response.data;
+        setRows(data);
+      } else if (actionName === 'Cancel') {
+        console.log('Cancel button clicked');
+        handleCancel();
+      } else if (actionName === 'Delete') {
+        console.log('Delete button clicked');
+        await axios.delete(`http://localhost:8081/usercreation/${userid}`);
+        console.log('Customer deleted');
+        setSelectedCustomerData(null);
+        handleCancel();
+      } else if (actionName === 'Edit') {
+        console.log('Edit button clicked');
+        const selectedCustomer = rows.find((row) => row.userid === userid);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/usercreation/${userid}`, updatedCustomer);
+        console.log('Customer updated');
+        handleCancel();
+      } else if (actionName === 'Add') {
+        await axios.post('http://localhost:8081/usercreation', book);
+        console.log(book);
+        handleCancel();
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+  };
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  });
+  const handleRowClick = useCallback((params) => {
+    console.log(params.row);
+    const customerData = params.row;
+    setSelectedCustomerData(customerData);
+    setSelectedCustomerId(params.row.customerId);
+  }, []);
+
   const handleClickShowPasswords = () => {
     setShowPasswords((show) => !show);
   };
@@ -249,7 +389,11 @@ const UserCreation = () => {
                   id="id"
                   label="ID"
                   name="userid"
+<<<<<<< HEAD
                   value={selectedCustomerData?.userid || book.userid}
+=======
+                  value={selectedCustomerData?.driverid || book.driverid}
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
                   onChange={handleChange}
                   variant="standard"
                 />
@@ -262,9 +406,15 @@ const UserCreation = () => {
                   margin="normal"
                   size="small"
                   id="user-name"
+<<<<<<< HEAD
                   label="User Mail-Id"
                   name="username"
                   value={selectedCustomerData?.username || book.username}
+=======
+                  label="User Name"
+                  name="username"
+                  value={selectedCustomerData?.driverid || book.driverid}
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
                   onChange={handleChange}
                   autoFocus
                 />
@@ -273,7 +423,7 @@ const UserCreation = () => {
                 <div className="icone">
                   <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-stationname"
@@ -284,6 +434,25 @@ const UserCreation = () => {
                   options={StationName.map((option) => ({
                     label: option.Option,
                   }))}
+<<<<<<< HEAD
+=======
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Station Name" />
+                  )}
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo-customerType"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  value={selectedCustomerData?.stationname || ''}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
+                  options={StationName.map((option) => ({
+                    label: option.Option,
+                  }))}
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
                     params.inputProps.value = selectedCustomerData?.stationname || ''
@@ -301,7 +470,11 @@ const UserCreation = () => {
                 <TextField
                   size="small"
                   name="designation"
+<<<<<<< HEAD
                   value={selectedCustomerData?.designation || book.designation}
+=======
+                  value={selectedCustomerData?.driverid || book.driverid}
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
                   onChange={handleChange}
                   label="Designation"
                   id="designation"
@@ -319,8 +492,11 @@ const UserCreation = () => {
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <Input
                     name="userpassword"
+<<<<<<< HEAD
                     value={selectedCustomerData?.userpassword || book.userpassword}
                     onChange={handleChange}
+=======
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
                     id="password"
                     type={showPasswords ? 'text' : 'password'}
                     endAdornment={
@@ -345,8 +521,11 @@ const UserCreation = () => {
                   <InputLabel htmlFor="confirm-password">Confirm Password</InputLabel>
                   <Input
                     name="userconfirmpassword"
+<<<<<<< HEAD
                     value={selectedCustomerData?.userconfirmpassword || book.userconfirmpassword}
                     onChange={handleChange}
+=======
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
                     id="confirm-password"
                     type={showPassword ? 'text' : 'password'}
                     endAdornment={
@@ -373,8 +552,11 @@ const UserCreation = () => {
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="active"
+<<<<<<< HEAD
                     onChange={handleChange}
                     value={selectedCustomerData?.active || book.active}
+=======
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
                   >
                     <FormControlLabel
                       value="yes"
@@ -393,7 +575,7 @@ const UserCreation = () => {
                 <div className="icone">
                   <QuizOutlinedIcon color="action" />
                 </div>
-                <Autocomplete
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-viewfor"
@@ -404,6 +586,25 @@ const UserCreation = () => {
                   options={ViewFor.map((option) => ({
                     label: option.Option,
                   }))}
+<<<<<<< HEAD
+=======
+                  getOptionLabel={(option) => option.label || ""}
+                  renderInput={(params) => (
+                    <TextField {...params} label="View For" />
+                  )}
+                /> */}
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo-customerType"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  value={selectedCustomerData?.viewfor || ''}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "viewfor")}
+                  options={ViewFor.map((option) => ({
+                    label: option.Option,
+                  }))}
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
                     params.inputProps.value = selectedCustomerData?.viewfor || ''

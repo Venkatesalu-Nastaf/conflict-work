@@ -17,6 +17,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -36,6 +41,10 @@ const columns = [
   { field: "billingno", headerName: "Billing No", width: 130 },
 ]; 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
 const Closed = () => {
 
   const [rows, setRows] = useState([]);
@@ -43,6 +52,10 @@ const Closed = () => {
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
    // download function
    const handleDownload = (format) => {
     // Perform data conversion and export based on the selected format
@@ -70,7 +83,11 @@ const Closed = () => {
       }));
       const csvFormattedData = csvExporter.generateCsv(csvRows, true);
       const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
+<<<<<<< HEAD
       saveAs(blob, 'closed_tripsheet.csv');
+=======
+      saveAs(blob, 'Customer_details.csv');
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
     } else if (format === 'pdf') {
       const doc = new jsPDF();
       const headerNames = columns.map(column => column.headerName);
@@ -79,15 +96,45 @@ const Closed = () => {
         head: [headerNames],
         body: bodyData,
       });
+<<<<<<< HEAD
       doc.save('closed_tripsheet.pdf');
+=======
+      doc.save('Customer_details.pdf');
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
     }
   };
   // End
 
   const handleInputChange = (event, newValue) => {
+<<<<<<< HEAD
     setDepartment(newValue ? newValue.label : ''); // Assuming the label field contains the station name
   };
 
+=======
+    setDepartment(newValue.label || ""); // Assuming the label field contains the station name
+  };
+
+
+  const handleDateChange = (date, dateType) => {
+    if (dateType === "fromDate") {
+      setFromDate(date);
+    } else {
+      setToDate(date);
+    }
+  };
+
+  // const handleShow = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:8081/tripsheet?tripsheetno=${tripsheetno}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+  //     const data = response.data;
+  //     setRows(data);
+  //   } catch (error) {
+  //     console.error('Error retrieving data:', error);
+  //     setRows([]);
+  //   }
+  // }, [tripsheetno, fromDate, toDate]);
+
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -108,7 +155,13 @@ const Closed = () => {
   const handleShowAll = useCallback(async () => {
     try {
       const response = await axios.get(
+<<<<<<< HEAD
         `http://localhost:8081/tripsheet`
+=======
+        `http://localhost:8081/tripsheet?fromDate=${encodeURIComponent(
+          fromDate.toISOString()
+        )}&toDate=${encodeURIComponent(toDate.toISOString())}`
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
       );
       const data = response.data;
       setRows(data);
@@ -116,7 +169,11 @@ const Closed = () => {
       console.error('Error retrieving data:', error);
       setRows([]);
     }
+<<<<<<< HEAD
   }, []);
+=======
+  }, [fromDate, toDate]);
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
 
 
   const handleButtonClick = () => {
@@ -167,7 +224,11 @@ const Closed = () => {
                     }))}
                     getOptionLabel={(option) => option.label || ""}
                     onChange={handleInputChange}
+<<<<<<< HEAD
                     renderInput={(params) => 
+=======
+                    renderInput={(params) => (
+>>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
                       <TextField {...params} label="Stations" />
                     }
                   />

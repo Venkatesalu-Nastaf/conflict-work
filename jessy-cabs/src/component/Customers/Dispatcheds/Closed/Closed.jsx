@@ -18,10 +18,15 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+
+
+>>>>>>> origin/back-end
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -42,9 +47,13 @@ const columns = [
 ]; 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+
+>>>>>>> origin/back-end
 const Closed = () => {
 
   const [rows, setRows] = useState([]);
@@ -53,9 +62,13 @@ const Closed = () => {
   const [toDate, setToDate] = useState(dayjs());
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+
+>>>>>>> origin/back-end
    // download function
    const handleDownload = (format) => {
     // Perform data conversion and export based on the selected format
@@ -84,10 +97,14 @@ const Closed = () => {
       const csvFormattedData = csvExporter.generateCsv(csvRows, true);
       const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
 <<<<<<< HEAD
+<<<<<<< HEAD
       saveAs(blob, 'closed_tripsheet.csv');
 =======
       saveAs(blob, 'Customer_details.csv');
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+      saveAs(blob, 'Customer_details.csv');
+>>>>>>> origin/back-end
     } else if (format === 'pdf') {
       const doc = new jsPDF();
       const headerNames = columns.map(column => column.headerName);
@@ -97,20 +114,27 @@ const Closed = () => {
         body: bodyData,
       });
 <<<<<<< HEAD
+<<<<<<< HEAD
       doc.save('closed_tripsheet.pdf');
 =======
       doc.save('Customer_details.pdf');
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+      doc.save('Customer_details.pdf');
+>>>>>>> origin/back-end
     }
   };
   // End
 
   const handleInputChange = (event, newValue) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
     setDepartment(newValue ? newValue.label : ''); // Assuming the label field contains the station name
   };
 
 =======
+=======
+>>>>>>> origin/back-end
     setDepartment(newValue.label || ""); // Assuming the label field contains the station name
   };
 
@@ -134,7 +158,10 @@ const Closed = () => {
   //   }
   // }, [tripsheetno, fromDate, toDate]);
 
+<<<<<<< HEAD
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+>>>>>>> origin/back-end
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -156,12 +183,18 @@ const Closed = () => {
     try {
       const response = await axios.get(
 <<<<<<< HEAD
+<<<<<<< HEAD
         `http://localhost:8081/tripsheet`
 =======
         `http://localhost:8081/tripsheet?fromDate=${encodeURIComponent(
           fromDate.toISOString()
         )}&toDate=${encodeURIComponent(toDate.toISOString())}`
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+        `http://localhost:8081/tripsheet?fromDate=${encodeURIComponent(
+          fromDate.toISOString()
+        )}&toDate=${encodeURIComponent(toDate.toISOString())}`
+>>>>>>> origin/back-end
       );
       const data = response.data;
       setRows(data);
@@ -170,10 +203,14 @@ const Closed = () => {
       setRows([]);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
   }, []);
 =======
   }, [fromDate, toDate]);
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+  }, [fromDate, toDate]);
+>>>>>>> origin/back-end
 
 
   const handleButtonClick = () => {
@@ -225,8 +262,11 @@ const Closed = () => {
                     getOptionLabel={(option) => option.label || ""}
                     onChange={handleInputChange}
 <<<<<<< HEAD
+<<<<<<< HEAD
                     renderInput={(params) => 
 =======
+=======
+>>>>>>> origin/back-end
                     renderInput={(params) => (
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
                       <TextField {...params} label="Stations" />

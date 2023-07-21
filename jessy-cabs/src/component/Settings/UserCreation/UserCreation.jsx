@@ -32,10 +32,14 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 <<<<<<< HEAD
+<<<<<<< HEAD
 // import dayjs from "dayjs";
 =======
 import dayjs from "dayjs";
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+import dayjs from "dayjs";
+>>>>>>> origin/back-end
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
@@ -350,6 +354,130 @@ const UserCreation = () => {
     setSelectedCustomerId(params.row.customerId);
   }, []);
 
+
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [actionName] = useState('');
+  const [error, setError] = useState(false);
+
+  const [book, setBook] = useState({
+    userid: '',
+    username: '',
+    stationname: '',
+    designation: '',
+    userpassword: '',
+    userconfirmpassword: '',
+    active: '',
+    viewfor: '',
+  });
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+
+    if (type === 'checkbox') {
+      // For checkboxes, update the state based on the checked value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      // For other input fields, update the state based on the value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleAutocompleteChange = (event, value, name) => {
+    const selectedOption = value ? value.label : '';
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: selectedOption,
+    }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
+  };
+
+  // const handleDateChange = (date, name) => {
+  //   const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+  //   setBook((prevBook) => ({
+  //     ...prevBook,
+  //     [name]: formattedDate,
+  //   }));
+  // };
+
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      userid: '',
+      username: '',
+      stationname: '',
+      designation: '',
+      userpassword: '',
+      userconfirmpassword: '',
+      active: '',
+      viewfor: '',
+    }));
+    setSelectedCustomerData({});
+  };
+
+  const handleClick = async (event, actionName, userid) => {
+    event.preventDefault();
+    try {
+      if (actionName === 'List') {
+        console.log('List button clicked');
+        const response = await axios.get('http://localhost:8081/usercreation');
+        const data = response.data;
+        setRows(data);
+      } else if (actionName === 'Cancel') {
+        console.log('Cancel button clicked');
+        handleCancel();
+      } else if (actionName === 'Delete') {
+        console.log('Delete button clicked');
+        await axios.delete(`http://localhost:8081/usercreation/${userid}`);
+        console.log('Customer deleted');
+        setSelectedCustomerData(null);
+        handleCancel();
+      } else if (actionName === 'Edit') {
+        console.log('Edit button clicked');
+        const selectedCustomer = rows.find((row) => row.userid === userid);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/usercreation/${userid}`, updatedCustomer);
+        console.log('Customer updated');
+        handleCancel();
+      } else if (actionName === 'Add') {
+        await axios.post('http://localhost:8081/usercreation', book);
+        console.log(book);
+        handleCancel();
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+  };
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  });
+  const handleRowClick = useCallback((params) => {
+    console.log(params.row);
+    const customerData = params.row;
+    setSelectedCustomerData(customerData);
+    setSelectedCustomerId(params.row.customerId);
+  }, []);
+
   const handleClickShowPasswords = () => {
     setShowPasswords((show) => !show);
   };
@@ -390,10 +518,14 @@ const UserCreation = () => {
                   label="ID"
                   name="userid"
 <<<<<<< HEAD
+<<<<<<< HEAD
                   value={selectedCustomerData?.userid || book.userid}
 =======
                   value={selectedCustomerData?.driverid || book.driverid}
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+                  value={selectedCustomerData?.driverid || book.driverid}
+>>>>>>> origin/back-end
                   onChange={handleChange}
                   variant="standard"
                 />
@@ -414,7 +546,10 @@ const UserCreation = () => {
                   label="User Name"
                   name="username"
                   value={selectedCustomerData?.driverid || book.driverid}
+<<<<<<< HEAD
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+>>>>>>> origin/back-end
                   onChange={handleChange}
                   autoFocus
                 />
@@ -452,7 +587,10 @@ const UserCreation = () => {
                   options={StationName.map((option) => ({
                     label: option.Option,
                   }))}
+<<<<<<< HEAD
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+>>>>>>> origin/back-end
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
                     params.inputProps.value = selectedCustomerData?.stationname || ''
@@ -471,10 +609,14 @@ const UserCreation = () => {
                   size="small"
                   name="designation"
 <<<<<<< HEAD
+<<<<<<< HEAD
                   value={selectedCustomerData?.designation || book.designation}
 =======
                   value={selectedCustomerData?.driverid || book.driverid}
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+                  value={selectedCustomerData?.driverid || book.driverid}
+>>>>>>> origin/back-end
                   onChange={handleChange}
                   label="Designation"
                   id="designation"
@@ -493,10 +635,13 @@ const UserCreation = () => {
                   <Input
                     name="userpassword"
 <<<<<<< HEAD
+<<<<<<< HEAD
                     value={selectedCustomerData?.userpassword || book.userpassword}
                     onChange={handleChange}
 =======
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+>>>>>>> origin/back-end
                     id="password"
                     type={showPasswords ? 'text' : 'password'}
                     endAdornment={
@@ -522,10 +667,13 @@ const UserCreation = () => {
                   <Input
                     name="userconfirmpassword"
 <<<<<<< HEAD
+<<<<<<< HEAD
                     value={selectedCustomerData?.userconfirmpassword || book.userconfirmpassword}
                     onChange={handleChange}
 =======
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+>>>>>>> origin/back-end
                     id="confirm-password"
                     type={showPassword ? 'text' : 'password'}
                     endAdornment={
@@ -553,10 +701,13 @@ const UserCreation = () => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="active"
 <<<<<<< HEAD
+<<<<<<< HEAD
                     onChange={handleChange}
                     value={selectedCustomerData?.active || book.active}
 =======
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+>>>>>>> origin/back-end
                   >
                     <FormControlLabel
                       value="yes"
@@ -604,7 +755,10 @@ const UserCreation = () => {
                   options={ViewFor.map((option) => ({
                     label: option.Option,
                   }))}
+<<<<<<< HEAD
 >>>>>>> 1c8316e0932e9e80e255285a5c4cfa12fff4f470
+=======
+>>>>>>> origin/back-end
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
                     params.inputProps.value = selectedCustomerData?.viewfor || ''

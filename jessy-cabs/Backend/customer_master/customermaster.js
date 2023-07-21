@@ -579,6 +579,7 @@ app.get('/usercreation', (req, res) => {
 });
 
 // End user creation database
+<<<<<<< HEAD
 
 // -----------------------------------------------------------------------------------------------------------
 
@@ -855,6 +856,8 @@ app.get('/usercreation', (req, res) => {
 });
 
 // End user creation database
+=======
+>>>>>>> origin/back-end
 
 
 const port = 8081;

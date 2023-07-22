@@ -71,11 +71,11 @@ const UserCreation = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
-  const [setIsVisible] = useState(true);
+  // const [setIsVisible] = useState(true);
 
-  const handleClose = () => {
-    setIsVisible(false);
-  };
+  // const handleClose = () => {
+  //   setIsVisible(false);
+  // };
 
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -204,8 +204,19 @@ const UserCreation = () => {
     }
   };
   const hidePopup = () => {
+    setPasswordsMatch(true);
     setError(false);
   };
+  useEffect(() => {
+    if (error || !passwordsMatch) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error, passwordsMatch]);
+
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -425,12 +436,17 @@ const UserCreation = () => {
             </div>
           </div>
           {error &&
-            <div className='alert-popup Success' >
+            <div className='alert-popup Error' >
               <span className='cancel-btn' onClick={hidePopup}>x</span>
               <p>Something went wrong!</p>
             </div>
           }
-          {!passwordsMatch && <p>Passwords do not match. Please try again.</p>}
+          {!passwordsMatch &&
+            <div className='alert-popup Warning' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>Passwords do not match. Please try again.</p>
+            </div>
+          }
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

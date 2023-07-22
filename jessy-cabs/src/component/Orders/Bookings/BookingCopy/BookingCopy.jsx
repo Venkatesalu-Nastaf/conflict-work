@@ -35,13 +35,13 @@ const BookingCopy = () => {
     setBookingNo(event.target.value);
   };
 
-  const handleDateChange = (date, dateType) => {
-    if (dateType === "fromDate") {
-      setFromDate(date);
-    } else {
-      setToDate(date);
-    }
-  };
+  // const handleDateChange = (date, dateType) => {
+  //   if (dateType === "fromDate") {
+  //     setFromDate(date);
+  //   } else {
+  //     setToDate(date);
+  //   }
+  // };
 
   const handleShow = useCallback(async () => {
     try {
@@ -107,7 +107,7 @@ const BookingCopy = () => {
               rows={rows}
               columns={columns}
               pageSize={5}
-              // checkboxSelection
+            // checkboxSelection
             />
           </div>
         </div>

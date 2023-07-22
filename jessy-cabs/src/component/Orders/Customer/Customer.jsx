@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-// eslint-disable-next-line
-import { saveAs } from 'file-saver';
-import { ExportToCsv } from 'export-to-csv';
-import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
 import {
   UnderGroup,
   states,
@@ -52,6 +47,8 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
 
 // speed dial button function
 
@@ -94,41 +91,44 @@ const Customer = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [error, setError] = useState(false);
-  // download function
-  const handleDownload = (format) => {
-    // Perform data conversion and export based on the selected format
-    if (format === 'excel') {
-      const csvExporter = new ExportToCsv({
-        filename: 'Customer_details.csv',
-        useKeysAsHeaders: true, // Include header row
-      });
-      const csvRows = rows.map(({ id, printName, address1, phoneno, active, customerId, rateType, gstTax, state, enableDriverApp }) => ({
-        Sno: id,
-        ID: customerId,
-        Customer_Name: printName,
-        Address: address1,
-        Phone: phoneno,
-        Active: active,
-        Rate_Type: rateType,
-        GST_NO: gstTax,
-        State: state,
-        Driver_App: enableDriverApp,
-      }));
-      const csvFormattedData = csvExporter.generateCsv(csvRows, true);
-      const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
-      saveAs(blob, 'Customer_details.csv');
-    } else if (format === 'pdf') {
-      const doc = new jsPDF();
-      const headerNames = columns.map(column => column.headerName);
-      const bodyData = rows.map(row => columns.map(column => row[column.field]));
-      doc.autoTable({
-        head: [headerNames],
-        body: bodyData,
-      });
-      doc.save('Customer_details.pdf');
-    }
+
+  const convertToCSV = (data) => {
+    const header = columns.map((column) => column.headerName).join(",");
+    const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+    return [header, ...rows].join("\n");
   };
-  // End
+  const handleExcelDownload = () => {
+    const csvData = convertToCSV(rows);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "customer_details.csv");
+  };
+  const handlePdfDownload = () => {
+    const pdf = new jsPDF();
+    pdf.setFontSize(12);// Set the font size and font style
+    pdf.setFont('helvetica', 'normal');
+    pdf.text("Customer Details", 10, 10);// Add a title for the table
+    const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
+    pdf.autoTable({
+      head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
+      body: tableData,
+      startY: 20,
+    }); // Create a table to display the data
+    const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
+    saveAs(pdfBlob, 'customer_details.pdf'); // Download the PDF
+  };
+
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+
   const [book, setBook] = useState({
     customerId: '',
     name: '',
@@ -350,7 +350,7 @@ const Customer = () => {
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
                     params.inputProps.value = selectedCustomerData?.customerType || ''
-                    return (        
+                    return (
                       <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
                     )
                   }
@@ -784,7 +784,12 @@ const Customer = () => {
                 </FormControl>
               </div>
             </div>
-            {error && <p>Something went wrong!</p>}
+            {error &&
+              <div className='alert-popup Error' >
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <p>Something went wrong!</p>
+              </div>
+            }
             <div className="SpeedDial" style={{ padding: '26px', }}>
               <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                 <StyledSpeedDial
@@ -798,7 +803,6 @@ const Customer = () => {
                       tooltipTitle={action.name}
                       onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                     />
-
                   ))}
                 </StyledSpeedDial>
               </Box>
@@ -812,16 +816,13 @@ const Customer = () => {
                     Download
                   </Button>
                   <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={() => { handleDownload('excel'); popupState.close(); }}>Excel</MenuItem>
-                    <MenuItem onClick={() => { handleDownload('pdf'); popupState.close(); }}>PDF</MenuItem>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
                   </Menu>
-
                 </React.Fragment>
               )}
             </PopupState>
-
             <div className="table-customer-list">
-
               <DataGrid
                 rows={rows}
                 columns={columns}

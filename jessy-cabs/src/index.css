@@ -10,11 +10,11 @@ body {
 
 /* ERROR POPUP */
 .Error {
-  color: rgb(95, 33, 32);
+  color: rgb(172, 23, 20);
   background-color: rgb(253, 237, 237);
-}
+} 
 
-.Worning {
+.Warning {
   color: rgb(102, 60, 0);
   background-color: rgb(255, 244, 229);
 }

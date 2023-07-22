@@ -7,3 +7,57 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+/* ERROR POPUP */
+.Error {
+  color: rgb(95, 33, 32);
+  background-color: rgb(253, 237, 237);
+}
+
+.Worning {
+  color: rgb(102, 60, 0);
+  background-color: rgb(255, 244, 229);
+}
+
+.Info {
+  color: rgb(1, 67, 97);
+  background-color: rgb(229, 246, 253);
+}
+
+.Success {
+  color: rgb(30, 70, 32);
+  background-color: rgb(237, 247, 237);
+}
+
+.alert-popup {
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  padding: 8px 15px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  animation: fadeInOut 1s ease;
+}
+
+.alert-popup .cancel-btn {
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  top: 1px;
+  right: 9px;
+}
+
+@keyframes fadeInOut {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

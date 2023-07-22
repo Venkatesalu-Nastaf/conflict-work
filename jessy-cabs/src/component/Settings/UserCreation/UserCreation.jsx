@@ -71,6 +71,11 @@ const UserCreation = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [setIsVisible] = useState(true);
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
 
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -197,6 +202,9 @@ const UserCreation = () => {
       console.log(err);
       setError(true);
     }
+  };
+  const hidePopup = () => {
+    setError(false);
   };
   useEffect(() => {
     if (actionName === 'List') {
@@ -416,7 +424,12 @@ const UserCreation = () => {
               </div>
             </div>
           </div>
-          {error && <p>Something went wrong!</p>}
+          {error &&
+            <div className='alert-popup Success' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>Something went wrong!</p>
+            </div>
+          }
           {!passwordsMatch && <p>Passwords do not match. Please try again.</p>}
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial

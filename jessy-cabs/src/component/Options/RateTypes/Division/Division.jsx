@@ -3,6 +3,16 @@ import "./Division.css";
 import { CustomerName } from "./DivisionData.js";
 import Autocomplete from "@mui/material/Autocomplete";
 
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import { styled } from "@mui/material/styles";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import Box from "@mui/material/Box";
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -16,6 +26,25 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
+const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+  position: "absolute",
+  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+    top: theme.spacing(2),
+    left: theme.spacing(2),
+  },
+}));
+const actions = [
+  { icon: <ChecklistIcon />, name: "List" },
+  { icon: <CancelPresentationIcon />, name: "Cancel" },
+  { icon: <DeleteIcon />, name: "Delete" },
+  { icon: <ModeEditIcon />, name: "Edit" },
+  { icon: <BookmarkAddedIcon />, name: "Add" },
+];
+// TABLE
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "DivisionName", headerName: "Division Name", width: 130 },
@@ -121,6 +150,21 @@ const Division = () => {
             </div>
           </div>
         </div>
+        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <StyledSpeedDial
+            ariaLabel="SpeedDial playground example"
+            icon={<SpeedDialIcon />}
+            direction="left"
+          >
+            {actions.map((action) => (
+              <SpeedDialAction
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={action.name}
+              />
+            ))}
+          </StyledSpeedDial>
+        </Box>
         <div className="table-bookingCopy">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid

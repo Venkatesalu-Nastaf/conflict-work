@@ -30,7 +30,7 @@ import {
 import SpeedIcon from "@mui/icons-material/Speed";
 import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
-import ChecklistIcon from "@mui/icons-material/Checklist";
+// import ChecklistIcon from "@mui/icons-material/Checklist";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -461,17 +461,17 @@ const Vehicaleinfo = () => {
                   </DemoItem>
                 </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-  <DemoItem label="St. permit">
-    <DatePicker
-      value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
-      onChange={(date) => handleDateChange(date, 'stpermit')}
-    >
-      {({ inputProps, inputRef }) => (
-        <TextField {...inputProps} inputRef={inputRef} name='stpermit' value={selectedCustomerData.stpermit || ''} />
-      )}
-    </DatePicker>
-  </DemoItem>
-</LocalizationProvider>
+                  <DemoItem label="St. permit">
+                    <DatePicker
+                      value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
+                      onChange={(date) => handleDateChange(date, 'stpermit')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='stpermit' value={selectedCustomerData.stpermit || ''} />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
+                </LocalizationProvider>
               </div>
               <div className="input">
                 {/* <LocalizationProvider dateAdapter={AdapterDayjs}>

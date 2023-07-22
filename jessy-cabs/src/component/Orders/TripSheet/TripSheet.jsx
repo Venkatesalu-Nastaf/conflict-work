@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import axios from "axios";
 import {
   Apps,
@@ -85,7 +85,7 @@ import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import ChecklistIcon from "@mui/icons-material/Checklist";
+// import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -184,16 +184,16 @@ const TripSheet = () => {
   const [error, setError] = useState(false);
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
-  const [actionName] = useState('');
-  const [rows, setRows] = useState([]);
+  // const [actionName] = useState('');
+  const [rows] = useState([]);
   // const [displayCopy, setDisplayCopy] = useState(false);
   // const [value, setValue] = React.useState("list");
-  const [currentTime, setCurrentTime] = useState("");
+  // const [currentTime, setCurrentTime] = useState("");
   const [starttime, setStartTime] = useState('');
   const [closetime, setCloseTime] = useState('');
   const [starttime2, setStartTime2] = useState('');
   const [closetime2, setCloseTime2] = useState('');
-  
+
   // const [tripsheetno, setTripsheetno] = useState(null);
 
   const [book, setBook] = useState({
@@ -552,20 +552,20 @@ const TripSheet = () => {
   const calculateTotalDays = () => {
     const startDate = selectedCustomerData.startdate || book.startdate;
     const closeDate = selectedCustomerData.closedate || book.closedate;
-  
+
     if (startDate && closeDate) {
       const startDateObj = dayjs(startDate);
       const closeDateObj = dayjs(closeDate);
       const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
       console.log('Total Days:', totalDays); // Add this line to log the totalDays value
-      return totalDays; 
+      return totalDays;
     }
-  
+
     return 0;
   };
-  
+
   // In the form submission function
-  
+
   // Function to calculate total kilometers
   // const calculateTotalKilometers = () => {
   //   const startKm = selectedCustomerData.startkm || book.startkm;
@@ -581,13 +581,13 @@ const TripSheet = () => {
   const calculateTotalKilometers = () => {
     const startKm = selectedCustomerData.startkm || book.startkm;
     const closeKm = selectedCustomerData.closekm || book.closekm;
-  
+
     if (startKm !== undefined && closeKm !== undefined) {
       const totalKm = closeKm - startKm;
       console.log('Total Kilometers:', totalKm); // Add this line to log the totalKm value
       return totalKm;
     }
-  
+
     return 0;
   };
 
@@ -647,17 +647,17 @@ const TripSheet = () => {
   // TIMER START
   // const [currentTime, setCurrentTime] = useState("");
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, "0");
-      const minutes = now.getMinutes().toString().padStart(2, "0");
-      setCurrentTime(`${hours}:${minutes}`);
-    }, 1000);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     const now = new Date();
+  //     const hours = now.getHours().toString().padStart(2, "0");
+  //     const minutes = now.getMinutes().toString().padStart(2, "0");
+  //     setCurrentTime(`${hours}:${minutes}`);
+  //   }, 1000);
 
-    return () => clearInterval(intervalId);
-  }, []);
-  // TIMER END
+  //   return () => clearInterval(intervalId);
+  // }, []);
+  // // TIMER END
   return (
     <div className="form-container">
       <div className="Tripsheet-form">
@@ -1678,7 +1678,7 @@ const TripSheet = () => {
                   key={action.name}
                   icon={action.icon}
                   tooltipTitle={action.name}
-                  onClick={(event) => handleClick(event, action.name)}
+                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
 
                 />
               ))}
@@ -2036,7 +2036,7 @@ const TripSheet = () => {
                           type="number"
                           id="total-days"
                           variant="standard"
-                          // disabled
+                        // disabled
                         />
                       </DemoItem>
                     </div>
@@ -2113,7 +2113,7 @@ const TripSheet = () => {
                         label="Total Time"
                         id="total-time"
                         variant="standard"
-                        
+
                       />
                     </div>
                     <div className="input">

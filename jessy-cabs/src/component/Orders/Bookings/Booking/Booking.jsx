@@ -80,10 +80,10 @@ const Booking = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [actionName] = useState('');
-  const [rows, setRows] = useState([]);
+  const [rows] = useState([]);
   const [displayCopy, setDisplayCopy] = useState(false);
   const [value, setValue] = React.useState("list");
-  const [currentTime, setCurrentTime] = useState("");
+  // const [currentTime, setCurrentTime] = useState("");
   const [triptime, setTripTime] = useState('');
   const [registertime, setRegisterTime] = useState('');
   const [starttime, setStartTime] = useState('');
@@ -384,7 +384,7 @@ const Booking = () => {
     }
   }, []);
 
-  
+
 
   const [currentYear, setCurrentYear] = useState("");
 
@@ -395,16 +395,16 @@ const Booking = () => {
     setCurrentYear(value);
   }, []);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, "0");
-      const minutes = now.getMinutes().toString().padStart(2, "0");
-      setCurrentTime(`${hours}:${minutes}`);
-    }, 1000);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     const now = new Date();
+  //     const hours = now.getHours().toString().padStart(2, "0");
+  //     const minutes = now.getMinutes().toString().padStart(2, "0");
+  //     setCurrentTime(`${hours}:${minutes}`);
+  //   }, 1000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+  //   return () => clearInterval(intervalId);
+  // }, []);
   // TIMER END
   return (
     <div className="booking-form">
@@ -449,7 +449,7 @@ const Booking = () => {
                 </LocalizationProvider>
 
               </div>
-             
+
               <div className="input time">
                 <label>Booking Time</label>
                 <input
@@ -1384,7 +1384,7 @@ const Booking = () => {
                 icon={action.icon}
                 tooltipTitle={action.name}
                 // onClick={action.onClick}
-                onClick={(event) => handleClick(event, action.name)}
+                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
               />
             ))}
           </StyledSpeedDial>

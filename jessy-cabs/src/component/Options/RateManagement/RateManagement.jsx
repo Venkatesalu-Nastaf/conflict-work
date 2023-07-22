@@ -19,7 +19,7 @@ const RateManagement = () => {
   };
 
   return (
-    <div className="form-container-ratetype">
+    <div className="form-container-PackageRateEntery">
       <div className="container-main">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>

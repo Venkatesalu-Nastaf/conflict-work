@@ -17,8 +17,8 @@ const rows = [
   createData("muthu ", 18908424, "2 March 2022", "Pending"),
   createData("presanth", 18908424, "2 March 2022", "Approved"),
   createData("navin ", 18908421, "2 March 2022", "Delivered"),
-  createData("navin ", 18908421, "2 March 2022", "Delivered"),
-  createData("navin ", 18908421, "2 March 2022", "Delivered"),
+  createData("fahad ", 18908421, "2 March 2022", "Delivered"),
+  createData("akash ", 18908421, "2 March 2022", "Delivered"),
 ];
 
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 // eslint-disable-next-line
 import { saveAs } from 'file-saver';
-import { ExportToCsv } from 'export-to-csv';
+// import { ExportToCsv } from 'export-to-csv';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import {
@@ -95,39 +95,50 @@ const Customer = () => {
   const [actionName] = useState('');
   const [error, setError] = useState(false);
   // download function
-  const handleDownload = (format) => {
-    // Perform data conversion and export based on the selected format
-    if (format === 'excel') {
-      const csvExporter = new ExportToCsv({
-        filename: 'Customer_details.csv',
-        useKeysAsHeaders: true, // Include header row
-      });
-      const csvRows = rows.map(({ id, printName, address1, phoneno, active, customerId, rateType, gstTax, state, enableDriverApp }) => ({
-        Sno: id,
-        ID: customerId,
-        Customer_Name: printName,
-        Address: address1,
-        Phone: phoneno,
-        Active: active,
-        Rate_Type: rateType,
-        GST_NO: gstTax,
-        State: state,
-        Driver_App: enableDriverApp,
-      }));
-      const csvFormattedData = csvExporter.generateCsv(csvRows, true);
-      const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
-      saveAs(blob, 'Customer_details.csv');
-    } else if (format === 'pdf') {
-      const doc = new jsPDF();
-      const headerNames = columns.map(column => column.headerName);
-      const bodyData = rows.map(row => columns.map(column => row[column.field]));
-      doc.autoTable({
-        head: [headerNames],
-        body: bodyData,
-      });
-      doc.save('Customer_details.pdf');
-    }
+  // const handleDownload = (format) => {
+  //   // Perform data conversion and export based on the selected format
+  //   if (format === 'excel') {
+  //     const csvExporter = new ExportToCsv({
+  //       filename: 'Customer_details.csv',
+  //       useKeysAsHeaders: true, // Include header row
+  //     });
+  //     const csvRows = rows.map(({ id, printName, address1, phoneno, active, customerId, rateType, gstTax, state, enableDriverApp }) => ({
+  //       Sno: id,
+  //       ID: customerId,
+  //       Customer_Name: printName,
+  //       Address: address1,
+  //       Phone: phoneno,
+  //       Active: active,
+  //       Rate_Type: rateType,
+  //       GST_NO: gstTax,
+  //       State: state,
+  //       Driver_App: enableDriverApp,
+  //     }));
+  //     const csvFormattedData = csvExporter.generateCsv(csvRows, true);
+  //     const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
+  //     saveAs(blob, 'Customer_details.csv');
+  //   } else if (format === 'pdf') {
+  //     const doc = new jsPDF();
+  //     const headerNames = columns.map(column => column.headerName);
+  //     const bodyData = rows.map(row => columns.map(column => row[column.field]));
+  //     doc.autoTable({
+  //       head: [headerNames],
+  //       body: bodyData,
+  //     });
+  //     doc.save('Customer_details.pdf');
+  //   }
+  // };
+  const handleDownload = () => {
+    const doc = new jsPDF();
+    const headerNames = columns.map(column => column.headerName);
+    const bodyData = rows.map(row => columns.map(column => row[column.field]));
+    doc.autoTable({
+      head: [headerNames],
+      body: bodyData,
+    });
+    doc.save('Customer_details.pdf');
   };
+  
   // End
   const [book, setBook] = useState({
     customerId: '',

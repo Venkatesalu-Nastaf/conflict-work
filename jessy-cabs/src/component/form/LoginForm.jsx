@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { emailValidator, passwordValidator } from "./regexValidator";
+import { emailValidator, passwordValidator } from "./regexValidator";
 import "./Form.css";
 import portalimg from "../../assets/img/portal-img.jpg";
 import { useNavigate } from "react-router-dom";
@@ -8,54 +8,40 @@ import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircle
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
 import { BiHide } from "@react-icons/all-files/bi/BiHide";
 import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
-// import { useNavigate } from "react-router-dom";
-
 const Login = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    userpassword: "",
-  });
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
-
   const toggle = () => {
     setOpen(!open);
   };
-
-  const navigate = useNavigate(); // Move the hook call here at the top level of the component
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-
-    try {
-      const response = await fetch("http://localhost:8081/usercreation", {
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSuccessMessage(data.message);
-        // Perform navigation to the dashboard page
-        navigate("/home/dashboard");
-      } else {
-        setErrorMessage(data.error);
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-      setErrorMessage("An error occurred during login.");
-    }
+  const [input, setInput] = React.useState({ username: "", password: "" });
+  const [errorMessage, seterrorMessage] = useState("");
+  const [successMessage, setsuccessMessage] = useState("");
+  const handleChange = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value });
   };
 
+  React.useEffect(() => {
+    if (localStorage.getItem("auth")) navigate("/");
+  });
+
+  const formSumitter = (e) => {
+    e.preventDefault();
+    setsuccessMessage("");
+    if (!emailValidator(input.username))
+      return seterrorMessage("Please enter valid user id");
+
+    if (!passwordValidator(input.password))
+      return seterrorMessage(
+        "Password should have minimum 8 character with the combination of uppercase, lowercase, numbers and specialcharaters"
+      );
+    // setsuccessMessage('Successfully Validated');
+    if (input.username !== "admin@gmail.com" || input.password !== "Admin@321")
+      return seterrorMessage("Invalid user id");
+
+    navigate("/home/dashboard");
+    localStorage.setItem("auth", true);
+  };
   return (
     <div className="portal-container">
       <div className="glasses">
@@ -63,17 +49,15 @@ const Login = () => {
           <img className="portalimg" src={portalimg} alt="portalimg"></img>
         </div>
         <div className="right-col">
-          <form className="portal" onSubmit={handleLogin}>
+          <form className="portal" onSubmit={formSumitter}>
             <div className="title">login</div>
             {errorMessage.length > 0 && (
-              <div className="password-alert" style={{ marginBottom: "10px" }}>
-                <div className="headering-war">Alert</div>
+              <div style={{ marginBottom: "10px", color: "red" }}>
                 {errorMessage}
               </div>
             )}
-
             {successMessage.length > 0 && (
-              <div className="password-alert" style={{ marginBottom: "10px" }}>
+              <div style={{ marginBottom: "10px", color: "green" }}>
                 {successMessage}
               </div>
             )}
@@ -92,7 +76,7 @@ const Login = () => {
             <div className="user-input">
               <input
                 type={open === false ? "password" : "text"}
-                name="userpassword"
+                name="password"
                 autoComplete="off"
                 onChange={handleChange}
                 required

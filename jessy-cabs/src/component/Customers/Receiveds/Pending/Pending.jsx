@@ -1,9 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import "./Pending.css";
 import axios from "axios";
-// eslint-disable-next-line
 import { saveAs } from 'file-saver';
-import { ExportToCsv } from 'export-to-csv';
 
 import { Stations } from "./PendingData";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -38,37 +36,16 @@ const Pending = () => {
   const [servicestation, setServiceStation] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
-  // const [data, setData] = useState([]);
 
-  // useEffect(() => {
-  //   handleShow([]); // Fetch initial data on component mount
-  // }, []);
-
-  const handleDownload = () => {
-    const format = 'excel'; // Set the format to 'excel'
-    // Perform data conversion and export based on the selected format
-    if (format === 'excel') {
-      const csvExporter = new ExportToCsv({
-        filename: 'Customer_details.csv',
-        useKeysAsHeaders: true, // Include header row
-      });
-      const csvRows = rows.map(({ id, bookingno, bookingdate, bookingtime, guestname, mobileno, address1, address2, city, customer, tripid }) => ({
-        Sno: id,
-        Booking_ID: bookingno,
-        Date: bookingdate,
-        Time: bookingtime,
-        Guest_Name: guestname,
-        Mobile: mobileno,
-        R_Address: address1,
-        R_Address1: address2,
-        R_Address2: city,
-        Company: customer,
-        TripID: tripid,
-      }));
-      const csvFormattedData = csvExporter.generateCsv(csvRows, true);
-      const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
-      saveAs(blob, 'Customer_details.csv');
-    }
+  const convertToCSV = (data) => {
+    const header = columns.map((column) => column.headerName).join(",");
+    const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+    return [header, ...rows].join("\n");
+  };
+  const handleExcelDownload = () => {
+    const csvData = convertToCSV(rows);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "customer_details.csv");
   };
 
   const handleInputChange = (event, newValue) => {
@@ -105,7 +82,7 @@ const Pending = () => {
       setRows([]);
     }
   }, []);
-  
+
   const handleButtonClickBooking = () => {
     window.location.href = '/home/orders/bookings';
 
@@ -169,7 +146,7 @@ const Pending = () => {
                     variant="outlined"
                     component="label"
                     startIcon={<DescriptionIcon />}
-                    onClick={() => { handleDownload('excel') }}
+                    onClick={() => { handleExcelDownload('excel') }}
                   >
                     Excel
                   </Button>

@@ -29,6 +29,7 @@ const Customer = () => {
     localStorage.setItem('activeMenuItem', menuItem);
   };
 
+
   return (
     <>
       <div className='customer-conatiner' id='menu'>

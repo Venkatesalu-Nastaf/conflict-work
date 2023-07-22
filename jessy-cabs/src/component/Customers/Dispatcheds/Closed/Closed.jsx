@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import "./Closed.css";
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import { ExportToCsv } from 'export-to-csv';
+// import { ExportToCsv } from 'export-to-csv';
 import { jsPDF } from 'jspdf';
 import { Stations } from "./ClosedData.js";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -34,7 +34,7 @@ const columns = [
   { field: "drivername", headerName: "Driver", width: 130 },
   { field: "status", headerName: "Status", width: 130 },
   { field: "billingno", headerName: "Billing No", width: 130 },
-]; 
+];
 
 const Closed = () => {
 
@@ -43,44 +43,30 @@ const Closed = () => {
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
 
-   // download function
-   const handleDownload = (format) => {
-    // Perform data conversion and export based on the selected format
-    if (format === 'excel') {
-      const csvExporter = new ExportToCsv({
-        filename: 'Customer_details.csv',
-        useKeysAsHeaders: true, // Include header row
-      });
-      const csvRows = rows.map(({ id, tripsheetno, startdate, username, customer, startkm, closekm, totalkm1, starttime, closetime, totaltime, vehiclerigsterno, drivername, status, billingno }) => ({
-        Sno: id,
-        Trip_Sheet_No: tripsheetno,
-        Trip_Date: startdate,
-        User_Name: username,
-        Customer_Name: customer,
-        Start_Km: startkm,
-        Close_Km: closekm,
-        Total_Km: totalkm1,
-        Start_Time: starttime,
-        Close_Time: closetime,
-        Total_Time: totaltime,
-        Vehicle_No: vehiclerigsterno,
-        Driver: drivername,
-        Status: status,
-        Billing_No: billingno,
-      }));
-      const csvFormattedData = csvExporter.generateCsv(csvRows, true);
-      const blob = new Blob([csvFormattedData], { type: 'text/csv;charset=utf-8' });
-      saveAs(blob, 'closed_tripsheet.csv');
-    } else if (format === 'pdf') {
-      const doc = new jsPDF();
-      const headerNames = columns.map(column => column.headerName);
-      const bodyData = rows.map(row => columns.map(column => row[column.field]));
-      doc.autoTable({
-        head: [headerNames],
-        body: bodyData,
-      });
-      doc.save('closed_tripsheet.pdf');
-    }
+  // download function
+  const convertToCSV = (data) => {
+    const header = columns.map((column) => column.headerName).join(",");
+    const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+    return [header, ...rows].join("\n");
+  };
+  const handleExcelDownload = () => {
+    const csvData = convertToCSV(rows);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "closed_Details.csv");
+  };
+  const handlePdfDownload = () => {
+    const pdf = new jsPDF();
+    pdf.setFontSize(12);// Set the font size and font style
+    pdf.setFont('helvetica', 'normal');
+    pdf.text("closed_Details", 10, 10);// Add a title for the table
+    const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
+    pdf.autoTable({
+      head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
+      body: tableData,
+      startY: 20,
+    }); // Create a table to display the data
+    const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
+    saveAs(pdfBlob, 'closed_Details.pdf'); // Download the PDF
   };
   // End
 
@@ -131,32 +117,32 @@ const Closed = () => {
             <div className="copy-title-btn">
               <div className="input-field">
                 <div className="input" style={{ width: "50%" }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker", "DatePicker"]}>
-                    <DatePicker
-                      label="From Date"
-                      value={fromDate}
-                      onChange={(date) => setFromDate(date)}
-                    />
-                    <DatePicker
-                      label="To Date"
-                      value={toDate}
-                      onChange={(date) => setToDate(date)}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="From Date"
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
+                      />
+                      <DatePicker
+                        label="To Date"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
                 </div>
                 <div className="input" >
-                <Button variant="contained" onClick={handleShow}>Show</Button>
+                  <Button variant="contained" onClick={handleShow}>Show</Button>
                 </div>
                 <div className="input">
-                <Button variant="outlined" onClick={handleShowAll}>Show All</Button>
+                  <Button variant="outlined" onClick={handleShowAll}>Show All</Button>
                 </div>
               </div>
               <div className="input-field">
                 <div className="input" style={{ width: "300px" }}>
-                
-                   <Autocomplete
+
+                  <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
@@ -167,27 +153,26 @@ const Closed = () => {
                     }))}
                     getOptionLabel={(option) => option.label || ""}
                     onChange={handleInputChange}
-                    renderInput={(params) => 
+                    renderInput={(params) =>
                       <TextField {...params} label="Stations" />
                     }
                   />
                 </div>
                 <div className="input" >
-                 
-                   <PopupState variant="popover" popupId="demo-popup-menu">
-              {(popupState) => (
-                <React.Fragment>
-                  <Button variant="outlined" {...bindTrigger(popupState)}>
-                    Download
-                  </Button>
-                  <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={() => { handleDownload('excel'); popupState.close(); }}>Excel</MenuItem>
-                    <MenuItem onClick={() => { handleDownload('pdf'); popupState.close(); }}>PDF</MenuItem>
-                  </Menu>
 
-                </React.Fragment>
-              )}
-            </PopupState>
+                  <PopupState variant="popover" popupId="demo-popup-menu">
+                    {(popupState) => (
+                      <React.Fragment>
+                        <Button variant="outlined" {...bindTrigger(popupState)}>
+                          Download
+                        </Button>
+                        <Menu {...bindMenu(popupState)}>
+                          <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                          <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                        </Menu>
+                      </React.Fragment>
+                    )}
+                  </PopupState>
                 </div>
                 <div className="input" style={{ width: '170px' }}>
                   <Button variant="contained" onClick={handleButtonClick}>

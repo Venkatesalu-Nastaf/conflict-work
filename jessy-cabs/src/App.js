@@ -8,7 +8,7 @@ import Customer from "./component/Orders/Customer/Customer";
 import Customers from "./component/Customers/Customers";
 import Suppliers from "./component/Orders/Supplier/Suppliers";
 import Bookings from "./component/Orders/Bookings/Bookings";
-
+import './index.css'
 import Page404 from "./component/Page404/page404";
 import TripSheet from "./component/Orders/TripSheet/TripSheet";
 import Settings from "./component/Settings/Settings";

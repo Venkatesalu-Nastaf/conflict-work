@@ -38,7 +38,7 @@ const Login = () => {
 
     try {
       const response = await fetch("http://localhost:8081/usercreation", {
-        body: JSON.stringify(formData),
+        // body: JSON.stringify(formData),
       });
 
       const data = await response.json();

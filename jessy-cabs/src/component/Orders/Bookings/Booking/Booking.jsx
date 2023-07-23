@@ -82,7 +82,7 @@ const Booking = () => {
   const [actionName] = useState('');
   const [rows] = useState([]);
   const [displayCopy, setDisplayCopy] = useState(false);
-  const [value, setValue] = React.useState("list");
+  const [value, setValue] = React.useState("billingaddress");
   // const [currentTime, setCurrentTime] = useState("");
   const [triptime, setTripTime] = useState('');
   const [registertime, setRegisterTime] = useState('');
@@ -409,7 +409,6 @@ const Booking = () => {
   return (
     <div className="booking-form">
       <form onSubmit={handleClick}>
-        <span className="Title-Name">Booking</span>
         <div className="detail-container-main">
           <div className="container-left">
             <div className="input-field">
@@ -953,29 +952,10 @@ const Booking = () => {
                       onChange={handleTabChange}
                       aria-label="lab API tabs example"
                     >
-                      <Tab label="List" value="list" />
                       <Tab label="Billing Address" value="billingaddress" />
                       <Tab label="Email" value="email" />
                     </TabList>
                   </Box>
-                  <TabPanel value="list">
-                    <div className="booking-update">
-                      <div className="booking-update-content list-update">
-                        <span>
-                          List Lorem ipsum dolor sit amet, consectetur
-                          adipisicing elit. Harum veniam quos laborum. Dicta
-                          suscipit voluptas laboriosam rem alias praesentium,
-                          facere aliquam sed iste, officia excepturi quos
-                          corporis. Facilis, reiciendis et. Lorem ipsum dolor
-                          sit amet consectetur adipisicing elit. Cum nostrum
-                          nihil minima debitis, nobis incidunt temporibus velit
-                          accusantium dolore assumenda iusto quod ratione
-                          praesentium maxime eveniet voluptas enim animi
-                          laudantium.
-                        </span>
-                      </div>
-                    </div>
-                  </TabPanel>
                   <TabPanel value="billingaddress">
                     <div className="booking-update">
                       <div className="booking-update-content">

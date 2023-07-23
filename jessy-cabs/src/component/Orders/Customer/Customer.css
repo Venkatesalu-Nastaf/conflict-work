@@ -10,18 +10,22 @@
 .Customer-page-secend-container {
   border-top: solid 1px #ccc;
   background-color: var(--glass);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 30px;
+  padding: 20px;
   margin-top: 10px; 
 }
+/* Button */
+
+.Download-btn{
+  padding: 20px 10px;
+}
+
 /* TABLE */
 .customer-list-table-container{
   border: 1px solid #ccc;
   padding: 20px;
   background-color: var(--glass);
 }
+
 .table-customer-list{
   border: 2px solid #ccc;
   border-radius: 10px;

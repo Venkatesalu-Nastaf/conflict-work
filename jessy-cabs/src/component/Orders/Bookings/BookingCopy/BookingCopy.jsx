@@ -57,7 +57,6 @@ const BookingCopy = () => {
   return (
     <div className="bookingcopy-form">
       <form action="">
-        <span className="Title-Name">Booking Copy</span>
         <div className="detail-container-main">
           <div className="container-left">
             <div className="input-field copy-title-btn">

@@ -22,6 +22,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import dayjs from "dayjs";
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
@@ -281,7 +282,6 @@ const Customer = () => {
       handleClick(null, 'List');
     }
   });
-  const updateItems = ["Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id.  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt doloremque quisquam quod quos laboriosam tempora totam, unde non illo ipsum asperiores, expedita quis, impedit necessitatibus cupiditate rem quibusdam ut id."]; // Example data for update items
   return (
     <div className="form-container">
       <div className="customer-form">
@@ -460,72 +460,23 @@ const Customer = () => {
             </div>
           </div>
           <div className="Customer-page-secend-container">
-            <div className="Customer-page-secend-container-left">
-              <div className="input-field">
-                <div className="input" style={{ width: "400px" }}>
-                  <div className="icone">
-                    <AddHomeWorkIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="address1"
-                    value={selectedCustomerData?.address1 || book.address1}
-                    label="Address"
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    id="remark"
-                    sx={{ m: 1, width: "200ch" }}
-                    variant="standard"
-                  />
+            <div className="input-field  checkbox">
+              <div className="input" style={{ width: "400px" }}>
+                <div className="icone">
+                  <AddHomeWorkIcon color="action" />
                 </div>
+                <TextField
+                  size="small"
+                  name="address1"
+                  value={selectedCustomerData?.address1 || book.address1}
+                  label="Address"
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  id="remark"
+                  sx={{ m: 1, width: "200ch" }}
+                  variant="standard"
+                />
               </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "400px" }}>
-                  <div className="icone">
-                    <HomeTwoToneIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="address2"
-                    value={selectedCustomerData?.address2 || book.address2}
-                    id="remark"
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    sx={{ m: 1, width: "200ch" }}
-                    variant="standard"
-                  />
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "400px" }}>
-                  <div className="icone">
-                    <LocationCityIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    name="city"
-                    id="address3"
-                    value={selectedCustomerData?.city || book.city}
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    sx={{ m: 1, width: "200ch" }}
-                    variant="standard"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="Customer-page-secend-container-right">
-              <div className="textboxlist">
-                {updateItems.map((item, index) => (
-                  <div className="textboxlist-customer list-update" key={`update-item-${index}`}>
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="detail-container-main-customer">
-            <div className="input-field checkbox">
               <FormControlLabel
                 name="printBill"
                 value="Printbill"
@@ -562,6 +513,24 @@ const Customer = () => {
                 onChange={handleChange}
                 checked={Boolean(selectedCustomerData?.division || book.division)}
               />
+
+            </div>
+            <div className="input-field">
+              <div className="input" style={{ width: "400px" }}>
+                <div className="icone">
+                  <HomeTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  size="small"
+                  name="address2"
+                  value={selectedCustomerData?.address2 || book.address2}
+                  id="remark"
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  sx={{ m: 1, width: "200ch" }}
+                  variant="standard"
+                />
+              </div>
               <FormControlLabel
                 size="small"
                 name="hourRoundedOff"
@@ -594,8 +563,37 @@ const Customer = () => {
                   }
                 />
               </div>
+              <div className="input">
+                <div className="icone">
+                  <StoreIcon color="action" />
+                </div>
+                <TextField
+                  name="entity"
+                  autoComplete="new-password"
+                  value={selectedCustomerData?.entity || book.entity}
+                  onChange={handleChange}
+                  label="Entity"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
             </div>
             <div className="input-field">
+              <div className="input" style={{ width: "400px" }}>
+                <div className="icone">
+                  <LocationCityIcon color="action" />
+                </div>
+                <TextField
+                  size="small"
+                  name="city"
+                  id="address3"
+                  value={selectedCustomerData?.city || book.city}
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  sx={{ m: 1, width: "200ch" }}
+                  variant="standard"
+                />
+              </div>
               <div className="input">
                 <Autocomplete
                   fullWidth
@@ -662,20 +660,10 @@ const Customer = () => {
                   }
                 />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <StoreIcon color="action" />
-                </div>
-                <TextField
-                  name="entity"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.entity || book.entity}
-                  onChange={handleChange}
-                  label="Entity"
-                  id="standard-size-normal"
-                  variant="standard"
-                />
-              </div>
+            </div>
+          </div>
+          <div className="detail-container-main-customer">
+            <div className="input-field">
             </div>
             <div className="input-field">
               <div className="input radio">
@@ -767,7 +755,6 @@ const Customer = () => {
                     name="gstTax"
                     autoComplete="new-password"
                     onChange={handleChange}
-                    // value={selectedCustomerData.gstTax || ''}
                     value={selectedCustomerData?.gstTax || book.gstTax}
                   >
                     <FormControlLabel
@@ -809,19 +796,21 @@ const Customer = () => {
             </div>
           </div>
           <div className="customer-list-table-container">
-            <PopupState variant="popover" popupId="demo-popup-menu">
-              {(popupState) => (
-                <React.Fragment>
-                  <Button variant="contained" {...bindTrigger(popupState)}>
-                    Download
-                  </Button>
-                  <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                  </Menu>
-                </React.Fragment>
-              )}
-            </PopupState>
+            <div className="Download-btn">
+              <PopupState variant="popover" popupId="demo-popup-menu">
+                {(popupState) => (
+                  <React.Fragment>
+                    <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                      Download
+                    </Button>
+                    <Menu {...bindMenu(popupState)}>
+                      <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                      <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </PopupState>
+            </div>
             <div className="table-customer-list">
               <DataGrid
                 rows={rows}

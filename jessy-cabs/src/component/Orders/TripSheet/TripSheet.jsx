@@ -183,7 +183,9 @@ const actions = [
 const TripSheet = () => {
   const [error, setError] = useState(false);
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
+  // const [selectedvehRegNo, setSelectedvehRegNo] = useState({});
   // const [actionName] = useState('');
   const [rows] = useState([]);
   // const [displayCopy, setDisplayCopy] = useState(false);
@@ -193,6 +195,7 @@ const TripSheet = () => {
   const [closetime, setCloseTime] = useState('');
   const [starttime2, setStartTime2] = useState('');
   const [closetime2, setCloseTime2] = useState('');
+  // const [vehicleDetails, setVehicleDetails] = useState({});
 
   // const [tripsheetno, setTripsheetno] = useState(null);
 
@@ -213,10 +216,10 @@ const TripSheet = () => {
     city: '',
     hireTypes: '',
     department: '',
-    vehiclerigsterno: '',
-    vehicleRate: '',
-    drivername: '',
-    cell: '',
+    vehRegNo: '',
+    vehType: '',
+    driverName: '',
+    mobileNo: '',
     driversmsexbetta: '',
     gps: '',
     duty: '',
@@ -321,10 +324,10 @@ const TripSheet = () => {
       city: '',
       hireTypes: '',
       department: '',
-      vehiclerigsterno: '',
-      vehicleRate: '',
-      drivername: '',
-      cell: '',
+      vehRegNo: '',
+      vehType: '',
+      driverName: '',
+      mobileNo: '',
       driversmsexbetta: '',
       gps: '',
       duty: '',
@@ -641,6 +644,23 @@ const TripSheet = () => {
         setSelectedCustomerId(bookingDetails.tripsheetno);
       } catch (error) {
         console.error('Error retrieving booking details:', error);
+      }
+    }
+  }, []);
+
+  const handleKeyEnter = useCallback(async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      try {
+        const response = await axios.get(`http://localhost:8081/vehicleinfo/${event.target.value}`);
+        const vehicleData = response.data;
+        console.log(vehicleData);
+
+        // Assuming the server returns both vehicle and driver details
+        // setVehicleDetails(vehicleData);
+        setSelectedCustomerDatas(vehicleData);
+      } catch (error) {
+        console.error('Error retrieving vehicle details:', error.message);
       }
     }
   }, []);
@@ -988,9 +1008,13 @@ const TripSheet = () => {
                       <Table stickyHeader hoverRow borderAxis="y">
                         <thead>
                           <tr>
-                            <th style={{ width: "20%" }}>User Name</th>
-                            <th style={{ width: "35%" }}>Address</th>
-                            <th style={{ width: "35%" }}>Address</th>
+                            <th style={{ width: "20%" }}>Vehicle Name</th>
+                            <th style={{ width: "35%" }}>Vehicle Type</th>
+                            <th style={{ width: "35%" }}>Dname</th>
+                            <th style={{ width: "35%" }}>Dphone</th>
+                            <th style={{ width: "35%" }}>Percentage</th>
+                            <th style={{ width: "35%" }}>Supplier</th>
+                            <th style={{ width: "35%" }}>Online Access</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1098,10 +1122,10 @@ const TripSheet = () => {
                   size="small"
                   id="vehiclerigsterno"
                   label="Vehicle Rigster No"
-                  name="vehiclerigsterno"
-                  value={selectedCustomerData.vehiclerigsterno || book.vehiclerigsterno}
+                  name="vehRegNo"
+                  value={selectedCustomerDatas.vehRegNo || book.vehRegNo}
                   onChange={handleChange}
-                  // onKeyDown={handleKeyDown}
+                  onKeyDown={handleKeyEnter}
                   autoFocus
                 />
               </div>
@@ -1136,9 +1160,9 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData.vehicleRate || ''
+                    params.inputProps.value = selectedCustomerDatas.vehType || ''
                     return (
-                      <TextField {...params} label="Vehicle Rate" name="vehicleRate" inputRef={params.inputRef} />
+                      <TextField {...params} label="Vehicle Rate" name="vehType" inputRef={params.inputRef} />
                     )
                   }
                   }
@@ -1151,8 +1175,9 @@ const TripSheet = () => {
                   <SensorOccupiedIcon color="action" />
                 </div>
                 <TextField
-                  name="drivername"
-                  value={selectedCustomerData.drivername || book.drivername}
+                  name="driverName"
+                  value={selectedCustomerDatas.driverName || book.driverName}
+                  // value={vehicleDetails.drivername || ''}
                   onChange={handleChange}
                   // onKeyDown={handleKeyDown}
                   label="Driver Name"
@@ -1165,8 +1190,8 @@ const TripSheet = () => {
                   <PhoneIphoneIcon color="action" />
                 </div>
                 <TextField
-                  name="cell"
-                  value={selectedCustomerData.cell || book.cell}
+                  name="mobileNo"
+                  value={selectedCustomerDatas.mobileNo || book.mobileNo}
                   onChange={handleChange}
                   // onKeyDown={handleKeyDown}
                   label="Cell"

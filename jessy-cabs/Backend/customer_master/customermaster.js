@@ -174,6 +174,25 @@ app.post('/vehicleinfo', (req, res) => {
   });
 });
 
+// collect data from vehicleInfo database
+
+app.get('/vehicleinfo/:vehRegNo', (req, res) => {
+  const vehRegNo = req.params.vehRegNo;
+
+  db.query('SELECT * FROM vehicleinfo WHERE vehRegNo = ?', vehRegNo, (err, result) => {
+    if (err) {
+      console.error('Error retrieving vehicle details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Vehicle not found' });
+    }
+    const vehicleDetails = result[0]; // Assuming there is only one matching vehicle
+    return res.status(200).json(vehicleDetails);
+  });
+});
+
+
 // end vehicle_info database
 
 // -----------------------------------------------------------------------------------------------------------

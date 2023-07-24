@@ -54,7 +54,7 @@ const columns = [
   { field: "ChTime", headerName: "ChTime", width: 130 },
   { field: "AllowKMS", headerName: "AllowKMS", width: 130 },
   { field: "ChKMS", headerName: "ChKMS", width: 130 },
-  { field: "Batta", headerName: "Batta", width: 130 },
+  { field: "Bata", headerName: "Bata", width: 130 },
   { field: "NightHalt", headerName: "NightHalt", width: 130 },
   { field: "RateID", headerName: "RateID", width: 130 },
 ];
@@ -74,7 +74,7 @@ const rows = [
     ChTime: "7:00 PM",
     AllowKMS: "7:00 PM",
     ChKMS: "7:00 PM",
-    Batta: "7:00 PM",
+    Bata: "7:00 PM",
     NightHalt: "7:00 PM",
     RateID: 1233,
   },
@@ -92,7 +92,7 @@ const rows = [
     ChTime: "7:00 PM",
     AllowKMS: "7:00 PM",
     ChKMS: "7:00 PM",
-    Batta: "7:00 PM",
+    Bata: "7:00 PM",
     NightHalt: "7:00 PM",
     RateID: 1234,
   },
@@ -234,8 +234,8 @@ const PackageRateEntery = () => {
                 type='number'
                 size="small"
                 id="id"
-                label="Rent"
-                name="Rent"
+                label="Rate"
+                name="Rate"
               />
             </div>
             <div className="input" style={{ width: "100px" }}>

@@ -49,7 +49,6 @@ function App() {
             <Route path="/home/options/ratetype" element={<RateTypes />} />
             <Route path="/home/options/ratemanagement" element={<RateManagement />} />
             <Route path="/home/options/fuledetails" element={<FuelDetails />} />
-            <Route path="/home/options/ratetype" element={<RateTypes />} />
           </Route>
           <Route path="/home/settings" element={<Settings />}>
             <Route

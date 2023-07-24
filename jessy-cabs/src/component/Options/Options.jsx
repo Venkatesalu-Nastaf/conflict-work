@@ -55,13 +55,6 @@ const Options = () => {
                 >
                     Fule Details
                 </Link>
-                <Link
-                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Driver Master' ? 'actives' : ''}`}
-                    to='/home/options/ratetype'
-                    onClick={() => handleMenuItemClick('Driver Master')}
-                >
-                    Driver Master
-                </Link>
             </div>
             <Outlet />
         </div>

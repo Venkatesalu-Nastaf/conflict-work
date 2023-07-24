@@ -4,15 +4,12 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import SearchRate from './SearchRate/SearchRate';
 import PackageRateEntery from './PackageRateEntery/PackageRateEntery';
-import RateCopy from './RateCopy/RateCopy';
-import MonthlyRate from './MonthlyRate/MonthlyRate';
-import BataRateEntry from './BataRateEntry/BataRateEntry';
+import DriverBataRate from './DriverBataRate/DriverBataRate';
 
 const RateManagement = () => {
 
-  const [value, setValue] = React.useState("SearchRate");
+  const [value, setValue] = React.useState("packagerateentery");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -25,18 +22,12 @@ const RateManagement = () => {
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList onChange={handleChange} aria-label="lab API tabs example">
-                <Tab label="Search Rate" value="searchrate" />
-                <Tab label="Package Rate Entery" value="packagerateentery" />
-                <Tab label="Rate Copy" value="ratecopy" />
-                <Tab label="Monthly Rate" value="monthlyrate" />
-                <Tab label="BataRate Entry" value="batarateentry" />
+                <Tab label="Package Rate" value="packagerateentery" />
+                <Tab label="Driver Bata Rate" value="driverbatarate" />
               </TabList>
             </Box>
-            <TabPanel value="searchrate"><SearchRate /></TabPanel>
             <TabPanel value="packagerateentery"><PackageRateEntery /></TabPanel>
-            <TabPanel value="ratecopy"><RateCopy /></TabPanel>
-            <TabPanel value="monthlyrate"><MonthlyRate/></TabPanel>
-            <TabPanel value="batarateentry"><BataRateEntry/></TabPanel>
+            <TabPanel value="driverbatarate"><DriverBataRate/></TabPanel>
           </TabContext>
         </Box>
       </div>

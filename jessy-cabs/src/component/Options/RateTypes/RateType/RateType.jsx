@@ -31,21 +31,21 @@ import { DataGrid } from "@mui/x-data-grid";
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
     "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
-      bottom: theme.spacing(2),
-      right: theme.spacing(2),
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
     },
     "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
-      top: theme.spacing(2),
-      left: theme.spacing(2),
+        top: theme.spacing(2),
+        left: theme.spacing(2),
     },
-  }));
-  const actions = [
+}));
+const actions = [
     { icon: <ChecklistIcon />, name: "List" },
     { icon: <CancelPresentationIcon />, name: "Cancel" },
     { icon: <DeleteIcon />, name: "Delete" },
     { icon: <ModeEditIcon />, name: "Edit" },
     { icon: <BookmarkAddedIcon />, name: "Add" },
-  ];
+];
 // TABLE
 
 const columns = [

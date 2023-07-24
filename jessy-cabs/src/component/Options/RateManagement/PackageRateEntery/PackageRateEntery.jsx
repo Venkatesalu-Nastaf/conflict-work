@@ -183,7 +183,7 @@ const PackageRateEntery = () => {
                   />
                 </div>
                 <div className="input">
-                  <Button variant="outlined">Show All Date</Button>
+                <Button variant="outlined">Show All Date</Button>
                 </div>
               </div>
             </div>

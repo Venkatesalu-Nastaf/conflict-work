@@ -25,11 +25,11 @@ export const Sidebardata = [
       heading: "Options",
       key: "/home/options/ratetype",
     },
-    // {
-    //   icon: BiBarChartSquare,
-    //   heading: "Chart",
-    //   key: "/home/chart",
-    // },
+    {
+      icon: BiBarChartSquare,
+      heading: "Billing",
+      key: "/home/billing",
+    },
     {
       icon: BiBarChartSquare,
       heading: "settings",

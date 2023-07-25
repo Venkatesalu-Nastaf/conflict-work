@@ -6,7 +6,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Received from './Received/Received';
-import Sumbited from './Sumbited/Sumbited';
+import Submited from './Submited/Submited';
 import Pending from './Pending/Pending';
 
 const Receiveds = () => {
@@ -29,7 +29,7 @@ const Receiveds = () => {
                                 </TabList>
                             </Box>
                             <TabPanel value="received"><Received /></TabPanel>
-                            <TabPanel value="submited"><Sumbited /></TabPanel>
+                            <TabPanel value="submited"><Submited /></TabPanel>
                             <TabPanel value="pending"><Pending /></TabPanel>
                         </TabContext>
                     </Box>

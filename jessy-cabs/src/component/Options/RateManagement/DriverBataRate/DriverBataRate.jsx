@@ -107,7 +107,7 @@ const DriverBataRate = () => {
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-DriverBataRate">
               <div className="input-field">
                 <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -238,7 +238,7 @@ const DriverBataRate = () => {
             ))}
           </StyledSpeedDial>
         </Box>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-DriverBataRate">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

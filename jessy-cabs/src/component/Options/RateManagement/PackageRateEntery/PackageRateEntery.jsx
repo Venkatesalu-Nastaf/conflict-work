@@ -283,7 +283,7 @@ const PackageRateEntery = () => {
       <form action="">
         <div className="PackageRateEntery-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-PackageRateEntery">
               <div className="input-field">
                 <div className="input" style={{ width: "300px" }}>
                   <div className="icone">
@@ -644,7 +644,7 @@ const PackageRateEntery = () => {
             ))}
           </StyledSpeedDial>
         </Box>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-PackageRateEntery">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

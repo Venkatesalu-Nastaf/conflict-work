@@ -29,9 +29,10 @@
     height: 0px;
     overflow-x: hidden;
   }
-  .table-bookingCopy {
+  .table-bookingCopy-Dispatched {
     border: 2px solid #ccc;
-    border-radius: 10px;
+    border-radius: 15px;
+    background-color: var(--glass);
     margin-top: 30px;
   }
   
@@ -54,12 +55,13 @@
   .dispatched-form .Title-Name {
     position: relative;
   }
-  .copy-title-btn {
+  .copy-title-btn-Dispatched {
     width: 100%;
     margin-top: 30px;
-    padding: 10px;
+    background-color: var(--glass);
+    padding: 20px 20px;
     border: 2px solid #ccc;
-    border-radius: 10px;
+    border-radius: 15px ;
   }
   
   .dispatched-form .Title-Name::after {

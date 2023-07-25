@@ -61,7 +61,7 @@ const Billed = () => {
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-Billed">
               <div className="input-field">
                 <div className="input" style={{ width: "50%" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -120,7 +120,7 @@ const Billed = () => {
             </div>
           </div>
         </div>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-Billed">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

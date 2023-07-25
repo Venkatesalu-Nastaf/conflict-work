@@ -59,7 +59,7 @@ const BookingCopy = () => {
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="input-field copy-title-btn">
+            <div className="input-field copy-title-btn-BookingCopy">
               <div className="input">
                 <div className="icone">
                   <AutoModeIcon color="action" />
@@ -100,7 +100,7 @@ const BookingCopy = () => {
             </div>
           </div>
         </div>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-BookingCopy">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

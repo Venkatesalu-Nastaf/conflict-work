@@ -76,7 +76,7 @@ const Division = () => {
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-Division">
               <div className="input-field">
                 <div className="input">
                   <div className="icone">
@@ -165,7 +165,7 @@ const Division = () => {
             ))}
           </StyledSpeedDial>
         </Box>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-Division">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

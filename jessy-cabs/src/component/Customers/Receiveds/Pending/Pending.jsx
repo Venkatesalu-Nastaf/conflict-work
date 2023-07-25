@@ -102,9 +102,9 @@ const Pending = () => {
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-Pending">
               <div className="input-field">
-                <div className="input" style={{ width: "50%" }}>
+                <div className="input" style={{ width: "60%" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
@@ -120,10 +120,10 @@ const Pending = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-                <div className="input" >
+                <div className="input" style={{ width: "130px" }} >
                   <Button variant="outlined" onClick={handleShow}>Show</Button>
                 </div>
-                <div className="input">
+                <div className="input" style={{ width: "110px" }} >
                   <Button variant="outlined" onClick={handleShowAll}>Show All</Button>
                 </div>
               </div>
@@ -168,7 +168,7 @@ const Pending = () => {
             </div>
           </div>
         </div>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-Pending">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

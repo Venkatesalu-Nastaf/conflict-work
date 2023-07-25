@@ -1,6 +1,6 @@
 import React from 'react'
-import './Sumbited.css'
-import { SumbitStatus } from './SumbitData.js'
+import './Submited.css'
+import { SubmitStatus } from './SubmitData.js'
 import Autocomplete from "@mui/material/Autocomplete";
 
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -58,7 +58,7 @@ const Sumbited = () => {
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-submited">
               <div className="input-field">
                 <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -84,8 +84,8 @@ const Sumbited = () => {
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={SumbitStatus.map((option) => option.optionvalue)}
-                    options={SumbitStatus.map((option) => ({
+                    value={SubmitStatus.map((option) => option.optionvalue)}
+                    options={SubmitStatus.map((option) => ({
                       label: option.Option,
                     }))}
                     getOptionLabel={(option) => option.label || ""}
@@ -115,7 +115,7 @@ const Sumbited = () => {
             </div>
           </div>
         </div>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-Submited">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

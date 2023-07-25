@@ -866,7 +866,7 @@ const TripSheet = () => {
               <div className="textbox-TripSheet">
                 <div className="textboxlist-TripSheet">
                   <div className="textboxlist-customer list-updates">
-                    <span>
+                    <span> 
                       <Table  hoverRow borderAxis="y">
                         <thead>
                           <tr>

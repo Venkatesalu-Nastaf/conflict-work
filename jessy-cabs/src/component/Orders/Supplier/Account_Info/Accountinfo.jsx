@@ -79,6 +79,20 @@ const Accuntinfo = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
+  const [error, setError] = useState(false);
+
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+
 
   // download function
   const convertToCSV = (data) => {
@@ -141,7 +155,6 @@ const Accuntinfo = () => {
     autoRefresh: '',
   });
 
-  const [error, setError] = useState(false);
 
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
@@ -688,7 +701,12 @@ const Accuntinfo = () => {
               />
             </div>
           </div>
-          {error && <p>Something went wrong!</p>}
+          {error &&
+              <div className='alert-popup Error' >
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <p>Something went wrong!</p>
+              </div>
+            }
 
           <div className="SpeedDial" style={{ "paddingTop": "96px" }}>
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>

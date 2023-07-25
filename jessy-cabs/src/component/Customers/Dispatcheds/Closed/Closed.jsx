@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import "./Closed.css";
 import axios from "axios";
 import { saveAs } from 'file-saver';
@@ -42,6 +42,20 @@ const Closed = () => {
   const [department, setDepartment] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
+  const [error, setError] = useState(false);
+
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+
 
   // download function
   const convertToCSV = (data) => {
@@ -103,6 +117,10 @@ const Closed = () => {
       setRows([]);
     }
   }, []);
+  const handleButtonClickTripsheet = (selectedRow) => {
+    const bookingPageUrl = `/home/orders/tripsheet?tripsheetno=${selectedRow.tripsheetno}&bookingid=${selectedRow.bookingid}&status=${selectedRow.status}&billingno=${selectedRow.billingno}&apps=${selectedRow.apps}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobile=${selectedRow.mobile}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&address1=${selectedRow.address1}&streetno=${selectedRow.streetno}&city=${selectedRow.city}&hireTypes=${selectedRow.hireTypes}&department=${selectedRow.department}&vehRegNo=${selectedRow.vehRegNo}&vehType=${selectedRow.vehType}&driverName=${selectedRow.driverName}&mobileNo=${selectedRow.mobileNo}&driversmsexbetta=${selectedRow.driversmsexbetta}&gps=${selectedRow.gps}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&useage=${selectedRow.useage}&request=${selectedRow.request}&startdate=${selectedRow.startdate}&closedate=${selectedRow.closedate}&empolyeeno=${selectedRow.empolyeeno}&starttime=${selectedRow.starttime}&closetime=${selectedRow.closetime}&advancepaidtovendor=${selectedRow.advancepaidtovendor}&customercode=${selectedRow.customercode}&startkm=${selectedRow.startkm}&closekm=${selectedRow.closekm}&permit=${selectedRow.permit}&parking=${selectedRow.parking}&toll=${selectedRow.toll}&vpermettovendor=${selectedRow.vpermettovendor}&vendortoll=${selectedRow.vendortoll}&customeradvance=${selectedRow.customeradvance}&email1=${selectedRow.email1}&remark=${selectedRow.remark}`;
+    window.location.href = bookingPageUrl;
+  }
 
 
   const handleButtonClick = () => {
@@ -183,11 +201,18 @@ const Closed = () => {
             </div>
           </div>
         </div>
+        {error &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>Something went wrong!</p>
+          </div>
+        }
         <div className="table-bookingCopy-Closed">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}
               columns={columns}
+              onRowClick={(event) => handleButtonClickTripsheet(event.row)}
               pageSize={5}
               checkboxSelection
             />

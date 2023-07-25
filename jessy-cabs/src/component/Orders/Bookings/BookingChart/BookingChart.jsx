@@ -95,11 +95,11 @@ const BookingChart = () => {
   const columns = generateColumns();
 
   return (
-    <div className="bookingcopy-form">
+    <div className="BookingChart-form">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-BookingChart">
               <div className="input-field">
                 <div className="input" style={{ width: "50%" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -145,7 +145,7 @@ const BookingChart = () => {
             </div>
           </div>
         </div>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-BookingChart">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={vehicles}

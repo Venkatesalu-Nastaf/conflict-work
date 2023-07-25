@@ -29,10 +29,10 @@
     height: 0px;
     overflow-x: hidden;
   }
-  .table-bookingCopy {
+  .table-bookingCopys {
     background: var(--glass);
     border: 2px solid #ccc;
-    border-radius: 10px;
+    border-radius: 15px;
     margin-top: 30px;
   }
   
@@ -55,11 +55,11 @@
   .appuserlist-form .Title-Name {
     position: relative;
   }
-  .copy-title-btn {
+  .copy-title-btn-AppUserList {
     background: var(--glass);
     width: 100%;
     margin-top: 30px;
-    padding: 10px;
+    padding: 15px;
     border: 2px solid #ccc;
     border-radius: 10px;
   }

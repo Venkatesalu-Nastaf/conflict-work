@@ -459,7 +459,7 @@ const Customer = () => {
               </div>
             </div>
           </div>
-          <div className="Customer-page-secend-container">
+          <div className="Customer-page-secend-containers">
             <div className="input-field  checkbox">
               <div className="input" style={{ width: "400px" }}>
                 <div className="icone">
@@ -811,7 +811,7 @@ const Customer = () => {
                 )}
               </PopupState>
             </div>
-            <div className="table-customer-list">
+            <div className="table-customer-lists">
               <DataGrid
                 rows={rows}
                 columns={columns}

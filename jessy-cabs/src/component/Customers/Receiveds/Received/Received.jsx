@@ -55,7 +55,7 @@ const Received = () => {
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-Received">
               <div className="input-field">
                 <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -109,7 +109,7 @@ const Received = () => {
             </div>
           </div>
         </div>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-Received">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

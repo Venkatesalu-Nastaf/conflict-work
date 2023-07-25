@@ -29,9 +29,10 @@
   height: 0px;
   overflow-x: hidden;
 }
-.table-bookingCopy {
+.table-bookingCopy-Excelimport {
   border: 2px solid #ccc;
-  border-radius: 10px;
+  border-radius: 15px;
+  background-color: var(--glass);
   margin-top: 30px;
 }
 
@@ -54,12 +55,13 @@
 .bookingcopy-form .Title-Name {
   position: relative;
 }
-.copy-title-btn {
+.copy-title-btn-ExcelImport {
   width: 100%;
   margin-top: 30px;
-  padding: 10px;
+  padding: 20px 20px 35px 20px;
+  background-color: var(--glass);
   border: 2px solid #ccc;
-  border-radius: 10px;
+  border-radius: 15px ;
 }
 
 .bookingcopy-form .Title-Name::after {

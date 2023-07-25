@@ -35,9 +35,10 @@
     overflow-x: hidden;
 }
 
-.table-bookingCopy {
+.table-bookingCopy-DriverBataRate {
     border: 2px solid #ccc;
-    border-radius: 10px;
+    border-radius: 15px;
+    background-color: var(--glass);
     margin-top: 30px;
 }
 
@@ -92,12 +93,13 @@
     position: relative;
 }
 
-.copy-title-btn {
+.copy-title-btn-DriverBataRate {
     width: 100%;
     margin-top: 30px;
     padding: 10px;
     border: 2px solid #ccc;
-    border-radius: 10px;
+    border-radius: 15px;
+    background-color: var(--glass);
 }
 
 .ratetype-form .Title-Name::after {

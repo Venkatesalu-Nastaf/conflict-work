@@ -966,6 +966,7 @@ const Booking = () => {
                   <InfoIcon color="action" />
                 </div>
                 <TextField
+                  size='small'
                   type="number"
                   name='advance'
                   autoComplete="new-password"

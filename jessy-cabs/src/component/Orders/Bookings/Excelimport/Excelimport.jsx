@@ -93,7 +93,7 @@ const Excelimport = () => {
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-ExcelImport">
               <div className="input-field">
                 <div className="input">
                   <div className="icone">
@@ -173,7 +173,7 @@ const Excelimport = () => {
             </div>
           </div>
         </div>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-Excelimport">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

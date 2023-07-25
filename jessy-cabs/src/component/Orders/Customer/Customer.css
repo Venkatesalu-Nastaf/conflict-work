@@ -7,7 +7,7 @@
   margin-bottom: -10px;
 }
 /*SECEND-CONTAINER  */
-.Customer-page-secend-container {
+.Customer-page-secend-containers {
   border-top: solid 1px #ccc;
   background-color: var(--glass);
   padding: 20px;
@@ -26,12 +26,12 @@
   background-color: var(--glass);
 }
 
-.table-customer-list{
+.table-customer-lists{
   border: 2px solid #ccc;
   border-radius: 10px;
   height: 400px;
   width: 100%;
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 
 .form-container .Title-Name {

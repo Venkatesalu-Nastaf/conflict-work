@@ -1,6 +1,6 @@
 // SumbitStatus
 
-export const SumbitStatus = [
+export const SubmitStatus = [
     {
         Option: "Confirmed",
         optionvalue: "Confirmed",

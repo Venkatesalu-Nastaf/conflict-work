@@ -30,7 +30,6 @@ import {
 import SpeedIcon from "@mui/icons-material/Speed";
 import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
-// import ChecklistIcon from "@mui/icons-material/Checklist";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -42,8 +41,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-// const today = dayjs();
-// const tomorrow = dayjs().add(1, "day");
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -228,6 +226,9 @@ const Vehicaleinfo = () => {
       setError(true);
     }
   };
+  const hidePopup = () => {
+    setError(false);
+  };
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -241,7 +242,6 @@ const Vehicaleinfo = () => {
   return (
     <div className="vehicale-form">
       <form action="">
-        <span className="Title-Name">Vehicale Info</span>
         <div className="detail-container-main-vehicale">
           <div className="container-left-vehicale">
             <div className="input-field">
@@ -282,8 +282,6 @@ const Vehicaleinfo = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-            </div>
-            <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <CarCrashIcon color="action" />
@@ -314,6 +312,8 @@ const Vehicaleinfo = () => {
                   variant="standard"
                 />
               </div>
+            </div>
+            <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <CommuteIcon color="action" />
@@ -328,8 +328,6 @@ const Vehicaleinfo = () => {
                   variant="standard"
                 />
               </div>
-            </div>
-            <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <AssessmentIcon color="action" />
@@ -419,6 +417,20 @@ const Vehicaleinfo = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
+              <div className="input">
+                <div className="icone">
+                  <AccountBalanceWalletIcon color="action" />
+                </div>
+                <TextField
+                  name="financer"
+                  value={selectedCustomerData.financer || book.financer}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
+                  label="Financer"
+                  id="financer"
+                  variant="standard"
+                />
+              </div>
             </div>
             <div className="input-field">
               <div className="input">
@@ -498,22 +510,7 @@ const Vehicaleinfo = () => {
                     </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
-              </div>
-            </div>
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <AccountBalanceWalletIcon color="action" />
-                </div>
-                <TextField
-                  name="financer"
-                  value={selectedCustomerData.financer || book.financer}
-                  onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
-                  label="Financer"
-                  id="financer"
-                  variant="standard"
-                />
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -527,22 +524,6 @@ const Vehicaleinfo = () => {
                   label="AVG Mileage"
                   id="avgmileage"
                   variant="standard"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <AltRouteIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  name="routeno"
-                  value={selectedCustomerData.routeno || book.routeno}
-                  onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
-                  label="Route No"
-                  id="routeno"
-                  autoFocus
                 />
               </div>
             </div>
@@ -591,6 +572,22 @@ const Vehicaleinfo = () => {
                   autoFocus
                 />
               </div>
+              <div className="input">
+                <div className="icone">
+                  <AltRouteIcon color="action" />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  name="routeno"
+                  value={selectedCustomerData.routeno || book.routeno}
+                  onChange={handleChange}
+                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
+                  label="Route No"
+                  id="routeno"
+                  autoFocus
+                />
+              </div>
             </div>
             <div className="input-field">
               <div className="input">
@@ -623,8 +620,6 @@ const Vehicaleinfo = () => {
                   variant="standard"
                 />
               </div>
-            </div>
-            <div className="input-field">
               <div className="input">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -657,63 +652,31 @@ const Vehicaleinfo = () => {
                 </Button>
               </div>
             </div>
-            {error && <p>Something went wrong!</p>}
 
-            <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-              <StyledSpeedDial
-                ariaLabel="SpeedDial playground example"
-                // hidden={hidden}
-                icon={<SpeedDialIcon />}
-              // direction={direction}
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    onClick={(event) => handleClick(event, action.name)}
-                  />
-                ))}
-              </StyledSpeedDial>
-            </Box>
-          </div>
-
-          <div className="container-right-vehicale">
-            <div className="textbox">
-              <div className="textboxlist">
-                <div className="textboxlist-customer list-update">
-                  <span>
-                    List Lorem ipsum dolor sit amet, consectetur adipisicing
-                    elit. Harum veniam quos laborum. Dicta suscipit voluptas
-                    laboriosam rem alias praesentium, facere aliquam sed iste,
-                    officia excepturi quos corporis. Facilis, reiciendis et.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
-                    nostrum nihil minima debitis, nobis incidunt temporibus
-                    velit accusantium dolore assumenda iusto quod ratione
-                    praesentium maxime eveniet voluptas enim animi laudantium.
-                  </span>
-                </div>
-              </div>
-              <div className="textboxupdate">
-                <div className="textboxlist">
-                  <div className="textboxlist-customer list-update">
-                    <span>
-                      List Lorem ipsum dolor sit amet, consectetur adipisicing
-                      elit. Harum veniam quos laborum. Dicta suscipit voluptas
-                      laboriosam rem alias praesentium, facere aliquam sed iste,
-                      officia excepturi quos corporis. Facilis, reiciendis et.
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Cum nostrum nihil minima debitis, nobis incidunt
-                      temporibus velit accusantium dolore assumenda iusto quod
-                      ratione praesentium maxime eveniet voluptas enim animi
-                      laudantium.
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
+        {error && <div className='alert-popup Error' >
+          <span className='cancel-btn' onClick={hidePopup}>x</span>
+          <p>Something went wrong!</p>
+        </div>}
+
+        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <StyledSpeedDial
+            ariaLabel="SpeedDial playground example"
+            // hidden={hidden}
+            icon={<SpeedDialIcon />}
+          // direction={direction}
+          >
+            {actions.map((action) => (
+              <SpeedDialAction
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={action.name}
+                onClick={(event) => handleClick(event, action.name)}
+              />
+            ))}
+          </StyledSpeedDial>
+        </Box>
       </form>
     </div>
   );

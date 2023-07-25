@@ -20,6 +20,7 @@ import {
   RadioGroup,
   Checkbox,
 } from "@mui/material";
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
@@ -74,7 +75,7 @@ const actions = [
 ];
 const Accuntinfo = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-  const [value, setValue] = React.useState("list");
+  const [value, setValue] = React.useState("online_password");
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
@@ -292,7 +293,6 @@ const Accuntinfo = () => {
   return (
     <div className="account-form">
       <form onSubmit={handleClick}>
-        <span className="Title-Name">Accounting Info</span>
         <div className="detail-container-main-account">
           <div className="container-left-account">
             <div className="input-field">
@@ -300,7 +300,6 @@ const Accuntinfo = () => {
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
-
                 <TextField
                   name="accountNo"
                   label="Account No"
@@ -479,28 +478,9 @@ const Accuntinfo = () => {
                         onChange={handleTabChange}
                         aria-label="lab API tabs example"
                       >
-                        <Tab label="List" value="list" />
                         <Tab label="Online Password" value="online_password" />
                       </TabList>
                     </Box>
-                    <TabPanel value="list">
-                      <div className="booking-update">
-                        <div className="booking-update-content list-update">
-                          <span>
-                            List Lorem ipsum dolor sit amet, consectetur
-                            adipisicing elit. Harum veniam quos laborum. Dicta
-                            suscipit voluptas laboriosam rem alias praesentium,
-                            facere aliquam sed iste, officia excepturi quos
-                            corporis. Facilis, reiciendis et. Lorem ipsum dolor
-                            sit amet consectetur adipisicing elit. Cum nostrum
-                            nihil minima debitis, nobis incidunt temporibus
-                            velit accusantium dolore assumenda iusto quod
-                            ratione praesentium maxime eveniet voluptas enim
-                            animi laudantium.
-                          </span>
-                        </div>
-                      </div>
-                    </TabPanel>
                     <TabPanel value="online_password">
                       <div
                         className="booking-update"
@@ -729,19 +709,21 @@ const Accuntinfo = () => {
             </Box>
           </div>
         </div>
-        <PopupState variant="popover" popupId="demo-popup-menu">
-          {(popupState) => (
-            <React.Fragment>
-              <Button variant="contained" {...bindTrigger(popupState)}>
-                Download
-              </Button>
-              <Menu {...bindMenu(popupState)}>
-                <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-              </Menu>
-            </React.Fragment>
-          )}
-        </PopupState>
+        <div className="Download-btn">
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  Download
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
+        </div>
         <div className="table-customer-list">
           <DataGrid
             rows={rows}

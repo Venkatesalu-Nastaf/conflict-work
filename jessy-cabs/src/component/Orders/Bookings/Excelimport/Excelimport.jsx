@@ -91,7 +91,6 @@ const Excelimport = () => {
   return (
     <div className="bookingcopy-form">
       <form action="">
-        <span className="Title-Name">Excel Import</span>
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn">

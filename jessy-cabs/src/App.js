@@ -24,6 +24,8 @@ import Options from "./component/Options/Options";
 import RateTypes from "./component/Options/RateTypes/RateTypes";
 import RateManagement from "./component/Options/RateManagement/RateManagement";
 import FuelDetails from "./component/Options/FuelDetails/FuelDetails";
+import Billings from "./component/Billings/Billings";
+import Billing from "./component/Billings/Billing/Billing";
 
 
 function App() {
@@ -49,7 +51,9 @@ function App() {
             <Route path="/home/options/ratetype" element={<RateTypes />} />
             <Route path="/home/options/ratemanagement" element={<RateManagement />} />
             <Route path="/home/options/fuledetails" element={<FuelDetails />} />
-            <Route path="/home/options/ratetype" element={<RateTypes />} />
+          </Route>
+          <Route path="/home/billing" element={<Billings />}>
+            <Route path="/home/billing/" element={<Billing/>} />
           </Route>
           <Route path="/home/settings" element={<Settings />}>
             <Route

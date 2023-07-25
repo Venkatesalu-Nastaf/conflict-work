@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import './Options.css'
+import './Billings.css'
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
-const Options = () => {
 
-
+const Billings = () => {
     const location = useLocation();
 
     useEffect(() => {
@@ -32,28 +31,35 @@ const Options = () => {
 
 
     return (
-        <div className='customer-conatiner' id='menu'>
+        <div className='billings-conatiner' id='menu'>
             <div className='menu-bar'>
                 <Link
-                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Rate Type' ? 'actives' : ''}`}
-                    to='/home/options/ratetype'
-                    onClick={() => handleMenuItemClick('Rate Type')}
+                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Billing' ? 'actives' : ''}`}
+                    to='/home/billing'
+                    onClick={() => handleMenuItemClick('Billing')}
                 >
-                   Rate Type
+                    Billing
                 </Link>
                 <Link
-                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Rate Management' ? 'actives' : ''}`}
-                    to='/home/options/ratemanagement'
-                    onClick={() => handleMenuItemClick('Rate Management')}
+                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Dispatched' ? 'actives' : ''}`}
+                    to='/home/customers/dispatched'
+                    onClick={() => handleMenuItemClick('Dispatched')}
                 >
-                   Rate Management
+                    Dispatched
                 </Link>
                 <Link
-                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Fule Details' ? 'actives' : ''}`}
-                    to='/home/options/fuledetails'
-                    onClick={() => handleMenuItemClick('Fule Details')}
+                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Collected' ? 'actives' : ''}`}
+                    to='/home/customers/collected'
+                    onClick={() => handleMenuItemClick('Collected')}
                 >
-                    Fule Details
+                    Collected
+                </Link>
+                <Link
+                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Driver Master' ? 'actives' : ''}`}
+                    to='/home/customers/drivermaster'
+                    onClick={() => handleMenuItemClick('Driver Master')}
+                >
+                    Driver Master
                 </Link>
             </div>
             <Outlet />
@@ -61,4 +67,4 @@ const Options = () => {
     )
 }
 
-export default Options
+export default Billings

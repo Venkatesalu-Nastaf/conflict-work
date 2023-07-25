@@ -68,10 +68,10 @@ const BookingChart = () => {
       { field: "id", headerName: "Sno", width: 70 },
       { field: "vehicleName", headerName: "Vehicle Name", width: 130 },
     ];
-  
+
     let currentDate = dayjs(fromDate);
     const lastDate = dayjs(toDate);
-  
+
     while (currentDate.isBefore(lastDate) || currentDate.isSame(lastDate, "day")) {
       const formattedDate = currentDate.format("YYYY-MM-DD");
       columns.push({
@@ -80,24 +80,23 @@ const BookingChart = () => {
         width: 130,
         valueGetter: createValueGetter(formattedDate),
       });
-  
+
       currentDate = currentDate.add(1, "day");
     }
-  
+
     return columns;
   };
-  
+
   const createValueGetter = (bookingDate) => (params) => {
     return params.row.bookings[bookingDate]?.count || 0;
   };
-  
+
 
   const columns = generateColumns();
-  
+
   return (
     <div className="bookingcopy-form">
       <form action="">
-        <span className="Title-Name">Booking Chart</span>
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn">

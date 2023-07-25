@@ -176,8 +176,8 @@ const TripSheet = () => {
     customer: '',
     orderedby: '',
     mobile: '',
-    username: '',
-    phonecell: '',
+    guestname: '',
+    guestmobile: '',
     email: '',
     address1: '',
     streetno: '',
@@ -192,7 +192,7 @@ const TripSheet = () => {
     gps: '',
     duty: '',
     pickup: '',
-    usages: '',
+    useage: '',
     request: '',
     startdate: '',
     closedate: '',
@@ -284,8 +284,8 @@ const TripSheet = () => {
       customer: '',
       orderedby: '',
       mobile: '',
-      username: '',
-      phonecell: '',
+      guestname: '',
+      guestmobile: '',
       email: '',
       address1: '',
       streetno: '',
@@ -300,7 +300,7 @@ const TripSheet = () => {
       gps: '',
       duty: '',
       pickup: '',
-      usages: '',
+      useage: '',
       request: '',
       startdate: '',
       closedate: '',
@@ -622,8 +622,8 @@ const TripSheet = () => {
                   size="small"
                   id="bookingid"
                   label="Booking ID"
-                  name="bookingid"
-                  value={selectedCustomerData.bookingid || book.bookingid}
+                  name="bookingno"
+                  value={selectedCustomerData.bookingno || book.bookingno}
                   onChange={handleChange}
                   autoFocus
                 />
@@ -772,8 +772,8 @@ const TripSheet = () => {
                   margin="normal"
                   id="username"
                   label="User Name"
-                  name="username"
-                  value={selectedCustomerData.username || book.username}
+                  name="guestname"
+                  value={selectedCustomerData.guestname || book.guestname}
                   onChange={handleChange}
                   size="small"
                   autoFocus
@@ -784,8 +784,8 @@ const TripSheet = () => {
                   <CallIcon color="action" />
                 </div>
                 <TextField
-                  name="phonecell"
-                  value={selectedCustomerData.phonecell || book.phonecell}
+                  name="guestmobile"
+                  value={selectedCustomerData.guestmobile || book.guestmobile}
                   onChange={handleChange}
                   label="Phone (Cell)"
                   id="Phonecell"
@@ -983,7 +983,7 @@ const TripSheet = () => {
                   id="free-solo-demo"
                   freeSolo
                   sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleRate")}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
                   value={VehicleRate.find((option) => option.optionvalue)?.label || ''}
                   options={VehicleRate.map((option) => ({
                     label: option.option,
@@ -1109,8 +1109,8 @@ const TripSheet = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  name="usages"
-                  value={selectedCustomerData.usages || book.usages}
+                  name="useage"
+                  value={selectedCustomerData.useage || book.useage}
                   onChange={handleChange}
                   label="Usage"
                   id="usage"

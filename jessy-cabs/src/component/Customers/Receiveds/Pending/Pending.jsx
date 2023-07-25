@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import "./Pending.css";
 import axios from "axios";
 import { saveAs } from 'file-saver';
@@ -36,6 +36,19 @@ const Pending = () => {
   const [servicestation, setServiceStation] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
+  const [error, setError] = useState(false);
+
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
 
   const convertToCSV = (data) => {
     const header = columns.map((column) => column.headerName).join(",");
@@ -168,6 +181,12 @@ const Pending = () => {
             </div>
           </div>
         </div>
+        {error &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>Something went wrong!</p>
+          </div>
+        }
         <div className="table-bookingCopy-Pending">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid

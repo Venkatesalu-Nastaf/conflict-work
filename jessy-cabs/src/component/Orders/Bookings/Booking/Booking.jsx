@@ -77,7 +77,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const Booking = () => {
-  const [error, setError] = useState(false);
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [actionName] = useState('');
@@ -90,7 +89,19 @@ const Booking = () => {
   const [bookingtime, setBookingTime] = useState('');
   const [formData, setFormData] = useState({});
   const location = useLocation();
+  const [error, setError] = useState(false);
 
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -246,6 +257,7 @@ const Booking = () => {
       travelsemail: '',
     }));
     setSelectedCustomerData({});
+    setFormData({});
   };
 
   const handleChange = (event) => {
@@ -1390,7 +1402,12 @@ const Booking = () => {
                 />
               </div>
             </div>
-            {error && <p>Something went wrong!</p>}
+            {error &&
+              <div className='alert-popup Error' >
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <p>Something went wrong!</p>
+              </div>
+            }
           </div>
         ) : null}
 

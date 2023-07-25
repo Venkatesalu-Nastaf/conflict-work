@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import "./BookingChart.css";
 import dayjs from "dayjs";
@@ -12,6 +12,20 @@ import { VehicleModel } from "./BookingChart";
 const BookingChart = () => {
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
+  const [error, setError] = useState(false);
+
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+
   const [vehicles, setVehicles] = useState(() => {
     const initialVehicles = VehicleModel.map((vehicle, index) => ({
       id: index + 1,
@@ -145,6 +159,12 @@ const BookingChart = () => {
             </div>
           </div>
         </div>
+        {error &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>Something went wrong!</p>
+          </div>
+        }
         <div className="table-bookingCopy-BookingChart">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid

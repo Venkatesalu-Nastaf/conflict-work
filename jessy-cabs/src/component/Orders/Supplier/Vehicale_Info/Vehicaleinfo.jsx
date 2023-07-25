@@ -62,10 +62,22 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 const Vehicaleinfo = () => {
-  // const [value] = React.useState("list");
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
-  // const [rows, setRows] = useState([]);
   const [actionName] = useState('');
+  const [error, setError] = useState(false);
+
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+
 
   // Table Start
   // const columns = [
@@ -107,8 +119,7 @@ const Vehicaleinfo = () => {
     active: '',
   });
 
-  const [error, setError] = useState(false);
-
+  
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
 
@@ -226,10 +237,7 @@ const Vehicaleinfo = () => {
       setError(true);
     }
   };
-  const hidePopup = () => {
-    setError(false);
-  };
-
+  
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');

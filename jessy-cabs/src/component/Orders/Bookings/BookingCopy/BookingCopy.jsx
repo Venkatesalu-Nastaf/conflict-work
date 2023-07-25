@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import "./BookingCopy.css";
 import axios from "axios";
 import { TextField } from "@mui/material";
@@ -30,18 +30,24 @@ const BookingCopy = () => {
   const [bookingno, setBookingNo] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
+  const [error, setError] = useState(false);
+
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+
 
   const handleInputChange = (event) => {
     setBookingNo(event.target.value);
   };
-
-  // const handleDateChange = (date, dateType) => {
-  //   if (dateType === "fromDate") {
-  //     setFromDate(date);
-  //   } else {
-  //     setToDate(date);
-  //   }
-  // };
 
   const handleShow = useCallback(async () => {
     try {
@@ -100,6 +106,12 @@ const BookingCopy = () => {
             </div>
           </div>
         </div>
+        {error &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>Something went wrong!</p>
+          </div>
+        }
         <div className="table-bookingCopy-BookingCopy">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid

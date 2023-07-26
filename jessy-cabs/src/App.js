@@ -26,6 +26,8 @@ import RateManagement from "./component/Options/RateManagement/RateManagement";
 import FuelDetails from "./component/Options/FuelDetails/FuelDetails";
 import Billings from "./component/Billings/Billings";
 import Billing from "./component/Billings/Billing/Billing";
+import CashFlow from "./component/Billings/CashFlow/CashFlow";
+import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 
 
 function App() {
@@ -54,6 +56,8 @@ function App() {
           </Route>
           <Route path="/home/billing" element={<Billings />}>
             <Route path="/home/billing/" element={<Billing/>} />
+            <Route path="/home/billing/cashflow" element={<CashFlow/>} />
+            <Route path="/home/billing/profitandloss" element={<ProfiteLoss/>} />
           </Route>
           <Route path="/home/settings" element={<Settings />}>
             <Route

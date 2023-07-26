@@ -272,6 +272,10 @@ const Booking = () => {
         ...prevData,
         [name]: checked,
       }));
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
     } else {
       // Check if the field is the time field
       if (name === 'bookingtime') {
@@ -284,6 +288,10 @@ const Booking = () => {
           ...prevData,
           [name]: formattedTime,
         }));
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: formattedTime,
+        }));
       } else {
         setBook((prevBook) => ({
           ...prevBook,
@@ -293,15 +301,16 @@ const Booking = () => {
           ...prevData,
           [name]: value,
         }));
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
       }
     }
   };
-
-
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
   };
-
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
     setBook((prevBook) => ({
@@ -313,7 +322,6 @@ const Booking = () => {
       [name]: selectedOption,
     }));
   };
-
   const handleDateChange = (date, name) => {
     const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
     setBook((prevBook) => ({
@@ -335,6 +343,7 @@ const Booking = () => {
         await axios.delete(`http://localhost:8081/booking/${book.bookingno}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setFormData(null);
         handleCancel();
       } else if (actionName === 'Modify') {
         console.log('Edit button clicked');
@@ -714,15 +723,17 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "report")}
-                  value={Report.find((option) => option.Option)?.label || ''}
                   options={Report.map((option) => ({
                     label: option.Option,
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.report || selectedCustomerData.report || ''
                     return (
-                      <TextField {...params} label="Report" name="report" inputRef={params.inputRef} />
+                      <TextField {...params} 
+                      label="Report" 
+                      name="report" 
+                      value={formData.report || selectedCustomerData.report || book.report} 
+                      />
                     )
                   }
                   }

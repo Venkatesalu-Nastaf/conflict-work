@@ -28,6 +28,8 @@ import Billings from "./component/Billings/Billings";
 import Billing from "./component/Billings/Billing/Billing";
 import CashFlow from "./component/Billings/CashFlow/CashFlow";
 import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
+import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
+import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 
 
 function App() {
@@ -55,9 +57,9 @@ function App() {
             <Route path="/home/options/fuledetails" element={<FuelDetails />} />
           </Route>
           <Route path="/home/billing" element={<Billings />}>
-            <Route path="/home/billing/" element={<Billing/>} />
-            <Route path="/home/billing/cashflow" element={<CashFlow/>} />
-            <Route path="/home/billing/profitandloss" element={<ProfiteLoss/>} />
+            <Route path="/home/billing/" element={<Billing />} />
+            <Route path="/home/billing/cashflow" element={<CashFlow />} />
+            <Route path="/home/billing/profitandloss" element={<ProfiteLoss />} />
           </Route>
           <Route path="/home/settings" element={<Settings />}>
             <Route
@@ -72,6 +74,9 @@ function App() {
             <Route path="/home/settings/mainsetting" element={<MainSetting />} />
           </Route>
         </Route>
+
+        <Route path="/onlineLogin" element={<OnlineLoginForm />} />
+        <Route path="/onlinebooking" element={<OnlineBooking />} />
         <Route
           path="*"
           element={

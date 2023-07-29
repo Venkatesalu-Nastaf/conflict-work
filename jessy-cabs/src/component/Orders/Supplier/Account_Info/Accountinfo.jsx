@@ -253,7 +253,6 @@ const Accuntinfo = () => {
       autoRefresh: '',
     }));
     setSelectedCustomerData({});
-
   };
 
   const handleRowClick = useCallback((params) => {

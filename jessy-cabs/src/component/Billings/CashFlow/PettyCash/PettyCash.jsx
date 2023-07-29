@@ -1,6 +1,8 @@
 import React from 'react'
 import "./PettyCash.css";
-
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -9,13 +11,15 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import Box from "@mui/material/Box";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import BadgeIcon from "@mui/icons-material/Badge";
-import { TextField } from "@mui/material";
+import { Menu, TextField } from "@mui/material";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DataGrid } from "@mui/x-data-grid";
@@ -42,6 +46,34 @@ const actions = [
     { icon: <ModeEditIcon />, name: "Edit" },
     { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
+
+// download function
+const convertToCSV = (data) => {
+    const header = columns.map((column) => column.headerName).join(",");
+    const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+    return [header, ...rows].join("\n");
+};
+const handleExcelDownload = () => {
+    const csvData = convertToCSV(rows);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "Account_Info.csv");
+};
+const handlePdfDownload = () => {
+    const pdf = new jsPDF();
+    pdf.setFontSize(12);// Set the font size and font style
+    pdf.setFont('helvetica', 'normal');
+    pdf.text("Account_Info", 10, 10);// Add a title for the table
+    const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
+    pdf.autoTable({
+        head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
+        body: tableData,
+        startY: 20,
+    }); // Create a table to display the data
+    const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
+    saveAs(pdfBlob, 'Account_Info.pdf'); // Download the PDF
+};
+
+
 // TABLE
 
 const columns = [
@@ -85,7 +117,7 @@ const PettyCash = () => {
             <form action="">
                 <div className="PettyCash-page-header">
                     <div className="input-field">
-                        <div className="input">
+                        <div className="input" style={{ width: "300px" }}>
                             <div className="icone">
                                 <BadgeIcon color="action" />
                             </div>
@@ -97,8 +129,7 @@ const PettyCash = () => {
                                 autoFocus
                             />
                         </div>
-
-                        <div className="input">
+                        <div className="input" style={{ width: "220px" }}>
                             <div className="icone">
                                 <RateReviewIcon color="action" />
                             </div>
@@ -112,13 +143,11 @@ const PettyCash = () => {
                         </div>
                         <div className="input">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoItem label="Date">
-                                    <DatePicker
-                                        defaultValue={today}
-                                        minDate={tomorrow}
-                                        views={["year", "month", "day"]}
-                                    />
-                                </DemoItem>
+                                <DatePicker
+                                    defaultValue={today}
+                                    minDate={tomorrow}
+                                    views={["year", "month", "day"]}
+                                />
                             </LocalizationProvider>
                         </div>
                     </div>
@@ -135,7 +164,7 @@ const PettyCash = () => {
                                 autoFocus
                             />
                         </div>
-                        <div className="input">
+                        <div className="input" style={{ width: "220px" }}>
                             <div className="icone">
                                 <BadgeIcon color="action" />
                             </div>
@@ -155,7 +184,33 @@ const PettyCash = () => {
                 <div className="detail-container-main">
                     <div className="container-left">
                         <div className="copy-title-btn-PettyCash">
-
+                            <div className="input-field">
+                                <div className="input">
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoItem label="From">
+                                            <DatePicker
+                                                defaultValue={today}
+                                                minDate={tomorrow}
+                                                views={["year", "month", "day"]}
+                                            />
+                                        </DemoItem>
+                                    </LocalizationProvider>
+                                </div>
+                                <div className="input">
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoItem label="To">
+                                            <DatePicker
+                                                defaultValue={today}
+                                                minDate={tomorrow}
+                                                views={["year", "month", "day"]}
+                                            />
+                                        </DemoItem>
+                                    </LocalizationProvider>
+                                </div>
+                                <div className="input" style={{ width: '123px', 'margin-top': "50px" }}>
+                                    <Button variant="contained">Search</Button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -174,6 +229,21 @@ const PettyCash = () => {
                         ))}
                     </StyledSpeedDial>
                 </Box>
+                <div className="Download-btn">
+                    <PopupState variant="popover" popupId="demo-popup-menu">
+                        {(popupState) => (
+                            <React.Fragment>
+                                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                    Download
+                                </Button>
+                                <Menu {...bindMenu(popupState)}>
+                                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                                </Menu>
+                            </React.Fragment>
+                        )}
+                    </PopupState>
+                </div>
                 <div className="table-bookingCopy-PettyCash">
                     <div style={{ height: 400, width: "100%" }}>
                         <DataGrid

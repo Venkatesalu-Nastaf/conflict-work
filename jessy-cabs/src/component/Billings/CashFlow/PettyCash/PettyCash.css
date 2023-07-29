@@ -2,7 +2,8 @@
 .PettyCash-page-header {
     border-bottom: solid 1px #ccc;
     padding: 20px;
-  }
+}
+
 .css-13xfq8m-MuiTabPanel-root {
     display: flex;
     padding: 0px !important;
@@ -45,7 +46,11 @@
     border: 2px solid #ccc;
     border-radius: 15px;
     background-color: var(--glass);
-    margin-top: 30px;
+    margin: 0px 20px;
+}
+
+.Download-btn {
+    padding: 20px;
 }
 
 /* TIMER START */

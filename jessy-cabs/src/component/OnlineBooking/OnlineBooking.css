@@ -1,9 +1,12 @@
 /* OnlineBooking.css */
+
+/* Styles for the title */
 .title {
     text-align: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Styles for the booking container */
 .booking-container {
     max-width: 400px;
     margin: 0 auto;
@@ -13,30 +16,34 @@
     background-color: #f7f7f7;
 }
 
+/* Styles for the booking form */
 .booking-form {
     display: flex;
     flex-direction: column;
 }
 
+/* Styles for each form item */
 .item {
     display: flex;
     flex-direction: column;
 }
 
+/* Styles for items inside the form */
 .items {
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
-.input-lable {
+/* Styles for the input label */
+.input-label {
     margin-bottom: 10px;
     font-size: 14px;
     color: #12034d;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 16px;
 }
 
+/* Styles for input fields, select elements, and textareas */
 .input-item,
 #selects,
 .textareas {
@@ -47,8 +54,10 @@
     border-top-right-radius: 5px;
     font-size: 16px;
     transition: all 0.3s ease;
+    background-color: transparent;
 }
 
+/* Styles for focused input fields, select elements, and textareas */
 .input-item:focus,
 #selects:focus,
 .textareas:focus {
@@ -57,6 +66,7 @@
     box-shadow: 0 0 5px rgba(15, 70, 130, 0.5);
 }
 
+/* Styles for the online booking buttons */
 .btns-online {
     padding: 12px 24px;
     background-color: #12034d;
@@ -68,12 +78,12 @@
     transition: background-color 0.3s ease;
 }
 
+/* Styles for the online booking buttons on hover */
 .btns-online:hover {
     background-color: #0056b3;
 }
 
 /* Super CSS Animations */
-
 .booking-forms div {
     opacity: 0;
     transform: translateY(20px);
@@ -87,12 +97,7 @@
     }
 }
 
-.input-item,
-#selects,
-.textareas {
-    background-color: transparent;
-}
-
+/* Additional styles for input items and selects */
 .input-item,
 #selects {
     border: none;
@@ -102,11 +107,13 @@
     transition: all 0.3s ease;
 }
 
+/* Styles for placeholder text in input items and selects */
 .input-item::placeholder,
 #selects::placeholder {
     color: #888;
 }
 
+/* Styles for focused input items, selects, and textareas */
 .input-item:focus,
 #selects:focus,
 .textareas:focus {
@@ -114,15 +121,18 @@
     border-bottom: 2px solid #12034d;
 }
 
+/* Styles for textareas with vertical resize */
 .textareas {
     resize: vertical;
 }
 
+/* Additional styles for the online booking buttons */
 .btns-online {
     position: relative;
     overflow: hidden;
 }
 
+/* Styles for the hover effect on online booking buttons */
 .btns-online::before {
     content: '';
     position: absolute;
@@ -134,11 +144,14 @@
     transition: height 0.3s ease;
 }
 
+/* Styles for the hover effect on online booking buttons */
 .btns-online:hover::before {
     height: 100%;
 }
-.logout-btns{
+
+/* Styles for the logout buttons */
+.logout-btns {
     cursor: pointer;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }

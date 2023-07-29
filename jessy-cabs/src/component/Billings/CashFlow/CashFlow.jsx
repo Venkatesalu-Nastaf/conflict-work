@@ -7,15 +7,16 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 // import Division from './Division/Division';
 import PettyCash from './PettyCash/PettyCash';
-import Asset from './Asset/Asset';
+import PayRoll from './Asset/PayRoll';
+
 
 
 const CashFlow = () => {
-    const [value, setValue] = React.useState("pettycash");
+  const [value, setValue] = React.useState("pettycash");
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return (
     <div className="form-container-pettycash">
       <div className="container-main">
@@ -24,12 +25,12 @@ const CashFlow = () => {
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="Petty Cash" value="pettycash" />
-                <Tab label="Asset" value="asset" />
+                <Tab label="Pay Roll" value="payroll" />
                 {/* <Tab label="Division" value="division" /> */}
               </TabList>
             </Box>
-            <TabPanel value="pettycash"><PettyCash/></TabPanel>
-            <TabPanel value="asset"><Asset/></TabPanel>
+            <TabPanel value="pettycash"><PettyCash /></TabPanel>
+            <TabPanel value="payroll"><PayRoll /></TabPanel>
             {/* <TabPanel value="division"><Division /></TabPanel> */}
           </TabContext>
         </Box>

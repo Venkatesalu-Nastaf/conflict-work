@@ -68,20 +68,57 @@ const Closed = () => {
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
     saveAs(blob, "closed_Details.csv");
   };
+  // const handlePdfDownload = () => {
+  //   const pdf = new jsPDF();
+  //   pdf.setFontSize(12);// Set the font size and font style
+  //   pdf.setFont('helvetica', 'normal');
+  //   pdf.text("closed_Details", 10, 10);// Add a title for the table
+  //   const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
+  //   pdf.autoTable({
+  //     head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
+  //     body: tableData,
+  //     startY: 20,
+  //   }); // Create a table to display the data
+  //   const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
+  //   saveAs(pdfBlob, 'closed_Details.pdf'); // Download the PDF
+  // };
   const handlePdfDownload = () => {
-    const pdf = new jsPDF();
-    pdf.setFontSize(12);// Set the font size and font style
+    const pdf = new jsPDF('landscape');
+    pdf.setFontSize(12);
     pdf.setFont('helvetica', 'normal');
-    pdf.text("closed_Details", 10, 10);// Add a title for the table
-    const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
+    pdf.text("Customer Details", 10, 10);
+
+    // Modify tableData to exclude the index number
+    const tableData = rows.map((row) => [
+      row['id'],
+      row['tripsheetno'],
+      row['startdate'],
+      row['guestname'],
+      row['customer'],
+      row['startkm'],
+      row['closekm'],
+      row['totalkm1'],
+      row['starttime'],
+      row['closetime'],
+      row['totaltime'],
+      row['vehRegNo'],
+      row['driverName'],
+      row['status'],
+      row['billingno']
+    ]);
+
     pdf.autoTable({
-      head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
+      head: [['Sno', 'Trip Sheet No', 'Trip Date', 'User Name', 'Customer Name', 'Start Km', 'Close Km', 'Total Km', 'Start Time', 'Close Time', 'Total Time', 'Vehicle No', 'Driver', 'Status', 'Billing No']],
       body: tableData,
       startY: 20,
-    }); // Create a table to display the data
-    const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-    saveAs(pdfBlob, 'closed_Details.pdf'); // Download the PDF
+      columnWidth: 'auto',
+     
+    });
+
+    const pdfBlob = pdf.output('blob');
+    saveAs(pdfBlob, 'Customer_Details.pdf');
   };
+
   // End
 
   const handleInputChange = (event, newValue) => {

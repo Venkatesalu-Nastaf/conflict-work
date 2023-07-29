@@ -105,20 +105,51 @@ const Accuntinfo = () => {
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
     saveAs(blob, "Account_Info.csv");
   };
+  // const handlePdfDownload = () => {
+  //   const pdf = new jsPDF();
+  //   pdf.setFontSize(12);// Set the font size and font style
+  //   pdf.setFont('helvetica', 'normal');
+  //   pdf.text("Account_Info", 10, 10);// Add a title for the table
+  //   const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
+  //   pdf.autoTable({
+  //     head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
+  //     body: tableData,
+  //     startY: 20,
+  //   }); // Create a table to display the data
+  //   const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
+  //   saveAs(pdfBlob, 'Account_Info.pdf'); // Download the PDF
+  // };
+
   const handlePdfDownload = () => {
     const pdf = new jsPDF();
-    pdf.setFontSize(12);// Set the font size and font style
+    pdf.setFontSize(12);
     pdf.setFont('helvetica', 'normal');
-    pdf.text("Account_Info", 10, 10);// Add a title for the table
-    const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
+    pdf.text("Account_Info", 10, 10);
+
+    // Modify tableData to exclude the index number
+    const tableData = rows.map((row) => [
+      row['id'],
+      row['cperson'],
+      row['accountNo'],
+      row['address1'],
+      row['phone'],
+      row['isRunning'],
+      row['vehicleInfo'],
+      row['vehCommission'],
+      row['rateType'],
+      row['autoRefresh']
+    ]);
+
     pdf.autoTable({
-      head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
+      head: [['Sno', 'Supplier_Name', 'Vehicle_No', 'Address', 'Phone', 'Active', 'Owner_Type', 'Percentage', 'Rate_Type', 'Driver']],
       body: tableData,
       startY: 20,
-    }); // Create a table to display the data
-    const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-    saveAs(pdfBlob, 'Account_Info.pdf'); // Download the PDF
+    });
+
+    const pdfBlob = pdf.output('blob');
+    saveAs(pdfBlob, 'Account_Info.pdf');
   };
+
 
   // Table Start
   const columns = [

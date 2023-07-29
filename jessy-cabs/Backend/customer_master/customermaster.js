@@ -949,6 +949,286 @@ app.get('/ratemanagement', (req, res) => {
 
 // -----------------------------------------------------------------------------------------------------------
 
+// Ratetype Database
+
+// Add Ratetype database
+
+app.post('/ratetype', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO ratetype SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete Ratetype data
+
+app.delete('/ratetype/:driverid', (req, res) => {
+  const driverid = req.params.driverid;
+  console.log('Customer ID:', driverid); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM ratetype WHERE driverid = ?', driverid);
+  db.query('DELETE FROM ratetype WHERE driverid = ?', driverid, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update Ratetype details
+
+app.put('/ratetype/:driverid', (req, res) => {
+  const driverid = req.params.driverid;
+  const updatedCustomerData = req.body;
+ 
+  db.query('UPDATE ratetype SET ? WHERE driverid = ?', [updatedCustomerData, driverid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data for Ratetype table
+
+app.get('/ratetype', (req, res) => {
+  db.query('SELECT * FROM ratetype', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
+// End Ratetype database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// RateValidity Database
+
+// Add RateValidity database
+
+app.post('/ratevalidity', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO ratevalidity SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete RateValidity data
+
+app.delete('/ratevalidity/:driverid', (req, res) => {
+  const driverid = req.params.driverid;
+  console.log('Customer ID:', driverid); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM ratevalidity WHERE driverid = ?', driverid);
+  db.query('DELETE FROM ratevalidity WHERE driverid = ?', driverid, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update RateValidity details
+
+app.put('/ratevalidity/:driverid', (req, res) => {
+  const driverid = req.params.driverid;
+  const updatedCustomerData = req.body;
+ 
+  db.query('UPDATE ratevalidity SET ? WHERE driverid = ?', [updatedCustomerData, driverid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data for RateValidity table
+
+app.get('/ratevalidity', (req, res) => {
+  db.query('SELECT * FROM ratevalidity', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
+// End RateValidity database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// division Database
+
+// Add division database
+
+app.post('/division', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO division SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete division data
+
+app.delete('/division/:driverid', (req, res) => {
+  const driverid = req.params.driverid;
+  console.log('Customer ID:', driverid); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM division WHERE driverid = ?', driverid);
+  db.query('DELETE FROM division WHERE driverid = ?', driverid, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update RateValidity details
+
+app.put('/division/:driverid', (req, res) => {
+  const driverid = req.params.driverid;
+  const updatedCustomerData = req.body;
+ 
+  db.query('UPDATE division SET ? WHERE driverid = ?', [updatedCustomerData, driverid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data for RateValidity table
+
+app.get('/division', (req, res) => {
+  db.query('SELECT * FROM division', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
+// End RateValidity database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// driverbatarate Database
+
+// Add driverbatarate database
+
+app.post('/driverbatarate', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO driverbatarate SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete division data
+
+app.delete('/driverbatarate/:id', (req, res) => {
+  const driverid = req.params.id;
+  console.log('Customer ID:', driverid); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM driverbatarate WHERE id = ?', driverid);
+  db.query('DELETE FROM driverbatarate WHERE id = ?', driverid, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update RateValidity details
+
+app.put('/driverbatarate/:id', (req, res) => {
+  const driverid = req.params.id;
+  const updatedCustomerData = req.body;
+ 
+  db.query('UPDATE driverbatarate SET ? WHERE id = ?', [updatedCustomerData, driverid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data for RateValidity table
+
+app.get('/driverbatarate', (req, res) => {
+  db.query('SELECT * FROM driverbatarate', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
+// End RateValidity database
+
+// -----------------------------------------------------------------------------------------------------------
+
 
 const port = 8081;
 app.listen(port, () => {

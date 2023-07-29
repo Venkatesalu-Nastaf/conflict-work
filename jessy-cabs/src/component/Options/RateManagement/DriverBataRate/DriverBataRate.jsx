@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from "axios";
 import "./DriverBataRate.css";
 import { VehicleType, Duty } from "./DriverBataRateData.js";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -47,61 +48,156 @@ const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "VehicleType", headerName: "Vehicle Type", width: 130 },
   { field: "Duty", headerName: "Duty", width: 130 },
-  { field: "Hours", headerName: "Hours", width: 130 },
-  { field: "KMS", headerName: "KMS", width: 130 },
-  { field: "Rate", headerName: "Rate", width: 130 },
-  { field: "PerHours", headerName: "PerHours", width: 130 },
-  { field: "PerKMS", headerName: "PerKMS", width: 130 },
+  { field: "ExtraPerDayPrice", headerName: "ExtraPerDayPrice", width: 130 },
   { field: "ExtraHours", headerName: "ExtraHours", width: 130 },
-  { field: "ExtraKMS", headerName: "ExtraKMS", width: 130 },
-  { field: "ChTime", headerName: "ChTime", width: 130 },
-  { field: "AllowKMS", headerName: "AllowKMS", width: 130 },
-  { field: "ChKMS", headerName: "ChKMS", width: 130 },
-  { field: "Batta", headerName: "Batta", width: 130 },
-  { field: "NightHalt", headerName: "NightHalt", width: 130 },
-  { field: "RateID", headerName: "RateID", width: 130 },
+  { field: "ExtraDays", headerName: "ExtraDays", width: 130 },
+  { field: "fromdate", headerName: "From_Date", width: 130 },
+  { field: "todate", headerName: "To_Date", width: 130 },
+  { field: "Bata", headerName: "Bata", width: 130 },
+
 ];
 
-const rows = [
-  {
-    id: 1,
-    VehicleType: 1,
-    Duty: 13,
-    Hours: "2023-06-08",
-    KMS: 11,
-    Rate: "7:00 PM",
-    PerHours: "7:00 PM",
-    PerKMS: "7:00 PM",
-    ExtraHours: "7:00 PM",
-    ExtraKMS: "7:00 PM",
-    ChTime: "7:00 PM",
-    AllowKMS: "7:00 PM",
-    ChKMS: "7:00 PM",
-    Batta: "7:00 PM",
-    NightHalt: "7:00 PM",
-    RateID: 1233,
-  },
-  {
-    id: 2,
-    VehicleType: 2,
-    Duty: 13,
-    Hours: "2023-06-08",
-    KMS: 11,
-    Rate: "7:00 PM",
-    PerHours: "7:00 PM",
-    PerKMS: "7:00 PM",
-    ExtraHours: "7:00 PM",
-    ExtraKMS: "7:00 PM",
-    ChTime: "7:00 PM",
-    AllowKMS: "7:00 PM",
-    ChKMS: "7:00 PM",
-    Batta: "7:00 PM",
-    NightHalt: "7:00 PM",
-    RateID: 1234,
-  },
-];
 
 const DriverBataRate = () => {
+
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [actionName] = useState('');
+  const [formData] = useState({});
+  const [error, setError] = useState(false);
+
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+
+  const [book, setBook] = useState({
+    Bata: '',
+    ExtraPerDayPrice: '',
+    ExtraPerHoursPrice: '',
+    ExtraDays: '',
+    ExtraHours: '',
+    Duty: '',
+    VehicleType: '',
+    todate: '',
+    fromdate: '',
+  });
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+
+    if (type === 'checkbox') {
+      // For checkboxes, update the state based on the checked value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      // For other input fields, update the state based on the value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleAutocompleteChange = (event, value, name) => {
+    const selectedOption = value ? value.label : '';
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: selectedOption,
+    }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
+  };
+
+
+  const handleDateChange = (date, name) => {
+    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: formattedDate,
+    }));
+  };
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      Bata: '',
+      ExtraPerDayPrice: '',
+      ExtraPerHoursPrice: '',
+      ExtraDays: '',
+      ExtraHours: '',
+      Duty: '',
+      VehicleType: '',
+      todate: '',
+      fromdate: '',
+    }));
+    setSelectedCustomerData({});
+  };
+  const handleRowClick = useCallback((params) => {
+    console.log(params.row);
+    const customerData = params.row;
+    setSelectedCustomerData(customerData);
+    setSelectedCustomerId(params.row.customerId);
+  }, []);
+  const handleClick = async (event, actionName, id) => {
+    event.preventDefault();
+    try {
+      if (actionName === 'List') {
+        console.log('List button clicked');
+        const response = await axios.get('http://localhost:8081/driverbatarate');
+        const data = response.data;
+        setRows(data);
+      } else if (actionName === 'Cancel') {
+        console.log('Cancel button clicked');
+        handleCancel();
+      } else if (actionName === 'Delete') {
+        console.log('Delete button clicked');
+        await axios.delete(`http://localhost:8081/driverbatarate/${id}`);
+        console.log('Customer deleted');
+        setSelectedCustomerData(null);
+        handleCancel();
+      } else if (actionName === 'Edit') {
+        console.log('Edit button clicked');
+        const selectedCustomer = rows.find((row) => row.id === id);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/driverbatarate/${id}`, updatedCustomer);
+        console.log('Customer updated');
+        handleCancel();
+      } else if (actionName === 'Add') {
+        await axios.post('http://localhost:8081/driverbatarate', book);
+        console.log(book);
+        handleCancel();
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+  };
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  });
+
+
   return (
     <div className="ratetype-form">
       <form action="">
@@ -111,19 +207,49 @@ const DriverBataRate = () => {
               <div className="input-field">
                 <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="From Date" defaultValue={dayjs()} />
+                    {/* <DemoItem label="From Date"> */}
+                    <DatePicker
+                      label='From Date'
+                      defaultValue={dayjs()}
+                      value={formData.fromdate || selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
+                      onChange={(date) => handleDateChange(date, 'fromdate')}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          name="fromdate"
+                          value={formData.fromdate || selectedCustomerData.fromdate || ''}
+                          inputRef={params.inputRef}
+                        />
+                      )}
+                    />
+                    {/* </DemoItem> */}
                   </LocalizationProvider>
                 </div>
                 <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="To Date" defaultValue={dayjs()} />
+                    {/* <DemoItem label="To Date"> */}
+                    <DatePicker
+                      label='To Date'
+                      defaultValue={dayjs()}
+                      value={formData.todate || selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
+                      onChange={(date) => handleDateChange(date, 'todate')}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          name="todate"
+                          value={formData.todate || selectedCustomerData.todate || ''}
+                          inputRef={params.inputRef}
+                        />
+                      )}
+                    />
+                    {/* </DemoItem> */}
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: "300px" }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
@@ -134,8 +260,28 @@ const DriverBataRate = () => {
                     }))}
                     getOptionLabel={(option) => option.label || ""}
                     renderInput={(params) => (
-                      <TextField {...params} label="Vehicle Type" />
+                      <TextField {...params} name='VehicleType' label="Vehicle Type" />
                     )}
+                  /> */}
+                   <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-demo-VehicleType"
+                    freeSolo
+                    // sx={{ width: "20ch" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "VehicleType")}
+                    value={VehicleType.find((option) => option.optionvalue)?.label || ''}
+                    options={VehicleType.map((option) => ({
+                      label: option.option,
+                    }))}
+                    getOptionLabel={(option) => option.label || ''}
+                    renderInput={(params) => {
+                      params.inputProps.value = selectedCustomerData?.VehicleType || ''
+                      return (
+                        <TextField {...params} label="Vehicle Type" name="VehicleType" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
                   />
                 </div>
                 <div className="input" style={{ width: "111px" }}>
@@ -147,7 +293,7 @@ const DriverBataRate = () => {
                   <div className="icone">
                     <EngineeringIcon color="action" />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
@@ -158,8 +304,28 @@ const DriverBataRate = () => {
                     }))}
                     getOptionLabel={(option) => option.label || ""}
                     renderInput={(params) => (
-                      <TextField {...params} label="Duty" />
+                      <TextField {...params} name='Duty' label="Duty" />
                     )}
+                  /> */}
+                   <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-demo-VehicleType"
+                    freeSolo
+                    // sx={{ width: "20ch" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "Duty")}
+                    value={Duty.find((option) => option.optionvalue)?.label || ''}
+                    options={Duty.map((option) => ({
+                      label: option.option,
+                    }))}
+                    getOptionLabel={(option) => option.label || ''}
+                    renderInput={(params) => {
+                      params.inputProps.value = selectedCustomerData?.Duty || ''
+                      return (
+                        <TextField {...params} label="Duty" name="Duty" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
                   />
                 </div>
                 <div className="input" style={{ width: "111px" }}>
@@ -169,6 +335,9 @@ const DriverBataRate = () => {
                     id="id"
                     label="ExtraHours"
                     name="ExtraHours"
+                    autoComplete="new-password"
+                    value={selectedCustomerData?.ExtraHours || book.ExtraHours}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="input" style={{ width: "111px" }}>
@@ -178,6 +347,9 @@ const DriverBataRate = () => {
                     id="id"
                     label="ExtraDays"
                     name="ExtraDays"
+                    autoComplete="new-password"
+                    value={selectedCustomerData?.ExtraDays || book.ExtraDays}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="input" style={{ width: "135px" }}>
@@ -187,6 +359,9 @@ const DriverBataRate = () => {
                     id="id"
                     label="ExtraPerHoursPrice"
                     name="ExtraPerHoursPrice"
+                    autoComplete="new-password"
+                    value={selectedCustomerData?.ExtraPerHoursPrice || book.ExtraPerHoursPrice}
+                    onChange={handleChange}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
@@ -202,6 +377,9 @@ const DriverBataRate = () => {
                     id="id"
                     label="ExtraPerDayPrice"
                     name="ExtraPerDayPrice"
+                    autoComplete="new-password"
+                    value={selectedCustomerData?.ExtraPerDayPrice || book.ExtraPerDayPrice}
+                    onChange={handleChange}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
@@ -217,12 +395,21 @@ const DriverBataRate = () => {
                     id="id"
                     label="Bata"
                     name="Bata"
+                    autoComplete="new-password"
+                    value={selectedCustomerData?.Bata || book.Bata}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
+        {error &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>Something went wrong!</p>
+          </div>
+        }
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
@@ -234,6 +421,7 @@ const DriverBataRate = () => {
                 key={action.name}
                 icon={action.icon}
                 tooltipTitle={action.name}
+                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
               />
             ))}
           </StyledSpeedDial>
@@ -243,6 +431,7 @@ const DriverBataRate = () => {
             <DataGrid
               rows={rows}
               columns={columns}
+              onRowClick={handleRowClick}
               pageSize={5}
               checkboxSelection
             />

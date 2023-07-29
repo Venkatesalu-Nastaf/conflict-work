@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from "axios";
 import "./RateType.css";
 import { Stations } from "./RateTypeData.js";
 import Autocomplete from "@mui/material/Autocomplete";
-
+import Button from "@mui/material/Button";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -26,6 +31,9 @@ import {
     RadioGroup,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+import "jspdf-autotable";
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -50,40 +58,207 @@ const actions = [
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
-    { field: "RateType", headerName: "Rate Type", width: 130 },
-    { field: "CustomerType", headerName: "Customer Type", width: 130 },
-    { field: "Active", headerName: "Active", width: 130 },
-    { field: "StartTime", headerName: "Start Time", width: 130 },
-    { field: "CloseTime", headerName: "Close Time", width: 130 },
-];
-
-const rows = [
-    {
-        id: 1,
-        RateType: 1,
-        CustomerType: 12,
-        Active: "2023-06-07",
-        StartTime: "9:00 AM",
-        CloseTime: "7:00 PM",
-
-    },
-    {
-        id: 2,
-        RateType: 2,
-        CustomerType: 13,
-        Active: "2023-06-08",
-        StartTime: "7:00 PM",
-        CloseTime: "7:00 PM",
-
-    },
-    // Add more rows as needed
+    { field: "driverid", headerName: "Driver ID", width: 130 },
+    { field: "ratename", headerName: "Rate Type", width: 130 },
+    { field: "active", headerName: "Active", width: 130 },
+    { field: "starttime", headerName: "Start Time", width: 130 },
+    { field: "closetime", headerName: "Close Time", width: 130 },
 ];
 
 const RateType = () => {
+    const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const [rows, setRows] = useState([]);
+    const [actionName] = useState('');
+    const [error, setError] = useState(false);
+    const [starttime, setStartTime] = useState('');
+    const [closetime, setCloseTime] = useState('');
+    const [formData] = useState({});
+
+    const convertToCSV = (data) => {
+        const header = columns.map((column) => column.headerName).join(",");
+        const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+        return [header, ...rows].join("\n");
+    };
+    const handleExcelDownload = () => {
+        const csvData = convertToCSV(rows);
+        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+        saveAs(blob, "customer_details.csv");
+    };
+    // const handlePdfDownload = () => {
+    //     const pdf = new jsPDF();
+    //     pdf.setFontSize(12);// Set the font size and font style
+    //     pdf.setFont('helvetica', 'normal');
+    //     pdf.text("Rate Type Details", 10, 10);// Add a title for the table
+    //     const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
+    //     pdf.autoTable({
+    //         head: [['Sno', 'Driver ID', 'Rate Type', 'Active', 'Start Time', 'Close Time']],
+    //         body: tableData,
+    //         startY: 20,
+    //     }); // Create a table to display the data
+    //     const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
+    //     saveAs(pdfBlob, 'Rate_Type.pdf'); // Download the PDF
+    // };
+    const handlePdfDownload = () => {
+        const pdf = new jsPDF();
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text("Rate Type Details", 10, 10);
+    
+        // Modify tableData to exclude the index number
+        const tableData = rows.map((row) => [
+            row['id'],
+            row['driverid'],
+            row['ratename'],
+            row['active'],
+            row['starttime'],
+            row['closetime']
+        ]);
+    
+        pdf.autoTable({
+            head: [['sno', 'Driver ID', 'Rate Type', 'Active', 'Start Time', 'Close Time']],
+            body: tableData,
+            startY: 20,
+        });
+    
+        const pdfBlob = pdf.output('blob');
+        saveAs(pdfBlob, 'Rate_Type.pdf');
+    };
+    
+
+    const hidePopup = () => {
+        setError(false);
+    };
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [error]);
+
+    const [book, setBook] = useState({
+        driverid: '',
+        stations: '',
+        ratename: '',
+        validity: '',
+        active: '',
+        starttime: '',
+        closetime: '',
+    });
+    const handleChange = (event) => {
+        const { name, value, checked, type } = event.target;
+
+        if (type === 'checkbox') {
+            // For checkboxes, update the state based on the checked value
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: checked,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: checked,
+            }));
+        } else {
+            // For other input fields, update the state based on the value
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: value,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
+    };
+
+    const handleAutocompleteChange = (event, value, name) => {
+        const selectedOption = value ? value.label : '';
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: selectedOption,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: selectedOption,
+        }));
+    };
+
+
+    const handleCancel = () => {
+        setBook((prevBook) => ({
+            ...prevBook,
+            driverid: '',
+            stations: '',
+            ratename: '',
+            validity: '',
+            active: '',
+            starttime: '',
+            closetime: '',
+        }));
+        setSelectedCustomerData({});
+    };
+    const handleRowClick = useCallback((params) => {
+        console.log(params.row);
+        const customerData = params.row;
+        setSelectedCustomerData(customerData);
+        setSelectedCustomerId(params.row.customerId);
+    }, []);
+    const handleClick = async (event, actionName, driverid) => {
+        event.preventDefault();
+        try {
+            if (actionName === 'List') {
+                console.log('List button clicked');
+                const response = await axios.get('http://localhost:8081/ratetype');
+                const data = response.data;
+                setRows(data);
+            } else if (actionName === 'Cancel') {
+                console.log('Cancel button clicked');
+                handleCancel();
+            } else if (actionName === 'Delete') {
+                console.log('Delete button clicked');
+                await axios.delete(`http://localhost:8081/ratetype/${driverid}`);
+                console.log('Customer deleted');
+                setSelectedCustomerData(null);
+                handleCancel();
+            } else if (actionName === 'Edit') {
+                console.log('Edit button clicked');
+                const selectedCustomer = rows.find((row) => row.driverid === driverid);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`http://localhost:8081/ratetype/${driverid}`, updatedCustomer);
+                console.log('Customer updated');
+                handleCancel();
+            }// else if (actionName === 'Add') {
+            //     await axios.post('http://localhost:8081/ratetype', book);
+            //     console.log(book);
+            //     handleCancel();
+            // }
+            else if (actionName === 'Add') {
+                const updatedBook = {
+                    ...book,
+                    starttime: starttime,
+                    closetime: closetime,
+                };
+                await axios.post('http://localhost:8081/ratetype', updatedBook);
+                console.log(updatedBook);
+                handleCancel();
+            }
+        } catch (err) {
+            console.log(err);
+            setError(true);
+        }
+    };
+    useEffect(() => {
+        if (actionName === 'List') {
+            handleClick(null, 'List');
+        }
+    });
+
 
     return (
         <div className="ratetype-form">
-            <form action="">
+            <form onSubmit={handleClick}>
                 <div className="detail-container-main">
                     <div className="container-left">
                         <div className="copy-title-btn-RateType">
@@ -97,6 +272,9 @@ const RateType = () => {
                                         id="id"
                                         label="ID"
                                         name="driverid"
+                                        autoComplete="new-password"
+                                        value={selectedCustomerData?.driverid || book.driverid}
+                                        onChange={handleChange}
                                         autoFocus
                                     />
                                 </div>
@@ -104,7 +282,7 @@ const RateType = () => {
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
-                                    <Autocomplete
+                                    {/* <Autocomplete
                                         fullWidth
                                         id="free-solo-demo"
                                         freeSolo
@@ -115,8 +293,28 @@ const RateType = () => {
                                         }))}
                                         getOptionLabel={(option) => option.label || ""}
                                         renderInput={(params) => (
-                                            <TextField {...params} label="Stations" />
+                                            <TextField {...params} name='stations' label="Stations" />
                                         )}
+                                    /> */}
+                                    <Autocomplete
+                                        fullWidth
+                                        size="small"
+                                        id="free-solo-demo-customerType"
+                                        freeSolo
+                                        // sx={{ width: "20ch" }}
+                                        onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
+                                        value={Stations.find((option) => option.Option)?.label || ''}
+                                        options={Stations.map((option) => ({
+                                            label: option.Option,
+                                        }))}
+                                        getOptionLabel={(option) => option.label || ''}
+                                        renderInput={(params) => {
+                                            params.inputProps.value = selectedCustomerData?.stations || ''
+                                            return (
+                                                <TextField   {...params} label="Stations" name="stations" inputRef={params.inputRef} />
+                                            )
+                                        }
+                                        }
                                     />
                                 </div>
                                 <div className="input">
@@ -128,6 +326,9 @@ const RateType = () => {
                                         id="id"
                                         label="Rate Name"
                                         name="ratename"
+                                        autoComplete="new-password"
+                                        value={selectedCustomerData?.ratename || book.ratename}
+                                        onChange={handleChange}
                                         autoFocus
                                     />
                                 </div>
@@ -142,6 +343,9 @@ const RateType = () => {
                                         id="id"
                                         label="Validity"
                                         name="validity"
+                                        autoComplete="new-password"
+                                        value={selectedCustomerData?.validity || book.validity}
+                                        onChange={handleChange}
                                         autoFocus
                                     />
                                 </div>
@@ -154,6 +358,9 @@ const RateType = () => {
                                             row
                                             aria-labelledby="demo-row-radio-buttons-group-label"
                                             name="active"
+                                            autoComplete="new-password"
+                                            value={selectedCustomerData?.active || book.active}
+                                            onChange={handleChange}
                                         >
                                             <FormControlLabel
                                                 value="yes"
@@ -172,20 +379,36 @@ const RateType = () => {
                                     <label>Start Time</label>
                                     <input
                                         type="time"
-                                        name='starttime'
+                                        value={formData.starttime || selectedCustomerData.starttime || book.starttime}
+                                        onChange={(event) => {
+                                            setBook({ ...book, starttime: event.target.value });
+                                            setStartTime(event.target.value);
+                                        }}
+                                        name="starttime"
                                     />
                                 </div>
                                 <div className="input times">
                                     <label>Close Time</label>
                                     <input
                                         type="time"
-                                        name='starttime'
+                                        value={formData.closetime || selectedCustomerData.closetime || book.closetime}
+                                        onChange={(event) => {
+                                            setBook({ ...book, closetime: event.target.value });
+                                            setCloseTime(event.target.value);
+                                        }}
+                                        name="closetime"
                                     />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                {error &&
+                    <div className='alert-popup Error' >
+                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <p>Something went wrong!</p>
+                    </div>
+                }
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
@@ -197,15 +420,32 @@ const RateType = () => {
                                 key={action.name}
                                 icon={action.icon}
                                 tooltipTitle={action.name}
+                                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                             />
                         ))}
                     </StyledSpeedDial>
                 </Box>
+                <div className="Download-btn">
+                    <PopupState variant="popover" popupId="demo-popup-menu">
+                        {(popupState) => (
+                            <React.Fragment>
+                                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                    Download
+                                </Button>
+                                <Menu {...bindMenu(popupState)}>
+                                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                                </Menu>
+                            </React.Fragment>
+                        )}
+                    </PopupState>
+                </div>
                 <div className="table-bookingCopy-RateType">
                     <div style={{ height: 400, width: "100%" }}>
                         <DataGrid
                             rows={rows}
                             columns={columns}
+                            onRowClick={handleRowClick}
                             pageSize={5}
                             checkboxSelection
                         />

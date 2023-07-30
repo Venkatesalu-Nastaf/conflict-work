@@ -39,14 +39,21 @@ const Options = () => {
                     to='/home/options/ratetype'
                     onClick={() => handleMenuItemClick('Rate Type')}
                 >
-                   Rate Type
+                    Rate Type
                 </Link>
                 <Link
                     className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Rate Management' ? 'actives' : ''}`}
                     to='/home/options/ratemanagement'
                     onClick={() => handleMenuItemClick('Rate Management')}
                 >
-                   Rate Management
+                    Rate Management
+                </Link>
+                <Link
+                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Employes' ? 'actives' : ''}`}
+                    to='/home/options/employes'
+                    onClick={() => handleMenuItemClick('Employes')}
+                >
+                    Employes
                 </Link>
                 <Link
                     className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Fule Details' ? 'actives' : ''}`}

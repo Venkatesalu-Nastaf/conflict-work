@@ -7,7 +7,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 // import Division from './Division/Division';
 import PettyCash from './PettyCash/PettyCash';
-import PayRoll from './Asset/PayRoll';
+import PayRoll from './PayRoll/PayRoll';
 
 
 

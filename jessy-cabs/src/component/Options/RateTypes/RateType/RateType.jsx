@@ -104,7 +104,7 @@ const RateType = () => {
         pdf.setFontSize(12);
         pdf.setFont('helvetica', 'normal');
         pdf.text("Rate Type Details", 10, 10);
-    
+
         // Modify tableData to exclude the index number
         const tableData = rows.map((row) => [
             row['id'],
@@ -114,17 +114,17 @@ const RateType = () => {
             row['starttime'],
             row['closetime']
         ]);
-    
+
         pdf.autoTable({
             head: [['sno', 'Driver ID', 'Rate Type', 'Active', 'Start Time', 'Close Time']],
             body: tableData,
             startY: 20,
         });
-    
+
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Rate_Type.pdf');
     };
-    
+
 
     const hidePopup = () => {
         setError(false);
@@ -409,6 +409,22 @@ const RateType = () => {
                         <p>Something went wrong!</p>
                     </div>
                 }
+
+                <div className="Download-btn">
+                    <PopupState variant="popover" popupId="demo-popup-menu">
+                        {(popupState) => (
+                            <React.Fragment>
+                                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                    Download
+                                </Button>
+                                <Menu {...bindMenu(popupState)}>
+                                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                                </Menu>
+                            </React.Fragment>
+                        )}
+                    </PopupState>
+                </div>
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
@@ -425,21 +441,6 @@ const RateType = () => {
                         ))}
                     </StyledSpeedDial>
                 </Box>
-                <div className="Download-btn">
-                    <PopupState variant="popover" popupId="demo-popup-menu">
-                        {(popupState) => (
-                            <React.Fragment>
-                                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                                    Download
-                                </Button>
-                                <Menu {...bindMenu(popupState)}>
-                                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                                </Menu>
-                            </React.Fragment>
-                        )}
-                    </PopupState>
-                </div>
                 <div className="table-bookingCopy-RateType">
                     <div style={{ height: 400, width: "100%" }}>
                         <DataGrid

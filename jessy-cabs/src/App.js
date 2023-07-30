@@ -30,6 +30,7 @@ import CashFlow from "./component/Billings/CashFlow/CashFlow";
 import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
+import Employes from "./component/Options/Employes/Employes";
 
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
             <Route path="/home/options/ratetype" element={<RateTypes />} />
             <Route path="/home/options/ratemanagement" element={<RateManagement />} />
             <Route path="/home/options/fuledetails" element={<FuelDetails />} />
+            <Route path="/home/options/employes" element={<Employes/>} />
           </Route>
           <Route path="/home/billing" element={<Billings />}>
             <Route path="/home/billing/" element={<Billing />} />

@@ -97,7 +97,7 @@ const columns = [
     { field: "Name", headerName: "Name", width: 130 },
     { field: "Email", headerName: "Email", width: 130 },
     { field: "Mobile", headerName: "Mobile", width: 130 },
-    { field: "Roll", headerName: "Roll", width: 130 },
+    { field: "JobRoll", headerName: "Job Roll", width: 130 },
     { field: "JoiningDate", headerName: "Joining Date", width: 130 },
     { field: "Gender", headerName: "Gender", width: 130 },
     { field: "BloogGroup", headerName: "Bloog Group", width: 130 },
@@ -115,7 +115,7 @@ const rows = [
         Name: "2023-06-07",
         Email: 600,
         Mobile: 600,
-        Roll: 600,
+        JobRoll: 600,
         JoiningDate: "2023-06-07",
         Gender: 600,
         BloogGroup: 600,
@@ -132,7 +132,7 @@ const rows = [
         Name: "2023-06-08",
         Email: 600,
         Mobile: 600,
-        Roll: 600,
+        JobRoll: 600,
         JoiningDate: "2023-06-07",
         Gender: 600,
         BloogGroup: 600,
@@ -213,9 +213,9 @@ const Employe = () => {
                                 </div>
                                 <TextField
                                     size="small"
-                                    id="roll"
-                                    label="Roll"
-                                    name="roll"
+                                    id="jobroll"
+                                    label="Job Roll"
+                                    name="jobroll"
                                     autoComplete="new-password"
                                     autoFocus
                                 />
@@ -326,19 +326,19 @@ const Employe = () => {
                             </div>
                             <div className="input" style={{ width: "215px" }}>
                                 <div className="icone">
-                                    <FactCheckIcon color="action" />
+                                    <CurrencyRupeeIcon color="action" />
                                 </div>
                                 <TextField
                                     size="small"
-                                    id="function"
-                                    label="Function"
-                                    name="function"
+                                    id="fixedsalary"
+                                    label="Fixed Salary"
+                                    name="fixedsalary"
                                     autoFocus
                                 />
                             </div>
                         </div>
                         <div className="input-field">
-                            <div className="input" >
+                            <div className="input" style={{ width: "260px" }}>
                                 <div className="icone">
                                     <DeviceHubRoundedIcon color="action" />
                                 </div>
@@ -350,7 +350,7 @@ const Employe = () => {
                                     autoFocus
                                 />
                             </div>
-                            <div className="input">
+                            <div className="input" style={{ width: "260px" }}>
                                 <div className="icone">
                                     <MedicalInformationIcon color="action" />
                                 </div>
@@ -362,7 +362,7 @@ const Employe = () => {
                                     autoFocus
                                 />
                             </div>
-                            <div className="input" style={{ width: "190px" }}>
+                            <div className="input" style={{ width: "250px" }}>
                                 <div className="icone">
                                     <DirectionsCarIcon color="action" />
                                 </div>
@@ -382,18 +382,6 @@ const Employe = () => {
                                         style={{ display: "none" }}
                                     />
                                 </IconButton>
-                            </div>
-                            <div className="input" >
-                                <div className="icone">
-                                    <CurrencyRupeeIcon color="action" />
-                                </div>
-                                <TextField
-                                    size="small"
-                                    id="netsalary"
-                                    label="Net Salary"
-                                    name="netsalary"
-                                    autoFocus
-                                />
                             </div>
                         </div>
                     </div>

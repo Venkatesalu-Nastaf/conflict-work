@@ -1,259 +1,444 @@
 import React from 'react'
 import "./PayRoll.css";
-import { saveAs } from 'file-saver';
-import jsPDF from 'jspdf';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import Button from "@mui/material/Button";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import { styled } from "@mui/material/styles";
-import SpeedDial from "@mui/material/SpeedDial";
-import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import CreditScoreIcon from '@mui/icons-material/CreditScore';
+import AddCardIcon from '@mui/icons-material/AddCard';
+import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
+import TimerIcon from '@mui/icons-material/Timer';
+import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
+import NetworkPingIcon from '@mui/icons-material/NetworkPing';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import DeviceHubRoundedIcon from '@mui/icons-material/DeviceHubRounded';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import WorkOffIcon from '@mui/icons-material/WorkOff';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
+import NaturePeopleIcon from '@mui/icons-material/NaturePeople';
+import WorkIcon from '@mui/icons-material/Work';
+import EmailIcon from '@mui/icons-material/Email';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import WorkHistoryIcon from '@mui/icons-material/WorkHistory'
+import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
+import HailIcon from '@mui/icons-material/Hail';
 import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
-import RateReviewIcon from '@mui/icons-material/RateReview';
 import BadgeIcon from "@mui/icons-material/Badge";
-import { Menu, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DataGrid } from "@mui/x-data-grid";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import MonthlyPayDetails from './SliderPaySlips/MonthlyPayDetails';
+import EmployePaySlip from './SliderPaySlips/EmployePaySlip';
 
 
-
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
-  position: "absolute",
-  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
-  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
-    top: theme.spacing(2),
-    left: theme.spacing(2),
-  },
-}));
-const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
-
-// download function
-const convertToCSV = (data) => {
-  const header = columns.map((column) => column.headerName).join(",");
-  const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-  return [header, ...rows].join("\n");
-};
-const handleExcelDownload = () => {
-  const csvData = convertToCSV(rows);
-  const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-  saveAs(blob, "Account_Info.csv");
-};
-const handlePdfDownload = () => {
-  const pdf = new jsPDF();
-  pdf.setFontSize(12);// Set the font size and font style
-  pdf.setFont('helvetica', 'normal');
-  pdf.text("Account_Info", 10, 10);// Add a title for the table
-  const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
-  pdf.autoTable({
-    head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-    body: tableData,
-    startY: 20,
-  }); // Create a table to display the data
-  const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-  saveAs(pdfBlob, 'Account_Info.pdf'); // Download the PDF
-};
-
-
-// TABLE
-
-const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "VoucherNo", headerName: "VoucherNo", width: 130 },
-  { field: "PaymentDate", headerName: "Payment Date", width: 130 },
-  { field: "BillName", headerName: "Bill Name", width: 130 },
-  { field: "PaymentCategory", headerName: "Payment Category", width: 150 },
-  { field: "Amount", headerName: "Amount", width: 130 },
-];
-
-const rows = [
-  {
-    id: 1,
-    VoucherNo: 1,
-    PaymentDate: "2023-06-07",
-    BillName: "2023-06-07",
-    PaymentCategory: "9:00 AM",
-    Amount: 600,
-
-  },
-  {
-    id: 2,
-    VoucherNo: 2,
-    PaymentDate: "2023-06-07",
-    BillName: "2023-06-08",
-    PaymentCategory: "7:00 PM",
-    Amount: 500,
-
-  },
-  // Add more rows as needed
-];
-
-// date
-const today = dayjs();
-const tomorrow = dayjs().add(1, "day");
 
 const PayRoll = () => {
+  const [value, setValue] = React.useState("monthlypayslip");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return (
     <div className="PettyCash-form">
       <form action="">
         <div className="PettyCash-page-header">
           <div className="input-field">
-            <div className="input" style={{ width: "300px" }}>
+            <div className="input" style={{ width: "215px" }}>
               <div className="icone">
                 <BadgeIcon color="action" />
               </div>
               <TextField
                 size="small"
-                id="voucher"
-                label="Voucher No"
-                name="voucher"
+                id="id"
+                label="Employe ID"
+                name="driverid"
+                autoComplete="new-password"
                 autoFocus
               />
             </div>
-            <div className="input" style={{ width: "220px" }}>
+            <div className="input" style={{ width: "215px" }}>
               <div className="icone">
-                <RateReviewIcon color="action" />
+                <PermIdentityIcon color="action" />
               </div>
               <TextField
                 size="small"
-                id="id"
-                label="Bill Name"
-                name="ratename"
+                id="name"
+                label="Name"
+                name="name"
+                autoComplete="new-password"
                 autoFocus
               />
             </div>
-            <div className="input">
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <EmailIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="emailid"
+                label="Email Id"
+                name="emailid"
+                autoComplete="new-password"
+                autoFocus
+              />
+            </div>
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <PhoneIphoneIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="mobile"
+                label="Mobile"
+                name="mobile"
+                autoComplete="new-password"
+                autoFocus
+              />
+            </div>
+          </div>
+          <div className="input-field">
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <WorkOutlineRoundedIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="jobroll"
+                label="Job Roll"
+                name="jobroll"
+                autoComplete="new-password"
+                autoFocus
+              />
+            </div>
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <WorkIcon color="action" />
+              </div>
+              <TextField
+                type='number'
+                size="small"
+                id="workingdays"
+                label="Working Days"
+                name="workingdays"
+                variant="standard"
+              />
+            </div>
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <WorkOffIcon color="action" />
+              </div>
+              <TextField
+                type='number'
+                size="small"
+                id="leavedays"
+                label="Leave Days"
+                name="leavedays"
+                variant="standard"
+              />
+            </div>
+            <div className="input" style={{ width: "215px" }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  defaultValue={today}
-                  minDate={tomorrow}
-                  views={["year", "month", "day"]}
+                  label='Salary Date'
+                  defaultValue={dayjs()}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      name="salarydate"
+                      inputRef={params.inputRef}
+                    />
+                  )}
                 />
               </LocalizationProvider>
             </div>
           </div>
           <div className="input-field">
-            <div className="input" style={{ width: "300px" }}>
+            <div className="input" style={{ width: "260px" }}>
+              <div className="icone">
+                <DeviceHubRoundedIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="uanid"
+                label="UAN Id"
+                name="uanid"
+                autoFocus
+              />
+            </div>
+            <div className="input" style={{ width: "260px" }}>
+              <div className="icone">
+                <MedicalInformationIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="esino"
+                label="ESI No"
+                name="esino"
+                autoFocus
+              />
+            </div>
+            <div className="input" style={{ width: "260px" }}>
+              <div className="icone">
+                <AccountBalanceWalletIcon color="action" />
+              </div>
+              <TextField
+                type='number'
+                size="small"
+                id="grosspay"
+                label="Gross Pay"
+                name="grosspay"
+                variant="standard"
+              />
+            </div>
+          </div>
+        </div>
+        <div className='PayRoll-container'>
+          <span className="Title-Name">Earnings</span>
+          <div className="input-field">
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                < SwitchAccountIcon color="action" />
+              </div>
+              <TextField
+                type='number'
+                size="small"
+                id="basicsalary"
+                label="Basic Salary"
+                name="basicsalary"
+                variant="standard"
+              />
+            </div>
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <AddHomeWorkIcon color="action" />
+              </div>
+              <TextField
+                type='number'
+                size="small"
+                id="houserentallowance"
+                label="House Rent Allowance"
+                name="houserentallowance"
+                variant="standard"
+              />
+            </div>
+            <div className="input" style={{ width: "215px" }}>
               <div className="icone">
                 <FactCheckIcon color="action" />
               </div>
               <TextField
+                type='number'
                 size="small"
-                id="id"
-                label="Payment Category"
-                name="PaymentCategory"
-                autoFocus
+                id="otherallowance"
+                label="Other Allowance"
+                name="otherallowance"
+                variant="standard"
               />
             </div>
-            <div className="input" style={{ width: "220px" }}>
+            <div className="input" style={{ width: "215px" }}>
               <div className="icone">
-                <BadgeIcon color="action" />
+                <TimerIcon color="action" />
               </div>
               <TextField
                 size="small"
-                id="amount"
-                label="Amount"
-                name="amount"
+                id="overtime"
+                label="Over Time"
+                name="overtime"
                 autoFocus
               />
             </div>
-            <div className="input" style={{ width: "100px" }}>
-              <Button variant="contained">Add</Button>
-            </div>
           </div>
-        </div>
-        <div className="detail-container-main">
-          <div className="container-left">
-            <div className="copy-title-btn-PettyCash">
-              <div className="input-field">
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoItem label="From">
-                      <DatePicker
-                        defaultValue={today}
-                        minDate={tomorrow}
-                        views={["year", "month", "day"]}
-                      />
-                    </DemoItem>
-                  </LocalizationProvider>
-                </div>
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoItem label="To">
-                      <DatePicker
-                        defaultValue={today}
-                        minDate={tomorrow}
-                        views={["year", "month", "day"]}
-                      />
-                    </DemoItem>
-                  </LocalizationProvider>
-                </div>
-                <div className="input" style={{ width: '123px', 'margin-top': "50px" }}>
-                  <Button variant="contained">Search</Button>
-                </div>
+          <div className="input-field">
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <NaturePeopleIcon color="action" />
               </div>
+              <TextField
+                size="small"
+                id="outstation"
+                label="Out Station"
+                name="outstation"
+                autoFocus
+              />
+            </div>
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <WorkHistoryIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="extraworkingdays"
+                label="Extra Working Days"
+                name="extraworkingdays"
+                autoFocus
+              />
+            </div>
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <HailIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="cellwash"
+                label="Cell Wash"
+                name="cellwash"
+                autoFocus
+              />
+            </div>
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <CurrencyRupeeIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="totalerningsamount"
+                label="Total Ernings Amount"
+                name="totalerningsamount"
+                variant="standard"
+              />
             </div>
           </div>
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-          <StyledSpeedDial
-            ariaLabel="SpeedDial playground example"
-            icon={<SpeedDialIcon />}
-            direction="left"
-          >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
+        <div className='PayRoll-container'>
+          <span className="Title-Name">Deductions</span>
+          <div className="input-field">
+            <div className="input" style={{ width: "240px" }}>
+              <div className="icone">
+                <DeviceHubRoundedIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="PF12%"
+                label="PF 12%"
+                name="PF12%"
+                autoFocus
               />
-            ))}
-          </StyledSpeedDial>
-        </Box>
-        <div className="Download-btn">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
-        </div>
-        <div className="table-bookingCopy-PettyCash">
-          <div style={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              pageSize={5}
-              checkboxSelection
-            />
+            </div>
+            <div className="input" style={{ width: "240px" }}>
+              <div className="icone">
+                <MedicalInformationIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="ESIC0.75%"
+                label="ESIC 0.75%"
+                name="ESIC0.75%"
+                autoFocus
+              />
+            </div>
+            <div className="input" style={{ width: "240px" }}>
+              <div className="icone">
+                <ContactMailIcon color="action" />
+              </div>
+              <TextField
+                type='number'
+                size="small"
+                id="otherdeducations"
+                label="Other Deducations"
+                name="otherdeducations"
+              />
+            </div>
+            <div className="input" style={{ width: "240px" }}>
+              <div className="icone">
+                <ContactEmergencyIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="professionaltax"
+                label="Professional Tax"
+                name="professionaltax"
+                autoFocus
+              />
+            </div>
+          </div>
+          <div className="input-field">
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <NetworkPingIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="incometax"
+                label="Income Tax"
+                name="incometax"
+                autoFocus
+              />
+            </div>
+            <div className="input" >
+              <div className="icone">
+                <CreditScoreIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="advancepaid"
+                label="Advance Paid"
+                name="advancepaid"
+                autoFocus
+              />
+            </div>
+            <div className="input"  >
+              <div className="icone">
+                <AddCardIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="advance"
+                label="Advance Loan"
+                name="advanceloan"
+                autoFocus
+              />
+            </div>
+            <div className="input" style={{ width: "225px" }}>
+              <div className="icone">
+                <CurrencyRupeeIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="totaldeductionamount"
+                label="Total Deduction Amount"
+                name="totaldeductionamount"
+                variant="standard"
+              />
+            </div>
+          </div>
+          <div className="input-field">
+            <div className="input" style={{ width: "225px" }}>
+              <div className="icone">
+                <CurrencyRupeeIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="takehomeamount"
+                label="Take Home Amount"
+                name="takehomeamount"
+                variant="standard"
+              />
+            </div>
           </div>
         </div>
+        <div className='payroll-slider'>
+          <Box sx={{ width: "100%", typography: "body1" }}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                  <Tab label="Monthly Pay Details" value="monthlypaydetails" />
+                  <Tab label="Employes Pay Slip" value="employespayslip" />
+                </TabList>
+              </Box>
+              <TabPanel value="monthlypaydetails">
+                <MonthlyPayDetails />
+              </TabPanel>
+              <TabPanel value="employespayslip">
+                <EmployePaySlip />
+              </TabPanel>
+            </TabContext>
+          </Box>
+        </div>
+
       </form>
     </div>
   )

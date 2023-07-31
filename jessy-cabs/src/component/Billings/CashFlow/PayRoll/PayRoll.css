@@ -4,9 +4,18 @@
     padding: 20px;
 }
 
-.css-13xfq8m-MuiTabPanel-root {
+.payroll-slider .css-13xfq8m-MuiTabPanel-root {
     display: flex;
+    flex-direction: column !important;
     padding: 0px !important;
+}
+
+.payroll-slider {
+    background-color: var(--glass);
+    margin: 10px;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    padding: 20px 0px;
 }
 
 .detail-container-main {
@@ -111,6 +120,14 @@
     padding: 10px 20px 35px;
     border: 2px solid #ccc;
     border-radius: 15px;
+}
+
+.PayRoll-container {
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    margin: 40px 30px;
+    background-color: var(--glass);
+    padding: 25px 20px;
 }
 
 .PettyCash-form .Title-Name::after {

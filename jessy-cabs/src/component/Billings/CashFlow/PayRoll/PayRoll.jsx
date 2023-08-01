@@ -38,7 +38,7 @@ import EmployePaySlip from './SliderPaySlips/EmployePaySlip';
 
 
 const PayRoll = () => {
-  const [value, setValue] = React.useState("monthlypayslip");
+  const [value, setValue] = React.useState("monthlypaydetails");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

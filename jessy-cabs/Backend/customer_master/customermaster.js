@@ -176,10 +176,44 @@ app.post('/vehicleinfo', (req, res) => {
 
 // collect data from vehicleInfo database
 
+// app.get('/vehicleinfo/:vehRegNo', (req, res) => {
+//   const vehRegNo = req.params.vehRegNo;
+
+//   db.query('SELECT * FROM vehicleinfo WHERE vehRegNo = ?', vehRegNo, (err, result) => {
+//     if (err) {
+//       console.error('Error retrieving vehicle details from MySQL:', err);
+//       return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
+//     }
+//     if (result.length === 0) {
+//       return res.status(404).json({ error: 'Vehicle not found' });
+//     }
+//     const vehicleDetails = result[0]; // Assuming there is only one matching vehicle
+//     return res.status(200).json(vehicleDetails);
+//   });
+// });
+
+// app.get('/vehicleinfo/:vehRegNo', (req, res) => {
+//   const vehRegNo = req.params.vehRegNo;
+
+//   // Modify the query to use the LIKE operator for partial matching
+//   db.query('SELECT * FROM vehicleinfo WHERE vehRegNo LIKE ? LIMIT 1', `%${vehRegNo}`, (err, result) => {
+//     if (err) {
+//       console.error('Error retrieving vehicle details from MySQL:', err);
+//       return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
+//     }
+//     if (result.length === 0) {
+//       return res.status(404).json({ error: 'Vehicle not found' });
+//     }
+//     const vehicleDetails = result[0]; // Assuming there is only one matching vehicle
+//     return res.status(200).json(vehicleDetails);
+//   });
+// });
+
 app.get('/vehicleinfo/:vehRegNo', (req, res) => {
   const vehRegNo = req.params.vehRegNo;
 
-  db.query('SELECT * FROM vehicleinfo WHERE vehRegNo = ?', vehRegNo, (err, result) => {
+  // Modify the query to use the LIKE operator for partial matching
+  db.query('SELECT * FROM vehicleinfo WHERE vehRegNo LIKE ? LIMIT 1', `%${vehRegNo}%`, (err, result) => {
     if (err) {
       console.error('Error retrieving vehicle details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
@@ -267,6 +301,22 @@ app.put('/booking/:bookingno', (req, res) => {
     console.log('Data updated in MySQL');
     return res.status(200).json({ message: "Data updated successfully" });
   });
+});
+
+//booking number change
+
+app.get('booking', async (req, res) => {
+  try {
+    // Find the highest booking number in the database
+    const highestBooking = await Booking.findOne().sort({ bookingno: -1 }).exec();
+
+    // Calculate the next booking number
+    const nextBookingNo = highestBooking ? highestBooking.bookingno + 1 : 1000;
+
+    res.json({ bookingno: nextBookingNo });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching next booking number' });
+  }
 });
 
 //End booking page database 
@@ -1226,6 +1276,78 @@ app.get('/driverbatarate', (req, res) => {
 });
 
 // End RateValidity database
+
+// -----------------------------------------------------------------------------------------------------------
+
+// Employees Database
+
+// Add Employees database
+
+app.post('/employees', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO employees SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+
+// delete Employees data
+
+app.delete('/employees/:empid', (req, res) => {
+  const empid = req.params.empid;
+  console.log('empid:', empid); // Log the customer ID
+  console.log('DELETE query:', 'DELETE FROM employees WHERE empid = ?', empid);
+  db.query('DELETE FROM employees WHERE empid = ?', empid, (err, result) => {
+    if (err) {
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+// update Employees details
+
+app.put('/employees/:customerId', (req, res) => {
+  const empid = req.params.empid;
+  const updatedCustomerData = req.body;
+  console.log('empid:', empid); // Log the customer ID
+  console.log('Updated customer data:', updatedCustomerData);
+
+  db.query('UPDATE employees SET ? WHERE empid = ?', [updatedCustomerData, empid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
+// collect data for Employees table
+
+app.get('/employees', (req, res) => {
+  db.query('SELECT * FROM employees', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+
+// End Employees database
 
 // -----------------------------------------------------------------------------------------------------------
 

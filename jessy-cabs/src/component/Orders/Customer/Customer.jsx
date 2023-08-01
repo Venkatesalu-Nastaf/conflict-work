@@ -103,20 +103,6 @@ const Customer = () => {
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
     saveAs(blob, "customer_details.csv");
   };
-  // const handlePdfDownload = () => {
-  //   const pdf = new jsPDF();
-  //   pdf.setFontSize(12);// Set the font size and font style
-  //   pdf.setFont('helvetica', 'normal');
-  //   pdf.text("Customer Details", 10, 10);// Add a title for the table
-  //   const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
-  //   pdf.autoTable({
-  //     head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-  //     body: tableData,
-  //     startY: 20,
-  //   }); // Create a table to display the data
-  //   const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-  //   saveAs(pdfBlob, 'customer_details.pdf'); // Download the PDF
-  // };
   const handlePdfDownload = () => {
     const pdf = new jsPDF();
     pdf.setFontSize(12);

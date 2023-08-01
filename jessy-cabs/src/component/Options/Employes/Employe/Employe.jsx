@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from "axios";
 import "./Employe.css";
 import Button from "@mui/material/Button";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -19,6 +20,7 @@ import BloodtypeIcon from '@mui/icons-material/Bloodtype';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -41,7 +43,6 @@ import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import "jspdf-autotable";
 
-
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
     "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -61,95 +62,239 @@ const actions = [
     { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-// download function
-const convertToCSV = (data) => {
-    const header = columns.map((column) => column.headerName).join(",");
-    const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-    return [header, ...rows].join("\n");
-};
-const handleExcelDownload = () => {
-    const csvData = convertToCSV(rows);
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "Account_Info.csv");
-};
-const handlePdfDownload = () => {
-    const pdf = new jsPDF();
-    pdf.setFontSize(12);// Set the font size and font style
-    pdf.setFont('helvetica', 'normal');
-    pdf.text("Account_Info", 10, 10);// Add a title for the table
-    const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
-    pdf.autoTable({
-        head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-        body: tableData,
-        startY: 20,
-    }); // Create a table to display the data
-    const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-    saveAs(pdfBlob, 'Account_Info.pdf'); // Download the PDF
-};
-
-
 
 // TABLE
 
 const columns = [
     { field: "id", headerName: "Sno", width: 50 },
-    { field: "EmployeID", headerName: "Employe ID", width: 140 },
-    { field: "Name", headerName: "Name", width: 130 },
-    { field: "Email", headerName: "Email", width: 130 },
-    { field: "Mobile", headerName: "Mobile", width: 130 },
-    { field: "JobRoll", headerName: "Job Roll", width: 130 },
-    { field: "JoiningDate", headerName: "Joining Date", width: 130 },
-    { field: "Gender", headerName: "Gender", width: 130 },
-    { field: "BloogGroup", headerName: "Bloog Group", width: 130 },
-    { field: "Guardian", headerName: "Guardian", width: 130 },
-    { field: "UANID", headerName: "UAN ID", width: 140 },
-    { field: "ESINO", headerName: "ESI NO", width: 140 },
-    { field: "NetSalary", headerName: "Net Salary", width: 130 },
-    { field: "DrivingLicenceNo", headerName: "Driving Licence No", width: 140 },
+    { field: "empid", headerName: "Employe ID", width: 140 },
+    { field: "empname", headerName: "Name", width: 130 },
+    { field: "empemailid", headerName: "Email", width: 130 },
+    { field: "empmobile", headerName: "Mobile", width: 130 },
+    { field: "jobroll", headerName: "Job Roll", width: 130 },
+    { field: "joiningdate", headerName: "Joining Date", width: 130 },
+    { field: "gender", headerName: "Gender", width: 130 },
+    { field: "bloodgroup", headerName: "Bloog Group", width: 130 },
+    { field: "guardian", headerName: "Guardian", width: 130 },
+    { field: "uanid", headerName: "UAN ID", width: 140 },
+    { field: "esino", headerName: "ESI NO", width: 140 },
+    { field: "fixedsalary", headerName: "Net Salary", width: 130 },
+    { field: "licenceno", headerName: "Driving Licence No", width: 140 },
 ];
 
-const rows = [
-    {
-        id: 1,
-        EmployeID: 1,
-        Name: "2023-06-07",
-        Email: 600,
-        Mobile: 600,
-        JobRoll: 600,
-        JoiningDate: "2023-06-07",
-        Gender: 600,
-        BloogGroup: 600,
-        Guardian: 600,
-        UANID: 600,
-        ESINO: 600,
-        NetSalary: 600,
-        DrivingLicenceNo: 600,
-
-    },
-    {
-        id: 2,
-        EmployeID: 2,
-        Name: "2023-06-08",
-        Email: 600,
-        Mobile: 600,
-        JobRoll: 600,
-        JoiningDate: "2023-06-07",
-        Gender: 600,
-        BloogGroup: 600,
-        Guardian: 600,
-        UANID: 600,
-        ESINO: 600,
-        NetSalary: 600,
-        DrivingLicenceNo: 600,
-    },
-];
 
 const Employe = () => {
+    const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const [rows, setRows] = useState([]);
+    const [actionName] = useState('');
+    const [error, setError] = useState(false);
+    const [formData] = useState({});
+
+
+    const convertToCSV = (data) => {
+        const header = columns.map((column) => column.headerName).join(",");
+        const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+        return [header, ...rows].join("\n");
+    };
+    const handleExcelDownload = () => {
+        const csvData = convertToCSV(rows);
+        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+        saveAs(blob, "customer_details.csv");
+    };
+    const handlePdfDownload = () => {
+        const pdf = new jsPDF('landscape');
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text("Employee Details", 10, 10);
+
+        // Modify tableData to exclude the index number
+        const tableData = rows.map((row) => [
+            row['id'],
+            row['empid'],
+            row['empname'],
+            row['empemailid'],
+            row['empmobile'],
+            row['jobroll'],
+            row['joiningdate'],
+            row['gender'],
+            row['bloodgroup'],
+            row['address1'],
+            row['aadharcard'],
+            row['pancard'],
+            row['address2'],
+            row['guardian'],
+            row['fixedsalary'],
+            row['uanid'],
+            row['esino'],
+            row['uanid']
+        ]);
+        pdf.autoTable({
+            head: [['Sno', 'Employe ID', 'Name', 'Email', 'Mobile', 'Job Roll', 'Joining Date', 'Gender', 'Blood Group', 'Guardian', 'UAN ID', 'ESI NO', 'Net Salary', 'Driving Licence No']],
+            body: tableData,
+            startY: 20,
+            columnWidth: 'auto',
+        });
+
+        const pdfBlob = pdf.output('blob');
+        saveAs(pdfBlob, 'Customer_Details.pdf');
+    };
+
+
+    const hidePopup = () => {
+        setError(false);
+    };
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [error]);
+
+    const [book, setBook] = useState({
+        empid: '',
+        empname: '',
+        empemailid: '',
+        empmobile: '',
+        jobroll: '',
+        joiningdate: '',
+        gender: '',
+        bloodgroup: '',
+        address1: '',
+        aadharcard: '',
+        pancard: '',
+        address2: '',
+        guardian: '',
+        fixedsalary: '',
+        uanid: '',
+        esino: '',
+        licenceno: '',
+
+    });
+    const handleChange = (event) => {
+        const { name, value, checked, type } = event.target;
+
+        if (type === 'checkbox') {
+            // For checkboxes, update the state based on the checked value
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: checked,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: checked,
+            }));
+        } else {
+            // For other input fields, update the state based on the value
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: value,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
+    };
+
+    // const handleAutocompleteChange = (event, value, name) => {
+    //     const selectedOption = value ? value.label : '';
+    //     setBook((prevBook) => ({
+    //         ...prevBook,
+    //         [name]: selectedOption,
+    //     }));
+    //     setSelectedCustomerData((prevData) => ({
+    //         ...prevData,
+    //         [name]: selectedOption,
+    //     }));
+    // };
+
+    const handleDateChange = (date, name) => {
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: formattedDate,
+        }));
+    };
+    const handleCancel = () => {
+        setBook((prevBook) => ({
+            ...prevBook,
+            empid: '',
+            empname: '',
+            empemailid: '',
+            empmobile: '',
+            jobroll: '',
+            joiningdate: '',
+            gender: '',
+            bloodgroup: '',
+            address1: '',
+            aadharcard: '',
+            pancard: '',
+            address2: '',
+            guardian: '',
+            fixedsalary: '',
+            uanid: '',
+            esino: '',
+            licenceno: '',
+
+        }));
+        setSelectedCustomerData({});
+    };
+
+    const handleRowClick = useCallback((params) => {
+        console.log(params.row);
+        const customerData = params.row;
+        setSelectedCustomerData(customerData);
+        setSelectedCustomerId(params.row.customerId);
+    }, []);
+
+    const handleClick = async (event, actionName, empid) => {
+        event.preventDefault();
+        try {
+            if (actionName === 'List') {
+                console.log('List button clicked');
+                const response = await axios.get('http://localhost:8081/employees');
+                const data = response.data;
+                setRows(data);
+            } else if (actionName === 'Cancel') {
+                console.log('Cancel button clicked');
+                handleCancel();
+            } else if (actionName === 'Delete') {
+                console.log('Delete button clicked');
+                await axios.delete(`http://localhost:8081/employees/${empid}`);
+                console.log('Customer deleted');
+                setSelectedCustomerData(null);
+                handleCancel();
+            } else if (actionName === 'Edit') {
+                console.log('Edit button clicked');
+                const selectedCustomer = rows.find((row) => row.empid === empid);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`http://localhost:8081/employees/${empid}`, updatedCustomer);
+                console.log('Customer updated');
+                handleCancel();
+            } else if (actionName === 'Add') {
+                await axios.post('http://localhost:8081/employees', book);
+                console.log(book);
+                handleCancel();
+            }
+        } catch (err) {
+            console.log(err);
+            setError(true);
+        }
+    };
+    useEffect(() => {
+        if (actionName === 'List') {
+            handleClick(null, 'List');
+        }
+    });
+
 
 
     return (
         <div className="Employe-form">
-            <form>
+            <form onSubmit={handleClick}>
                 <div className="detail-container-main-Employe">
                     <div className="container-Employe">
                         <div className="input-field">
@@ -161,8 +306,10 @@ const Employe = () => {
                                     size="small"
                                     id="id"
                                     label="Employe ID"
-                                    name="driverid"
+                                    name="empid"
                                     autoComplete="new-password"
+                                    value={selectedCustomerData?.empid || book.empid}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -174,8 +321,10 @@ const Employe = () => {
                                     size="small"
                                     id="name"
                                     label="Name"
-                                    name="name"
+                                    name="empname"
                                     autoComplete="new-password"
+                                    value={selectedCustomerData?.empname || book.empname}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -187,8 +336,10 @@ const Employe = () => {
                                     size="small"
                                     id="emailid"
                                     label="Email Id"
-                                    name="emailid"
+                                    name="empemailid"
                                     autoComplete="new-password"
+                                    value={selectedCustomerData?.empemailid || book.empemailid}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -200,8 +351,10 @@ const Employe = () => {
                                     size="small"
                                     id="mobile"
                                     label="Mobile"
-                                    name="mobile"
+                                    name="empmobile"
                                     autoComplete="new-password"
+                                    value={selectedCustomerData?.empmobile || book.empmobile}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -217,11 +370,13 @@ const Employe = () => {
                                     label="Job Roll"
                                     name="jobroll"
                                     autoComplete="new-password"
+                                    value={selectedCustomerData?.jobroll || book.jobroll}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
                             <div className="input" >
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label='Joining Date'
                                         defaultValue={dayjs()}
@@ -233,6 +388,34 @@ const Employe = () => {
                                             />
                                         )}
                                     />
+                                </LocalizationProvider> */}
+                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoItem label="Date">
+                                        <DatePicker
+                                            value={selectedCustomerData?.joiningdate ? dayjs(selectedCustomerData?.joiningdate) : null}
+                                            onChange={handleDateChange}
+                                        >
+                                            {({ inputProps, inputRef }) => (
+                                                <TextField {...inputProps} inputRef={inputRef} name="joiningdate" value={selectedCustomerData?.joiningdate} />
+                                            )}
+                                        </DatePicker>
+                                    </DemoItem>
+                                </LocalizationProvider> */}
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoItem label="Joining Date">
+                                        <DatePicker
+                                            value={formData.joiningdate || selectedCustomerData.joiningdate ? dayjs(selectedCustomerData.joiningdate) : null}
+                                            onChange={(date) => handleDateChange(date, 'joiningdate')}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    name="joiningdate"
+                                                    value={formData.joiningdate || selectedCustomerData.joiningdate || ''}
+                                                    inputRef={params.inputRef}
+                                                />
+                                            )}
+                                        />
+                                    </DemoItem>
                                 </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -244,6 +427,9 @@ const Employe = () => {
                                     id="gender"
                                     label="Gender"
                                     name="gender"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.gender || book.gender}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -256,6 +442,9 @@ const Employe = () => {
                                     id="bloodgroup"
                                     label="Blood Group"
                                     name="bloodgroup"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.bloodgroup || book.bloodgroup}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -271,6 +460,9 @@ const Employe = () => {
                                     id="address1"
                                     label="Address"
                                     name="address1"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.address1 || book.address1}
+                                    onChange={handleChange}
                                     variant="standard"
                                 />
                             </div>
@@ -283,6 +475,9 @@ const Employe = () => {
                                     id="aadharcard"
                                     label="Aadhar Card"
                                     name="aadharcard"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.aadharcard || book.aadharcard}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -295,6 +490,9 @@ const Employe = () => {
                                     id="pancard"
                                     label="Pan Card"
                                     name="pancard"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.pancard || book.pancard}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -309,6 +507,9 @@ const Employe = () => {
                                     size="small"
                                     id="address2"
                                     name="address2"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.address2 || book.address2}
+                                    onChange={handleChange}
                                     variant="standard"
                                 />
                             </div>
@@ -321,6 +522,9 @@ const Employe = () => {
                                     id="guardian"
                                     label="Guardian"
                                     name="guardian"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.guardian || book.guardian}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -333,6 +537,9 @@ const Employe = () => {
                                     id="fixedsalary"
                                     label="Fixed Salary"
                                     name="fixedsalary"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.fixedsalary || book.fixedsalary}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -347,6 +554,9 @@ const Employe = () => {
                                     id="uanid"
                                     label="UAN Id"
                                     name="uanid"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.uanid || book.uanid}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -359,6 +569,9 @@ const Employe = () => {
                                     id="esino"
                                     label="ESI No"
                                     name="esino"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.esino || book.esino}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -370,7 +583,10 @@ const Employe = () => {
                                     size="small"
                                     id="drivinglicence no"
                                     label="Drving Licence No"
-                                    name="licence no"
+                                    name="licenceno"
+                                    autoComplete="new-password"
+                                    value={selectedCustomerData?.licenceno || book.licenceno}
+                                    onChange={handleChange}
                                     autoFocus
                                 />
                             </div>
@@ -386,6 +602,12 @@ const Employe = () => {
                         </div>
                     </div>
                 </div>
+                {error &&
+                    <div className='alert-popup Error' >
+                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <p>Something went wrong!</p>
+                    </div>
+                }
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
@@ -396,6 +618,7 @@ const Employe = () => {
                                 key={action.name}
                                 icon={action.icon}
                                 tooltipTitle={action.name}
+                                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                             />
                         ))}
                     </StyledSpeedDial>
@@ -420,6 +643,7 @@ const Employe = () => {
                         <DataGrid
                             rows={rows}
                             columns={columns}
+                            onRowClick={handleRowClick}
                             pageSize={5}
                             checkboxSelection
                         />

@@ -90,6 +90,8 @@ const Booking = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
   const [error, setError] = useState(false);
+  // const [nextBookingNo, setNextBookingNo] = useState(null);
+
 
   const hidePopup = () => {
     setError(false);
@@ -262,6 +264,7 @@ const Booking = () => {
 
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
+    setFormData({ ...formData, [name]: value });
 
     if (event.target.type === 'checkbox') {
       setBook((prevBook) => ({
@@ -467,6 +470,18 @@ const Booking = () => {
     setCurrentYear(value);
   }, []);
 
+  const [nextBookingNo, setNextBookingNo] = useState(null);
+
+  useEffect(() => {
+    axios.get('http://localhost:8081/booking')
+      .then((response) => {
+        setNextBookingNo(response.data.bookingno);
+      })
+      .catch((error) => {
+        console.error('Error fetching next booking number:', error);
+      });
+  }, []);
+
   return (
     <div className="booking-form">
       <form onSubmit={handleClick}>
@@ -483,7 +498,8 @@ const Booking = () => {
                   label="Booking No"
                   id="standard-size-normal"
                   autoComplete="new-password"
-                  value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno}
+                  // value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || currentNumber}
+                  value={formData.bookingno || nextBookingNo}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   variant="standard"
@@ -729,10 +745,10 @@ const Booking = () => {
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} 
-                      label="Report" 
-                      name="report" 
-                      value={formData.report || selectedCustomerData.report || book.report} 
+                      <TextField {...params}
+                        label="Report"
+                        name="report"
+                        value={formData.report || selectedCustomerData.report || book.report}
                       />
                     )
                   }

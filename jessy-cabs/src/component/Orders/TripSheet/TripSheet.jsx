@@ -159,7 +159,12 @@ const actions = [
 
 const TripSheet = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
-  const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
+  const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
+    vehType: '',
+    driverName: '',
+    vehRegNo: '',
+    mobileNo: '',
+  });
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [rows, setRows] = useState([]);
   const [starttime, setStartTime] = useState('');
@@ -632,6 +637,10 @@ const TripSheet = () => {
           ...prevData,
           [name]: value,
         }));
+        setSelectedCustomerDatas((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
         setFormData((prevData) => ({
           ...prevData,
           [name]: value,
@@ -664,11 +673,15 @@ const TripSheet = () => {
         const vehicleData = response.data;
         console.log(vehicleData);
         setRows([vehicleData]);
-        setSelectedCustomerDatas(vehicleData);
       } catch (error) {
         console.error('Error retrieving vehicle details:', error.message);
       }
     }
+  }, []);
+
+  const handleRowClick = useCallback((params) => {
+    console.log(params);
+    setSelectedCustomerDatas(params);
   }, []);
 
   return (
@@ -948,38 +961,38 @@ const TripSheet = () => {
                 <div className="textboxlist-TripSheet">
                   <div className="textboxlist-customer list-updates">
                     <span>
-                      <Table hoverRow borderAxis="y">
-                        <thead>
-                          <tr>
-                            <th style={{ width: "100%" }}>Vehicle Name</th>
-                            <th style={{ width: "100%" }}>Vehicle Type</th>
-                            <th style={{ width: "50%" }}>Dname</th>
-                            <th style={{ width: "50%" }}>Dphone</th>
-                            <th style={{ width: "50%" }}>Percentage</th>
-                            <th style={{ width: "50%" }}>Supplier</th>
-                            <th style={{ width: "50%" }}>Online Access</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {rows.length === 0 ? (
+                      <div style={{ overflow: 'scroll' }}>
+                        <Table hoverRow borderAxis="y">
+                          <thead>
                             <tr>
-                              <td colSpan={7}>No data available.</td>
+                              <th>Vehicle Name</th>
+                              <th>Vehicle Type</th>
+                              <th>Dname</th>
+                              <th>Dphone</th>
+                              <th>Supplier</th>
+                              <th>Online Access</th>
                             </tr>
-                          ) : (
-                            rows.map((row) => (
-                              <tr key={row.id}>
-                                <td style={{ width: '100%' }}>{row.vehRegNo}</td>
-                                <td style={{ width: '100%' }}>{row.vehType}</td>
-                                <td style={{ width: '100%' }}>{row.driverName}</td>
-                                <td style={{ width: '50%' }}>{row.mobileNo}</td>
-                                <td style={{ width: '50%' }}>{row.percentage}</td>
-                                <td style={{ width: '50%' }}>{row.vehRegNo}</td>
-                                <td style={{ width: '50%' }}>{row.active}</td>
+                          </thead>
+                          <tbody>
+                            {rows.length === 0 ? (
+                              <tr>
+                                <td colSpan={6}>No data available.</td>
                               </tr>
-                            ))
-                          )}
-                        </tbody>
-                      </Table>
+                            ) : (
+                              rows.map((row) => (
+                                <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                  <td>{row.vehRegNo}</td>
+                                  <td>{row.vehType}</td>
+                                  <td>{row.driverName}</td>
+                                  <td>{row.mobileNo}</td>
+                                  <td>{row.supplier}</td>
+                                  <td>{row.onlineAccess}</td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </Table>
+                      </div>
                     </span>
                   </div>
                 </div>
@@ -1048,7 +1061,7 @@ const TripSheet = () => {
                   id="vehiclerigsterno"
                   label="Vehicle Rigster No"
                   name="vehRegNo"
-                  value={formData.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo}
+                  value={formData.vehRegNo || selectedCustomerData.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo}
                   onChange={handleChange}
                   onKeyDown={handleKeyEnter}
                   autoFocus
@@ -1071,7 +1084,7 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.vehType || selectedCustomerDatas.vehType || ''
+                    params.inputProps.value = formData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || ''
                     return (
                       <TextField {...params} label="Vehicle Rate" name="vehType" inputRef={params.inputRef} />
                     )
@@ -1087,7 +1100,7 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="driverName"
-                  value={formData.driverName || selectedCustomerDatas.driverName || book.driverName}
+                  value={formData.driverName || selectedCustomerData.driverName || selectedCustomerDatas.driverName || book.driverName}
                   onChange={handleChange}
                   label="Driver Name"
                   id="drivername"
@@ -1100,7 +1113,7 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="mobileNo"
-                  value={formData.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo}
+                  value={formData.mobileNo || selectedCustomerData.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo}
                   onChange={handleChange}
                   label="Cell"
                   id="cell"
@@ -1358,7 +1371,6 @@ const TripSheet = () => {
                   sx={{ m: 1, width: "23ch" }}
                 />
               </div>
-
               <div className="input">
                 <div className="icone">
                   <FontAwesomeIcon icon={faStamp} />

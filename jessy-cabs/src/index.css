@@ -61,3 +61,39 @@ body {
     opacity: 1;
   }
 }
+
+/* CSS animation for the .input element */
+.input-field .input {
+  transition: transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s forwards;
+}
+
+.input-field .input:hover {
+  transform: translateY(-5px) scale(1.05);
+}
+
+/* CSS animation for the icon */
+.input-field .input .icone {
+  transition: transform 0.3s ease;
+}
+
+.input-field .input .icone:hover {
+  transform: rotate(360deg);
+}
+
+/* CSS animation for input field focus */
+/* .input-field .input input:focus {
+  outline: none;
+  border-color: #00bcd4;
+  box-shadow: 0 0 5px #00bcd4;
+} */
+
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

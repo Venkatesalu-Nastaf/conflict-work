@@ -63,12 +63,11 @@ body {
 }
 
 /* CSS animation for the .input element */
-.input-field {
-  opacity: 0;
+.input-field{
+    opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 1s forwards;
 }
-
 .input-field .input {
   transition: transform 0.3s ease;
 

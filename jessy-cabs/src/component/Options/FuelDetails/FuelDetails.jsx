@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './FuelDetails.css'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 import Button from "@mui/material/Button";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -102,11 +104,17 @@ const FuelDetails = () => {
     },
   ];
 
+  useEffect(() => {
+    AOS.init({ duration: 1000 })
+  }, [])
   return (
     <div className="form-container">
       <div className="FuelDetails-form">
         <form >
-          <span className="Title-Name">Mailage Details</span>
+          <div data-aos='fade-up'> 
+          <span className="Title-Name" >Mailage Details</span>
+
+          </div>
           <div className="FuelDetails-page-header">
             <div className="detailsFuel">
               <div className="input-field">

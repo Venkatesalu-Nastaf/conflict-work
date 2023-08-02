@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from "axios";
 import "./PettyCash.css";
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
@@ -7,7 +8,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Button from "@mui/material/Button";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+// import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -44,77 +45,254 @@ const actions = [
     { icon: <CancelPresentationIcon />, name: "Cancel" },
     { icon: <DeleteIcon />, name: "Delete" },
     { icon: <ModeEditIcon />, name: "Edit" },
-    { icon: <BookmarkAddedIcon />, name: "Add" },
+    // { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-// download function
-const convertToCSV = (data) => {
-    const header = columns.map((column) => column.headerName).join(",");
-    const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-    return [header, ...rows].join("\n");
-};
-const handleExcelDownload = () => {
-    const csvData = convertToCSV(rows);
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "Account_Info.csv");
-};
-const handlePdfDownload = () => {
-    const pdf = new jsPDF();
-    pdf.setFontSize(12);// Set the font size and font style
-    pdf.setFont('helvetica', 'normal');
-    pdf.text("Account_Info", 10, 10);// Add a title for the table
-    const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
-    pdf.autoTable({
-        head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-        body: tableData,
-        startY: 20,
-    }); // Create a table to display the data
-    const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-    saveAs(pdfBlob, 'Account_Info.pdf'); // Download the PDF
-};
+// // download function
+// const convertToCSV = (data) => {
+//     const header = columns.map((column) => column.headerName).join(",");
+//     const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+//     return [header, ...rows].join("\n");
+// };
+// const handleExcelDownload = () => {
+//     const csvData = convertToCSV(rows);
+//     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+//     saveAs(blob, "Account_Info.csv");
+// };
+// const handlePdfDownload = () => {
+//     const pdf = new jsPDF();
+//     pdf.setFontSize(12);// Set the font size and font style
+//     pdf.setFont('helvetica', 'normal');
+//     pdf.text("Account_Info", 10, 10);// Add a title for the table
+//     const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
+//     pdf.autoTable({
+//         head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
+//         body: tableData,
+//         startY: 20,
+//     }); // Create a table to display the data
+//     const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
+//     saveAs(pdfBlob, 'Account_Info.pdf'); // Download the PDF
+// };
 
 
 // TABLE
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
-    { field: "VoucherNo", headerName: "VoucherNo", width: 130 },
-    { field: "PaymentDate", headerName: "Payment Date", width: 130 },
-    { field: "BillName", headerName: "Bill Name", width: 130 },
+    { field: "voucherno", headerName: "VoucherNo", width: 130 },
+    { field: "date", headerName: "Payment Date", width: 130 },
+    { field: "Billname", headerName: "Bill Name", width: 130 },
     { field: "PaymentCategory", headerName: "Payment Category", width: 150 },
-    { field: "Amount", headerName: "Amount", width: 130 },
+    { field: "amount", headerName: "Amount", width: 130 },
 ];
 
-const rows = [
-    {
-        id: 1,
-        VoucherNo: 1,
-        PaymentDate: "2023-06-07",
-        BillName: "2023-06-07",
-        PaymentCategory: "9:00 AM",
-        Amount: 600,
+// const rows = [
+//     {
+//         id: 1,
+//         VoucherNo: 1,
+//         PaymentDate: "2023-06-07",
+//         BillName: "2023-06-07",
+//         PaymentCategory: "9:00 AM",
+//         Amount: 600,
 
-    },
-    {
-        id: 2,
-        VoucherNo: 2,
-        PaymentDate: "2023-06-07",
-        BillName: "2023-06-08",
-        PaymentCategory: "7:00 PM",
-        Amount: 500,
+//     },
+//     {
+//         id: 2,
+//         VoucherNo: 2,
+//         PaymentDate: "2023-06-07",
+//         BillName: "2023-06-08",
+//         PaymentCategory: "7:00 PM",
+//         Amount: 500,
 
-    },
-    // Add more rows as needed
-];
+//     },
+//     // Add more rows as needed
+// ];
 
 // date
-const today = dayjs();
-const tomorrow = dayjs().add(1, "day");
+
 
 const PettyCash = () => {
+    const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const [rows, setRows] = useState([]);
+    const [actionName] = useState('');
+    const [toDate, setToDate] = useState(dayjs());
+    const [voucherno] = useState("");
+    const [fromDate, setFromDate] = useState(dayjs());
+    const [error, setError] = useState(false);
+
+    const convertToCSV = (data) => {
+        const header = columns.map((column) => column.headerName).join(",");
+        const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+        return [header, ...rows].join("\n");
+    };
+    const handleExcelDownload = () => {
+        const csvData = convertToCSV(rows);
+        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+        saveAs(blob, "customer_details.csv");
+    };
+    const handlePdfDownload = () => {
+        const pdf = new jsPDF();
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text("Customer Details", 10, 10);
+        // Modify tableData to exclude the index number
+        const tableData = rows.map((row) => [
+            row['id'],
+            row['voucherno'],
+            row['printName'],
+            row['Billname'],
+            row['date'],
+            row['PaymentCategory'],
+            row['amount']
+        ]);
+        pdf.autoTable({
+            head: [['Sno', 'VoucherNo', 'Payment Date', 'Bill Name', 'Payment Category', 'Amount']],
+            body: tableData,
+            startY: 20,
+        });
+        const pdfBlob = pdf.output('blob');
+        saveAs(pdfBlob, 'Customer_Details.pdf');
+    };
+    const hidePopup = () => {
+        setError(false);
+    };
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [error]);
+    const [book, setBook] = useState({
+        voucherno: '',
+        Billname: '',
+        date: '',
+        PaymentCategory: '',
+        amount: '',
+    });
+    const handleChange = (event) => {
+        const { name, value, checked, type } = event.target;
+        if (type === 'checkbox') {
+            // For checkboxes, update the state based on the checked value
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: checked,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: checked,
+            }));
+        } else {
+            // For other input fields, update the state based on the value
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: value,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
+    };
+    const handleDateChange = (date) => {
+        const startOfDay = dayjs(date).startOf('day').format();
+        setBook((prevBook) => ({
+            ...prevBook,
+            date: startOfDay,
+        }));
+    };
+    const handleCancel = () => {
+        setBook((prevBook) => ({
+            ...prevBook,
+            voucherno: '',
+            Billname: '',
+            date: '',
+            PaymentCategory: '',
+            amount: '',
+        }));
+        setSelectedCustomerData({});
+    };
+    const handleRowClick = useCallback((params) => {
+        console.log(params.row);
+        const customerData = params.row;
+        setSelectedCustomerData(customerData);
+        setSelectedCustomerId(params.row.customerId);
+    }, []);
+
+
+    const handleAdd = async () => {
+        try {
+          console.log('Add button clicked');
+          const response = await axios.post('http://localhost:8081/pettycash', book);
+          console.log('Customer added:', response.data);
+          handleCancel(); // Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
+        } catch (error) {
+          console.error('Error adding customer:', error);
+          // You can add error handling code here, like displaying an error message to the user
+        }
+      };
+    const handleClick = async (event, actionName, voucherno) => {
+        event.preventDefault();
+        try {
+            if (actionName === 'List') {
+                console.log('List button clicked');
+                const response = await axios.get('http://localhost:8081/pettycash');
+                const data = response.data;
+                setRows(data);
+            } else if (actionName === 'Cancel') {
+                console.log('Cancel button clicked');
+                handleCancel();
+            } else if (actionName === 'Delete') {
+                console.log('Delete button clicked');
+                await axios.delete(`http://localhost:8081/pettycash/${voucherno}`);
+                console.log('Customer deleted');
+                setSelectedCustomerData(null);
+                handleCancel();
+            } else if (actionName === 'Edit') {
+                console.log('Edit button clicked');
+                const selectedCustomer = rows.find((row) => row.voucherno === voucherno);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`http://localhost:8081/pettycash/${voucherno}`, updatedCustomer);
+                console.log('Customer updated');
+                handleCancel();
+            }  //else if (actionName === 'Add') {
+            //     // await axios.post('http://localhost:8081/pettycash', book);
+            //     // console.log(book);
+            //     // handleCancel();
+            //     handleAdd();
+            // }
+        } catch (err) {
+            console.log(err);
+            setError(true);
+        }
+    };
+    useEffect(() => {
+        if (actionName === 'List') {
+            handleClick(null, 'List');
+        }
+    });
+    // const handleInputChange = (event, newValue) => {
+    //     setVoucherNo(newValue ? newValue.label : ''); // Assuming the label field contains the station name
+    //   };
+
+
+    const handleShow = useCallback(async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:8081/pettycash?voucherno=${encodeURIComponent(voucherno)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}`
+            );
+            const data = response.data;
+            setRows(data);
+        } catch (error) {
+            console.error('Error retrieving data:', error);
+            setRows([]);
+        }
+    }, [voucherno, fromDate, toDate]);
     return (
         <div className="PettyCash-form">
-            <form action="">
+            <form onSubmit={handleClick}>
                 <div className="PettyCash-page-header">
                     <div className="input-field">
                         <div className="input" style={{ width: "300px" }}>
@@ -125,7 +303,10 @@ const PettyCash = () => {
                                 size="small"
                                 id="voucher"
                                 label="Voucher No"
-                                name="voucher"
+                                name="voucherno"
+                                autoComplete="new-password"
+                                value={selectedCustomerData?.voucherno || book.voucherno}
+                                onChange={handleChange}
                                 autoFocus
                             />
                         </div>
@@ -137,17 +318,24 @@ const PettyCash = () => {
                                 size="small"
                                 id="id"
                                 label="Bill Name"
-                                name="ratename"
+                                name="Billname"
+                                autoComplete="new-password"
+                                value={selectedCustomerData?.Billname || book.Billname}
+                                onChange={handleChange}
                                 autoFocus
                             />
                         </div>
                         <div className="input">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
-                                    defaultValue={today}
-                                    minDate={tomorrow}
-                                    views={["year", "month", "day"]}
-                                />
+                                    label="Date"
+                                    value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
+                                    onChange={handleDateChange}
+                                >
+                                    {({ inputProps, inputRef }) => (
+                                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
+                                    )}
+                                </DatePicker>
                             </LocalizationProvider>
                         </div>
                     </div>
@@ -161,6 +349,9 @@ const PettyCash = () => {
                                 id="id"
                                 label="Payment Category"
                                 name="PaymentCategory"
+                                autoComplete="new-password"
+                                value={selectedCustomerData?.PaymentCategory || book.PaymentCategory}
+                                onChange={handleChange}
                                 autoFocus
                             />
                         </div>
@@ -173,11 +364,14 @@ const PettyCash = () => {
                                 id="amount"
                                 label="Amount"
                                 name="amount"
+                                autoComplete="new-password"
+                                value={selectedCustomerData?.amount || book.amount}
+                                onChange={handleChange}
                                 autoFocus
                             />
                         </div>
                         <div className="input" style={{ width: "100px" }}>
-                            <Button variant="contained">Add</Button>
+                            <Button variant="contained" onClick={handleAdd}>Add</Button>
                         </div>
                     </div>
                 </div>
@@ -189,9 +383,9 @@ const PettyCash = () => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="From">
                                             <DatePicker
-                                                defaultValue={today}
-                                                minDate={tomorrow}
-                                                views={["year", "month", "day"]}
+                                                label="From Date"
+                                                value={fromDate}
+                                                onChange={(date) => setFromDate(date)}
                                             />
                                         </DemoItem>
                                     </LocalizationProvider>
@@ -200,20 +394,26 @@ const PettyCash = () => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="To">
                                             <DatePicker
-                                                defaultValue={today}
-                                                minDate={tomorrow}
-                                                views={["year", "month", "day"]}
+                                                label="To Date"
+                                                value={toDate}
+                                                onChange={(date) => setToDate(date)}
                                             />
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input" style={{ width: '123px', 'margin-top': "50px" }}>
-                                    <Button variant="contained">Search</Button>
+                                    <Button variant="contained" onClick={handleShow}>Search</Button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                {error &&
+                    <div className='alert-popup Error' >
+                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <p>Something went wrong!</p>
+                    </div>
+                }
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
@@ -225,6 +425,7 @@ const PettyCash = () => {
                                 key={action.name}
                                 icon={action.icon}
                                 tooltipTitle={action.name}
+                                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                             />
                         ))}
                     </StyledSpeedDial>
@@ -249,6 +450,7 @@ const PettyCash = () => {
                         <DataGrid
                             rows={rows}
                             columns={columns}
+                            onRowClick={handleRowClick}
                             pageSize={5}
                             checkboxSelection
                         />

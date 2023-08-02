@@ -378,11 +378,11 @@ const Billing = () => {
                                     type='number'
                                     margin="normal"
                                     size="small"
-                                    id="TotalKms"
+                                    // id="totalkms"
                                     label="Total Kms"
-                                    name="TotalKms"
+                                    name="totalkms"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.TotalKms || book.TotalKms}
+                                    value={selectedCustomerData?.totalkms || book.totalkms}
                                     onChange={handleChange}
                                 />
                             </div>

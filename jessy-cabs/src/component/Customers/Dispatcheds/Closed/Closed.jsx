@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import "./Closed.css";
 import axios from "axios";
 import { saveAs } from 'file-saver';
-// import { ExportToCsv } from 'export-to-csv';
 import { jsPDF } from 'jspdf';
 import { Stations } from "./ClosedData.js";
 import Autocomplete from "@mui/material/Autocomplete";

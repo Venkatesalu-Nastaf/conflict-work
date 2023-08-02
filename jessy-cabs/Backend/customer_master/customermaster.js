@@ -210,7 +210,7 @@ app.delete('/booking/:bookingno', (req, res) => {
 // update booking details
 app.put('/booking/:bookingno', (req, res) => {
   const bookingno = req.params.bookingno;
- const updatedCustomerData = req.body;
+  const updatedCustomerData = req.body;
   db.query('UPDATE booking SET ? WHERE bookingno = ?', [updatedCustomerData, bookingno], (err, result) => {
     if (err) {
       console.error('Error updating data in MySQL:', err);
@@ -361,7 +361,7 @@ app.get('/tripsheet/:tripsheetno', (req, res) => {
 // -----------------------------------------------------------------------------------------------------------
 // customers/Dispatch/closed data collect from database
 app.get('/tripsheet', (req, res) => {
- const { department, fromDate, toDate } = req.query;
+  const { department, fromDate, toDate } = req.query;
   let query = 'SELECT * FROM tripsheet WHERE 1=1';
   let params = [];
   if (department) {
@@ -1133,6 +1133,82 @@ app.get('/billing', (req, res) => {
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
     return res.status(200).json(results);
+  });
+});
+// End Billing database
+// -----------------------------------------------------------------------------------------------------------
+// cashflow Database
+// Add pettycash database
+app.post('/pettycash', (req, res) => {
+  const bookData = req.body;
+  db.query('INSERT INTO pettycash SET ?', bookData, (err, result) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
+    }
+    console.log('Data inserted into MySQL');
+    return res.status(200).json({ message: "Data inserted successfully" });
+  });
+});
+// delete Billing data
+app.delete('/pettycash/:voucherno', (req, res) => {
+  const voucherno = req.params.voucherno;
+  db.query('DELETE FROM pettycash WHERE voucherno = ?', voucherno, (err, result) => {
+    if (err) { 
+      console.error('Error deleting data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data deleted from MySQL');
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+// update pettycash details
+app.put('/pettycash/:voucherno', (req, res) => {
+  const voucherno = req.params.voucherno;
+  const updatedCustomerData = req.body;
+  console.log('voucherno:', voucherno); // Log the pettycash
+  console.log('Updated pettycash data:', updatedCustomerData);
+  db.query('UPDATE pettycash SET ? WHERE voucherno = ?', [updatedCustomerData, voucherno], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+// collect data for pettycash table
+app.get('/pettycash', (req, res) => {
+  db.query('SELECT * FROM pettycash', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+// filter data from pettycash database
+app.get('/pettycash', (req, res) => {
+  const { fromDate, toDate } = req.query;
+  let query = 'SELECT * FROM pettycash WHERE 1=1';
+  let params = [];
+  if (fromDate && toDate) {
+    query += ' AND startdate BETWEEN ? AND ?';
+    params.push(fromDate);
+    params.push(toDate);
+  }
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
   });
 });
 // End Billing database

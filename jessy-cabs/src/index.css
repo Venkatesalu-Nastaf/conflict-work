@@ -12,7 +12,7 @@ body {
 .Error {
   color: rgb(172, 23, 20);
   background-color: rgb(253, 237, 237);
-} 
+}
 
 .Warning {
   color: rgb(102, 60, 0);
@@ -63,11 +63,15 @@ body {
 }
 
 /* CSS animation for the .input element */
-.input-field .input {
-  transition: transform 0.3s ease;
+.input-field {
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 1s forwards;
+}
+
+.input-field .input {
+  transition: transform 0.3s ease;
+
 }
 
 .input-field .input:hover {
@@ -83,12 +87,6 @@ body {
   transform: rotate(360deg);
 }
 
-/* CSS animation for input field focus */
-/* .input-field .input input:focus {
-  outline: none;
-  border-color: #00bcd4;
-  box-shadow: 0 0 5px #00bcd4;
-} */
 
 
 @keyframes fadeInUp {

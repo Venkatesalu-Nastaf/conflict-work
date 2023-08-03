@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import "./PayRoll.css";
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
 import AddCardIcon from '@mui/icons-material/AddCard';
@@ -14,6 +15,7 @@ import WorkOffIcon from '@mui/icons-material/WorkOff';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 import NaturePeopleIcon from '@mui/icons-material/NaturePeople';
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import WorkIcon from '@mui/icons-material/Work';
 import EmailIcon from '@mui/icons-material/Email';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
@@ -31,16 +33,263 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import { TextField } from "@mui/material";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import SpeedDial from "@mui/material/SpeedDial";
+import { styled } from "@mui/material/styles";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import MonthlyPayDetails from './SliderPaySlips/MonthlyPayDetails';
 import EmployePaySlip from './SliderPaySlips/EmployePaySlip';
+// import { saveAs } from 'file-saver';
+// import jsPDF from 'jspdf';
 
+
+const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+  position: "absolute",
+  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+    top: theme.spacing(2),
+    left: theme.spacing(2),
+  },
+}));
+const actions = [
+  { icon: <ChecklistIcon />, name: "List" },
+  { icon: <CancelPresentationIcon />, name: "Cancel" },
+  { icon: <DeleteIcon />, name: "Delete" },
+  { icon: <ModeEditIcon />, name: "Edit" },
+  { icon: <BookmarkAddedIcon />, name: "Add" },
+];
 
 
 const PayRoll = () => {
   const [value, setValue] = React.useState("monthlypaydetails");
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [selectedCustomerId] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [actionName] = useState('');
+  const [formData, setFormData] = useState({});
+  const [error, setError] = useState(false);
 
-  const handleChange = (event, newValue) => {
+  // const convertToCSV = (data) => {
+  //   const header = columns.map((column) => column.headerName).join(",");
+  //   const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+  //   return [header, ...rows].join("\n");
+  // };
+  // const handleExcelDownload = () => {
+  //   const csvData = convertToCSV(rows);
+  //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+  //   saveAs(blob, "customer_details.csv");
+  // };
+  // const handlePdfDownload = () => {
+  //   const pdf = new jsPDF();
+  //   pdf.setFontSize(12);
+  //   pdf.setFont('helvetica', 'normal');
+  //   pdf.text("Customer Details", 10, 10);
+
+  //   // Modify tableData to exclude the index number
+  //   const tableData = rows.map((row) => [
+  //     row['id'],
+  //     row['customerId'],
+  //     row['printName'],
+  //     row['address1'],
+  //     row['phoneno'],
+  //     row['Active'],
+  //     row['active'],
+  //     row['gstTax'],
+  //     row['state'],
+  //     row['enableDriverApp']
+  //   ]);
+
+  //   pdf.autoTable({
+  //     head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
+  //     body: tableData,
+  //     startY: 20,
+  //   });
+
+  //   const pdfBlob = pdf.output('blob');
+  //   saveAs(pdfBlob, 'Customer_Details.pdf');
+  // };
+
+
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+
+  const [book, setBook] = useState({
+    empid: '',
+    empname: '',
+    empemailid: '',
+    empmobile: '',
+    jobroll: '',
+    workingdays: '',
+    leavedays: '',
+    salarydate: '',
+    uanid: '',
+    esino: '',
+    grosspay: '',
+    basicsalary: '',
+    houserentallowance: '',
+    otherallowance: '',
+    overtime: '',
+    outstation: '',
+    extraworkingdays: '',
+    cellwash: '',
+    totalerningsamount: '',
+    PF12: '',
+    ESIC0_75: '',
+    otherdeducations: '',
+    professionaltax: '',
+    incometax: '',
+    advancepaid: '',
+    advanceloan: '',
+    totaldeductionamount: '',
+    takehomeamount: '',
+
+  });
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+
+    if (type === 'checkbox') {
+      // For checkboxes, update the state based on the checked value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      // For other input fields, update the state based on the value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  // const handleAutocompleteChange = (event, value, name) => {
+  //   const selectedOption = value ? value.label : '';
+  //   setBook((prevBook) => ({
+  //     ...prevBook,
+  //     [name]: selectedOption,
+  //   }));
+  //   setSelectedCustomerData((prevData) => ({
+  //     ...prevData,
+  //     [name]: selectedOption,
+  //   }));
+  // };
+
+  const handleDateChange = (date, name) => {
+    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: formattedDate,
+    }));
+  };
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      empid: '',
+      empname: '',
+      empemailid: '',
+      empmobile: '',
+      jobroll: '',
+      workingdays: '',
+      leavedays: '',
+      salarydate: '',
+      uanid: '',
+      esino: '',
+      grosspay: '',
+      basicsalary: '',
+      houserentallowance: '',
+      otherallowance: '',
+      overtime: '',
+      outstation: '',
+      extraworkingdays: '',
+      cellwash: '',
+      totalerningsamount: '',
+      PF12: '',
+      ESIC0_75: '',
+      otherdeducations: '',
+      professionaltax: '',
+      incometax: '',
+      advancepaid: '',
+      advanceloan: '',
+      totaldeductionamount: '',
+      takehomeamount: '',
+
+    }));
+    setSelectedCustomerData({});
+    setFormData({});
+  };
+  // const handleRowClick = useCallback((params) => {
+  //   console.log(params.row);
+  //   const customerData = params.row;
+  //   setSelectedCustomerData(customerData);
+  //   setSelectedCustomerId(params.row.customerId);
+  // }, []);
+  const handleClick = async (event, actionName, empid) => {
+    event.preventDefault();
+    try {
+      if (actionName === 'List') {
+        console.log('List button clicked');
+        const response = await axios.get('http://localhost:8081/payroll');
+        const data = response.data;
+        setRows(data);
+      } else if (actionName === 'Cancel') {
+        console.log('Cancel button clicked');
+        handleCancel();
+      } else if (actionName === 'Delete') {
+        console.log('Delete button clicked');
+        await axios.delete(`http://localhost:8081/payroll/${empid}`);
+        console.log('Customer deleted');
+        setSelectedCustomerData(null);
+        handleCancel();
+      } else if (actionName === 'Edit') {
+        console.log('Edit button clicked');
+        const selectedCustomer = rows.find((row) => row.empid === empid);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/payroll/${empid}`, updatedCustomer);
+        console.log('Customer updated');
+        handleCancel();
+      } else if (actionName === 'Add') {
+        await axios.post('http://localhost:8081/payroll', book);
+        console.log(book);
+        handleCancel();
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+    }
+  };
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  });
+
+  const handleTapChange = (event, newValue) => {
     setValue(newValue);
   };
   return (
@@ -56,8 +305,10 @@ const PayRoll = () => {
                 size="small"
                 id="id"
                 label="Employe ID"
-                name="driverid"
+                name="empid"
                 autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.empid || book.empid}
                 autoFocus
               />
             </div>
@@ -69,8 +320,10 @@ const PayRoll = () => {
                 size="small"
                 id="name"
                 label="Name"
-                name="name"
+                name="empname"
                 autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.empname || book.empname}
                 autoFocus
               />
             </div>
@@ -82,8 +335,10 @@ const PayRoll = () => {
                 size="small"
                 id="emailid"
                 label="Email Id"
-                name="emailid"
+                name="empemailid"
                 autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.empemailid || book.empemailid}
                 autoFocus
               />
             </div>
@@ -95,8 +350,10 @@ const PayRoll = () => {
                 size="small"
                 id="mobile"
                 label="Mobile"
-                name="mobile"
+                name="empmobile"
                 autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.empmobile || book.empmobile}
                 autoFocus
               />
             </div>
@@ -112,6 +369,8 @@ const PayRoll = () => {
                 label="Job Roll"
                 name="jobroll"
                 autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.jobroll || book.jobroll}
                 autoFocus
               />
             </div>
@@ -125,6 +384,9 @@ const PayRoll = () => {
                 id="workingdays"
                 label="Working Days"
                 name="workingdays"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.workingdays || book.workingdays}
                 variant="standard"
               />
             </div>
@@ -138,11 +400,14 @@ const PayRoll = () => {
                 id="leavedays"
                 label="Leave Days"
                 name="leavedays"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.leavedays || book.leavedays}
                 variant="standard"
               />
             </div>
             <div className="input" style={{ width: "215px" }}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label='Salary Date'
                   defaultValue={dayjs()}
@@ -154,6 +419,34 @@ const PayRoll = () => {
                     />
                   )}
                 />
+              </LocalizationProvider> */}
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoItem label="Salary Date">
+                  <DatePicker
+                    value={selectedCustomerData?.salarydate ? dayjs(selectedCustomerData?.salarydate) : null}
+                    onChange={handleDateChange}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.salarydate} />
+                    )}
+                  </DatePicker>
+                </DemoItem>
+              </LocalizationProvider> */}
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoItem label="Salary Date">
+                  <DatePicker
+                    value={formData.salarydate || selectedCustomerData.salarydate ? dayjs(selectedCustomerData.salarydate) : null}
+                    onChange={(date) => handleDateChange(date, 'salarydate')}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        name="salarydate"
+                        value={formData.salarydate || selectedCustomerData.salarydate || ''}
+                        inputRef={params.inputRef}
+                      />
+                    )}
+                  />
+                </DemoItem>
               </LocalizationProvider>
             </div>
           </div>
@@ -167,6 +460,9 @@ const PayRoll = () => {
                 id="uanid"
                 label="UAN Id"
                 name="uanid"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.uanid || book.uanid}
                 autoFocus
               />
             </div>
@@ -179,6 +475,9 @@ const PayRoll = () => {
                 id="esino"
                 label="ESI No"
                 name="esino"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.esino || book.esino}
                 autoFocus
               />
             </div>
@@ -192,6 +491,9 @@ const PayRoll = () => {
                 id="grosspay"
                 label="Gross Pay"
                 name="grosspay"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.grosspay || book.grosspay}
                 variant="standard"
               />
             </div>
@@ -210,6 +512,9 @@ const PayRoll = () => {
                 id="basicsalary"
                 label="Basic Salary"
                 name="basicsalary"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.basicsalary || book.basicsalary}
                 variant="standard"
               />
             </div>
@@ -223,6 +528,9 @@ const PayRoll = () => {
                 id="houserentallowance"
                 label="House Rent Allowance"
                 name="houserentallowance"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.houserentallowance || book.houserentallowance}
                 variant="standard"
               />
             </div>
@@ -236,6 +544,9 @@ const PayRoll = () => {
                 id="otherallowance"
                 label="Other Allowance"
                 name="otherallowance"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.otherallowance || book.otherallowance}
                 variant="standard"
               />
             </div>
@@ -248,6 +559,9 @@ const PayRoll = () => {
                 id="overtime"
                 label="Over Time"
                 name="overtime"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.overtime || book.overtime}
                 autoFocus
               />
             </div>
@@ -262,6 +576,9 @@ const PayRoll = () => {
                 id="outstation"
                 label="Out Station"
                 name="outstation"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.outstation || book.outstation}
                 autoFocus
               />
             </div>
@@ -274,6 +591,9 @@ const PayRoll = () => {
                 id="extraworkingdays"
                 label="Extra Working Days"
                 name="extraworkingdays"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.extraworkingdays || book.extraworkingdays}
                 autoFocus
               />
             </div>
@@ -286,6 +606,9 @@ const PayRoll = () => {
                 id="cellwash"
                 label="Cell Wash"
                 name="cellwash"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.cellwash || book.cellwash}
                 autoFocus
               />
             </div>
@@ -298,6 +621,9 @@ const PayRoll = () => {
                 id="totalerningsamount"
                 label="Total Ernings Amount"
                 name="totalerningsamount"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.totalerningsamount || book.totalerningsamount}
                 variant="standard"
               />
             </div>
@@ -314,7 +640,10 @@ const PayRoll = () => {
                 size="small"
                 id="PF12%"
                 label="PF 12%"
-                name="PF12%"
+                name="PF12"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.PF12 || book.PF12}
                 autoFocus
               />
             </div>
@@ -326,7 +655,10 @@ const PayRoll = () => {
                 size="small"
                 id="ESIC0.75%"
                 label="ESIC 0.75%"
-                name="ESIC0.75%"
+                name="ESIC0_75"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.ESIC0_75 || book.ESIC0_75}
                 autoFocus
               />
             </div>
@@ -340,6 +672,9 @@ const PayRoll = () => {
                 id="otherdeducations"
                 label="Other Deducations"
                 name="otherdeducations"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.otherdeducations || book.otherdeducations}
               />
             </div>
             <div className="input" style={{ width: "240px" }}>
@@ -351,6 +686,9 @@ const PayRoll = () => {
                 id="professionaltax"
                 label="Professional Tax"
                 name="professionaltax"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.professionaltax || book.professionaltax}
                 autoFocus
               />
             </div>
@@ -365,6 +703,9 @@ const PayRoll = () => {
                 id="incometax"
                 label="Income Tax"
                 name="incometax"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.incometax || book.incometax}
                 autoFocus
               />
             </div>
@@ -377,6 +718,9 @@ const PayRoll = () => {
                 id="advancepaid"
                 label="Advance Paid"
                 name="advancepaid"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.advancepaid || book.advancepaid}
                 autoFocus
               />
             </div>
@@ -389,6 +733,9 @@ const PayRoll = () => {
                 id="advance"
                 label="Advance Loan"
                 name="advanceloan"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.advanceloan || book.advanceloan}
                 autoFocus
               />
             </div>
@@ -401,6 +748,9 @@ const PayRoll = () => {
                 id="totaldeductionamount"
                 label="Total Deduction Amount"
                 name="totaldeductionamount"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.totaldeductionamount || book.totaldeductionamount}
                 variant="standard"
               />
             </div>
@@ -415,16 +765,43 @@ const PayRoll = () => {
                 id="takehomeamount"
                 label="Take Home Amount"
                 name="takehomeamount"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.takehomeamount || book.takehomeamount}
                 variant="standard"
               />
             </div>
           </div>
         </div>
+        {error &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>Something went wrong!</p>
+          </div>
+        }
+        <div className="SpeedDial" style={{ padding: '26px', }}>
+          <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+            <StyledSpeedDial
+              ariaLabel="SpeedDial playground example"
+              icon={<SpeedDialIcon />}
+              direction="left"
+            >
+              {actions.map((action) => (
+                <SpeedDialAction
+                  key={action.name}
+                  icon={action.icon}
+                  tooltipTitle={action.name}
+                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
+                />
+              ))}
+            </StyledSpeedDial>
+          </Box>
+        </div>
         <div className='payroll-slider'>
           <Box sx={{ width: "100%", typography: "body1" }}>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                <TabList onChange={handleTapChange} aria-label="lab API tabs example">
                   <Tab label="Monthly Pay Details" value="monthlypaydetails" />
                   <Tab label="Employes Pay Slip" value="employespayslip" />
                 </TabList>

@@ -110,11 +110,8 @@ body {
 .input-field .input .icone:hover {
   /* animation: zigzag 0.5s ease infinite; */
   /* Adjust the duration as desired */
-  animation: zigzag 0.5s ease; 
+  animation: zigzag 0.5s ease;
 }
-
-
-
 
 @keyframes fadeInUp {
   to {

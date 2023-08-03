@@ -63,11 +63,12 @@ body {
 }
 
 /* CSS animation for the .input element */
-.input-field{
-    opacity: 0;
+.input-field {
+  opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 1s forwards;
 }
+
 .input-field .input {
   transition: transform 0.3s ease;
 
@@ -82,9 +83,36 @@ body {
   transition: transform 0.3s ease;
 }
 
-.input-field .input .icone:hover {
-  transform: rotate(360deg);
+/* Define the keyframes for the zigzag animation */
+@keyframes zigzag {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(15deg);
+  }
+
+  50% {
+    transform: rotate(-15deg);
+  }
+
+  75% {
+    transform: rotate(15deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
 }
+
+/* Apply the zigzag animation on hover */
+.input-field .input .icone:hover {
+  /* animation: zigzag 0.5s ease infinite; */
+  /* Adjust the duration as desired */
+  animation: zigzag 0.5s ease; 
+}
+
 
 
 

@@ -4,16 +4,21 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 import Button from "@mui/material/Button";
 import Menu from '@mui/material/Menu';
+import CommuteIcon from '@mui/icons-material/Commute';
+import CarCrashIcon from '@mui/icons-material/CarCrash';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import EmailIcon from '@mui/icons-material/Email';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+
+// FontAwesomeIcon Link
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGasPump, faGaugeHigh, faGaugeSimple } from "@fortawesome/free-solid-svg-icons";
+
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -111,8 +116,8 @@ const FuelDetails = () => {
     <div className="form-container">
       <div className="FuelDetails-form">
         <form >
-          <div data-aos='fade-up'> 
-          <span className="Title-Name" >Mailage Details</span>
+          <div data-aos='fade-up'>
+            <span className="Title-Name" >Mailage Details</span>
 
           </div>
           <div className="FuelDetails-page-header">
@@ -120,7 +125,7 @@ const FuelDetails = () => {
               <div className="input-field">
                 <div className="input" >
                   <div className="icone">
-                    <EmailIcon color="action" />
+                    <CarCrashIcon color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -131,7 +136,7 @@ const FuelDetails = () => {
                 </div>
                 <div className="input" >
                   <div className="icone">
-                    <EmailIcon color="action" />
+                    <CommuteIcon color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -172,7 +177,7 @@ const FuelDetails = () => {
               <div className="input-field">
                 <div className="input" >
                   <div className="icone">
-                    <EmailIcon color="action" />
+                    <BadgeIcon color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -183,7 +188,7 @@ const FuelDetails = () => {
                 </div>
                 <div className="input" style={{ width: "250px" }}>
                   <div className="icone">
-                    <BadgeIcon color="action" />
+                    <FontAwesomeIcon icon={faGaugeSimple} size="lg" />
                   </div>
                   <TextField
                     size="small"
@@ -197,7 +202,7 @@ const FuelDetails = () => {
                 </div>
                 <div className="input" style={{ width: "250px" }}>
                   <div className="icone">
-                    <PermIdentityIcon color="action" />
+                    <FontAwesomeIcon icon={faGaugeHigh} size="lg" />
                   </div>
                   <TextField
                     size="small"
@@ -213,7 +218,7 @@ const FuelDetails = () => {
               <div className="input-field">
                 <div className="input" style={{ width: "250px" }}>
                   <div className="icone">
-                    <EmailIcon color="action" />
+                    <FontAwesomeIcon icon={faGasPump} size="xl" />
                   </div>
                   <TextField
                     size="small"
@@ -239,7 +244,13 @@ const FuelDetails = () => {
 
             </div>
             <div>
-              <h2>Mileage: </h2> <p>{mileage.toFixed(2)} km/L</p>
+              <h2>Mileage: </h2>
+              <p>
+                <span className="mailage-icone">
+                  <FontAwesomeIcon icon={faGaugeHigh} size="lg" />
+                </span>
+                {mileage.toFixed(2)} km/L
+              </p>
             </div>
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>
               <StyledSpeedDial

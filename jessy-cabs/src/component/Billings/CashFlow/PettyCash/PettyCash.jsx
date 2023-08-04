@@ -290,7 +290,7 @@ const PettyCash = () => {
         }
     }, [voucherno, fromDate, toDate]);
     return (
-        <div className="PettyCash-form">
+        <div className="PettyCash-form Scroll-Style-hide">
             <form onSubmit={handleClick}>
                 <div className="PettyCash-page-header">
                     <div className="input-field">

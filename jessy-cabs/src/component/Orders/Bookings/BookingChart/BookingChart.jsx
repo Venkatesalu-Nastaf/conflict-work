@@ -168,6 +168,7 @@ const BookingChart = () => {
         <div className="table-bookingCopy-BookingChart">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
+              className="Scroll-Style" 
               rows={vehicles}
               columns={columns}
               pageSize={5}

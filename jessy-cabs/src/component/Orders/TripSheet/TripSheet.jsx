@@ -959,7 +959,7 @@ const TripSheet = () => {
                 <div className="textboxlist-TripSheet">
                   <div className="textboxlist-customer list-updates">
                     <span>
-                      <div style={{ overflow: 'scroll' }}>
+                      <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
                         <Table hoverRow borderAxis="y">
                           <thead>
                             <tr>
@@ -1230,13 +1230,13 @@ const TripSheet = () => {
                     <DatePicker
                       value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
                       onChange={(date) => handleDateChange(date, 'startdate')}
-                      >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
-                    )}
-                  </DatePicker>
-                </DemoItem>
-              </LocalizationProvider>
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
+                </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1244,7 +1244,7 @@ const TripSheet = () => {
                     <DatePicker
                       value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null}
                       onChange={(date) => handleDateChange(date, 'closedate')}
-                      >
+                    >
                       {({ inputProps, inputRef }) => (
                         <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
                       )}
@@ -1529,6 +1529,7 @@ const TripSheet = () => {
           </Box>
           <div className="Tipsheet-content-table-main">
             <Tabs
+            className='Scroll-Style'
               size="sm"
               aria-label="Pricing plan"
               defaultValue={0}
@@ -1752,7 +1753,7 @@ const TripSheet = () => {
                           <DatePicker
                             value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
                             onChange={(date) => handleDateChange(date, 'startdate1')}
-                            >
+                          >
                             {({ inputProps, inputRef }) => (
                               <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
                             )}
@@ -1766,7 +1767,7 @@ const TripSheet = () => {
                           <DatePicker
                             value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null}
                             onChange={(date) => handleDateChange(date, 'closedate1')}
-                            >
+                          >
                             {({ inputProps, inputRef }) => (
                               <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
                             )}
@@ -2500,7 +2501,7 @@ const TripSheet = () => {
                           <DatePicker
                             value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
                             onChange={(date) => handleDateChange(date, 'fcdate')}
-                            >
+                          >
                             {({ inputProps, inputRef }) => (
                               <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.fcdate} />
                             )}
@@ -2534,7 +2535,7 @@ const TripSheet = () => {
                           <DatePicker
                             value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null}
                             onChange={(date) => handleDateChange(date, 'insdate')}
-                            >
+                          >
                             {({ inputProps, inputRef }) => (
                               <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.insdate} />
                             )}
@@ -2548,7 +2549,7 @@ const TripSheet = () => {
                           <DatePicker
                             value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
                             onChange={(date) => handleDateChange(date, 'stpermit')}
-                            >
+                          >
                             {({ inputProps, inputRef }) => (
                               <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.stpermit} />
                             )}

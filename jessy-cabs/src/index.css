@@ -119,3 +119,50 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Scroll Style */
+
+.Scroll-Style-hide::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  cursor: pointer;
+  position: absolute;
+}
+.Scroll-Style{
+  overflow: scroll;
+}
+.Scroll-Style::-webkit-scrollbar {
+  width: 8px; 
+  height: 5px;
+  cursor: pointer;
+  position: absolute;
+}
+.Scroll-Style::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px transparent;
+}
+
+.Scroll-Style::-webkit-scrollbar-thumb {
+  background-color: #457cdc;
+  width: 50px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+.css-204u17-MuiDataGrid-main {
+  overflow: scroll;
+}
+.css-204u17-MuiDataGrid-main ::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px;
+  cursor: pointer;
+  position: absolute;
+}
+.css-204u17-MuiDataGrid-main ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px transparent;
+}
+
+.css-204u17-MuiDataGrid-main ::-webkit-scrollbar-thumb {
+  background-color: #457cdc;
+  width: 50px;
+  cursor: pointer;
+  border-radius: 20px;
+}

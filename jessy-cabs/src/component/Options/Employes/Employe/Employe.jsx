@@ -281,7 +281,7 @@ const Employe = () => {
     });
 
     return (
-        <div className="Employe-form">
+        <div className="Employe-form Scroll-Style-hide">
             <form onSubmit={handleClick}>
                 <div className="detail-container-main-Employe">
                     <div className="container-Employe">
@@ -369,13 +369,13 @@ const Employe = () => {
                                         <DatePicker
                                             value={formData.joiningdate || selectedCustomerData.joiningdate ? dayjs(selectedCustomerData.joiningdate) : null}
                                             onChange={(date) => handleDateChange(date, 'joiningdate')}
-                                            >
+                                        >
                                             {({ inputProps, inputRef }) => (
-                                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.joiningdate} />
+                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.joiningdate} />
                                             )}
-                                          </DatePicker>
-                                        </DemoItem>
-                                      </LocalizationProvider>
+                                        </DatePicker>
+                                    </DemoItem>
+                                </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "215px" }}>
                                 <div className="icone">
@@ -597,9 +597,10 @@ const Employe = () => {
                         )}
                     </PopupState>
                 </div>
-                <div className="table-bookingCopy-Employe">
+                <div className="table-bookingCopy-Employe ">
                     <div style={{ height: 400, width: "100%" }}>
                         <DataGrid
+                            className="Scroll-Style"
                             rows={rows}
                             columns={columns}
                             onRowClick={handleRowClick}

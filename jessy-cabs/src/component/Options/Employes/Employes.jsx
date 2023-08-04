@@ -15,7 +15,7 @@ const Employes = () => {
     };
     return (
         <div className="form-container-Emplyes">
-            <div className="container-main">
+            <div className="container-main ">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

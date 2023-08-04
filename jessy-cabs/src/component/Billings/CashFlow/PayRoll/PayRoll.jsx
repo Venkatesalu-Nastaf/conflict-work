@@ -293,7 +293,7 @@ const PayRoll = () => {
     setValue(newValue);
   };
   return (
-    <div className="PettyCash-form">
+    <div className="PettyCash-form Scroll-Style-hide">
       <form action="">
         <div className="PettyCash-page-header">
           <div className="input-field">

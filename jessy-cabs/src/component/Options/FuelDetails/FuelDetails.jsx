@@ -114,11 +114,10 @@ const FuelDetails = () => {
   }, [])
   return (
     <div className="form-container">
-      <div className="FuelDetails-form">
+      <div  className="FuelDetails-form">
         <form >
-          <div data-aos='fade-up'>
+          <div data-aos='zoom-out'>
             <span className="Title-Name" >Mailage Details</span>
-
           </div>
           <div className="FuelDetails-page-header">
             <div className="detailsFuel">
@@ -268,7 +267,7 @@ const FuelDetails = () => {
                 ))}
               </StyledSpeedDial>
             </Box>
-            <div className="Download-btn">
+            <div  className="Download-btn">
               <PopupState variant="popover" popupId="demo-popup-menu">
                 {(popupState) => (
                   <React.Fragment>
@@ -283,7 +282,7 @@ const FuelDetails = () => {
                 )}
               </PopupState>
             </div>
-            <div className="table-bookingCopy-Employe">
+            <div   className="table-bookingCopy-Employe">
               <div style={{ height: 400, width: "100%" }}>
                 <DataGrid
                   rows={rows}

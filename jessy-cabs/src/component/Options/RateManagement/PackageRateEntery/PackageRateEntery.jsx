@@ -1,27 +1,28 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-// import dayjs from "dayjs";
 import "./PackageRateEntery.css";
-import { RateType, PriceTag, VehicleType, Duty } from "./PackageRateEnteryData.js";
-import Autocomplete from "@mui/material/Autocomplete";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ChecklistIcon from "@mui/icons-material/Checklist";
+import Box from "@mui/material/Box";
+import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+import Autocomplete from "@mui/material/Autocomplete";
+import { RateType, PriceTag, VehicleType, Duty } from "./PackageRateEnteryData.js";
+
+// ICONS
+import DeleteIcon from "@mui/icons-material/Delete";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Box from "@mui/material/Box";
-import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import CarCrashIcon from '@mui/icons-material/CarCrash';
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { TextField } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import Button from "@mui/material/Button";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -41,7 +42,7 @@ const actions = [
   { icon: <ModeEditIcon />, name: "Edit" },
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
-// Table
+// Table START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "vehicleType", headerName: "Vehicle Type", width: 130 },
@@ -58,47 +59,8 @@ const columns = [
   { field: "ChKMS", headerName: "ChKMS", width: 130 },
   { field: "Bata", headerName: "Bata", width: 130 },
   { field: "NHalt", headerName: "NightHalt", width: 130 },
-  // { field: "RateID", headerName: "RateID", width: 130 },
 ];
-
-// const rows = [
-//   {
-//     id: 1,
-//     VehicleType: 1,
-//     Duty: 13,
-//     Hours: "2023-06-08",
-//     KMS: 11,
-//     Rate: "7:00 PM",
-//     PerHours: "7:00 PM",
-//     PerKMS: "7:00 PM",
-//     ExtraHours: "7:00 PM",
-//     ExtraKMS: "7:00 PM",
-//     ChTime: "7:00 PM",
-//     AllowKMS: "7:00 PM",
-//     ChKMS: "7:00 PM",
-//     Bata: "7:00 PM",
-//     NightHalt: "7:00 PM",
-//     RateID: 1233,
-//   },
-//   {
-//     id: 2,
-//     VehicleType: 2,
-//     Duty: 13,
-//     Hours: "2023-06-08",
-//     KMS: 11,
-//     Rate: "7:00 PM",
-//     PerHours: "7:00 PM",
-//     PerKMS: "7:00 PM",
-//     ExtraHours: "7:00 PM",
-//     ExtraKMS: "7:00 PM",
-//     ChTime: "7:00 PM",
-//     AllowKMS: "7:00 PM",
-//     ChKMS: "7:00 PM",
-//     Bata: "7:00 PM",
-//     NightHalt: "7:00 PM",
-//     RateID: 1234,
-//   },
-// ];
+// TABLE END
 
 
 const PackageRateEntery = () => {
@@ -531,7 +493,7 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "100px" }}>
+            <div className="input" style={{ width: "110px" }}>
               <TextField
                 type='number'
                 size="small"
@@ -557,7 +519,7 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "100px" }}>
+            <div className="input" style={{ width: "110px" }}>
               <TextField
                 type='number'
                 size="small"

@@ -1,57 +1,43 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from "axios";
-import {
-  UnderGroup,
-  states,
-  Customertype,
-  Select,
-  BillingGroup,
-} from "./Customerdata";
-import Button from "@mui/material/Button";
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import "./Customer.css";
-import {
-  TextField,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Checkbox,
-} from "@mui/material";
+import jsPDF from 'jspdf';
+import axios from "axios";
 import dayjs from "dayjs";
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import AttachEmailIcon from "@mui/icons-material/AttachEmail";
-import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import RateReviewIcon from "@mui/icons-material/RateReview";
-import StoreIcon from "@mui/icons-material/Store";
-import BadgeIcon from "@mui/icons-material/Badge";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import Autocomplete from "@mui/material/Autocomplete";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { saveAs } from 'file-saver';
+import Box from "@mui/material/Box";
+import Menu from '@mui/material/Menu';
+import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
+import MenuItem from '@mui/material/MenuItem';
 import SpeedDial from "@mui/material/SpeedDial";
+import Autocomplete from "@mui/material/Autocomplete";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { UnderGroup, states, Customertype, Select, BillingGroup } from "./Customerdata";
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
+
+// ICONS
+import StoreIcon from "@mui/icons-material/Store";
+import BadgeIcon from "@mui/icons-material/Badge";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+import AttachEmailIcon from "@mui/icons-material/AttachEmail";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import { saveAs } from 'file-saver';
-import jsPDF from 'jspdf';
-
-// speed dial button function
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -72,8 +58,7 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-// Data grid table function
-
+// TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "customerId", headerName: "Customer ID", width: 130 },
@@ -86,6 +71,8 @@ const columns = [
   { field: "state", headerName: "State", width: 160 },
   { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
 ];
+// TABLE END
+
 const Customer = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -319,7 +306,6 @@ const Customer = () => {
                   variant="standard"
                   autoFocus
                 />
-
               </div>
               <div className="input">
                 <div className="icone">
@@ -373,8 +359,6 @@ const Customer = () => {
                   }
                 />
               </div>
-
-
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Date">
@@ -680,8 +664,6 @@ const Customer = () => {
           </div>
           <div className="detail-container-main-customer">
             <div className="input-field">
-            </div>
-            <div className="input-field">
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -838,7 +820,6 @@ const Customer = () => {
                   },
                 }}
                 pageSizeOptions={[5, 10]}
-              // checkboxSelection
               />
             </div>
           </div>

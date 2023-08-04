@@ -3,10 +3,7 @@ import './Options.css'
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const Options = () => {
-
-
     const location = useLocation();
-
     useEffect(() => {
         // Retrieve the previously stored actives menu item from localStorage
         const activeMenuItem = localStorage.getItem('activeMenuItem');
@@ -29,7 +26,6 @@ const Options = () => {
         // Store the clicked menu item in localStorage
         localStorage.setItem('activeMenuItem', menuItem);
     };
-
 
     return (
         <div className='customer-conatiner' id='menu'>

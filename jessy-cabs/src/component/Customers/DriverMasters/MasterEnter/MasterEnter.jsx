@@ -1,46 +1,41 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-import {
-  CabDriver,
-} from "./MasterEnteryData";
-import "./MasterEnter.css";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import { TextField } from "@mui/material";
-import CallIcon from "@mui/icons-material/Call";
-import AttachEmailIcon from "@mui/icons-material/AttachEmail";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
-import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import RateReviewIcon from "@mui/icons-material/RateReview";
-// import { Table } from "@mui/joy";
 import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import BadgeIcon from "@mui/icons-material/Badge";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import Autocomplete from "@mui/material/Autocomplete";
-import { DataGrid } from "@mui/x-data-grid";
-
-//
-import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
-import { styled } from "@mui/material/styles";
+import "./MasterEnter.css";
 import Box from "@mui/material/Box";
+import { TextField } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { styled } from "@mui/material/styles";
+import { CabDriver } from "./MasterEnteryData";
 import SpeedDial from "@mui/material/SpeedDial";
-
+import Autocomplete from "@mui/material/Autocomplete";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileInvoice, faKey, faSheetPlastic } from "@fortawesome/free-solid-svg-icons";
 
+// ICONS
+import CallIcon from "@mui/icons-material/Call";
+import BadgeIcon from "@mui/icons-material/Badge";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import AttachEmailIcon from "@mui/icons-material/AttachEmail";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 
 
 // TABLE
@@ -48,12 +43,8 @@ const columns = [
   { field: "driverid", headerName: "Driver ID", width: 70 },
   { field: "username", headerName: "Driver Name", width: 130 },
   { field: "Phoencell", headerName: "Mobile", width: 130 },
-
 ];
-
-
 // TABLE END
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -355,8 +346,8 @@ const MasterEnter = () => {
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
                     params.inputProps.value = selectedCustomerData?.cabdriver || ''
-                    return ( 
-                    <TextField {...params} label="Cab Driver" name="cabdriver" />
+                    return (
+                      <TextField {...params} label="Cab Driver" name="cabdriver" />
                     )
                   }
                   }
@@ -542,7 +533,7 @@ const MasterEnter = () => {
                 <div className="textboxlist-masterEntery">
                   <div className="textboxlist-customer list-update">
                     <span>
-                    {/* <TableHead>
+                      {/* <TableHead>
     <TableRow>
       <TableCell style={{ width: "70px" }}>Driver ID</TableCell>
       <TableCell style={{ width: "130px" }}>Driver Name</TableCell>

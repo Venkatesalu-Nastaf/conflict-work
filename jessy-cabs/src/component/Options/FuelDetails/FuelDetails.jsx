@@ -1,36 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import './FuelDetails.css'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
-import Button from "@mui/material/Button";
+import React, { useState } from 'react';
+import './FuelDetails.css';
+import "jspdf-autotable";
+import Box from "@mui/material/Box";
 import Menu from '@mui/material/Menu';
-import CommuteIcon from '@mui/icons-material/Commute';
-import CarCrashIcon from '@mui/icons-material/CarCrash';
+import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
+import { styled } from "@mui/material/styles";
 import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
 
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGasPump, faGaugeHigh, faGaugeSimple } from "@fortawesome/free-solid-svg-icons";
 
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import { styled } from "@mui/material/styles";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Box from "@mui/material/Box";
+// ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
-import { TextField } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import "jspdf-autotable";
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import CommuteIcon from '@mui/icons-material/Commute';
+import CarCrashIcon from '@mui/icons-material/CarCrash';
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -52,9 +51,6 @@ const actions = [
 ];
 
 
-// TABLE
-
-
 const FuelDetails = () => {
 
   const [initialOdometer, setInitialOdometer] = useState(0);
@@ -68,8 +64,7 @@ const FuelDetails = () => {
     setMileage(mileageValue);
   };
 
-  // TABLE
-
+  // TABLE START
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "VehicleNo", headerName: "Vehicl eNo", width: 130 },
@@ -108,17 +103,13 @@ const FuelDetails = () => {
 
     },
   ];
+  // TABLE END
 
-  useEffect(() => {
-    AOS.init({ duration: 1000 })
-  }, [])
   return (
     <div className="form-container">
-      <div  className="FuelDetails-form">
+      <div className="FuelDetails-form">
         <form >
-          <div data-aos='zoom-out'>
-            <span className="Title-Name" >Mailage Details</span>
-          </div>
+          <span className="Title-Name" >Mailage Details</span>
           <div className="FuelDetails-page-header">
             <div className="detailsFuel">
               <div className="input-field">
@@ -267,7 +258,7 @@ const FuelDetails = () => {
                 ))}
               </StyledSpeedDial>
             </Box>
-            <div  className="Download-btn">
+            <div className="Download-btn">
               <PopupState variant="popover" popupId="demo-popup-menu">
                 {(popupState) => (
                   <React.Fragment>
@@ -282,7 +273,7 @@ const FuelDetails = () => {
                 )}
               </PopupState>
             </div>
-            <div   className="table-bookingCopy-Employe">
+            <div className="table-bookingCopy-Employe">
               <div style={{ height: 400, width: "100%" }}>
                 <DataGrid
                   rows={rows}

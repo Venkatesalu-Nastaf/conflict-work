@@ -1,17 +1,17 @@
 import React from "react";
 import "./Collected.css";
+import dayjs from "dayjs";
+import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
 import { CustomerName } from "./CollectedData";
 import Autocomplete from "@mui/material/Autocomplete";
-import DescriptionIcon from "@mui/icons-material/Description";
-import { TextField } from "@mui/material";
-import dayjs from "dayjs";
-import { DataGrid } from "@mui/x-data-grid";
-import Button from "@mui/material/Button";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import DescriptionIcon from "@mui/icons-material/Description";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-
+// TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "billno", headerName: "Bill No", width: 130 },
@@ -42,9 +42,9 @@ const rows = [
     collected: "456 Avenue, Unit 8, Town",
     balance: "XYZ Car",
   },
-  // Add more rows as needed
 ];
 
+// TABLE END
 
 const Collected = () => {
   return (

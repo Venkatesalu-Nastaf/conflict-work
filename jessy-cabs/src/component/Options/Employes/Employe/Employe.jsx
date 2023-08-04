@@ -1,47 +1,50 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from "axios";
 import "./Employe.css";
-import Button from "@mui/material/Button";
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import Menu from '@mui/material/Menu';
+import "jspdf-autotable";
 import dayjs from "dayjs";
+import axios from "axios";
+import jsPDF from 'jspdf';
+import Box from "@mui/material/Box";
+import { saveAs } from 'file-saver';
+import Menu from '@mui/material/Menu';
+import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
+import MenuItem from '@mui/material/MenuItem';
+import { styled } from "@mui/material/styles";
+import SpeedDial from "@mui/material/SpeedDial";
+import { IconButton, TextField } from "@mui/material";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import DeviceHubRoundedIcon from '@mui/icons-material/DeviceHubRounded';
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
-import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
+
+// ICONS
+import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from '@mui/icons-material/Email';
-import ContactMailIcon from '@mui/icons-material/ContactMail';
+import DeleteIcon from "@mui/icons-material/Delete";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import BloodtypeIcon from '@mui/icons-material/Bloodtype';
-import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import { styled } from "@mui/material/styles";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Box from "@mui/material/Box";
-import FactCheckIcon from '@mui/icons-material/FactCheck';
+import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
+import DeviceHubRoundedIcon from '@mui/icons-material/DeviceHubRounded';
+import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
+import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import TransgenderRoundedIcon from '@mui/icons-material/TransgenderRounded';
-import BadgeIcon from "@mui/icons-material/Badge";
-import { IconButton, TextField } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { saveAs } from 'file-saver';
-import jsPDF from 'jspdf';
-import "jspdf-autotable";
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -63,8 +66,7 @@ const actions = [
 ];
 
 
-// TABLE
-
+// TABLE STRAT
 const columns = [
     { field: "id", headerName: "Sno", width: 50 },
     { field: "empid", headerName: "Employe ID", width: 140 },
@@ -81,6 +83,7 @@ const columns = [
     { field: "fixedsalary", headerName: "Net Salary", width: 130 },
     { field: "licenceno", headerName: "Driving Licence No", width: 140 },
 ];
+// TABLE END
 
 
 const Employe = () => {
@@ -376,31 +379,6 @@ const Employe = () => {
                                 />
                             </div>
                             <div className="input" >
-                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        label='Joining Date'
-                                        defaultValue={dayjs()}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                name="joiningdate"
-                                                inputRef={params.inputRef}
-                                            />
-                                        )}
-                                    />
-                                </LocalizationProvider> */}
-                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoItem label="Date">
-                                        <DatePicker
-                                            value={selectedCustomerData?.joiningdate ? dayjs(selectedCustomerData?.joiningdate) : null}
-                                            onChange={handleDateChange}
-                                        >
-                                            {({ inputProps, inputRef }) => (
-                                                <TextField {...inputProps} inputRef={inputRef} name="joiningdate" value={selectedCustomerData?.joiningdate} />
-                                            )}
-                                        </DatePicker>
-                                    </DemoItem>
-                                </LocalizationProvider> */}
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoItem label="Joining Date">
                                         <DatePicker

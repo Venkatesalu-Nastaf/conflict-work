@@ -1,27 +1,25 @@
 import React from "react";
 import "./MailDetails.css";
-import { TextField } from "@mui/material";
-import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import { Table } from "@mui/joy";
-import SmsIcon from '@mui/icons-material/Sms';
-import BadgeIcon from '@mui/icons-material/Badge';
-import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import { TextField } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 
-
+// ICONS
+import SmsIcon from '@mui/icons-material/Sms';
+import BadgeIcon from '@mui/icons-material/Badge';
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import Button from "@mui/material/Button";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 
-
-
-// TABLE
+// TABLE START
 function createData(Sno, Name, mobile) {
   return { Sno, Name, mobile };
 }
@@ -52,11 +50,7 @@ const rowsTemplate = [
   createDataTemplate('7', '129', 'Important notice: Account security update.'),
   createDataTemplate('8', '130', 'You have a new message.'),
 ];
-
-
-
 // TABLE END
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",

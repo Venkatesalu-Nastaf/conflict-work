@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import "./Closed.css";
 import axios from "axios";
-import { saveAs } from 'file-saver';
-import { jsPDF } from 'jspdf';
-import { Stations } from "./ClosedData.js";
-import Autocomplete from "@mui/material/Autocomplete";
-import { TextField } from "@mui/material";
 import dayjs from "dayjs";
-import { DataGrid } from "@mui/x-data-grid";
-import Button from "@mui/material/Button";
+import { jsPDF } from 'jspdf';
+import { saveAs } from 'file-saver';
 import Menu from '@mui/material/Menu';
+import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import { Stations } from "./ClosedData.js";
+import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -170,7 +170,7 @@ const Closed = () => {
           <div className="container-left">
             <div className="copy-title-btn-Closed">
               <div className="input-field">
-                <div className="input" style={{ width: "50%" }}>
+                <div className="input" style={{ width: "70%" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
@@ -186,16 +186,15 @@ const Closed = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-                <div className="input" >
+                <div className="input" style={{ width: '130px' }}>
                   <Button variant="contained" onClick={handleShow}>Show</Button>
                 </div>
-                <div className="input">
+                <div className="input" style={{ width: '120px' }}>
                   <Button variant="outlined" onClick={handleShowAll}>Show All</Button>
                 </div>
               </div>
               <div className="input-field">
                 <div className="input" style={{ width: "300px" }}>
-
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -212,8 +211,7 @@ const Closed = () => {
                     }
                   />
                 </div>
-                <div className="input" >
-
+                <div className="input" style={{ width: '150px' }}>
                   <PopupState variant="popover" popupId="demo-popup-menu">
                     {(popupState) => (
                       <React.Fragment>
@@ -228,7 +226,7 @@ const Closed = () => {
                     )}
                   </PopupState>
                 </div>
-                <div className="input" style={{ width: '170px' }}>
+                <div className="input" style={{ width: '150px' }}>
                   <Button variant="contained" onClick={handleButtonClick}>
                     Tripsheet
                   </Button>

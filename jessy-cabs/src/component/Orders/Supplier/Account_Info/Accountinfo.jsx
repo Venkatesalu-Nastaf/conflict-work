@@ -1,59 +1,52 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from "axios";
-import { saveAs } from 'file-saver';
-import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import dayjs from "dayjs";
+import jsPDF from 'jspdf';
+import axios from "axios";
 import "./Accountinfo.css";
-import Button from "@mui/material/Button";
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
-import {
-  TextField,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Checkbox,
-} from "@mui/material";
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import LocationCityIcon from "@mui/icons-material/LocationCity";
-import AttachEmailIcon from "@mui/icons-material/AttachEmail";
-import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import InputAdornment from "@mui/material/InputAdornment";
-import RateReviewIcon from "@mui/icons-material/RateReview";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
-import StoreIcon from "@mui/icons-material/Store";
 import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
+import Box from "@mui/material/Box";
+import { saveAs } from 'file-saver';
+import Menu from '@mui/material/Menu';
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
-import Box from "@mui/material/Box";
-import Autocomplete from "@mui/material/Autocomplete";
+import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import { Undergroup, Vehicleinfo } from "./Accountinfo";
-import SpeedDial from "@mui/material/SpeedDial";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import MinorCrashIcon from "@mui/icons-material/MinorCrash";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import TabContext from "@mui/lab/TabContext";
+import MenuItem from '@mui/material/MenuItem';
 import { styled } from "@mui/material/styles";
-import dayjs from "dayjs";
+import SpeedDial from "@mui/material/SpeedDial";
+import Autocomplete from "@mui/material/Autocomplete";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
 
-// const today = dayjs();
-// const tomorrow = dayjs().add(1, "day");
+// ICONS
+import StoreIcon from "@mui/icons-material/Store";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import { Undergroup, Vehicleinfo } from "./Accountinfo";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import InputAdornment from "@mui/material/InputAdornment";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import MinorCrashIcon from "@mui/icons-material/MinorCrash";
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+import AttachEmailIcon from "@mui/icons-material/AttachEmail";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -151,7 +144,7 @@ const Accuntinfo = () => {
   };
 
 
-  // Table Start
+  // TABLE START
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "cperson", headerName: "Supplier_Name", width: 130 },
@@ -164,7 +157,7 @@ const Accuntinfo = () => {
     { field: "rateType", headerName: "Rate_Type", width: 130 },
     { field: "autoRefresh", headerName: "Driver", width: 130 },
   ];
-
+  // TABLE END
   const [book, setBook] = useState({
     accountNo: '',
     date: '',
@@ -732,11 +725,11 @@ const Accuntinfo = () => {
             </div>
           </div>
           {error &&
-              <div className='alert-popup Error' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
-                <p>Something went wrong!</p>
-              </div>
-            }
+            <div className='alert-popup Error' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>Something went wrong!</p>
+            </div>
+          }
 
           <div className="SpeedDial" style={{ "paddingTop": "96px" }}>
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>

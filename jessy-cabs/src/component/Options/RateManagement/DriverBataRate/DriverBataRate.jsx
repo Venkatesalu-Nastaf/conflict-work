@@ -1,28 +1,29 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-import "./DriverBataRate.css";
-import { VehicleType, Duty } from "./DriverBataRateData.js";
-import Autocomplete from "@mui/material/Autocomplete";
 import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import CarCrashIcon from '@mui/icons-material/CarCrash';
-import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import { styled } from "@mui/material/styles";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import "./DriverBataRate.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { InputAdornment, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { styled } from "@mui/material/styles";
+import SpeedDial from "@mui/material/SpeedDial";
+import Autocomplete from "@mui/material/Autocomplete";
+import { InputAdornment, TextField } from "@mui/material";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { VehicleType, Duty } from "./DriverBataRateData.js";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 
+//ICONS 
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import CarCrashIcon from '@mui/icons-material/CarCrash';
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -43,7 +44,7 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-// Table
+// TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "VehicleType", headerName: "Vehicle Type", width: 130 },
@@ -54,9 +55,8 @@ const columns = [
   { field: "fromdate", headerName: "From_Date", width: 130 },
   { field: "todate", headerName: "To_Date", width: 130 },
   { field: "Bata", headerName: "Bata", width: 130 },
-
 ];
-
+// TABLE END
 
 const DriverBataRate = () => {
 

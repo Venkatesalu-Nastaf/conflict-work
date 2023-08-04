@@ -17,24 +17,22 @@ const DriverMasters = () => {
     };
 
     return (
-        <>
-            <div className="form-container-drivermaster">
-                <div className="container-main">
-                    <Box sx={{ width: "100%", typography: "body1" }}>
-                        <TabContext value={value}>
-                            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                                <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                    <Tab label="Master Entry" value="masterentry" />
-                                    <Tab label="App USer List" value="appuserlist" />
-                                </TabList>
-                            </Box>
-                            <TabPanel value="masterentry"><MasterEnter /></TabPanel>
-                            <TabPanel value="appuserlist"><AppUserList /></TabPanel>
-                        </TabContext>
-                    </Box>
-                </div>
-            </div >
-        </>
+        <div className="form-container-drivermaster">
+            <div className="container-main">
+                <Box sx={{ width: "100%", typography: "body1" }}>
+                    <TabContext value={value}>
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                            <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                <Tab label="Master Entry" value="masterentry" />
+                                <Tab label="App USer List" value="appuserlist" />
+                            </TabList>
+                        </Box>
+                        <TabPanel value="masterentry"><MasterEnter /></TabPanel>
+                        <TabPanel value="appuserlist"><AppUserList /></TabPanel>
+                    </TabContext>
+                </Box>
+            </div>
+        </div >
     )
 }
 

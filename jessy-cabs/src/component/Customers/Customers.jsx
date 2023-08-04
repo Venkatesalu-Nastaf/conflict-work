@@ -31,41 +31,39 @@ const Customer = () => {
 
 
   return (
-    <>
-      <div className='customer-conatiner' id='menu'>
-        <div className='menu-bar'>
-          <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Received' ? 'actives' : ''}`}
-            to='/home/customers/received'
-            onClick={() => handleMenuItemClick('Received')}
-          >
-            Received
-          </Link>
-          <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Dispatched' ? 'actives' : ''}`}
-            to='/home/customers/dispatched'
-            onClick={() => handleMenuItemClick('Dispatched')}
-          >
-            Dispatched
-          </Link>
-          <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Collected' ? 'actives' : ''}`}
-            to='/home/customers/collected'
-            onClick={() => handleMenuItemClick('Collected')}
-          >
-            Collected
-          </Link>
-          <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Driver Master' ? 'actives' : ''}`}
-            to='/home/customers/drivermaster'
-            onClick={() => handleMenuItemClick('Driver Master')}
-          >
-            Driver Master
-          </Link>
-        </div>
-        <Outlet />
+    <div className='customer-conatiner' id='menu'>
+      <div className='menu-bar'>
+        <Link
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Received' ? 'actives' : ''}`}
+          to='/home/customers/received'
+          onClick={() => handleMenuItemClick('Received')}
+        >
+          Received
+        </Link>
+        <Link
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Dispatched' ? 'actives' : ''}`}
+          to='/home/customers/dispatched'
+          onClick={() => handleMenuItemClick('Dispatched')}
+        >
+          Dispatched
+        </Link>
+        <Link
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Collected' ? 'actives' : ''}`}
+          to='/home/customers/collected'
+          onClick={() => handleMenuItemClick('Collected')}
+        >
+          Collected
+        </Link>
+        <Link
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Driver Master' ? 'actives' : ''}`}
+          to='/home/customers/drivermaster'
+          onClick={() => handleMenuItemClick('Driver Master')}
+        >
+          Driver Master
+        </Link>
       </div>
-    </>
+      <Outlet />
+    </div>
   )
 }
 

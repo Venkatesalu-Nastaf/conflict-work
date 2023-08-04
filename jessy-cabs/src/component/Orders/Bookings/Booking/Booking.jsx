@@ -1,68 +1,62 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from "axios";
 import "./Booking.css";
-import AltRouteIcon from "@mui/icons-material/AltRoute";
+import dayjs from "dayjs";
+import axios from "axios";
+import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import CarCrashIcon from "@mui/icons-material/CarCrash";
 import Button from "@mui/material/Button";
-import CommuteIcon from "@mui/icons-material/Commute";
-import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-import NoCrashIcon from "@mui/icons-material/NoCrash";
-import SellIcon from "@mui/icons-material/Sell";
-import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
-import FmdBadIcon from "@mui/icons-material/FmdBad";
-import InfoIcon from "@mui/icons-material/Info";
-import DomainAddIcon from "@mui/icons-material/DomainAdd";
-import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
-import QrCodeIcon from "@mui/icons-material/QrCode";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import TaxiAlertTwoToneIcon from "@mui/icons-material/TaxiAlertTwoTone";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
-import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
-import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
-import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
-import { Duty, Hire, PayType, Report, VehicleModel, Service_Station } from "./Booking";
+import { styled } from "@mui/material/styles";
+import TabContext from "@mui/lab/TabContext";
 import { useLocation } from "react-router-dom";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
-import {
-  TextField,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Checkbox,
-} from "@mui/material";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
-import AttachEmailIcon from "@mui/icons-material/AttachEmail";
-import RateReviewIcon from "@mui/icons-material/RateReview";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
-import Box from "@mui/material/Box";
-import SpeedDial from "@mui/material/SpeedDial";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import { styled } from "@mui/material/styles";
-import dayjs from "dayjs";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { Duty, Hire, PayType, Report, VehicleModel, Service_Station } from "./Booking";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
+
+// ICONS
+import InfoIcon from "@mui/icons-material/Info";
+import SellIcon from "@mui/icons-material/Sell";
+import DeleteIcon from "@mui/icons-material/Delete";
+import QrCodeIcon from "@mui/icons-material/QrCode";
+import FmdBadIcon from "@mui/icons-material/FmdBad";
+import NoCrashIcon from "@mui/icons-material/NoCrash";
+import CommuteIcon from "@mui/icons-material/Commute";
+import AltRouteIcon from "@mui/icons-material/AltRoute";
+import CarCrashIcon from "@mui/icons-material/CarCrash";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-// import { useLocation } from 'react-router-dom';
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import AttachEmailIcon from "@mui/icons-material/AttachEmail";
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
+import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
+import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import TaxiAlertTwoToneIcon from "@mui/icons-material/TaxiAlertTwoTone";
+import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
+import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -523,9 +517,7 @@ const Booking = () => {
                     />
                   </DemoItem>
                 </LocalizationProvider>
-
               </div>
-
               <div className="input time">
                 <label>Booking Time</label>
                 <input

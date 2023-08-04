@@ -574,7 +574,6 @@ const TripSheet = () => {
       const startDateObj = dayjs(startDate);
       const closeDateObj = dayjs(closeDate);
       const totalDays = closeDateObj.diff(startDateObj, 'days') + 1;
-      // console.log('Total Days:', totalDays); // Add this line to log the totalDays value
       return totalDays;
     }
 
@@ -671,7 +670,6 @@ const TripSheet = () => {
       try {
         const response = await axios.get(`http://localhost:8081/vehicleinfo/${event.target.value}`);
         const vehicleData = response.data;
-        console.log(vehicleData);
         setRows([vehicleData]);
       } catch (error) {
         console.error('Error retrieving vehicle details:', error.message);
@@ -1232,17 +1230,13 @@ const TripSheet = () => {
                     <DatePicker
                       value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
                       onChange={(date) => handleDateChange(date, 'startdate')}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          name="startdate"
-                          value={formData.startdate || selectedCustomerData.startdate || ''}
-                          inputRef={params.inputRef}
-                        />
-                      )}
-                    />
-                  </DemoItem>
-                </LocalizationProvider>
+                      >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                    )}
+                  </DatePicker>
+                </DemoItem>
+              </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1250,15 +1244,11 @@ const TripSheet = () => {
                     <DatePicker
                       value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null}
                       onChange={(date) => handleDateChange(date, 'closedate')}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          name="closedate"
-                          value={formData.closedate || selectedCustomerData.closedate || ''}
-                          inputRef={params.inputRef}
-                        />
+                      >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
                       )}
-                    />
+                    </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
               </div>
@@ -1762,15 +1752,11 @@ const TripSheet = () => {
                           <DatePicker
                             value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
                             onChange={(date) => handleDateChange(date, 'startdate1')}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                name="startdate1"
-                                value={formData.startdate || selectedCustomerData.startdate || ''}
-                                inputRef={params.inputRef}
-                              />
+                            >
+                            {({ inputProps, inputRef }) => (
+                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
                             )}
-                          />
+                          </DatePicker>
                         </DemoItem>
                       </LocalizationProvider>
                     </div>
@@ -1780,15 +1766,11 @@ const TripSheet = () => {
                           <DatePicker
                             value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null}
                             onChange={(date) => handleDateChange(date, 'closedate1')}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                name="closedate1"
-                                value={formData.closedate || selectedCustomerData.closedate || ''}
-                                inputRef={params.inputRef}
-                              />
+                            >
+                            {({ inputProps, inputRef }) => (
+                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
                             )}
-                          />
+                          </DatePicker>
                         </DemoItem>
                       </LocalizationProvider>
                     </div>
@@ -2518,15 +2500,11 @@ const TripSheet = () => {
                           <DatePicker
                             value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
                             onChange={(date) => handleDateChange(date, 'fcdate')}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                name="fcdate"
-                                value={selectedCustomerData.fcdate || ''}
-                                inputRef={params.inputRef}
-                              />
+                            >
+                            {({ inputProps, inputRef }) => (
+                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.fcdate} />
                             )}
-                          />
+                          </DatePicker>
                         </DemoItem>
                       </LocalizationProvider>
                     </div>
@@ -2556,15 +2534,11 @@ const TripSheet = () => {
                           <DatePicker
                             value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null}
                             onChange={(date) => handleDateChange(date, 'insdate')}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                name="insdate"
-                                value={selectedCustomerData.insdate || ''}
-                                inputRef={params.inputRef}
-                              />
+                            >
+                            {({ inputProps, inputRef }) => (
+                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.insdate} />
                             )}
-                          />
+                          </DatePicker>
                         </DemoItem>
                       </LocalizationProvider>
                     </div>
@@ -2574,15 +2548,11 @@ const TripSheet = () => {
                           <DatePicker
                             value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
                             onChange={(date) => handleDateChange(date, 'stpermit')}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                name="stpermit"
-                                value={selectedCustomerData.stpermit || ''}
-                                inputRef={params.inputRef}
-                              />
+                            >
+                            {({ inputProps, inputRef }) => (
+                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.stpermit} />
                             )}
-                          />
+                          </DatePicker>
                         </DemoItem>
                       </LocalizationProvider>
                     </div>

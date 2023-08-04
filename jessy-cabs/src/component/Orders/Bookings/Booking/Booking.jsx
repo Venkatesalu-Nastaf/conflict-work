@@ -445,8 +445,6 @@ const Booking = () => {
       try {
         const response = await axios.get(`http://localhost:8081/booking/${event.target.value}`);
         const bookingDetails = response.data;
-        console.log(bookingDetails);
-
         setSelectedCustomerData(bookingDetails);
         setSelectedCustomerId(bookingDetails.customerId);
       } catch (error) {
@@ -464,17 +462,17 @@ const Booking = () => {
     setCurrentYear(value);
   }, []);
 
-  const [nextBookingNo, setNextBookingNo] = useState(null);
+  // const [nextBookingNo, setNextBookingNo] = useState(null);
 
-  useEffect(() => {
-    axios.get('http://localhost:8081/booking')
-      .then((response) => {
-        setNextBookingNo(response.data.bookingno);
-      })
-      .catch((error) => {
-        console.error('Error fetching next booking number:', error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios.get('http://localhost:8081/booking')
+  //     .then((response) => {
+  //       setNextBookingNo(response.data.bookingno);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching next booking number:', error);
+  //     });
+  // }, []);
 
   return (
     <div className="booking-form">
@@ -492,8 +490,8 @@ const Booking = () => {
                   label="Booking No"
                   id="standard-size-normal"
                   autoComplete="new-password"
-                  // value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || currentNumber}
-                  value={formData.bookingno || nextBookingNo}
+                  value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno}
+                  // value={formData.bookingno || nextBookingNo}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   variant="standard"
@@ -506,17 +504,13 @@ const Booking = () => {
                     <DatePicker
                       value={formData.bookingdate || selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null}
                       onChange={(date) => handleDateChange(date, 'bookingdate')}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          name="bookingdate"
-                          value={formData.bookingdate || selectedCustomerData.bookingdate || ''}
-                          inputRef={params.inputRef}
-                        />
-                      )}
-                    />
-                  </DemoItem>
-                </LocalizationProvider>
+                      >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
+                    )}
+                  </DatePicker>
+                </DemoItem>
+              </LocalizationProvider>
               </div>
               <div className="input time">
                 <label>Booking Time</label>
@@ -802,16 +796,6 @@ const Booking = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-              {/* <div className="input time">
-                <label>Start Time</label>
-                <input
-                  type="time"
-                  defaultValue={currentTime}
-                  name='starttime'
-                  value={starttime}
-                  onChange={(event) => setStartTime(event.target.value)}
-                />
-              </div> */}
               <div className="input time">
                 <label>Start Time</label>
                 <input
@@ -823,26 +807,14 @@ const Booking = () => {
                     setStartTime(event.target.value);
                   }}
                   name='starttime'
-                // onChange={(event) => setStartTime(event.target.value)}
                 />
               </div>
-              {/* <div className="input time">
-                <label>Register Time</label>
-                <input
-                  type="time"
-                  defaultValue={currentTime}
-                  name='registertime'
-                  value={registertime}
-                  onChange={(event) => setRegisterTime(event.target.value)}
-                />
-              </div> */}
               <div className="input time">
                 <label>Register Time</label>
                 <input
                   type="time"
                   name='registertime'
                   value={formData.registertime || selectedCustomerData.registertime || book.registertime}
-                  // onChange={(event) => setBook({ ...book, registertime: event.target.value })}
                   onChange={(event) => {
                     setBook({ ...book, registertime: event.target.value });
                     setRegisterTime(event.target.value);
@@ -1031,83 +1003,70 @@ const Booking = () => {
                   <TabPanel value="billingaddress">
                     <div className="booking-update">
                       <div className="booking-update-content">
-                        <form action="">
-                          <div className="input-field billing">
-                            <div className="input">
-                              <div className="icone">
-                                <PermIdentityIcon color="action" />
-                              </div>
-                              <TextField
-                                margin="normal"
-                                size="small"
-                                name="nameupdate"
-                                autoComplete="new-password"
-                                value={formData.guestname || selectedCustomerData.guestname || book.guestname}
-                                onChange={handleChange}
-                                label="Name"
-                                id="name"
-                                autoFocus
-                              />
+                        <div className="input-field billing">
+                          <div className="input">
+                            <div className="icone">
+                              <PermIdentityIcon color="action" />
                             </div>
-                            <div className="input">
-                              <div className="icone">
-                                <AddHomeWorkIcon color="action" />
-                              </div>
-                              <TextField
-                                margin="normal"
-                                size="small"
-                                id="streetnameupdate"
-                                label="No.Street Name"
-                                name="address3"
-                                autoComplete="new-password"
-                                value={formData.address1 || selectedCustomerData.address1 || book.address1}
-                                onChange={handleChange}
-                                autoFocus
-                              />
-                            </div>
+                            <TextField
+                              margin="normal"
+                              size="small"
+                              name="nameupdate"
+                              autoComplete="new-password"
+                              value={formData.guestname || selectedCustomerData.guestname || book.guestname}
+                              onChange={handleChange}
+                              label="Name"
+                              id="name"
+                              autoFocus
+                            />
                           </div>
-                          <div className="input-field billing">
-                            <div className="input">
-                              <div className="icone">
-                                <HomeTwoToneIcon color="action" />
-                              </div>
-                              <TextField
-                                name="address4"
-                                autoComplete="new-password"
-                                value={formData.address2 || selectedCustomerData.address2 || book.address2}
-                                onChange={handleChange}
-                                label="Address"
-                                id="address4"
-                                variant="standard"
-                              />
+                          <div className="input">
+                            <div className="icone">
+                              <AddHomeWorkIcon color="action" />
                             </div>
-                            <div className="input">
-                              <div className="icone">
-                                <LocationCityIcon color="action" />
-                              </div>
-                              <TextField
-                                name="cityupdate"
-                                autoComplete="new-password"
-                                value={formData.city || selectedCustomerData.city || book.city}
-                                onChange={handleChange}
-                                label="City"
-                                id="cityupdate"
-                                variant="standard"
-                              />
-                            </div>
+                            <TextField
+                              margin="normal"
+                              size="small"
+                              id="streetnameupdate"
+                              label="No.Street Name"
+                              name="address3"
+                              autoComplete="new-password"
+                              value={formData.address1 || selectedCustomerData.address1 || book.address1}
+                              onChange={handleChange}
+                              autoFocus
+                            />
                           </div>
-                          {/* <div className="input-field billing">
-                            <Button
-                              color="primary"
-                              disabled={false}
-                              onClick={actionName === 'Modify'}
-                              size="md"
-                              variant="outlined"
-                            >
-                              Update Address
-                            </Button>
-                          </div> */}
-                        </form>
+                        </div>
+                        <div className="input-field billing">
+                          <div className="input">
+                            <div className="icone">
+                              <HomeTwoToneIcon color="action" />
+                            </div>
+                            <TextField
+                              name="address4"
+                              autoComplete="new-password"
+                              value={formData.address2 || selectedCustomerData.address2 || book.address2}
+                              onChange={handleChange}
+                              label="Address"
+                              id="address4"
+                              variant="standard"
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <LocationCityIcon color="action" />
+                            </div>
+                            <TextField
+                              name="cityupdate"
+                              autoComplete="new-password"
+                              value={formData.city || selectedCustomerData.city || book.city}
+                              onChange={handleChange}
+                              label="City"
+                              id="cityupdate"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </TabPanel>
@@ -1222,16 +1181,6 @@ const Booking = () => {
                     </DemoItem>
                   </LocalizationProvider>
                 </div>
-                {/* <div className="input time">
-                  <label>Trip Time</label>
-                  <input
-                    type="time"
-                    defaultValue={currentTime}
-                    name='triptime'
-                    value={triptime}
-                    onChange={(event) => setTripTime(event.target.value)}
-                  />
-                </div> */}
                 <div className="input time">
                   <label>Trip Time</label>
                   <input
@@ -1429,7 +1378,6 @@ const Booking = () => {
             }
           </div>
         ) : null}
-
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"

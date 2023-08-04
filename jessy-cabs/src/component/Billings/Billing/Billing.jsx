@@ -31,7 +31,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
-
+// import MyInput from '@mui/icons-material/TollTwoTone';
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightArrowLeft, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore } from "@fortawesome/free-solid-svg-icons"
@@ -65,47 +65,6 @@ const Billing = () => {
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
     const [error, setError] = useState(false);
-
-    // const convertToCSV = (data) => {
-    //   const header = columns.map((column) => column.headerName).join(",");
-    //   const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-    //   return [header, ...rows].join("\n");
-    // };
-    // const handleExcelDownload = () => {
-    //   const csvData = convertToCSV(rows);
-    //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    //   saveAs(blob, "customer_details.csv");
-    // };
-    // const handlePdfDownload = () => {
-    //   const pdf = new jsPDF();
-    //   pdf.setFontSize(12);
-    //   pdf.setFont('helvetica', 'normal');
-    //   pdf.text("Customer Details", 10, 10);
-
-    //   // Modify tableData to exclude the index number
-    //   const tableData = rows.map((row) => [
-    //     row['id'],
-    //     row['customerId'],
-    //     row['printName'],
-    //     row['address1'],
-    //     row['phoneno'],
-    //     row['Active'],
-    //     row['active'],
-    //     row['gstTax'],
-    //     row['state'],
-    //     row['enableDriverApp']
-    //   ]);
-
-    //   pdf.autoTable({
-    //     head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-    //     body: tableData,
-    //     startY: 20,
-    //   });
-
-    //   const pdfBlob = pdf.output('blob');
-    //   saveAs(pdfBlob, 'Customer_Details.pdf');
-    // };
-
 
     const hidePopup = () => {
         setError(false);
@@ -192,18 +151,6 @@ const Billing = () => {
         }
     };
 
-    // const handleAutocompleteChange = (event, value, name) => {
-    //     const selectedOption = value ? value.label : '';
-    //     setBook((prevBook) => ({
-    //         ...prevBook,
-    //         [name]: selectedOption,
-    //     }));
-    //     setSelectedCustomerData((prevData) => ({
-    //         ...prevData,
-    //         [name]: selectedOption,
-    //     }));
-    // };
-
     const handleDateChange = (date, name) => {
         const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
         setBook((prevBook) => ({
@@ -263,12 +210,7 @@ const Billing = () => {
         }));
         setSelectedCustomerData({});
     };
-    // const handleRowClick = useCallback((params) => {
-    //     console.log(params.row);
-    //     const customerData = params.row;
-    //     setSelectedCustomerData(customerData);
-    //     setSelectedCustomerId(params.row.customerId);
-    // }, []);
+
     const handleClick = async (event, actionName, tripsheetno) => {
         event.preventDefault();
         try {
@@ -346,30 +288,16 @@ const Billing = () => {
                                 />
                             </div>
                             <div className="input">
-                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoItem label="Date">
-                                        <DatePicker
-                                            name="date"
-                                            defaultValue={today}
-                                            minDate={tomorrow}
-                                            views={["year", "month", "day"]}
-                                        />
-                                    </DemoItem>
-                                </LocalizationProvider> */}
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoItem label="Date">
                                         <DatePicker
                                             value={formData.Billingdate || selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null}
                                             onChange={(date) => handleDateChange(date, 'Billingdate')}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    name="Billingdate"
-                                                    value={formData.Billingdate || selectedCustomerData.Billingdate || ''}
-                                                    inputRef={params.inputRef}
-                                                />
+                                        >
+                                            {({ inputProps, inputRef }) => (
+                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.Billingdate} />
                                             )}
-                                        />
+                                        </DatePicker>
                                     </DemoItem>
                                 </LocalizationProvider>
                             </div>
@@ -378,7 +306,6 @@ const Billing = () => {
                                     type='number'
                                     margin="normal"
                                     size="small"
-                                    // id="totalkms"
                                     label="Total Kms"
                                     name="totalkms"
                                     autoComplete="new-password"
@@ -434,32 +361,19 @@ const Billing = () => {
                                 />
                             </div>
                             <div className="input">
-                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoItem label="Trip Date">
-                                        <DatePicker
-                                            name="tripdate"
-                                            defaultValue={today}
-                                            minDate={tomorrow}
-                                            views={["year", "month", "day"]}
-                                        />
-                                    </DemoItem>
-                                </LocalizationProvider> */}
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoItem label="Trip Date">
                                         <DatePicker
                                             value={formData.tripdate || selectedCustomerData.tripdate ? dayjs(selectedCustomerData.tripdate) : null}
                                             onChange={(date) => handleDateChange(date, 'tripdate')}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    name="Billingdate"
-                                                    value={formData.tripdate || selectedCustomerData.tripdate || ''}
-                                                    inputRef={params.inputRef}
-                                                />
+                                        >
+                                            {({ inputProps, inputRef }) => (
+                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripdate} />
                                             )}
-                                        />
+                                        </DatePicker>
                                     </DemoItem>
                                 </LocalizationProvider>
+
                             </div>
                             <div className="input" style={{ width: "111px" }}>
                                 <TextField

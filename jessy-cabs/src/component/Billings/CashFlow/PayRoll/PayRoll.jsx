@@ -407,47 +407,19 @@ const PayRoll = () => {
               />
             </div>
             <div className="input" style={{ width: "215px" }}>
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label='Salary Date'
-                  defaultValue={dayjs()}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      name="salarydate"
-                      inputRef={params.inputRef}
-                    />
-                  )}
-                />
-              </LocalizationProvider> */}
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoItem label="Salary Date">
                   <DatePicker
-                    value={selectedCustomerData?.salarydate ? dayjs(selectedCustomerData?.salarydate) : null}
-                    onChange={handleDateChange}
+                    value={formData.salarydate || selectedCustomerData.salarydate ? dayjs(selectedCustomerData.salarydate) : null}
+                    onChange={(date) => handleDateChange(date, 'salarydate')}
                   >
                     {({ inputProps, inputRef }) => (
                       <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.salarydate} />
                     )}
                   </DatePicker>
                 </DemoItem>
-              </LocalizationProvider> */}
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoItem label="Salary Date">
-                  <DatePicker
-                    value={formData.salarydate || selectedCustomerData.salarydate ? dayjs(selectedCustomerData.salarydate) : null}
-                    onChange={(date) => handleDateChange(date, 'salarydate')}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        name="salarydate"
-                        value={formData.salarydate || selectedCustomerData.salarydate || ''}
-                        inputRef={params.inputRef}
-                      />
-                    )}
-                  />
-                </DemoItem>
               </LocalizationProvider>
+
             </div>
           </div>
           <div className="input-field">

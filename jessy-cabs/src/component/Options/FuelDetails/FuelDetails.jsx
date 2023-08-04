@@ -15,12 +15,9 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-
-
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGasPump, faGaugeHigh, faGaugeSimple } from "@fortawesome/free-solid-svg-icons";
-
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -59,6 +56,7 @@ const columns = [
   { field: "filldate", headerName: "Fill Date", width: 130 },
   { field: "emptydate", headerName: "Empty Date", width: 150 },
   { field: "DriverName", headerName: "Driver Name", width: 130 },
+  { field: "FuelPrice", headerName: "Fuel Price", width: 130 },
   { field: "InitialOdometerReading", headerName: "Initial Odometer Reading", width: 130 },
   { field: "FinalOdometerReading", headerName: "Final Odometer Reading", width: 130 },
   { field: "FuelConsumptioninliters", headerName: "Fuel Consumption (in liters)", width: 130 },
@@ -97,6 +95,7 @@ const FuelDetails = () => {
     filldate: '',
     emptydate: '',
     DriverName: '',
+    FuelPrice: '',
     InitialOdometerReading: '',
     FinalOdometerReading: '',
     FuelConsumptioninliters: '',
@@ -142,14 +141,15 @@ const FuelDetails = () => {
       filldate: '',
       emptydate: '',
       DriverName: '',
+      FuelPrice: '',
       InitialOdometerReading: '',
       FinalOdometerReading: '',
       FuelConsumptioninliters: '',
     }));
     setSelectedCustomerData({});
-    setFuelConsumption({});
-    setFinalOdometer({});
-    setInitialOdometer({});
+    setFuelConsumption(0);
+    setFinalOdometer(0);
+    setInitialOdometer(0);
   };
   const handleRowClick = useCallback((params) => {
     console.log(params.row);
@@ -196,14 +196,6 @@ const FuelDetails = () => {
       handleClick(null, 'List');
     }
   });
-
-
-  // const calculateMileage = () => {
-  //   const distance = finalOdometer - initialOdometer;
-  //   const mileageValue = distance / fuelConsumption;
-  //   setMileage(mileageValue);
-  //   console.log(mileageValue);
-  // };
 
   const calculateMileage = () => {
     const distance =
@@ -310,7 +302,7 @@ const FuelDetails = () => {
                     label="Fuel Price"
                     name="FuelPrice"
                     autoComplete="new-password"
-                    value={selectedCustomerData?.DriverName || book.DriverName}
+                    value={selectedCustomerData?.FuelPrice || book.FuelPrice}
                     onChange={handleChange}
                   />
                 </div>

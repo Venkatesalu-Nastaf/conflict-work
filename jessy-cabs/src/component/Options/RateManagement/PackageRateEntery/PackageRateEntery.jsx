@@ -241,7 +241,7 @@ const PackageRateEntery = () => {
   });
 
   return (
-    <div className="PackageRateEntery-form">
+    <div className="PackageRateEntery-form Scroll-Style-hide">
       <form action="">
         <div className="PackageRateEntery-container-main">
           <div className="container-left">

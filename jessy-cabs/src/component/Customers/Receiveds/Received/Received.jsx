@@ -51,7 +51,7 @@ const Received = () => {
 
 
   return (
-    <div className="received-form">
+    <div className="received-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

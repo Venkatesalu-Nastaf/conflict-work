@@ -72,7 +72,7 @@ const actions = [
 const MailDetails = () => {
   return (
     <div className="mailDetails-form-container">
-      <div className="mailDetails-form">
+      <div className="mailDetails-form Scroll-Style-hide">
         <form action="">
           <div className="detail-container-main-mailDetails">
             <div className="container-left-mailDetails">

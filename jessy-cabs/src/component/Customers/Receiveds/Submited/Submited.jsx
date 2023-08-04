@@ -54,7 +54,7 @@ const Sumbited = () => {
   }
 
   return (
-    <div className="submit-form">
+    <div className="submit-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

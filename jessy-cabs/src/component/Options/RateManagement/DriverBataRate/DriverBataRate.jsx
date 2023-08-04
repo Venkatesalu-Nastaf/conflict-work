@@ -199,7 +199,7 @@ const DriverBataRate = () => {
 
 
   return (
-    <div className="ratetype-form">
+    <div className="ratetype-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

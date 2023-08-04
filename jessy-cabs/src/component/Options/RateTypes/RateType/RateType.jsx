@@ -257,7 +257,7 @@ const RateType = () => {
 
 
     return (
-        <div className="ratetype-form">
+        <div className="ratetype-form Scroll-Style-hide">
             <form onSubmit={handleClick}>
                 <div className="detail-container-main">
                     <div className="container-left">

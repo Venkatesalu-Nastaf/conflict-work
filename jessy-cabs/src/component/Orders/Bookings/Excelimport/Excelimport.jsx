@@ -90,7 +90,7 @@ const Excelimport = () => {
   };
 
   return (
-    <div className="bookingcopy-form">
+    <div className="bookingcopy-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

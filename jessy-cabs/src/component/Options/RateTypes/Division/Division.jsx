@@ -174,7 +174,7 @@ const Division = () => {
   });
 
   return (
-    <div className="division-form">
+    <div className="division-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

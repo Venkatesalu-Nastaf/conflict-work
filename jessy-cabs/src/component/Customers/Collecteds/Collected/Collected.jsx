@@ -48,7 +48,7 @@ const rows = [
 
 const Collected = () => {
   return (
-    <div className="collected-form">
+    <div className="collected-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

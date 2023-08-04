@@ -475,7 +475,7 @@ const Booking = () => {
   // }, []);
 
   return (
-    <div className="booking-form">
+    <div className="booking-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
         <div className="detail-container-main">
           <div className="container-left">

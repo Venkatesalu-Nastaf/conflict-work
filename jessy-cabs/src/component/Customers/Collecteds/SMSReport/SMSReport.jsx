@@ -47,7 +47,7 @@ const rows = [
 const SMSReport = () => {
 
   return (
-    <div className="smsreport-form">
+    <div className="smsreport-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

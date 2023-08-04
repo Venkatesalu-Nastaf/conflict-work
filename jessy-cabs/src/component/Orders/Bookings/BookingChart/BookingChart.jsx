@@ -109,7 +109,7 @@ const BookingChart = () => {
   const columns = generateColumns();
 
   return (
-    <div className="BookingChart-form">
+    <div className="BookingChart-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">

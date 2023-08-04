@@ -116,10 +116,10 @@ const Ratevalidity = () => {
     const handleDateChange = (date, name) => {
         const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
         setBook((prevBook) => ({
-          ...prevBook,
-          [name]: formattedDate,
+            ...prevBook,
+            [name]: formattedDate,
         }));
-      };
+    };
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
@@ -224,16 +224,11 @@ const Ratevalidity = () => {
                                             defaultValue={dayjs()}
                                             value={formData.fromdate || selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
                                             onChange={(date) => handleDateChange(date, 'fromdate')}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    name="fromdate"
-                                                    value={formData.fromdate || selectedCustomerData.fromdate || ''}
-                                                    inputRef={params.inputRef}
-                                                />
+                                        >
+                                            {({ inputProps, inputRef }) => (
+                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.fromdate} />
                                             )}
-                                        />
-                                        {/* </DemoItem> */}
+                                        </DatePicker>
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input" style={{ width: "30%" }}>
@@ -244,16 +239,11 @@ const Ratevalidity = () => {
                                             defaultValue={dayjs()}
                                             value={formData.todate || selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
                                             onChange={(date) => handleDateChange(date, 'todate')}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    name="todate"
-                                                    value={formData.todate || selectedCustomerData.todate || ''}
-                                                    inputRef={params.inputRef}
-                                                />
+                                        >
+                                            {({ inputProps, inputRef }) => (
+                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.todate} />
                                             )}
-                                        />
-                                        {/* </DemoItem> */}
+                                        </DatePicker>
                                     </LocalizationProvider>
                                 </div>
 
@@ -304,7 +294,8 @@ const Ratevalidity = () => {
                         </div>
                     </div>
                 </div>
-                {error &&
+                {
+                    error &&
                     <div className='alert-popup Error' >
                         <span className='cancel-btn' onClick={hidePopup}>x</span>
                         <p>Something went wrong!</p>
@@ -337,8 +328,8 @@ const Ratevalidity = () => {
                         />
                     </div>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     )
 }
 

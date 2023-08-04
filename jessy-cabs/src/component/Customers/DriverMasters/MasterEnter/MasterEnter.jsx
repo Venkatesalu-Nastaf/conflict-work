@@ -4,7 +4,9 @@ import dayjs from "dayjs";
 import "./MasterEnter.css";
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+// import { DataGrid } from "@mui/x-data-grid";
+import { Table } from "@mui/joy";
+
 import { styled } from "@mui/material/styles";
 import { CabDriver } from "./MasterEnteryData";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -39,11 +41,11 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 
 
 // TABLE
-const columns = [
-  { field: "driverid", headerName: "Driver ID", width: 70 },
-  { field: "username", headerName: "Driver Name", width: 130 },
-  { field: "Phoencell", headerName: "Mobile", width: 130 },
-];
+// const columns = [
+//   { field: "driverid", headerName: "Driver ID", width: 70 },
+//   { field: "username", headerName: "Driver Name", width: 130 },
+//   { field: "Phoencell", headerName: "Mobile", width: 130 },
+// ];
 // TABLE END
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -69,10 +71,21 @@ const actions = [
 const MasterEnter = () => {
 
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
-  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [selectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [error, setError] = useState(false);
+  const hidePopup = () => {
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
 
   const [book, setBook] = useState({
     driverid: '',
@@ -205,10 +218,7 @@ const MasterEnter = () => {
     }
   });
   const handleRowClick = useCallback((params) => {
-    console.log(params.row);
-    const customerData = params.row;
-    setSelectedCustomerData(customerData);
-    setSelectedCustomerId(params.row.customerId);
+    setSelectedCustomerData(params);
   }, []);
 
   return (
@@ -298,40 +308,7 @@ const MasterEnter = () => {
                 <div className="icone">
                   <AppsOutageOutlinedIcon color="action" />
                 </div>
-                {/* <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  freeSolo
-                  value={CabDriver.map((option) => option.optionvalue)}
-                  options={CabDriver.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) => option.label || ""}
-                  renderInput={(params) => (
-                    <TextField {...params} name="cabdriver" label="Cab Driver" />
-                  )}
-                /> */}
-                {/* <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo-customerType"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "cabdriver")}
-                  value={CabDriver.find((option) => option.Option)?.label || ''}
-                  options={CabDriver.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) => option.label || ''}
-                  renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.cabdriver || ''
-                    return (        
-                      <TextField   {...params} label="Cab Driver" name="cabdriver" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
-                /> */}
+               
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -369,7 +346,7 @@ const MasterEnter = () => {
                     value={selectedCustomerData?.address1 || book.address1}
                     onChange={handleChange}
                     label="Address"
-                    id="remark"
+                    id="address1"
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
                   />
@@ -400,7 +377,7 @@ const MasterEnter = () => {
                     name="streetno"
                     value={selectedCustomerData?.streetno || book.streetno}
                     onChange={handleChange}
-                    id="remark"
+                    id="streetno"
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
                   />
@@ -465,11 +442,8 @@ const MasterEnter = () => {
                   />
                 </div>
                 <div className="input" style={{ width: "185px" }}>
-                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker name="dlexpdate" label="D.L.Exp Date" defaultValue={dayjs()} />
-                  </LocalizationProvider> */}
+                
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    {/* <DemoItem label="Date"> */}
                     <DatePicker
                       label="D.L.Exp Date"
                       value={selectedCustomerData.dlexpdate ? dayjs(selectedCustomerData.dlexpdate) : null}
@@ -479,7 +453,6 @@ const MasterEnter = () => {
                         <TextField {...inputProps} inputRef={inputRef} name='dlexpdate' value={selectedCustomerData.dlexpdate} />
                       )}
                     </DatePicker>
-                    {/* </DemoItem> */}
                   </LocalizationProvider>
                 </div>
                 <div className="input">
@@ -533,57 +506,44 @@ const MasterEnter = () => {
                 <div className="textboxlist-masterEntery">
                   <div className="textboxlist-customer list-update">
                     <span>
-                      {/* <TableHead>
-    <TableRow>
-      <TableCell style={{ width: "70px" }}>Driver ID</TableCell>
-      <TableCell style={{ width: "130px" }}>Driver Name</TableCell>
-      <TableCell style={{ width: "130px" }}>Mobile</TableCell>
-    </TableRow>
-  </TableHead>
-  <TableBody>
-    {rows.map((row) => (
-      <TableRow key={row.driverid} onClick={() => handleRowClick(row)}>
-        <TableCell>{row.driverid}</TableCell>
-        <TableCell>{row.username}</TableCell>
-        <TableCell>{row.Phoencell}</TableCell>
-      </TableRow>
-    ))}
-  </TableBody> */}
-                      {/* <Table stickyHeader hoverRow borderAxis="y">
-                        <thead>
-                          <tr>
-                            <th style={{ width: "20%" }}>Driver Name</th>
-                            <th style={{ width: "35%" }}>Mobile</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {rows.map((row) => (
-                            <tr key={row.name}>
-                              <td>{row.driverName}</td>
-                              <td>{row.mobile}</td>
+                      <div>
+                        <Table hoverRow borderAxis="y">
+                          <thead>
+                            <tr>
+                              <th>Driver ID</th>
+                              <th>Driver Name</th>
+                              <th>Mobile</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </Table> */}
-                      <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        onRowClick={handleRowClick}
-                        initialState={{
-                          pagination: {
-                            paginationModel: { page: 0, pageSize: 5 },
-                          },
-                        }}
-                        pageSizeOptions={[5, 10]}
-                      // checkboxSelection
-                      />
+                          </thead>
+                          <tbody>
+                            {rows.length === 0 ? (
+                              <tr>
+                                <td colSpan={6}>No data available.</td>
+                              </tr>
+                            ) : (
+                              rows.map((row) => (
+                                <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                  <td>{row.driverid}</td>
+                                  <td>{row.username}</td>
+                                  <td>{row.Phoencell}</td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </Table>
+                      </div>
                     </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {error && <p>Something went wrong!</p>}
+          {error &&
+            <div className='alert-popup Error' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>Something went wrong!</p>
+            </div>
+          }
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

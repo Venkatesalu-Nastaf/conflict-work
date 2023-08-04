@@ -17,7 +17,6 @@ import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from '@mui/icons-material/Email';
@@ -202,18 +201,6 @@ const Employe = () => {
         }
     };
 
-    // const handleAutocompleteChange = (event, value, name) => {
-    //     const selectedOption = value ? value.label : '';
-    //     setBook((prevBook) => ({
-    //         ...prevBook,
-    //         [name]: selectedOption,
-    //     }));
-    //     setSelectedCustomerData((prevData) => ({
-    //         ...prevData,
-    //         [name]: selectedOption,
-    //     }));
-    // };
-
     const handleDateChange = (date, name) => {
         const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
         setBook((prevBook) => ({
@@ -292,8 +279,6 @@ const Employe = () => {
             handleClick(null, 'List');
         }
     });
-
-
 
     return (
         <div className="Employe-form">
@@ -384,17 +369,13 @@ const Employe = () => {
                                         <DatePicker
                                             value={formData.joiningdate || selectedCustomerData.joiningdate ? dayjs(selectedCustomerData.joiningdate) : null}
                                             onChange={(date) => handleDateChange(date, 'joiningdate')}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    name="joiningdate"
-                                                    value={formData.joiningdate || selectedCustomerData.joiningdate || ''}
-                                                    inputRef={params.inputRef}
-                                                />
+                                            >
+                                            {({ inputProps, inputRef }) => (
+                                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.joiningdate} />
                                             )}
-                                        />
-                                    </DemoItem>
-                                </LocalizationProvider>
+                                          </DatePicker>
+                                        </DemoItem>
+                                      </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "215px" }}>
                                 <div className="icone">

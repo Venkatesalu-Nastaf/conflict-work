@@ -213,16 +213,11 @@ const DriverBataRate = () => {
                       defaultValue={dayjs()}
                       value={formData.fromdate || selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
                       onChange={(date) => handleDateChange(date, 'fromdate')}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          name="fromdate"
-                          value={formData.fromdate || selectedCustomerData.fromdate || ''}
-                          inputRef={params.inputRef}
-                        />
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.fromdate} />
                       )}
-                    />
-                    {/* </DemoItem> */}
+                    </DatePicker>
                   </LocalizationProvider>
                 </div>
                 <div className="input" >
@@ -233,42 +228,22 @@ const DriverBataRate = () => {
                       defaultValue={dayjs()}
                       value={formData.todate || selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
                       onChange={(date) => handleDateChange(date, 'todate')}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          name="todate"
-                          value={formData.todate || selectedCustomerData.todate || ''}
-                          inputRef={params.inputRef}
-                        />
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.todate} />
                       )}
-                    />
-                    {/* </DemoItem> */}
+                    </DatePicker>
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: "300px" }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={VehicleType.map((option) => option.optionvalue)}
-                    options={VehicleType.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} name='VehicleType' label="Vehicle Type" />
-                    )}
-                  /> */}
-                   <Autocomplete
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-VehicleType"
                     freeSolo
-                    // sx={{ width: "20ch" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "VehicleType")}
                     value={VehicleType.find((option) => option.optionvalue)?.label || ''}
                     options={VehicleType.map((option) => ({
@@ -293,21 +268,7 @@ const DriverBataRate = () => {
                   <div className="icone">
                     <EngineeringIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={Duty.map((option) => option.optionvalue)}
-                    options={Duty.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} name='Duty' label="Duty" />
-                    )}
-                  /> */}
-                   <Autocomplete
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-VehicleType"

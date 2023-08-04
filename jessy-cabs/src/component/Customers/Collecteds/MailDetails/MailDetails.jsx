@@ -20,35 +20,31 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 
 // TABLE START
-function createData(Sno, Name, mobile) {
-  return { Sno, Name, mobile };
-}
+// function createData(Sno, Name, mobile) {
+//   return { Sno, Name, mobile };
+// }
 
 const rows = [
-  createData('1', "John Doe", "9912277222"),
-  createData('2', "Jane Smith", "9123317892"),
-  createData('3', "Michael Johnson", "73421288938"),
-  createData('4', "Sarah Davis", "62779165285"),
-  createData('5', "Robert Wilson", "7729734456"),
-  createData('6', "Robert Wilson", "7729734456"),
-  createData('7', "Robert Wilson", "7729734456"),
-  createData('8', "Robert Wilson", "7729734456"),
+  // createData('1', "John Doe", "9912277222"),
+  // createData('2', "Jane Smith", "9123317892"),
+  // createData('3', "Michael Johnson", "73421288938"),
+  // createData('4', "Sarah Davis", "62779165285"),
+  // createData('5', "Robert Wilson", "7729734456"),
+  
 ];
 
 
-function createDataTemplate(Sno, Id, messages) {
-  return { Sno, Id, messages };
-}
+// function createDataTemplate(Sno, Id, messages) {
+//   return { Sno, Id, messages };
+// }
 
 const rowsTemplate = [
-  createDataTemplate('1', '123', 'Hello, how are you?'),
-  createDataTemplate('2', '124', 'Reminder: Your appointment is tomorrow.'),
-  createDataTemplate('3', '125', 'Congratulations! You won a prize.'),
-  createDataTemplate('4', '126', 'URGENT: Action required. Please respond.'),
-  createDataTemplate('5', '127', 'Thank you for your purchase.'),
-  createDataTemplate('6', '128', 'We have a special offer just for you.'),
-  createDataTemplate('7', '129', 'Important notice: Account security update.'),
-  createDataTemplate('8', '130', 'You have a new message.'),
+  // createDataTemplate('1', '123', 'Hello, how are you?'),
+  // createDataTemplate('2', '124', 'Reminder: Your appointment is tomorrow.'),
+  // createDataTemplate('3', '125', 'Congratulations! You won a prize.'),
+  // createDataTemplate('4', '126', 'URGENT: Action required. Please respond.'),
+  // createDataTemplate('5', '127', 'Thank you for your purchase.'),
+ 
 ];
 // TABLE END
 

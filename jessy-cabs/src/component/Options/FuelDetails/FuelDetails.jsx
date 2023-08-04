@@ -30,6 +30,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
@@ -299,7 +300,21 @@ const FuelDetails = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input" style={{ width: "250px" }}>
+                <div className="input" >
+                  <div className="icone">
+                    <CurrencyRupeeIcon color='action' />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="FuelPrice"
+                    label="Fuel Price"
+                    name="FuelPrice"
+                    autoComplete="new-password"
+                    value={selectedCustomerData?.DriverName || book.DriverName}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faGaugeSimple} size="lg" />
                   </div>
@@ -318,7 +333,7 @@ const FuelDetails = () => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ width: "250px" }}>
+                <div className="input">
                   <div className="icone">
                     <FontAwesomeIcon icon={faGaugeHigh} size="lg" />
                   </div>

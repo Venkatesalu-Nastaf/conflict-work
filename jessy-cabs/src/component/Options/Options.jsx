@@ -56,7 +56,7 @@ const Options = () => {
                     to='/home/options/fuledetails'
                     onClick={() => handleMenuItemClick('Fule Details')}
                 >
-                    Fule Details
+                    Fuel Details
                 </Link>
             </div>
             <Outlet />

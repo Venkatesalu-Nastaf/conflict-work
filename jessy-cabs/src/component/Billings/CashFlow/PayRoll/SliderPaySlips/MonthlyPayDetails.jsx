@@ -31,7 +31,7 @@ const MonthlyPayDetails = () => {
     const [toDate, setToDate] = useState(dayjs());
     const [error, setError] = useState(false);
 
-    
+
 
     // download function
     const convertToCSV = (data) => {
@@ -42,16 +42,24 @@ const MonthlyPayDetails = () => {
     const handleExcelDownload = () => {
         const csvData = convertToCSV(rows);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-        saveAs(blob, "customer_details.csv");
+        saveAs(blob, "Employee_Monthly_Payment_Details.csv");
     };
     const handlePdfDownload = () => {
         const pdf = new jsPDF('landscape');
-        pdf.setFontSize(12);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text("Customer Details", 10, 10);
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        // pdf.text('Employee PaySlip', 10, 10);
+        const title = 'Employee_Monthly_Payment_Details';
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const textWidth = pdf.getStringUnitWidth(title) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
+        const xPosition = (pageWidth - textWidth) / 2;
+        const yPosition = 10;
+
+        pdf.text(title, xPosition, yPosition);
         // Modify tableData to exclude the index number
-        const tableData = rows.map((row) => [
-            row['id'],
+        const tableData = rows.map((row, index) => [
+            index + 1, // Adding a serial number column
             row['empid'],
             row['empname'],
             row['jobroll'],
@@ -60,16 +68,23 @@ const MonthlyPayDetails = () => {
             row['salarydate'],
             row['empemailid'],
             row['empmobile'],
-            row['takehomeamount']
+            row['takehomeamount'],
         ]);
         pdf.autoTable({
-            head: [['Sno', 'Employe ID', 'Name', 'Job Roll', 'UAN ID', 'ESI NO', 'Joining Date', 'Email', 'Mobile', 'Take Home Amount']],
+            head: [['Sno', 'Employee ID', 'Name', 'Job Roll', 'UAN ID', 'ESI NO', 'Joining Date', 'Email', 'Mobile', 'Take Home Amount']],
             body: tableData,
             startY: 20,
+            theme: 'grid', // Use 'grid' theme for better visual separation
+            width: 'auto',
+            styles: {
+                fontSize: 10,
+                cellPadding: 5,
+                valign: 'middle',
+            },
         });
-        const pdfBlob = pdf.output('blob');
-        saveAs(pdfBlob, 'Customer_Details.pdf');
+        pdf.save('Employee_Monthly_Payment_Details.pdf');
     };
+
 
     const hidePopup = () => {
         setError(false);
@@ -84,8 +99,9 @@ const MonthlyPayDetails = () => {
     }, [error]);
 
 
-
-   
+    //   const handleInputChange = (event) => {
+    //     setempid(event.target.value);
+    //   };
 
     const handleShow = useCallback(async () => {
         try {

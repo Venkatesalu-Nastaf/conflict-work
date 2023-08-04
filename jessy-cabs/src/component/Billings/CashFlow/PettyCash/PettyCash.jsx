@@ -24,7 +24,7 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DataGrid } from "@mui/x-data-grid";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+// import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 
 
 
@@ -380,24 +380,24 @@ const PettyCash = () => {
                             <div className="input-field">
                                 <div className="input">
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DemoItem label="From">
+                                        {/* <DemoItem label="From"> */}
                                             <DatePicker
                                                 label="From Date"
                                                 value={fromDate}
                                                 onChange={(date) => setFromDate(date)}
                                             />
-                                        </DemoItem>
+                                        {/* </DemoItem> */}
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input">
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DemoItem label="To">
+                                        {/* <DemoItem label="To"> */}
                                             <DatePicker
                                                 label="To Date"
                                                 value={toDate}
                                                 onChange={(date) => setToDate(date)}
                                             />
-                                        </DemoItem>
+                                        {/* </DemoItem> */}
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input" style={{ width: '123px', 'margin-top': "50px" }}>

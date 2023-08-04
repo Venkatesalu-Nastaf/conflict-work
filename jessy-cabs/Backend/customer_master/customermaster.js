@@ -1154,7 +1154,7 @@ app.post('/pettycash', (req, res) => {
 app.delete('/pettycash/:voucherno', (req, res) => {
   const voucherno = req.params.voucherno;
   db.query('DELETE FROM pettycash WHERE voucherno = ?', voucherno, (err, result) => {
-    if (err) { 
+    if (err) {
       console.error('Error deleting data from MySQL:', err);
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
     }
@@ -1184,22 +1184,14 @@ app.put('/pettycash/:voucherno', (req, res) => {
   });
 });
 // collect data for pettycash table
-app.get('/pettycash', (req, res) => {
-  db.query('SELECT * FROM pettycash', (err, results) => {
-    if (err) {
-      console.error('Error fetching data from MySQL:', err);
-      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
-    }
-    return res.status(200).json(results);
-  });
-});
+
 // filter data from pettycash database
 app.get('/pettycash', (req, res) => {
   const { fromDate, toDate } = req.query;
   let query = 'SELECT * FROM pettycash WHERE 1=1';
   let params = [];
   if (fromDate && toDate) {
-    query += ' AND startdate BETWEEN ? AND ?';
+    query += ' AND date BETWEEN ? AND ?';
     params.push(fromDate);
     params.push(toDate);
   }
@@ -1225,11 +1217,11 @@ app.post('/payroll', (req, res) => {
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
-// delete Billing data
+// delete payroll data
 app.delete('/payroll/:empid', (req, res) => {
   const empid = req.params.empid;
   db.query('DELETE FROM payroll WHERE empid = ?', empid, (err, result) => {
-    if (err) { 
+    if (err) {
       console.error('Error deleting data from MySQL:', err);
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
     }
@@ -1240,7 +1232,7 @@ app.delete('/payroll/:empid', (req, res) => {
     return res.status(200).json({ message: "Data deleted successfully" });
   });
 });
-// update pettycash details
+// update payroll details
 app.put('/payroll/:empid', (req, res) => {
   const empid = req.params.empid;
   const updatedCustomerData = req.body;
@@ -1258,37 +1250,11 @@ app.put('/payroll/:empid', (req, res) => {
     return res.status(200).json({ message: "Data updated successfully" });
   });
 });
-// collect data for pettycash table
-app.get('/payroll', (req, res) => {
-  db.query('SELECT * FROM payroll', (err, results) => {
-    if (err) {
-      console.error('Error fetching data from MySQL:', err);
-      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
-    }
-    return res.status(200).json(results);
-  });
-});
-// filter data from pettycash database
-app.get('/payroll', (req, res) => {
-  const { fromDate, toDate } = req.query;
-  let query = 'SELECT * FROM payroll WHERE 1=1';
-  let params = [];
-  if (fromDate && toDate) {
-    query += ' AND startdate BETWEEN ? AND ?';
-    params.push(fromDate);
-    params.push(toDate);
-  }
-  db.query(query, params, (err, result) => {
-    if (err) {
-      console.error('Error retrieving booking details from MySQL:', err);
-      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-    }
-    return res.status(200).json(result);
-  });
-});
-// End pettycash database
+
+// End payroll database
 // -----------------------------------------------------------------------------------------------------------
 // Employee pay slip data collect:
+
 app.get('/payroll', (req, res) => {
   const { empid, fromDate, toDate } = req.query;
   // Query and parameters for fetching booking details based on the query parameters
@@ -1298,7 +1264,7 @@ app.get('/payroll', (req, res) => {
     query += ' AND empid = ?';
     params.push(empid);
   }
- 
+  
   if (fromDate && toDate) {
     query += ' AND salarydate BETWEEN ? AND ?';
     params.push(fromDate);

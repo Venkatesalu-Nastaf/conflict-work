@@ -575,7 +575,7 @@ const Billing = () => {
                                         sx={{ m: 1, width: "60ch" }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", 'padding-top': "20px" }}>
+                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
@@ -612,7 +612,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", 'padding-top': "20px" }}>
+                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
                                     <div className="icone">
                                         <TollTwoToneIcon color="action" />
                                     </div>
@@ -631,7 +631,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", 'padding-top': "10px" }}>
+                                <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
@@ -669,7 +669,7 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", 'padding-top': "20px" }}>
+                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
                                     <div className="icone">
                                         <TollTwoToneIcon color="action" />
                                     </div>
@@ -688,14 +688,14 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", 'padding-top': "10px" }}>
+                                <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
                                     <TextField
                                         name="amount2"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.amount2 || book.amount20}
+                                        value={selectedCustomerData?.amount2 || book.amount2}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
@@ -720,7 +720,7 @@ const Billing = () => {
                                         variant="standard"
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", 'padding-top': "20px" }}>
+                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
                                     <div className="icone">
                                         <TollTwoToneIcon color="action" />
                                     </div>
@@ -737,7 +737,7 @@ const Billing = () => {
                                             ),
                                         }} />
                                 </div>
-                                <div className="input" style={{ width: "170px", 'padding-top': "10px" }}>
+                                <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
@@ -769,7 +769,7 @@ const Billing = () => {
                                         variant="standard"
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", 'padding-top': "20px" }}>
+                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
                                     <div className="icone">
                                         <TollTwoToneIcon color="action" />
                                     </div>
@@ -786,7 +786,7 @@ const Billing = () => {
                                             ),
                                         }} />
                                 </div>
-                                <div className="input" style={{ width: "170px", 'padding-top': "10px" }}>
+                                <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
@@ -819,7 +819,7 @@ const Billing = () => {
                                         sx={{ m: 1, width: "60ch" }}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "170px", 'padding-top': "20px" }}>
+                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
@@ -835,7 +835,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field">
-                                <div className="input" style={{ width: "260px", 'padding-top': "10px" }}>
+                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileContract} size="lg" />
                                     </div>
@@ -850,7 +850,7 @@ const Billing = () => {
                                         id="amount"
                                     />
                                 </div>
-                                <div className="input" style={{ width: "260px", 'padding-top': "10px" }}>
+                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faWindowRestore} size="lg" />
                                     </div>

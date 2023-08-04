@@ -1,29 +1,29 @@
-import React from 'react'
-import './TaxSetting.css'
-import { TaxType } from './TaxSettingData.js'
-import { DataGrid } from "@mui/x-data-grid";
+import React from 'react';
+import './TaxSetting.css';
 import dayjs from "dayjs";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
+import { TaxType } from './TaxSettingData.js'
+import { DataGrid } from "@mui/x-data-grid";
 import IconButton from '@mui/material/IconButton';
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
-import Autocomplete from "@mui/material/Autocomplete";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 // FontAwesomeIcon Link
+import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { faNewspaper } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons"
-import { faNewspaper } from "@fortawesome/free-solid-svg-icons"
-import { faSave } from "@fortawesome/free-solid-svg-icons"
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
 // date
 const today = dayjs();
 const tomorrow = dayjs().add(1, "day");
 
-// Table Start
+// TABLE START
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "From_Date", headerName: "From_Date", width: 130 },
@@ -65,10 +65,9 @@ const rows = [
         KKCessDes: "XYZ Car",
         TAX: "XYZ Car",
     },
-
-    // Add more rows as needed
 ];
 // Table End
+
 const TaxSetting = () => {
     return (
         <div className="TaxSetting-form">
@@ -198,13 +197,13 @@ const TaxSetting = () => {
                             columns={columns}
                         />
                     </div>
-                    <div className="input-field" style={{ 'margin-top': '-20px', 'margin-left': '-25px','margin-bottom': '25px' }}>
-                        <div className="input" style={{ 'margin-top': '40px' }}>
+                    <div className="input-field" style={{ marginTop: '-20px', marginLeft: '-25px', marginBottom: '25px' }}>
+                        <div className="input" style={{ marginTop: '40px' }}>
                             <Button>
                                 Refresh
                             </Button>
                         </div>
-                        <div className="input" style={{ 'margin-top': '40px' }}>
+                        <div className="input" style={{ marginTop: '40px' }}>
                             <Button startIcon={<FontAwesomeIcon icon={faSave} size="lg" />} variant="contained">
                                 Update
                             </Button>
@@ -212,7 +211,6 @@ const TaxSetting = () => {
                     </div>
                 </div>
             </form>
-
         </div>
     )
 }

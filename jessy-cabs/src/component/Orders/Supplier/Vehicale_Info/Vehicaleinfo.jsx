@@ -1,45 +1,43 @@
 import React, { useState, useEffect } from 'react';
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import dayjs from "dayjs";
 import "./Vehicaleinfo.css";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
-import AutoModeIcon from "@mui/icons-material/AutoMode";
-import SummarizeTwoToneIcon from "@mui/icons-material/SummarizeTwoTone";
-import AltRouteIcon from "@mui/icons-material/AltRoute";
-import { FaMoneyBillWave } from "react-icons/fa";
-import AssignmentIndTwoToneIcon from "@mui/icons-material/AssignmentIndTwoTone";
-import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import CommuteIcon from "@mui/icons-material/Commute";
-import CarCrashIcon from "@mui/icons-material/CarCrash";
-import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
-import PriceChangeIcon from "@mui/icons-material/PriceChange";
-import AssessmentIcon from "@mui/icons-material/Assessment";
-import MinorCrashIcon from "@mui/icons-material/MinorCrash";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
-import {
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
-import SpeedIcon from "@mui/icons-material/Speed";
-import Box from "@mui/material/Box";
-import SpeedDial from "@mui/material/SpeedDial";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import { styled } from "@mui/material/styles";
-import dayjs from "dayjs";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+
+// FONTAWESOME ICON
+import { FaMoneyBillWave } from "react-icons/fa";
+
+// ICONS
+import SpeedIcon from "@mui/icons-material/Speed";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CommuteIcon from "@mui/icons-material/Commute";
+import CarCrashIcon from "@mui/icons-material/CarCrash";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import AutoModeIcon from "@mui/icons-material/AutoMode";
+import AltRouteIcon from "@mui/icons-material/AltRoute";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import MinorCrashIcon from "@mui/icons-material/MinorCrash";
+import PriceChangeIcon from "@mui/icons-material/PriceChange";
+import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import SummarizeTwoToneIcon from "@mui/icons-material/SummarizeTwoTone";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
+import AssignmentIndTwoToneIcon from "@mui/icons-material/AssignmentIndTwoTone";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
+
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -119,7 +117,7 @@ const Vehicaleinfo = () => {
     active: '',
   });
 
-  
+
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
 
@@ -237,14 +235,12 @@ const Vehicaleinfo = () => {
       setError(true);
     }
   };
-  
+
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
   });
-
-
 
 
   return (
@@ -298,7 +294,7 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   id="veh_reg_no"
-                  label="Veh.Reg.No"
+                  label="Vehicle Reg No"
                   name="vehRegNo"
                   value={selectedCustomerData.vehRegNo || book.vehRegNo}
                   onChange={handleChange}
@@ -331,7 +327,7 @@ const Vehicaleinfo = () => {
                   value={selectedCustomerData.vehType || book.vehType}
                   onChange={handleChange}
                   // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
-                  label="Veh.Type"
+                  label="Vehicle Type"
                   id="veh_type"
                   variant="standard"
                 />
@@ -413,7 +409,7 @@ const Vehicaleinfo = () => {
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="NP Date">
+                  <DemoItem label="National Permit Date">
                     <DatePicker
                       value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
                       onChange={(date) => handleDateChange(date, 'npdate')}
@@ -455,7 +451,7 @@ const Vehicaleinfo = () => {
                   </DemoItem>
                 </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Ins. Date">
+                  <DemoItem label="Insurance Date">
                     <DatePicker
                       value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null}
                       onChange={(date) => handleDateChange(date, 'insdate')}
@@ -481,7 +477,7 @@ const Vehicaleinfo = () => {
                   </DemoItem>
                 </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="St. permit">
+                  <DemoItem label="State permit">
                     <DatePicker
                       value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
                       onChange={(date) => handleDateChange(date, 'stpermit')}
@@ -623,7 +619,7 @@ const Vehicaleinfo = () => {
                   value={selectedCustomerData.OwnerType || book.OwnerType}
                   onChange={handleChange}
                   // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
-                  label="owner_Type"
+                  label="Owner Type"
                   id="owner_type"
                   variant="standard"
                 />

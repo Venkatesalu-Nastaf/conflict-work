@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import "./Permission.css";
 import { TextField } from "@mui/material";
-import BadgeIcon from "@mui/icons-material/Badge";
 import Button from "@mui/material/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import BadgeIcon from "@mui/icons-material/Badge";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Permission = () => {
+  // TABLE START
   const [permissionsData, setPermissionsData] = useState([
     { id: 1, name: 'Account Master', read: false, new: false, modify: false, delete: false },
     { id: 2, name: 'Billing', read: false, new: false, modify: false, delete: false },
@@ -36,9 +37,8 @@ const Permission = () => {
     { id: 26, name: 'User Creation', read: false, new: false, modify: false, delete: false },
     { id: 27, name: 'Vehicle Type', read: false, new: false, modify: false, delete: false },
     { id: 28, name: 'Vendor Report', read: false, new: false, modify: false, delete: false },
-    // Add more permissions...
   ]);
-
+  // TABLE END
   const handlePermissionChange = (permissionId, permissionType) => {
     setPermissionsData(prevData =>
       prevData.map(permission => {

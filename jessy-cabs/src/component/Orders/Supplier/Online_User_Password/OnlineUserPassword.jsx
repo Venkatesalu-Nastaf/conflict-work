@@ -1,14 +1,8 @@
 import React from "react";
 import "./OnlineUserPassword.css";
-import {
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
-import SummarizeTwoToneIcon from "@mui/icons-material/SummarizeTwoTone";
 import Button from "@mui/material/Button";
+import SummarizeTwoToneIcon from "@mui/icons-material/SummarizeTwoTone";
+import { FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 const Online_User_Password = () => {
   return (

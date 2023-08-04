@@ -29,41 +29,39 @@ const Orders = () => {
   };
 
   return (
-    <>
-      <div className='order-conatiner' id='menu'>
-        <div className='menu-bar'>
-          <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Customer Master' ? 'actives' : ''}`}
-            to='/home/orders/customer'
-            onClick={() => handleMenuItemClick('Customer Master')}
-          >
-            Customer Master
-          </Link>
-          <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Supplier Master' ? 'actives' : ''}`}
-            to='/home/orders/supplier'
-            onClick={() => handleMenuItemClick('Supplier Master')}
-          >
-            Supplier Master
-          </Link>
-          <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Booking' ? 'actives' : ''}`}
-            to='/home/orders/bookings'
-            onClick={() => handleMenuItemClick('Booking')}
-          >
-            Booking
-          </Link>
-          <Link
-            className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Trip Sheet' ? 'actives' : ''}`}
-            to='/home/orders/tripsheet'
-            onClick={() => handleMenuItemClick('Trip Sheet')}
-          >
-            Trip Sheet
-          </Link>
-        </div>
-        <Outlet />
+    <div className='order-conatiner' id='menu'>
+      <div className='menu-bar'>
+        <Link
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Customer Master' ? 'actives' : ''}`}
+          to='/home/orders/customer'
+          onClick={() => handleMenuItemClick('Customer Master')}
+        >
+          Customer Master
+        </Link>
+        <Link
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Supplier Master' ? 'actives' : ''}`}
+          to='/home/orders/supplier'
+          onClick={() => handleMenuItemClick('Supplier Master')}
+        >
+          Supplier Master
+        </Link>
+        <Link
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Booking' ? 'actives' : ''}`}
+          to='/home/orders/bookings'
+          onClick={() => handleMenuItemClick('Booking')}
+        >
+          Booking
+        </Link>
+        <Link
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Trip Sheet' ? 'actives' : ''}`}
+          to='/home/orders/tripsheet'
+          onClick={() => handleMenuItemClick('Trip Sheet')}
+        >
+          Trip Sheet
+        </Link>
       </div>
-    </>
+      <Outlet />
+    </div>
   );
 };
 

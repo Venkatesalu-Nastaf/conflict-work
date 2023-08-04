@@ -1,43 +1,40 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import "./UserCreation.css";
 import axios from "axios";
-import {
-  TextField,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
-import { StationName, ViewFor } from "./UserCreationData";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Box from "@mui/material/Box";
-import BadgeIcon from "@mui/icons-material/Badge";
-import Autocomplete from "@mui/material/Autocomplete";
-import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import { styled } from "@mui/material/styles";
-import { DataGrid } from "@mui/x-data-grid";
-import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
+import Box from "@mui/material/Box";
+import { DataGrid } from "@mui/x-data-grid";
+import { styled } from "@mui/material/styles";
+import SpeedDial from "@mui/material/SpeedDial";
+import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
+import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
+import { StationName, ViewFor } from "./UserCreationData";
+import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-// import dayjs from "dayjs";
-// FontAwesomeIcon Link
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+
+// FONTAWESOME
+import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
-import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
+
+// ICONS
+import BadgeIcon from "@mui/icons-material/Badge";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -57,8 +54,6 @@ const actions = [
   { icon: <ModeEditIcon />, name: "Edit" },
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
-// Table Start
-
 
 const UserCreation = () => {
   const [showPasswords, setShowPasswords] = useState(false);
@@ -71,12 +66,8 @@ const UserCreation = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
-  // const [setIsVisible] = useState(true);
 
-  // const handleClose = () => {
-  //   setIsVisible(false);
-  // };
-
+  // TABLE START
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "username", headerName: "User_Name", width: 130 },
@@ -97,6 +88,9 @@ const UserCreation = () => {
     active: '',
     viewfor: '',
   });
+
+  // TABLE END
+
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
 
@@ -475,7 +469,6 @@ const UserCreation = () => {
                   },
                 }}
                 pageSizeOptions={[5, 10]}
-              // checkboxSelection
               />
             </div>
           </div>

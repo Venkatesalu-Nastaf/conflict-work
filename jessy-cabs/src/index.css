@@ -142,7 +142,7 @@ body {
 }
 
 .Scroll-Style::-webkit-scrollbar-thumb {
-  background-color: #457cdc;
+  background-color: #696969;
   width: 50px;
   cursor: pointer;
   border-radius: 20px;
@@ -161,7 +161,7 @@ body {
 }
 
 .css-204u17-MuiDataGrid-main ::-webkit-scrollbar-thumb {
-  background-color: #457cdc;
+  background-color: #696969;
   width: 50px;
   cursor: pointer;
   border-radius: 20px;

@@ -31,6 +31,7 @@ import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 import Employes from "./component/Options/Employes/Employes";
+import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
 
         <Route path="/onlineLogin" element={<OnlineLoginForm />} />
         <Route path="/onlinebooking" element={<OnlineBooking />} />
+        <Route path="/onlinedigital/digitalsignature" element={<DigitalSignature />} />
         <Route
           path="*"
           element={

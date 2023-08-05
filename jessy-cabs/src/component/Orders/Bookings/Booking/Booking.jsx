@@ -84,8 +84,36 @@ const Booking = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
   const [error, setError] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
   // const [nextBookingNo, setNextBookingNo] = useState(null);
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
+
+  const handleUpload = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      // Make an API call to the backend to upload the file
+      // You can use fetch or any other library like Axios for this.
+      fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Handle the response from the backend, if needed
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error('Error uploading file:', error);
+        });
+    }
+  };
 
   const hidePopup = () => {
     setError(false);
@@ -504,13 +532,13 @@ const Booking = () => {
                     <DatePicker
                       value={formData.bookingdate || selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null}
                       onChange={(date) => handleDateChange(date, 'bookingdate')}
-                      >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
-                    )}
-                  </DatePicker>
-                </DemoItem>
-              </LocalizationProvider>
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
+                </LocalizationProvider>
               </div>
               <div className="input time">
                 <label>Booking Time</label>
@@ -1232,9 +1260,13 @@ const Booking = () => {
               </div>
               <div className="input">
                 <Button
+                  type='file'
                   color="primary"
+                  name="attachfile"
+                  accept=".pdf,.jpg,.jpeg,.png"
                   disabled={false}
-                  onClick={function () { }}
+                  onChange={handleFileChange}
+                  onClick={handleUpload}
                   size="md"
                   variant="outlined"
                 >

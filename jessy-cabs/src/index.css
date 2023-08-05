@@ -142,7 +142,7 @@ body {
 }
 
 .Scroll-Style::-webkit-scrollbar-thumb {
-  background-color: #ffffff;
+  background-color: #6d6d6d;
   width: 50px;
   cursor: pointer;
   border-radius: 20px;

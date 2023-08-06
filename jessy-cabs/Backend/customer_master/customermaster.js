@@ -2,7 +2,9 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('../db');
+const multer = require('multer');
 const app = express();
+const upload = multer({ dest: 'uploads/' });
 app.use(cors());
 app.use(express.json());
 app.get('/', (req, res) => {
@@ -236,6 +238,29 @@ app.get('booking', async (req, res) => {
     res.status(500).json({ error: 'Error fetching next booking number' });
   }
 });
+// bookingfile upload
+app.post('/upload', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded.' });
+  }
+
+  const fileData = {
+    name: req.file.originalname,
+    mimetype: req.file.mimetype,
+    size: req.file.size,
+    path: req.file.path,
+  };
+
+  const query = 'INSERT INTO upload SET ?';
+  db.query(query, fileData, (err, result) => {
+    if (err) {
+      console.error('Error storing file in the database:', err);
+      return res.status(500).json({ error: 'Error storing file in the database.' });
+    }
+    return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
+  });
+});
+
 //End booking page database 
 // -----------------------------------------------------------------------------------------------------------
 // booking copy data collect:

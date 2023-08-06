@@ -63,8 +63,10 @@ const Vehicaleinfo = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [actionName] = useState('');
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const hidePopup = () => {
+    setSuccess(false);
     setError(false);
   };
   useEffect(() => {
@@ -75,21 +77,14 @@ const Vehicaleinfo = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
-
-
-  // Table Start
-  // const columns = [
-  //   { field: "id", headerName: "Sno", width: 70 },
-  //   { field: "cperson", headerName: "Supplier_Name", width: 130 },
-  //   { field: "accountNo", headerName: "Vehicle_No", width: 130 },
-  //   { field: "address1", headerName: "Address", width: 130 },
-  //   { field: "phone", headerName: "Phone", width: 130 },
-  //   { field: "isRunning", headerName: "Active", width: 160 },
-  //   { field: "rateType", headerName: "Owner_Type", width: 130 },
-  //   { field: "vehcommission", headerName: "Percentage", width: 130 },
-  //   { field: "printBill", headerName: "Rate_Type", width: 130 },
-  //   { field: "autoRefresh", headerName: "Driver_App", width: 130 },
-  // ];
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
   const [book, setBook] = useState({
     vehicleId: '',
@@ -142,28 +137,6 @@ const Vehicaleinfo = () => {
     }
   };
 
-
-  // const handleAutocompleteChange = (event, value, name) => {
-  //   const selectedOption = value ? value.label : '';
-  //   setBook((prevBook) => ({
-  //     ...prevBook,
-  //     [name]: selectedOption,
-  //   }));
-  //   setSelectedCustomerData((prevData) => ({
-  //     ...prevData,
-  //     [name]: selectedOption,
-  //   }));
-  // };
-
-
-  // const handleDateChange = (date, name) => {
-  //   const startOfDay = dayjs(date).startOf('day').format();
-  //   setBook((prevBook) => ({
-  //     ...prevBook,
-  //     [name]: startOfDay,
-  //   }));
-  // };
-
   const handleDateChange = (date, name) => {
     const startOfDay = dayjs(date).startOf('day').format();
     setBook((prevBook) => ({
@@ -203,20 +176,12 @@ const Vehicaleinfo = () => {
 
   };
 
-  // const handleRowClick = useCallback((params) => {
-  //   const customerData = params.row;
-  //   setSelectedCustomerData(customerData);
-  // }, []);
-
   const handleClick = async (event, actionName) => {
     event.preventDefault();
 
     try {
       if (actionName === 'List') {
         console.log('List button clicked');
-        // const response = await axios.get('http://localhost:8081/vehicleinfo');
-        // const data = response.data;
-        // setRows(data);
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
@@ -264,15 +229,6 @@ const Vehicaleinfo = () => {
                 />
               </div>
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="D.O.A Date">
-                    <DatePicker
-                      defaultValue={today}
-                      minDate={tomorrow}
-                      views={["year", "month", "day"]}
-                    />
-                  </DemoItem>
-                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="D.O.A Date">
                     <DatePicker
@@ -298,7 +254,6 @@ const Vehicaleinfo = () => {
                   name="vehRegNo"
                   value={selectedCustomerData.vehRegNo || book.vehRegNo}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   autoFocus
                 />
               </div>
@@ -310,7 +265,6 @@ const Vehicaleinfo = () => {
                   name="costCenter"
                   value={selectedCustomerData.costCenter || book.costCenter}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Cost Center"
                   id="standard-size-normal"
                   variant="standard"
@@ -326,7 +280,6 @@ const Vehicaleinfo = () => {
                   name="vehType"
                   value={selectedCustomerData.vehType || book.vehType}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Vehicle Type"
                   id="veh_type"
                   variant="standard"
@@ -340,11 +293,9 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   id="year_model"
-                  // value={"2012"}
                   name="yearModel"
                   value={selectedCustomerData.yearModel || book.yearModel}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Year Model"
                   autoFocus
                 />
@@ -357,7 +308,6 @@ const Vehicaleinfo = () => {
                   name="owner"
                   value={selectedCustomerData.owner || book.owner}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Owner"
                   id="owner"
                   variant="standard"
@@ -371,7 +321,6 @@ const Vehicaleinfo = () => {
                   name="mobileNo"
                   value={selectedCustomerData.mobileNo || book.mobileNo}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Mobile No"
                   id="mobile_no"
                   variant="standard"
@@ -429,7 +378,6 @@ const Vehicaleinfo = () => {
                   name="financer"
                   value={selectedCustomerData.financer || book.financer}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Financer"
                   id="financer"
                   variant="standard"
@@ -438,18 +386,6 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input-field">
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Ins. Date">
-                    <DatePicker
-                      value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
-                      onChange={handleDateChange}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='insdate' value={selectedCustomerData.date} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
-                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Insurance Date">
                     <DatePicker
@@ -464,18 +400,6 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="St Permit">
-                    <DatePicker
-                      value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
-                      onChange={handleDateChange}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='stpermit' value={selectedCustomerData.date} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
-                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="State permit">
                     <DatePicker
@@ -490,18 +414,6 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Due Date">
-                    <DatePicker
-                      value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null}
-                      onChange={handleDateChange}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.date} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
-                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Due Date">
                     <DatePicker
@@ -514,7 +426,6 @@ const Vehicaleinfo = () => {
                     </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
-
               </div>
               <div className="input">
                 <div className="icone">
@@ -524,7 +435,6 @@ const Vehicaleinfo = () => {
                   name="avgmileage"
                   value={selectedCustomerData.avgmileage || book.avgmileage}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="AVG Mileage"
                   id="avgmileage"
                   variant="standard"
@@ -540,7 +450,6 @@ const Vehicaleinfo = () => {
                   name="driverName"
                   value={selectedCustomerData.driverName || book.driverName}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Driver Name"
                   id="driver_name"
                   variant="standard"
@@ -554,7 +463,6 @@ const Vehicaleinfo = () => {
                   name="dueAmount"
                   value={selectedCustomerData.dueAmount || book.dueAmount}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Due Amount"
                   id="due_amount"
                   variant="standard"
@@ -570,7 +478,6 @@ const Vehicaleinfo = () => {
                   name="tankCap"
                   value={selectedCustomerData.tankCap || book.tankCap}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Tank Cap"
                   id="tank_cap"
                   autoFocus
@@ -586,7 +493,6 @@ const Vehicaleinfo = () => {
                   name="routeno"
                   value={selectedCustomerData.routeno || book.routeno}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Route No"
                   id="routeno"
                   autoFocus
@@ -604,7 +510,6 @@ const Vehicaleinfo = () => {
                   name="remarks"
                   value={selectedCustomerData.remarks || book.remarks}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Remarks"
                   id="remarks"
                   autoFocus
@@ -618,7 +523,6 @@ const Vehicaleinfo = () => {
                   name="OwnerType"
                   value={selectedCustomerData.OwnerType || book.OwnerType}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Owner Type"
                   id="owner_type"
                   variant="standard"
@@ -663,7 +567,12 @@ const Vehicaleinfo = () => {
           <span className='cancel-btn' onClick={hidePopup}>x</span>
           <p>Something went wrong!</p>
         </div>}
-
+        {success &&
+          <div className='alert-popup Success' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>success fully submitted</p>
+          </div>
+        }
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"

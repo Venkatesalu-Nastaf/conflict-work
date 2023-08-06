@@ -38,6 +38,7 @@
     "jspdf-autotable": "^3.5.29",
     "lord-icon-element": "^4.1.1",
     "material-ui-popup-state": "^5.0.9",
+    "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "node-modules": "^0.0.1",
     "nodemon": "^3.0.1",

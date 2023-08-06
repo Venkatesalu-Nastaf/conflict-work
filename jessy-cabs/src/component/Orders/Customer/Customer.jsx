@@ -79,6 +79,7 @@ const Customer = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const convertToCSV = (data) => {
     const header = columns.map((column) => column.headerName).join(",");
@@ -122,6 +123,7 @@ const Customer = () => {
 
 
   const hidePopup = () => {
+    setSuccess(false);
     setError(false);
   };
   useEffect(() => {
@@ -132,6 +134,14 @@ const Customer = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
   const [book, setBook] = useState({
     customerId: '',
@@ -274,6 +284,8 @@ const Customer = () => {
         await axios.post('http://localhost:8081/customers', book);
         console.log(book);
         handleCancel();
+        setSuccess(true);
+
       }
     } catch (err) {
       console.log(err);
@@ -773,6 +785,12 @@ const Customer = () => {
               <div className='alert-popup Error' >
                 <span className='cancel-btn' onClick={hidePopup}>x</span>
                 <p>Something went wrong!</p>
+              </div>
+            }
+             {success &&
+              <div className='alert-popup Success' >
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <p>success fully submitted</p>
               </div>
             }
             <div className="SpeedDial" style={{ padding: '26px', }}>

@@ -174,8 +174,10 @@ const TripSheet = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const hidePopup = () => {
+    setSuccess(false);
     setError(false);
   };
   useEffect(() => {
@@ -186,6 +188,14 @@ const TripSheet = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -1512,6 +1522,12 @@ const TripSheet = () => {
               <p>Something went wrong!</p>
             </div>
           }
+          {success &&
+            <div className='alert-popup Success' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>success fully submitted</p>
+            </div>
+          }
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -1529,7 +1545,7 @@ const TripSheet = () => {
           </Box>
           <div className="Tipsheet-content-table-main">
             <Tabs
-            className='Scroll-Style'
+              className='Scroll-Style'
               size="sm"
               aria-label="Pricing plan"
               defaultValue={0}

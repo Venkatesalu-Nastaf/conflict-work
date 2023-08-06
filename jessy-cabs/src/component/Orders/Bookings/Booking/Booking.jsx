@@ -84,40 +84,16 @@ const Booking = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
   const [error, setError] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   // const [nextBookingNo, setNextBookingNo] = useState(null);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-  };
-
-  const handleUpload = () => {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-
-      // Make an API call to the backend to upload the file
-      // You can use fetch or any other library like Axios for this.
-      fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // Handle the response from the backend, if needed
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error('Error uploading file:', error);
-        });
-    }
-  };
 
   const hidePopup = () => {
     setError(false);
+    setSuccess(false);
   };
+
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -126,6 +102,14 @@ const Booking = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -391,6 +375,7 @@ const Booking = () => {
         await axios.post('http://localhost:8081/booking', updatedBook);
         console.log(updatedBook);
         handleCancel();
+        setSuccess(true);
       }
 
     } catch (err) {
@@ -490,17 +475,29 @@ const Booking = () => {
     setCurrentYear(value);
   }, []);
 
-  // const [nextBookingNo, setNextBookingNo] = useState(null);
+  const handleUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf, .jpg, .jpeg, .png';
+    input.onchange = handleFileChange;
+    input.click();
+  };
 
-  // useEffect(() => {
-  //   axios.get('http://localhost:8081/booking')
-  //     .then((response) => {
-  //       setNextBookingNo(response.data.bookingno);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching next booking number:', error);
-  //     });
-  // }, []);
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return; // If no file selected, exit the function
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await axios.post('http://localhost:8081/upload', formData);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -1259,17 +1256,16 @@ const Booking = () => {
                 </FormControl>
               </div>
               <div className="input">
-                <Button
-                  type='file'
+                {/* <Button
                   color="primary"
-                  name="attachfile"
-                  accept=".pdf,.jpg,.jpeg,.png"
                   disabled={false}
-                  onChange={handleFileChange}
                   onClick={handleUpload}
                   size="md"
                   variant="outlined"
                 >
+                  Attach File
+                </Button> */}
+                <Button color="primary" onClick={handleUpload} size="md" variant="outlined">
                   Attach File
                 </Button>
               </div>
@@ -1406,6 +1402,12 @@ const Booking = () => {
               <div className='alert-popup Error' >
                 <span className='cancel-btn' onClick={hidePopup}>x</span>
                 <p>Something went wrong!</p>
+              </div>
+            }
+            {success &&
+              <div className='alert-popup Error' >
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <p>success fully submitted</p>
               </div>
             }
           </div>

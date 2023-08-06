@@ -92,6 +92,7 @@ const Employe = () => {
     const [actionName] = useState('');
     const [error, setError] = useState(false);
     const [formData] = useState({});
+    const [success, setSuccess] = useState(false);
 
 
     const convertToCSV = (data) => {
@@ -143,17 +144,27 @@ const Employe = () => {
     };
 
 
-    const hidePopup = () => {
-        setError(false);
-    };
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [error]);
+
+const hidePopup = () => {
+    setSuccess(false);
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
     const [book, setBook] = useState({
         empid: '',
@@ -565,6 +576,12 @@ const Employe = () => {
                     <div className='alert-popup Error' >
                         <span className='cancel-btn' onClick={hidePopup}>x</span>
                         <p>Something went wrong!</p>
+                    </div>
+                }
+                {success &&
+                    <div className='alert-popup Success' >
+                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <p>success fully submitted</p>
                     </div>
                 }
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>

@@ -85,31 +85,6 @@ const columns = [
     { field: "amount", headerName: "Amount", width: 130 },
 ];
 
-// const rows = [
-//     {
-//         id: 1,
-//         VoucherNo: 1,
-//         PaymentDate: "2023-06-07",
-//         BillName: "2023-06-07",
-//         PaymentCategory: "9:00 AM",
-//         Amount: 600,
-
-//     },
-//     {
-//         id: 2,
-//         VoucherNo: 2,
-//         PaymentDate: "2023-06-07",
-//         BillName: "2023-06-08",
-//         PaymentCategory: "7:00 PM",
-//         Amount: 500,
-
-//     },
-//     // Add more rows as needed
-// ];
-
-// date
-
-
 const PettyCash = () => {
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -119,6 +94,7 @@ const PettyCash = () => {
     const [voucherno] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
     const [error, setError] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -153,17 +129,28 @@ const PettyCash = () => {
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Customer_Details.pdf');
     };
-    const hidePopup = () => {
-        setError(false);
-    };
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [error]);
+   
+const hidePopup = () => {
+    setSuccess(false);
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
+
     const [book, setBook] = useState({
         voucherno: '',
         Billname: '',
@@ -223,15 +210,15 @@ const PettyCash = () => {
 
     const handleAdd = async () => {
         try {
-          console.log('Add button clicked');
-          const response = await axios.post('http://localhost:8081/pettycash', book);
-          console.log('Customer added:', response.data);
-          handleCancel(); // Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
+            console.log('Add button clicked');
+            const response = await axios.post('http://localhost:8081/pettycash', book);
+            console.log('Customer added:', response.data);
+            handleCancel(); // Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
         } catch (error) {
-          console.error('Error adding customer:', error);
-          // You can add error handling code here, like displaying an error message to the user
+            console.error('Error adding customer:', error);
+            // You can add error handling code here, like displaying an error message to the user
         }
-      };
+    };
     const handleClick = async (event, actionName, voucherno) => {
         event.preventDefault();
         try {
@@ -381,22 +368,22 @@ const PettyCash = () => {
                                 <div className="input">
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         {/* <DemoItem label="From"> */}
-                                            <DatePicker
-                                                label="From Date"
-                                                value={fromDate}
-                                                onChange={(date) => setFromDate(date)}
-                                            />
+                                        <DatePicker
+                                            label="From Date"
+                                            value={fromDate}
+                                            onChange={(date) => setFromDate(date)}
+                                        />
                                         {/* </DemoItem> */}
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input">
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         {/* <DemoItem label="To"> */}
-                                            <DatePicker
-                                                label="To Date"
-                                                value={toDate}
-                                                onChange={(date) => setToDate(date)}
-                                            />
+                                        <DatePicker
+                                            label="To Date"
+                                            value={toDate}
+                                            onChange={(date) => setToDate(date)}
+                                        />
                                         {/* </DemoItem> */}
                                     </LocalizationProvider>
                                 </div>
@@ -411,6 +398,12 @@ const PettyCash = () => {
                     <div className='alert-popup Error' >
                         <span className='cancel-btn' onClick={hidePopup}>x</span>
                         <p>Something went wrong!</p>
+                    </div>
+                }
+                {success &&
+                    <div className='alert-popup Success' >
+                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <p>success fully submitted</p>
                     </div>
                 }
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>

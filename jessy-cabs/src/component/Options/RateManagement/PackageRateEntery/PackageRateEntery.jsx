@@ -69,33 +69,10 @@ const PackageRateEntery = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [error, setError] = useState(false);
-
-  // const convertToCSV = (data) => {
-  //   const header = columns.map((column) => column.headerName).join(",");
-  //   const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-  //   return [header, ...rows].join("\n");
-  // };
-  // const handleExcelDownload = () => {
-  //   const csvData = convertToCSV(rows);
-  //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-  //   saveAs(blob, "customer_details.csv");
-  // };
-  // const handlePdfDownload = () => {
-  //   const pdf = new jsPDF();
-  //   pdf.setFontSize(12);// Set the font size and font style
-  //   pdf.setFont('helvetica', 'normal');
-  //   pdf.text("Customer Details", 10, 10);// Add a title for the table
-  //   const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
-  //   pdf.autoTable({
-  //     head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-  //     body: tableData,
-  //     startY: 20,
-  //   }); // Create a table to display the data
-  //   const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-  //   saveAs(pdfBlob, 'customer_details.pdf'); // Download the PDF
-  // };
+  const [success, setSuccess] = useState(false);
 
   const hidePopup = () => {
+    setSuccess(false);
     setError(false);
   };
   useEffect(() => {
@@ -106,6 +83,14 @@ const PackageRateEntery = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
   const [book, setBook] = useState({
     ratetype: '',
@@ -164,13 +149,7 @@ const PackageRateEntery = () => {
     }));
   };
 
-  // const handleDateChange = (date) => {
-  //   const startOfDay = dayjs(date).startOf('day').format();
-  //   setBook((prevBook) => ({
-  //     ...prevBook,
-  //     date: startOfDay,
-  //   }));
-  // };
+
   const handleCancel = () => {
     setBook((prevBook) => ({
       ...prevBook,
@@ -588,6 +567,12 @@ const PackageRateEntery = () => {
           <div className='alert-popup Error' >
             <span className='cancel-btn' onClick={hidePopup}>x</span>
             <p>Something went wrong!</p>
+          </div>
+        }
+        {success &&
+          <div className='alert-popup Success' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>success fully submitted</p>
           </div>
         }
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>

@@ -66,6 +66,7 @@ const UserCreation = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [success, setSuccess] = useState(false);
 
   // TABLE START
   const columns = [
@@ -200,6 +201,7 @@ const UserCreation = () => {
   const hidePopup = () => {
     setPasswordsMatch(true);
     setError(false);
+    setSuccess(false);
   };
   useEffect(() => {
     if (error || !passwordsMatch) {
@@ -210,6 +212,14 @@ const UserCreation = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error, passwordsMatch]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -439,6 +449,12 @@ const UserCreation = () => {
             <div className='alert-popup Warning' >
               <span className='cancel-btn' onClick={hidePopup}>x</span>
               <p>Passwords do not match. Please try again.</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>success fully submitted</p>
             </div>
           }
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>

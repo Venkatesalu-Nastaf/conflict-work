@@ -75,7 +75,10 @@ const MasterEnter = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+
   const hidePopup = () => {
+    setSuccess(false);
     setError(false);
   };
   useEffect(() => {
@@ -86,6 +89,15 @@ const MasterEnter = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
+
 
   const [book, setBook] = useState({
     driverid: '',
@@ -308,7 +320,7 @@ const MasterEnter = () => {
                 <div className="icone">
                   <AppsOutageOutlinedIcon color="action" />
                 </div>
-               
+
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -442,7 +454,7 @@ const MasterEnter = () => {
                   />
                 </div>
                 <div className="input" style={{ width: "185px" }}>
-                
+
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="D.L.Exp Date"
@@ -542,6 +554,12 @@ const MasterEnter = () => {
             <div className='alert-popup Error' >
               <span className='cancel-btn' onClick={hidePopup}>x</span>
               <p>Something went wrong!</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>success fully submitted</p>
             </div>
           }
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>

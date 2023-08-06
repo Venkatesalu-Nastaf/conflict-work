@@ -74,6 +74,7 @@ const RateType = () => {
     const [starttime, setStartTime] = useState('');
     const [closetime, setCloseTime] = useState('');
     const [formData] = useState({});
+    const [success, setSuccess] = useState(false);
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -85,20 +86,7 @@ const RateType = () => {
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
         saveAs(blob, "customer_details.csv");
     };
-    // const handlePdfDownload = () => {
-    //     const pdf = new jsPDF();
-    //     pdf.setFontSize(12);// Set the font size and font style
-    //     pdf.setFont('helvetica', 'normal');
-    //     pdf.text("Rate Type Details", 10, 10);// Add a title for the table
-    //     const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
-    //     pdf.autoTable({
-    //         head: [['Sno', 'Driver ID', 'Rate Type', 'Active', 'Start Time', 'Close Time']],
-    //         body: tableData,
-    //         startY: 20,
-    //     }); // Create a table to display the data
-    //     const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-    //     saveAs(pdfBlob, 'Rate_Type.pdf'); // Download the PDF
-    // };
+
     const handlePdfDownload = () => {
         const pdf = new jsPDF();
         pdf.setFontSize(12);
@@ -127,6 +115,7 @@ const RateType = () => {
 
 
     const hidePopup = () => {
+        setSuccess(false);
         setError(false);
     };
     useEffect(() => {
@@ -137,6 +126,14 @@ const RateType = () => {
             return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [error]);
+    useEffect(() => {
+        if (success) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [success]);
 
     const [book, setBook] = useState({
         driverid: '',
@@ -409,7 +406,12 @@ const RateType = () => {
                         <p>Something went wrong!</p>
                     </div>
                 }
-
+                {success &&
+                    <div className='alert-popup Success' >
+                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <p>success fully submitted</p>
+                    </div>
+                }
                 <div className="Download-btn">
                     <PopupState variant="popover" popupId="demo-popup-menu">
                         {(popupState) => (

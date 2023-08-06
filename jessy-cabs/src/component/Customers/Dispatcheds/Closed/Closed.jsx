@@ -42,8 +42,11 @@ const Closed = () => {
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+
 
   const hidePopup = () => {
+    setSuccess(false);
     setError(false);
   };
   useEffect(() => {
@@ -54,6 +57,14 @@ const Closed = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
 
   // download function
@@ -67,20 +78,6 @@ const Closed = () => {
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
     saveAs(blob, "closed_Details.csv");
   };
-  // const handlePdfDownload = () => {
-  //   const pdf = new jsPDF();
-  //   pdf.setFontSize(12);// Set the font size and font style
-  //   pdf.setFont('helvetica', 'normal');
-  //   pdf.text("closed_Details", 10, 10);// Add a title for the table
-  //   const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
-  //   pdf.autoTable({
-  //     head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-  //     body: tableData,
-  //     startY: 20,
-  //   }); // Create a table to display the data
-  //   const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-  //   saveAs(pdfBlob, 'closed_Details.pdf'); // Download the PDF
-  // };
   const handlePdfDownload = () => {
     const pdf = new jsPDF('landscape');
     pdf.setFontSize(12);
@@ -111,7 +108,7 @@ const Closed = () => {
       body: tableData,
       startY: 20,
       columnWidth: 'auto',
-     
+
     });
 
     const pdfBlob = pdf.output('blob');
@@ -239,6 +236,12 @@ const Closed = () => {
           <div className='alert-popup Error' >
             <span className='cancel-btn' onClick={hidePopup}>x</span>
             <p>Something went wrong!</p>
+          </div>
+        }
+        {success &&
+          <div className='alert-popup Success' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>success fully submitted</p>
           </div>
         }
         <div className="table-bookingCopy-Closed">

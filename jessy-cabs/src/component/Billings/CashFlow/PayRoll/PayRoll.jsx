@@ -77,49 +77,10 @@ const PayRoll = () => {
   const [actionName] = useState('');
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(false);
-
-  // const convertToCSV = (data) => {
-  //   const header = columns.map((column) => column.headerName).join(",");
-  //   const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-  //   return [header, ...rows].join("\n");
-  // };
-  // const handleExcelDownload = () => {
-  //   const csvData = convertToCSV(rows);
-  //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-  //   saveAs(blob, "customer_details.csv");
-  // };
-  // const handlePdfDownload = () => {
-  //   const pdf = new jsPDF();
-  //   pdf.setFontSize(12);
-  //   pdf.setFont('helvetica', 'normal');
-  //   pdf.text("Customer Details", 10, 10);
-
-  //   // Modify tableData to exclude the index number
-  //   const tableData = rows.map((row) => [
-  //     row['id'],
-  //     row['customerId'],
-  //     row['printName'],
-  //     row['address1'],
-  //     row['phoneno'],
-  //     row['Active'],
-  //     row['active'],
-  //     row['gstTax'],
-  //     row['state'],
-  //     row['enableDriverApp']
-  //   ]);
-
-  //   pdf.autoTable({
-  //     head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-  //     body: tableData,
-  //     startY: 20,
-  //   });
-
-  //   const pdfBlob = pdf.output('blob');
-  //   saveAs(pdfBlob, 'Customer_Details.pdf');
-  // };
-
+  const [success, setSuccess] = useState(false);
 
   const hidePopup = () => {
+    setSuccess(false);
     setError(false);
   };
   useEffect(() => {
@@ -130,6 +91,14 @@ const PayRoll = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
   const [book, setBook] = useState({
     empid: '',
@@ -751,6 +720,12 @@ const PayRoll = () => {
             <p>Something went wrong!</p>
           </div>
         }
+         {success &&
+              <div className='alert-popup Success' >
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <p>success fully submitted</p>
+              </div>
+            }
         <div className="SpeedDial" style={{ padding: '26px', }}>
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial

@@ -57,7 +57,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
 
-
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -87,7 +86,6 @@ const Booking = () => {
   const [success, setSuccess] = useState(false);
 
   // const [nextBookingNo, setNextBookingNo] = useState(null);
-
 
   const hidePopup = () => {
     setError(false);
@@ -162,7 +160,6 @@ const Booking = () => {
       travelsemail: params.get('travelsemail'),
     };
     setFormData(bookingFormData);
-    console.log(bookingFormData);
   }, [location]);
 
   const [book, setBook] = useState({
@@ -486,10 +483,11 @@ const Booking = () => {
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return; // If no file selected, exit the function
-
+    const bookingno = book.bookingno; // Access the bookingno from the book object
     const formData = new FormData();
     formData.append('file', file);
-
+    formData.append('bookingno', bookingno);
+    console.log(formData);
     try {
       const response = await axios.post('http://localhost:8081/upload', formData);
       console.log(response.data);
@@ -497,7 +495,6 @@ const Booking = () => {
       console.error('Error uploading file:', error);
     }
   };
-
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -516,7 +513,6 @@ const Booking = () => {
                   id="standard-size-normal"
                   autoComplete="new-password"
                   value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno}
-                  // value={formData.bookingno || nextBookingNo}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   variant="standard"

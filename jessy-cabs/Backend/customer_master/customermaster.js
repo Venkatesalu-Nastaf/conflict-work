@@ -249,6 +249,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
     mimetype: req.file.mimetype,
     size: req.file.size,
     path: req.file.path,
+    bookingno: req.body.bookingno, 
   };
 
   const query = 'INSERT INTO upload SET ?';

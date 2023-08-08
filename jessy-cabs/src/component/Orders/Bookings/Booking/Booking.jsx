@@ -1160,12 +1160,7 @@ const Booking = () => {
             </div>
             <div className="inpu-field">
               <div className="input">
-                <FormControlLabel
-                  value="vehicleconfirm"
-                  control={<Checkbox size="small" />}
-                  label="Vehicle Confirm"
-                  onChange={handleCheckboxChange}
-                />
+              
                 <FormControlLabel
                   value="vehiclechanges"
                   control={<Checkbox size="small" />}
@@ -1303,7 +1298,7 @@ const Booking = () => {
             </div>
           </div>
         </div>
-        {isChecked ? (
+        {/* {isChecked ? (/ */}
           <div className="vehicle-confirm">
             <div className="input-field">
               <div className="input">
@@ -1442,7 +1437,7 @@ const Booking = () => {
               </div>
             }
           </div>
-        ) : null}
+        {/* ) : null} */}
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"

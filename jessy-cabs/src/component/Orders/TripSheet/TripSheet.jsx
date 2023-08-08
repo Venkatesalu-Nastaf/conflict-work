@@ -553,6 +553,7 @@ const TripSheet = () => {
         await axios.post('http://localhost:8081/tripsheet', updatedBook);
         console.log(updatedBook);
         handleCancel();
+        setSuccess(true);
       }
     } catch (err) {
       console.log(err);

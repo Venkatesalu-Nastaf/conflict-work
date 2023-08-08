@@ -14,6 +14,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
@@ -212,7 +213,7 @@ const Closed = () => {
                   <PopupState variant="popover" popupId="demo-popup-menu">
                     {(popupState) => (
                       <React.Fragment>
-                        <Button variant="outlined" {...bindTrigger(popupState)}>
+                        <Button variant="outlined" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                           Download
                         </Button>
                         <Menu {...bindMenu(popupState)}>

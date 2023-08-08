@@ -2,12 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import "./Pending.css";
 import axios from "axios";
 import { saveAs } from 'file-saver';
-
+import jsPDF from 'jspdf';
 import { Stations } from "./PendingData";
 import Autocomplete from "@mui/material/Autocomplete";
-import DescriptionIcon from "@mui/icons-material/Description";
+// import DescriptionIcon from "@mui/icons-material/Description";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { TextField } from "@mui/material";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import dayjs from "dayjs";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
@@ -18,6 +22,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
+  { field: "status", headerName: "Status", width: 130 },
   { field: "bookingno", headerName: "Booking ID", width: 130 },
   { field: "bookingdate", headerName: "Date", width: 130 },
   { field: "bookingtime", headerName: "Time", width: 90 },
@@ -68,7 +73,37 @@ const Pending = () => {
   const handleExcelDownload = () => {
     const csvData = convertToCSV(rows);
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "customer_details.csv");
+    saveAs(blob, "Pending Reports.csv");
+  };
+  const handlePdfDownload = () => {
+    const pdf = new jsPDF();
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text("Pending Reports", 10, 10);
+
+    // Modify tableData to exclude the index number
+    const tableData = rows.map((row) => [
+      row['id'],
+      row['status'],
+      row['bookingno'],
+      row['bookingdate'],
+      row['bookingtime'],
+      row['guestname'],
+      row['mobileno'],
+      row['address1'],
+      row['address2'],
+      row['customer'],
+      row['tripid']
+    ]);
+
+    pdf.autoTable({
+      head: [['Sno', 'Status', 'Booking ID', 'Date', 'Time', 'Guest Name', 'Mobile', 'R.Address', 'R.Address1', 'R.Address2', 'Company', 'BookingID']],
+      body: tableData,
+      startY: 20,
+    });
+
+    const pdfBlob = pdf.output('blob');
+    saveAs(pdfBlob, 'Pending Reports.pdf');
   };
 
   const handleInputChange = (event, newValue) => {
@@ -79,7 +114,7 @@ const Pending = () => {
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/booking?servicestation=${encodeURIComponent(
+        `http://localhost:8081/pending-bookings?servicestation=${encodeURIComponent(
           servicestation
         )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
           toDate.toISOString()
@@ -92,6 +127,7 @@ const Pending = () => {
       setRows([]);
     }
   }, [servicestation, fromDate, toDate]);
+
 
   const handleShowAll = useCallback(async () => {
     try {
@@ -106,10 +142,6 @@ const Pending = () => {
     }
   }, []);
 
-  // const handleButtonClickBooking = () => {
-  //   window.location.href = '/home/orders/bookings';
-
-  // }
 
   const handleButtonClickBooking = (selectedRow) => {
     const bookingPageUrl = `/home/orders/bookings?bookingno=${selectedRow.bookingno}&bookingdate=${selectedRow.bookingdate}&bookingtime=${selectedRow.bookingtime}&status=${selectedRow.status}&tripid=${selectedRow.tripid}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobileno=${selectedRow.mobileno}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&employeeno=${selectedRow.employeeno}&address1=${selectedRow.address1}&address2=${selectedRow.address2}&city=${selectedRow.report}&vehType=${selectedRow.vehType}&paymenttype=${selectedRow.paymenttype}&startdate=${selectedRow.startdate}&starttime=${selectedRow.starttime}&registertime=${selectedRow.registertime}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&costcode=${selectedRow.costcode}&registerno=${selectedRow.registerno}&flightno=${selectedRow.flightno}&orderbyemail=${selectedRow.orderbyemail}&remarks=${selectedRow.remarks}&servicestation=${selectedRow.servicestation}&advance=${selectedRow.advance}&nameupdate=${selectedRow.nameupdate}&address3=${selectedRow.address3}&address4=${selectedRow.address4}&cityupdate=${selectedRow.cityupdate}&useage=${selectedRow.useage}&username=${selectedRow.username}&tripdate=${selectedRow.tripdate}&triptime=${selectedRow.triptime}&emaildoggle=${selectedRow.emaildoggle}&hiretypes=${selectedRow.hiretypes}&travelsname=${selectedRow.travelsname}&vehicleregisterno=${selectedRow.vehicleregisterno}&vehiclemodule=${selectedRow.vehiclemodule}&driverName=${selectedRow.driverName}&driverphone=${selectedRow.driverphone}&travelsemail=${selectedRow.travelsemail}`;
@@ -167,17 +199,6 @@ const Pending = () => {
                       <TextField {...params} label="Stations" />
                     )}
                   />
-
-                </div>
-                <div className="input" style={{ width: "110px" }}>
-                  <Button
-                    variant="outlined"
-                    component="label"
-                    startIcon={<DescriptionIcon />}
-                    onClick={() => { handleExcelDownload('excel') }}
-                  >
-                    Excel
-                  </Button>
                 </div>
                 <div className="input" style={{ width: "140px" }}>
                   <Button variant="contained">New Booking</Button>
@@ -204,6 +225,21 @@ const Pending = () => {
           </div>
         }
         <div className="table-bookingCopy-Pending">
+          <div className="Download-btn">
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                    Download
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+          </div>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

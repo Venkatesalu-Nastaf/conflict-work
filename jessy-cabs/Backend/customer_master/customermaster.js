@@ -249,7 +249,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
     mimetype: req.file.mimetype,
     size: req.file.size,
     path: req.file.path,
-    bookingno: req.body.bookingno, 
+    bookingno: req.body.bookingno,
   };
 
   const query = 'INSERT INTO upload SET ?';
@@ -385,6 +385,88 @@ app.get('/tripsheet/:tripsheetno', (req, res) => {
 });
 // End tripsheet database
 // -----------------------------------------------------------------------------------------------------------
+// customers/Received/Pending data collect from database
+// app.get('/booking:status', (req, res) => {
+//   const { servicestation, fromDate, toDate } = req.query;
+//   // Query and parameters for fetching booking details based on the query parameters
+//   let query = 'SELECT * FROM booking WHERE 1=1';
+//   let params = [];
+
+//   if (servicestation) {
+//     query += ' AND servicestation = ?';
+//     params.push(servicestation);
+//   }
+//   if (fromDate && toDate) {
+//     query += ' AND bookingdate BETWEEN ? AND ?';
+//     params.push(fromDate);
+//     params.push(toDate);
+//   }
+//   db.query(query, params, (err, result) => {
+//     if (err) {
+//       console.error('Error retrieving booking details from MySQL:', err);
+//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//     }
+//     return res.status(200).json(result);
+//   });
+// });
+// app.get('/booking/status/:status', (req, res) => {
+//   const { servicestation, fromDate, toDate } = req.query;
+//   const status = req.params.status; // Get the status from the URL parameter
+
+//   // Query and parameters for fetching booking details based on the query parameters and status
+//   let query = 'SELECT * FROM booking WHERE 1=1';
+//   let params = [];
+
+//   if (status) {
+//     query += ' AND status = "pending"'; // Assuming the column name for status is 'status'
+//     params.push(status);
+//   }
+
+//   if (servicestation) {
+//     query += ' AND servicestation = ?';
+//     params.push(servicestation);
+//   }
+//   if (fromDate && toDate) {
+//     query += ' AND bookingdate BETWEEN ? AND ?';
+//     params.push(fromDate);
+//     params.push(toDate);
+//   }
+//   db.query(query, params, (err, result) => {
+//     if (err) {
+//       console.error('Error retrieving booking details from MySQL:', err);
+//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//     }
+//     return res.status(200).json(result);
+//   });
+// });
+app.get('/pending-bookings', (req, res) => {
+  const { servicestation, fromDate, toDate } = req.query;
+
+  let query = 'SELECT * FROM booking WHERE status = "pending"';
+  let params = [];
+
+  if (servicestation) {
+    query += ' AND servicestation = ?';
+    params.push(servicestation);
+  }
+  if (fromDate && toDate) {
+    query += ' AND bookingdate BETWEEN ? AND ?';
+    params.push(fromDate);
+    params.push(toDate);
+  }
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
+
+
+
 // customers/Dispatch/closed data collect from database
 app.get('/tripsheet', (req, res) => {
   const { department, fromDate, toDate } = req.query;

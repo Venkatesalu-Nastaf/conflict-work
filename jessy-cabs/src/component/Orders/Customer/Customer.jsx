@@ -6,10 +6,10 @@ import dayjs from "dayjs";
 import { saveAs } from 'file-saver';
 import Box from "@mui/material/Box";
 import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
-import MenuItem from '@mui/material/MenuItem';
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -784,7 +784,7 @@ const Customer = () => {
             {error &&
               <div className='alert-popup Error' >
                 <span className='cancel-btn' onClick={hidePopup}>x</span>
-                <p>Something went wrong!</p>
+                <p>Check your Network connection</p>
               </div>
             }
              {success &&

@@ -84,8 +84,7 @@ const Booking = () => {
   const location = useLocation();
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  // const [nextBookingNo, setNextBookingNo] = useState(null);
+  const [selectedValue, setSelectedValue] = useState('pending');
 
   const hidePopup = () => {
     setError(false);
@@ -265,11 +264,65 @@ const Booking = () => {
     setFormData({});
   };
 
-  const handleChange = (event) => {
-    const { name, value, checked } = event.target;
-    setFormData({ ...formData, [name]: value });
+  // const handleChange = (event) => {
+  //   const { name, value, checked } = event.target;
+  //   setFormData({ ...formData, [name]: value });
+  //   setSelectedValue({ ...selectedValue, [name]: checked });
 
-    if (event.target.type === 'checkbox') {
+  //   if (event.target.type === 'checkbox') {
+  //     setBook((prevBook) => ({
+  //       ...prevBook,
+  //       [name]: checked,
+  //     }));
+  //     setSelectedCustomerData((prevData) => ({
+  //       ...prevData,
+  //       [name]: checked,
+  //     }));
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       [name]: checked,
+  //     }));
+  //     // setSelectedValue((prevData) => ({
+  //     //   ...prevData,
+  //     //   [name]: checked,
+  //     // }));
+  //   } else {
+  //     // Check if the field is the time field
+  //     if (name === 'bookingtime') {
+  //       const formattedTime = value; // Modify the time value if needed
+  //       setBook((prevBook) => ({
+  //         ...prevBook,
+  //         [name]: formattedTime,
+  //       }));
+  //       setSelectedCustomerData((prevData) => ({
+  //         ...prevData,
+  //         [name]: formattedTime,
+  //       }));
+  //       setFormData((prevData) => ({
+  //         ...prevData,
+  //         [name]: formattedTime,
+  //       }));
+  //     } else {
+  //       setBook((prevBook) => ({
+  //         ...prevBook,
+  //         [name]: value,
+  //       }));
+  //       setSelectedCustomerData((prevData) => ({
+  //         ...prevData,
+  //         [name]: value,
+  //       }));
+  //       setFormData((prevData) => ({
+  //         ...prevData,
+  //         [name]: value,
+  //       }));
+  //     }
+  //   }
+  // };
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+    setSelectedValue(event.target.value);
+
+    if (type === 'checkbox') {
       setBook((prevBook) => ({
         ...prevBook,
         [name]: checked,
@@ -282,38 +335,29 @@ const Booking = () => {
         ...prevData,
         [name]: checked,
       }));
+      setSelectedValue((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
     } else {
-      // Check if the field is the time field
-      if (name === 'bookingtime') {
-        const formattedTime = value; // Modify the time value if needed
-        setBook((prevBook) => ({
-          ...prevBook,
-          [name]: formattedTime,
-        }));
-        setSelectedCustomerData((prevData) => ({
-          ...prevData,
-          [name]: formattedTime,
-        }));
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: formattedTime,
-        }));
-      } else {
-        setBook((prevBook) => ({
-          ...prevBook,
-          [name]: value,
-        }));
-        setSelectedCustomerData((prevData) => ({
-          ...prevData,
-          [name]: value,
-        }));
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: value,
-        }));
-      }
+      // Handling non-checkbox fields
+      const fieldValue = type === 'time' ? value : value;
+      setSelectedValue(value);
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: fieldValue,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: fieldValue,
+      }));
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: fieldValue,
+      }));
     }
   };
+
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -368,6 +412,7 @@ const Booking = () => {
           starttime: starttime,
           registertime: registertime,
           triptime: triptime,
+          status: selectedValue,
         };
         await axios.post('http://localhost:8081/booking', updatedBook);
         console.log(updatedBook);
@@ -512,7 +557,7 @@ const Booking = () => {
                   label="Booking No"
                   id="standard-size-normal"
                   autoComplete="new-password"
-                  value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno}
+                  value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   variant="standard"
@@ -557,14 +602,14 @@ const Booking = () => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="status"
                     autoComplete="new-password"
-                    value={formData.status || selectedCustomerData.status || book.status}
+                    value={formData.status || selectedCustomerData.status || book.status || selectedValue || ''}
                     onChange={handleChange}
                   >
                     <FormControlLabel
                       value="pending"
                       control={<Radio />}
                       label="Pending"
-                      labelPlacement="end"
+                    // labelPlacement="end"
                     />
                     <FormControlLabel
                       value="cancelled"

@@ -5,7 +5,6 @@ import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import { Stations } from "./PendingData";
 import Autocomplete from "@mui/material/Autocomplete";
-// import DescriptionIcon from "@mui/icons-material/Description";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { TextField } from "@mui/material";
 import Menu from '@mui/material/Menu';
@@ -18,7 +17,6 @@ import Button from "@mui/material/Button";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -34,7 +32,6 @@ const columns = [
   { field: "customer", headerName: "Company", width: 130 },
   { field: "tripid", headerName: "BookingID", width: 130 },
 ];
-
 
 const Pending = () => {
   const [rows, setRows] = useState([]);

@@ -146,22 +146,7 @@ app.post('/vehicleinfo', (req, res) => {
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
-// collect data from vehicleInfo database
-app.get('/vehicleinfo/:vehRegNo', (req, res) => {
-  const vehRegNo = req.params.vehRegNo;
-  // Modify the query to use the LIKE operator for partial matching
-  db.query('SELECT * FROM vehicleinfo WHERE vehRegNo LIKE ? LIMIT 1', `%${vehRegNo}%`, (err, result) => {
-    if (err) {
-      console.error('Error retrieving vehicle details from MySQL:', err);
-      return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ error: 'Vehicle not found' });
-    }
-    const vehicleDetails = result[0]; // Assuming there is only one matching vehicle
-    return res.status(200).json(vehicleDetails);
-  });
-});
+
 // end vehicle_info database
 // -----------------------------------------------------------------------------------------------------------
 // Booking database:
@@ -261,6 +246,22 @@ app.post('/upload', upload.single('file'), (req, res) => {
     return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
   });
 });
+// collect data from vehicleInfo database
+app.get('/name-customers/:printName', (req, res) => {
+  const printName = req.params.printName; // Access the parameter using req.params
+  // Modify the query to use the LIKE operator for partial matching
+  db.query('SELECT * FROM customers WHERE printName LIKE ?', [`%${printName}%`], (err, result) => {
+    if (err) {
+      console.error('Error retrieving customer details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+    const customerDetails = result[0]; // Assuming there is only one matching customer
+    return res.status(200).json(customerDetails);
+  });
+});
 
 //End booking page database 
 // -----------------------------------------------------------------------------------------------------------
@@ -336,9 +337,9 @@ app.post('/tripsheet', (req, res) => {
   });
 });
 // delete tripsheet data
-app.delete('/tripsheet/:tripsheetno', (req, res) => {
-  const tripsheetno = req.params.tripsheetno;
-  db.query('DELETE FROM tripsheet WHERE tripsheetno = ?', tripsheetno, (err, result) => {
+app.delete('/tripsheet/:tripid', (req, res) => {
+  const tripid = req.params.tripid;
+  db.query('DELETE FROM tripsheet WHERE tripid = ?', tripid, (err, result) => {
     if (err) {
       console.error('Error deleting data from MySQL:', err);
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
@@ -351,12 +352,12 @@ app.delete('/tripsheet/:tripsheetno', (req, res) => {
   });
 });
 // update tripsheet details
-app.put('/tripsheet/:tripsheetno', (req, res) => {
-  const tripsheetno = req.params.tripsheetno;
+app.put('/tripsheet/:tripid', (req, res) => {
+  const tripid = req.params.tripid;
   const updatedCustomerData = req.body;
-  console.log('Customer ID:', tripsheetno); // Log the customer ID
+  console.log('Customer ID:', tripid); // Log the customer ID
   console.log('Updated customer data:', updatedCustomerData);
-  db.query('UPDATE tripsheet SET ? WHERE tripsheetno = ?', [updatedCustomerData, tripsheetno], (err, result) => {
+  db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
     if (err) {
       console.error('Error updating data in MySQL:', err);
       return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -369,9 +370,9 @@ app.put('/tripsheet/:tripsheetno', (req, res) => {
   });
 });
 // collect data from tripsheet database
-app.get('/tripsheet/:tripsheetno', (req, res) => {
-  const tripsheetno = req.params.tripsheetno;
-  db.query('SELECT * FROM tripsheet WHERE tripsheetno = ?', tripsheetno, (err, result) => {
+app.get('/tripsheet/:tripid', (req, res) => {
+  const tripid = req.params.tripid;
+  db.query('SELECT * FROM tripsheet WHERE tripid = ?', tripid, (err, result) => {
     if (err) {
       console.error('Error retrieving booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
@@ -383,62 +384,25 @@ app.get('/tripsheet/:tripsheetno', (req, res) => {
     return res.status(200).json(bookingDetails);
   });
 });
+// collect data from vehicleInfo database
+app.get('/vehicleinfo/:vehRegNo', (req, res) => {
+  const vehRegNo = req.params.vehRegNo;
+  // Modify the query to use the LIKE operator for partial matching
+  db.query('SELECT * FROM vehicleinfo WHERE vehRegNo LIKE ? LIMIT 1', `%${vehRegNo}%`, (err, result) => {
+    if (err) {
+      console.error('Error retrieving vehicle details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Vehicle not found' });
+    }
+    const vehicleDetails = result[0]; // Assuming there is only one matching vehicle
+    return res.status(200).json(vehicleDetails);
+  });
+});
 // End tripsheet database
 // -----------------------------------------------------------------------------------------------------------
 // customers/Received/Pending data collect from database
-// app.get('/booking:status', (req, res) => {
-//   const { servicestation, fromDate, toDate } = req.query;
-//   // Query and parameters for fetching booking details based on the query parameters
-//   let query = 'SELECT * FROM booking WHERE 1=1';
-//   let params = [];
-
-//   if (servicestation) {
-//     query += ' AND servicestation = ?';
-//     params.push(servicestation);
-//   }
-//   if (fromDate && toDate) {
-//     query += ' AND bookingdate BETWEEN ? AND ?';
-//     params.push(fromDate);
-//     params.push(toDate);
-//   }
-//   db.query(query, params, (err, result) => {
-//     if (err) {
-//       console.error('Error retrieving booking details from MySQL:', err);
-//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-//     }
-//     return res.status(200).json(result);
-//   });
-// });
-// app.get('/booking/status/:status', (req, res) => {
-//   const { servicestation, fromDate, toDate } = req.query;
-//   const status = req.params.status; // Get the status from the URL parameter
-
-//   // Query and parameters for fetching booking details based on the query parameters and status
-//   let query = 'SELECT * FROM booking WHERE 1=1';
-//   let params = [];
-
-//   if (status) {
-//     query += ' AND status = "pending"'; // Assuming the column name for status is 'status'
-//     params.push(status);
-//   }
-
-//   if (servicestation) {
-//     query += ' AND servicestation = ?';
-//     params.push(servicestation);
-//   }
-//   if (fromDate && toDate) {
-//     query += ' AND bookingdate BETWEEN ? AND ?';
-//     params.push(fromDate);
-//     params.push(toDate);
-//   }
-//   db.query(query, params, (err, result) => {
-//     if (err) {
-//       console.error('Error retrieving booking details from MySQL:', err);
-//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-//     }
-//     return res.status(200).json(result);
-//   });
-// });
 app.get('/pending-bookings', (req, res) => {
   const { servicestation, fromDate, toDate } = req.query;
 
@@ -463,14 +427,12 @@ app.get('/pending-bookings', (req, res) => {
     return res.status(200).json(result);
   });
 });
-
-
-
-
+// End 
+// -----------------------------------------------------------------------------------------------------------
 // customers/Dispatch/closed data collect from database
 app.get('/tripsheet', (req, res) => {
   const { department, fromDate, toDate } = req.query;
-  let query = 'SELECT * FROM tripsheet WHERE 1=1';
+  let query = 'SELECT * FROM tripsheet WHERE status = "closed"';
   let params = [];
   if (department) {
     query += ' AND department = ?';
@@ -1199,11 +1161,11 @@ app.post('/billing', (req, res) => {
   });
 });
 // delete Billing data
-app.delete('/billing/:tripsheetno', (req, res) => {
-  const tripsheetno = req.params.tripsheetno;
-  console.log('tripsheetno:', tripsheetno); // Log the Billing
-  console.log('DELETE query:', 'DELETE FROM billing WHERE tripsheetno = ?', tripsheetno);
-  db.query('DELETE FROM billing WHERE tripsheetno = ?', tripsheetno, (err, result) => {
+app.delete('/billing/:tripid', (req, res) => {
+  const tripid = req.params.tripid;
+  console.log('tripid:', tripid); // Log the Billing
+  console.log('DELETE query:', 'DELETE FROM billing WHERE tripid = ?', tripid);
+  db.query('DELETE FROM billing WHERE tripid = ?', tripid, (err, result) => {
     if (err) {
       console.error('Error deleting data from MySQL:', err);
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
@@ -1216,12 +1178,12 @@ app.delete('/billing/:tripsheetno', (req, res) => {
   });
 });
 // update Billing details
-app.put('/billing/:tripsheetno', (req, res) => {
-  const tripsheetno = req.params.tripsheetno;
+app.put('/billing/:tripid', (req, res) => {
+  const tripid = req.params.tripid;
   const updatedCustomerData = req.body;
-  console.log('tripsheetno:', tripsheetno); // Log the Billing
+  console.log('tripid:', tripid); // Log the Billing
   console.log('Updated billing data:', updatedCustomerData);
-  db.query('UPDATE billing SET ? WHERE tripsheetno = ?', [updatedCustomerData, tripsheetno], (err, result) => {
+  db.query('UPDATE billing SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
     if (err) {
       console.error('Error updating data in MySQL:', err);
       return res.status(500).json({ error: "Failed to update data in MySQL" });

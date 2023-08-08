@@ -20,7 +20,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "tripsheetno", headerName: "Trip Sheet No", width: 130 },
+  { field: "tripid", headerName: "Trip Sheet No", width: 130 },
   { field: "startdate", headerName: "Trip Date", width: 130 },
   { field: "guestname", headerName: "User Name", width: 130 },
   { field: "customer", headerName: "Customer Name", width: 130 },
@@ -88,7 +88,7 @@ const Closed = () => {
     // Modify tableData to exclude the index number
     const tableData = rows.map((row) => [
       row['id'],
-      row['tripsheetno'],
+      row['tripid'],
       row['startdate'],
       row['guestname'],
       row['customer'],
@@ -152,7 +152,7 @@ const Closed = () => {
     }
   }, []);
   const handleButtonClickTripsheet = (selectedRow) => {
-    const bookingPageUrl = `/home/orders/tripsheet?tripsheetno=${selectedRow.tripsheetno}&bookingid=${selectedRow.bookingid}&status=${selectedRow.status}&billingno=${selectedRow.billingno}&apps=${selectedRow.apps}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobile=${selectedRow.mobile}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&address1=${selectedRow.address1}&streetno=${selectedRow.streetno}&city=${selectedRow.city}&hireTypes=${selectedRow.hireTypes}&department=${selectedRow.department}&vehRegNo=${selectedRow.vehRegNo}&vehType=${selectedRow.vehType}&driverName=${selectedRow.driverName}&mobileNo=${selectedRow.mobileNo}&driversmsexbetta=${selectedRow.driversmsexbetta}&gps=${selectedRow.gps}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&useage=${selectedRow.useage}&request=${selectedRow.request}&startdate=${selectedRow.startdate}&closedate=${selectedRow.closedate}&empolyeeno=${selectedRow.empolyeeno}&starttime=${selectedRow.starttime}&closetime=${selectedRow.closetime}&advancepaidtovendor=${selectedRow.advancepaidtovendor}&customercode=${selectedRow.customercode}&startkm=${selectedRow.startkm}&closekm=${selectedRow.closekm}&permit=${selectedRow.permit}&parking=${selectedRow.parking}&toll=${selectedRow.toll}&vpermettovendor=${selectedRow.vpermettovendor}&vendortoll=${selectedRow.vendortoll}&customeradvance=${selectedRow.customeradvance}&email1=${selectedRow.email1}&remark=${selectedRow.remark}`;
+    const bookingPageUrl = `/home/orders/tripsheet?tripid=${selectedRow.tripid}&bookingid=${selectedRow.bookingid}&status=${selectedRow.status}&billingno=${selectedRow.billingno}&apps=${selectedRow.apps}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobile=${selectedRow.mobile}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&address1=${selectedRow.address1}&streetno=${selectedRow.streetno}&city=${selectedRow.city}&hireTypes=${selectedRow.hireTypes}&department=${selectedRow.department}&vehRegNo=${selectedRow.vehRegNo}&vehType=${selectedRow.vehType}&driverName=${selectedRow.driverName}&mobileNo=${selectedRow.mobileNo}&driversmsexbetta=${selectedRow.driversmsexbetta}&gps=${selectedRow.gps}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&useage=${selectedRow.useage}&request=${selectedRow.request}&startdate=${selectedRow.startdate}&closedate=${selectedRow.closedate}&empolyeeno=${selectedRow.empolyeeno}&starttime=${selectedRow.starttime}&closetime=${selectedRow.closetime}&advancepaidtovendor=${selectedRow.advancepaidtovendor}&customercode=${selectedRow.customercode}&startkm=${selectedRow.startkm}&closekm=${selectedRow.closekm}&permit=${selectedRow.permit}&parking=${selectedRow.parking}&toll=${selectedRow.toll}&vpermettovendor=${selectedRow.vpermettovendor}&vendortoll=${selectedRow.vendortoll}&customeradvance=${selectedRow.customeradvance}&email1=${selectedRow.email1}&remark=${selectedRow.remark}`;
     window.location.href = bookingPageUrl;
   }
 

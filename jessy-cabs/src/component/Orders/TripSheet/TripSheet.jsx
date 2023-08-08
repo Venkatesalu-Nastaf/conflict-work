@@ -200,7 +200,7 @@ const TripSheet = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const bookingFormData = {
-      tripsheetno: params.get('tripsheetno'),
+      tripid: params.get('tripid'),
       bookingid: params.get('bookingid'),
       status: params.get('status'),
       billingno: params.get('billingno'),
@@ -249,7 +249,7 @@ const TripSheet = () => {
   }, [location]);
 
   const [book, setBook] = useState({
-    tripsheetno: '',
+    tripid: '',
     bookingid: '',
     status: '',
     billingno: '',
@@ -357,7 +357,7 @@ const TripSheet = () => {
   const handleCancel = () => {
     setBook((prevBook) => ({
       ...prevBook,
-      tripsheetno: '',
+      tripid: '',
       bookingid: '',
       status: '',
       billingno: '',
@@ -467,13 +467,13 @@ const TripSheet = () => {
   };
 
   const handleDelete = async () => {
-    if (!selectedCustomerData.tripsheetno) {
+    if (!selectedCustomerData.tripid) {
       console.log('No tripsheet number provided for deletion.');
       return;
     }
     try {
       console.log('Delete button clicked');
-      await axios.delete(`http://localhost:8081/tripsheet/${selectedCustomerData.tripsheetno}`);
+      await axios.delete(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid}`);
       console.log('Customer deleted');
       setFormData({});
       setSelectedCustomerData({});
@@ -484,16 +484,16 @@ const TripSheet = () => {
   };
 
   const handleEdit = async () => {
-    if (!selectedCustomerData.tripsheetno) {
+    if (!selectedCustomerData.tripid) {
       console.log('No tripsheet number provided for editing.');
       return;
     }
 
     try {
       console.log('Edit button clicked');
-      const selectedCustomer = rows.find((row) => row.tripsheetno === selectedCustomerData.tripsheetno || formData.tripsheetno);
+      const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid);
       const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData, ...formData };
-      await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripsheetno || formData.tripsheetno}`, updatedCustomer);
+      await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || formData.tripid}`, updatedCustomer);
       console.log('Customer updated');
       handleCancel();
     } catch (error) {
@@ -668,7 +668,7 @@ const TripSheet = () => {
         console.log(bookingDetails);
 
         setSelectedCustomerData(bookingDetails);
-        setSelectedCustomerId(bookingDetails.tripsheetno);
+        setSelectedCustomerId(bookingDetails.tripid);
       } catch (error) {
         console.error('Error retrieving booking details:', error);
       }
@@ -707,10 +707,10 @@ const TripSheet = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  id="tripsheetno"
+                  id="tripid"
                   label="Trip Sheet No"
-                  name="tripsheetno"
-                  value={formData.tripsheetno || selectedCustomerData.tripsheetno || book.tripsheetno}
+                  name="tripid"
+                  value={formData.tripid || selectedCustomerData.tripid || book.tripid}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   autoFocus
@@ -1703,7 +1703,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="VendorTripNo"
-                        value={formData.tripsheetno || selectedCustomerData.tripsheetno || book.tripsheetno}
+                        value={formData.tripid || selectedCustomerData.tripid || book.tripid}
                         onChange={handleChange}
                         label="Vendor Trip No"
                         id="Vendor-Trip-No"

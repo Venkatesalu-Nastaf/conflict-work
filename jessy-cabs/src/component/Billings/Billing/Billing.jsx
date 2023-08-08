@@ -89,7 +89,7 @@ const Billing = () => {
     }, [success]);
 
     const [book, setBook] = useState({
-        tripsheetno: '',
+        tripid: '',
         Billingno: '',
         Billingdate: '',
         totalkms: '',
@@ -171,7 +171,7 @@ const Billing = () => {
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
-            tripsheetno: '',
+            tripid: '',
             Billingno: '',
             Billingdate: '',
             totalkms: '',
@@ -221,7 +221,7 @@ const Billing = () => {
         setSelectedCustomerData({});
     };
 
-    const handleClick = async (event, actionName, tripsheetno) => {
+    const handleClick = async (event, actionName, tripid) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
@@ -234,15 +234,15 @@ const Billing = () => {
                 handleCancel();
             } else if (actionName === 'Delete') {
                 console.log('Delete button clicked');
-                await axios.delete(`http://localhost:8081/billing/${tripsheetno}`);
+                await axios.delete(`http://localhost:8081/billing/${tripid}`);
                 console.log('Customer deleted');
                 setSelectedCustomerData(null);
                 handleCancel();
             } else if (actionName === 'Edit') {
                 console.log('Edit button clicked');
-                const selectedCustomer = rows.find((row) => row.tripsheetno === tripsheetno);
+                const selectedCustomer = rows.find((row) => row.tripid === tripid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`http://localhost:8081/billing/${tripsheetno}`, updatedCustomer);
+                await axios.put(`http://localhost:8081/billing/${tripid}`, updatedCustomer);
                 console.log('Customer updated');
                 handleCancel();
             } else if (actionName === 'Add') {
@@ -274,11 +274,11 @@ const Billing = () => {
                                 <TextField
                                     margin="normal"
                                     size="small"
-                                    id="TripSheetno"
+                                    id="tripid"
                                     label="Trip Sheet No"
-                                    name="tripsheetno"
+                                    name="tripid"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.tripsheetno || book.tripsheetno}
+                                    value={selectedCustomerData?.tripid || book.tripid}
                                     onChange={handleChange}
                                 />
                             </div>

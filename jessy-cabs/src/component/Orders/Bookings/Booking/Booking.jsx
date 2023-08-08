@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import "./Booking.css";
 import dayjs from "dayjs";
 import axios from "axios";
+import { Table } from "@mui/joy";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
@@ -18,7 +19,6 @@ import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Duty, Hire, PayType, Report, VehicleModel, Service_Station } from "./Booking";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
-
 // ICONS
 import InfoIcon from "@mui/icons-material/Info";
 import SellIcon from "@mui/icons-material/Sell";
@@ -29,8 +29,8 @@ import NoCrashIcon from "@mui/icons-material/NoCrash";
 import CommuteIcon from "@mui/icons-material/Commute";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import RateReviewIcon from "@mui/icons-material/RateReview";
@@ -73,7 +73,7 @@ const Booking = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [actionName] = useState('');
-  const [rows] = useState([]);
+  const [rows, setRows] = useState([]);
   const [displayCopy, setDisplayCopy] = useState(false);
   const [value, setValue] = React.useState("billingaddress");
   const [triptime, setTripTime] = useState('');
@@ -85,6 +85,12 @@ const Booking = () => {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [selectedValue, setSelectedValue] = useState('pending');
+  const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
+    vehType: '',
+    driverName: '',
+    vehRegNo: '',
+    mobileNo: '',
+  });
 
   const hidePopup = () => {
     setError(false);
@@ -264,60 +270,6 @@ const Booking = () => {
     setFormData({});
   };
 
-  // const handleChange = (event) => {
-  //   const { name, value, checked } = event.target;
-  //   setFormData({ ...formData, [name]: value });
-  //   setSelectedValue({ ...selectedValue, [name]: checked });
-
-  //   if (event.target.type === 'checkbox') {
-  //     setBook((prevBook) => ({
-  //       ...prevBook,
-  //       [name]: checked,
-  //     }));
-  //     setSelectedCustomerData((prevData) => ({
-  //       ...prevData,
-  //       [name]: checked,
-  //     }));
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       [name]: checked,
-  //     }));
-  //     // setSelectedValue((prevData) => ({
-  //     //   ...prevData,
-  //     //   [name]: checked,
-  //     // }));
-  //   } else {
-  //     // Check if the field is the time field
-  //     if (name === 'bookingtime') {
-  //       const formattedTime = value; // Modify the time value if needed
-  //       setBook((prevBook) => ({
-  //         ...prevBook,
-  //         [name]: formattedTime,
-  //       }));
-  //       setSelectedCustomerData((prevData) => ({
-  //         ...prevData,
-  //         [name]: formattedTime,
-  //       }));
-  //       setFormData((prevData) => ({
-  //         ...prevData,
-  //         [name]: formattedTime,
-  //       }));
-  //     } else {
-  //       setBook((prevBook) => ({
-  //         ...prevBook,
-  //         [name]: value,
-  //       }));
-  //       setSelectedCustomerData((prevData) => ({
-  //         ...prevData,
-  //         [name]: value,
-  //       }));
-  //       setFormData((prevData) => ({
-  //         ...prevData,
-  //         [name]: value,
-  //       }));
-  //     }
-  //   }
-  // };
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
     setSelectedValue(event.target.value);
@@ -541,6 +493,24 @@ const Booking = () => {
     }
   };
 
+  const handleKeyEnter = useCallback(async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      try {
+        const response = await axios.get(`http://localhost:8081/name-customers/${event.target.value}`);
+        const vehicleData = response.data;
+        setRows([vehicleData]);
+      } catch (error) {
+        console.error('Error retrieving vehicle details:', error.message);
+      }
+    }
+  }, []);
+
+  const handleRowClick = useCallback((params) => {
+    console.log(params);
+    setSelectedCustomerDatas(params);
+  }, []);
+
   return (
     <div className="booking-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
@@ -551,7 +521,6 @@ const Booking = () => {
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
-
                 <TextField
                   name="bookingno"
                   label="Booking No"
@@ -609,7 +578,6 @@ const Booking = () => {
                       value="pending"
                       control={<Radio />}
                       label="Pending"
-                    // labelPlacement="end"
                     />
                     <FormControlLabel
                       value="cancelled"
@@ -640,8 +608,9 @@ const Booking = () => {
                 <TextField
                   name="customer"
                   autoComplete="new-password"
-                  value={formData.customer || selectedCustomerData.customer || book.customer}
+                  value={formData.customer || selectedCustomerDatas.customer || selectedCustomerData.customer || book.customer}
                   onChange={handleChange}
+                  onKeyDown={handleKeyEnter}
                   label="Customer"
                   id="customer"
                   variant="standard"
@@ -867,7 +836,6 @@ const Booking = () => {
                 <input
                   type="time"
                   value={formData.starttime || selectedCustomerData.starttime || book.starttime}
-                  // onChange={(event) => setBook({ ...book, starttime: event.target.value })}
                   onChange={(event) => {
                     setBook({ ...book, starttime: event.target.value });
                     setStartTime(event.target.value);
@@ -918,7 +886,6 @@ const Booking = () => {
                 <div className="icone">
                   <LocationCityIcon color="action" />
                 </div>
-
                 <TextField
                   margin="normal"
                   size="small"
@@ -1062,10 +1029,41 @@ const Booking = () => {
                       onChange={handleTabChange}
                       aria-label="lab API tabs example"
                     >
+                      <Tab label="List" value="list" />
                       <Tab label="Billing Address" value="billingaddress" />
                       <Tab label="Email" value="email" />
                     </TabList>
                   </Box>
+                  <TabPanel value="list">
+                    <div className="booking-update">
+                    <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
+                      <Table hoverRow borderAxis="y">
+                        <thead>
+                          <tr>
+                            <th>Customer Name</th>
+                            <th>Address</th>
+                            <th>Address 1</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {rows.length === 0 ? (
+                            <tr>
+                              <td colSpan={6}>No data available.</td>
+                            </tr>
+                          ) : (
+                            rows.map((row) => (
+                              <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                <td>{row.printName}</td>
+                                <td>{row.address1}</td>
+                                <td>{row.address2}</td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </Table>
+                      </div>
+                    </div>
+                  </TabPanel>
                   <TabPanel value="billingaddress">
                     <div className="booking-update">
                       <div className="booking-update-content">
@@ -1156,6 +1154,7 @@ const Booking = () => {
                       </div>
                     </div>
                   </TabPanel>
+                  
                 </TabContext>
               </Box>
             </div>
@@ -1297,15 +1296,6 @@ const Booking = () => {
                 </FormControl>
               </div>
               <div className="input">
-                {/* <Button
-                  color="primary"
-                  disabled={false}
-                  onClick={handleUpload}
-                  size="md"
-                  variant="outlined"
-                >
-                  Attach File
-                </Button> */}
                 <Button color="primary" onClick={handleUpload} size="md" variant="outlined">
                   Attach File
                 </Button>

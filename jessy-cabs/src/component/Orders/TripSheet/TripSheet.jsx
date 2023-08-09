@@ -201,7 +201,7 @@ const TripSheet = () => {
     const params = new URLSearchParams(location.search);
     const bookingFormData = {
       tripid: params.get('tripid'),
-      bookingid: params.get('bookingid'),
+      bookingno: params.get('bookingno'),
       status: params.get('status'),
       billingno: params.get('billingno'),
       apps: params.get('apps'),
@@ -250,7 +250,7 @@ const TripSheet = () => {
 
   const [book, setBook] = useState({
     tripid: '',
-    bookingid: '',
+    bookingno: '',
     status: '',
     billingno: '',
     apps: '',
@@ -358,7 +358,7 @@ const TripSheet = () => {
     setBook((prevBook) => ({
       ...prevBook,
       tripid: '',
-      bookingid: '',
+      bookingno: '',
       status: '',
       billingno: '',
       apps: '',

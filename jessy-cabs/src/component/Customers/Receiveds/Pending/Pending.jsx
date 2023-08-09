@@ -17,11 +17,16 @@ import Button from "@mui/material/Button";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "status", headerName: "Status", width: 130 },
   { field: "bookingno", headerName: "Booking ID", width: 130 },
+  { field: "tripid", headerName: "Tripsheet No", width: 130 },
   { field: "bookingdate", headerName: "Date", width: 130 },
   { field: "bookingtime", headerName: "Time", width: 90 },
   { field: "guestname", headerName: "Guest Name", width: 160 },
@@ -30,7 +35,6 @@ const columns = [
   { field: "address2", headerName: "R.Address1", width: 130 },
   { field: "city", headerName: "R.Address2", width: 130 },
   { field: "customer", headerName: "Company", width: 130 },
-  { field: "tripid", headerName: "BookingID", width: 130 },
 ];
 
 const Pending = () => {
@@ -40,6 +44,8 @@ const Pending = () => {
   const [toDate, setToDate] = useState(dayjs());
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   const hidePopup = () => {
     setSuccess(false);
@@ -73,7 +79,7 @@ const Pending = () => {
     saveAs(blob, "Pending Reports.csv");
   };
   const handlePdfDownload = () => {
-    const pdf = new jsPDF();
+    const pdf = new jsPDF('Landscape');
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'normal');
     pdf.text("Pending Reports", 10, 10);
@@ -83,6 +89,7 @@ const Pending = () => {
       row['id'],
       row['status'],
       row['bookingno'],
+      row['tripid'],
       row['bookingdate'],
       row['bookingtime'],
       row['guestname'],
@@ -90,11 +97,10 @@ const Pending = () => {
       row['address1'],
       row['address2'],
       row['customer'],
-      row['tripid']
     ]);
 
     pdf.autoTable({
-      head: [['Sno', 'Status', 'Booking ID', 'Date', 'Time', 'Guest Name', 'Mobile', 'R.Address', 'R.Address1', 'R.Address2', 'Company', 'BookingID']],
+      head: [['Sno', 'Status', 'Booking ID', 'Tripsheet No', 'Date', 'Time', 'Guest Name', 'Mobile', 'R.Address', 'R.Address1', 'R.Address2', 'Company']],
       body: tableData,
       startY: 20,
     });
@@ -140,12 +146,37 @@ const Pending = () => {
   }, []);
 
 
-  const handleButtonClickBooking = (selectedRow) => {
+  // const handleButtonClickBooking = (selectedRow) => {
+  //   const bookingPageUrl = `/home/orders/bookings?bookingno=${selectedRow.bookingno}&bookingdate=${selectedRow.bookingdate}&bookingtime=${selectedRow.bookingtime}&status=${selectedRow.status}&tripid=${selectedRow.tripid}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobileno=${selectedRow.mobileno}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&employeeno=${selectedRow.employeeno}&address1=${selectedRow.address1}&address2=${selectedRow.address2}&city=${selectedRow.report}&vehType=${selectedRow.vehType}&paymenttype=${selectedRow.paymenttype}&startdate=${selectedRow.startdate}&starttime=${selectedRow.starttime}&registertime=${selectedRow.registertime}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&costcode=${selectedRow.costcode}&registerno=${selectedRow.registerno}&flightno=${selectedRow.flightno}&orderbyemail=${selectedRow.orderbyemail}&remarks=${selectedRow.remarks}&servicestation=${selectedRow.servicestation}&advance=${selectedRow.advance}&nameupdate=${selectedRow.nameupdate}&address3=${selectedRow.address3}&address4=${selectedRow.address4}&cityupdate=${selectedRow.cityupdate}&useage=${selectedRow.useage}&username=${selectedRow.username}&tripdate=${selectedRow.tripdate}&triptime=${selectedRow.triptime}&emaildoggle=${selectedRow.emaildoggle}&hiretypes=${selectedRow.hiretypes}&travelsname=${selectedRow.travelsname}&vehicleregisterno=${selectedRow.vehicleregisterno}&vehiclemodule=${selectedRow.vehiclemodule}&driverName=${selectedRow.driverName}&driverphone=${selectedRow.driverphone}&travelsemail=${selectedRow.travelsemail}`;
+  //   window.location.href = bookingPageUrl;
+  // }
+
+  // const handleButtonClick = (selectedRow) => {
+  //   // window.location.href = '/home/orders/tripsheet';
+  //   const bookingPageUrl = `/home/orders/tripsheet?bookingno=${selectedRow.bookingno}&bookingdate=${selectedRow.bookingdate}&bookingtime=${selectedRow.bookingtime}&status=${selectedRow.status}&tripid=${selectedRow.tripid}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobileno=${selectedRow.mobileno}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&employeeno=${selectedRow.employeeno}&address1=${selectedRow.address1}&address2=${selectedRow.address2}&city=${selectedRow.report}&vehType=${selectedRow.vehType}&paymenttype=${selectedRow.paymenttype}&startdate=${selectedRow.startdate}&starttime=${selectedRow.starttime}&registertime=${selectedRow.registertime}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&costcode=${selectedRow.costcode}&registerno=${selectedRow.registerno}&flightno=${selectedRow.flightno}&orderbyemail=${selectedRow.orderbyemail}&remarks=${selectedRow.remarks}&servicestation=${selectedRow.servicestation}&advance=${selectedRow.advance}&nameupdate=${selectedRow.nameupdate}&address3=${selectedRow.address3}&address4=${selectedRow.address4}&cityupdate=${selectedRow.cityupdate}&useage=${selectedRow.useage}&username=${selectedRow.username}&tripdate=${selectedRow.tripdate}&triptime=${selectedRow.triptime}&emaildoggle=${selectedRow.emaildoggle}&hiretypes=${selectedRow.hiretypes}&travelsname=${selectedRow.travelsname}&vehicleregisterno=${selectedRow.vehicleregisterno}&vehiclemodule=${selectedRow.vehiclemodule}&driverName=${selectedRow.driverName}&driverphone=${selectedRow.driverphone}&travelsemail=${selectedRow.travelsemail}`;
+  //   window.location.href = bookingPageUrl;
+  // };
+
+  const handleButtonClick = (row) => {
+    setSelectedRow(row);
+    setPopupOpen(true);
+  };
+  const handlePopupClose = () => {
+    setSelectedRow(null);
+    setPopupOpen(false);
+  };
+  const handleBookingClick = () => {
     const bookingPageUrl = `/home/orders/bookings?bookingno=${selectedRow.bookingno}&bookingdate=${selectedRow.bookingdate}&bookingtime=${selectedRow.bookingtime}&status=${selectedRow.status}&tripid=${selectedRow.tripid}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobileno=${selectedRow.mobileno}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&employeeno=${selectedRow.employeeno}&address1=${selectedRow.address1}&address2=${selectedRow.address2}&city=${selectedRow.report}&vehType=${selectedRow.vehType}&paymenttype=${selectedRow.paymenttype}&startdate=${selectedRow.startdate}&starttime=${selectedRow.starttime}&registertime=${selectedRow.registertime}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&costcode=${selectedRow.costcode}&registerno=${selectedRow.registerno}&flightno=${selectedRow.flightno}&orderbyemail=${selectedRow.orderbyemail}&remarks=${selectedRow.remarks}&servicestation=${selectedRow.servicestation}&advance=${selectedRow.advance}&nameupdate=${selectedRow.nameupdate}&address3=${selectedRow.address3}&address4=${selectedRow.address4}&cityupdate=${selectedRow.cityupdate}&useage=${selectedRow.useage}&username=${selectedRow.username}&tripdate=${selectedRow.tripdate}&triptime=${selectedRow.triptime}&emaildoggle=${selectedRow.emaildoggle}&hiretypes=${selectedRow.hiretypes}&travelsname=${selectedRow.travelsname}&vehicleregisterno=${selectedRow.vehicleregisterno}&vehiclemodule=${selectedRow.vehiclemodule}&driverName=${selectedRow.driverName}&driverphone=${selectedRow.driverphone}&travelsemail=${selectedRow.travelsemail}`;
     window.location.href = bookingPageUrl;
-  }
-
-  const handleButtonClick = () => {
+  };
+  const handleTripsheetClick = () => {
+    const bookingPageUrl = `/home/orders/tripsheet?bookingno=${selectedRow.bookingno}&bookingdate=${selectedRow.bookingdate}&bookingtime=${selectedRow.bookingtime}&tripid=${selectedRow.tripid}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobileno=${selectedRow.mobileno}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&employeeno=${selectedRow.employeeno}&address1=${selectedRow.address1}&address2=${selectedRow.address2}&city=${selectedRow.report}&vehType=${selectedRow.vehType}&paymenttype=${selectedRow.paymenttype}&startdate=${selectedRow.startdate}&starttime=${selectedRow.starttime}&registertime=${selectedRow.registertime}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&costcode=${selectedRow.costcode}&registerno=${selectedRow.registerno}&flightno=${selectedRow.flightno}&orderbyemail=${selectedRow.orderbyemail}&remarks=${selectedRow.remarks}&servicestation=${selectedRow.servicestation}&advance=${selectedRow.advance}&nameupdate=${selectedRow.nameupdate}&address3=${selectedRow.address3}&address4=${selectedRow.address4}&cityupdate=${selectedRow.cityupdate}&useage=${selectedRow.useage}&username=${selectedRow.username}&tripdate=${selectedRow.tripdate}&triptime=${selectedRow.triptime}&emaildoggle=${selectedRow.emaildoggle}&hiretypes=${selectedRow.hiretypes}&travelsname=${selectedRow.travelsname}&vehicleregisterno=${selectedRow.vehicleregisterno}&vehiclemodule=${selectedRow.vehiclemodule}&driverName=${selectedRow.driverName}&driverphone=${selectedRow.driverphone}&travelsemail=${selectedRow.travelsemail}`;
+    window.location.href = bookingPageUrl;
+  };
+  const handleButtonbooking = () => {
+    window.location.href = '/home/orders/bookings';
+  };
+  const handleButtontripsheet = () => {
     window.location.href = '/home/orders/tripsheet';
   };
 
@@ -181,12 +212,12 @@ const Pending = () => {
               </div>
               <div className="input-field">
                 <div className="input" style={{ width: "300px" }}>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={servicestation}
+                    value={servicestation || ''}
                     options={Stations.map((option) => ({
                       label: option.optionvalue,
                     }))}
@@ -195,13 +226,38 @@ const Pending = () => {
                     renderInput={(params) => (
                       <TextField {...params} label="Stations" />
                     )}
+                  /> */}
+                  {/* <Autocomplete
+                    fullWidth id="free-solo-demo"
+                    freeSolo size="small"
+                    value={servicestation || ""}
+                    options={Stations || []}
+                    getOptionLabel={(option) => option.optionvalue || ''}
+                    onChange={handleInputChange}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Stations" />
+                    )}
+                  /> */}
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={servicestation}
+                    options={Stations}
+                    getOptionLabel={(option) => option.optionvalue || ''}
+                    onChange={handleInputChange}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Stations" />
+                    )}
                   />
+
                 </div>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained">New Booking</Button>
+                  <Button variant="contained" onClick={handleButtonbooking}>New Booking</Button>
                 </div>
                 <div className="input" style={{ width: '170px' }}>
-                  <Button variant="contained" onClick={handleButtonClick}>
+                  <Button variant="contained" onClick={handleButtontripsheet}>
                     New TripSheet
                   </Button>
                 </div>
@@ -241,10 +297,28 @@ const Pending = () => {
             <DataGrid
               rows={rows}
               columns={columns}
-              onRowClick={(event) => handleButtonClickBooking(event.row)}
+              // onRowClick={(event) => handleButtonClick(event.row)}
+              // onRowDoubleClick={(params) => handleButtonClickBooking(params.row)}
+              onRowClick={(event) => handleButtonClick(event.row)}
               pageSize={5}
-              checkboxSelection
+            // checkboxSelection
             />
+            <Dialog open={popupOpen} onClose={handlePopupClose}>
+              <DialogTitle>Select an Option</DialogTitle>
+              <DialogContent>
+                {selectedRow && (
+                  <div>
+                    <Button onClick={handleBookingClick}>Booking</Button>
+                    <Button onClick={handleTripsheetClick}>Tripsheet</Button>
+                  </div>
+                )}
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handlePopupClose} variant="contained" color="primary">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </div>
       </form>

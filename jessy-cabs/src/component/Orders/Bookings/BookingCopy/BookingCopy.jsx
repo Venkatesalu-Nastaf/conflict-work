@@ -101,9 +101,6 @@ const BookingCopy = () => {
               <div className="input" style={{ width: "70px" }}>
                 <Button variant="outlined" onClick={handleShow}>Show</Button>
               </div>
-              <div className="input" style={{ width: "70px" }}>
-                <Button variant="contained">Save</Button>
-              </div>
             </div>
           </div>
         </div>

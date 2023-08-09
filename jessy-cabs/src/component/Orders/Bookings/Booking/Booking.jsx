@@ -287,10 +287,7 @@ const Booking = () => {
         ...prevData,
         [name]: checked,
       }));
-      setSelectedValue((prevData) => ({
-        ...prevData,
-        [name]: checked,
-      }));
+    
     } else {
       // Handling non-checkbox fields
       const fieldValue = type === 'time' ? value : value;
@@ -306,6 +303,10 @@ const Booking = () => {
       setFormData((prevData) => ({
         ...prevData,
         [name]: fieldValue,
+      }));
+      setSelectedValue((prevData) => ({
+        ...prevData,
+        [name]: value,
       }));
     }
   };
@@ -391,34 +392,6 @@ const Booking = () => {
   const handleClickHide = () => {
     setDisplayCopy(false);
   };
-
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event.target.checked);
-  };
-
-  useEffect(() => {
-    const handleKeyPress = (event) => {
-      // Handle key press logic
-    };
-
-    const handleKeyDown = (event) => {
-      if (event.keyCode === 116) {
-        // F5 key code is 116
-        event.preventDefault();
-        setIsChecked(!isChecked);
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keypress", handleKeyPress);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keypress", handleKeyPress);
-    };
-  }, [isChecked]);
 
   const actions = [
     { icon: <LocalPostOfficeIcon />, name: "Email" },
@@ -1036,31 +1009,31 @@ const Booking = () => {
                   </Box>
                   <TabPanel value="list">
                     <div className="booking-update">
-                    <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
-                      <Table hoverRow borderAxis="y">
-                        <thead>
-                          <tr>
-                            <th>Customer Name</th>
-                            <th>Address</th>
-                            <th>Address 1</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {rows.length === 0 ? (
+                      <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
+                        <Table hoverRow borderAxis="y">
+                          <thead>
                             <tr>
-                              <td colSpan={6}>No data available.</td>
+                              <th>Customer Name</th>
+                              <th>Address</th>
+                              <th>Address 1</th>
                             </tr>
-                          ) : (
-                            rows.map((row) => (
-                              <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                <td>{row.printName}</td>
-                                <td>{row.address1}</td>
-                                <td>{row.address2}</td>
+                          </thead>
+                          <tbody>
+                            {rows.length === 0 ? (
+                              <tr>
+                                <td colSpan={6}>No data available.</td>
                               </tr>
-                            ))
-                          )}
-                        </tbody>
-                      </Table>
+                            ) : (
+                              rows.map((row) => (
+                                <tr key={row.id} onClick={() => handleRowClick(row)}>
+                                  <td>{row.printName}</td>
+                                  <td>{row.address1}</td>
+                                  <td>{row.address2}</td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </Table>
                       </div>
                     </div>
                   </TabPanel>
@@ -1154,13 +1127,13 @@ const Booking = () => {
                       </div>
                     </div>
                   </TabPanel>
-                  
+
                 </TabContext>
               </Box>
             </div>
             <div className="inpu-field">
               <div className="input">
-              
+
                 <FormControlLabel
                   value="vehiclechanges"
                   control={<Checkbox size="small" />}
@@ -1298,146 +1271,144 @@ const Booking = () => {
             </div>
           </div>
         </div>
-        {/* {isChecked ? (/ */}
-          <div className="vehicle-confirm">
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <AirportShuttleIcon color="action" />
-                </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "hiretypes")}
-                  value={Hire.find((option) => option.Option)?.label || ''}
-                  options={Hire.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) => option.label || ''}
-                  renderInput={(params) => {
-                    params.inputProps.value = formData.hiretypes || selectedCustomerData.hiretypes || ''
-                    return (
-                      <TextField {...params} label="Hire Types" name="hiretypes" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
-                />
+        <div className="vehicle-confirm">
+          <div className="input-field">
+            <div className="input">
+              <div className="icone">
+                <AirportShuttleIcon color="action" />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <AltRouteIcon color="action" />
-                </div>
-                <TextField
-                  name="travelsname"
-                  autoComplete="new-password"
-                  value={formData.travelsname || selectedCustomerData.travelsname || book.travelsname}
-                  onChange={handleChange}
-                  label="Travels Name"
-                  id="travelsname"
-                  variant="standard"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <CarCrashIcon color="action" />
-                </div>
-                <TextField
-                  name="vehicleregisterno"
-                  autoComplete="new-password"
-                  value={formData.vehicleregisterno || selectedCustomerData.vehicleregisterno || book.vehicleregisterno}
-                  onChange={handleChange}
-                  label="Vehicle Register No"
-                  id="vehicleregisterno"
-                  variant="standard"
-                />
-              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) => handleAutocompleteChange(event, value, "hiretypes")}
+                value={Hire.find((option) => option.Option)?.label || ''}
+                options={Hire.map((option) => ({
+                  label: option.Option,
+                }))}
+                getOptionLabel={(option) => option.label || ''}
+                renderInput={(params) => {
+                  params.inputProps.value = formData.hiretypes || selectedCustomerData.hiretypes || ''
+                  return (
+                    <TextField {...params} label="Hire Types" name="hiretypes" inputRef={params.inputRef} />
+                  )
+                }
+                }
+              />
             </div>
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <CommuteIcon color="action" />
-                </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehiclemodule")}
-                  value={VehicleModel.find((option) => option.carmodel)?.label || ''}
-                  options={VehicleModel.map((option) => ({
-                    label: option.carmodel,
-                  }))}
-                  getOptionLabel={(option) => option.label || ''}
-                  renderInput={(params) => {
-                    params.inputProps.value = formData.vehiclemodule || selectedCustomerData.vehiclemodule || ''
-                    return (
-                      <TextField {...params} label="Vehicle Model" name="vehiclemodule" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
-                />
+            <div className="input">
+              <div className="icone">
+                <AltRouteIcon color="action" />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <NoCrashIcon color="action" />
-                </div>
-                <TextField
-                  name="driverName"
-                  autoComplete="new-password"
-                  value={formData.driverName || selectedCustomerData.driverName || book.driverName}
-                  onChange={handleChange}
-                  label="Driver Name"
-                  id="drivername"
-                  variant="standard"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <AddIcCallTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  name="driverphone"
-                  autoComplete="new-password"
-                  value={formData.driverphone || selectedCustomerData.driverphone || book.driverphone}
-                  onChange={handleChange}
-                  label="Driver Phone"
-                  id="driverphone"
-                  variant="standard"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <AttachEmailIcon color="action" />
-                </div>
-                <TextField
-                  name="travelsemail"
-                  autoComplete="new-password"
-                  value={formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail}
-                  onChange={handleChange}
-                  label="Travels Email"
-                  id="travelsemail"
-                  variant="standard"
-                />
-              </div>
+              <TextField
+                name="travelsname"
+                autoComplete="new-password"
+                value={formData.travelsname || selectedCustomerData.travelsname || book.travelsname}
+                onChange={handleChange}
+                label="Travels Name"
+                id="travelsname"
+                variant="standard"
+              />
             </div>
-            {error &&
-              <div className='alert-popup Error' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
-                <p>Something went wrong!</p>
+            <div className="input">
+              <div className="icone">
+                <CarCrashIcon color="action" />
               </div>
-            }
-            {success &&
-              <div className='alert-popup Error' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
-                <p>success fully submitted</p>
-              </div>
-            }
+              <TextField
+                name="vehicleregisterno"
+                autoComplete="new-password"
+                value={formData.vehicleregisterno || selectedCustomerData.vehicleregisterno || book.vehicleregisterno}
+                onChange={handleChange}
+                label="Vehicle Register No"
+                id="vehicleregisterno"
+                variant="standard"
+              />
+            </div>
           </div>
-        {/* ) : null} */}
+          <div className="input-field">
+            <div className="input">
+              <div className="icone">
+                <CommuteIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) => handleAutocompleteChange(event, value, "vehiclemodule")}
+                value={VehicleModel.find((option) => option.carmodel)?.label || ''}
+                options={VehicleModel.map((option) => ({
+                  label: option.carmodel,
+                }))}
+                getOptionLabel={(option) => option.label || ''}
+                renderInput={(params) => {
+                  params.inputProps.value = formData.vehiclemodule || selectedCustomerData.vehiclemodule || ''
+                  return (
+                    <TextField {...params} label="Vehicle Model" name="vehiclemodule" inputRef={params.inputRef} />
+                  )
+                }
+                }
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <NoCrashIcon color="action" />
+              </div>
+              <TextField
+                name="driverName"
+                autoComplete="new-password"
+                value={formData.driverName || selectedCustomerData.driverName || book.driverName}
+                onChange={handleChange}
+                label="Driver Name"
+                id="drivername"
+                variant="standard"
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <AddIcCallTwoToneIcon color="action" />
+              </div>
+              <TextField
+                name="driverphone"
+                autoComplete="new-password"
+                value={formData.driverphone || selectedCustomerData.driverphone || book.driverphone}
+                onChange={handleChange}
+                label="Driver Phone"
+                id="driverphone"
+                variant="standard"
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <AttachEmailIcon color="action" />
+              </div>
+              <TextField
+                name="travelsemail"
+                autoComplete="new-password"
+                value={formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail}
+                onChange={handleChange}
+                label="Travels Email"
+                id="travelsemail"
+                variant="standard"
+              />
+            </div>
+          </div>
+          {error &&
+            <div className='alert-popup Error' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>Something went wrong!</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Error' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>success fully submitted</p>
+            </div>
+          }
+        </div>
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"

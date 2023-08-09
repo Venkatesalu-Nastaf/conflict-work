@@ -110,9 +110,8 @@ const Pending = () => {
   };
 
   const handleInputChange = (event, newValue) => {
-    setServiceStation(newValue.label || ""); // Assuming the label field contains the station name
+    setServiceStation(newValue ? newValue.label : ''); // Assuming the label field contains the station name
   };
-
 
   const handleShow = useCallback(async () => {
     try {
@@ -144,18 +143,6 @@ const Pending = () => {
       setRows([]);
     }
   }, []);
-
-
-  // const handleButtonClickBooking = (selectedRow) => {
-  //   const bookingPageUrl = `/home/orders/bookings?bookingno=${selectedRow.bookingno}&bookingdate=${selectedRow.bookingdate}&bookingtime=${selectedRow.bookingtime}&status=${selectedRow.status}&tripid=${selectedRow.tripid}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobileno=${selectedRow.mobileno}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&employeeno=${selectedRow.employeeno}&address1=${selectedRow.address1}&address2=${selectedRow.address2}&city=${selectedRow.report}&vehType=${selectedRow.vehType}&paymenttype=${selectedRow.paymenttype}&startdate=${selectedRow.startdate}&starttime=${selectedRow.starttime}&registertime=${selectedRow.registertime}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&costcode=${selectedRow.costcode}&registerno=${selectedRow.registerno}&flightno=${selectedRow.flightno}&orderbyemail=${selectedRow.orderbyemail}&remarks=${selectedRow.remarks}&servicestation=${selectedRow.servicestation}&advance=${selectedRow.advance}&nameupdate=${selectedRow.nameupdate}&address3=${selectedRow.address3}&address4=${selectedRow.address4}&cityupdate=${selectedRow.cityupdate}&useage=${selectedRow.useage}&username=${selectedRow.username}&tripdate=${selectedRow.tripdate}&triptime=${selectedRow.triptime}&emaildoggle=${selectedRow.emaildoggle}&hiretypes=${selectedRow.hiretypes}&travelsname=${selectedRow.travelsname}&vehicleregisterno=${selectedRow.vehicleregisterno}&vehiclemodule=${selectedRow.vehiclemodule}&driverName=${selectedRow.driverName}&driverphone=${selectedRow.driverphone}&travelsemail=${selectedRow.travelsemail}`;
-  //   window.location.href = bookingPageUrl;
-  // }
-
-  // const handleButtonClick = (selectedRow) => {
-  //   // window.location.href = '/home/orders/tripsheet';
-  //   const bookingPageUrl = `/home/orders/tripsheet?bookingno=${selectedRow.bookingno}&bookingdate=${selectedRow.bookingdate}&bookingtime=${selectedRow.bookingtime}&status=${selectedRow.status}&tripid=${selectedRow.tripid}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobileno=${selectedRow.mobileno}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&employeeno=${selectedRow.employeeno}&address1=${selectedRow.address1}&address2=${selectedRow.address2}&city=${selectedRow.report}&vehType=${selectedRow.vehType}&paymenttype=${selectedRow.paymenttype}&startdate=${selectedRow.startdate}&starttime=${selectedRow.starttime}&registertime=${selectedRow.registertime}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&costcode=${selectedRow.costcode}&registerno=${selectedRow.registerno}&flightno=${selectedRow.flightno}&orderbyemail=${selectedRow.orderbyemail}&remarks=${selectedRow.remarks}&servicestation=${selectedRow.servicestation}&advance=${selectedRow.advance}&nameupdate=${selectedRow.nameupdate}&address3=${selectedRow.address3}&address4=${selectedRow.address4}&cityupdate=${selectedRow.cityupdate}&useage=${selectedRow.useage}&username=${selectedRow.username}&tripdate=${selectedRow.tripdate}&triptime=${selectedRow.triptime}&emaildoggle=${selectedRow.emaildoggle}&hiretypes=${selectedRow.hiretypes}&travelsname=${selectedRow.travelsname}&vehicleregisterno=${selectedRow.vehicleregisterno}&vehiclemodule=${selectedRow.vehiclemodule}&driverName=${selectedRow.driverName}&driverphone=${selectedRow.driverphone}&travelsemail=${selectedRow.travelsemail}`;
-  //   window.location.href = bookingPageUrl;
-  // };
 
   const handleButtonClick = (row) => {
     setSelectedRow(row);
@@ -211,47 +198,22 @@ const Pending = () => {
                 </div>
               </div>
               <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={servicestation || ''}
-                    options={Stations.map((option) => ({
-                      label: option.optionvalue,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    onChange={handleInputChange}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Stations" />
-                    )}
-                  /> */}
-                  {/* <Autocomplete
-                    fullWidth id="free-solo-demo"
-                    freeSolo size="small"
-                    value={servicestation || ""}
-                    options={Stations || []}
-                    getOptionLabel={(option) => option.optionvalue || ''}
-                    onChange={handleInputChange}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Stations" />
-                    )}
-                  /> */}
+              <div className="input" style={{ width: "300px" }}>
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
                     size="small"
                     value={servicestation}
-                    options={Stations}
-                    getOptionLabel={(option) => option.optionvalue || ''}
+                    options={Stations.map((option) => ({
+                      label: option.optionvalue,
+                    }))}
+                    getOptionLabel={(option) => option.label || ""}
                     onChange={handleInputChange}
-                    renderInput={(params) => (
+                    renderInput={(params) =>
                       <TextField {...params} label="Stations" />
-                    )}
+                    }
                   />
-
                 </div>
                 <div className="input" style={{ width: "140px" }}>
                   <Button variant="contained" onClick={handleButtonbooking}>New Booking</Button>

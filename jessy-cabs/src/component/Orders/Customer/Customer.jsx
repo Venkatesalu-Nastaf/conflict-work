@@ -198,8 +198,9 @@ const Customer = () => {
     }
   };
 
-  const handleAutocompleteChange = (event, value, name) => {
-    const selectedOption = value ? value.label : '';
+  const handleAutocompleteChange = (event, newValue, name) => {
+    const selectedOption = newValue ? newValue.label : '';
+
     setBook((prevBook) => ({
       ...prevBook,
       [name]: selectedOption,

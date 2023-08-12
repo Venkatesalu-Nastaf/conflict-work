@@ -136,6 +136,7 @@ const Closed = () => {
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
     }
   }, [department, fromDate, toDate]);
 
@@ -149,6 +150,7 @@ const Closed = () => {
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
     }
   }, []);
   const handleButtonClickTripsheet = (selectedRow) => {

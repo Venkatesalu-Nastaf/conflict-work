@@ -373,8 +373,8 @@ const Booking = () => {
         setSuccess(true);
       }
 
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
       setError(true);
     }
   };

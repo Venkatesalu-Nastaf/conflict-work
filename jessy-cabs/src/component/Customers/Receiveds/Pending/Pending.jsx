@@ -127,6 +127,7 @@ const Pending = () => {
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
     }
   }, [servicestation, fromDate, toDate]);
 
@@ -141,6 +142,8 @@ const Pending = () => {
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
+
     }
   }, []);
 

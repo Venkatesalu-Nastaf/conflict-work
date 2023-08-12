@@ -31,7 +31,7 @@ import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import StreamIcon from "@mui/icons-material/Stream";
 import DataUsageIcon from "@mui/icons-material/DataUsage";
-import SmsIcon from "@mui/icons-material/Sms";
+// import SmsIcon from "@mui/icons-material/Sms";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import Button from "@mui/material/Button";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -150,7 +150,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const actions = [
-  // { icon: <ChecklistIcon />, name: "List" },
   { icon: <CancelPresentationIcon />, name: "Cancel" },
   { icon: <DeleteIcon />, name: "Delete" },
   { icon: <ModeEditIcon />, name: "Edit" },
@@ -974,12 +973,12 @@ const TripSheet = () => {
                         <Table hoverRow borderAxis="y">
                           <thead>
                             <tr>
-                              <th>Vehicle Name</th>
-                              <th>Vehicle Type</th>
-                              <th>Dname</th>
-                              <th>Dphone</th>
-                              <th>Supplier</th>
-                              <th>Online Access</th>
+                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Vehicle Name</th>
+                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Vehicle Type</th>
+                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Dname</th>
+                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Dphone</th>
+                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Supplier</th>
+                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Online Access</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1129,17 +1128,15 @@ const TripSheet = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <SmsIcon color="action" />
-                </div>
-                <TextField
+              <div className="input radio">
+                <FormControlLabel
                   name="driversmsexbetta"
-                  value={formData.driversmsexbetta || selectedCustomerData.driversmsexbetta || book.driversmsexbetta}
+                  value="Driver SMS"
+                  control={<Checkbox size="small" />}
+                  label="Driver SMS"
+                  autoComplete="new-password"
                   onChange={handleChange}
-                  label="Driver SMS Ex Betta"
-                  id="cell"
-                  variant="standard"
+                  checked={Boolean(formData.driversmsexbetta || selectedCustomerData?.driversmsexbetta || book.driversmsexbetta)}
                 />
               </div>
               <div className="input radio">

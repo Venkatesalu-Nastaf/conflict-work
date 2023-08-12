@@ -58,6 +58,7 @@ const BookingCopy = () => {
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
     }
   }, [bookingno, fromDate, toDate]);
 

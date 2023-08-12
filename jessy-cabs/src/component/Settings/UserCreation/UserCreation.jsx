@@ -353,7 +353,7 @@ const UserCreation = () => {
                           onClick={handleClickShowPasswords}
                           onMouseDown={handleMouseDownPasswords}
                         >
-                          {showPasswords ? <VisibilityOff /> : <Visibility />}
+                          {showPasswords ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -379,7 +379,7 @@ const UserCreation = () => {
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
                         >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
                     }

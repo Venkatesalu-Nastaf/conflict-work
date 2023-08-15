@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import "./Billing.css";
 import {
@@ -61,7 +61,7 @@ const actions = [
 const Billing = () => {
     const [formData] = useState({});
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
-    const [selectedCustomerId] = useState(null);
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
     const [error, setError] = useState(false);
@@ -90,19 +90,19 @@ const Billing = () => {
 
     const [book, setBook] = useState({
         tripid: '',
-        Billingno: '',
+        billingno: '',
         Billingdate: '',
-        totalkms: '',
-        TotalHours: '',
-        Customer: '',
-        Supplier: '',
-        tripdate: '',
-        TotalDays: '',
-        GustName: '',
-        RateType: '',
-        VehicleNo: '',
-        VehicleType: '',
-        Duty: '',
+        totalkm1: '',
+        totaltime: '',
+        customer: '',
+        supplier: '',
+        startdate: '',
+        totaldays: '',
+        guestname: '',
+        rateType: '',
+        vehRegNo: '',
+        vehType: '',
+        duty: '',
         MinCharges: '',
         minchargeamount: '',
         ChargesForExtra: '',
@@ -172,22 +172,21 @@ const Billing = () => {
         setBook((prevBook) => ({
             ...prevBook,
             tripid: '',
-            Billingno: '',
+            billingno: '',
             Billingdate: '',
-            totalkms: '',
-            TotalHours: '',
-            Customer: '',
-            Supplier: '',
-            tripdate: '',
-            TotalDays: '',
-            GustName: '',
-            RateType: '',
-            VehicleNo: '',
-            VehicleType: '',
-            Duty: '',
+            totalkm1: '',
+            totaltime: '',
+            customer: '',
+            supplier: '',
+            startdate: '',
+            totaldays: '',
+            guestname: '',
+            rateType: '',
+            vehRegNo: '',
+            vehType: '',
+            duty: '',
             MinCharges: '',
             minchargeamount: '',
-            MinHours: '',
             ChargesForExtra: '',
             ChargesForExtraamount: '',
             amount1: '',
@@ -260,6 +259,21 @@ const Billing = () => {
             handleClick(null, 'List');
         }
     });
+
+    const handleKeyDown = useCallback(async (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            try {
+                const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
+                const bookingDetails = response.data;
+                setSelectedCustomerData(bookingDetails);
+                setSelectedCustomerId(bookingDetails.customerId);
+            } catch (error) {
+                console.error('Error retrieving booking details:', error);
+            }
+        }
+    }, []);
+
     return (
         <div className="form-container">
             <div className="Billing-form">
@@ -277,9 +291,10 @@ const Billing = () => {
                                     id="tripid"
                                     label="Trip Sheet No"
                                     name="tripid"
-                                    autoComplete="new-password"
+                                    autoComplete="off"
                                     value={selectedCustomerData?.tripid || book.tripid}
                                     onChange={handleChange}
+                                    onKeyDown={handleKeyDown}
                                 />
                             </div>
                             <div className="input">
@@ -291,9 +306,9 @@ const Billing = () => {
                                     size="small"
                                     id="Billingno"
                                     label="Billing No"
-                                    name="Billingno"
+                                    name="billingno"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.Billingno || book.Billingno}
+                                    value={selectedCustomerData?.billingno || book.billingno}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -317,9 +332,9 @@ const Billing = () => {
                                     margin="normal"
                                     size="small"
                                     label="Total Kms"
-                                    name="totalkms"
+                                    name="totalkm1"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.totalkms || book.totalkms}
+                                    value={selectedCustomerData?.totalkm1 || book.totalkm1}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -330,9 +345,9 @@ const Billing = () => {
                                     size="small"
                                     id="TotalHours"
                                     label="Total Hours"
-                                    name="TotalHours"
+                                    name="totaltime"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.TotalHours || book.TotalHours}
+                                    value={selectedCustomerData?.totaltime || book.totaltime}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -348,9 +363,9 @@ const Billing = () => {
                                     sx={{ width: "300px" }}
                                     id="Customer"
                                     label="Customer"
-                                    name="Customer"
+                                    name="customer"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.Customer || book.Customer}
+                                    value={selectedCustomerData?.customer || book.customer}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -364,9 +379,9 @@ const Billing = () => {
                                     sx={{ width: "300px" }}
                                     id="Supplier"
                                     label="Supplier"
-                                    name="Supplier"
+                                    name="supplier"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.Supplier || book.Supplier}
+                                    value={selectedCustomerData?.supplier || book.supplier}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -374,11 +389,11 @@ const Billing = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoItem label="Trip Date">
                                         <DatePicker
-                                            value={formData.tripdate || selectedCustomerData.tripdate ? dayjs(selectedCustomerData.tripdate) : null}
-                                            onChange={(date) => handleDateChange(date, 'tripdate')}
+                                            value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
+                                            onChange={(date) => handleDateChange(date, 'startdate')}
                                         >
                                             {({ inputProps, inputRef }) => (
-                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripdate} />
+                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
                                             )}
                                         </DatePicker>
                                     </DemoItem>
@@ -390,11 +405,11 @@ const Billing = () => {
                                     type='number'
                                     margin="normal"
                                     size="small"
-                                    id="TotalDays"
+                                    id="totaldays"
                                     label="Total Days"
-                                    name="TotalDays"
+                                    name="totaldays"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.TotalDays || book.TotalDays}
+                                    value={selectedCustomerData?.totaldays || book.totaldays}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -408,11 +423,11 @@ const Billing = () => {
                                     margin="normal"
                                     size="small"
                                     sx={{ width: "300px" }}
-                                    id="GustName"
+                                    id="guestname"
                                     label="Gust Name"
-                                    name="GustName"
+                                    name="guestname"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.GustName || book.GustName}
+                                    value={selectedCustomerData?.guestname || book.guestname}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -424,11 +439,11 @@ const Billing = () => {
                                     margin="normal"
                                     size="small"
                                     sx={{ width: "300px" }}
-                                    id="RateType"
+                                    id="rateType"
                                     label="Rate Type"
-                                    name="RateType"
+                                    name="rateType"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.RateType || book.RateType}
+                                    value={selectedCustomerData?.rateType || book.rateType}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -439,11 +454,11 @@ const Billing = () => {
                                 <TextField
                                     margin="normal"
                                     size="small"
-                                    id="VehicleNo"
+                                    id="vehRegNo"
                                     label="Vehicle No"
-                                    name="VehicleNo"
+                                    name="vehRegNo"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData?.VehicleNo || book.VehicleNo}
+                                    value={selectedCustomerData?.vehRegNo || book.vehRegNo}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -457,12 +472,12 @@ const Billing = () => {
                                         <CarCrashIcon color="action" />
                                     </div>
                                     <TextField
-                                        name="VehicleType"
+                                        name="vehType"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.VehicleType || book.VehicleType}
+                                        value={selectedCustomerData?.vehType || book.vehType}
                                         onChange={handleChange}
                                         label="Vehicle Type"
-                                        id="VehicleType"
+                                        id="vehType"
                                         size="small"
                                         sx={{ m: 1, width: "60ch" }}
                                     />
@@ -473,12 +488,12 @@ const Billing = () => {
                                     </div>
                                     <TextField
                                         label='Duty'
-                                        name="Duty"
+                                        name="duty"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.Duty || book.Duty}
+                                        value={selectedCustomerData?.duty || book.duty}
                                         onChange={handleChange}
                                         size="small"
-                                        id="amount"
+                                        id="duty"
                                     />
                                 </div>
                             </div>

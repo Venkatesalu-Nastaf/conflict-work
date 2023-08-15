@@ -287,7 +287,7 @@ const Booking = () => {
         ...prevData,
         [name]: checked,
       }));
-    
+
     } else {
       // Handling non-checkbox fields
       const fieldValue = type === 'time' ? value : value;

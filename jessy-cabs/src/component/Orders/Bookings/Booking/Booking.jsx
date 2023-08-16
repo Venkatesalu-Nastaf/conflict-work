@@ -332,6 +332,28 @@ const Booking = () => {
       [name]: formattedDate,
     }));
   };
+  const handleAdd = async () => {
+ 
+    try {
+      console.log('Add button clicked');
+      const updatedBook = {
+        ...book,
+        bookingtime: bookingtime,
+        starttime: starttime,
+        registertime: registertime,
+        triptime: triptime,
+        status: selectedValue,
+      };
+      await axios.post('http://localhost:8081/booking', updatedBook);
+      console.log(updatedBook);
+      handleCancel();
+      setSuccess(true);
+      
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
   const handleClick = async (event, actionName, bookingno) => {
     event.preventDefault();
 
@@ -359,18 +381,7 @@ const Booking = () => {
         console.log('Copy This button clicked');
         handleClickShow();
       } else if (actionName === 'Add') {
-        const updatedBook = {
-          ...book,
-          bookingtime: bookingtime,
-          starttime: starttime,
-          registertime: registertime,
-          triptime: triptime,
-          status: selectedValue,
-        };
-        await axios.post('http://localhost:8081/booking', updatedBook);
-        console.log(updatedBook);
-        handleCancel();
-        setSuccess(true);
+        handleAdd();
       }
 
     } catch (error) {
@@ -1396,7 +1407,7 @@ const Booking = () => {
               />
             </div>
             <div className="input" style={{ width: "100px" }}>
-              <Button variant="contained" >Add</Button>
+              <Button variant="contained" onClick={handleAdd}>Add</Button>
             </div>
           </div>
           {error &&

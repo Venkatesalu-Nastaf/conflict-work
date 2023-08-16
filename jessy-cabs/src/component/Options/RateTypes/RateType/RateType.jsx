@@ -199,6 +199,23 @@ const RateType = () => {
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
     }, []);
+    const handleAdd = async () => {
+
+        try {
+            const updatedBook = {
+                ...book,
+                starttime: starttime,
+                closetime: closetime,
+            };
+            await axios.post('http://localhost:8081/ratetype', updatedBook);
+            console.log(updatedBook);
+            handleCancel();
+
+        } catch (error) {
+            console.error('Error updating customer:', error);
+        }
+    };
+
     const handleClick = async (event, actionName, driverid) => {
         event.preventDefault();
         try {
@@ -223,20 +240,9 @@ const RateType = () => {
                 await axios.put(`http://localhost:8081/ratetype/${driverid}`, updatedCustomer);
                 console.log('Customer updated');
                 handleCancel();
-            }// else if (actionName === 'Add') {
-            //     await axios.post('http://localhost:8081/ratetype', book);
-            //     console.log(book);
-            //     handleCancel();
-            // }
+            }
             else if (actionName === 'Add') {
-                const updatedBook = {
-                    ...book,
-                    starttime: starttime,
-                    closetime: closetime,
-                };
-                await axios.post('http://localhost:8081/ratetype', updatedBook);
-                console.log(updatedBook);
-                handleCancel();
+                handleAdd();
             }
         } catch (err) {
             console.log(err);
@@ -276,26 +282,12 @@ const RateType = () => {
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
-                                    {/* <Autocomplete
-                                        fullWidth
-                                        id="free-solo-demo"
-                                        freeSolo
-                                        size="small"
-                                        value={Stations.map((option) => option.optionvalue)}
-                                        options={Stations.map((option) => ({
-                                            label: option.Option,
-                                        }))}
-                                        getOptionLabel={(option) => option.label || ""}
-                                        renderInput={(params) => (
-                                            <TextField {...params} name='stations' label="Stations" />
-                                        )}
-                                    /> */}
+
                                     <Autocomplete
                                         fullWidth
                                         size="small"
                                         id="free-solo-demo-customerType"
                                         freeSolo
-                                        // sx={{ width: "20ch" }}
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
                                         value={Stations.find((option) => option.Option)?.label || ''}
                                         options={Stations.map((option) => ({
@@ -396,7 +388,7 @@ const RateType = () => {
                             </div>
                             <div className="input-field">
                                 <div className="input" style={{ width: "100px" }}>
-                                    <Button variant="contained" >Add</Button>
+                                    <Button variant="contained" onClick={handleAdd}>Add</Button>
                                 </div>
                             </div>
                         </div>

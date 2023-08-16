@@ -147,6 +147,19 @@ const Ratevalidity = () => {
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
     }, []);
+    const handleAdd = async () => {
+
+        try {
+            console.log('Add button clicked');
+            await axios.post('http://localhost:8081/ratevalidity', book);
+            console.log(book);
+            handleCancel();
+
+        } catch (error) {
+            console.error('Error updating customer:', error);
+        }
+    };
+
     const handleClick = async (event, actionName, driverid) => {
         event.preventDefault();
         try {
@@ -172,9 +185,7 @@ const Ratevalidity = () => {
                 console.log('Customer updated');
                 handleCancel();
             } else if (actionName === 'Add') {
-                await axios.post('http://localhost:8081/ratevalidity', book);
-                console.log(book);
-                handleCancel();
+                handleAdd();
             }
         } catch (err) {
             console.log(err);
@@ -299,7 +310,7 @@ const Ratevalidity = () => {
                                     </FormControl>
                                 </div>
                                 <div className="input" style={{ width: "100px" }}>
-                                    <Button variant="contained" >Add</Button>
+                                    <Button variant="contained" onClick={handleAdd}>Add</Button>
                                 </div>
                             </div>
                         </div>

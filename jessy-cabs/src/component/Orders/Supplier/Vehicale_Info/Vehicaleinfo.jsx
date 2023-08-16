@@ -176,6 +176,20 @@ const Vehicaleinfo = () => {
 
   };
 
+  const handleAdd = async () => {
+
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/vehicleinfo', book);
+      console.log(book);
+      handleCancel();
+
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
+
   const handleClick = async (event, actionName) => {
     event.preventDefault();
 
@@ -192,11 +206,10 @@ const Vehicaleinfo = () => {
         console.log('Edit button clicked');
         // Perform the desired action when the "Edit" button is clicked
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/vehicleinfo', book);
-        console.log(book);
+        handleAdd();
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
       setError(true);
     }
   };
@@ -558,6 +571,9 @@ const Vehicaleinfo = () => {
                 <Button variant="outlined" startIcon={<SummarizeTwoToneIcon />}>
                   list
                 </Button>
+              </div>
+              <div className="input" style={{ width: "100px" }}>
+                <Button variant="contained" onClick={handleAdd}>Add</Button>
               </div>
             </div>
 

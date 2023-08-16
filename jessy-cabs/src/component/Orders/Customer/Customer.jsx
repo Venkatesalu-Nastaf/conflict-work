@@ -257,6 +257,19 @@ const Customer = () => {
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+  const handleAdd = async () => {
+
+    try {
+      await axios.post('http://localhost:8081/customers', book);
+      console.log(book);
+      handleCancel();
+      setSuccess(true);
+
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
   const handleClick = async (event, actionName, customerId) => {
     event.preventDefault();
     try {
@@ -282,14 +295,10 @@ const Customer = () => {
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/customers', book);
-        console.log(book);
-        handleCancel();
-        setSuccess(true);
-
+        handleAdd();
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
       setError(true);
     }
   };
@@ -784,7 +793,7 @@ const Customer = () => {
             </div>
             <div className="input-field">
               <div className="input">
-                <Button variant="contained" >Add</Button>
+                <Button variant="contained" onClick={handleAdd}>Add</Button>
               </div>
             </div>
             {error &&

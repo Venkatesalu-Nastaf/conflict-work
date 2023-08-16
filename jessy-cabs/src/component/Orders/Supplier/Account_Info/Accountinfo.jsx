@@ -217,31 +217,6 @@ const Accuntinfo = () => {
     setValue(newValue);
   };
 
-  // const handleChange = (event, newValue) => {
-  //   const { name, value, checked, type } = event.target || {};
-
-  //   if (type === "checkbox") {
-  //     setBook((prevBook) => ({
-  //       ...prevBook,
-  //       [name]: checked,
-  //     }));
-  //     setSelectedCustomerData((prevData) => ({
-  //       ...prevData,
-  //       [name]: checked,
-  //     }));
-  //   } else if (typeof newValue !== "undefined") {
-  //     setValue(newValue);
-  //   } else {
-  //     setBook((prevBook) => ({
-  //       ...prevBook,
-  //       [name]: value,
-  //     }));
-  //     setSelectedCustomerData((prevData) => ({
-  //       ...prevData,
-  //       [name]: value,
-  //     }));
-  //   }
-  // };
 
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
@@ -296,6 +271,20 @@ const Accuntinfo = () => {
     setSelectedCustomerId(params.row.accountNo);
   }, []);
 
+  const handleAdd = async () => {
+
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/accountinfo', book);
+      console.log(book);
+      handleCancel();
+
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
+
   const handleClick = async (event, actionName, accountNo) => {
     event.preventDefault();
     try {
@@ -321,12 +310,10 @@ const Accuntinfo = () => {
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/accountinfo', book);
-        console.log(book);
-        handleCancel();
+        handleAdd();
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
       setError(true);
     }
   };
@@ -359,32 +346,9 @@ const Accuntinfo = () => {
                   autoFocus
                 />
 
-
-                {/* <TextField
-                  name="accountNo"
-                  autoComplete="new-password"
-                  value={selectedCustomerData.accountNo || book.accountNo}
-                  onChange={handleChange}
-                  label="Account No"
-                  size="small"
-                  id="accountno1"
-                  variant="standard"
-                  margin="normal"
-                /> */}
               </div>
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Date">
-                    <DatePicker
-                      value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
-                      onChange={handleDateChange}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='date' value={selectedCustomerData?.date} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
-                </LocalizationProvider> */}
+
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Date">
                     <DatePicker
@@ -424,7 +388,6 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.address1 || book.address1}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.address1 || !!book.address1, }}
                   label="Address"
                   id="remark"
                   sx={{ m: 1, width: "200ch" }}
@@ -440,7 +403,6 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.cperson || book.cperson}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.cperson || !!book.cperson, }}
                   label="C Person"
                   id="cperson"
                   variant="standard"
@@ -458,7 +420,6 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.streetNo || book.streetNo}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.streetNo || !!book.streetNo, }}
                   id="remark"
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
@@ -473,7 +434,6 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.email || book.email}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.email || !!book.email, }}
                   label="Email"
                   id="standard-size-normal"
                   variant="standard"
@@ -491,7 +451,6 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.city || book.city}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.city || !!book.city, }}
                   id="address3"
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
@@ -506,7 +465,6 @@ const Accuntinfo = () => {
                   autoComplete="new-password"
                   value={selectedCustomerData?.phone || book.phone}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.phone || !!book.phone, }}
                   label="Phone"
                   id="phone"
                   variant="standard"
@@ -549,7 +507,6 @@ const Accuntinfo = () => {
                                   autoComplete="new-password"
                                   value={selectedCustomerData?.customerId || book.customerId}
                                   onChange={handleChange}
-                                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                                   label="Temporary Password"
                                   id="standard-size-normal"
                                   variant="standard"
@@ -583,7 +540,6 @@ const Accuntinfo = () => {
                 autoComplete="new-password"
                 value={selectedCustomerData?.vehCommission || book.vehCommission}
                 onChange={handleChange}
-                // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                 label="Veh.Commission"
                 size="small"
                 id="outlined-start-adornment"
@@ -648,7 +604,6 @@ const Accuntinfo = () => {
                 autoComplete="new-password"
                 value={selectedCustomerData?.rateType || book.rateType}
                 onChange={handleChange}
-                // InputLabelProps={{ shrink: !!selectedCustomerData.rateType || !!book.rateType, }}
                 label="Rate Type"
                 id="standard-size-normal"
                 variant="standard"
@@ -663,7 +618,6 @@ const Accuntinfo = () => {
                 autoComplete="new-password"
                 value={selectedCustomerData?.entity || book.entity}
                 onChange={handleChange}
-                // InputLabelProps={{ shrink: !!selectedCustomerData.entity || !!book.entity, }}
                 label="Opening Balance"
                 id="standard-size-normal"
                 variant="standard"
@@ -718,12 +672,11 @@ const Accuntinfo = () => {
                 checked={Boolean(selectedCustomerData?.printBill || book.printBill)}
                 control={<Checkbox size="small" />}
                 value="Rate"
-                // control={<Checkbox size="small" />}
                 label="Rate"
               />
             </div>
             <div className="input" style={{ width: "100px" }}>
-              <Button variant="contained" >Add</Button>
+              <Button variant="contained" onClick={handleAdd}>Add</Button>
             </div>
           </div>
           {error &&
@@ -784,7 +737,6 @@ const Accuntinfo = () => {
               },
             }}
             pageSizeOptions={[5, 10]}
-          // checkboxSelection
           />
         </div>
       </form>

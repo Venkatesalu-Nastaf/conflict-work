@@ -144,6 +144,18 @@ const Division = () => {
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+  const handleAdd = async () => {
+
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/division', book);
+      console.log(book);
+      handleCancel();
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
   const handleClick = async (event, actionName, driverid) => {
     event.preventDefault();
     try {
@@ -169,9 +181,7 @@ const Division = () => {
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/division', book);
-        console.log(book);
-        handleCancel();
+        handleAdd();
       }
     } catch (err) {
       console.log(err);
@@ -227,20 +237,7 @@ const Division = () => {
                   <div className="icone">
                     <WarehouseIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={CustomerName.map((option) => option.optionvalue)}
-                    options={CustomerName.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} name='customername' label="Customer Name" />
-                    )}
-                  /> */}
+
                   <Autocomplete
                     fullWidth
                     size="small"
@@ -289,7 +286,7 @@ const Division = () => {
                   </FormControl>
                 </div>
                 <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained" >Add</Button>
+                  <Button variant="contained" onClick={handleAdd}>Add</Button>
                 </div>
               </div>
             </div>

@@ -133,6 +133,19 @@ const StationCreation = () => {
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+  const handleAdd = async () => {
+
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/stationcreation', book);
+      console.log(book);
+      handleCancel();
+
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
   const handleClick = async (event, actionName, stationid) => {
     event.preventDefault();
     try {
@@ -158,9 +171,7 @@ const StationCreation = () => {
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/stationcreation', book);
-        console.log(book);
-        handleCancel();
+        handleAdd();
       }
     } catch (err) {
       console.log(err);
@@ -227,17 +238,7 @@ const StationCreation = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                 />
-                {/* <TextField
-                  margin="normal"
-                  size="small"
-                  id="Station-name"
-                  label="Station Name"
-                  sx={{ m: 1, width: "200ch" }}
-                  name="Stationname"
-                  value={selectedCustomerData?.Stationname || book.Stationname}
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                /> */}
+
               </div>
             </div>
             <div className="input-field">
@@ -294,7 +295,7 @@ const StationCreation = () => {
                 </FormControl>
               </div>
               <div className="input" style={{ width: "100px" }}>
-                <Button variant="contained" >Add</Button>
+                <Button variant="contained" onClick={handleAdd}>Add</Button>
               </div>
             </div>
           </div>

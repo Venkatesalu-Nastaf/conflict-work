@@ -500,7 +500,29 @@ const TripSheet = () => {
     }
   };
 
-
+  const handleAdd = async () => {
+ 
+    try {
+      console.log('Add button clicked');
+      const updatedBook = {
+        ...book,
+        starttime: starttime,
+        closetime: closetime,
+        starttime2: starttime2,
+        closetime2: closetime2,
+        totaldays: calculateTotalDays(), // Add the totaldays field here
+        totalkm1: calculateTotalKilometers(), // Add the totaldays field here
+        totaltime: calculateTotalTime(), // Add the totaldays field here
+      };
+      await axios.post('http://localhost:8081/tripsheet', updatedBook);
+      console.log(updatedBook);
+      handleCancel();
+      setSuccess(true);
+      
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
 
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
@@ -538,21 +560,7 @@ const TripSheet = () => {
         console.log('Edit button clicked');
         handleEdit();
       } else if (actionName === 'Add') {
-        const updatedBook = {
-          ...book,
-          starttime: starttime,
-          closetime: closetime,
-          starttime2: starttime2,
-          closetime2: closetime2,
-          totaldays: calculateTotalDays(), // Add the totaldays field here
-          totalkm1: calculateTotalKilometers(), // Add the totaldays field here
-          totaltime: calculateTotalTime(), // Add the totaldays field here
-
-        };
-        await axios.post('http://localhost:8081/tripsheet', updatedBook);
-        console.log(updatedBook);
-        handleCancel();
-        setSuccess(true);
+        handleAdd();
       }
     } catch (err) {
       console.log(err);
@@ -1515,7 +1523,7 @@ const TripSheet = () => {
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "175px" }}>
-                <Button variant="contained" >Add</Button>
+                <Button variant="contained"  onClick={handleAdd}>Add</Button>
               </div>
             </div>
           </div>

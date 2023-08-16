@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import "./UserCreation.css";
 import axios from "axios";
-import Input from '@mui/material/Input';
 import Box from "@mui/material/Box";
+import Input from '@mui/material/Input';
+import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -436,6 +437,9 @@ const UserCreation = () => {
                   }
                   }
                 />
+              </div>
+              <div className="input" style={{ width: "100px" }}>
+                <Button variant="contained" >Add</Button>
               </div>
             </div>
           </div>

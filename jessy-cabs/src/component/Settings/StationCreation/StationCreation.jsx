@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import "./StationCreation.css";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -291,6 +292,9 @@ const StationCreation = () => {
                     />
                   </RadioGroup>
                 </FormControl>
+              </div>
+              <div className="input" style={{ width: "100px" }}>
+                <Button variant="contained" >Add</Button>
               </div>
             </div>
           </div>

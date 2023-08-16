@@ -1,32 +1,29 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-import "./Ratevalidity.css";
 import dayjs from "dayjs";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ChecklistIcon from "@mui/icons-material/Checklist";
+import "./Ratevalidity.css";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Box from "@mui/material/Box";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
-import RateReviewIcon from '@mui/icons-material/RateReview';
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
+// ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
-import {
-    TextField,
-    FormControlLabel,
-    FormControl,
-    FormLabel,
-    Radio,
-    RadioGroup,
-} from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -70,24 +67,24 @@ const Ratevalidity = () => {
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
-      };
-      useEffect(() => {
+    };
+    useEffect(() => {
         if (error) {
-          const timer = setTimeout(() => {
-            hidePopup();
-          }, 3000); // 3 seconds
-          return () => clearTimeout(timer); // Clean up the timer on unmount
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
         }
-      }, [error]);
-      useEffect(() => {
+    }, [error]);
+    useEffect(() => {
         if (success) {
-          const timer = setTimeout(() => {
-            hidePopup();
-          }, 3000); // 3 seconds
-          return () => clearTimeout(timer); // Clean up the timer on unmount
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
         }
-      }, [success]);
-    
+    }, [success]);
+
 
     const [book, setBook] = useState({
         driverid: '',
@@ -300,6 +297,9 @@ const Ratevalidity = () => {
                                             />
                                         </RadioGroup>
                                     </FormControl>
+                                </div>
+                                <div className="input" style={{ width: "100px" }}>
+                                    <Button variant="contained" >Add</Button>
                                 </div>
                             </div>
                         </div>

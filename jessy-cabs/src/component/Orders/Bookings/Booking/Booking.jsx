@@ -1326,8 +1326,6 @@ const Booking = () => {
                 variant="standard"
               />
             </div>
-          </div>
-          <div className="input-field">
             <div className="input">
               <div className="icone">
                 <CommuteIcon color="action" />
@@ -1353,6 +1351,8 @@ const Booking = () => {
                 }
               />
             </div>
+          </div>
+          <div className="input-field">
             <div className="input">
               <div className="icone">
                 <NoCrashIcon color="action" />
@@ -1394,6 +1394,9 @@ const Booking = () => {
                 id="travelsemail"
                 variant="standard"
               />
+            </div>
+            <div className="input" style={{ width: "100px" }}>
+              <Button variant="contained" >Add</Button>
             </div>
           </div>
           {error &&

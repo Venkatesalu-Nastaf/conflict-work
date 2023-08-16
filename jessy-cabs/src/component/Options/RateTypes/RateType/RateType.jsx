@@ -1,39 +1,36 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from "axios";
 import "./RateType.css";
-import { Stations } from "./RateTypeData.js";
-import Autocomplete from "@mui/material/Autocomplete";
-import Button from "@mui/material/Button";
+import "jspdf-autotable";
+import jsPDF from 'jspdf';
+import axios from "axios";
+import { saveAs } from 'file-saver';
+import Box from "@mui/material/Box";
 import Menu from '@mui/material/Menu';
+import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
+import { Stations } from "./RateTypeData.js";
 import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ChecklistIcon from "@mui/icons-material/Checklist";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+import Autocomplete from "@mui/material/Autocomplete";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Box from "@mui/material/Box";
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import RateReviewIcon from '@mui/icons-material/RateReview';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
+// ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
-import {
-    TextField,
-    FormControlLabel,
-    FormControl,
-    FormLabel,
-    Radio,
-    RadioGroup,
-} from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { saveAs } from 'file-saver';
-import jsPDF from 'jspdf';
-import "jspdf-autotable";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, } from "@mui/material";
+
+
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -395,6 +392,11 @@ const RateType = () => {
                                         }}
                                         name="closetime"
                                     />
+                                </div>
+                            </div>
+                            <div className="input-field">
+                                <div className="input" style={{ width: "100px" }}>
+                                    <Button variant="contained" >Add</Button>
                                 </div>
                             </div>
                         </div>

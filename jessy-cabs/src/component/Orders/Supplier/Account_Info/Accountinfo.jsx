@@ -722,16 +722,8 @@ const Accuntinfo = () => {
                 label="Rate"
               />
             </div>
-            <div className="input">
-              <FormControlLabel
-                name='autoRefresh'
-                value="Auto Refresh"
-                autoComplete="new-password"
-                onChange={handleChange}
-                checked={Boolean(selectedCustomerData?.autoRefresh || book.autoRefresh)}
-                control={<Checkbox size="small" />}
-                label="Auto Refresh"
-              />
+            <div className="input" style={{ width: "100px" }}>
+              <Button variant="contained" >Add</Button>
             </div>
           </div>
           {error &&

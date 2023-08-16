@@ -300,7 +300,7 @@ const DriverBataRate = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{ width: "111px" }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
@@ -312,7 +312,7 @@ const DriverBataRate = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input" style={{ width: "111px" }}>
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
@@ -324,7 +324,10 @@ const DriverBataRate = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input" style={{ width: "135px" }}>
+
+              </div>
+              <div className="input-field">
+                <div className="input">
                   <TextField
                     type='number'
                     size="small"
@@ -342,7 +345,7 @@ const DriverBataRate = () => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ width: "125px" }}>
+                <div className="input" >
                   <TextField
                     type='number'
                     size="small"
@@ -372,6 +375,9 @@ const DriverBataRate = () => {
                     onChange={handleChange}
                   />
                 </div>
+                <div className="input" style={{ width: "100px" }}>
+                  <Button variant="contained" >Add</Button>
+                </div>
               </div>
             </div>
           </div>
@@ -382,12 +388,12 @@ const DriverBataRate = () => {
             <p>Something went wrong!</p>
           </div>
         }
-           {success &&
-              <div className='alert-popup Success' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
-                <p>success fully submitted</p>
-              </div>
-            }
+        {success &&
+          <div className='alert-popup Success' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>success fully submitted</p>
+          </div>
+        }
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"

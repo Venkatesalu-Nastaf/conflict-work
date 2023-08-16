@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import "./Division.css";
+import Button from "@mui/material/Button";
 import { CustomerName } from "./DivisionData.js";
 import Autocomplete from "@mui/material/Autocomplete";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -286,6 +287,9 @@ const Division = () => {
                       />
                     </RadioGroup>
                   </FormControl>
+                </div>
+                <div className="input" style={{ width: "100px" }}>
+                  <Button variant="contained" >Add</Button>
                 </div>
               </div>
             </div>

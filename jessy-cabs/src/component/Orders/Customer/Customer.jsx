@@ -782,13 +782,18 @@ const Customer = () => {
                 </FormControl>
               </div>
             </div>
+            <div className="input-field">
+              <div className="input">
+                <Button variant="contained" >Add</Button>
+              </div>
+            </div>
             {error &&
               <div className='alert-popup Error' >
                 <span className='cancel-btn' onClick={hidePopup}>x</span>
                 <p>Check your Network connection</p>
               </div>
             }
-             {success &&
+            {success &&
               <div className='alert-popup Success' >
                 <span className='cancel-btn' onClick={hidePopup}>x</span>
                 <p>success fully submitted</p>

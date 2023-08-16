@@ -57,7 +57,7 @@ function App() {
             <Route path="/home/options/ratetype" element={<RateTypes />} />
             <Route path="/home/options/ratemanagement" element={<RateManagement />} />
             <Route path="/home/options/fuledetails" element={<FuelDetails />} />
-            <Route path="/home/options/employes" element={<Employes/>} />
+            <Route path="/home/options/employes" element={<Employes />} />
           </Route>
           <Route path="/home/billing" element={<Billings />}>
             <Route path="/home/billing/" element={<Billing />} />

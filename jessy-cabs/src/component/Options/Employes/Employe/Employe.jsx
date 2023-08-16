@@ -145,26 +145,26 @@ const Employe = () => {
 
 
 
-const hidePopup = () => {
-    setSuccess(false);
-    setError(false);
-  };
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [error]);
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [success]);
+    const hidePopup = () => {
+        setSuccess(false);
+        setError(false);
+    };
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [error]);
+    useEffect(() => {
+        if (success) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [success]);
 
     const [book, setBook] = useState({
         empid: '',
@@ -568,6 +568,11 @@ const hidePopup = () => {
                                         style={{ display: "none" }}
                                     />
                                 </IconButton>
+                            </div>
+                        </div>
+                        <div className="input-field">
+                            <div className="input" style={{ width: "100px" }}>
+                                <Button variant="contained" >Add</Button>
                             </div>
                         </div>
                     </div>

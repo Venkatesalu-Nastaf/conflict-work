@@ -1513,6 +1513,11 @@ const TripSheet = () => {
                 </Button>
               </div>
             </div>
+            <div className="input-field">
+              <div className="input" style={{ width: "175px" }}>
+                <Button variant="contained" >Add</Button>
+              </div>
+            </div>
           </div>
           {error &&
             <div className='alert-popup Error' >

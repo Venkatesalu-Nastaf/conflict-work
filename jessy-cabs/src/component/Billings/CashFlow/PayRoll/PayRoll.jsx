@@ -7,6 +7,7 @@ import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
 import TimerIcon from '@mui/icons-material/Timer';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import NetworkPingIcon from '@mui/icons-material/NetworkPing';
+import Button from "@mui/material/Button";
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import DeviceHubRoundedIcon from '@mui/icons-material/DeviceHubRounded';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
@@ -712,6 +713,9 @@ const PayRoll = () => {
                 variant="standard"
               />
             </div>
+            <div className="input" style={{ width: "100px" }}>
+              <Button variant="contained" >Add</Button>
+            </div>
           </div>
         </div>
         {error &&
@@ -720,12 +724,12 @@ const PayRoll = () => {
             <p>Something went wrong!</p>
           </div>
         }
-         {success &&
-              <div className='alert-popup Success' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
-                <p>success fully submitted</p>
-              </div>
-            }
+        {success &&
+          <div className='alert-popup Success' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>success fully submitted</p>
+          </div>
+        }
         <div className="SpeedDial" style={{ padding: '26px', }}>
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial

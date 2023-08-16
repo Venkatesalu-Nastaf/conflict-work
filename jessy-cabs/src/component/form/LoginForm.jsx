@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { emailValidator, passwordValidator } from "./regexValidator";
+// import { emailValidator, passwordValidator } from "./regexValidator";
 import "./Form.css";
 import portalimg from "../../assets/img/portal-img.jpg";
 import { useNavigate } from "react-router-dom";
@@ -8,55 +8,72 @@ import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircle
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
 import { BiHide } from "@react-icons/all-files/bi/BiHide";
 import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
+
 const Login = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const toggle = () => {
     setOpen(!open);
   };
-  const [input, setInput] = React.useState({ username: "", password: "" });
-  const [errorMessage, seterrorMessage] = useState("");
-  const [successMessage, setsuccessMessage] = useState("");
+  // const [passwordVisible, setPasswordVisible] = useState(false); // Rename 'open' to 'passwordVisible'
+  const [input, setInput] = useState({ username: '', userpassword: '' });
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
+  // const [username] = useState("");
+  // const [userpassword] = useState("");
+
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-
-  React.useEffect(() => {
-    if (localStorage.getItem("auth")) navigate("/");
-  });
-
-  const formSumitter = (e) => {
+  
+  const formSubmitter = async (e) => {
     e.preventDefault();
-    setsuccessMessage("");
-    if (!emailValidator(input.username))
-      return seterrorMessage("Please enter valid user id");
-
-    if (!passwordValidator(input.password))
-      return seterrorMessage(
-        "Password should have minimum 8 character with the combination of uppercase, lowercase, numbers and specialcharaters"
-      );
-    // setsuccessMessage('Successfully Validated');
-    if (input.username !== "admin@gmail.com" || input.password !== "Admin@321")
-      return seterrorMessage("Invalid user id");
-
-    navigate("/home/dashboard");
-    localStorage.setItem("auth", true);
+    setErrorMessage('');
+  
+    try {
+      const response = await fetch('http://localhost:8081/usercreation', {
+        // method: 'POST',
+        // headers: {
+        //   'Content-Type': 'application/json',
+        // },
+        // body: JSON.stringify({
+        //   username: input.username, // Use input.username from state
+        //   userpassword: input.userpassword, // Use input.userpassword from state
+        // }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        // Login successful
+        setSuccessMessage(data.message);
+        localStorage.setItem('auth', true);
+        navigate('/home/dashboard');
+      } else {
+        // Login failed
+        setErrorMessage(data.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setErrorMessage('An error occurred');
+    }
   };
+
   return (
     <div className="portal-container">
       <div className="glasses">
         <div className="left-col">
-          <img className="portalimg" src={portalimg} alt="portalimg"></img>
+          <img className="portalimg" src={portalimg} alt="portalimg" />
         </div>
         <div className="right-col">
-          <form className="portal" onSubmit={formSumitter}>
-            <div className="title">login</div>
-            {errorMessage.length > 0 && (
+          <form className="portal" onSubmit={formSubmitter}>
+            <div className="title">Login</div>
+            {errorMessage && (
               <div style={{ marginBottom: "10px", color: "red" }}>
                 {errorMessage}
               </div>
             )}
-            {successMessage.length > 0 && (
+            {successMessage && (
               <div style={{ marginBottom: "10px", color: "green" }}>
                 {successMessage}
               </div>
@@ -69,30 +86,29 @@ const Login = () => {
                 onChange={handleChange}
                 required
               />
-              <div className="under-line" required></div>
-
+              <div className="under-line" />
               <label>Username</label>
             </div>
             <div className="user-input">
               <input
-                type={open === false ? "password" : "text"}
+                type={open ? "text" : "password"}
                 name="password"
                 autoComplete="off"
                 onChange={handleChange}
                 required
               />
-              <div className="under-line" required></div>
+              <div className="under-line" />
               <label>Password</label>
               <div className="pass-hide">
-                {open === false ? (
-                  <BiHide onClick={toggle} />
-                ) : (
+                {open ? (
                   <AiOutlineEye onClick={toggle} />
+                ) : (
+                  <BiHide onClick={toggle} />
                 )}
               </div>
             </div>
             <div className="forget-link">
-              <a href="/">forget password </a>
+              <a href="/">Forgot password</a>
             </div>
             <div className="group button-group">
               <button type="submit" className="signup-btn">

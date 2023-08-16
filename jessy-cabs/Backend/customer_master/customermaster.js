@@ -10,6 +10,23 @@ app.use(express.json());
 app.get('/', (req, res) => {
   return res.json({ message: "Hello from the backend side" });
 });
+
+// -----------------------------------------------------------------------------------------------------------
+// Login Page database
+app.get('/usercreation', (req, res) => {
+  const query = 'SELECT * FROM usercreation WHERE username = ?';
+  db.query(query, [username], (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Database error' });
+    } else {
+      if (results.length === 1 && results[0].userpassword === userpassword) {
+        res.json({ message: 'Login successful' });
+      } else {
+        res.status(401).json({ error: 'Invalid credentials' });
+      }
+    }
+  });
+});
 // -----------------------------------------------------------------------------------------------------------
 // Customer Master Database
 // Add Customer Master database

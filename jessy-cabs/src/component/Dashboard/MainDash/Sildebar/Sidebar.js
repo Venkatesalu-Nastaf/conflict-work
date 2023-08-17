@@ -32,7 +32,13 @@ export const Sidebardata = [
     },
     {
       icon: AiOutlineSetting,
-      heading: "settings",
+      heading: "Settings",
       key: "/home/settings/usercreation",
     },
+    {
+      icon: AiOutlineSetting,
+      heading: "User",
+      key: "/home/settings/usercreation",
+    },
+    
   ];

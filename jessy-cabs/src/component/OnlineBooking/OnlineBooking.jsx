@@ -1,45 +1,98 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import './OnlineBooking.css'
+
 const OnlineBooking = () => {
-  // State to hold form data
-  const [formData, setFormData] = useState({
-    mobile: '',
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const hidePopup = () => {
+    setError(false);
+    setSuccess(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
+  const [book, setBook] = useState({
+    guestname: '',
+    mobileno: '',
     email: '',
+    startdate: '',
+    starttime: '',
     pickup: '',
-    drop: '',
-    usage: ''
+    useage: '',
+    duty: '',
+    vehType: '',
+    remarks: '',
   });
-
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here, you can perform any necessary actions with the form data, such as sending it to a server
-    console.log(formData);
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      guestname: '',
+      mobileno: '',
+      email: '',
+      startdate: '',
+      starttime: '',
+      pickup: '',
+      useage: '',
+      duty: '',
+      vehType: '',
+      remarks: '',
+    }));
   };
 
-  // Handle form field changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+    if (type === 'checkbox') {
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+    } else {
+      const fieldValue = type === 'time' ? value : value;
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: fieldValue,
+      }));
+    }
   };
-
-  
+  const handleAdd = async (event) => {
+    event.preventDefault(); 
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/booking', book);
+      handleCancel();
+      setSuccess(true);
+    } catch (error) {
+      console.error('Error updating customer:', error);
+      setError(true);
+    }
+  };
 
   return (
     <div className="booking-container">
       <h2 className='title'>Online Booking Form</h2>
-      <form className="booking-forms" onSubmit={handleSubmit}>
+      <form className="booking-forms" method='post'>
         <div className='item'>
           <label className='input-lable' htmlFor="name">Guest Name:</label>
           <input
             className='input-item'
             type="text"
             id="name"
-            name="name"
-            value={formData.mobile}
+            name="guestname"
+            value={book.guestname || ''}
             onChange={handleChange}
             required
           />
@@ -48,11 +101,10 @@ const OnlineBooking = () => {
           <label className='input-lable' htmlFor="mobile">Mobile:</label>
           <input
             className='input-item'
-
             type="text"
             id="mobile"
-            name="mobile"
-            value={formData.mobile}
+            name="mobileno"
+            value={book.mobileno || ''}
             onChange={handleChange}
             required
           />
@@ -61,11 +113,10 @@ const OnlineBooking = () => {
           <label className='input-lable' htmlFor="email">Email:</label>
           <input
             className='input-item'
-
             type="email"
             id="email"
             name="email"
-            value={formData.email}
+            value={book.email || ''}
             onChange={handleChange}
             required
           />
@@ -73,13 +124,20 @@ const OnlineBooking = () => {
         <div className='items'>
           <div className='item'>
             <label className='input-lable' htmlFor="email">Booking Date:</label>
-            <input type="date"
+            <input
+              type="date"
+              name='startdate'
+              value={book.startdate || ''}
+              onChange={handleChange}
               className='input-item'
             />
           </div>
           <div className='item'>
             <label className='input-lable' htmlFor="email">Booking Time:</label>
             <input type="time"
+              name='starttime'
+              onChange={handleChange}
+              value={book.starttime || ''}
               className='input-item'
             />
           </div>
@@ -91,7 +149,7 @@ const OnlineBooking = () => {
             type="text"
             id="pickup"
             name="pickup"
-            value={formData.pickup}
+            value={book.pickup || ''}
             onChange={handleChange}
             required
           />
@@ -102,8 +160,8 @@ const OnlineBooking = () => {
             className='input-item'
             type="text"
             id="drop"
-            name="drop"
-            value={formData.drop}
+            name="useage"
+            value={book.useage || ''}
             onChange={handleChange}
             required
           />
@@ -111,9 +169,9 @@ const OnlineBooking = () => {
         <div className='item'>
           <label className='input-lable' htmlFor="usage">Usage:</label>
           <select
-            id='selects' 
-            name="usage"
-            value={formData.usage}
+            id='selects'
+            name="duty"
+            value={book.duty || ''}
             onChange={handleChange}
             required
           >
@@ -126,7 +184,13 @@ const OnlineBooking = () => {
         </div>
         <div className='item'>
           <label className='input-lable' htmlFor="usage">Vehicle Type:</label>
-          <select id='selects' name="vname" required="">
+          <select
+            id='selects'
+            name="vehType"
+            value={book.vehType || ''}
+            onChange={handleChange}
+            required
+          >
             <option>Vehicle Type</option>
             <option>Sedan</option>
             <option>Semi Premium</option>
@@ -139,11 +203,27 @@ const OnlineBooking = () => {
         </div>
         <div className='item'>
           <label className='input-lable' htmlFor="usage">Remark:</label>
-          <textarea className='textareas' placeholder='Enter Your Remarks'>
-
+          <textarea
+            name='remarks'
+            value={book.remarks || ''}
+            onChange={handleChange}
+            className='textareas'
+            placeholder='Enter Your Remarks'>
           </textarea>
         </div>
-        <button className='btns-online' type="submit">Submit</button>
+        <button className='btns-online' type="button" onClick={handleAdd}>Submit</button>
+        {error &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>Something went wrong!</p>
+          </div>
+        }
+        {success &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>success fully submitted</p>
+          </div>
+        }
       </form>
     </div>
   );

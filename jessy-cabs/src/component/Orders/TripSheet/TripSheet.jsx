@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
+import "./TripSheet.css";
 import {
   Apps,
   VehicleRate,
@@ -12,85 +13,87 @@ import {
   Email,
   Select,
 } from "./TripSheetdata";
-import "./TripSheet.css";
-import IconButton from "@mui/material/IconButton";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
-import Tabs from "@mui/joy/Tabs";
-import TabList from "@mui/joy/TabList";
-import Tab, { tabClasses } from "@mui/joy/Tab";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import TabPanel from "@mui/joy/TabPanel";
-import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
-import PaymentsIcon from "@mui/icons-material/Payments";
-import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
-import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
-import CurrencyRupeeTwoToneIcon from "@mui/icons-material/CurrencyRupeeTwoTone";
-import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
-import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
-import RecentActorsIcon from "@mui/icons-material/RecentActors";
-import StreamIcon from "@mui/icons-material/Stream";
-import DataUsageIcon from "@mui/icons-material/DataUsage";
-// import SmsIcon from "@mui/icons-material/Sms";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import Button from "@mui/material/Button";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
-import CarCrashIcon from "@mui/icons-material/CarCrash";
-import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
-import NoCrashIcon from "@mui/icons-material/NoCrash";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 import dayjs from "dayjs";
-import ListAltIcon from "@mui/icons-material/ListAlt";
+import { Table } from "@mui/joy";
+import Tabs from "@mui/joy/Tabs";
+import Box from "@mui/material/Box";
+import TabList from "@mui/joy/TabList";
+import TabPanel from "@mui/joy/TabPanel";
+import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
+import { styled } from "@mui/material/styles";
+import Tab, { tabClasses } from "@mui/joy/Tab";
+import { useLocation } from "react-router-dom";
+import SpeedDial from "@mui/material/SpeedDial";
+import IconButton from "@mui/material/IconButton";
+import Autocomplete from "@mui/material/Autocomplete";
+import InputAdornment from "@mui/material/InputAdornment";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import InputAdornment from "@mui/material/InputAdornment";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { TextField, FormControlLabel, Checkbox } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
+// ICONS
 import CallIcon from "@mui/icons-material/Call";
+import StoreIcon from "@mui/icons-material/Store";
+import BadgeIcon from "@mui/icons-material/Badge";
+import DeleteIcon from "@mui/icons-material/Delete";
+import StreamIcon from "@mui/icons-material/Stream";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import NoCrashIcon from "@mui/icons-material/NoCrash";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import CarCrashIcon from "@mui/icons-material/CarCrash";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import DataUsageIcon from "@mui/icons-material/DataUsage";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
-import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import RateReviewIcon from "@mui/icons-material/RateReview";
-import StoreIcon from "@mui/icons-material/Store";
-import { Table } from "@mui/joy";
-import BadgeIcon from "@mui/icons-material/Badge";
+import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
+import RecentActorsIcon from "@mui/icons-material/RecentActors";
+import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
+import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
+import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
+import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import Autocomplete from "@mui/material/Autocomplete";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import CurrencyRupeeTwoToneIcon from "@mui/icons-material/CurrencyRupeeTwoTone";
+
 // FontAwesomeIcon Link
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStamp } from "@fortawesome/free-solid-svg-icons";
-import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
-import { faEquals } from "@fortawesome/free-solid-svg-icons";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faTags } from "@fortawesome/free-solid-svg-icons";
 import { faRoad } from "@fortawesome/free-solid-svg-icons";
+import { faStamp } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faEquals } from "@fortawesome/free-solid-svg-icons";
 import { faStopwatch } from "@fortawesome/free-solid-svg-icons";
 import { faCloudMoon } from "@fortawesome/free-solid-svg-icons";
-import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
-import { faTags } from "@fortawesome/free-solid-svg-icons";
-import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
-import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faFileLines } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
-import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import SpeedDial from "@mui/material/SpeedDial";
-import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-// import ChecklistIcon from "@mui/icons-material/Checklist";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
-import { useLocation } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
+import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
+import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
+import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
+import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
+
+
 // UpdateTbaleRowsGPSSlider TABLE START
 const UpdateTbaleColumnsGPSSlider = [
   { field: "id", headerName: "Sno", width: 70 },

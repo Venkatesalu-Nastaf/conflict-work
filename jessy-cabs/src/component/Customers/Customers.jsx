@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import './Customers.css'
+import './Customers.css';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
-const Customer = () => {
-
+const Customers = () => {
   const location = useLocation();
 
   useEffect(() => {
@@ -29,42 +28,41 @@ const Customer = () => {
     localStorage.setItem('activeMenuItem', menuItem);
   };
 
-
   return (
-    <div className='customer-conatiner' id='menu'>
+    <div className='order-conatiner' id='menu'>
       <div className='menu-bar'>
         <Link
-          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Received' ? 'actives' : ''}`}
-          to='/home/customers/received'
-          onClick={() => handleMenuItemClick('Received')}
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Customer' ? 'actives' : ''}`}
+          to='/home/customers/customers'
+          onClick={() => handleMenuItemClick('Customer')}
         >
-          Received
+          Customer
         </Link>
         <Link
-          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Dispatched' ? 'actives' : ''}`}
-          to='/home/customers/dispatched'
-          onClick={() => handleMenuItemClick('Dispatched')}
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Supplier' ? 'actives' : ''}`}
+          to='/home/customers/supplier'
+          onClick={() => handleMenuItemClick('Supplier')}
         >
-          Dispatched
+          Supplier
         </Link>
         <Link
-          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Collected' ? 'actives' : ''}`}
-          to='/home/customers/collected'
-          onClick={() => handleMenuItemClick('Collected')}
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Booking' ? 'actives' : ''}`}
+          to='/home/customers/bookings'
+          onClick={() => handleMenuItemClick('Booking')}
         >
-          Collected
+          Booking
         </Link>
         <Link
-          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Driver Master' ? 'actives' : ''}`}
-          to='/home/customers/drivermaster'
-          onClick={() => handleMenuItemClick('Driver Master')}
+          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Trip Sheet' ? 'actives' : ''}`}
+          to='/home/customers/tripsheet'
+          onClick={() => handleMenuItemClick('Trip Sheet')}
         >
-          Driver Master
+          Trip Sheet
         </Link>
       </div>
       <Outlet />
     </div>
-  )
-}
+  );
+};
 
-export default Customer
+export default Customers;

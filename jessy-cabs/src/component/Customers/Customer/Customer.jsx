@@ -311,7 +311,7 @@ const Customer = () => {
     <div className="form-container">
       <div className="customer-form">
         <form onSubmit={handleClick}>
-          <span className="Title-Name">Customer Master</span>
+          <span className="Title-Name">Customer</span>
           <div className="Customer-page-header">
             <div className="input-field">
               <div className="input">

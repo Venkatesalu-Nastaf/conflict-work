@@ -3,7 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const db = require('../db');
 const multer = require('multer');
+const fs = require('fs');//signature png
 const app = express();
+const path = require('path');
 const upload = multer({ dest: 'uploads/' });
 app.use(cors());
 app.use(express.json());
@@ -1486,6 +1488,35 @@ app.get('/taxsettings', (req, res) => {
   });
 });
 // End Customer Master database
+// -----------------------------------------------------------------------------------------------------------
+//signature database
+app.post('/api/saveSignature', (req, res) => {
+  const { signatureData } = req.body;
+
+  const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
+  const imageBuffer = Buffer.from(base64Data, 'base64');
+
+  const imageName = `signature-${Date.now()}.png`; // Generate a unique image name
+  const imagePath = path.join(__dirname, 'path_to_save_images', imageName);
+
+  fs.writeFile(imagePath, imageBuffer, (error) => {
+      if (error) {
+          console.error('Error saving signature image:', error);
+          res.status(500).json({ error: 'Failed to save signature' });
+      } else {
+          const sql = 'INSERT INTO signatures (signature_path) VALUES (?)';
+          db.query(sql, [imagePath], (dbError, results) => {
+              if (dbError) {
+                  console.error('Error saving signature data:', dbError);
+                  res.status(500).json({ error: 'Failed to save signature' });
+              } else {
+                  res.json({ message: 'Signature saved successfully' });
+              }
+          });
+      }
+  });
+});
+//End signature database
 // -----------------------------------------------------------------------------------------------------------
 
 const port = 8081;

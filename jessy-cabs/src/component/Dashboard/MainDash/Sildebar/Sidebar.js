@@ -1,9 +1,9 @@
-// Sidebar Importrs
 import { BiHomeAlt } from "@react-icons/all-files/bi/BiHomeAlt";
 import { BiNotepad } from "@react-icons/all-files/bi/BiNotepad";
 import { HiOutlineUsers } from "@react-icons/all-files/hi/HiOutlineUsers";
 import { AiOutlineFileProtect } from "@react-icons/all-files/ai/AiOutlineFileProtect";
 import { BiBarChartSquare } from "@react-icons/all-files/bi/BiBarChartSquare";
+import {AiOutlineSetting} from "@react-icons/all-files/ai/AiOutlineSetting"
 export const Sidebardata = [
     {
       icon: BiHomeAlt,
@@ -11,19 +11,14 @@ export const Sidebardata = [
       key: "/home/dashboard",
     },
     {
-      icon: BiNotepad,
-      heading: "Orders",
-      key: "/home/orders/customer",
-    },
-    {
       icon: HiOutlineUsers,
       heading: "Customers",
-      key: "/home/customers/received",
+      key: "/home/customers/customers",
     },
     {
-      icon: AiOutlineFileProtect,
-      heading: "Options",
-      key: "/home/options/ratetype",
+      icon: BiNotepad,
+      heading: "Orders",
+      key: "/home/orders/received",
     },
     {
       icon: BiBarChartSquare,
@@ -31,7 +26,12 @@ export const Sidebardata = [
       key: "/home/billing",
     },
     {
-      icon: BiBarChartSquare,
+      icon: AiOutlineFileProtect,
+      heading: "Options",
+      key: "/home/options/ratetype",
+    },
+    {
+      icon: AiOutlineSetting,
       heading: "settings",
       key: "/home/settings/usercreation",
     },

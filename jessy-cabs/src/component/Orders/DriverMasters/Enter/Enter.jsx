@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import dayjs from "dayjs";
-import "./MasterEnter.css";
-import Box from "@mui/material/Box";
-import { TextField } from "@mui/material";
-// import { DataGrid } from "@mui/x-data-grid";
+import "./Enter.css";
 import { Table } from "@mui/joy";
-
+import Box from "@mui/material/Box";
+import { CabDriver } from "./EnteryData";
+import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { CabDriver } from "./MasterEnteryData";
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -68,7 +66,7 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-const MasterEnter = () => {
+const Enter = () => {
 
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId] = useState(null);
@@ -584,4 +582,4 @@ const MasterEnter = () => {
   )
 }
 
-export default MasterEnter
+export default Enter

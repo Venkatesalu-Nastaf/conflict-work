@@ -1,38 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import "./index.css";
 import Login from "./component/form/LoginForm";
-import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Orders from "./component/Orders/Orders";
-import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
-import Customer from "./component/Orders/Customer/Customer";
-import Customers from "./component/Customers/Customers";
-import Suppliers from "./component/Orders/Supplier/Suppliers";
-import Bookings from "./component/Orders/Bookings/Bookings";
-import { ThreeCircles } from "react-loader-spinner"; // Import the ThreeCircles spinner
-import "./index.css"; // Import your global CSS file
+import { Route, Routes } from "react-router-dom";
 import Page404 from "./component/Page404/page404";
-import TripSheet from "./component/Orders/TripSheet/TripSheet";
-import Settings from "./component/Settings/Settings";
-import UserCreation from "./component/Settings/UserCreation/UserCreation";
-import StationCreation from "./component/Settings/StationCreation/StationCreation";
-import Permission from "./component/Settings/Permission/Permission";
-import MainSetting from "./component/Settings/MainSetting/MainSetting";
-import Received from "./component/Customers/Receiveds/Receiveds";
-import Dispatcheds from "./component/Customers/Dispatcheds/Dispatcheds";
-import Collecteds from "./component/Customers/Collecteds/Collecteds";
-import DriverMasters from "./component/Customers/DriverMasters/DriverMasters";
 import Options from "./component/Options/Options";
-import RateTypes from "./component/Options/RateTypes/RateTypes";
-import RateManagement from "./component/Options/RateManagement/RateManagement";
-import FuelDetails from "./component/Options/FuelDetails/FuelDetails";
+import { ThreeCircles } from "react-loader-spinner";
+import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
+import Customers from "./component/Customers/Customers";
 import Billing from "./component/Billings/Billing/Billing";
-import CashFlow from "./component/Billings/CashFlow/CashFlow";
-import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
-import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
-import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 import Employes from "./component/Options/Employes/Employes";
+import CashFlow from "./component/Billings/CashFlow/CashFlow";
+import Received from "./component/Orders/Receiveds/Receiveds";
+import MainDash from "./component/Dashboard/MainDash/MainDash";
+import Customer from "./component/Customers/Customer/Customer";
+import Bookings from "./component/Customers/Bookings/Bookings";
+import Suppliers from "./component/Customers/Supplier/Suppliers";
+import RateTypes from "./component/Options/RateTypes/RateTypes";
+import TripSheet from "./component/Customers/TripSheet/TripSheet";
+import Collecteds from "./component/Orders/Collecteds/Collecteds";
+import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
+import Permission from "./component/Settings/Permission/Permission";
+import Dispatcheds from "./component/Orders/Dispatcheds/Dispatcheds";
+import FuelDetails from "./component/Options/FuelDetails/FuelDetails";
+import MainSetting from "./component/Settings/MainSetting/MainSetting";
+import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
+import UserCreation from "./component/Settings/UserCreation/UserCreation";
+import DriverMasters from "./component/Orders/DriverMasters/DriverMasters";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
+import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
+import RateManagement from "./component/Options/RateManagement/RateManagement";
+import StationCreation from "./component/Settings/StationCreation/StationCreation";
+import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 
 
 function App() {
@@ -47,28 +47,28 @@ function App() {
 
   return (
     <>
-    <div className={isLoading ? "loading-container" : ""}>
-      {isLoading ? ( // Show loading spinner while loading
-        <div className="loading-spinners">
-          <ThreeCircles color="#3d92f3" height={80} width={80} />
-          {/* <ThreeCircles color="#00BFFF" height={80} width={130} /> */}
-        </div>
-      ) : (
+      <div className={isLoading ? "loading-container" : ""}>
+        {isLoading ? (
+          <div className="loading-spinners">
+            <ThreeCircles color="#3d92f3" height={80} width={80} />
+            {/* <ThreeCircles color="#00BFFF" height={80} width={130} /> */}
+          </div>
+        ) : (
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<MainDashboard />}>
               <Route path="/home/dashboard" element={<MainDash />} />
-              <Route path="/home/orders" element={<Orders />}>
-                <Route path="/home/orders/customer" element={<Customer />} />
-                <Route path="/home/orders/supplier" element={<Suppliers />} />
-                <Route path="/home/orders/bookings" element={<Bookings />} />
-                <Route path="/home/orders/tripsheet" element={<TripSheet />} />
-              </Route>
               <Route path="/home/customers" element={<Customers />} >
-                <Route path="/home/customers/received" element={<Received />} />
-                <Route path="/home/customers/dispatched" element={<Dispatcheds />} />
-                <Route path="/home/customers/collected" element={<Collecteds />} />
-                <Route path="/home/customers/drivermaster" element={<DriverMasters />} />
+                <Route path="/home/customers/customers" element={<Customer />} />
+                <Route path="/home/customers/supplier" element={<Suppliers />} />
+                <Route path="/home/customers/bookings" element={<Bookings />} />
+                <Route path="/home/customers/tripsheet" element={<TripSheet />} />
+              </Route>
+              <Route path="/home/orders" element={<Orders />}>
+                <Route path="/home/orders/received" element={<Received />} />
+                <Route path="/home/orders/dispatched" element={<Dispatcheds />} />
+                <Route path="/home/orders/collected" element={<Collecteds />} />
+                <Route path="/home/orders/drivermaster" element={<DriverMasters />} />
               </Route>
               <Route path="/home/options" element={<Options />} >
                 <Route path="/home/options/ratetype" element={<RateTypes />} />
@@ -94,7 +94,6 @@ function App() {
                 <Route path="/home/settings/mainsetting" element={<MainSetting />} />
               </Route>
             </Route>
-
             <Route path="/onlinelogin" element={<OnlineLoginForm />} />
             <Route path="/onlinebooking" element={<OnlineBooking />} />
             <Route path="/onlinedigital/digitalsignature" element={<DigitalSignature />} />

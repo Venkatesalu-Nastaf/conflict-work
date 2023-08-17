@@ -65,6 +65,7 @@ const DriverBataRate = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [formData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -168,6 +169,23 @@ const DriverBataRate = () => {
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+  const handleAdd = async () => {
+    const DivisionName = book.DivisionName;
+    if (!DivisionName) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/driverbatarate', book);
+      console.log(book);
+      handleCancel();
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
   const handleClick = async (event, actionName, id) => {
     event.preventDefault();
     try {
@@ -193,13 +211,12 @@ const DriverBataRate = () => {
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/driverbatarate', book);
-        console.log(book);
-        handleCancel();
+        handleAdd();
       }
     } catch (err) {
       console.log(err);
       setError(true);
+      setErrorMessage("Check Network Connection")
     }
   };
   useEffect(() => {
@@ -385,7 +402,7 @@ const DriverBataRate = () => {
         {error &&
           <div className='alert-popup Error' >
             <span className='cancel-btn' onClick={hidePopup}>x</span>
-            <p>Something went wrong!</p>
+            <p>{errorMessage}</p>
           </div>
         }
         {success &&

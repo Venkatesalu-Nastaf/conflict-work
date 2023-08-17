@@ -67,6 +67,7 @@ const RateType = () => {
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
+    const [errorMessage, setErrorMessage] = useState(false);
     const [error, setError] = useState(false);
     const [starttime, setStartTime] = useState('');
     const [closetime, setCloseTime] = useState('');
@@ -200,7 +201,12 @@ const RateType = () => {
         setSelectedCustomerId(params.row.customerId);
     }, []);
     const handleAdd = async () => {
-
+        const ratename = book.ratename;
+        if (!ratename) {
+          setError(true);
+          setErrorMessage("fill mantatory fields");
+          return;
+        }
         try {
             const updatedBook = {
                 ...book,
@@ -247,6 +253,7 @@ const RateType = () => {
         } catch (err) {
             console.log(err);
             setError(true);
+            setErrorMessage("Check Network Connection")
         }
     };
     useEffect(() => {
@@ -397,7 +404,7 @@ const RateType = () => {
                 {error &&
                     <div className='alert-popup Error' >
                         <span className='cancel-btn' onClick={hidePopup}>x</span>
-                        <p>Something went wrong!</p>
+                        <p>{errorMessage}</p>
                     </div>
                 }
                 {success &&

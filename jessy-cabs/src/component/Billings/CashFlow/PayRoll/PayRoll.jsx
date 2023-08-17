@@ -77,6 +77,7 @@ const PayRoll = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [formData, setFormData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -219,6 +220,23 @@ const PayRoll = () => {
   //   setSelectedCustomerData(customerData);
   //   setSelectedCustomerId(params.row.customerId);
   // }, []);
+  const handleAdd = async () => {
+    const empname = book.empname;
+    if (!empname) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/payroll', book);
+      console.log(book);
+      handleCancel();// Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
+    } catch (error) {
+      console.error('Error adding customer:', error);
+      // You can add error handling code here, like displaying an error message to the user
+    }
+  };
   const handleClick = async (event, actionName, empid) => {
     event.preventDefault();
     try {
@@ -244,13 +262,16 @@ const PayRoll = () => {
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/payroll', book);
-        console.log(book);
-        handleCancel();
+        // await axios.post('http://localhost:8081/payroll', book);
+        // console.log(book);
+        // handleCancel();
+        handleAdd();
       }
     } catch (err) {
       console.log(err);
       setError(true);
+      setErrorMessage("Check Network Connection")
+
     }
   };
   useEffect(() => {
@@ -714,14 +735,14 @@ const PayRoll = () => {
               />
             </div>
             <div className="input" style={{ width: "100px" }}>
-              <Button variant="contained" >Add</Button>
+              <Button variant="contained" onClick={handleAdd}>Add</Button>
             </div>
           </div>
         </div>
         {error &&
           <div className='alert-popup Error' >
             <span className='cancel-btn' onClick={hidePopup}>x</span>
-            <p>Something went wrong!</p>
+            <p>{errorMessage}</p>
           </div>
         }
         {success &&

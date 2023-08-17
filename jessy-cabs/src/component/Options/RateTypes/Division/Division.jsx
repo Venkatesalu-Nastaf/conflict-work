@@ -58,7 +58,7 @@ const Division = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
-  // const [formData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -145,7 +145,12 @@ const Division = () => {
     setSelectedCustomerId(params.row.customerId);
   }, []);
   const handleAdd = async () => {
-
+    const DivisionName = book.DivisionName;
+    if (!DivisionName) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
     try {
       console.log('Add button clicked');
       await axios.post('http://localhost:8081/division', book);
@@ -186,6 +191,7 @@ const Division = () => {
     } catch (err) {
       console.log(err);
       setError(true);
+      setErrorMessage("Check Network Connection")
     }
   };
   useEffect(() => {
@@ -295,7 +301,7 @@ const Division = () => {
         {error &&
           <div className='alert-popup Error' >
             <span className='cancel-btn' onClick={hidePopup}>x</span>
-            <p>Something went wrong!</p>
+            <p>{errorMessage}</p>
           </div>
         }
         {success &&

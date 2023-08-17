@@ -90,6 +90,7 @@ const Employe = () => {
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
+    const [errorMessage, setErrorMessage] = useState(false);
     const [error, setError] = useState(false);
     const [formData] = useState({});
     const [success, setSuccess] = useState(false);
@@ -250,6 +251,23 @@ const Employe = () => {
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
     }, []);
+    const handleAdd = async () => {
+        const empname = book.empname;
+        if (!empname) {
+            setError(true);
+            setErrorMessage("fill mantatory fields");
+            return;
+        }
+        try {
+            console.log('Add button clicked');
+            await axios.post('http://localhost:8081/employees', book);
+            console.log(book);
+            handleCancel();
+        } catch (error) {
+            console.error('Error updating customer:', error);
+        }
+    };
+
 
     const handleClick = async (event, actionName, empid) => {
         event.preventDefault();
@@ -276,9 +294,7 @@ const Employe = () => {
                 console.log('Customer updated');
                 handleCancel();
             } else if (actionName === 'Add') {
-                await axios.post('http://localhost:8081/employees', book);
-                console.log(book);
-                handleCancel();
+                handleAdd();
             }
         } catch (err) {
             console.log(err);
@@ -572,7 +588,7 @@ const Employe = () => {
                         </div>
                         <div className="input-field">
                             <div className="input" style={{ width: "100px" }}>
-                                <Button variant="contained" >Add</Button>
+                                <Button variant="contained" onClick={handleAdd}>Add</Button>
                             </div>
                         </div>
                     </div>
@@ -580,7 +596,7 @@ const Employe = () => {
                 {error &&
                     <div className='alert-popup Error' >
                         <span className='cancel-btn' onClick={hidePopup}>x</span>
-                        <p>Something went wrong!</p>
+                        <p>{errorMessage}</p>
                     </div>
                 }
                 {success &&

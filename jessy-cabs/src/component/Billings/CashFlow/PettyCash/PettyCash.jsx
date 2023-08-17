@@ -93,6 +93,7 @@ const PettyCash = () => {
     const [toDate, setToDate] = useState(dayjs());
     const [voucherno] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
+    const [errorMessage, setErrorMessage] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
 
@@ -129,27 +130,27 @@ const PettyCash = () => {
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Customer_Details.pdf');
     };
-   
-const hidePopup = () => {
-    setSuccess(false);
-    setError(false);
-  };
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [error]);
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [success]);
+
+    const hidePopup = () => {
+        setSuccess(false);
+        setError(false);
+    };
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [error]);
+    useEffect(() => {
+        if (success) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [success]);
 
     const [book, setBook] = useState({
         voucherno: '',
@@ -209,6 +210,12 @@ const hidePopup = () => {
 
 
     const handleAdd = async () => {
+        const Billname = book.Billname;
+        if (!Billname) {
+          setError(true);
+          setErrorMessage("fill mantatory fields");
+          return;
+        }
         try {
             console.log('Add button clicked');
             const response = await axios.post('http://localhost:8081/pettycash', book);
@@ -243,15 +250,11 @@ const hidePopup = () => {
                 await axios.put(`http://localhost:8081/pettycash/${voucherno}`, updatedCustomer);
                 console.log('Customer updated');
                 handleCancel();
-            }  //else if (actionName === 'Add') {
-            //     // await axios.post('http://localhost:8081/pettycash', book);
-            //     // console.log(book);
-            //     // handleCancel();
-            //     handleAdd();
-            // }
+            }
         } catch (err) {
             console.log(err);
             setError(true);
+            setErrorMessage("Check Network Connection")
         }
     };
     useEffect(() => {
@@ -259,9 +262,6 @@ const hidePopup = () => {
             handleClick(null, 'List');
         }
     });
-    // const handleInputChange = (event, newValue) => {
-    //     setVoucherNo(newValue ? newValue.label : ''); // Assuming the label field contains the station name
-    //   };
 
 
     const handleShow = useCallback(async () => {
@@ -274,6 +274,8 @@ const hidePopup = () => {
         } catch (error) {
             console.error('Error retrieving data:', error);
             setRows([]);
+            setError(true);
+            setErrorMessage("list is empty")
         }
     }, [voucherno, fromDate, toDate]);
     return (
@@ -397,7 +399,7 @@ const hidePopup = () => {
                 {error &&
                     <div className='alert-popup Error' >
                         <span className='cancel-btn' onClick={hidePopup}>x</span>
-                        <p>Something went wrong!</p>
+                        <p>{errorMessage}</p>
                     </div>
                 }
                 {success &&

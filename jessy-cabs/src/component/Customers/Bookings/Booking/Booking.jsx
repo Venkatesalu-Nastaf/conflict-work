@@ -82,6 +82,7 @@ const Booking = () => {
   const [bookingtime, setBookingTime] = useState('');
   const [formData, setFormData] = useState({});
   const location = useLocation();
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [selectedValue, setSelectedValue] = useState('pending');
@@ -333,7 +334,12 @@ const Booking = () => {
     }));
   };
   const handleAdd = async () => {
- 
+    const customer = book.customer;
+    if (!customer) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
     try {
       console.log('Add button clicked');
       const updatedBook = {
@@ -348,7 +354,7 @@ const Booking = () => {
       console.log(updatedBook);
       handleCancel();
       setSuccess(true);
-      
+
     } catch (error) {
       console.error('Error updating customer:', error);
     }
@@ -387,6 +393,8 @@ const Booking = () => {
     } catch (error) {
       console.log(error);
       setError(true);
+      setErrorMessage("Check Network Connection")
+
     }
   };
 
@@ -1413,7 +1421,7 @@ const Booking = () => {
           {error &&
             <div className='alert-popup Error' >
               <span className='cancel-btn' onClick={hidePopup}>x</span>
-              <p>Something went wrong!</p>
+              <p>{errorMessage}</p>
             </div>
           }
           {success &&

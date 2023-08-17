@@ -175,6 +175,7 @@ const TripSheet = () => {
   const [closetime2, setCloseTime2] = useState('');
   const [formData, setFormData] = useState({});
   const location = useLocation();
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -504,7 +505,12 @@ const TripSheet = () => {
   };
 
   const handleAdd = async () => {
- 
+    const customer = book.customer;
+    if (!customer) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
     try {
       console.log('Add button clicked');
       const updatedBook = {
@@ -521,7 +527,7 @@ const TripSheet = () => {
       console.log(updatedBook);
       handleCancel();
       setSuccess(true);
-      
+
     } catch (error) {
       console.error('Error updating customer:', error);
     }
@@ -568,6 +574,7 @@ const TripSheet = () => {
     } catch (err) {
       console.log(err);
       setError(true);
+      setErrorMessage("Check Network Connection")
     }
   };
   // Function to calculate total time
@@ -1526,14 +1533,14 @@ const TripSheet = () => {
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "175px" }}>
-                <Button variant="contained"  onClick={handleAdd}>Add</Button>
+                <Button variant="contained" onClick={handleAdd}>Add</Button>
               </div>
             </div>
           </div>
           {error &&
             <div className='alert-popup Error' >
               <span className='cancel-btn' onClick={hidePopup}>x</span>
-              <p>Something went wrong!</p>
+              <p>{errorMessage}</p>
             </div>
           }
           {success &&

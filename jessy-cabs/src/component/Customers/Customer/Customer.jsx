@@ -78,6 +78,7 @@ const Customer = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -258,7 +259,12 @@ const Customer = () => {
     setSelectedCustomerId(params.row.customerId);
   }, []);
   const handleAdd = async () => {
-
+    const name = book.name;
+    if (!name) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
     try {
       await axios.post('http://localhost:8081/customers', book);
       console.log(book);
@@ -300,6 +306,7 @@ const Customer = () => {
     } catch (error) {
       console.log(error);
       setError(true);
+      setErrorMessage("Check Network connection");
     }
   };
   useEffect(() => {
@@ -336,7 +343,7 @@ const Customer = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  id="email"
+                  id="name"
                   label="Name"
                   value={selectedCustomerData?.name || book.name}
                   autoComplete="new-password"
@@ -799,10 +806,10 @@ const Customer = () => {
             {error &&
               <div className='alert-popup Error' >
                 <span className='cancel-btn' onClick={hidePopup}>x</span>
-                <p>Check your Network connection</p>
+                <p>{errorMessage}</p>
               </div>
             }
-             {success &&
+            {success &&
               <div className='alert-popup Success' >
                 <span className='cancel-btn' onClick={hidePopup}>x</span>
                 <p>success fully submitted</p>

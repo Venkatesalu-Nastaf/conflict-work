@@ -54,6 +54,7 @@ const StationCreation = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -134,7 +135,12 @@ const StationCreation = () => {
     setSelectedCustomerId(params.row.customerId);
   }, []);
   const handleAdd = async () => {
-
+    const Stationname = book.Stationname;
+    if (!Stationname) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
     try {
       console.log('Add button clicked');
       await axios.post('http://localhost:8081/stationcreation', book);
@@ -176,6 +182,7 @@ const StationCreation = () => {
     } catch (err) {
       console.log(err);
       setError(true);
+      setErrorMessage("Check Network Connection")
     }
   };
   useEffect(() => {
@@ -302,7 +309,7 @@ const StationCreation = () => {
           {error &&
             <div className='alert-popup Error' >
               <span className='cancel-btn' onClick={hidePopup}>x</span>
-              <p>Something went wrong!</p>
+              <p>{errorMessage}</p>
             </div>
           }
           {success &&

@@ -75,6 +75,7 @@ const FuelDetails = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [formData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
 
   const hidePopup = () => {
@@ -157,6 +158,23 @@ const FuelDetails = () => {
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+  const handleAdd = async () => {
+    const VehicleName = book.VehicleName;
+    if (!VehicleName) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/fueldetails', book);
+      console.log(book);
+      handleCancel();
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
   const handleClick = async (event, actionName, VehicleNo) => {
     event.preventDefault();
     try {
@@ -182,9 +200,7 @@ const FuelDetails = () => {
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/fueldetails', book);
-        console.log(book);
-        handleCancel();
+        handleAdd();
       }
     } catch (err) {
       console.log(err);
@@ -371,7 +387,7 @@ const FuelDetails = () => {
                   </Button>
                 </div>
                 <div className="input" style={{ width: "70px" }}>
-                  <Button color="primary" variant="contained" >
+                  <Button color="primary" variant="contained" onClick={handleAdd}>
                     Add
                   </Button>
                 </div>
@@ -386,6 +402,12 @@ const FuelDetails = () => {
                 {mileage.toFixed(2)} km/L
               </p>
             </div>
+            {error &&
+              <div className='alert-popup Error' >
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <p>{errorMessage}</p>
+              </div>
+            }
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>
               <StyledSpeedDial
                 ariaLabel="SpeedDial playground example"

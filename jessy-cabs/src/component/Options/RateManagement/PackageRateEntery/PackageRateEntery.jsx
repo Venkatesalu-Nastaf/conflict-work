@@ -68,6 +68,7 @@ const PackageRateEntery = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -179,6 +180,23 @@ const PackageRateEntery = () => {
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+  const handleAdd = async () => {
+    const duty = book.duty;
+    if (!duty) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/ratemanagement', book);
+        console.log(book);
+        handleCancel();
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
   const handleClick = async (event, actionName, id) => {
     event.preventDefault();
     try {
@@ -204,13 +222,13 @@ const PackageRateEntery = () => {
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/ratemanagement', book);
-        console.log(book);
-        handleCancel();
+        handleAdd();
       }
     } catch (err) {
       console.log(err);
       setError(true);
+      setErrorMessage("Check Network Connection")
+
     }
   };
   useEffect(() => {
@@ -230,21 +248,7 @@ const PackageRateEntery = () => {
                   <div className="icone">
                     <TypeSpecimenOutlinedIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={RateType.map((option) => option.optionvalue)}
-                    options={RateType.map((option) => ({
-                      label: option.Option
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} name='ratetype' label="RateType" />
-                    )}
-                  /> */}
-                  <Autocomplete
+                                   <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-ratetype"
@@ -268,21 +272,7 @@ const PackageRateEntery = () => {
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={PriceTag.map((option) => option.optionvalue)}
-                    options={PriceTag.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} name='pricetag' label="PriceTag" />
-                    )}
-                  /> */}
-                  <Autocomplete
+                                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-pricetag"
@@ -328,21 +318,7 @@ const PackageRateEntery = () => {
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={VehicleType.map((option) => option.optionvalue)}
-                    options={VehicleType.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} name='vehicleType' label="VehicleType" />
-                    )}
-                  /> */}
-                  <Autocomplete
+                                 <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-vehicleType"
@@ -376,21 +352,7 @@ const PackageRateEntery = () => {
               <div className="icone">
                 <EngineeringIcon color="action" />
               </div>
-              {/* <Autocomplete
-                fullWidth
-                id="free-solo-demo"
-                freeSolo
-                size="small"
-                value={Duty.map((option) => option.optionvalue)}
-                options={Duty.map((option) => ({
-                  label: option.option,
-                }))}
-                getOptionLabel={(option) => option.label || ""}
-                renderInput={(params) => (
-                  <TextField {...params} name='duty' label="Duty" />
-                )}
-              /> */}
-              <Autocomplete
+                           <Autocomplete
                 fullWidth
                 size="small"
                 id="free-solo-demo-duty"
@@ -559,14 +521,19 @@ const PackageRateEntery = () => {
               />
             </div>
             <div className="input" style={{ width: "100px" }}>
-              <Button variant="contained">Save All</Button>
+              <Button variant="contained" onClick={handleAdd}>Save All</Button>
             </div>
           </div>
         </div>
         {error &&
           <div className='alert-popup Error' >
             <span className='cancel-btn' onClick={hidePopup}>x</span>
-            <p>Something went wrong!</p>
+            {error &&
+              <div className='alert-popup Error' >
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <p>{errorMessage}</p>
+              </div>
+            }
           </div>
         }
         {success &&

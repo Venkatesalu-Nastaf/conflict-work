@@ -74,6 +74,7 @@ const TaxSetting = () => {
     const [rows, setRows] = useState([]);
     const [formData] = useState({});
     const [actionName] = useState('');
+    const [errorMessage, setErrorMessage] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
 
@@ -181,6 +182,12 @@ const TaxSetting = () => {
     }, []);
 
     const handleAdd = async () => {
+        const STax = book.STax;
+        if (!STax) {
+          setError(true);
+          setErrorMessage("fill mantatory fields");
+          return;
+        }
         try {
             console.log('Add button clicked');
             const response = await axios.post('http://localhost:8081/taxsettings', book);
@@ -219,6 +226,7 @@ const TaxSetting = () => {
         } catch (err) {
             console.log(err);
             setError(true);
+            setErrorMessage("Check Network Connection")
         }
     };
     useEffect(() => {
@@ -232,15 +240,6 @@ const TaxSetting = () => {
                 <div className="TaxSetting-header">
                     <div className="input-field" style={{ padding: '0px 15px' }}>
                         <div className="input">
-                            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoItem label="Date Tax From">
-                                    <DatePicker
-                                        defaultValue={today}
-                                        minDate={tomorrow}
-                                        views={["year", "month", "day"]}
-                                    />
-                                </DemoItem>
-                            </LocalizationProvider> */}
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Date Tax From">
                                     <DatePicker
@@ -390,7 +389,7 @@ const TaxSetting = () => {
                 {error &&
                     <div className='alert-popup Error' >
                         <span className='cancel-btn' onClick={hidePopup}>x</span>
-                        <p>Something went wrong!</p>
+                        <p>{errorMessage}</p>
                     </div>
                 }
                 {success &&

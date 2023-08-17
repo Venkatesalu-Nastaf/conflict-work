@@ -64,7 +64,7 @@ const MainDashboard = () => {
               </StyledBadge>
             </div>
             <div className="user-name-item">
-              <p>Fahad</p>
+              <p>abdul fahad</p>
             </div>
             <div className="logout-item">
               <FiLogOut className="logout-icon" onClick={handleLogout} />

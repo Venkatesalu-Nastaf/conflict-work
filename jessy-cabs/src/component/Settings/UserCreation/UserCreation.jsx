@@ -438,7 +438,9 @@ const UserCreation = () => {
                   }
                 />
               </div>
-              <div className="input" style={{ width: "100px" }}>
+            </div>
+            <div className="input-field">
+              <div className="input" style={{ width: "160px" }}>
                 <Button variant="contained" onClick={handleAdd}>Add</Button>
               </div>
             </div>

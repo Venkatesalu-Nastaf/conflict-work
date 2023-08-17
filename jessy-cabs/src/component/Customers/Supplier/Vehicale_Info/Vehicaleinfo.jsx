@@ -567,12 +567,12 @@ const Vehicaleinfo = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-              <div className="input">
+              <div className="input" style={{ width: "80px" }}>
                 <Button variant="outlined" startIcon={<SummarizeTwoToneIcon />}>
                   list
                 </Button>
               </div>
-              <div className="input" style={{ width: "100px" }}>
+              <div className="input" style={{ width: "80px" }}>
                 <Button variant="contained" onClick={handleAdd}>Add</Button>
               </div>
             </div>

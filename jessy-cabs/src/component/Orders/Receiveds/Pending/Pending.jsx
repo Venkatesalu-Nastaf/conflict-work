@@ -201,7 +201,7 @@ const Pending = () => {
                 </div>
               </div>
               <div className="input-field">
-              <div className="input" style={{ width: "300px" }}>
+                <div className="input" style={{ width: "300px" }}>
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -262,11 +262,8 @@ const Pending = () => {
             <DataGrid
               rows={rows}
               columns={columns}
-              // onRowClick={(event) => handleButtonClick(event.row)}
-              // onRowDoubleClick={(params) => handleButtonClickBooking(params.row)}
               onRowClick={(event) => handleButtonClick(event.row)}
               pageSize={5}
-            // checkboxSelection
             />
             <Dialog open={popupOpen} onClose={handlePopupClose}>
               <DialogTitle>Select an Option</DialogTitle>

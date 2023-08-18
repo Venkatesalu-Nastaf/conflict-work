@@ -74,10 +74,18 @@
 }
 
 .user-name-item p {
+  text-transform: capitalize;
   padding: 0px 5px;
   color: #000;
-  font-size: 14px;
+  font-size: 13px;
+  cursor: pointer;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: 0.2s;
+}
+
+.user-name-item p:hover {
+  text-decoration: underline;
+  color: rgb(19, 109, 255);
 }
 
 .logout-item {
@@ -87,6 +95,7 @@
   background-color: #cccccc21;
   transition: .1s;
 }
+
 .logout-item:hover {
   background-color: #cccccc6f;
 }

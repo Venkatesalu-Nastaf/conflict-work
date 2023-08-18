@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "./dashboard.css";
-import { Outlet } from "react-router-dom";
-import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
+import { Outlet } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
+import { styled } from '@mui/material/styles';
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../MainDash/Sildebar/Slidebar";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 
 const MainDashboard = () => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
+
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
       backgroundColor: '#44b700',
@@ -39,22 +40,25 @@ const MainDashboard = () => {
       },
     },
   }));
+
   useEffect(() => {
     if (!localStorage.getItem("auth")) navigate("/");
   }, [navigate]);
+
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem("auth");
     setExpanded(true);
     navigate("/");
   };
+
   return (
     <>
       <section className="dash-board">
         <div className="glass">
-          <Sidebar />
+          <Sidebar expanded={expanded} />
           <div className="header-user">
-            <div className="avatar">
+            <div className="avatar-item">
               <StyledBadge
                 overlap="circular"
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}

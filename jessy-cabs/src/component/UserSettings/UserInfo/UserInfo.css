@@ -1,0 +1,144 @@
+.css-13xfq8m-MuiTabPanel-root {
+    display: flex;
+    padding: 0px !important;
+}
+
+.detail-container-main {
+    display: flex;
+    padding: 20px;
+    width: 70%;
+}
+
+.form-container-UserSettings .Title-Name {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.form-container-UserSettings .userinfo-form {
+    height: 70vh;
+    width: 100vw;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    /* padding: 20px; */
+    color: #000;
+    background-color: var(--glass);
+}
+
+.form-container-UserSettings {
+    display: flex;
+    border-radius: 10px;
+}
+
+.form-container-UserSettings .container-main::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    overflow-x: hidden;
+}
+
+.table-bookingCopy-PettyCash {
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    background-color: var(--glass);
+    margin: 0px 20px;
+}
+
+.Download-btn {
+    padding: 20px;
+}
+
+/* TIMER START */
+.input-field .times {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+}
+
+.input-field .times input {
+    width: 181px;
+    margin-top: 28px;
+    margin-bottom: 25px;
+    background: transparent;
+    text-align: inherit;
+    border: 1px solid #457cdc;
+    padding: 9px 8px 9px 10px;
+    border-radius: 4px;
+    font-size: 17px;
+}
+
+.input-field .times label {
+    position: absolute;
+    color: #272626;
+    font-size: 14px;
+    top: 0px;
+    font-weight: 500;
+    left: 5px;
+}
+
+/* TIMER END */
+.form-container-UserSettings .container-main::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    outline: 1px solid transparent;
+}
+
+.form-container-UserSettings .container-main {
+    border: 2px solid #ccc;
+    overflow: scroll;
+    height: 77vh;
+    width: 81vw;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    border-radius: 20px;
+    color: #000;
+    background-color: var(--glass);
+}
+
+.userinfo-form .Title-Name {
+    position: relative;
+}
+.container-userinfo-main {
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    width: 100%;
+    margin-top: 30px;
+    background-color: var(--glass);
+    padding: 35px 20px;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+}
+.container-userinfo-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    border-right:solid 3px #457cdc;
+}
+.container-userinfo-right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 30px;
+}
+.user-photo{
+    position: relative;
+}
+.input .user-photo-edit{
+    position: absolute;
+    bottom: 0;
+    right: 45px;
+}
+.userinfo-form .Title-Name::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    border-radius: 20px;
+    height: 3px;
+    background-color: #457cdc;
+    /* Adjust color as needed */
+}

@@ -16,8 +16,9 @@ import Received from "./component/Orders/Receiveds/Receiveds";
 import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Customer from "./component/Customers/Customer/Customer";
 import Bookings from "./component/Customers/Bookings/Bookings";
-import Suppliers from "./component/Customers/Supplier/Suppliers";
 import RateTypes from "./component/Options/RateTypes/RateTypes";
+import Suppliers from "./component/Customers/Supplier/Suppliers";
+import UserSettings from "./component/UserSettings/UserSettings";
 import TripSheet from "./component/Customers/TripSheet/TripSheet";
 import Collecteds from "./component/Orders/Collecteds/Collecteds";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
@@ -33,6 +34,7 @@ import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import RateManagement from "./component/Options/RateManagement/RateManagement";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
+import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
 
 
 function App() {
@@ -93,7 +95,12 @@ function App() {
                 <Route path="/home/settings/permission" element={<Permission />} />
                 <Route path="/home/settings/mainsetting" element={<MainSetting />} />
               </Route>
+              <Route path="/home/usersettings" element={<UserSettings />} >
+                <Route path="/home/usersettings/usersetting" element={<UserSetting />} />
+                <Route path="/home/usersettings/usersetting" element={<UserSetting />} />
+              </Route>
             </Route>
+
             <Route path="/onlinelogin" element={<OnlineLoginForm />} />
             <Route path="/onlinebooking" element={<OnlineBooking />} />
             <Route path="/onlinedigital/digitalsignature" element={<DigitalSignature />} />

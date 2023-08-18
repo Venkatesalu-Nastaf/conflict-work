@@ -39,7 +39,7 @@ export const Sidebardata = [
   {
     icon: FaUserAstronaut,
     heading: "User",
-    key: "/home/settings/usercreation",
+    key: "/home/usersettings/usersetting",
   },
 
 ];

@@ -20,8 +20,10 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import InputAdornment from '@mui/material/InputAdornment';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import AttachEmailIcon from '@mui/icons-material/AttachEmail';
+import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 
 // FONTAWESOME
@@ -68,11 +70,10 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
         event.preventDefault();
     };
 
-
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         setSelectedImage(file);
-        onUpdate(file); // Call the provided onUpdate function
+        onUpdate(file);
     };
     const [errorMessage] = useState(false);
     const [error, setError] = useState(false);
@@ -130,7 +131,7 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                 <div className="input-field">
                                     <div className="input" style={{ width: "200px" }}>
                                         <div className="icone">
-                                            <FactCheckIcon color="action" />
+                                            <BadgeIcon color="action" />
                                         </div>
                                         <TextField
                                             size="small"
@@ -151,7 +152,7 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                     </div>
                                     <div className="input" >
                                         <div className="icone">
-                                            <BadgeIcon color="action" />
+                                            <SettingsPhoneIcon color="action" />
                                         </div>
                                         <TextField
                                             type='number'
@@ -166,7 +167,7 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                 <div className="input-field">
                                     <div className="input" style={{ width: "415px" }}>
                                         <div className="icone">
-                                            <FactCheckIcon color="action" />
+                                            <AttachEmailIcon color="action" />
                                         </div>
                                         <TextField
                                             sx={{ width: "193ch" }}
@@ -179,7 +180,7 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                     </div>
                                     <div className="input" >
                                         <div className="icone">
-                                            <BadgeIcon color="action" />
+                                            <WorkspacePremiumIcon color="action" />
                                         </div>
                                         <TextField
                                             size="small"

@@ -1,6 +1,6 @@
 import React from 'react';
 import './UserSettings.css';
-import Themes from './Them/Themes';
+import Themes from './Themes/Themes';
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";

@@ -3,7 +3,7 @@
     padding: 0px !important;
 }
 
-.detail-container-main {
+.detail-container-main-userinfo {
     display: flex;
     padding: 20px;
     width: 70%;
@@ -97,40 +97,39 @@
 .userinfo-form .Title-Name {
     position: relative;
 }
+
 .container-userinfo-main {
+    position: relative;
     display: flex;
-    align-items: center;    
+    align-items: center;
     justify-content: center;
     width: 100%;
-    margin-top: 30px;
+    margin: 30px auto;
     background-color: var(--glass);
-    padding: 35px 20px;
+    padding: 20px 35px 20px 0px;
     border: 2px solid #ccc;
     border-radius: 15px;
 }
-.container-userinfo-left{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+
+.container-userinfo-left {
     height: 300px;
-    border-right:solid 3px #457cdc;
+    border-right: solid 3px #457cdc;
 }
-.container-userinfo-right{
+
+.container-userinfo-right {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     margin-left: 30px;
 }
-.user-photo{
-    position: relative;
-}
-.input .user-photo-edit{
+
+.user-photo-edit {
     position: absolute;
-    bottom: 0;
-    right: 45px;
+    top: 10px;
+    right: 20px;
 }
+
 .userinfo-form .Title-Name::after {
     content: "";
     position: absolute;

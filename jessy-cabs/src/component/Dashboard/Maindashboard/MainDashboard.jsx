@@ -54,7 +54,9 @@ const MainDashboard = () => {
     setExpanded(true);
     navigate("/");
   };
-
+  const handleButtonClickUserInfo = () => {
+    window.location.href = '/home/usersettings/usersetting';
+  }
   return (
     <>
       <section className="dash-board">
@@ -71,7 +73,7 @@ const MainDashboard = () => {
               </StyledBadge>
             </div>
             <div className="user-name-item">
-              <p>abdul fahad</p>
+              <p onClick={handleButtonClickUserInfo}>abdul fahad</p>
             </div>
             <div className="logout-item">
               <FiLogOut className="logout-icon" onClick={handleLogout} />

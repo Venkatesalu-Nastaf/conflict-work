@@ -315,8 +315,6 @@ const Booking = () => {
     }
   };
 
-
-
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -751,7 +749,7 @@ const Booking = () => {
             <div className="input-field">
               <div className="input">
 
-                {/* <Autocomplete
+                <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -770,32 +768,6 @@ const Booking = () => {
                     )
                   }
                   }
-                /> */}
-                <Autocomplete
-                  fullWidth
-                  id="free-solo-demo"
-                  freeSolo
-                  size="small"
-                  options={Report.map((option) => ({
-                    label: option.optionvalue,
-                  }))}
-                  getOptionLabel={(option) => option.label || ""}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "report")}
-                  renderInput={(params) => {
-                    return (
-                      <TextField
-                        {...params}
-                        label="Report"
-                        name="report"
-                        inputRef={params.inputRef}
-                        value={formData.report || selectedCustomerData.report || ""}
-                        onChange={(event) => {
-                          const newValue = event.target.value;
-                          handleAutocompleteChange(event, newValue, "report");
-                        }}
-                      />
-                    );
-                  }}
                 />
 
               </div>
@@ -818,7 +790,7 @@ const Booking = () => {
                 <div className="icone">
                   <AccountBalanceWalletTwoToneIcon color="action" />
                 </div>
-                {/* <Autocomplete
+                <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -837,33 +809,8 @@ const Booking = () => {
                     )
                   }
                   }
-                /> */}
-                <Autocomplete
-                  fullWidth
-                  id="free-solo-demo"
-                  freeSolo
-                  size="small"
-                  options={PayType.map((option) => ({
-                    label: option.optionvalue,
-                  }))}
-                  getOptionLabel={(option) => option.label || ""}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "paymenttype")}
-                  renderInput={(params) => {
-                    return (
-                      <TextField
-                        {...params}
-                        label="Payment Type"
-                        name="paymenttype"
-                        inputRef={params.inputRef}
-                        value={formData.paymenttype || selectedCustomerData.paymenttype || ""}
-                        onChange={(event) => {
-                          const newValue = event.target.value;
-                          handleAutocompleteChange(event, newValue, "paymenttype");
-                        }}
-                      />
-                    );
-                  }}
                 />
+
               </div>
             </div>
             <div className="input-field">
@@ -912,7 +859,7 @@ const Booking = () => {
                 <div className="icone">
                   <EngineeringIcon color="action" />
                 </div>
-                {/* <Autocomplete
+                <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -931,33 +878,8 @@ const Booking = () => {
                     )
                   }
                   }
-                /> */}
-                <Autocomplete
-                  fullWidth
-                  id="free-solo-demo"
-                  freeSolo
-                  size="small"
-                  options={Duty.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) => option.label || ""}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                  renderInput={(params) => {
-                    return (
-                      <TextField
-                        {...params}
-                        label="Duty"
-                        name="duty"
-                        inputRef={params.inputRef}
-                        value={formData.duty || selectedCustomerData.duty || ""}
-                        onChange={(event) => {
-                          const newValue = event.target.value;
-                          handleAutocompleteChange(event, newValue, "duty");
-                        }}
-                      />
-                    );
-                  }}
                 />
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -1053,7 +975,7 @@ const Booking = () => {
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
-                {/* <Autocomplete
+                <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -1072,33 +994,8 @@ const Booking = () => {
                     )
                   }
                   }
-                /> */}
-                <Autocomplete
-                  fullWidth
-                  id="free-solo-demo"
-                  freeSolo
-                  size="small"
-                  options={Service_Station.map((option) => ({
-                    label: option.optionvalue,
-                  }))}
-                  getOptionLabel={(option) => option.label || ""}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
-                  renderInput={(params) => {
-                    return (
-                      <TextField
-                        {...params}
-                        label="Service Station"
-                        name="servicestation"
-                        inputRef={params.inputRef}
-                        value={formData.servicestation || selectedCustomerData.servicestation || ""}
-                        onChange={(event) => {
-                          const newValue = event.target.value;
-                          handleAutocompleteChange(event, newValue, "servicestation");
-                        }}
-                      />
-                    );
-                  }}
                 />
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -1407,7 +1304,7 @@ const Booking = () => {
               <div className="icone">
                 <AirportShuttleIcon color="action" />
               </div>
-              {/* <Autocomplete
+              <Autocomplete
                 fullWidth
                 size="small"
                 id="free-solo-demo"
@@ -1426,33 +1323,8 @@ const Booking = () => {
                   )
                 }
                 }
-              /> */}
-              <Autocomplete
-                fullWidth
-                id="free-solo-demo"
-                freeSolo
-                size="small"
-                options={Service_Station.map((option) => ({
-                  label: option.Option,
-                }))}
-                getOptionLabel={(option) => option.label || ""}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "hiretypes")}
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      label="Hire Types"
-                      name="hiretypes"
-                      inputRef={params.inputRef}
-                      value={formData.hiretypes || selectedCustomerData.hiretypes || ""}
-                      onChange={(event) => {
-                        const newValue = event.target.value;
-                        handleAutocompleteChange(event, newValue, "hiretypes");
-                      }}
-                    />
-                  );
-                }}
               />
+
             </div>
             <div className="input">
               <div className="icone">

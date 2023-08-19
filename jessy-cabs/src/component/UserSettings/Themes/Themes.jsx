@@ -1,9 +1,15 @@
-import React from 'react';
-import './Themes.css';
+import React, { useState } from 'react';
+import './Themes.css'; // Import your CSS file for styling
 
-const Themes = ({ handleThemeChange }) => {
+const Themes = () => {
+  const [selectedTheme, setSelectedTheme] = useState(null);
+
+  const handleThemeChange = (theme) => {
+    setSelectedTheme(theme);
+  };
+
   return (
-    <div className="themes">
+    <div className={`themes ${selectedTheme}`}>
       <div className="theme-options">
         <img
           src="theme1.jpg"

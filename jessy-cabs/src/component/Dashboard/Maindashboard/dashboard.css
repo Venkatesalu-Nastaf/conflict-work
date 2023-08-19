@@ -10,21 +10,6 @@
   --smboxShadow: -79px 51px 60px rgba(0, 0, 0, 0.08);
   --activeItem: #f799a354;
 }
-.dash-board.default {
-  background-image: url("https://images.pexels.com/photos/4039921/pexels-photo-4039921.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-
-}
-
-.dash-board.theme1 {
-  background-image: url("https://images.pexels.com/photos/4039921/pexels-photo-4039921.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-}
-
-.dash-board.theme2 {
-  background-image: url("https://images.pexels.com/photos/4039921/pexels-photo-4039921.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-
-}
-
-/* Add more theme-specific styles */
 
 .dash-board {
   color: var(--black);

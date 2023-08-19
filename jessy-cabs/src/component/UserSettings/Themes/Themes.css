@@ -27,7 +27,7 @@
   }
   
   .theme2 {
-    color: var(--black);
+        color: var(--black);
     /* background: linear-gradient(106.37deg,#aeb3ca 29.63%,#b69ad6 51.55%,#a3e792 90.85%); */
     background-repeat: no-repeat, repeat;
     background-size: 100%;

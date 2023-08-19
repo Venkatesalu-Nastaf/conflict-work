@@ -52,7 +52,7 @@ const rows = [
 const Billed = () => {
 
   const handleButtonClick = () => {
-    window.location.href = '/home/orders/tripsheet';
+    window.location.href = '/home/customers/tripsheet';
   };
 
   return (

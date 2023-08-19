@@ -49,8 +49,7 @@ const rows = [
 const Sumbited = () => {
 
   const handleButtonClickBooking = () => {
-    window.location.href = '/home/orders/bookings';
-
+    window.location.href = '/home/customers/bookings';
   }
 
   return (

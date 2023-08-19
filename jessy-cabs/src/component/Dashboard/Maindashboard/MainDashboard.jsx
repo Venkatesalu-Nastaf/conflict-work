@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../MainDash/Sildebar/Slidebar";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 
+// Import the image
+import logoImage from "../MainDash/Sildebar/Logo-Img/logo.png";
+
 const MainDashboard = () => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
@@ -51,7 +54,9 @@ const MainDashboard = () => {
     setExpanded(true);
     navigate("/");
   };
-
+  const handleButtonClickUserInfo = () => {
+    window.location.href = '/home/usersettings/usersetting';
+  }
   return (
     <>
       <section className="dash-board">
@@ -64,11 +69,11 @@ const MainDashboard = () => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 variant="dot"
               >
-                <Avatar alt="userimage" src="" />
+                   <Avatar alt="userimage" src={logoImage} />
               </StyledBadge>
             </div>
             <div className="user-name-item">
-              <p>abdul fahad</p>
+              <p onClick={handleButtonClickUserInfo}>abdul fahad</p>
             </div>
             <div className="logout-item">
               <FiLogOut className="logout-icon" onClick={handleLogout} />

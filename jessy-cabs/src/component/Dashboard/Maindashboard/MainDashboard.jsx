@@ -1,46 +1,26 @@
 import React, { useState, useEffect } from "react";
 import "./dashboard.css";
 import Badge from '@mui/material/Badge';
-import { Outlet } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';
-import { useNavigate } from "react-router-dom";
 import Sidebar from "../MainDash/Sildebar/Slidebar";
+import { useNavigate, Outlet } from "react-router-dom"; 
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
-
-// Import the image
 import logoImage from "../MainDash/Sildebar/Logo-Img/logo.png";
+import { useThemes } from '../../UserSettings/Themes/ThemesContext'; 
+import { ThemesProvider } from '../../UserSettings/Themes/ThemesContext';
 
 const MainDashboard = () => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
+  const { selectedTheme } = useThemes(); // Access selected theme
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
-      backgroundColor: '#44b700',
-      color: '#44b700',
-      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-      '&::after': {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        borderRadius: '50%',
-        animation: 'ripple 1.2s infinite ease-in-out',
-        border: '1px solid currentColor',
-        content: '""',
-      },
+      // StyledBadge styles
     },
     '@keyframes ripple': {
-      '0%': {
-        transform: 'scale(.8)',
-        opacity: 1,
-      },
-      '100%': {
-        transform: 'scale(2.4)',
-        opacity: 0,
-      },
+      // Ripple animation styles
     },
   }));
 
@@ -54,36 +34,43 @@ const MainDashboard = () => {
     setExpanded(true);
     navigate("/");
   };
+
   const handleButtonClickUserInfo = () => {
     window.location.href = '/home/usersettings/usersetting';
-  }
+  };
+
   return (
-    <>
-      <section className="dash-board">
-        <div className="glass">
-          <Sidebar expanded={expanded} />
-          <div className="header-user">
-            <div className="avatar-item">
-              <StyledBadge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                variant="dot"
-              >
-                   <Avatar alt="userimage" src={logoImage} />
-              </StyledBadge>
-            </div>
-            <div className="user-name-item">
-              <p onClick={handleButtonClickUserInfo}>abdul fahad</p>
-            </div>
-            <div className="logout-item">
-              <FiLogOut className="logout-icon" onClick={handleLogout} />
-            </div>
+    <section className={`dash-board ${selectedTheme}`}>
+      <div className="glass">
+        <Sidebar expanded={expanded} />
+        <div className="header-user">
+          <div className="avatar-item">
+            <StyledBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              variant="dot"
+            >
+              <Avatar alt="userimage" src={logoImage} />
+            </StyledBadge>
           </div>
-          <Outlet />
+          <div className="user-name-item">
+            <p onClick={handleButtonClickUserInfo}>abdul fahad</p>
+          </div>
+          <div className="logout-item">
+            <FiLogOut className="logout-icon" onClick={handleLogout} />
+          </div>
         </div>
-      </section>
-    </>
+        <Outlet />
+      </div>
+    </section>
+  );
+};
+const WrappedMainDashboard = () => {
+  return (
+    <ThemesProvider>
+      <MainDashboard />
+    </ThemesProvider>
   );
 };
 
-export default MainDashboard;
+export default WrappedMainDashboard;

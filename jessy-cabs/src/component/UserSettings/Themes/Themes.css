@@ -1,42 +1,36 @@
 .themes {
-    width: 100vw;
-    height: 100vh;
-    transition: background-image 0.5s;
-  }
-  .dash-board {
-    color: var(--black);
-    /* background: linear-gradient(106.37deg,#aeb3ca 29.63%,#b69ad6 51.55%,#a3e792 90.85%); */
-    background-repeat: no-repeat, repeat;
-    background-size: 100%;
-    background-image: url("https://images.pexels.com/photos/4039921/pexels-photo-4039921.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .theme1 {
-    color: var(--black);
-    /* background: linear-gradient(106.37deg,#aeb3ca 29.63%,#b69ad6 51.55%,#a3e792 90.85%); */
-    background-repeat: no-repeat, repeat;
-    background-size: 100%;
-    background-image: url("https://images.pexels.com/photos/4039921/pexels-photo-4039921.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .theme2 {
-        color: var(--black);
-    /* background: linear-gradient(106.37deg,#aeb3ca 29.63%,#b69ad6 51.55%,#a3e792 90.85%); */
-    background-repeat: no-repeat, repeat;
-    background-size: 100%;
-    background-image: url('https://images.pexels.com/photos/5791347/pexels-photo-5791347.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load');
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* Define more theme-related styles */
-  
+  width: 100vw;
+}
+.Theme-Title{
+  color: #161616;
+}
+.theme-options-main{
+  margin: 50px;
+  padding: 20px;
+  border-radius: 15px;
+  border: solid 2px #ccc;
+  background: var(--glass);
+}
+.theme-options {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.theme-options .theme-image img {
+  cursor: pointer;
+  height: 160px;
+  width: 160px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+.theme-options .theme-image p {
+  cursor: pointer;
+  text-align: center;
+  text-transform: capitalize;
+  font-weight: bold;
+  color: #5e5e5ebb;
+}
+.theme-options .theme-image p:hover{
+  text-decoration: underline;
+}
+

@@ -85,7 +85,6 @@ const Booking = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [selectedValue, setSelectedValue] = useState('pending');
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
     vehType: '',
     driverName: '',
@@ -117,7 +116,7 @@ const Booking = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const bookingFormData = {
+    const formData = {
       bookingno: params.get('bookingno'),
       bookingdate: params.get('bookingdate'),
       bookingtime: params.get('bookingtime'),
@@ -165,14 +164,14 @@ const Booking = () => {
       driverphone: params.get('driverphone'),
       travelsemail: params.get('travelsemail'),
     };
-    setFormData(bookingFormData);
+    setFormData(formData);
   }, [location]);
 
   const [book, setBook] = useState({
     bookingno: '',
     bookingdate: '',
     bookingtime: '',
-    status: '',
+    status: 'pending',
     tripid: '',
     customer: '',
     orderedby: '',
@@ -223,7 +222,6 @@ const Booking = () => {
       bookingno: '',
       bookingdate: '',
       bookingtime: '',
-      status: '',
       tripid: '',
       customer: '',
       orderedby: '',
@@ -270,10 +268,8 @@ const Booking = () => {
     setSelectedCustomerData({});
     setFormData({});
   };
-
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
-    setSelectedValue(event.target.value);
 
     if (type === 'checkbox') {
       setBook((prevBook) => ({
@@ -288,11 +284,22 @@ const Booking = () => {
         ...prevData,
         [name]: checked,
       }));
-
+    } else if (type === 'radio') {
+      const statusValue = value;
+      setBook((prevBook) => ({
+        ...prevBook,
+        status: statusValue,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        status: statusValue,
+      }));
+      setFormData((prevData) => ({
+        ...prevData,
+        status: statusValue,
+      }));
     } else {
-      // Handling non-checkbox fields
-      const fieldValue = type === 'time' ? value : value;
-      setSelectedValue(value);
+      const fieldValue = value;
       setBook((prevBook) => ({
         ...prevBook,
         [name]: fieldValue,
@@ -304,10 +311,6 @@ const Booking = () => {
       setFormData((prevData) => ({
         ...prevData,
         [name]: fieldValue,
-      }));
-      setSelectedValue((prevData) => ({
-        ...prevData,
-        [name]: value,
       }));
     }
   };
@@ -348,7 +351,6 @@ const Booking = () => {
         starttime: starttime,
         registertime: registertime,
         triptime: triptime,
-        status: selectedValue,
       };
       await axios.post('http://localhost:8081/booking', updatedBook);
       console.log(updatedBook);
@@ -394,7 +396,6 @@ const Booking = () => {
       console.log(error);
       setError(true);
       setErrorMessage("Check Network Connection")
-
     }
   };
 
@@ -563,7 +564,7 @@ const Booking = () => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="status"
                     autoComplete="new-password"
-                    value={formData.status || selectedCustomerData.status || book.status || selectedValue || ''}
+                    value={formData.status || selectedCustomerData.status || book.status || ''}
                     onChange={handleChange}
                   >
                     <FormControlLabel
@@ -606,6 +607,7 @@ const Booking = () => {
                   label="Customer"
                   id="customer"
                   variant="standard"
+                  required
                 />
               </div>
             </div>
@@ -650,6 +652,7 @@ const Booking = () => {
                   label="Guest Name"
                   id="guestname"
                   variant="standard"
+                  required
                 />
               </div>
             </div>
@@ -745,6 +748,7 @@ const Booking = () => {
             </div>
             <div className="input-field">
               <div className="input">
+
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -752,21 +756,20 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "report")}
+                  value={Report.find((option) => option.Option)?.label || ''}
                   options={Report.map((option) => ({
                     label: option.Option,
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
+                    params.inputProps.value = formData.report || selectedCustomerData.report || ''
                     return (
-                      <TextField {...params}
-                        label="Report"
-                        name="report"
-                        value={formData.report || selectedCustomerData.report || book.report}
-                      />
+                      <TextField {...params} label="Report" name="report" inputRef={params.inputRef} />
                     )
                   }
                   }
                 />
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -780,6 +783,7 @@ const Booking = () => {
                   label="Vehical Type"
                   id="vehicaltype"
                   variant="standard"
+                  required
                 />
               </div>
               <div className="input">
@@ -806,6 +810,7 @@ const Booking = () => {
                   }
                   }
                 />
+
               </div>
             </div>
             <div className="input-field">
@@ -845,6 +850,7 @@ const Booking = () => {
                     setBook({ ...book, registertime: event.target.value });
                     setRegisterTime(event.target.value);
                   }}
+
                 />
               </div>
             </div>
@@ -873,6 +879,7 @@ const Booking = () => {
                   }
                   }
                 />
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -988,6 +995,7 @@ const Booking = () => {
                   }
                   }
                 />
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -1316,6 +1324,7 @@ const Booking = () => {
                 }
                 }
               />
+
             </div>
             <div className="input">
               <div className="icone">
@@ -1425,7 +1434,7 @@ const Booking = () => {
             </div>
           }
           {success &&
-            <div className='alert-popup Error' >
+            <div className='alert-popup Success' >
               <span className='cancel-btn' onClick={hidePopup}>x</span>
               <p>success fully submitted</p>
             </div>

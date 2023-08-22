@@ -164,6 +164,7 @@ const Booking = () => {
       driverphone: params.get('driverphone'),
       travelsemail: params.get('travelsemail'),
     };
+    setBook(formData);
     setFormData(formData);
   }, [location]);
 
@@ -378,14 +379,25 @@ const Booking = () => {
         setSelectedCustomerData(null);
         setFormData(null);
         handleCancel();
-      } else if (actionName === 'Modify') {
+      } // else if (actionName === 'Modify') {
+      //   console.log('Edit button clicked');
+      //   const selectedCustomer = rows.find((row) => row.bookingno === bookingno);
+      //   const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+      //   await axios.put(`http://localhost:8081/booking/${book.bookingno}`, updatedCustomer);
+      //   console.log('Customer updated');
+      //   handleCancel();
+      //}
+      else if (actionName === 'Modify') {
         console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.bookingno === bookingno);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/booking/${book.bookingno}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
-      } else if (actionName === 'Copy This') {
+      }
+
+
+      else if (actionName === 'Copy This') {
         console.log('Copy This button clicked');
         handleClickShow();
       } else if (actionName === 'Add') {

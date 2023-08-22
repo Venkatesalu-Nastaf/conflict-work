@@ -202,7 +202,7 @@ const TripSheet = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const bookingFormData = {
+    const formData = {
       tripid: params.get('tripid'),
       bookingno: params.get('bookingno'),
       status: params.get('status'),
@@ -247,8 +247,8 @@ const TripSheet = () => {
       email1: params.get('email1'),
       remark: params.get('remark'),
     };
-    setFormData(bookingFormData);
-    console.log(bookingFormData);
+    setBook(formData);
+    setFormData(formData);
   }, [location]);
 
   const [book, setBook] = useState({
@@ -486,11 +486,21 @@ const TripSheet = () => {
     }
   };
 
+  // else if (actionName === 'Modify') {
+  //       console.log('Edit button clicked');
+  //       const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid);
+  //       const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData, ...formData };
+  //       await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || formData.tripid}`, updatedCustomer);
+  //       console.log('Customer updated');
+  //       handleCancel();
+  //     }
+
+
   const handleEdit = async () => {
-    if (!selectedCustomerData.tripid) {
-      console.log('No tripsheet number provided for editing.');
-      return;
-    }
+    // if (!selectedCustomerData.tripid) {
+    //   console.log('No tripsheet number provided for editing.');
+    //   return;
+    // }
 
     try {
       console.log('Edit button clicked');

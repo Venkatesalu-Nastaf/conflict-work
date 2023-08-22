@@ -66,7 +66,8 @@ const Billing = () => {
     const [actionName] = useState('');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-
+   
+    
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
@@ -107,16 +108,16 @@ const Billing = () => {
         minchargeamount: '',
         ChargesForExtra: '',
         ChargesForExtraamount: '',
-        amount1: '',
+        cfeamount: '',
         ChargesForExtraHRS: '',
         ChargesForExtraHRSamount: '',
-        amount2: '',
+        cfehamount: '',
         NightHalt: '',
         NightHaltamount: '',
-        amount3: '',
+        nhamount: '',
         driverbata: '',
         driverbataamount: '',
-        amount4: '',
+        dbamount: '',
         OtherCharges: '',
         OtherChargesamount: '',
         permitothertax: '',
@@ -130,6 +131,7 @@ const Billing = () => {
         RoundedOff: '',
         BalanceReceivable: '',
         NetAmount: '',
+        payableamount:'',
         SavePrint: '',
         document: '',
         Preview: '',
@@ -189,16 +191,16 @@ const Billing = () => {
             minchargeamount: '',
             ChargesForExtra: '',
             ChargesForExtraamount: '',
-            amount1: '',
+            cfeamount: '',
             ChargesForExtraHRS: '',
             ChargesForExtraHRSamount: '',
-            amount2: '',
+            cfehamount: '',
             NightHalt: '',
             NightHaltamount: '',
-            amount3: '',
+            nhamount: '',
             driverbata: '',
             driverbataamount: '',
-            amount4: '',
+            dbamount: '',
             OtherCharges: '',
             OtherChargesamount: '',
             permitothertax: '',
@@ -212,6 +214,7 @@ const Billing = () => {
             RoundedOff: '',
             BalanceReceivable: '',
             NetAmount: '',
+            payableamount:'',
             SavePrint: '',
             document: '',
             Preview: '',
@@ -245,8 +248,12 @@ const Billing = () => {
                 console.log('Customer updated');
                 handleCancel();
             } else if (actionName === 'Add') {
-                await axios.post('http://localhost:8081/billing', book);
-                console.log(book);
+                const updatedBook = {
+                    ...book,
+                    amount1: calculateTotalAmount(),
+                };
+                await axios.post('http://localhost:8081/billing', updatedBook);
+                console.log(updatedBook);
                 handleCancel();
             }
         } catch (err) {
@@ -259,6 +266,48 @@ const Billing = () => {
             handleClick(null, 'List');
         }
     });
+
+    const calculateTotalAmount = () => {
+        const totalkm1 = selectedCustomerData.totalkm1 || book.totalkm1;
+        const ChargesForExtraamount = selectedCustomerData.ChargesForExtraamount || book.ChargesForExtraamount;
+
+        if (totalkm1 !== undefined && ChargesForExtraamount !== undefined) {
+            const totalKm = totalkm1 * ChargesForExtraamount;
+            return totalKm;
+        }
+
+        return 0;
+    };
+
+    const calculatePayableAmount = () => {
+        // const GrossAmount = selectedCustomerData.GrossAmount || book.GrossAmount;; // Replace with the actual GrossAmount
+        const DiscountAmount = selectedCustomerData.DiscountAmount || book.DiscountAmount;; // Replace with the actual DiscountAmount
+        const AdvanceReceived = selectedCustomerData.AdvanceReceived || book.AdvanceReceived;; // Replace with the actual AdvanceReceived
+
+        const netAmount = calculateGrossAmount() - DiscountAmount - AdvanceReceived;
+        return netAmount;
+    };
+
+    const calculateGrossAmount = () => {
+        const {
+            cfehamount,
+            nhamount,
+            dbamount,
+            OtherChargesamount,
+            permitothertax,
+            parkingtollcharges
+        } = selectedCustomerData || book;
+
+        const parsedValues = [
+            calculateTotalAmount(), cfehamount, nhamount, dbamount,
+            OtherChargesamount, permitothertax, parkingtollcharges
+        ].map(value => parseFloat(value) || 0); // Convert to numbers, default to 0 if NaN
+
+        const gross = parsedValues.reduce((sum, value) => sum + value, 0);
+
+        return gross;
+    };
+
 
     const handleKeyDown = useCallback(async (event) => {
         if (event.key === 'Enter') {
@@ -340,7 +389,7 @@ const Billing = () => {
                             </div>
                             <div className="input" style={{ width: "120px" }}>
                                 <TextField
-                                    type='number'
+
                                     margin="normal"
                                     size="small"
                                     id="TotalHours"
@@ -536,12 +585,12 @@ const Billing = () => {
                                     </div>
                                     <TextField
                                         type='number'
-                                        name="ChargesForExtra"
+                                        name="totalkm1"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.ChargesForExtra || book.ChargesForExtra}
+                                        value={selectedCustomerData?.totalkm1 || book.totalkm1}
                                         onChange={handleChange}
                                         label="Charges For Extra"
-                                        id="ChargesForExtra"
+                                        id="totalkm1"
                                         size="small"
                                         variant="standard"
                                         InputProps={{
@@ -575,13 +624,13 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
                                     <TextField
-                                        name="amount1"
+                                        name="cfeamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.amount1 || book.amount1}
+                                        value={selectedCustomerData?.cfeamount || calculateTotalAmount() || book.cfeamount}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
-                                        id="amount"
+                                        id="cfeamount"
                                         variant="standard"
                                     />
                                 </div>
@@ -632,13 +681,14 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
                                     <TextField
-                                        name="amount2"
+                                        type='number'
+                                        name="cfehamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.amount2 || book.amount2}
+                                        value={selectedCustomerData?.cfehamount || book.cfehamount}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
-                                        id="amount"
+                                        id="cfehamount"
                                         variant="standard"
                                     />
                                 </div>
@@ -649,6 +699,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faCloudMoon} />
                                     </div>
                                     <TextField
+                                        type='number'
                                         name="NightHalt"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.NightHalt || book.NightHalt}
@@ -681,13 +732,14 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
                                     <TextField
-                                        name="amount3"
+                                        type='number'
+                                        name="nhamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.amount3 || book.amount3}
+                                        value={selectedCustomerData?.nhamount || book.nhamount}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
-                                        id="amount"
+                                        id="nhamount"
                                         variant="standard"
                                     />
                                 </div>
@@ -698,6 +750,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faMoneyBill1Wave} />
                                     </div>
                                     <TextField
+                                        type='number'
                                         label="Driver Bata"
                                         name='driverbata'
                                         autoComplete="new-password"
@@ -730,13 +783,14 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
                                     <TextField
-                                        name="amount4"
+                                        type='number'
+                                        name="dbamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.amount4 || book.amount4}
+                                        value={selectedCustomerData?.dbamount || book.dbamount}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
-                                        id="amount"
+                                        id="dbamount"
                                         variant="standard"
                                     />
                                 </div>
@@ -747,6 +801,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
                                     <TextField
+                                        type='number'
                                         name="OtherCharges"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.OtherCharges || book.OtherCharges}
@@ -763,6 +818,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
                                     <TextField
+                                        type='number'
                                         name="OtherChargesamount"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.OtherChargesamount || book.OtherChargesamount}
@@ -845,13 +901,14 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faMagnifyingGlassChart} size="lg" />
                                     </div>
                                     <TextField
+                                        type='number'
                                         margin="normal"
                                         size="small"
                                         id="GrossAmount"
                                         label="Gross Amount"
                                         name="GrossAmount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.GrossAmount || book.GrossAmount}
+                                        value={selectedCustomerData?.GrossAmount || calculateGrossAmount() || book.GrossAmount}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -945,7 +1002,7 @@ const Billing = () => {
                                         label="Balance Receivable"
                                         name="BalanceReceivable"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.BalanceReceivable || book.BalanceReceivable}
+                                        value={selectedCustomerData?.BalanceReceivable || calculatePayableAmount() || book.BalanceReceivable}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -960,7 +1017,34 @@ const Billing = () => {
                                         label="Net Amount"
                                         name="NetAmount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.NetAmount || book.NetAmount}
+                                        value={selectedCustomerData?.NetAmount || calculatePayableAmount() || book.NetAmount}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="input-field">
+                                <div className="input" style={{ width: "220px" }}>
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faCoins} size="lg" />
+                                    </div>
+                                    {/* <TextField
+                                        margin="normal"
+                                        size="small"
+                                        id="payableamount"
+                                        label="Payable Amount"
+                                        name="payableamount"
+                                        autoComplete="new-password"
+                                        value={selectedCustomerData?.payableamount || calculatePayableAmount() || book.payableamount}
+                                        onChange={handleChange}
+                                    /> */}
+                                    <TextField
+                                        margin="normal"
+                                        size="small"
+                                        id="payableamount"
+                                        label="Payable Amount"
+                                        name="payableamount"
+                                        autoComplete="new-password"
+                                        value={selectedCustomerData?.payableamount || calculatePayableAmount() || book.payableamount}
                                         onChange={handleChange}
                                     />
                                 </div>

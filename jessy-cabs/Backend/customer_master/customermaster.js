@@ -3,16 +3,29 @@ const express = require('express');
 const cors = require('cors');
 const db = require('../db');
 const multer = require('multer');
-const fs = require('fs');//signature png
+const fs = require('fs'); // signature png
 const app = express();
 const path = require('path');
 const upload = multer({ dest: 'uploads/' });
+const session = require('express-session');
+const crypto = require('crypto'); // Import the crypto library
+
 app.use(cors());
 app.use(express.json());
+
 app.get('/', (req, res) => {
   return res.json({ message: "Hello from the backend side" });
 });
 
+const generateRandomKey = () => {
+  return crypto.randomBytes(64).toString('hex');
+};
+
+app.use(session({
+  secret: generateRandomKey(),
+  resave: false,
+  saveUninitialized: true,
+}));
 // -----------------------------------------------------------------------------------------------------------
 // Login Page database
 app.get('/usercreation', (req, res) => {

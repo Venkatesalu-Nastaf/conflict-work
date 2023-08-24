@@ -75,22 +75,29 @@ const Booking = () => {
   const [actionName] = useState('');
   const [rows, setRows] = useState([]);
   const [displayCopy, setDisplayCopy] = useState(false);
-  const [value, setValue] = React.useState("billingaddress");
+  const [value, setValue] = React.useState("list");
   const [triptime, setTripTime] = useState('');
   const [registertime, setRegisterTime] = useState('');
   const [starttime, setStartTime] = useState('');
   const [bookingtime, setBookingTime] = useState('');
-  const [formData, setFormData] = useState({});
+  // const [formData, setFormData] = useState({});
   const location = useLocation();
   const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+
+  });
+
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
     vehType: '',
     driverName: '',
     vehRegNo: '',
     mobileNo: '',
   });
+
+
+
 
   const hidePopup = () => {
     setError(false);
@@ -114,65 +121,75 @@ const Booking = () => {
     }
   }, [success]);
 
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const statusValue = params.get('status') || 'pending';
+  //   const formData = {
+  //     bookingno: params.get('bookingno'),
+  //     bookingdate: params.get('bookingdate'),
+  //     bookingtime: params.get('bookingtime'),
+  //     status: statusValue,
+  //     tripid: params.get('tripid'),
+  //     customer: params.get('customer'),
+  //     orderedby: params.get('orderedby'),
+  //     mobileno: params.get('mobileno'),
+  //     guestname: params.get('guestname'),
+  //     guestmobileno: params.get('guestmobileno'),
+  //     email: params.get('email'),
+  //     employeeno: params.get('employeeno'),
+  //     address1: params.get('address1'),
+  //     address2: params.get('address2'),
+  //     city: params.get('city'),
+  //     report: params.get('report'),
+  //     vehType: params.get('vehType'),
+  //     paymenttype: params.get('paymenttype'),
+  //     startdate: params.get('startdate'),
+  //     starttime: params.get('starttime'),
+  //     registertime: params.get('registertime'),
+  //     duty: params.get('duty'),
+  //     pickup: params.get('pickup'),
+  //     costcode: params.get('costcode'),
+  //     registerno: params.get('registerno'),
+  //     flightno: params.get('flightno'),
+  //     orderbyemail: params.get('orderbyemail'),
+  //     remarks: params.get('remarks'),
+  //     servicestation: params.get('servicestation'),
+  //     advance: params.get('advance'),
+  //     nameupdate: params.get('nameupdate'),
+  //     address3: params.get('address3'),
+  //     address4: params.get('address4'),
+  //     cityupdate: params.get('cityupdate'),
+  //     useage: params.get('useage'),
+  //     username: params.get('username'),
+  //     tripdate: params.get('tripdate'),
+  //     triptime: params.get('triptime'),
+  //     emaildoggle: params.get('emaildoggle'),
+  //     hiretypes: params.get('hiretypes'),
+  //     travelsname: params.get('travelsname'),
+  //     vehicleregisterno: params.get('vehicleregisterno'),
+  //     vehiclemodule: params.get('vehiclemodule'),
+  //     driverName: params.get('driverName'),
+  //     driverphone: params.get('driverphone'),
+  //     travelsemail: params.get('travelsemail'),
+  //   };
+  //   setBook(formData);
+  //   setFormData(formData);
+  // }, [location]);
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const formData = {
-      bookingno: params.get('bookingno'),
-      bookingdate: params.get('bookingdate'),
-      bookingtime: params.get('bookingtime'),
-      status: params.get('status'),
-      tripid: params.get('tripid'),
-      customer: params.get('customer'),
-      orderedby: params.get('orderedby'),
-      mobileno: params.get('mobileno'),
-      guestname: params.get('guestname'),
-      guestmobileno: params.get('guestmobileno'),
-      email: params.get('email'),
-      employeeno: params.get('employeeno'),
-      address1: params.get('address1'),
-      address2: params.get('address2'),
-      city: params.get('city'),
-      report: params.get('report'),
-      vehType: params.get('vehType'),
-      paymenttype: params.get('paymenttype'),
-      startdate: params.get('startdate'),
-      starttime: params.get('starttime'),
-      registertime: params.get('registertime'),
-      duty: params.get('duty'),
-      pickup: params.get('pickup'),
-      costcode: params.get('costcode'),
-      registerno: params.get('registerno'),
-      flightno: params.get('flightno'),
-      orderbyemail: params.get('orderbyemail'),
-      remarks: params.get('remarks'),
-      servicestation: params.get('servicestation'),
-      advance: params.get('advance'),
-      nameupdate: params.get('nameupdate'),
-      address3: params.get('address3'),
-      address4: params.get('address4'),
-      cityupdate: params.get('cityupdate'),
-      useage: params.get('useage'),
-      username: params.get('username'),
-      tripdate: params.get('tripdate'),
-      triptime: params.get('triptime'),
-      emaildoggle: params.get('emaildoggle'),
-      hiretypes: params.get('hiretypes'),
-      travelsname: params.get('travelsname'),
-      vehicleregisterno: params.get('vehicleregisterno'),
-      vehiclemodule: params.get('vehiclemodule'),
-      driverName: params.get('driverName'),
-      driverphone: params.get('driverphone'),
-      travelsemail: params.get('travelsemail'),
-    };
-    setBook(formData);
-    setFormData(formData);
-  }, [location]);
+    // Fetch the stored data from the server
+    fetch('http://localhost:8081/get-stored-booking-data')
+      .then(response => response.json())
+      .then(data => {
+        setBook(data);
+        setFormData(data);
+      });
+  }, []);
 
   const [book, setBook] = useState({
     bookingno: '',
-    bookingdate: '',
+    bookingdate: dayjs(),
     bookingtime: '',
-    status: 'pending',
+    status: '',
     tripid: '',
     customer: '',
     orderedby: '',
@@ -269,6 +286,17 @@ const Booking = () => {
     setSelectedCustomerData({});
     setFormData({});
   };
+
+
+  const getCurrentTime = () => {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
+
+
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
 
@@ -286,18 +314,18 @@ const Booking = () => {
         [name]: checked,
       }));
     } else if (type === 'radio') {
-      const statusValue = value;
+
       setBook((prevBook) => ({
         ...prevBook,
-        status: statusValue,
+        [name]: value,
       }));
       setSelectedCustomerData((prevData) => ({
         ...prevData,
-        status: statusValue,
+        [name]: value,
       }));
       setFormData((prevData) => ({
         ...prevData,
-        status: statusValue,
+        [name]: value,
       }));
     } else {
       const fieldValue = value;
@@ -330,13 +358,17 @@ const Booking = () => {
       [name]: selectedOption,
     }));
   };
-  const handleDateChange = (date, name) => {
-    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
-    setBook((prevBook) => ({
-      ...prevBook,
-      [name]: formattedDate,
+  const handleDateChange = (date, fieldName) => {
+    setBook((prevData) => ({
+      ...prevData,
+      [fieldName]: date,
+    }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [fieldName]: date,
     }));
   };
+
   const handleAdd = async () => {
     const customer = book.customer;
     if (!customer) {
@@ -346,18 +378,20 @@ const Booking = () => {
     }
     try {
       console.log('Add button clicked');
+      const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
+      console.log('Selected Booking Date:', selectedBookingDate);
       const updatedBook = {
         ...book,
-        bookingtime: bookingtime,
+        bookingtime: bookingtime || getCurrentTime(),
         starttime: starttime,
         registertime: registertime,
         triptime: triptime,
+        bookingdate: selectedBookingDate,
       };
       await axios.post('http://localhost:8081/booking', updatedBook);
       console.log(updatedBook);
       handleCancel();
       setSuccess(true);
-
     } catch (error) {
       console.error('Error updating customer:', error);
     }
@@ -379,31 +413,19 @@ const Booking = () => {
         setSelectedCustomerData(null);
         setFormData(null);
         handleCancel();
-      } // else if (actionName === 'Modify') {
-      //   console.log('Edit button clicked');
-      //   const selectedCustomer = rows.find((row) => row.bookingno === bookingno);
-      //   const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-      //   await axios.put(`http://localhost:8081/booking/${book.bookingno}`, updatedCustomer);
-      //   console.log('Customer updated');
-      //   handleCancel();
-      //}
-      else if (actionName === 'Modify') {
+      } else if (actionName === 'Modify') {
         console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.bookingno === bookingno);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/booking/${book.bookingno}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
-      }
-
-
-      else if (actionName === 'Copy This') {
+      } else if (actionName === 'Copy This') {
         console.log('Copy This button clicked');
         handleClickShow();
       } else if (actionName === 'Add') {
         handleAdd();
       }
-
     } catch (error) {
       console.log(error);
       setError(true);
@@ -457,6 +479,8 @@ const Booking = () => {
       try {
         const response = await axios.get(`http://localhost:8081/booking/${event.target.value}`);
         const bookingDetails = response.data;
+        console.log(bookingDetails);
+        setBook(bookingDetails);
         setSelectedCustomerData(bookingDetails);
         setSelectedCustomerId(bookingDetails.customerId);
       } catch (error) {
@@ -511,6 +535,7 @@ const Booking = () => {
     }
   }, []);
 
+
   const handleRowClick = useCallback((params) => {
     console.log(params);
     setSelectedCustomerDatas(params);
@@ -542,7 +567,8 @@ const Booking = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">
                     <DatePicker
-                      value={formData.bookingdate || selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null}
+                      // value={formData.bookingdate ? dayjs() : (selectedCustomerData.bookingdate ? dayjs() : null)}
+                      value={book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
                       onChange={(date) => handleDateChange(date, 'bookingdate')}
                     >
                       {({ inputProps, inputRef }) => (
@@ -551,12 +577,14 @@ const Booking = () => {
                     </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
+
+
               </div>
               <div className="input time">
                 <label>Booking Time</label>
                 <input
                   type="time"
-                  value={formData.bookingtime || selectedCustomerData.bookingtime || book.bookingtime}
+                  value={formData.bookingtime || selectedCustomerData.bookingtime || book.bookingtime || getCurrentTime()}
                   onChange={(event) => {
                     setBook({ ...book, bookingtime: event.target.value });
                     setBookingTime(event.target.value);
@@ -576,7 +604,8 @@ const Booking = () => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="status"
                     autoComplete="new-password"
-                    value={formData.status || selectedCustomerData.status || book.status || ''}
+                    // value={book.status}
+                    value={formData.status || selectedCustomerData.status || book.status}
                     onChange={handleChange}
                   >
                     <FormControlLabel
@@ -827,18 +856,33 @@ const Booking = () => {
             </div>
             <div className="input-field">
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Report Date">
                     <DatePicker
-                      value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
+                     
+                      value={dayjs(book.startdate) || dayjs()}
                       onChange={(date) => handleDateChange(date, 'startdate')}
                     >
                       {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='startdate' value={formData.startdate || selectedCustomerData.startdate || ''} />
+                        <TextField {...inputProps} inputRef={inputRef} name='startdate'  />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Report Date">
+                    <DatePicker
+                      // value={formData.bookingdate ? dayjs() : (selectedCustomerData.bookingdate ? dayjs() : null)}
+                      value={book.startdate ? dayjs(book.startdate) : dayjs()}
+                      onChange={(date) => handleDateChange(date, 'startdate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
                       )}
                     </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
+
               </div>
               <div className="input time">
                 <label>Start Time</label>
@@ -853,7 +897,7 @@ const Booking = () => {
                 />
               </div>
               <div className="input time">
-                <label>Register Time</label>
+                <label>Report Time</label>
                 <input
                   type="time"
                   name='registertime'
@@ -934,7 +978,7 @@ const Booking = () => {
                   autoComplete="new-password"
                   value={formData.registerno || selectedCustomerData.registerno || book.registerno}
                   onChange={handleChange}
-                  label="Register No"
+                  label="Request No"
                   id="registerno"
                   variant="standard"
                 />
@@ -1015,7 +1059,7 @@ const Booking = () => {
                 </div>
                 <TextField
                   size='small'
-                  type="number"
+                  // type="number"
                   name='advance'
                   autoComplete="new-password"
                   value={formData.advance || selectedCustomerData.advance || book.advance}

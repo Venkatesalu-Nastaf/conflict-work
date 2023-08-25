@@ -96,9 +96,6 @@ const Booking = () => {
     mobileNo: '',
   });
 
-
-
-
   const hidePopup = () => {
     setError(false);
     setSuccess(false);
@@ -121,68 +118,44 @@ const Booking = () => {
     }
   }, [success]);
 
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   const statusValue = params.get('status') || 'pending';
-  //   const formData = {
-  //     bookingno: params.get('bookingno'),
-  //     bookingdate: params.get('bookingdate'),
-  //     bookingtime: params.get('bookingtime'),
-  //     status: statusValue,
-  //     tripid: params.get('tripid'),
-  //     customer: params.get('customer'),
-  //     orderedby: params.get('orderedby'),
-  //     mobileno: params.get('mobileno'),
-  //     guestname: params.get('guestname'),
-  //     guestmobileno: params.get('guestmobileno'),
-  //     email: params.get('email'),
-  //     employeeno: params.get('employeeno'),
-  //     address1: params.get('address1'),
-  //     address2: params.get('address2'),
-  //     city: params.get('city'),
-  //     report: params.get('report'),
-  //     vehType: params.get('vehType'),
-  //     paymenttype: params.get('paymenttype'),
-  //     startdate: params.get('startdate'),
-  //     starttime: params.get('starttime'),
-  //     registertime: params.get('registertime'),
-  //     duty: params.get('duty'),
-  //     pickup: params.get('pickup'),
-  //     costcode: params.get('costcode'),
-  //     registerno: params.get('registerno'),
-  //     flightno: params.get('flightno'),
-  //     orderbyemail: params.get('orderbyemail'),
-  //     remarks: params.get('remarks'),
-  //     servicestation: params.get('servicestation'),
-  //     advance: params.get('advance'),
-  //     nameupdate: params.get('nameupdate'),
-  //     address3: params.get('address3'),
-  //     address4: params.get('address4'),
-  //     cityupdate: params.get('cityupdate'),
-  //     useage: params.get('useage'),
-  //     username: params.get('username'),
-  //     tripdate: params.get('tripdate'),
-  //     triptime: params.get('triptime'),
-  //     emaildoggle: params.get('emaildoggle'),
-  //     hiretypes: params.get('hiretypes'),
-  //     travelsname: params.get('travelsname'),
-  //     vehicleregisterno: params.get('vehicleregisterno'),
-  //     vehiclemodule: params.get('vehiclemodule'),
-  //     driverName: params.get('driverName'),
-  //     driverphone: params.get('driverphone'),
-  //     travelsemail: params.get('travelsemail'),
-  //   };
-  //   setBook(formData);
-  //   setFormData(formData);
-  // }, [location]);
   useEffect(() => {
-    // Fetch the stored data from the server
-    fetch('http://localhost:8081/get-stored-booking-data')
-      .then(response => response.json())
-      .then(data => {
-        setBook(data);
-        setFormData(data);
-      });
+    const params = new URLSearchParams(location.search);
+    const statusValue = params.get('status') || 'pending';
+    const formData = {};
+
+    // Define a list of parameter keys
+    const parameterKeys = [
+      'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby',
+      'mobileno', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2',
+      'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'registertime',
+      'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
+      'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
+      'username', 'tripdate', 'triptime', 'emaildoggle', 'hiretypes', 'travelsname',
+      'vehicleregisterno', 'vehiclemodule', 'driverName', 'driverphone', 'travelsemail'
+    ];
+
+    // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
+    parameterKeys.forEach(key => {
+      const value = params.get(key);
+      if (value !== null && value !== "null") {
+        formData[key] = value;
+      }
+    });
+
+    // Set the status separately
+    formData['status'] = statusValue;
+
+    setBook(formData);
+    setFormData(formData);
+  }, [location]);
+
+  useEffect(() => {
+    // Clear URL parameters
+    window.history.replaceState(null, document.title, window.location.pathname);
+
+    // Reset form data to initial/default values
+    const initialFormData = {}; // You can set the initial/default values here
+    setFormData(initialFormData);
   }, []);
 
   const [book, setBook] = useState({
@@ -295,8 +268,6 @@ const Booking = () => {
     return `${hours}:${minutes}`;
   };
 
-
-
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
 
@@ -357,6 +328,10 @@ const Booking = () => {
       ...prevData,
       [name]: selectedOption,
     }));
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
   };
   const handleDateChange = (date, fieldName) => {
     setBook((prevData) => ({
@@ -379,7 +354,7 @@ const Booking = () => {
     try {
       console.log('Add button clicked');
       const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
-      console.log('Selected Booking Date:', selectedBookingDate);
+
       const updatedBook = {
         ...book,
         bookingtime: bookingtime || getCurrentTime(),
@@ -567,7 +542,6 @@ const Booking = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">
                     <DatePicker
-                      // value={formData.bookingdate ? dayjs() : (selectedCustomerData.bookingdate ? dayjs() : null)}
                       value={book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
                       onChange={(date) => handleDateChange(date, 'bookingdate')}
                     >
@@ -577,8 +551,6 @@ const Booking = () => {
                     </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
-
-
               </div>
               <div className="input time">
                 <label>Booking Time</label>
@@ -604,7 +576,6 @@ const Booking = () => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="status"
                     autoComplete="new-password"
-                    // value={book.status}
                     value={formData.status || selectedCustomerData.status || book.status}
                     onChange={handleChange}
                   >
@@ -628,7 +599,7 @@ const Booking = () => {
                 <TextField
                   name="tripid"
                   autoComplete="new-password"
-                  value={formData.tripid || selectedCustomerData.tripid || book.tripid}
+                  value={formData.tripid || selectedCustomerData.tripid || book.tripid || ''}
                   onChange={handleChange}
                   label="Trip Id"
                   id="standard-size-normal"
@@ -642,7 +613,7 @@ const Booking = () => {
                 <TextField
                   name="customer"
                   autoComplete="new-password"
-                  value={formData.customer || selectedCustomerDatas.customer || selectedCustomerData.customer || book.customer}
+                  value={formData.customer || selectedCustomerDatas.customer || selectedCustomerData.customer || book.customer || ''}
                   onChange={handleChange}
                   onKeyDown={handleKeyEnter}
                   label="Customer"
@@ -660,7 +631,7 @@ const Booking = () => {
                 <TextField
                   name="orderedby"
                   autoComplete="new-password"
-                  value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby}
+                  value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
                   onChange={handleChange}
                   label="Ordered by"
                   id="orderedby"
@@ -674,7 +645,7 @@ const Booking = () => {
                 <TextField
                   name="mobileno"
                   autoComplete="new-password"
-                  value={formData.mobileno || selectedCustomerData.mobileno || book.mobileno}
+                  value={formData.mobileno || selectedCustomerData.mobileno || book.mobileno || ''}
                   onChange={handleChange}
                   label="Mobile No"
                   id="mobileno"
@@ -688,7 +659,7 @@ const Booking = () => {
                 <TextField
                   name="guestname"
                   autoComplete="new-password"
-                  value={formData.guestname || selectedCustomerData.guestname || book.guestname}
+                  value={formData.guestname || selectedCustomerData.guestname || book.guestname || ''}
                   onChange={handleChange}
                   label="Guest Name"
                   id="guestname"
@@ -705,7 +676,7 @@ const Booking = () => {
                 <TextField
                   name="guestmobileno"
                   autoComplete="new-password"
-                  value={formData.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno}
+                  value={formData.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || ''}
                   onChange={handleChange}
                   label="Guest Mobile No"
                   id="guestmobileno"
@@ -719,7 +690,7 @@ const Booking = () => {
                 <TextField
                   name="email"
                   autoComplete="new-password"
-                  value={formData.email || selectedCustomerData.email || book.email}
+                  value={formData.email || selectedCustomerData.email || book.email || ''}
                   onChange={handleChange}
                   label="Email"
                   id="email"
@@ -733,7 +704,7 @@ const Booking = () => {
                 <TextField
                   name="employeeno"
                   autoComplete="new-password"
-                  value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno}
+                  value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
                   onChange={handleChange}
                   label="Employee No"
                   id="employeeno"
@@ -753,7 +724,7 @@ const Booking = () => {
                   label="No.Street Name"
                   name="address1"
                   autoComplete="new-password"
-                  value={formData.address1 || selectedCustomerData.address1 || book.address1}
+                  value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
                   onChange={handleChange}
                   autoFocus
                 />
@@ -765,7 +736,7 @@ const Booking = () => {
                 <TextField
                   name="address2"
                   autoComplete="new-password"
-                  value={formData.address2 || selectedCustomerData.address2 || book.address2}
+                  value={formData.address2 || selectedCustomerData.address2 || book.address2 || ''}
                   onChange={handleChange}
                   label="Address"
                   id="address"
@@ -779,7 +750,7 @@ const Booking = () => {
                 <TextField
                   name="city"
                   autoComplete="new-password"
-                  value={formData.city || selectedCustomerData.city || book.city}
+                  value={formData.city || selectedCustomerData.city || book.city || ''}
                   onChange={handleChange}
                   label="City"
                   id="standard-size-normal"
@@ -789,7 +760,6 @@ const Booking = () => {
             </div>
             <div className="input-field">
               <div className="input">
-
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -810,7 +780,6 @@ const Booking = () => {
                   }
                   }
                 />
-
               </div>
               <div className="input">
                 <div className="icone">
@@ -819,7 +788,7 @@ const Booking = () => {
                 <TextField
                   name="vehType"
                   autoComplete="new-password"
-                  value={formData.vehType || selectedCustomerData.vehType || book.vehType}
+                  value={formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
                   onChange={handleChange}
                   label="Vehical Type"
                   id="vehicaltype"
@@ -851,28 +820,13 @@ const Booking = () => {
                   }
                   }
                 />
-
               </div>
             </div>
             <div className="input-field">
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Report Date">
-                    <DatePicker
-                     
-                      value={dayjs(book.startdate) || dayjs()}
-                      onChange={(date) => handleDateChange(date, 'startdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='startdate'  />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
-                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Report Date">
                     <DatePicker
-                      // value={formData.bookingdate ? dayjs() : (selectedCustomerData.bookingdate ? dayjs() : null)}
                       value={book.startdate ? dayjs(book.startdate) : dayjs()}
                       onChange={(date) => handleDateChange(date, 'startdate')}
                     >
@@ -882,7 +836,6 @@ const Booking = () => {
                     </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
-
               </div>
               <div className="input time">
                 <label>Start Time</label>
@@ -906,7 +859,6 @@ const Booking = () => {
                     setBook({ ...book, registertime: event.target.value });
                     setRegisterTime(event.target.value);
                   }}
-
                 />
               </div>
             </div>
@@ -935,7 +887,6 @@ const Booking = () => {
                   }
                   }
                 />
-
               </div>
               <div className="input">
                 <div className="icone">
@@ -960,7 +911,7 @@ const Booking = () => {
                 <TextField
                   name="costcode"
                   autoComplete="new-password"
-                  value={formData.costcode || selectedCustomerData.costcode || book.costcode}
+                  value={formData.costcode || selectedCustomerData.costcode || book.costcode || ''}
                   onChange={handleChange}
                   label="Cost Code"
                   id="costcode"
@@ -976,7 +927,7 @@ const Booking = () => {
                 <TextField
                   name="registerno"
                   autoComplete="new-password"
-                  value={formData.registerno || selectedCustomerData.registerno || book.registerno}
+                  value={formData.registerno || selectedCustomerData.registerno || book.registerno || ''}
                   onChange={handleChange}
                   label="Request No"
                   id="registerno"
@@ -990,7 +941,7 @@ const Booking = () => {
                 <TextField
                   name="flightno"
                   autoComplete="new-password"
-                  value={formData.flightno || selectedCustomerData.flightno || book.flightno}
+                  value={formData.flightno || selectedCustomerData.flightno || book.flightno || ''}
                   onChange={handleChange}
                   label="Flight No"
                   id="flight"
@@ -1004,7 +955,7 @@ const Booking = () => {
                 <TextField
                   name="orderbyemail"
                   autoComplete="new-password"
-                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || book.orderbyemail}
+                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || book.orderbyemail || ''}
                   onChange={handleChange}
                   label="Order By Email"
                   id="orederbyemail"
@@ -1020,7 +971,7 @@ const Booking = () => {
                 <TextField
                   name="remarks"
                   autoComplete="new-password"
-                  value={formData.remarks || selectedCustomerData.remarks || book.remarks}
+                  value={formData.remarks || selectedCustomerData.remarks || book.remarks || ''}
                   onChange={handleChange}
                   label="Remarks"
                   id="remarks"
@@ -1051,7 +1002,6 @@ const Booking = () => {
                   }
                   }
                 />
-
               </div>
               <div className="input">
                 <div className="icone">
@@ -1062,7 +1012,7 @@ const Booking = () => {
                   // type="number"
                   name='advance'
                   autoComplete="new-password"
-                  value={formData.advance || selectedCustomerData.advance || book.advance}
+                  value={formData.advance || selectedCustomerData.advance || book.advance || ''}
                   onChange={handleChange}
                   label="Advance"
                   id="advance"
@@ -1133,7 +1083,7 @@ const Booking = () => {
                               size="small"
                               name="nameupdate"
                               autoComplete="new-password"
-                              value={formData.guestname || selectedCustomerData.guestname || book.guestname}
+                              value={formData.guestname || selectedCustomerData.guestname || book.guestname || ''}
                               onChange={handleChange}
                               label="Name"
                               id="name"
@@ -1151,7 +1101,7 @@ const Booking = () => {
                               label="No.Street Name"
                               name="address3"
                               autoComplete="new-password"
-                              value={formData.address1 || selectedCustomerData.address1 || book.address1}
+                              value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
                               onChange={handleChange}
                               autoFocus
                             />
@@ -1165,7 +1115,7 @@ const Booking = () => {
                             <TextField
                               name="address4"
                               autoComplete="new-password"
-                              value={formData.address2 || selectedCustomerData.address2 || book.address2}
+                              value={formData.address2 || selectedCustomerData.address2 || book.address2 || ''}
                               onChange={handleChange}
                               label="Address"
                               id="address4"
@@ -1179,7 +1129,7 @@ const Booking = () => {
                             <TextField
                               name="cityupdate"
                               autoComplete="new-password"
-                              value={formData.city || selectedCustomerData.city || book.city}
+                              value={formData.city || selectedCustomerData.city || book.city || ''}
                               onChange={handleChange}
                               label="City"
                               id="cityupdate"
@@ -1248,7 +1198,7 @@ const Booking = () => {
                   label="Usage"
                   name="useage"
                   autoComplete="new-password"
-                  value={formData.useage || selectedCustomerData.useage || book.useage}
+                  value={formData.useage || selectedCustomerData.useage || book.useage || ''}
                   onChange={handleChange}
                   autoFocus
                 />
@@ -1261,7 +1211,7 @@ const Booking = () => {
                   label="User Name"
                   name="username"
                   autoComplete="new-password"
-                  value={formData.username || selectedCustomerData.username || book.username}
+                  value={formData.username || selectedCustomerData.username || book.username || ''}
                   onChange={handleChange}
                   autoFocus
                 />
@@ -1287,11 +1237,11 @@ const Booking = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoItem label="Trip Date">
                       <DatePicker
-                        value={formData.tripdate || selectedCustomerData.tripdate ? dayjs(selectedCustomerData.tripdate) : null}
+                        value={book.tripdate ? dayjs(book.tripdate) : dayjs()}
                         onChange={(date) => handleDateChange(date, 'tripdate')}
                       >
                         {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} name='tripdate' value={formData.tripdate || selectedCustomerData.tripdate || ''} />
+                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripdate} />
                         )}
                       </DatePicker>
                     </DemoItem>
@@ -1302,7 +1252,7 @@ const Booking = () => {
                   <input
                     type="time"
                     name='triptime'
-                    value={formData.triptime || selectedCustomerData.triptime || book.triptime}
+                    value={formData.triptime || selectedCustomerData.triptime || book.triptime || ''}
                     onChange={(event) => {
                       setBook({ ...book, triptime: event.target.value });
                       setTripTime(event.target.value);
@@ -1330,7 +1280,7 @@ const Booking = () => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="emaildoggle"
                     autoComplete="new-password"
-                    value={formData.emaildoggle || selectedCustomerData.emaildoggle || book.emaildoggle}
+                    value={formData.emaildoggle || selectedCustomerData.emaildoggle || book.emaildoggle || ''}
                     onChange={handleChange}
                   >
                     <FormControlLabel
@@ -1380,7 +1330,6 @@ const Booking = () => {
                 }
                 }
               />
-
             </div>
             <div className="input">
               <div className="icone">
@@ -1389,7 +1338,7 @@ const Booking = () => {
               <TextField
                 name="travelsname"
                 autoComplete="new-password"
-                value={formData.travelsname || selectedCustomerData.travelsname || book.travelsname}
+                value={formData.travelsname || selectedCustomerData.travelsname || book.travelsname || ''}
                 onChange={handleChange}
                 label="Travels Name"
                 id="travelsname"
@@ -1403,7 +1352,7 @@ const Booking = () => {
               <TextField
                 name="vehicleregisterno"
                 autoComplete="new-password"
-                value={formData.vehicleregisterno || selectedCustomerData.vehicleregisterno || book.vehicleregisterno}
+                value={formData.vehicleregisterno || selectedCustomerData.vehicleregisterno || book.vehicleregisterno || ''}
                 onChange={handleChange}
                 label="Vehicle Register No"
                 id="vehicleregisterno"
@@ -1444,7 +1393,7 @@ const Booking = () => {
               <TextField
                 name="driverName"
                 autoComplete="new-password"
-                value={formData.driverName || selectedCustomerData.driverName || book.driverName}
+                value={formData.driverName || selectedCustomerData.driverName || book.driverName || ''}
                 onChange={handleChange}
                 label="Driver Name"
                 id="drivername"
@@ -1458,7 +1407,7 @@ const Booking = () => {
               <TextField
                 name="driverphone"
                 autoComplete="new-password"
-                value={formData.driverphone || selectedCustomerData.driverphone || book.driverphone}
+                value={formData.driverphone || selectedCustomerData.driverphone || book.driverphone || ''}
                 onChange={handleChange}
                 label="Driver Phone"
                 id="driverphone"
@@ -1472,7 +1421,7 @@ const Booking = () => {
               <TextField
                 name="travelsemail"
                 autoComplete="new-password"
-                value={formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail}
+                value={formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail || ''}
                 onChange={handleChange}
                 label="Travels Email"
                 id="travelsemail"

@@ -200,56 +200,98 @@ const TripSheet = () => {
     }
   }, [success]);
 
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const formData = {
+  //     tripid: params.get('tripid'),
+  //     bookingno: params.get('bookingno'),
+  //     status: params.get('status'),
+  //     billingno: params.get('billingno'),
+  //     apps: params.get('apps'),
+  //     customer: params.get('customer'),
+  //     orderedby: params.get('orderedby'),
+  //     mobile: params.get('mobile'),
+  //     guestname: params.get('guestname'),
+  //     guestmobile: params.get('guestmobile'),
+  //     email: params.get('email'),
+  //     address1: params.get('address1'),
+  //     streetno: params.get('streetno'),
+  //     city: params.get('city'),
+  //     hireTypes: params.get('hireTypes'),
+  //     department: params.get('department'),
+  //     vehRegNo: params.get('vehRegNo'),
+  //     vehType: params.get('vehType'),
+  //     driverName: params.get('driverName'),
+  //     mobileNo: params.get('mobileNo'),
+  //     driversmsexbetta: params.get('driversmsexbetta'),
+  //     gps: params.get('gps'),
+  //     duty: params.get('duty'),
+  //     pickup: params.get('pickup'),
+  //     useage: params.get('useage'),
+  //     request: params.get('request'),
+  //     startdate: params.get('startdate'),
+  //     closedate: params.get('closedate'),
+  //     empolyeeno: params.get('empolyeeno'),
+  //     starttime: params.get('starttime'),
+  //     closetime: params.get('closetime'),
+  //     advancepaidtovendor: params.get('advancepaidtovendor'),
+  //     customercode: params.get('customercode'),
+  //     startkm: params.get('startkm'),
+  //     closekm: params.get('closekm'),
+  //     permit: params.get('permit'),
+  //     parking: params.get('parking'),
+  //     toll: params.get('toll'),
+  //     vpermettovendor: params.get('vpermettovendor'),
+  //     vendortoll: params.get('vendortoll'),
+  //     customeradvance: params.get('customeradvance'),
+  //     email1: params.get('email1'),
+  //     remark: params.get('remark'),
+  //   };
+  //   setBook(formData);
+  //   setFormData(formData);
+  // }, [location]);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const formData = {
-      tripid: params.get('tripid'),
-      bookingno: params.get('bookingno'),
-      status: params.get('status'),
-      billingno: params.get('billingno'),
-      apps: params.get('apps'),
-      customer: params.get('customer'),
-      orderedby: params.get('orderedby'),
-      mobile: params.get('mobile'),
-      guestname: params.get('guestname'),
-      guestmobile: params.get('guestmobile'),
-      email: params.get('email'),
-      address1: params.get('address1'),
-      streetno: params.get('streetno'),
-      city: params.get('city'),
-      hireTypes: params.get('hireTypes'),
-      department: params.get('department'),
-      vehRegNo: params.get('vehRegNo'),
-      vehType: params.get('vehType'),
-      driverName: params.get('driverName'),
-      mobileNo: params.get('mobileNo'),
-      driversmsexbetta: params.get('driversmsexbetta'),
-      gps: params.get('gps'),
-      duty: params.get('duty'),
-      pickup: params.get('pickup'),
-      useage: params.get('useage'),
-      request: params.get('request'),
-      startdate: params.get('startdate'),
-      closedate: params.get('closedate'),
-      empolyeeno: params.get('empolyeeno'),
-      starttime: params.get('starttime'),
-      closetime: params.get('closetime'),
-      advancepaidtovendor: params.get('advancepaidtovendor'),
-      customercode: params.get('customercode'),
-      startkm: params.get('startkm'),
-      closekm: params.get('closekm'),
-      permit: params.get('permit'),
-      parking: params.get('parking'),
-      toll: params.get('toll'),
-      vpermettovendor: params.get('vpermettovendor'),
-      vendortoll: params.get('vendortoll'),
-      customeradvance: params.get('customeradvance'),
-      email1: params.get('email1'),
-      remark: params.get('remark'),
-    };
+    const statusValue = params.get('status') || 'pending';
+    const formData = {};
+
+    // Define a list of parameter keys
+    const parameterKeys = [
+      'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby',
+      'mobileno', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2',
+      'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'registertime',
+      'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
+      'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
+      'username', 'tripdate', 'triptime', 'emaildoggle', 'hiretypes', 'travelsname',
+      'vehicleregisterno', 'vehiclemodule', 'driverName', 'driverphone', 'travelsemail'
+    ];
+
+    // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
+    parameterKeys.forEach(key => {
+      const value = params.get(key);
+      if (value !== null && value !== "null") {
+        formData[key] = value;
+      }
+    });
+
+    // Set the status separately
+    formData['status'] = statusValue;
+
     setBook(formData);
     setFormData(formData);
   }, [location]);
+
+
+
+  useEffect(() => {
+    // Clear URL parameters
+    window.history.replaceState(null, document.title, window.location.pathname);
+
+    // Reset form data to initial/default values
+    const initialFormData = {}; // You can set the initial/default values here
+    setFormData(initialFormData);
+  }, []);
 
   const [book, setBook] = useState({
     tripid: '',

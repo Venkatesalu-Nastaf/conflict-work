@@ -200,60 +200,9 @@ const TripSheet = () => {
     }
   }, [success]);
 
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   const formData = {
-  //     tripid: params.get('tripid'),
-  //     bookingno: params.get('bookingno'),
-  //     status: params.get('status'),
-  //     billingno: params.get('billingno'),
-  //     apps: params.get('apps'),
-  //     customer: params.get('customer'),
-  //     orderedby: params.get('orderedby'),
-  //     mobile: params.get('mobile'),
-  //     guestname: params.get('guestname'),
-  //     guestmobile: params.get('guestmobile'),
-  //     email: params.get('email'),
-  //     address1: params.get('address1'),
-  //     streetno: params.get('streetno'),
-  //     city: params.get('city'),
-  //     hireTypes: params.get('hireTypes'),
-  //     department: params.get('department'),
-  //     vehRegNo: params.get('vehRegNo'),
-  //     vehType: params.get('vehType'),
-  //     driverName: params.get('driverName'),
-  //     mobileNo: params.get('mobileNo'),
-  //     driversmsexbetta: params.get('driversmsexbetta'),
-  //     gps: params.get('gps'),
-  //     duty: params.get('duty'),
-  //     pickup: params.get('pickup'),
-  //     useage: params.get('useage'),
-  //     request: params.get('request'),
-  //     startdate: params.get('startdate'),
-  //     closedate: params.get('closedate'),
-  //     empolyeeno: params.get('empolyeeno'),
-  //     starttime: params.get('starttime'),
-  //     closetime: params.get('closetime'),
-  //     advancepaidtovendor: params.get('advancepaidtovendor'),
-  //     customercode: params.get('customercode'),
-  //     startkm: params.get('startkm'),
-  //     closekm: params.get('closekm'),
-  //     permit: params.get('permit'),
-  //     parking: params.get('parking'),
-  //     toll: params.get('toll'),
-  //     vpermettovendor: params.get('vpermettovendor'),
-  //     vendortoll: params.get('vendortoll'),
-  //     customeradvance: params.get('customeradvance'),
-  //     email1: params.get('email1'),
-  //     remark: params.get('remark'),
-  //   };
-  //   setBook(formData);
-  //   setFormData(formData);
-  // }, [location]);
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const statusValue = params.get('status') || 'pending';
+    const statusValue = params.get('status') || 'opened';
     const formData = {};
 
     // Define a list of parameter keys
@@ -528,22 +477,8 @@ const TripSheet = () => {
     }
   };
 
-  // else if (actionName === 'Modify') {
-  //       console.log('Edit button clicked');
-  //       const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid);
-  //       const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData, ...formData };
-  //       await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || formData.tripid}`, updatedCustomer);
-  //       console.log('Customer updated');
-  //       handleCancel();
-  //     }
-
-
   const handleEdit = async () => {
-    // if (!selectedCustomerData.tripid) {
-    //   console.log('No tripsheet number provided for editing.');
-    //   return;
-    // }
-
+ 
     try {
       console.log('Edit button clicked');
       const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid);
@@ -817,7 +752,7 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.status || selectedCustomerData.status || ''
+                    params.inputProps.value = formData.status || selectedCustomerData.status || 'Opened'
                     return (
                       <TextField {...params} label="Status" name="status" inputRef={params.inputRef} />
                     )

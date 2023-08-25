@@ -85,8 +85,12 @@ const Booking = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [formData, setFormData] = useState({
-
+  const [formData, setFormData] = useState({});
+  const [formValues, setFormValues] = useState({
+    guestname: '',
+    guestmobileno: '',
+    email: '',
+    useage: '',
   });
 
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
@@ -284,6 +288,10 @@ const Booking = () => {
         ...prevData,
         [name]: checked,
       }));
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: checked,
+      }));
     } else if (type === 'radio') {
 
       setBook((prevBook) => ({
@@ -298,6 +306,10 @@ const Booking = () => {
         ...prevData,
         [name]: value,
       }));
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: value,
+      }));
     } else {
       const fieldValue = value;
       setBook((prevBook) => ({
@@ -310,6 +322,10 @@ const Booking = () => {
       }));
       setFormData((prevData) => ({
         ...prevData,
+        [name]: fieldValue,
+      }));
+      setFormValues((prevValues) => ({
+        ...prevValues,
         [name]: fieldValue,
       }));
     }
@@ -367,6 +383,7 @@ const Booking = () => {
       console.log(updatedBook);
       handleCancel();
       setSuccess(true);
+      handlecheck();
     } catch (error) {
       console.error('Error updating customer:', error);
     }
@@ -516,6 +533,51 @@ const Booking = () => {
     setSelectedCustomerDatas(params);
   }, []);
 
+  // const handlecheck = async (event) => {
+  //   event.preventDefault();
+
+  //   try {
+  //     const dataToSend = {
+  //       name: formValues.name,
+  //       email: formValues.email,
+  //       contactNo: formValues.contactNo,
+  //       message: formValues.message
+  //     };
+
+  //     await axios.post('http://localhost:8081/send-email', dataToSend);
+  //     alert('Email sent successfully');
+  //     console.log(dataToSend);
+  //   } catch (error) {
+  //     console.error('Error sending email:', error);
+  //     alert('An error occurred while sending the email');
+  //   }
+  // };
+  const [sendEmail, setSendEmail] = useState(false);
+  const handlecheck = async () => {
+
+    if (sendEmail) {
+      try {
+        const dataToSend = {
+          guestname: formValues.guestname,
+          guestmobileno: formValues.guestmobileno,
+          email: formValues.email,
+          pickup: formValues.pickup,
+          useage: formValues.useage
+        };
+
+        await axios.post('http://localhost:8081/send-email', dataToSend);
+        alert('Email sent successfully');
+        console.log(dataToSend);
+      } catch (error) {
+        console.error('Error sending email:', error);
+        alert('An error occurred while sending the email');
+      }
+    } else {
+      console.log('Send mail checkbox is not checked. Email not sent.');
+    }
+  };
+
+
   return (
     <div className="booking-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
@@ -659,7 +721,7 @@ const Booking = () => {
                 <TextField
                   name="guestname"
                   autoComplete="new-password"
-                  value={formData.guestname || selectedCustomerData.guestname || book.guestname || ''}
+                  value={formData.guestname || selectedCustomerData.guestname || book.guestname || formValues.guestname || ''}
                   onChange={handleChange}
                   label="Guest Name"
                   id="guestname"
@@ -676,7 +738,7 @@ const Booking = () => {
                 <TextField
                   name="guestmobileno"
                   autoComplete="new-password"
-                  value={formData.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || ''}
+                  value={formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
                   onChange={handleChange}
                   label="Guest Mobile No"
                   id="guestmobileno"
@@ -690,7 +752,7 @@ const Booking = () => {
                 <TextField
                   name="email"
                   autoComplete="new-password"
-                  value={formData.email || selectedCustomerData.email || book.email || ''}
+                  value={formData.email || selectedCustomerData.email || formValues.email || book.email || ''}
                   onChange={handleChange}
                   label="Email"
                   id="email"
@@ -899,7 +961,7 @@ const Booking = () => {
                   label="PickUp"
                   name="pickup"
                   autoComplete="new-password"
-                  value={formData.pickup || selectedCustomerData.pickup || book.pickup}
+                  value={formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup}
                   onChange={handleChange}
                   autoFocus
                 />
@@ -1185,8 +1247,9 @@ const Booking = () => {
                   label="Booking SMS"
                 />
                 <FormControlLabel
+                  id='sendMailCheckbox'
                   value="sendemail"
-                  control={<Checkbox size="small" />}
+                  control={<Checkbox size="small" checked={sendEmail} onChange={(event) => setSendEmail(event.target.checked)} />}
                   label="Send Email"
                 />
               </div>
@@ -1198,7 +1261,7 @@ const Booking = () => {
                   label="Usage"
                   name="useage"
                   autoComplete="new-password"
-                  value={formData.useage || selectedCustomerData.useage || book.useage || ''}
+                  value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
                   onChange={handleChange}
                   autoFocus
                 />

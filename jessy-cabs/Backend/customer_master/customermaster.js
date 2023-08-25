@@ -1,6 +1,8 @@
 //Database connection for TAAF Appliction this file contain Add, Delete, Collect data from mysql, and Update functions:  
 const express = require('express');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 const db = require('../db');
 const multer = require('multer');
 const fs = require('fs'); // signature png
@@ -8,6 +10,7 @@ const app = express();
 const path = require('path');
 const upload = multer({ dest: 'uploads/' });
 
+app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 
@@ -283,6 +286,85 @@ app.get('/name-customers/:printName', (req, res) => {
     return res.status(200).json(customerDetails);
   });
 });
+//booking mail send code
+// app.post('/send-email', async (req, res) => {
+//   try {
+//     const { guestname, guestmobileno, email, useage, pickup } = req.body;
+
+//     // Create a Nodemailer transporter
+//     const transporter = nodemailer.createTransport({
+//       host: 'smtp.gmail.com',
+//       port: 465,
+//       secure: true,
+//       auth: {
+//         user: 'akash02899@gmail.com',
+//         pass: 'zrbdlfwjxsgrjncr',
+//       },
+//     });
+
+//     // Email content
+//     const mailOptions = {
+//       from: 'akash02899@gmail.com',
+//       to: email,
+//       subject: 'Greeting from TAAF Travel Agency',
+//       text: `Hello ${guestname},\n\nThank you for reaching out. Your message is: ${pickup}\n\nRegards,\nTAAF Travel Agency`,
+//     };
+
+//     // Send email
+//     await transporter.sendMail(mailOptions);
+
+//     res.status(200).json({ message: 'Email sent successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'An error occurred while sending the email' });
+//   }
+// });
+
+app.post('/send-email', async (req, res) => {
+  try {
+    const { guestname, guestmobileno, email, useage, pickup } = req.body;
+
+    // Create a Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'akash02899@gmail.com',
+        pass: 'zrbdlfwjxsgrjncr',
+      },
+    });
+
+    // Email content for the owner
+    const ownerMailOptions = {
+      from: 'akash02899@gmail.com',
+      to: 'akash02899@gmail.com', // Set the owner's email address
+      // subject: ${name} 'sent you a feedback',
+      subject: `${guestname} sent you a feedback`,
+      text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nPickup: ${pickup}\nUsage: ${useage}`,
+    };
+
+    // Send email to the owner
+    await transporter.sendMail(ownerMailOptions);
+
+    // Email content for the customer
+    const customerMailOptions = {
+      from: 'akash02899@gmail.com',
+      to: email,
+      subject: 'Greetings from TAAF Travel Agency',
+      text: `Hello ${guestname},\n\nThank you for reaching out. Your message is: ${pickup}\n\nRegards,\nTAAF Travel Agency`,
+    };
+
+    // Send greeting email to the customer
+    await transporter.sendMail(customerMailOptions);
+
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred while sending the email' });
+  }
+});
+
 
 //End booking page database 
 // -----------------------------------------------------------------------------------------------------------

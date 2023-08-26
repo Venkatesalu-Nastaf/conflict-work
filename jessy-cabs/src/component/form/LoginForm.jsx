@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { emailValidator, passwordValidator } from "./regexValidator";
 import "./Form.css";
 import portalimg from "../../assets/img/portal-img.jpg";
@@ -17,6 +17,28 @@ const Login = () => {
   const [input, setInput] = React.useState({ username: "", password: "" });
   const [errorMessage, seterrorMessage] = useState("");
   const [successMessage, setsuccessMessage] = useState("");
+
+  const hidePopup = () => {
+    setsuccessMessage(false);
+    seterrorMessage(false);
+  };
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [errorMessage]);
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [successMessage]);
+
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
@@ -35,7 +57,7 @@ const Login = () => {
       return seterrorMessage(
         "Password should have minimum 8 character with the combination of uppercase, lowercase, numbers and specialcharaters"
       );
-    // setsuccessMessage('Successfully Validated');
+    setsuccessMessage('Successfully Validated');
     if (input.username !== "admin@gmail.com" || input.password !== "Admin@321")
       return seterrorMessage("Invalid user id");
 
@@ -52,12 +74,14 @@ const Login = () => {
           <form className="portal" onSubmit={formSumitter}>
             <div className="title">login</div>
             {errorMessage.length > 0 && (
-              <div style={{ marginBottom: "10px", color: "red" }}>
-                {errorMessage}
+              <div className='alert-popup Info'>
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <p>{errorMessage}</p>
               </div>
             )}
             {successMessage.length > 0 && (
-              <div style={{ marginBottom: "10px", color: "green" }}>
+              <div className='alert-popup Error'>
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
                 {successMessage}
               </div>
             )}

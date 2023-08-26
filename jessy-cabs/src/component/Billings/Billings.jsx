@@ -41,18 +41,18 @@ const Billings = () => {
                     Billing
                 </Link>
                 <Link
-                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Dispatched' ? 'actives' : ''}`}
-                    to='/home/customers/dispatched'
-                    onClick={() => handleMenuItemClick('Dispatched')}
+                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Cash Flow' ? 'actives' : ''}`}
+                    to='/home/billing/cashflow'
+                    onClick={() => handleMenuItemClick('Cash Flow')}
                 >
-                    Dispatched
+                    Cash Flow
                 </Link>
                 <Link
-                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Collected' ? 'actives' : ''}`}
-                    to='/home/customers/collected'
-                    onClick={() => handleMenuItemClick('Collected')}
+                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Profit & Loss' ? 'actives' : ''}`}
+                    to='/home/billing/profitandloss'
+                    onClick={() => handleMenuItemClick('Profit & Loss')}
                 >
-                    Collected
+                    Profit & Loss
                 </Link>
                 <Link
                     className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Driver Master' ? 'actives' : ''}`}

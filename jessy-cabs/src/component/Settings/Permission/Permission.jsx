@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import "./Permission.css";
 import { TextField } from "@mui/material";
-import BadgeIcon from "@mui/icons-material/Badge";
 import Button from "@mui/material/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import BadgeIcon from "@mui/icons-material/Badge";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Permission = () => {
+  // TABLE START
   const [permissionsData, setPermissionsData] = useState([
     { id: 1, name: 'Account Master', read: false, new: false, modify: false, delete: false },
     { id: 2, name: 'Billing', read: false, new: false, modify: false, delete: false },
@@ -36,9 +37,8 @@ const Permission = () => {
     { id: 26, name: 'User Creation', read: false, new: false, modify: false, delete: false },
     { id: 27, name: 'Vehicle Type', read: false, new: false, modify: false, delete: false },
     { id: 28, name: 'Vendor Report', read: false, new: false, modify: false, delete: false },
-    // Add more permissions...
   ]);
-
+  // TABLE END
   const handlePermissionChange = (permissionId, permissionType) => {
     setPermissionsData(prevData =>
       prevData.map(permission => {
@@ -83,54 +83,56 @@ const Permission = () => {
             <div className="secondary-table">
               <span className="Title-Name">Permission Table</span>
               <div className="table-Permission">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Form Name</th>
-                      <th>Read</th>
-                      <th>New</th>
-                      <th>Modify</th>
-                      <th>Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {permissionsData.map(permission => (
-                      <tr key={permission.id}>
-                        <td>{permission.id}</td>
-                        <td>{permission.name}</td>
-                        <td>
-                          <input
-                            type="checkbox"
-                            checked={permission.read}
-                            onChange={() => handlePermissionChange(permission.id, 'read')}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="checkbox"
-                            checked={permission.new}
-                            onChange={() => handlePermissionChange(permission.id, 'new')}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="checkbox"
-                            checked={permission.modify}
-                            onChange={() => handlePermissionChange(permission.id, 'modify')}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="checkbox"
-                            checked={permission.delete}
-                            onChange={() => handlePermissionChange(permission.id, 'delete')}
-                          />
-                        </td>
+                <div class="table-container Scroll-Style">
+                  <table class="responsive-table ">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Form Name</th>
+                        <th>Read</th>
+                        <th>New</th>
+                        <th>Modify</th>
+                        <th>Delete</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {permissionsData.map(permission => (
+                        <tr key={permission.id}>
+                          <td>{permission.id}</td>
+                          <td>{permission.name}</td>
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={permission.read}
+                              onChange={() => handlePermissionChange(permission.id, 'read')}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={permission.new}
+                              onChange={() => handlePermissionChange(permission.id, 'new')}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={permission.modify}
+                              onChange={() => handlePermissionChange(permission.id, 'modify')}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={permission.delete}
+                              onChange={() => handlePermissionChange(permission.id, 'delete')}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>

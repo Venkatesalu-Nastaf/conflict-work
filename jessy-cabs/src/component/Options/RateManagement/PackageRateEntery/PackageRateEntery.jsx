@@ -1,27 +1,28 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-// import dayjs from "dayjs";
 import "./PackageRateEntery.css";
-import { RateType, PriceTag, VehicleType, Duty } from "./PackageRateEnteryData.js";
-import Autocomplete from "@mui/material/Autocomplete";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ChecklistIcon from "@mui/icons-material/Checklist";
+import Box from "@mui/material/Box";
+import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+import Autocomplete from "@mui/material/Autocomplete";
+import { RateType, PriceTag, VehicleType, Duty } from "./PackageRateEnteryData.js";
+
+// ICONS
+import DeleteIcon from "@mui/icons-material/Delete";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Box from "@mui/material/Box";
-import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import CarCrashIcon from '@mui/icons-material/CarCrash';
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { TextField } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import Button from "@mui/material/Button";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -41,7 +42,7 @@ const actions = [
   { icon: <ModeEditIcon />, name: "Edit" },
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
-// Table
+// Table START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "vehicleType", headerName: "Vehicle Type", width: 130 },
@@ -58,47 +59,8 @@ const columns = [
   { field: "ChKMS", headerName: "ChKMS", width: 130 },
   { field: "Bata", headerName: "Bata", width: 130 },
   { field: "NHalt", headerName: "NightHalt", width: 130 },
-  // { field: "RateID", headerName: "RateID", width: 130 },
 ];
-
-// const rows = [
-//   {
-//     id: 1,
-//     VehicleType: 1,
-//     Duty: 13,
-//     Hours: "2023-06-08",
-//     KMS: 11,
-//     Rate: "7:00 PM",
-//     PerHours: "7:00 PM",
-//     PerKMS: "7:00 PM",
-//     ExtraHours: "7:00 PM",
-//     ExtraKMS: "7:00 PM",
-//     ChTime: "7:00 PM",
-//     AllowKMS: "7:00 PM",
-//     ChKMS: "7:00 PM",
-//     Bata: "7:00 PM",
-//     NightHalt: "7:00 PM",
-//     RateID: 1233,
-//   },
-//   {
-//     id: 2,
-//     VehicleType: 2,
-//     Duty: 13,
-//     Hours: "2023-06-08",
-//     KMS: 11,
-//     Rate: "7:00 PM",
-//     PerHours: "7:00 PM",
-//     PerKMS: "7:00 PM",
-//     ExtraHours: "7:00 PM",
-//     ExtraKMS: "7:00 PM",
-//     ChTime: "7:00 PM",
-//     AllowKMS: "7:00 PM",
-//     ChKMS: "7:00 PM",
-//     Bata: "7:00 PM",
-//     NightHalt: "7:00 PM",
-//     RateID: 1234,
-//   },
-// ];
+// TABLE END
 
 
 const PackageRateEntery = () => {
@@ -106,34 +68,12 @@ const PackageRateEntery = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
-
-  // const convertToCSV = (data) => {
-  //   const header = columns.map((column) => column.headerName).join(",");
-  //   const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-  //   return [header, ...rows].join("\n");
-  // };
-  // const handleExcelDownload = () => {
-  //   const csvData = convertToCSV(rows);
-  //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-  //   saveAs(blob, "customer_details.csv");
-  // };
-  // const handlePdfDownload = () => {
-  //   const pdf = new jsPDF();
-  //   pdf.setFontSize(12);// Set the font size and font style
-  //   pdf.setFont('helvetica', 'normal');
-  //   pdf.text("Customer Details", 10, 10);// Add a title for the table
-  //   const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
-  //   pdf.autoTable({
-  //     head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-  //     body: tableData,
-  //     startY: 20,
-  //   }); // Create a table to display the data
-  //   const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-  //   saveAs(pdfBlob, 'customer_details.pdf'); // Download the PDF
-  // };
+  const [success, setSuccess] = useState(false);
 
   const hidePopup = () => {
+    setSuccess(false);
     setError(false);
   };
   useEffect(() => {
@@ -144,6 +84,14 @@ const PackageRateEntery = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
   const [book, setBook] = useState({
     ratetype: '',
@@ -202,13 +150,7 @@ const PackageRateEntery = () => {
     }));
   };
 
-  // const handleDateChange = (date) => {
-  //   const startOfDay = dayjs(date).startOf('day').format();
-  //   setBook((prevBook) => ({
-  //     ...prevBook,
-  //     date: startOfDay,
-  //   }));
-  // };
+
   const handleCancel = () => {
     setBook((prevBook) => ({
       ...prevBook,
@@ -238,6 +180,23 @@ const PackageRateEntery = () => {
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+  const handleAdd = async () => {
+    const duty = book.duty;
+    if (!duty) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/ratemanagement', book);
+        console.log(book);
+        handleCancel();
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
   const handleClick = async (event, actionName, id) => {
     event.preventDefault();
     try {
@@ -263,13 +222,13 @@ const PackageRateEntery = () => {
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/ratemanagement', book);
-        console.log(book);
-        handleCancel();
+        handleAdd();
       }
     } catch (err) {
       console.log(err);
       setError(true);
+      setErrorMessage("Check Network Connection")
+
     }
   };
   useEffect(() => {
@@ -279,31 +238,17 @@ const PackageRateEntery = () => {
   });
 
   return (
-    <div className="PackageRateEntery-form">
+    <div className="PackageRateEntery-form Scroll-Style-hide">
       <form action="">
         <div className="PackageRateEntery-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-PackageRateEntery">
               <div className="input-field">
                 <div className="input" style={{ width: "300px" }}>
                   <div className="icone">
                     <TypeSpecimenOutlinedIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={RateType.map((option) => option.optionvalue)}
-                    options={RateType.map((option) => ({
-                      label: option.Option
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} name='ratetype' label="RateType" />
-                    )}
-                  /> */}
-                  <Autocomplete
+                                   <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-ratetype"
@@ -327,21 +272,7 @@ const PackageRateEntery = () => {
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={PriceTag.map((option) => option.optionvalue)}
-                    options={PriceTag.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} name='pricetag' label="PriceTag" />
-                    )}
-                  /> */}
-                  <Autocomplete
+                                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-pricetag"
@@ -387,21 +318,7 @@ const PackageRateEntery = () => {
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={VehicleType.map((option) => option.optionvalue)}
-                    options={VehicleType.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} name='vehicleType' label="VehicleType" />
-                    )}
-                  /> */}
-                  <Autocomplete
+                                 <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-vehicleType"
@@ -435,21 +352,7 @@ const PackageRateEntery = () => {
               <div className="icone">
                 <EngineeringIcon color="action" />
               </div>
-              {/* <Autocomplete
-                fullWidth
-                id="free-solo-demo"
-                freeSolo
-                size="small"
-                value={Duty.map((option) => option.optionvalue)}
-                options={Duty.map((option) => ({
-                  label: option.option,
-                }))}
-                getOptionLabel={(option) => option.label || ""}
-                renderInput={(params) => (
-                  <TextField {...params} name='duty' label="Duty" />
-                )}
-              /> */}
-              <Autocomplete
+                           <Autocomplete
                 fullWidth
                 size="small"
                 id="free-solo-demo-duty"
@@ -531,7 +434,7 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "100px" }}>
+            <div className="input" style={{ width: "110px" }}>
               <TextField
                 type='number'
                 size="small"
@@ -557,7 +460,7 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "100px" }}>
+            <div className="input" style={{ width: "110px" }}>
               <TextField
                 type='number'
                 size="small"
@@ -618,14 +521,25 @@ const PackageRateEntery = () => {
               />
             </div>
             <div className="input" style={{ width: "100px" }}>
-              <Button variant="contained">Save All</Button>
+              <Button variant="contained" onClick={handleAdd}>Save All</Button>
             </div>
           </div>
         </div>
         {error &&
           <div className='alert-popup Error' >
             <span className='cancel-btn' onClick={hidePopup}>x</span>
-            <p>Something went wrong!</p>
+            {error &&
+              <div className='alert-popup Error' >
+                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <p>{errorMessage}</p>
+              </div>
+            }
+          </div>
+        }
+        {success &&
+          <div className='alert-popup Success' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>success fully submitted</p>
           </div>
         }
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
@@ -644,7 +558,7 @@ const PackageRateEntery = () => {
             ))}
           </StyledSpeedDial>
         </Box>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-PackageRateEntery">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

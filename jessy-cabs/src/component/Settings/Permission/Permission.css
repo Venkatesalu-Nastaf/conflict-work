@@ -141,6 +141,23 @@
   margin-top: 30px;
 }
 
+/* Container for the responsive table */
+.table-container {
+  max-height: 400px;
+  width: 100%;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+/* Rest of the responsive table styles (same as previous example) */
+.responsive-table {
+  width: 100%;
+}
+
+.responsive-table th {
+  background-color: #c4c4c4;
+}
+
 .table-usercreation {
   border: 2px solid #ccc;
   border-radius: 10px;

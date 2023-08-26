@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './BackUp.css'
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import './BackUp.css';
 import dayjs from "dayjs";
+import Button from "@mui/material/Button";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import Button from "@mui/material/Button";
 
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -56,7 +56,7 @@ const BackUp = () => {
                                 </DemoItem>
                             </LocalizationProvider>
                         </div>
-                        <div className="input" style={{ 'margin-top': '40px' }}>
+                        <div className="input" style={{ marginTop: '40px' }}>
                             <Button startIcon={<FontAwesomeIcon icon={faDatabase} size="lg" />} variant="contained">
                                 Data BackUp
                             </Button>

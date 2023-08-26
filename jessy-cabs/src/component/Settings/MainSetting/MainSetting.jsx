@@ -2,14 +2,14 @@ import React from "react";
 import "./MainSetting.css";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
+import BackUp from "./BackUp/BackUp";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import FuelRate from "./FuelRate/FuelRate";
-import BackUp from "./BackUp/BackUp";
+import TabContext from "@mui/lab/TabContext";
 import SMSFormat from "./SMSFromat/SMSFormat";
-import YearEndProcess from "./YearEndProcess/YearEndProcess";
 import TaxSetting from "./TaxSetting/TaxSetting";
+import YearEndProcess from "./YearEndProcess/YearEndProcess";
 
 
 const MainSetting = () => {
@@ -40,16 +40,16 @@ const MainSetting = () => {
               <FuelRate />
             </TabPanel>
             <TabPanel value="Back_Up">
-              <BackUp/>
+              <BackUp />
             </TabPanel>
             <TabPanel value="SMS_Format">
-              <SMSFormat/>
+              <SMSFormat />
             </TabPanel>
             <TabPanel value="Year_End_Process">
-              <YearEndProcess/>
+              <YearEndProcess />
             </TabPanel>
             <TabPanel value="Tax_Setting">
-              <TaxSetting/>
+              <TaxSetting />
             </TabPanel>
           </TabContext>
         </Box>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import { useNavigate, Link } from "react-router-dom";
 import Logo from "./Logo-Img/logo.png";
-import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { AiOutlineBars } from "@react-icons/all-files/ai/AiOutlineBars";
 import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
@@ -22,12 +21,7 @@ const Sidebar = () => {
     navigate(key);
   };
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    localStorage.removeItem("auth");
-    setExpanded(true);
-    navigate("/");
-  };
+
 
   useEffect(() => {
     const selectedMenuItem = localStorage.getItem("selectedMenuItem");
@@ -74,9 +68,6 @@ const Sidebar = () => {
               <span>{item.heading}</span>
             </Link>
           ))}
-          <div className="menuItem">
-            <FiLogOut onClick={handleLogout} />
-          </div>
         </div>
       </motion.div>
     </>

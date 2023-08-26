@@ -1,33 +1,29 @@
-import React from 'react'
-import "./Ratevalidity.css";
-
-
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from "axios";
 import dayjs from "dayjs";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ChecklistIcon from "@mui/icons-material/Checklist";
+import "./Ratevalidity.css";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Box from "@mui/material/Box";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
-import RateReviewIcon from '@mui/icons-material/RateReview';
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
+// ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
-import {
-    TextField,
-    FormControlLabel,
-    FormControl,
-    FormLabel,
-    Radio,
-    RadioGroup,
-} from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -51,41 +47,170 @@ const actions = [
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
-    { field: "RateValidity", headerName: "Rate Validity", width: 130 },
-    { field: "Remarks", headerName: "Remarks", width: 130 },
-    { field: "Active", headerName: "Active", width: 130 },
-    { field: "FromDate", headerName: "From Date", width: 130 },
-    { field: "ToDate", headerName: "To Date", width: 130 },
+    { field: "ratename", headerName: "Rate Validity", width: 130 },
+    { field: "ReMarks", headerName: "Remarks", width: 130 },
+    { field: "active", headerName: "Active", width: 130 },
+    { field: "fromdate", headerName: "From Date", width: 130 },
+    { field: "todate", headerName: "To Date", width: 130 },
 ];
 
-const rows = [
-    {
-        id: 1,
-        RateValidity: 1,
-        Remarks: 12,
-        Active: "2023-06-07",
-        FromDate: "9:00 AM",
-        ToDate: "7:00 PM",
-
-    },
-    {
-        id: 2,
-        RateValidity: 2,
-        Remarks: 13,
-        Active: "2023-06-08",
-        FromDate: "7:00 PM",
-        ToDate: "7:00 PM",
-
-    },
-    // Add more rows as needed
-];
 const Ratevalidity = () => {
+
+    const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const [rows, setRows] = useState([]);
+    const [actionName] = useState('');
+    const [formData] = useState({});
+    const [errorMessage, setErrorMessage] = useState(false);
+    const [error, setError] = useState(false);
+    const [success, setSuccess] = useState(false);
+
+    const hidePopup = () => {
+        setSuccess(false);
+        setError(false);
+    };
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [error]);
+    useEffect(() => {
+        if (success) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [success]);
+
+
+    const [book, setBook] = useState({
+        driverid: '',
+        ratename: '',
+        fromdate: '',
+        todate: '',
+        ReMarks: '',
+        active: '',
+
+    });
+    const handleChange = (event) => {
+        const { name, value, checked, type } = event.target;
+
+        if (type === 'checkbox') {
+            // For checkboxes, update the state based on the checked value
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: checked,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: checked,
+            }));
+        } else {
+            // For other input fields, update the state based on the value
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: value,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
+    };
+
+    const handleDateChange = (date, name) => {
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: formattedDate,
+        }));
+    };
+    const handleCancel = () => {
+        setBook((prevBook) => ({
+            ...prevBook,
+            driverid: '',
+            ratename: '',
+            fromdate: '',
+            todate: '',
+            ReMarks: '',
+            active: '',
+
+        }));
+        setSelectedCustomerData({});
+    };
+    const handleRowClick = useCallback((params) => {
+        console.log(params.row);
+        const customerData = params.row;
+        setSelectedCustomerData(customerData);
+        setSelectedCustomerId(params.row.customerId);
+    }, []);
+    const handleAdd = async () => {
+        const ratename = book.ratename;
+        if (!ratename) {
+          setError(true);
+          setErrorMessage("fill mantatory fields");
+          return;
+        }
+        try {
+            console.log('Add button clicked');
+            await axios.post('http://localhost:8081/ratevalidity', book);
+            console.log(book);
+            handleCancel();
+
+        } catch (error) {
+            console.error('Error updating customer:', error);
+        }
+    };
+
+    const handleClick = async (event, actionName, driverid) => {
+        event.preventDefault();
+        try {
+            if (actionName === 'List') {
+                console.log('List button clicked');
+                const response = await axios.get('http://localhost:8081/ratevalidity');
+                const data = response.data;
+                setRows(data);
+            } else if (actionName === 'Cancel') {
+                console.log('Cancel button clicked');
+                handleCancel();
+            } else if (actionName === 'Delete') {
+                console.log('Delete button clicked');
+                await axios.delete(`http://localhost:8081/ratevalidity/${driverid}`);
+                console.log('Customer deleted');
+                setSelectedCustomerData(null);
+                handleCancel();
+            } else if (actionName === 'Edit') {
+                console.log('Edit button clicked');
+                const selectedCustomer = rows.find((row) => row.driverid === driverid);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`http://localhost:8081/ratevalidity/${driverid}`, updatedCustomer);
+                console.log('Customer updated');
+                handleCancel();
+            } else if (actionName === 'Add') {
+                handleAdd();
+            }
+        } catch (err) {
+            console.log(err);
+            setError(true);
+            setErrorMessage("Check Network Connection")
+        }
+    };
+    useEffect(() => {
+        if (actionName === 'List') {
+            handleClick(null, 'List');
+        }
+    });
+
     return (
-        <div className="RateValidity-form">
+        <div className="RateValidity-form Scroll-Style-hide">
             <form action="">
                 <div className="detail-container-main">
                     <div className="container-left">
-                        <div className="copy-title-btn">
+                        <div className="copy-title-btn-RateValidity">
                             <div className="input-field">
                                 <div className="input">
                                     <div className="icone">
@@ -96,6 +221,9 @@ const Ratevalidity = () => {
                                         id="id"
                                         label="ID"
                                         name="driverid"
+                                        autoComplete="new-password"
+                                        value={selectedCustomerData?.driverid || book.driverid}
+                                        onChange={handleChange}
                                         autoFocus
                                     />
                                 </div>
@@ -108,17 +236,40 @@ const Ratevalidity = () => {
                                         id="id"
                                         label="Rate Name"
                                         name="ratename"
+                                        autoComplete="new-password"
+                                        value={selectedCustomerData?.ratename || book.ratename}
+                                        onChange={handleChange}
                                         autoFocus
                                     />
                                 </div>
                                 <div className="input" style={{ width: "30%" }}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DatePicker label="From Date" defaultValue={dayjs()} />
+                                        {/* <DemoItem label="From Date"> */}
+                                        <DatePicker
+                                            label='From Date'
+                                            defaultValue={dayjs()}
+                                            value={formData.fromdate || selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
+                                            onChange={(date) => handleDateChange(date, 'fromdate')}
+                                        >
+                                            {({ inputProps, inputRef }) => (
+                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.fromdate} />
+                                            )}
+                                        </DatePicker>
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input" style={{ width: "30%" }}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DatePicker label="To Date" defaultValue={dayjs()} />
+                                        {/* <DemoItem label="To Date"> */}
+                                        <DatePicker
+                                            label='To Date'
+                                            defaultValue={dayjs()}
+                                            value={formData.todate || selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
+                                            onChange={(date) => handleDateChange(date, 'todate')}
+                                        >
+                                            {({ inputProps, inputRef }) => (
+                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.todate} />
+                                            )}
+                                        </DatePicker>
                                     </LocalizationProvider>
                                 </div>
 
@@ -133,6 +284,9 @@ const Ratevalidity = () => {
                                         id="id"
                                         label="ReMarks"
                                         name="ReMarks"
+                                        autoComplete="new-password"
+                                        value={selectedCustomerData?.ReMarks || book.ReMarks}
+                                        onChange={handleChange}
                                         autoFocus
                                     />
                                 </div>
@@ -145,6 +299,9 @@ const Ratevalidity = () => {
                                             row
                                             aria-labelledby="demo-row-radio-buttons-group-label"
                                             name="active"
+                                            autoComplete="new-password"
+                                            value={selectedCustomerData?.active || book.active}
+                                            onChange={handleChange}
                                         >
                                             <FormControlLabel
                                                 value="yes"
@@ -159,10 +316,26 @@ const Ratevalidity = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
+                                <div className="input" style={{ width: "100px" }}>
+                                    <Button variant="contained" onClick={handleAdd}>Add</Button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                {
+                    error &&
+                    <div className='alert-popup Error' >
+                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <p>{errorMessage}</p>
+                    </div>
+                }
+                {success &&
+                    <div className='alert-popup Success' >
+                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <p>success fully submitted</p>
+                    </div>
+                }
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
@@ -174,22 +347,24 @@ const Ratevalidity = () => {
                                 key={action.name}
                                 icon={action.icon}
                                 tooltipTitle={action.name}
+                                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                             />
                         ))}
                     </StyledSpeedDial>
                 </Box>
-                <div className="table-bookingCopy">
+                <div className="table-bookingCopy-RateValidity">
                     <div style={{ height: 400, width: "100%" }}>
                         <DataGrid
                             rows={rows}
                             columns={columns}
+                            onRowClick={handleRowClick}
                             pageSize={5}
                             checkboxSelection
                         />
                     </div>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     )
 }
 

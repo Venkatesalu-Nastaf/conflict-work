@@ -1,10 +1,11 @@
-import React from 'react'
-import './SMSFormat.css'
-import TextField from '@mui/material/TextField';
+import React from 'react';
+import './SMSFormat.css';
 import Button from "@mui/material/Button";
+import TextField from '@mui/material/TextField';
+
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload } from "@fortawesome/free-solid-svg-icons"
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
 const SMSFormat = () => {
     return (
@@ -83,8 +84,8 @@ const SMSFormat = () => {
                             />
                         </div>
                     </div>
-                    <div className="input-field" style={{ 'margin-top': '-20px', 'margin-left': '-25px' }}>
-                        <div className="input" style={{ 'margin-top': '40px' }}>
+                    <div className="input-field" style={{ marginTop: '-20px', marginLeft: '-25px' }}>
+                        <div className="input" style={{ marginTop: '40px' }}>
                             <Button startIcon={<FontAwesomeIcon icon={faUpload} size="lg" />} variant="contained">
                                 Update
                             </Button>
@@ -92,10 +93,10 @@ const SMSFormat = () => {
                     </div>
                     <div className="input-field">
                         <div className="inputs" style={{
-                            'width': "1430px", 'display': 'flex',
-                            'flex-direction': 'column',
-                            'align-items': 'center',
-                            'justify-content': 'center',
+                            width: "1430px", display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
                         }}>
                             <span className="Title-Name">Key-Words</span>
                             <TextField

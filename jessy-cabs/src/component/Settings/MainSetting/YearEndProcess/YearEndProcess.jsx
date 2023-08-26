@@ -1,21 +1,17 @@
-import React from 'react'
-import './YearEndProcess.css'
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import BadgeIcon from "@mui/icons-material/Badge";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
-import {
-  TextField,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
+import React from 'react';
 import dayjs from "dayjs";
+import './YearEndProcess.css';
 import Button from "@mui/material/Button";
+import BadgeIcon from "@mui/icons-material/Badge";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { TextField, FormControlLabel, Checkbox } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 // FontAwesomeIcon Link
+import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSave } from "@fortawesome/free-solid-svg-icons"
 // date
 const today = dayjs();
 const tomorrow = dayjs().add(1, "day");
@@ -47,7 +43,7 @@ const YearEndProcess = () => {
                 </DemoItem>
               </LocalizationProvider>
             </div>
-            <div className="input-field checkbox" style={{ 'padding-top': '40px' }}>
+            <div className="input-field checkbox" style={{ paddingTop: '40px' }}>
               <FormControlLabel
                 value="Update-Opening-Balance"
                 control={<Checkbox size="small" />}
@@ -86,7 +82,7 @@ const YearEndProcess = () => {
                 Status
               </Button>
             </div>
-            <div className="input-field checkbox" style={{ 'padding-top': '10px' }}>
+            <div className="input-field checkbox" style={{ paddingTop: '10px' }}>
               <FormControlLabel
                 value="Pending-Billing"
                 control={<Checkbox size="small" />}
@@ -96,10 +92,10 @@ const YearEndProcess = () => {
           </div>
           <div className="input-field">
             <div className="inputs" style={{
-              'width': "1430px", 'display': 'flex',
-              'flex-direction': 'column',
-              'align-items': 'center',
-              'justify-content': 'center',
+              width: "1430px", display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}>
               <TextField
                 className='sms-box'
@@ -110,8 +106,8 @@ const YearEndProcess = () => {
               />
             </div>
           </div>
-          <div className="input-field" style={{ 'margin-top': '-20px', 'margin-left': '-25px' }}>
-            <div className="input" style={{ 'margin-top': '40px' }}>
+          <div className="input-field" style={{ marginTop: '-20px', marginLeft: '-25px' }}>
+            <div className="input" style={{ marginTop: '40px' }}>
               <Button startIcon={<FontAwesomeIcon icon={faSave} size="lg" />} variant="contained">
                 Save
               </Button>

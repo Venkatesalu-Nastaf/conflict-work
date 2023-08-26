@@ -1,0 +1,232 @@
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import './OnlineBooking.css'
+
+const OnlineBooking = () => {
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const hidePopup = () => {
+    setError(false);
+    setSuccess(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
+  const [book, setBook] = useState({
+    guestname: '',
+    mobileno: '',
+    email: '',
+    startdate: '',
+    starttime: '',
+    pickup: '',
+    useage: '',
+    duty: '',
+    vehType: '',
+    remarks: '',
+  });
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      guestname: '',
+      mobileno: '',
+      email: '',
+      startdate: '',
+      starttime: '',
+      pickup: '',
+      useage: '',
+      duty: '',
+      vehType: '',
+      remarks: '',
+    }));
+  };
+
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+    if (type === 'checkbox') {
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+    } else {
+      const fieldValue = type === 'time' ? value : value;
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: fieldValue,
+      }));
+    }
+  };
+  const handleAdd = async (event) => {
+    event.preventDefault(); 
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/booking', book);
+      handleCancel();
+      setSuccess(true);
+    } catch (error) {
+      console.error('Error updating customer:', error);
+      setError(true);
+    }
+  };
+
+  return (
+    <div className="booking-container">
+      <h2 className='title'>Online Booking Form</h2>
+      <form className="booking-forms" method='post'>
+        <div className='item'>
+          <label className='input-lable' htmlFor="name">Guest Name:</label>
+          <input
+            className='input-item'
+            type="text"
+            id="name"
+            name="guestname"
+            value={book.guestname || ''}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='item'>
+          <label className='input-lable' htmlFor="mobile">Mobile:</label>
+          <input
+            className='input-item'
+            type="text"
+            id="mobile"
+            name="mobileno"
+            value={book.mobileno || ''}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='item'>
+          <label className='input-lable' htmlFor="email">Email:</label>
+          <input
+            className='input-item'
+            type="email"
+            id="email"
+            name="email"
+            value={book.email || ''}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='items'>
+          <div className='item'>
+            <label className='input-lable' htmlFor="email">Booking Date:</label>
+            <input
+              type="date"
+              name='startdate'
+              value={book.startdate || ''}
+              onChange={handleChange}
+              className='input-item'
+            />
+          </div>
+          <div className='item'>
+            <label className='input-lable' htmlFor="email">Booking Time:</label>
+            <input type="time"
+              name='starttime'
+              onChange={handleChange}
+              value={book.starttime || ''}
+              className='input-item'
+            />
+          </div>
+        </div>
+        <div className='item'>
+          <label className='input-lable' htmlFor="pickup">Pickup Location:</label>
+          <input
+            className='input-item'
+            type="text"
+            id="pickup"
+            name="pickup"
+            value={book.pickup || ''}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='item'>
+          <label className='input-lable' htmlFor="drop">Drop Location:</label>
+          <input
+            className='input-item'
+            type="text"
+            id="drop"
+            name="useage"
+            value={book.useage || ''}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className='item'>
+          <label className='input-lable' htmlFor="usage">Usage:</label>
+          <select
+            id='selects'
+            name="duty"
+            value={book.duty || ''}
+            onChange={handleChange}
+            required
+          >
+            <option value="">UsageType</option>
+            <option value="Local">Local</option>
+            <option value="Oneway">Oneway</option>
+            <option value="OutStation">OutStation</option>
+            <option value="Transfer">Transfer</option>
+          </select>
+        </div>
+        <div className='item'>
+          <label className='input-lable' htmlFor="usage">Vehicle Type:</label>
+          <select
+            id='selects'
+            name="vehType"
+            value={book.vehType || ''}
+            onChange={handleChange}
+            required
+          >
+            <option>Vehicle Type</option>
+            <option>Sedan</option>
+            <option>Semi Premium</option>
+            <option>Premium</option>
+            <option>SUV</option>
+            <option>Luxury</option>
+            <option>Super Luxury</option>
+            <option>Bus</option>
+          </select>
+        </div>
+        <div className='item'>
+          <label className='input-lable' htmlFor="usage">Remark:</label>
+          <textarea
+            name='remarks'
+            value={book.remarks || ''}
+            onChange={handleChange}
+            className='textareas'
+            placeholder='Enter Your Remarks'>
+          </textarea>
+        </div>
+        <button className='btns-online' type="button" onClick={handleAdd}>Submit</button>
+        {error &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>Something went wrong!</p>
+          </div>
+        }
+        {success &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>success fully submitted</p>
+          </div>
+        }
+      </form>
+    </div>
+  );
+};
+
+export default OnlineBooking;

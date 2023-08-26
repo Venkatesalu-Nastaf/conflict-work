@@ -3,10 +3,7 @@ import './Options.css'
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const Options = () => {
-
-
     const location = useLocation();
-
     useEffect(() => {
         // Retrieve the previously stored actives menu item from localStorage
         const activeMenuItem = localStorage.getItem('activeMenuItem');
@@ -30,7 +27,6 @@ const Options = () => {
         localStorage.setItem('activeMenuItem', menuItem);
     };
 
-
     return (
         <div className='customer-conatiner' id='menu'>
             <div className='menu-bar'>
@@ -39,21 +35,28 @@ const Options = () => {
                     to='/home/options/ratetype'
                     onClick={() => handleMenuItemClick('Rate Type')}
                 >
-                   Rate Type
+                    Rate Type
                 </Link>
                 <Link
                     className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Rate Management' ? 'actives' : ''}`}
                     to='/home/options/ratemanagement'
                     onClick={() => handleMenuItemClick('Rate Management')}
                 >
-                   Rate Management
+                    Rate Management
+                </Link>
+                <Link
+                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Employes' ? 'actives' : ''}`}
+                    to='/home/options/employes'
+                    onClick={() => handleMenuItemClick('Employes')}
+                >
+                    Employes
                 </Link>
                 <Link
                     className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Fule Details' ? 'actives' : ''}`}
                     to='/home/options/fuledetails'
                     onClick={() => handleMenuItemClick('Fule Details')}
                 >
-                    Fule Details
+                    Fuel Details
                 </Link>
             </div>
             <Outlet />

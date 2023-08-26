@@ -7,12 +7,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 /* ERROR POPUP */
 .Error {
   color: rgb(172, 23, 20);
   background-color: rgb(253, 237, 237);
-} 
+}
 
 .Warning {
   color: rgb(102, 60, 0);
@@ -61,3 +60,129 @@ body {
     opacity: 1;
   }
 }
+
+/* CSS animation for the .input element */
+.input-field {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s forwards;
+}
+
+.input-field .input {
+  transition: transform 0.3s ease;
+
+}
+
+.input-field .input:hover {
+  transform: translateY(-5px) scale(1.05);
+}
+
+/* CSS animation for the icon */
+.input-field .input .icone {
+  transition: transform 0.3s ease;
+}
+
+/* Define the keyframes for the zigzag animation */
+@keyframes zigzag {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(15deg);
+  }
+
+  50% {
+    transform: rotate(-15deg);
+  }
+
+  75% {
+    transform: rotate(15deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Apply the zigzag animation on hover */
+.input-field .input .icone:hover {
+  /* animation: zigzag 0.5s ease infinite; */
+  /* Adjust the duration as desired */
+  animation: zigzag 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scroll Style */
+
+.Scroll-Style-hide::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  cursor: pointer;
+  position: absolute;
+}
+.Scroll-Style{
+  overflow: scroll;
+}
+.Scroll-Style::-webkit-scrollbar {
+  width: 8px; 
+  height: 5px;
+  cursor: pointer;
+  position: absolute;
+}
+.Scroll-Style::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px transparent;
+}
+
+.Scroll-Style::-webkit-scrollbar-thumb {
+  background-color: #6d6d6d;
+  width: 50px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+.css-204u17-MuiDataGrid-main {
+  overflow: scroll;
+}
+.css-204u17-MuiDataGrid-main ::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px;
+  cursor: pointer;
+  position: absolute;
+}
+.css-204u17-MuiDataGrid-main ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px transparent;
+}
+
+.css-204u17-MuiDataGrid-main ::-webkit-scrollbar-thumb {
+  background-color: #457cdc;
+  width: 50px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+/* dashboard.css or a separate CSS file */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+/* .loading-spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  border-top-color: #000;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} */

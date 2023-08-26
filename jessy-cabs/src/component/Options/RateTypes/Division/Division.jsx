@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from "axios";
 import "./Division.css";
+import Button from "@mui/material/Button";
 import { CustomerName } from "./DivisionData.js";
 import Autocomplete from "@mui/material/Autocomplete";
-
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -48,35 +49,163 @@ const actions = [
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "DivisionName", headerName: "Division Name", width: 130 },
-  { field: "CustomerName", headerName: "Customer Name", width: 130 },
-  { field: "Active", headerName: "Active", width: 130 },
-];
-
-const rows = [
-  {
-    id: 1,
-    DivisionName: 1,
-    CustomerName: 12,
-    Active: "2023-06-07",
-
-  },
-  {
-    id: 2,
-    DivisionName: 2,
-    CustomerName: 13,
-    Active: "2023-06-08",
-
-  },
-  // Add more rows as needed
+  { field: "customername", headerName: "Customer Name", width: 130 },
+  { field: "active", headerName: "Active", width: 130 },
 ];
 
 const Division = () => {
+  const [selectedCustomerData, setSelectedCustomerData] = useState({});
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [actionName] = useState('');
+  const [errorMessage, setErrorMessage] = useState(false);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const hidePopup = () => {
+    setSuccess(false);
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
+
+  const [book, setBook] = useState({
+    driverid: '',
+    DivisionName: '',
+    customername: '',
+    active: '',
+  });
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+
+    if (type === 'checkbox') {
+      // For checkboxes, update the state based on the checked value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: checked,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      // For other input fields, update the state based on the value
+      setBook((prevBook) => ({
+        ...prevBook,
+        [name]: value,
+      }));
+      setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleAutocompleteChange = (event, value, name) => {
+    const selectedOption = value ? value.label : '';
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: selectedOption,
+    }));
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: selectedOption,
+    }));
+  };
+
+
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      driverid: '',
+      DivisionName: '',
+      customername: '',
+      active: '',
+    }));
+    setSelectedCustomerData({});
+  };
+  const handleRowClick = useCallback((params) => {
+    console.log(params.row);
+    const customerData = params.row;
+    setSelectedCustomerData(customerData);
+    setSelectedCustomerId(params.row.customerId);
+  }, []);
+  const handleAdd = async () => {
+    const DivisionName = book.DivisionName;
+    if (!DivisionName) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/division', book);
+      console.log(book);
+      handleCancel();
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
+  const handleClick = async (event, actionName, driverid) => {
+    event.preventDefault();
+    try {
+      if (actionName === 'List') {
+        console.log('List button clicked');
+        const response = await axios.get('http://localhost:8081/division');
+        const data = response.data;
+        setRows(data);
+      } else if (actionName === 'Cancel') {
+        console.log('Cancel button clicked');
+        handleCancel();
+      } else if (actionName === 'Delete') {
+        console.log('Delete button clicked');
+        await axios.delete(`http://localhost:8081/division/${driverid}`);
+        console.log('Customer deleted');
+        setSelectedCustomerData(null);
+        handleCancel();
+      } else if (actionName === 'Edit') {
+        console.log('Edit button clicked');
+        const selectedCustomer = rows.find((row) => row.driverid === driverid);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/division/${driverid}`, updatedCustomer);
+        console.log('Customer updated');
+        handleCancel();
+      } else if (actionName === 'Add') {
+        handleAdd();
+      }
+    } catch (err) {
+      console.log(err);
+      setError(true);
+      setErrorMessage("Check Network Connection")
+    }
+  };
+  useEffect(() => {
+    if (actionName === 'List') {
+      handleClick(null, 'List');
+    }
+  });
+
   return (
-    <div className="division-form">
+    <div className="division-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn">
+            <div className="copy-title-btn-Division">
               <div className="input-field">
                 <div className="input">
                   <div className="icone">
@@ -87,6 +216,9 @@ const Division = () => {
                     id="id"
                     label="ID"
                     name="driverid"
+                    autoComplete="new-password"
+                    value={selectedCustomerData?.driverid || book.driverid}
+                    onChange={handleChange}
                     autoFocus
                   />
                 </div>
@@ -99,6 +231,9 @@ const Division = () => {
                     id="id"
                     label="Division Name"
                     name="DivisionName"
+                    autoComplete="new-password"
+                    value={selectedCustomerData?.DivisionName || book.DivisionName}
+                    onChange={handleChange}
                     autoFocus
                   />
                 </div>
@@ -108,19 +243,26 @@ const Division = () => {
                   <div className="icone">
                     <WarehouseIcon color="action" />
                   </div>
+
                   <Autocomplete
                     fullWidth
-                    id="free-solo-demo"
-                    freeSolo
                     size="small"
-                    value={CustomerName.map((option) => option.optionvalue)}
+                    id="free-solo-demo-customername"
+                    freeSolo
+                    // sx={{ width: "20ch" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "customername")}
+                    value={CustomerName.find((option) => option.optionvalue)?.label || ''}
                     options={CustomerName.map((option) => ({
                       label: option.Option,
                     }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Customer Name" />
-                    )}
+                    getOptionLabel={(option) => option.label || ''}
+                    renderInput={(params) => {
+                      params.inputProps.value = selectedCustomerData?.customername || ''
+                      return (
+                        <TextField {...params} label="Customer Name" name="customername" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
                   />
                 </div>
                 <div className="input radio">
@@ -132,6 +274,9 @@ const Division = () => {
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="active"
+                      autoComplete="new-password"
+                      value={selectedCustomerData?.active || book.active}
+                      onChange={handleChange}
                     >
                       <FormControlLabel
                         value="yes"
@@ -146,10 +291,25 @@ const Division = () => {
                     </RadioGroup>
                   </FormControl>
                 </div>
+                <div className="input" style={{ width: "100px" }}>
+                  <Button variant="contained" onClick={handleAdd}>Add</Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        {error &&
+          <div className='alert-popup Error' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>{errorMessage}</p>
+          </div>
+        }
+        {success &&
+          <div className='alert-popup Success' >
+            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <p>success fully submitted</p>
+          </div>
+        }
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
@@ -161,15 +321,17 @@ const Division = () => {
                 key={action.name}
                 icon={action.icon}
                 tooltipTitle={action.name}
+                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
               />
             ))}
           </StyledSpeedDial>
         </Box>
-        <div className="table-bookingCopy">
+        <div className="table-bookingCopy-Division">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}
               columns={columns}
+              onRowClick={handleRowClick}
               pageSize={5}
               checkboxSelection
             />

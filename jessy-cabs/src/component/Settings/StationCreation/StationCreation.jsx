@@ -1,28 +1,24 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import "./StationCreation.css";
-import {
-  TextField,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
-import BadgeIcon from "@mui/icons-material/Badge";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import Box from "@mui/material/Box";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import { styled } from "@mui/material/styles";
+import SpeedDial from "@mui/material/SpeedDial";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+
+// ICONS
+import BadgeIcon from "@mui/icons-material/Badge";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -37,7 +33,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-// Table Start
+// TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "Stationname", headerName: "Statio_Name", width: 130 },
@@ -45,7 +41,7 @@ const columns = [
   { field: "shortname", headerName: "Station", width: 130 },
   { field: "ownbranch", headerName: "Own_Branch", width: 130 },
 ];
-
+// TABLE END
 const actions = [
   { icon: <ChecklistIcon />, name: "List" },
   { icon: <CancelPresentationIcon />, name: "Cancel" },
@@ -53,13 +49,35 @@ const actions = [
   { icon: <ModeEditIcon />, name: "Edit" },
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
-//
 const StationCreation = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
+  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const hidePopup = () => {
+    setSuccess(false);
+    setError(false);
+  };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
 
   const [book, setBook] = useState({
     stationid: '',
@@ -116,6 +134,24 @@ const StationCreation = () => {
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+  const handleAdd = async () => {
+    const Stationname = book.Stationname;
+    if (!Stationname) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
+    try {
+      console.log('Add button clicked');
+      await axios.post('http://localhost:8081/stationcreation', book);
+      console.log(book);
+      handleCancel();
+
+    } catch (error) {
+      console.error('Error updating customer:', error);
+    }
+  };
+
   const handleClick = async (event, actionName, stationid) => {
     event.preventDefault();
     try {
@@ -141,13 +177,12 @@ const StationCreation = () => {
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        await axios.post('http://localhost:8081/stationcreation', book);
-        console.log(book);
-        handleCancel();
+        handleAdd();
       }
     } catch (err) {
       console.log(err);
       setError(true);
+      setErrorMessage("Check Network Connection")
     }
   };
   useEffect(() => {
@@ -210,17 +245,7 @@ const StationCreation = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                 />
-                {/* <TextField
-                  margin="normal"
-                  size="small"
-                  id="Station-name"
-                  label="Station Name"
-                  sx={{ m: 1, width: "200ch" }}
-                  name="Stationname"
-                  value={selectedCustomerData?.Stationname || book.Stationname}
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                /> */}
+
               </div>
             </div>
             <div className="input-field">
@@ -276,9 +301,23 @@ const StationCreation = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
+              <div className="input" style={{ width: "100px" }}>
+                <Button variant="contained" onClick={handleAdd}>Add</Button>
+              </div>
             </div>
           </div>
-          {error && <p>Something went wrong!</p>}
+          {error &&
+            <div className='alert-popup Error' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <p>success fully submitted</p>
+            </div>
+          }
 
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial

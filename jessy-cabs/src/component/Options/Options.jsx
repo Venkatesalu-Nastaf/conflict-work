@@ -1,67 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Options.css'
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
-const Options = () => {
+const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
     const location = useLocation();
+    const isActive = location.pathname === to;
+
+    return (
+        <Link
+            className={`menu-link ${isActive ? 'actives' : ''}`}
+            to={to}
+            onClick={() => handleMenuItemClick(label)}
+        >
+            {label}
+        </Link>
+    );
+};
+
+const Options = () => {
+    const [activeMenuItem, setActiveMenuItem] = useState('');
+
     useEffect(() => {
-        // Retrieve the previously stored actives menu item from localStorage
-        const activeMenuItem = localStorage.getItem('activeMenuItem');
+        const storedActiveMenuItem = localStorage.getItem('activeMenuItem');
+        setActiveMenuItem(storedActiveMenuItem || '');
+    }, []);
 
-        // Add 'actives' class to the actives menu item if it exists
-        if (activeMenuItem) {
-            const menuItems = document.querySelectorAll('.menu-link');
-            menuItems.forEach((item) => {
-                if (item.textContent === activeMenuItem) {
-                    item.classList.add('actives');
-                } else {
-                    item.classList.remove('actives');
-                }
-            });
-        }
-    }, [location]);
-
-    // Function to handle menu item clicks
     const handleMenuItemClick = (menuItem) => {
-        // Store the clicked menu item in localStorage
         localStorage.setItem('activeMenuItem', menuItem);
+        setActiveMenuItem(menuItem);
     };
 
     return (
         <div className='customer-conatiner' id='menu'>
             <div className='menu-bar'>
-                <Link
-                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Rate Type' ? 'actives' : ''}`}
-                    to='/home/options/ratetype'
-                    onClick={() => handleMenuItemClick('Rate Type')}
-                >
-                    Rate Type
-                </Link>
-                <Link
-                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Rate Management' ? 'actives' : ''}`}
-                    to='/home/options/ratemanagement'
-                    onClick={() => handleMenuItemClick('Rate Management')}
-                >
-                    Rate Management
-                </Link>
-                <Link
-                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Employes' ? 'actives' : ''}`}
-                    to='/home/options/employes'
-                    onClick={() => handleMenuItemClick('Employes')}
-                >
-                    Employes
-                </Link>
-                <Link
-                    className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Fule Details' ? 'actives' : ''}`}
-                    to='/home/options/fuledetails'
-                    onClick={() => handleMenuItemClick('Fule Details')}
-                >
-                    Fuel Details
-                </Link>
+                <MenuItem label="Rate Type" to='/home/options/ratetype' menuItemKey="Rate Type" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Rate Management" to='/home/options/ratemanagement' menuItemKey="Rate Management" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Employees" to='/home/options/employes' menuItemKey="Employees" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Fuel Details" to='/home/options/fuledetails' menuItemKey="Fuel Details" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
             </div>
             <Outlet />
         </div>
     )
 }
 
-export default Options
+export default Options;

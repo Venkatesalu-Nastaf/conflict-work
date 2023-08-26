@@ -24,6 +24,7 @@ import Collecteds from "./component/Orders/Collecteds/Collecteds";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
 import Permission from "./component/Settings/Permission/Permission";
 import Dispatcheds from "./component/Orders/Dispatcheds/Dispatcheds";
+import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
 import FuelDetails from "./component/Options/FuelDetails/FuelDetails";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
 import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
@@ -34,7 +35,6 @@ import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import RateManagement from "./component/Options/RateManagement/RateManagement";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
-import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
 
 
 function App() {

@@ -5,6 +5,12 @@ import './OnlineBooking.css'
 const OnlineBooking = () => {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [formValues, setFormValues] = useState({
+    guestname: '',
+    guestmobileno: '',
+    email: '',
+    useage: '',
+  });
   const hidePopup = () => {
     setError(false);
     setSuccess(false);
@@ -27,7 +33,7 @@ const OnlineBooking = () => {
   }, [success]);
   const [book, setBook] = useState({
     guestname: '',
-    mobileno: '',
+    guestmobileno: '',
     email: '',
     startdate: '',
     starttime: '',
@@ -41,7 +47,7 @@ const OnlineBooking = () => {
     setBook((prevBook) => ({
       ...prevBook,
       guestname: '',
-      mobileno: '',
+      guestmobileno: '',
       email: '',
       startdate: '',
       starttime: '',
@@ -69,7 +75,7 @@ const OnlineBooking = () => {
     }
   };
   const handleAdd = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     try {
       console.log('Add button clicked');
       await axios.post('http://localhost:8081/booking', book);
@@ -79,6 +85,31 @@ const OnlineBooking = () => {
       console.error('Error updating customer:', error);
       setError(true);
     }
+  };
+
+
+  const [sendEmail, setSendEmail] = useState(false);
+  const handlecheck = async () => {
+
+    
+      try {
+        const dataToSend = {
+          guestname: formValues.guestname,
+          guestmobileno: formValues.guestmobileno,
+          email: formValues.email,
+          pickup: formValues.pickup,
+          useage: formValues.useage
+        };
+
+        await axios.post('http://localhost:8081/send-email', dataToSend);
+        // alert('Email sent successfully');
+        setSuccess(true);
+        console.log(dataToSend);
+      } catch (error) {
+        console.error('Error sending email:', error);
+        alert('An error occurred while sending the email');
+      }
+  
   };
 
   return (
@@ -103,8 +134,8 @@ const OnlineBooking = () => {
             className='input-item'
             type="text"
             id="mobile"
-            name="mobileno"
-            value={book.mobileno || ''}
+            name="guestmobileno"
+            value={book.guestmobileno || ''}
             onChange={handleChange}
             required
           />

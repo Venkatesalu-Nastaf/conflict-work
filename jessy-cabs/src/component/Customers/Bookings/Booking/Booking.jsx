@@ -260,6 +260,7 @@ const Booking = () => {
       driverphone: '',
       travelsemail: '',
     }));
+    setFormValues({});
     setSelectedCustomerData({});
     setFormData({});
   };
@@ -386,6 +387,7 @@ const Booking = () => {
       handlecheck();
     } catch (error) {
       console.error('Error updating customer:', error);
+      setError(true);
     }
   };
 
@@ -532,26 +534,7 @@ const Booking = () => {
     console.log(params);
     setSelectedCustomerDatas(params);
   }, []);
-
-  // const handlecheck = async (event) => {
-  //   event.preventDefault();
-
-  //   try {
-  //     const dataToSend = {
-  //       name: formValues.name,
-  //       email: formValues.email,
-  //       contactNo: formValues.contactNo,
-  //       message: formValues.message
-  //     };
-
-  //     await axios.post('http://localhost:8081/send-email', dataToSend);
-  //     alert('Email sent successfully');
-  //     console.log(dataToSend);
-  //   } catch (error) {
-  //     console.error('Error sending email:', error);
-  //     alert('An error occurred while sending the email');
-  //   }
-  // };
+ 
   const [sendEmail, setSendEmail] = useState(false);
   const handlecheck = async () => {
 
@@ -566,7 +549,8 @@ const Booking = () => {
         };
 
         await axios.post('http://localhost:8081/send-email', dataToSend);
-        alert('Email sent successfully');
+        // alert('Email sent successfully');
+        setSuccess(true);
         console.log(dataToSend);
       } catch (error) {
         console.error('Error sending email:', error);

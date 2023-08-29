@@ -5,9 +5,28 @@ import Logo from "./Logo-Img/logo.png";
 import { AiOutlineBars } from "@react-icons/all-files/ai/AiOutlineBars";
 import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
+import { useLocation } from "react-router-dom";
+
+const MenuItem = ({ item, index, currentPath, handleMenuItemClick }) => {
+  const isActive = item.key === currentPath;
+
+  return (
+    <Link
+      className={isActive ? "menuItem active" : "menuItem"}
+      to={item.key}
+      onClick={() => handleMenuItemClick(index, item.key)}
+    >
+      <item.icon />
+      <span>{item.heading}</span>
+    </Link>
+  );
+};
 
 const Sidebar = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
   const navigate = useNavigate();
+  // eslint-disable-next-line
   const [selected, setSelected] = useState(0);
   const [expanded, setExpanded] = useState(true);
 
@@ -20,8 +39,6 @@ const Sidebar = () => {
     localStorage.setItem("selectedMenuItem", key);
     navigate(key);
   };
-
-
 
   useEffect(() => {
     const selectedMenuItem = localStorage.getItem("selectedMenuItem");
@@ -58,15 +75,12 @@ const Sidebar = () => {
 
         <div className="menu">
           {Sidebardata.map((item, index) => (
-            <Link
-              className={selected === index ? "menuItem active" : "menuItem"}
-              key={item.key}
-              to={item.key}
-              onClick={() => handleMenuItemClick(index, item.key)}
-            >
-              <item.icon />
-              <span>{item.heading}</span>
-            </Link>
+            <MenuItem
+              item={item}
+              index={index}
+              currentPath={currentPath}
+              handleMenuItemClick={handleMenuItemClick}
+            />
           ))}
         </div>
       </motion.div>

@@ -49,6 +49,7 @@ export default function BasicTable() {
   return (
       <div className="Table">
         <TableContainer
+        className="Scroll-Style"
           component={Paper}
           style={{ boxShadow: "0px 13px 20px 0px #80808029" }}
         >

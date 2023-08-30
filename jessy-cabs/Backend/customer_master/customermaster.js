@@ -332,6 +332,68 @@ app.post('/send-email', async (req, res) => {
   }
 });
 //end booking mail
+//send email from online-booking page
+app.post('/send-onbook-email', async (req, res) => {
+  try {
+    const { guestname, guestmobileno, email, startdate, starttime, pickup, useage, duty, vehType, remarks, } = req.body;
+
+    // Create a Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'akash02899@gmail.com',
+        pass: 'zrbdlfwjxsgrjncr',
+      },
+    });
+
+    // Email content for the owner
+    const ownerMailOptions = {
+      from: 'akash02899@gmail.com',
+      to: 'akash02899@gmail.com', // Set the owner's email address
+      // subject: ${name} 'sent you a feedback',
+      subject: `${guestname} sent you a feedback`,
+      text: `Guest Name: ${guestname}\nEmail: ${email}\nGuest Mobile No: ${guestmobileno}\nStart Date: ${startdate}\nStart Time: ${starttime}\nPickup: ${pickup}\nUseage: ${useage}\nDuty: ${duty}\nVehicle Type: ${vehType}\nRemarks: ${remarks}`,
+    };
+
+    // Send email to the owner
+    await transporter.sendMail(ownerMailOptions);
+
+    // Email content for the customer
+    const customerMailOptions = {
+      from: 'akash02899@gmail.com',
+      to: email,
+      subject: 'Greetings from Jessy Cabs',
+      html: `
+      <p>Hello ${guestname},</p>
+      <p>Thank you for reaching out. Your booking is Placed successfully</p>
+      <p>Regards,<br>Jessy Cabs</p>
+      <table>
+        <tr><td>Guest Name:</td><td>${guestname}</td></tr>
+        <tr><td>Email:</td><td>${email}</td></tr>
+        <tr><td>Guest Mobile No:</td><td>${guestmobileno}</td></tr>
+        <tr><td>Start Date:</td><td>${startdate}</td></tr>
+        <tr><td>Start Time:</td><td>${starttime}</td></tr>
+        <tr><td>Pickup:</td><td>${pickup}</td></tr>
+        <tr><td>Useage:</td><td>${useage}</td></tr>
+        <tr><td>Duty:</td><td>${duty}</td></tr>
+        <tr><td>Vehicle Type:</td><td>${vehType}</td></tr>
+        <tr><td>Remarks:</td><td>${remarks}</td></tr>
+      </table>
+        `,
+    };
+
+    // Send greeting email to the customer
+    await transporter.sendMail(customerMailOptions);
+
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred while sending the email' });
+  }
+});
+//end online-booking mail
 //End booking page database 
 // -----------------------------------------------------------------------------------------------------------
 // booking copy data collect:
@@ -474,7 +536,6 @@ app.post('/send-tripsheet-email', async (req, res) => {
   try {
     const { guestname, guestmobileno, email, hireTypes, department, vehType, vehRegNo, driverName, mobileNo, useage, pickup } = req.body;
 
-
     // Create a Nodemailer transporter
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
@@ -503,7 +564,6 @@ app.post('/send-tripsheet-email', async (req, res) => {
       from: 'akash02899@gmail.com',
       to: email,
       subject: 'Greetings from Jessy Cabs',
-      // text: `Hello ${guestname},\n\nThank you for reaching out. Your booking is Placed successfully\n\nRegards,\nJessy Cabs\n\nGuest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nHireTypes: ${hireTypes}\nDepartment: ${department}\nVehicle Type: ${vehType}\nVehicle RegNo: ${vehRegNo}\nDriver Name: ${driverName}\nDriver-MobileNo: ${mobileNo}\nPickup: ${pickup}\nUsage: ${useage}`,
       html: `
       <p>Hello ${guestname},</p>
       <p>Thank you for reaching out. Your booking is Placed successfully</p>

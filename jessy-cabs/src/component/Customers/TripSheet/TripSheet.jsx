@@ -573,12 +573,20 @@ const TripSheet = () => {
       ...prevData,
       [name]: selectedOption,
     }));
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: selectedOption,
+    }));
   };
 
   const handleDateChange = (date, name) => {
     const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
     setBook((prevBook) => ({
       ...prevBook,
+      [name]: formattedDate,
+    }));
+    setFormValues((prevValues) => ({
+      ...prevValues,
       [name]: formattedDate,
     }));
   };

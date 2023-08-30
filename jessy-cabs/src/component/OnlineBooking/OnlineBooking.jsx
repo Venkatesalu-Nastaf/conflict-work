@@ -9,7 +9,13 @@ const OnlineBooking = () => {
     guestname: '',
     guestmobileno: '',
     email: '',
+    startdate: '',
+    starttime: '',
+    pickup: '',
     useage: '',
+    duty: '',
+    vehType: '',
+    remarks: '',
   });
   const hidePopup = () => {
     setError(false);
@@ -66,10 +72,18 @@ const OnlineBooking = () => {
         ...prevBook,
         [name]: checked,
       }));
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: checked,
+      }));
     } else {
       const fieldValue = type === 'time' ? value : value;
       setBook((prevBook) => ({
         ...prevBook,
+        [name]: fieldValue,
+      }));
+      setFormValues((prevValues) => ({
+        ...prevValues,
         [name]: fieldValue,
       }));
     }
@@ -80,6 +94,7 @@ const OnlineBooking = () => {
       console.log('Add button clicked');
       await axios.post('http://localhost:8081/booking', book);
       handleCancel();
+      handlecheck();
       setSuccess(true);
     } catch (error) {
       console.error('Error updating customer:', error);
@@ -88,28 +103,31 @@ const OnlineBooking = () => {
   };
 
 
-  const [sendEmail, setSendEmail] = useState(false);
+
   const handlecheck = async () => {
 
-    
-      try {
-        const dataToSend = {
-          guestname: formValues.guestname,
-          guestmobileno: formValues.guestmobileno,
-          email: formValues.email,
-          pickup: formValues.pickup,
-          useage: formValues.useage
-        };
+    try {
+      const dataToSend = {
+        guestname: formValues.guestname,
+        guestmobileno: formValues.guestmobileno,
+        email: formValues.email,
+        startdate: formValues.startdate,
+        starttime: formValues.starttime,
+        pickup: formValues.pickup,
+        useage: formValues.useage,
+        duty: formValues.duty,
+        vehType: formValues.vehType,
+        remarks: formValues.remarks,
+      };
 
-        await axios.post('http://localhost:8081/send-email', dataToSend);
-        // alert('Email sent successfully');
-        setSuccess(true);
-        console.log(dataToSend);
-      } catch (error) {
-        console.error('Error sending email:', error);
-        alert('An error occurred while sending the email');
-      }
-  
+      await axios.post('http://localhost:8081/send-onbook-email', dataToSend);
+      // alert('Email sent successfully');
+      setSuccess(true);
+      console.log(dataToSend);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('An error occurred while sending the email');
+    }
   };
 
   return (
@@ -123,7 +141,7 @@ const OnlineBooking = () => {
             type="text"
             id="name"
             name="guestname"
-            value={book.guestname || ''}
+            value={book.guestname || formValues.guestname || ''}
             onChange={handleChange}
             required
           />
@@ -135,7 +153,7 @@ const OnlineBooking = () => {
             type="text"
             id="mobile"
             name="guestmobileno"
-            value={book.guestmobileno || ''}
+            value={book.guestmobileno || formValues.guestmobileno || ''}
             onChange={handleChange}
             required
           />
@@ -147,7 +165,7 @@ const OnlineBooking = () => {
             type="email"
             id="email"
             name="email"
-            value={book.email || ''}
+            value={book.email || formValues.email || ''}
             onChange={handleChange}
             required
           />
@@ -158,7 +176,7 @@ const OnlineBooking = () => {
             <input
               type="date"
               name='startdate'
-              value={book.startdate || ''}
+              value={book.startdate || formValues.startdate || ''}
               onChange={handleChange}
               className='input-item'
             />
@@ -168,7 +186,7 @@ const OnlineBooking = () => {
             <input type="time"
               name='starttime'
               onChange={handleChange}
-              value={book.starttime || ''}
+              value={book.starttime || formValues.starttime || ''}
               className='input-item'
             />
           </div>
@@ -180,7 +198,7 @@ const OnlineBooking = () => {
             type="text"
             id="pickup"
             name="pickup"
-            value={book.pickup || ''}
+            value={book.pickup || formValues.pickup || ''}
             onChange={handleChange}
             required
           />
@@ -192,7 +210,7 @@ const OnlineBooking = () => {
             type="text"
             id="drop"
             name="useage"
-            value={book.useage || ''}
+            value={book.useage || formValues.useage || ''}
             onChange={handleChange}
             required
           />
@@ -202,7 +220,7 @@ const OnlineBooking = () => {
           <select
             id='selects'
             name="duty"
-            value={book.duty || ''}
+            value={book.duty || formValues.duty || ''}
             onChange={handleChange}
             required
           >
@@ -218,7 +236,7 @@ const OnlineBooking = () => {
           <select
             id='selects'
             name="vehType"
-            value={book.vehType || ''}
+            value={book.vehType || formValues.vehType || ''}
             onChange={handleChange}
             required
           >
@@ -236,7 +254,7 @@ const OnlineBooking = () => {
           <label className='input-lable' htmlFor="usage">Remark:</label>
           <textarea
             name='remarks'
-            value={book.remarks || ''}
+            value={book.remarks || formValues.remarks || ''}
             onChange={handleChange}
             className='textareas'
             placeholder='Enter Your Remarks'>

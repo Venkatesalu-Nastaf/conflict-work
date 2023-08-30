@@ -80,7 +80,6 @@ const Booking = () => {
   const [registertime, setRegisterTime] = useState('');
   const [starttime, setStartTime] = useState('');
   const [bookingtime, setBookingTime] = useState('');
-  // const [formData, setFormData] = useState({});
   const location = useLocation();
   const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
@@ -534,7 +533,7 @@ const Booking = () => {
     console.log(params);
     setSelectedCustomerDatas(params);
   }, []);
- 
+
   const [sendEmail, setSendEmail] = useState(false);
   const handlecheck = async () => {
 
@@ -560,7 +559,6 @@ const Booking = () => {
       console.log('Send mail checkbox is not checked. Email not sent.');
     }
   };
-
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -1212,7 +1210,6 @@ const Booking = () => {
             </div>
             <div className="inpu-field">
               <div className="input">
-
                 <FormControlLabel
                   value="vehiclechanges"
                   control={<Checkbox size="small" />}

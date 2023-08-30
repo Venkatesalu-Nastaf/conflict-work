@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
+// import { useNavigate } from 'react-router-dom';
 import "./TripSheet.css";
 import {
   Apps,
@@ -34,7 +35,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { TextField, FormControlLabel, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-
+//dialog box
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+// import DialogTitle from '@material-ui/core/DialogTitle';
 // ICONS
 import CallIcon from "@mui/icons-material/Call";
 import StoreIcon from "@mui/icons-material/Store";
@@ -92,6 +97,7 @@ import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
+import Invoice from '../Invoice/Invoice';
 
 
 // UpdateTbaleRowsGPSSlider TABLE START
@@ -178,6 +184,18 @@ const TripSheet = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  // const navigate = useNavigate();
+  const [popupOpen, setPopupOpen] = useState(false);
+
+  const handleETripsheetClick = (row) => {
+
+    setPopupOpen(true);
+  };
+  const handlePopupClose = () => {
+
+    setPopupOpen(false);
+  };
+
   const [formValues, setFormValues] = useState({
     guestname: '',
     guestmobileno: '',
@@ -501,7 +519,13 @@ const TripSheet = () => {
     setSelectedCustomerDatas({});
     setSelectedCustomerData({});
     setFormData({});
+    setFormValues({});
   };
+
+  // const handleETripsheetClick = () => {
+  //   // Navigate to the invoice page when the button is clicked
+  //   navigate('/home/customers/invoice'); // Replace '/invoice' with the actual path of your invoice page
+  // };
 
   const handleDelete = async () => {
     if (!selectedCustomerData.tripid) {
@@ -1573,10 +1597,21 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
-                <Button startIcon={<BorderColorIcon />} variant="outlined">
-                  Edit Vehicle
+                <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick}>
+                  E-Tripsheet
                 </Button>
               </div>
+              <Dialog open={popupOpen} onClose={handlePopupClose}>
+                <DialogContent>
+                  <Invoice />
+                </DialogContent>
+                <DialogActions>
+                  
+                  <Button onClick={handlePopupClose} variant="contained" color="primary">
+                    Cancel
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "175px" }}>

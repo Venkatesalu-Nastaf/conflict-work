@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const db = require('../db');
 const multer = require('multer');
 const fs = require('fs'); // signature png
+const sharp = require('sharp'); // Import the sharp library for png
 const app = express();
 const path = require('path');
 const upload = multer({ dest: 'uploads/' });
@@ -531,7 +532,7 @@ app.get('/vehicleinfo/:vehRegNo', (req, res) => {
     return res.status(200).json(vehicleDetails);
   });
 });
-//send email  from booking page
+//send email from tripsheet page
 app.post('/send-tripsheet-email', async (req, res) => {
   try {
     const { guestname, guestmobileno, email, hireTypes, department, vehType, vehRegNo, driverName, mobileNo, useage, pickup } = req.body;
@@ -593,7 +594,43 @@ app.post('/send-tripsheet-email', async (req, res) => {
     res.status(500).json({ message: 'An error occurred while sending the email' });
   }
 });
-//end booking mail
+//end tripsheet mail
+//file upload in tripsheet
+app.post('/uploads', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded.' });
+  }
+
+  const fileData = {
+    name: req.file.originalname,
+    mimetype: req.file.mimetype,
+    size: req.file.size,
+    path: req.file.path,
+    tripid: req.body.tripid,
+  };
+
+  const query = 'INSERT INTO tripsheetupload SET ?';
+  db.query(query, fileData, (err, result) => {
+    if (err) {
+      console.error('Error storing file in the database:', err);
+      return res.status(500).json({ error: 'Error storing file in the database.' });
+    }
+    return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
+  });
+});
+
+//end tripsheet file upload
+//collect data
+app.get('/tripuploadcollect', (req, res) => {
+  db.query('SELECT * FROM tripsheetupload', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+//end collect data
 // End tripsheet database
 // -----------------------------------------------------------------------------------------------------------
 // customers/Received/Pending data collect from database

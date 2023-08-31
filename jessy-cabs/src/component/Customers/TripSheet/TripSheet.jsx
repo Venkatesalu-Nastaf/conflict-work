@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
+
 // import { useNavigate } from 'react-router-dom';
 import "./TripSheet.css";
 import {
@@ -101,25 +102,11 @@ import Invoice from '../Invoice/Invoice';
 
 
 // UpdateTbaleRowsGPSSlider TABLE START
-const UpdateTbaleColumnsGPSSlider = [
+const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "attachname", headerName: "Attach Name", width: 130 },
-  { field: "attachpath", headerName: "Attach Path", width: 130 },
+  { field: "name", headerName: "Attach Name", width: 130 },
+  { field: "path", headerName: "Attach Path", width: 130 },
   { field: "tripid", headerName: "Trip ID", width: 90 },
-];
-const UpdateTbaleRowsGPSSlider = [
-  {
-    id: 1,
-    attachname: 1,
-    attachpath: "Employee 1",
-    tripid: "John Doe",
-  },
-  {
-    id: 2,
-    attachname: 2,
-    attachpath: "Band 2",
-    tripid: "Employee 2",
-  },
 ];
 
 // Update Table
@@ -184,8 +171,10 @@ const TripSheet = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
   // const navigate = useNavigate();
   const [popupOpen, setPopupOpen] = useState(false);
+  const [imgpopupOpen, setimgPopupOpen] = useState(false);
 
   const handleETripsheetClick = (row) => {
 
@@ -194,6 +183,53 @@ const TripSheet = () => {
   const handlePopupClose = () => {
 
     setPopupOpen(false);
+  };
+
+  const handleUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf, .jpg, .jpeg, .png';
+    input.onchange = handleFileChange;
+    input.click();
+  };
+  //file upload
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return; // If no file selected, exit the function
+    const tripid = book.tripid; // Access the bookingno from the book object
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('tripid', tripid);
+    console.log(formData);
+    try {
+      const response = await axios.post('http://localhost:8081/uploads', formData);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+  //end file upload
+  //refresh button function
+  const handleRefresh = async () => {
+
+    try {
+      console.log('Refresh button clicked');
+      const response = await axios.get('http://localhost:8081/tripuploadcollect');
+      const data = response.data;
+      setRows(data);
+    } catch (error) {
+      console.error('Error Refreshing customer:', error);
+    }
+  };
+  //list data in row
+  const handleTripRowClick = (params) => {
+    setSelectedRow(params.row);
+    console.log('Selected Image Path:', params.row.path);
+    setimgPopupOpen(true);
+  };
+  const handleimgPopupClose = () => {
+
+    setimgPopupOpen(false);
   };
 
   const [formValues, setFormValues] = useState({
@@ -1606,7 +1642,7 @@ const TripSheet = () => {
                   <Invoice />
                 </DialogContent>
                 <DialogActions>
-                  
+
                   <Button onClick={handlePopupClose} variant="contained" color="primary">
                     Cancel
                   </Button>
@@ -2818,7 +2854,7 @@ const TripSheet = () => {
                       />
                     </div>
                     <div className="input" style={{ width: "220px" }}>
-                      <Button variant="contained">Select File & Upload</Button>
+                      <Button variant="contained" onClick={handleUpload}>Select File & Upload</Button>
                     </div>
                   </div>
                   <div className="input-field">
@@ -2833,7 +2869,7 @@ const TripSheet = () => {
                       />
                     </div>
                     <div className="input">
-                      <Button>Refresh</Button>
+                      <Button variant="outlined" onClick={handleRefresh}>Refresh</Button>
                     </div>
                   </div>
                   <div className="input-field">
@@ -2858,13 +2894,24 @@ const TripSheet = () => {
                   <div className="table-TripSheet">
                     <div style={{ height: 400, width: "100%" }}>
                       <DataGrid
-                        rows={UpdateTbaleRowsGPSSlider}
-                        columns={UpdateTbaleColumnsGPSSlider}
+                        rows={rows}
+                        columns={columns}
+                        onRowClick={handleTripRowClick}
                         pageSize={5}
                         checkboxSelection
                       />
                     </div>
                   </div>
+                  <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
+                    <DialogContent>
+                      {selectedRow && <img src={`/uploads/${selectedRow.path}`} alt="Selected" />}
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                        Cancel
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </div>
               </TabPanel>
               <TabPanel value={6} sx={{ p: 2 }}>

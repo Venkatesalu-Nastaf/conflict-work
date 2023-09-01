@@ -589,6 +589,17 @@ app.post('/send-tripsheet-email', async (req, res) => {
   }
 });
 //end tripsheet mail
+//collect data
+app.get('/tripuploadcollect', (req, res) => {
+  db.query('SELECT * FROM tripsheetupload', (err, results) => {
+    if (err) {
+      console.error('Error fetching data from MySQL:', err);
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(results);
+  });
+});
+//end collect data
 //file upload in tripsheet
 app.post('/uploads', upload.single('file'), (req, res) => {
   if (!req.file) {

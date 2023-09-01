@@ -536,7 +536,6 @@ app.get('/vehicleinfo/:vehRegNo', (req, res) => {
 app.post('/send-tripsheet-email', async (req, res) => {
   try {
     const { guestname, guestmobileno, email, hireTypes, department, vehType, vehRegNo, driverName, mobileNo, useage, pickup } = req.body;
-
     // Create a Nodemailer transporter
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
@@ -547,19 +546,15 @@ app.post('/send-tripsheet-email', async (req, res) => {
         pass: 'zrbdlfwjxsgrjncr',
       },
     });
-
     // Email content for the owner
     const ownerMailOptions = {
       from: 'akash02899@gmail.com',
       to: 'akash02899@gmail.com', // Set the owner's email address
-      // subject: ${name} 'sent you a feedback',
       subject: `${guestname} sent you a feedback`,
       text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nHireTypes: ${hireTypes}\nDepartment: ${department}\nVehicle Type: ${vehType}\nVehicle RegNo: ${vehRegNo}\nDriver Name: ${driverName}\nDriver-MobileNo: ${mobileNo}\nPickup: ${pickup}\nUsage: ${useage}`,
     };
-
     // Send email to the owner
     await transporter.sendMail(ownerMailOptions);
-
     // Email content for the customer
     const customerMailOptions = {
       from: 'akash02899@gmail.com',
@@ -584,7 +579,6 @@ app.post('/send-tripsheet-email', async (req, res) => {
       </table>
     `,
     };
-
     // Send greeting email to the customer
     await transporter.sendMail(customerMailOptions);
 
@@ -600,15 +594,13 @@ app.post('/uploads', upload.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded.' });
   }
-
   const fileData = {
     name: req.file.originalname,
     mimetype: req.file.mimetype,
     size: req.file.size,
-    path: req.file.path,
+    path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
     tripid: req.body.tripid,
   };
-
   const query = 'INSERT INTO tripsheetupload SET ?';
   db.query(query, fileData, (err, result) => {
     if (err) {
@@ -618,19 +610,29 @@ app.post('/uploads', upload.single('file'), (req, res) => {
     return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
   });
 });
-
-//end tripsheet file upload
-//collect data
-app.get('/tripuploadcollect', (req, res) => {
-  db.query('SELECT * FROM tripsheetupload', (err, results) => {
+//space
+const imageDirectory = path.join(__dirname, 'uploads'); // Adjust the path as needed
+// Serve static files from the imageDirectory
+app.use('/images', express.static(imageDirectory));
+// Example route to serve an image by its filename
+app.get('/get-image/:filename', (req, res) => {
+  const { filename } = req.params;
+  const imagePath = path.join(imageDirectory, filename);
+  fs.access(imagePath, fs.constants.R_OK, (err) => {
     if (err) {
-      console.error('Error fetching data from MySQL:', err);
-      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+      console.error('Error accessing image:', err);
+      res.status(404).send('Image not found');
+    } else {
+      res.sendFile(imagePath, (err) => {
+        if (err) {
+          console.error('Error sending image:', err);
+          res.status(404).send('Image not found');
+        }
+      });
     }
-    return res.status(200).json(results);
   });
 });
-//end collect data
+//end tripsheet file upload
 // End tripsheet database
 // -----------------------------------------------------------------------------------------------------------
 // customers/Received/Pending data collect from database

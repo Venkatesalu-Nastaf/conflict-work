@@ -100,6 +100,7 @@ import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 import Invoice from '../Invoice/Invoice';
 
+// const serverBaseUrl = 'http://localhost:8081/get-image/:filename';
 
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
@@ -222,11 +223,27 @@ const TripSheet = () => {
     }
   };
   //list data in row
+  // const imageUrl = `http://localhost:8081/get-image/293a69979e0fec3424ec09ba43d0bc7d`; // Replace with the actual filename
+
+  const [imageUrl, setImageUrl] = useState('');
+  // const handleTripRowClick = (params) => {
+  //   setSelectedRow(params.row);
+  //   console.log('Selected Image Path:', params.row.path);
+  //   setimgPopupOpen(true);
+  //   setImageUrl(`http://localhost:8081/get-image/${params.row.path}`);
+  // };
+
   const handleTripRowClick = (params) => {
     setSelectedRow(params.row);
     console.log('Selected Image Path:', params.row.path);
+  
+    // Encode the path segment to handle special characters
+    const encodedPath = encodeURIComponent(params.row.path);
+    
     setimgPopupOpen(true);
+    setImageUrl(`http://localhost:8081/get-image/${encodedPath}`);
   };
+
   const handleimgPopupClose = () => {
 
     setimgPopupOpen(false);
@@ -815,6 +832,7 @@ const TripSheet = () => {
     console.log(params);
     setSelectedCustomerDatas(params);
   }, []);
+
 
   return (
     <div className="form-container">
@@ -2904,7 +2922,9 @@ const TripSheet = () => {
                   </div>
                   <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
                     <DialogContent>
-                      {selectedRow && <img src={`/uploads/${selectedRow.path}`} alt="Selected" />}
+                      {selectedRow && (
+                        <img src={imageUrl} alt={selectedRow.name} />
+                      )}
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={handleimgPopupClose} variant="contained" color="primary">

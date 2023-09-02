@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-
-// import { useNavigate } from 'react-router-dom';
 import "./TripSheet.css";
 import {
   Apps,
@@ -40,7 +38,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogTitle from '@material-ui/core/DialogTitle';
 // ICONS
 import CallIcon from "@mui/icons-material/Call";
 import StoreIcon from "@mui/icons-material/Store";
@@ -82,7 +79,6 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CurrencyRupeeTwoToneIcon from "@mui/icons-material/CurrencyRupeeTwoTone";
-
 // FontAwesomeIcon Link
 import { faTags } from "@fortawesome/free-solid-svg-icons";
 import { faRoad } from "@fortawesome/free-solid-svg-icons";
@@ -99,6 +95,7 @@ import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 import Invoice from '../Invoice/Invoice';
+
 
 // const serverBaseUrl = 'http://localhost:8081/get-image/:filename';
 
@@ -173,16 +170,26 @@ const TripSheet = () => {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  // const navigate = useNavigate();
   const [popupOpen, setPopupOpen] = useState(false);
   const [imgpopupOpen, setimgPopupOpen] = useState(false);
 
-  const handleETripsheetClick = (row) => {
+  // const [isInvoiceDialogOpen, setIsInvoiceDialogOpen] = useState(false);
 
+  const [tripSheetDetails, setTripSheetDetails] = useState(false);
+
+
+  const handleETripsheetClick = (row) => {
+    const updatedTripSheetDetails = {
+      tripId: row.tripid,
+  
+      // Add more details as needed
+    };
+    console.log(updatedTripSheetDetails);
+    // Set the updated tripSheetDetails
+    setTripSheetDetails(updatedTripSheetDetails);
     setPopupOpen(true);
   };
   const handlePopupClose = () => {
-
     setPopupOpen(false);
   };
 
@@ -212,7 +219,6 @@ const TripSheet = () => {
   //end file upload
   //refresh button function
   const handleRefresh = async () => {
-
     try {
       console.log('Refresh button clicked');
       const response = await axios.get('http://localhost:8081/tripuploadcollect');
@@ -223,32 +229,18 @@ const TripSheet = () => {
     }
   };
   //list data in row
-  // const imageUrl = `http://localhost:8081/get-image/293a69979e0fec3424ec09ba43d0bc7d`; // Replace with the actual filename
-
   const [imageUrl, setImageUrl] = useState('');
-  // const handleTripRowClick = (params) => {
-  //   setSelectedRow(params.row);
-  //   console.log('Selected Image Path:', params.row.path);
-  //   setimgPopupOpen(true);
-  //   setImageUrl(`http://localhost:8081/get-image/${params.row.path}`);
-  // };
-
   const handleTripRowClick = (params) => {
     setSelectedRow(params.row);
     console.log('Selected Image Path:', params.row.path);
-  
     // Encode the path segment to handle special characters
     const encodedPath = encodeURIComponent(params.row.path);
-    
     setimgPopupOpen(true);
     setImageUrl(`http://localhost:8081/get-image/${encodedPath}`);
   };
-
   const handleimgPopupClose = () => {
-
     setimgPopupOpen(false);
   };
-
   const [formValues, setFormValues] = useState({
     guestname: '',
     guestmobileno: '',
@@ -262,10 +254,8 @@ const TripSheet = () => {
     driverName: '',
     mobileNo: '',
   });
-
   const [sendEmail, setSendEmail] = useState(false);
   const handlecheck = async () => {
-
     if (sendEmail) {
       try {
         const dataToSend = {
@@ -281,7 +271,6 @@ const TripSheet = () => {
           driverName: formValues.driverName,
           mobileNo: formValues.mobileNo
         };
-
         await axios.post('http://localhost:8081/send-tripsheet-email', dataToSend);
         // alert('Email sent successfully');
         setSuccess(true);
@@ -795,6 +784,10 @@ const TripSheet = () => {
           ...prevValues,
           [name]: value,
         }));
+        setTripSheetDetails((prevValues) => ({
+          ...prevValues,
+          [name]: value,
+        }));
       }
     }
   };
@@ -851,7 +844,7 @@ const TripSheet = () => {
                   id="tripid"
                   label="Trip Sheet No"
                   name="tripid"
-                  value={formData.tripid || selectedCustomerData.tripid || book.tripid}
+                  value={formData.tripid || selectedCustomerData.tripid || book.tripid || tripSheetDetails.tripId}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   autoFocus
@@ -986,7 +979,6 @@ const TripSheet = () => {
               <FormControlLabel
                 name="emailcheck"
                 value="email"
-                // control={<Checkbox size="small" />}
                 label="Email"
                 autoComplete="new-password"
                 onChange={handleChange}
@@ -1054,7 +1046,6 @@ const TripSheet = () => {
               </div>
             </div>
           </div>
-
           <div className="detail-container-main-Tripsheet">
             <div className="container-left-Tripsheet">
               <div className="input-field">
@@ -1657,10 +1648,10 @@ const TripSheet = () => {
               </div>
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  <Invoice />
+                  <Invoice tripSheetDetails={tripSheetDetails} />
+                  {/* <img src={imageUrl} alt="Uploaded Invoice" style={{ maxWidth: '100%' }} /> */}
                 </DialogContent>
                 <DialogActions>
-
                   <Button onClick={handlePopupClose} variant="contained" color="primary">
                     Cancel
                   </Button>
@@ -2923,7 +2914,7 @@ const TripSheet = () => {
                   <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
                     <DialogContent>
                       {selectedRow && (
-                        <img src={imageUrl} alt={selectedRow.name} />
+                        <img className='dialogboximg' src={imageUrl} alt={selectedRow.name} />
                       )}
                     </DialogContent>
                     <DialogActions>

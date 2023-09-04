@@ -4,13 +4,8 @@ import { Button } from '@material-ui/core'; // Import necessary components
 import ReactDOMServer from 'react-dom/server';
 
 
-const PrintableInvoice = ({ tripSheetDetails }) => {
-  if (!tripSheetDetails) {
-    return <div>No trip sheet details available</div>;
-  }
-
-  // Use optional chaining to safely access properties
-  const tripId = tripSheetDetails.tripId || '';
+const PrintableInvoice = () => {
+  
  
 
   return (
@@ -26,7 +21,7 @@ const PrintableInvoice = ({ tripSheetDetails }) => {
         <table className="firstTable">
           <tr>
             <th><span >Log No:</span></th>
-            <td><span >{tripId}</span></td>
+            <td><span >6786876</span></td>
           </tr>
           <tr>
             <th><span >Date:</span></th>

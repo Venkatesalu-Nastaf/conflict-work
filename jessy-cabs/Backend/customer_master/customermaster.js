@@ -35,6 +35,39 @@ app.get('/usercreation', (req, res) => {
     }
   });
 });
+//update data from usercreation
+app.put('/usercreation/:userid', (req, res) => {
+  const userid = req.params.userid;
+  const updatedCustomerData = req.body;
+  console.log('Customer ID:', userid); // Log the customer ID
+  console.log('Updated customer data:', updatedCustomerData);
+  db.query('UPDATE usercreation SET ? WHERE userid = ?', [updatedCustomerData, userid], (err, result) => {
+    if (err) {
+      console.error('Error updating data in MySQL:', err);
+      return res.status(500).json({ error: "Failed to update data in MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    console.log('Data updated in MySQL');
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+//collect data from usercreation
+app.get('/usercreation/:userid', (req, res) => {
+  const userid = req.params.userid;
+  db.query('SELECT * FROM usercreation WHERE userid = ?', userid, (err, result) => {
+    if (err) {
+      console.error('Error retrieving usercreation details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    const bookingDetails = result[0]; // Assuming there is only one matching booking
+    return res.status(200).json(bookingDetails);
+  });
+});
 // -----------------------------------------------------------------------------------------------------------
 // Customer Master Database
 // Add Customer Master database

@@ -180,7 +180,7 @@ const Invoice = () => {
           
           .logo-image-invoice img {
             width: 100px;
-          
+            margin: 20px 10px ;
           }
           
           .invoice-address {

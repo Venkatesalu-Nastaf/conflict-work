@@ -1,117 +1,148 @@
 import React from 'react';
+import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 import './invoice.css'; // Import your CSS file for styling
 import { Button } from '@material-ui/core'; // Import necessary components
 import ReactDOMServer from 'react-dom/server';
 
 
 const PrintableInvoice = () => {
-  
- 
+
+
 
   return (
     <div className="invoice-wrapper">
       <article>
-        <address >
-          <p><h3>JESSY CABS</h3></p>
-          <p>No:8/7, 11th Street, Nandanam(Extn.),</p>
-          <p>Nandanam, Chennai-600 035</p>
-          <p>booking@jessycabs.in</p>
-          <p>Tel: 044-24354247, Mob: 9841505689</p>
-        </address>
-        <table className="firstTable">
-          <tr>
-            <th><span >Log No:</span></th>
-            <td><span >6786876</span></td>
-          </tr>
-          <tr>
-            <th><span >Date:</span></th>
-            <td><span >2356778</span></td>
-          </tr>
-          <tr>
-            <th><span >Duty Type:</span></th>
-            <td><span>Local</span></td>
-          </tr>
-          <tr>
-            <th><span >Vehicle Type:</span></th>
-            <td><span>SEDAN A/C</span></td>
-          </tr>
-          <tr>
-            <th><span >Vehicle No:</span></th>
-            <td><span>TN-11-BE-6744</span></td>
-          </tr>
-          <tr>
-            <th><span >Driver Name:</span></th>
-            <td><span>MR. ARUNACHALAM</span></td>
-          </tr>
-          <tr>
-            <th><span >Driver Mobile:</span></th>
-            <td><span>6369617469</span></td>
-          </tr>
-        </table>
-        <table className="firstleftTable">
-          <tr>
-            <th><span >Client Name:</span></th>
-            <td><span >Prodapt</span></td>
-          </tr>
-          <tr>
-            <th><span >Address:</span></th>
-            <td><span >Prince Infocity-II,4th floor</span></td>
-          </tr>
-          <tr>
-            <th><span >Ordered By:</span></th>
-            <td><span>Prodapt</span></td>
-          </tr>
-          <tr>
-            <th><span >Emp. No:</span></th>
-            <td><span>1039</span></td>
-          </tr>
-          <tr>
-            <th><span >CCode:</span></th>
-            <td><span>1039</span></td>
-          </tr>
-          <tr>
-            <th><span >Report To</span></th>
-            <td><span>Mr. Arun Pai</span></td>
-          </tr>
-        </table>
-        <table className="firstbottomTable">
-          <tr>
-            <th><span >Remarks:</span></th>
-            <td><span ></span></td>
-          </tr>
-        </table>
-        <table className="secondTable">
-          <thead>
-            <tr>
-              <th><span ></span></th>
-              <th><span >DATE</span></th>
-              <th><span >HOURS</span></th>
-              <th><span >KMS</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span >Closing</span></td>
-              <td><span >24/08/2023</span></td>
-              <td><span >01.01</span></td>
-              <td><span >285</span></td>
-            </tr>
-            <tr>
-              <td><span >Starting</span></td>
-              <td><span >24/08/2023</span></td>
-              <td><span >01.01</span></td>
-              <td><span >285</span></td>
-            </tr>
-            <tr>
-              <td><span >Total</span></td>
-              <td><span >0</span></td>
-              <td><span >0</span></td>
-              <td><span >0</span></td>
-            </tr>
-          </tbody>
-        </table>
+        <div className='invoice-container-header'>
+          <div className="logo-image-invoice">
+            <img src={Logo} alt="logo" />
+          </div>
+          <div className="invoice-address">
+            <address >
+              {/* <p><h3>JESSY CABS</h3></p> */}
+              <p className='invoice-address-detials'>No:8/7, 11th Street, Nandanam(Extn.),
+                Nandanam, Chennai-600 035
+                booking@jessycabs.in</p>
+              <p className='invoice-contact-details'>Tel: 044-24354247, Mob: 9841505689</p>
+            </address>
+          </div>
+        </div>
+        <div className="main-invoice-container">
+          <div className='first-table-invoice-container'>
+            <table id='table-invoice' className="firstleftTable">
+              <tr>
+                <th id='table-header'><span >Client Name:</span></th>
+                <td id='table-data'><span >Prodapt</span></td>
+              </tr>
+              <tr>
+                <th id='table-header'><span >Address:</span></th>
+                <td id='table-data'><span >Prince Infocity-II,4th floor</span></td>
+              </tr>
+              <tr>
+                <th id='table-header'><span >Ordered By:</span></th>
+                <td id='table-data'><span>Prodapt</span></td>
+              </tr>
+              <tr>
+                <th id='table-header'><span >Emp. No:</span></th>
+                <td id='table-data'><span>1039</span></td>
+              </tr>
+              <tr>
+                <th id='table-header'><span >CCode:</span></th>
+                <td id='table-data'><span>1039</span></td>
+              </tr>
+              <tr>
+                <th id='table-header'><span >Report To</span></th>
+                <td id='table-data'><span>Mr. Arun Pai</span></td>
+              </tr>
+              <tr>
+                <th id='table-header'><span >Reporting @</span></th>
+                <td id='table-data'><span ></span></td>
+              </tr>
+              <tr>
+                <th id='table-header'><span >Remarks:</span></th>
+                <td id='table-data'><span ></span></td>
+              </tr>
+            </table>
+            <table id='table-invoice' className="firstTable">
+              <tr>
+                <th id='table-header'>Log No:</th>
+                <td id='table-data'>6786876</td>
+              </tr>
+              <tr>
+                <th id='table-header'>Date:</th>
+                <td id='table-data'>2356778</td>
+              </tr>
+              <tr>
+                <th id='table-header'>Duty Type:</th>
+                <td id='table-data'>Local</td>
+              </tr>
+              <tr>
+                <th id='table-header'>Vehicle Type:</th>
+                <td id='table-data'><span>SEDAN A/C</span></td>
+              </tr>
+              <tr>
+                <th id='table-header'><span >Vehicle No:</span></th>
+                <td id='table-data'><span>TN-11-BE-6744</span></td>
+              </tr>
+              <tr>
+                <th id='table-header'><span >Driver Name:</span></th>
+                <td id='table-data'><span>MR. ARUNACHALAM</span></td>
+              </tr>
+              <tr>
+                <th id='table-header'><span >Driver Mobile:</span></th>
+                <td id='table-data'><span>6369617469</span></td>
+              </tr>
+            </table>
+          </div>
+          <div className="secondTable">
+            <div className='vehicale-details-table'>
+              <table id='table-invoice' >
+                <thead>
+                  <tr>
+                    <th id='table-headers'><span ></span></th>
+                    <th id='table-headers'><span >DATE</span></th>
+                    <th id='table-headers'><span >HOURS</span></th>
+                    <th id='table-headers'><span >KMS</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td id='table-datas'><span >Closing</span></td>
+                    <td id='table-datas'><span >24/08/2023</span></td>
+                    <td id='table-datas'><span >01.01</span></td>
+                    <td id='table-datas'><span >285</span></td>
+                  </tr>
+                  <tr>
+                    <td id='table-datas'><span >Starting</span></td>
+                    <td id='table-datas'><span >24/08/2023</span></td>
+                    <td id='table-datas'><span >01.01</span></td>
+                    <td id='table-datas'><span >285</span></td>
+                  </tr>
+                  <tr>
+                    <td id='table-datas'><span >Total</span></td>
+                    <td id='table-datas'><span >0</span></td>
+                    <td id='table-datas'><span >0</span></td>
+                    <td id='table-datas'><span >0</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="guest-signature-details">
+              <div className="instruction">
+                <h5>SPL INSTRUCTION</h5>
+                <p id='line'>------------------</p>
+                <p id='line'>------------------</p>
+              </div>
+              <div className="guest-sign">
+                <p>Guest Signature</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='total-values'>
+          <div id='Totals'><span id='title'>Total Parking  </span><span>00</span></div>
+          <div id='Totals'><span id='title'>Total Permit  </span><span>00</span></div>
+        </div>
       </article>
-      {/* <img src={imageUrl} alt="Uploaded Invoice" /> */}
     </div>
   );
 };
@@ -139,6 +170,26 @@ const Invoice = () => {
             padding: 20;
             text-decoration: none;
             vertical-align: top;
+          }
+          
+          .invoice-container-header {
+            display: flex;
+            align-content: center;
+            justify-content: space-between;
+          }
+          
+          .logo-image-invoice img {
+            width: 100px;
+          
+          }
+          
+          .invoice-address {
+            width: 230px;
+          }
+          
+          .invoice-address .invoice-contact-details {
+            font-weight: 600;
+            font-size: 13px;
           }
           
           /* heading */
@@ -180,12 +231,6 @@ const Invoice = () => {
             float: right;
           }
           
-          .invoice-wrapper header span {
-            margin: 0 0 1em 1em;
-            max-height: 25%;
-            max-width: 60%;
-            position: relative;
-          }
           
           .invoice-wrapper header img {
             max-height: 50%;
@@ -200,11 +245,7 @@ const Invoice = () => {
           
           /* article */
           
-          .invoice-wrapper article,
-          article address,
-          table {
-            margin: 0 0 3em;
-          }
+          
           
           .invoice-wrapper article h1 {
             clip: rect(0 0 0 0);
@@ -224,73 +265,134 @@ const Invoice = () => {
           }
           
           /* table */
+          .main-invoice-container {
+            border: 1px solid #000;
           
-          .invoice-wrapper table {
+          }
+          
+          .first-table-invoice-container {
+            display: flex;
+          }
+          
+          .secondTable {
+            display: flex;
+            border-top: 1px solid #000;
+          }
+          
+          .vehicale-details-table {
+            width: 60%;
+            border-right: 1px solid #000;
+          }
+          
+          .vehicale-details-table #table-headers,
+          #table-datas {
+            padding: 6px;
+            border-radius: 2px;
+            border: 1px solid #ccc;
+          }
+          
+          .guest-signature-details {
+            display: flex;
+            width: 40%;
+            padding: 5px;
+          
+          }
+          
+          .guest-signature-details .instruction {
+            width: 70%;
+            position: relative;
+          }
+          
+          .guest-signature-details .guest-sign {
+            width: 40%;
+            position: relative;
+          }
+          
+          .guest-signature-details .guest-sign p {
+            position: absolute;
+            bottom: 0;
+            font-size: 10px;
+            font-weight: bold;
+            text-decoration: underline;
+          }
+          
+          .invoice-wrapper #table-invoice {
             font-size: 75%;
             table-layout: auto;
             width: 100%;
           }
           
-          .invoice-wrapper table {
-            border-collapse: separate; 
+          .invoice-wrapper #table-invoice {
+            border-collapse: separate;
             border-spacing: 2px;
           }
           
-          .invoice-wrapper th,
-          td {
+          .invoice-wrapper #table-header,
+          #table-data {
             border-width: 1px;
-            padding: 1em;
+            padding: 6px;
             position: relative;
             text-align: left;
           }
           
-          .invoice-wrapper th,
-          td {
-            border-radius: 0.25em;
-            border-style: solid;
-          }
-          
-          .invoice-wrapper th {
+          .invoice-wrapper #table-header {
             background: #EEE;
-            border-color: #BBB;
+            padding: 6px;
+            border: none;
           }
           
-          .invoice-wrapper td {
-            border-color: #DDD;
+          .invoice-wrapper #table-data {
+            padding: 6px;
+            border: none;
+            /* width: 100px; */
           }
           
           /* table firstTable */
-          .invoice-wrapper table.firstleftTable {
+          .invoice-wrapper #table-invoice.firstleftTable {
             float: left;
             width: 45%;
-          
+            height: 50%;
           }
           
-          .invoice-wrapper table.firstTable {
+          .invoice-wrapper #table-invoice.firstTable {
             float: right;
             width: 45%;
-        
-          }
-          .invoice-wrapper table.firstbottomTable {
-            float: right;
-            width: 100%;
-            
+            height: 50%;
           }
           
-          .invoice-wrapper table.firstTable:after {
+          .invoice-wrapper #table-invoice.firstbottomTable {
+            float: right;
+            width: 100%;
+            height: 50%;
+          }
+          
+          .invoice-wrapper #table-invoice.firstTable:after {
             clear: both;
             content: "";
             display: table;
           }
           
+          
           /* table firstTable */
           
-          .invoice-wrapper table.firstTable th {
+          .invoice-wrapper #table-invoice.firstTable #table-header {
             width: 40%;
           }
           
-          .invoice-wrapper table.firstTable td {
+          .invoice-wrapper #table-invoice.firstTable #table-data {
             width: 60%;
+          }
+          
+          .total-values {
+            display: flex;
+          }
+          
+          .total-values #Totals {
+            margin: 10px;
+          }
+          
+          .total-values #Totals #title {
+            font-weight: bold;
           }
           
           .invoice-wrapper form {

@@ -1,14 +1,10 @@
 import React from 'react';
 import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-import './invoice.css'; // Import your CSS file for styling
-import { Button } from '@material-ui/core'; // Import necessary components
+import './invoice.css'; 
+import { Button } from '@material-ui/core'; 
 import ReactDOMServer from 'react-dom/server';
 
-
 const PrintableInvoice = () => {
-
-
-
   return (
     <div className="invoice-wrapper">
       <article>
@@ -18,7 +14,6 @@ const PrintableInvoice = () => {
           </div>
           <div className="invoice-address">
             <address >
-              {/* <p><h3>JESSY CABS</h3></p> */}
               <p className='invoice-address-detials'>No:8/7, 11th Street, Nandanam(Extn.),
                 Nandanam, Chennai-600 035
                 booking@jessycabs.in</p>

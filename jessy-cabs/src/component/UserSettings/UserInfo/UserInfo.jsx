@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import "./UserInfo.css";
 import Input from '@mui/material/Input';
 import Button from "@mui/material/Button";
@@ -7,8 +8,6 @@ import InputLabel from "@mui/material/InputLabel";
 import { TextField, FormControl } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
-
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 import IconButton from '@mui/material/IconButton';
@@ -17,20 +16,137 @@ import InputAdornment from '@mui/material/InputAdornment';
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
-
 // FONTAWESOME
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
+// import ImageDisplay from './ImageDisplay'; // Import your custom ImageDisplay component here
 
-const UserSetting = ({ defaultImage, onUpdate }) => {
+const UserSetting = ({ defaultImage, userid }) => {
+    const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const [rows] = useState([]);
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [showPasswords, setShowPasswords] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [editMode, setEditMode] = useState(false);
-    const [errorMessage] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [selectedCustomerId, setSelectedCustomerId] = useState({});
+
+
+    const [book, setBook] = useState({
+        userid: '',
+        ufirstname: '',
+        ulastname: '',
+        mobileno: '',
+        email: '',
+        designation: '',
+        userpassword: '',
+        userconfirmpassword: '',
+    });
+
+    const handleCancel = () => {
+        setBook((prevBook) => ({
+            ...prevBook,
+            userid: '',
+            ufirstname: '',
+            ulastname: '',
+            mobileno: '',
+            email: '',
+            designation: '',
+            userpassword: '',
+            userconfirmpassword: '',
+        }));
+        setSelectedCustomerData({});
+    };
+    //password match
+    useEffect(() => {
+        if (error || !passwordsMatch) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [error, passwordsMatch]);
+
+    const validatePasswordMatch = () => {
+        const password = selectedCustomerData?.userpassword || book.userpassword;
+        const confirmPassword = selectedCustomerData?.userconfirmpassword || book.userconfirmpassword;
+        setPasswordsMatch(password === confirmPassword);
+    };
+
+
+    const handleKeyDown = useCallback(async (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            try {
+                const response = await axios.get(`http://localhost:8081/usercreation/${event.target.value}`);
+                const bookingDetails = response.data;
+                console.log(bookingDetails);
+                setBook(bookingDetails);
+                setSelectedCustomerData(bookingDetails);
+                setSelectedCustomerId(bookingDetails.customerId);
+            } catch (error) {
+                console.error('Error retrieving booking details:', error);
+            }
+        }
+    }, []);
+
+    const handleUpdate = async () => {
+        if (password === confirmPassword) {
+            setPasswordsMatch(true);
+            validatePasswordMatch();
+        }
+        try {
+            console.log('Edit button clicked');
+            const selectedCustomer = rows.find((row) => row.userid === userid);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData, userid };
+            await axios.put(`http://localhost:8081/usercreation/${book.userid}`, updatedCustomer);
+            console.log('Customer updated');    
+            handleCancel();
+            validatePasswordMatch();
+        } catch (error) {
+            console.error('Error updating customer:', error);
+        }
+    };
+
+
+    const handleChange = (event) => {
+        const { name, value, checked, type } = event.target;
+
+        if (type === 'checkbox') {
+            // For checkboxes, update the state based on the checked value
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: checked,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: checked,
+            }));
+        } else {
+            // For other input fields, update the state based on the value
+            setBook((prevBook) => ({
+                ...prevBook,
+                [name]: value,
+            }));
+            setSelectedCustomerData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+            if (name === 'userpassword') {
+                setPassword(value);
+            } else if (name === 'userconfirmpassword') {
+                setConfirmPassword(value);
+            }
+        }
+    };
+
 
     const handleClickShowPasswords = () => {
         setShowPasswords((show) => !show);
@@ -48,15 +164,26 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
         event.preventDefault();
     };
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
+    const [file, setFile] = useState(null);
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0]
+        setFile(file);
         setSelectedImage(file);
-        onUpdate(file);
+    };
+
+    const handleUpload = () => {
+        if (!file) {
+            setErrorMessage('Please select an image to upload.');
+            setError(true);
+            return;
+        }
     };
 
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
+        setErrorMessage('');
     };
 
     useEffect(() => {
@@ -81,7 +208,6 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
         setEditMode((prevEditMode) => !prevEditMode);
     };
 
-
     return (
         <div className="userinfo-form Scroll-Style-hide">
             <form>
@@ -103,7 +229,8 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                             Upload
                                             <ModeEditIcon />
                                             <input
-                                                onChange={handleImageChange}
+                                                onChange={handleFileChange}
+                                                onClick={handleUpload}
                                                 type="file"
                                                 style={{ display: "none" }}
                                             />
@@ -113,6 +240,26 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                             </div>
                             <div className='container-userinfo-right'>
                                 <div className="input-field">
+                                    <div className="input">
+                                        <div className="icone">
+                                            <BadgeIcon color="action" />
+                                        </div>
+                                        <TextField
+                                            margin="normal"
+                                            size="small"
+                                            id="id"
+                                            label="ID"
+                                            name="userid"
+                                            value={selectedCustomerData?.userid || book.userid}
+                                            onChange={handleChange}
+                                            onKeyDown={handleKeyDown}
+                                            variant="standard"
+                                            disabled={!editMode}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="input-field">
+
                                     <div className="input" style={{ width: "200px" }}>
                                         <div className="icone">
                                             <BadgeIcon color="action" />
@@ -121,7 +268,10 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                             size="small"
                                             id="first-name"
                                             label="First Name"
-                                            name="first-name"
+                                            name="ufirstname"
+                                            autoComplete="new-password"
+                                            value={selectedCustomerData?.ufirstname || book.ufirstname}
+                                            onChange={handleChange}
                                             autoFocus
                                             disabled={!editMode}
                                         />
@@ -131,7 +281,10 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                             size="small"
                                             id="last-name"
                                             label="Last Name"
-                                            name="last-name"
+                                            name="ulastname"
+                                            autoComplete="new-password"
+                                            value={selectedCustomerData?.ulastname || book.ulastname}
+                                            onChange={handleChange}
                                             autoFocus
                                             disabled={!editMode}
                                         />
@@ -145,7 +298,10 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                             size="small"
                                             id="mobile"
                                             label="Mobile"
-                                            name="mobile"
+                                            name="mobileno"
+                                            autoComplete="new-password"
+                                            value={selectedCustomerData?.mobileno || book.mobileno}
+                                            onChange={handleChange}
                                             autoFocus
                                             disabled={!editMode}
                                         />
@@ -162,6 +318,9 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                             id="email"
                                             label="Email"
                                             name="email"
+                                            autoComplete="new-password"
+                                            value={selectedCustomerData?.email || book.email}
+                                            onChange={handleChange}
                                             autoFocus
                                             disabled={!editMode}
                                         />
@@ -174,7 +333,10 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                             size="small"
                                             id="role"
                                             label="Role"
-                                            name="role"
+                                            name="designation"
+                                            autoComplete="new-password"
+                                            value={selectedCustomerData?.designation || book.designation}
+                                            onChange={handleChange}
                                             autoFocus
                                             disabled={!editMode}
                                         />
@@ -189,20 +351,23 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                             <InputLabel htmlFor="password">Password</InputLabel>
                                             <Input
                                                 name="userpassword"
+                                                value={selectedCustomerData?.userpassword || book.userpassword}
+                                                onChange={handleChange}
                                                 id="password"
                                                 type={showPasswords ? 'text' : 'password'}
+                                                disabled={!editMode}
                                                 endAdornment={
                                                     <InputAdornment position="end">
                                                         <IconButton
                                                             aria-label="toggle password visibility"
                                                             onClick={handleClickShowPasswords}
                                                             onMouseDown={handleMouseDownPasswords}
+                                                            disabled={!editMode}
                                                         >
                                                             {showPasswords ? <Visibility /> : <VisibilityOff />}
                                                         </IconButton>
                                                     </InputAdornment>
                                                 }
-                                                disabled={!editMode}
                                             />
                                         </FormControl>
                                     </div>
@@ -214,20 +379,23 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                             <InputLabel htmlFor="confirm-password">Confirm Password</InputLabel>
                                             <Input
                                                 name="userconfirmpassword"
+                                                value={selectedCustomerData?.userconfirmpassword || book.userconfirmpassword}
+                                                onChange={handleChange}
                                                 id="confirm-password"
                                                 type={showPassword ? 'text' : 'password'}
+                                                disabled={!editMode}
                                                 endAdornment={
                                                     <InputAdornment position="end">
                                                         <IconButton
                                                             aria-label="confirm-password"
                                                             onClick={handleClickShowPassword}
                                                             onMouseDown={handleMouseDownPassword}
+                                                            disabled={!editMode}
                                                         >
                                                             {showPassword ? <Visibility /> : <VisibilityOff />}
                                                         </IconButton>
                                                     </InputAdornment>
                                                 }
-                                                disabled={!editMode}
                                             />
                                         </FormControl>
                                     </div>
@@ -240,14 +408,12 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                             </Button>
                                         </div>
                                         <div className="input" style={{ width: "150px" }}>
-                                            <Button variant="contained" onClick={() => {
-                                                setSuccess(true);
-                                                toggleEditMode();
-                                            }}>
+                                            <Button variant="contained"
+                                                onClick={() => handleUpdate(selectedCustomerId)}
+                                            >
                                                 Save
                                             </Button>
                                         </div>
-
                                     </div>
                                 ) : (
                                     <div className="user-photo-edit">
@@ -260,6 +426,12 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
                                     <div className='alert-popup Error' >
                                         <span className='cancel-btn' onClick={hidePopup}>x</span>
                                         <p>{errorMessage}</p>
+                                    </div>
+                                }
+                                {!passwordsMatch &&
+                                    <div className='alert-popup Warning' >
+                                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                                        <p>Passwords do not match. Please try again.</p>
                                     </div>
                                 }
                                 {success &&
@@ -276,5 +448,4 @@ const UserSetting = ({ defaultImage, onUpdate }) => {
         </div>
     );
 };
-
 export default UserSetting;

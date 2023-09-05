@@ -105,7 +105,7 @@ const UserSetting = ({ defaultImage, userid }) => {
         try {
             console.log('Edit button clicked');
             const selectedCustomer = rows.find((row) => row.userid === userid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData, userid };
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
             await axios.put(`http://localhost:8081/usercreation/${book.userid}`, updatedCustomer);
             console.log('Customer updated');    
             handleCancel();

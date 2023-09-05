@@ -76,6 +76,7 @@ const Sidebar = () => {
         <div className="menu">
           {Sidebardata.map((item, index) => (
             <MenuItem
+              key={item.key}
               item={item}
               index={index}
               currentPath={currentPath}

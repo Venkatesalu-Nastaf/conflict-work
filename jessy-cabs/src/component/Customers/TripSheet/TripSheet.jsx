@@ -174,19 +174,38 @@ const TripSheet = () => {
   const [imgpopupOpen, setimgPopupOpen] = useState(false);
 
   // const [isInvoiceDialogOpen, setIsInvoiceDialogOpen] = useState(false);
+  const [tripSheetData, setTripSheetData] = useState({
+    customer: '',
+    address1: '',
+    orderedby: '',
+    empolyeeno: '',
+    customercode: '',
+    guestname: '',
+    tripid: '',
+    startdate: '',
+    duty: '',
+    vehType: '',
+    vehRegNo: '',
+    driverName: '',
+    mobileNo: '',
+    closedate: '',
+    starttime: '',
+    startkm: '',
+    closetime: '',
+    closekm: '',
+    remark: '',
+    parking: '',
+    permit: '',
+  });
 
-  const [tripSheetDetails, setTripSheetDetails] = useState(false);
+  // const invoiceData = {
+  //   customer: 'Customer Name', // Example data, replace with your actual invoice data
+  // };
+
+  // const [tripSheetDetails] = useState(false);
 
 
   const handleETripsheetClick = (row) => {
-    const updatedTripSheetDetails = {
-      tripId: row.tripid,
-  
-      // Add more details as needed
-    };
-    console.log(updatedTripSheetDetails);
-    // Set the updated tripSheetDetails
-    setTripSheetDetails(updatedTripSheetDetails);
     setPopupOpen(true);
   };
   const handlePopupClose = () => {
@@ -312,13 +331,7 @@ const TripSheet = () => {
 
     // Define a list of parameter keys
     const parameterKeys = [
-      'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby',
-      'mobileno', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2',
-      'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'registertime',
-      'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
-      'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
-      'username', 'tripdate', 'triptime', 'emaildoggle', 'hiretypes', 'travelsname',
-      'vehicleregisterno', 'vehiclemodule', 'driverName', 'driverphone', 'travelsemail'
+      'bookingno', 'status', 'tripid', 'customer', 'orderedby', 'mobileNo', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2', 'city', 'report', 'vehType', 'startdate', 'starttime', 'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'emaildoggle', 'hiretypes', 'travelsname', 'vehicleregisterno', 'vehiclemodule', 'driverName', 'driverphone', 'travelsemail'
     ];
 
     // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
@@ -331,7 +344,7 @@ const TripSheet = () => {
 
     // Set the status separately
     formData['status'] = statusValue;
-
+    setTripSheetData(formData);
     setBook(formData);
     setFormData(formData);
   }, [location]);
@@ -643,6 +656,10 @@ const TripSheet = () => {
       ...prevValues,
       [name]: selectedOption,
     }));
+    setTripSheetData((prevValues) => ({
+      ...prevValues,
+      [name]: selectedOption,
+    }));
   };
 
   const handleDateChange = (date, name) => {
@@ -652,6 +669,10 @@ const TripSheet = () => {
       [name]: formattedDate,
     }));
     setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: formattedDate,
+    }));
+    setTripSheetData((prevValues) => ({
       ...prevValues,
       [name]: formattedDate,
     }));
@@ -729,6 +750,7 @@ const TripSheet = () => {
     const { name, value, checked } = event.target;
     setSelectedCustomerData({ ...selectedCustomerData, [name]: value });
     setFormData({ ...formData, [name]: value });
+    setTripSheetData({ ...tripSheetData, [name]: value });
 
     if (event.target.type === 'checkbox') {
       setBook((prevBook) => ({
@@ -747,6 +769,10 @@ const TripSheet = () => {
         ...prevValues,
         [name]: checked,
       }));
+      setTripSheetData((prevValues) => ({
+        ...prevValues,
+        [name]: checked,
+      }));
     } else {
       // Check if the field is the time field
       if (name === 'starttime') {
@@ -760,6 +786,10 @@ const TripSheet = () => {
           [name]: formattedTime,
         }));
         setFormData((prevData) => ({
+          ...prevData,
+          [name]: formattedTime,
+        }));
+        setTripSheetData((prevData) => ({
           ...prevData,
           [name]: formattedTime,
         }));
@@ -784,7 +814,7 @@ const TripSheet = () => {
           ...prevValues,
           [name]: value,
         }));
-        setTripSheetDetails((prevValues) => ({
+        setTripSheetData((prevValues) => ({
           ...prevValues,
           [name]: value,
         }));
@@ -844,7 +874,7 @@ const TripSheet = () => {
                   id="tripid"
                   label="Trip Sheet No"
                   name="tripid"
-                  value={formData.tripid || selectedCustomerData.tripid || book.tripid || tripSheetDetails.tripId}
+                  value={formData.tripid || selectedCustomerData.tripid || book.tripid}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   autoFocus
@@ -1648,8 +1678,8 @@ const TripSheet = () => {
               </div>
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  <Invoice tripSheetDetails={tripSheetDetails} />
-                  {/* <img src={imageUrl} alt="Uploaded Invoice" style={{ maxWidth: '100%' }} /> */}
+                  {/* <Invoice tripSheetDetails={tripSheetDetails} /> */}
+                  <Invoice tripSheetData={tripSheetData} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">

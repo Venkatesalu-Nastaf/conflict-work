@@ -1,10 +1,10 @@
 import React from 'react';
 import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-import './invoice.css'; 
-import { Button } from '@material-ui/core'; 
+import './invoice.css';
+import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 
-const PrintableInvoice = () => {
+const PrintableInvoice = ({ tripSheetData }) => {
   return (
     <div className="invoice-wrapper">
       <article>
@@ -25,66 +25,66 @@ const PrintableInvoice = () => {
           <div className='first-table-invoice-container'>
             <table id='table-invoice' className="firstleftTable">
               <tr>
-                <th id='table-header'><span >Client Name:</span></th>
-                <td id='table-data'><span >Prodapt</span></td>
+                <th id='table-header'><span>Client Name:</span></th>
+                <td id='table-data'><span >{tripSheetData.customer}</span></td>
               </tr>
               <tr>
-                <th id='table-header'><span >Address:</span></th>
-                <td id='table-data'><span >Prince Infocity-II,4th floor</span></td>
+                <th id='table-header'><span>Address:</span></th>
+                <td id='table-data'><span >{tripSheetData.address1}</span></td>
               </tr>
               <tr>
-                <th id='table-header'><span >Ordered By:</span></th>
-                <td id='table-data'><span>Prodapt</span></td>
+                <th id='table-header'><span>Ordered By:</span></th>
+                <td id='table-data'><span>{tripSheetData.orderedby}</span></td>
               </tr>
               <tr>
-                <th id='table-header'><span >Emp. No:</span></th>
-                <td id='table-data'><span>1039</span></td>
+                <th id='table-header'><span>Emp. No:</span></th>
+                <td id='table-data'><span>{tripSheetData.empolyeeno}</span></td>
               </tr>
               <tr>
-                <th id='table-header'><span >CCode:</span></th>
-                <td id='table-data'><span>1039</span></td>
+                <th id='table-header'><span>CCode:</span></th>
+                <td id='table-data'><span>{tripSheetData.customercode}</span></td>
               </tr>
               <tr>
-                <th id='table-header'><span >Report To</span></th>
-                <td id='table-data'><span>Mr. Arun Pai</span></td>
+                <th id='table-header'><span>Report To</span></th>
+                <td id='table-data'><span>{tripSheetData.guestname}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span >Reporting @</span></th>
-                <td id='table-data'><span ></span></td>
+                <td id='table-data'><span></span></td>
               </tr>
               <tr>
-                <th id='table-header'><span >Remarks:</span></th>
-                <td id='table-data'><span ></span></td>
+                <th id='table-header'><span>Remarks:</span></th>
+                <td id='table-data'><span>{tripSheetData.remark}</span></td>
               </tr>
             </table>
             <table id='table-invoice' className="firstTable">
               <tr>
                 <th id='table-header'>Log No:</th>
-                <td id='table-data'>6786876</td>
+                <td id='table-data'>{tripSheetData.tripid}</td>
               </tr>
               <tr>
                 <th id='table-header'>Date:</th>
-                <td id='table-data'>2356778</td>
+                <td id='table-data'>{tripSheetData.startdate}</td>
               </tr>
               <tr>
                 <th id='table-header'>Duty Type:</th>
-                <td id='table-data'>Local</td>
+                <td id='table-data'>{tripSheetData.duty}</td>
               </tr>
               <tr>
                 <th id='table-header'>Vehicle Type:</th>
-                <td id='table-data'><span>SEDAN A/C</span></td>
+                <td id='table-data'><span>{tripSheetData.vehType}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span >Vehicle No:</span></th>
-                <td id='table-data'><span>TN-11-BE-6744</span></td>
+                <td id='table-data'><span>{tripSheetData.vehRegNo}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span >Driver Name:</span></th>
-                <td id='table-data'><span>MR. ARUNACHALAM</span></td>
+                <td id='table-data'><span>{tripSheetData.driverName}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span >Driver Mobile:</span></th>
-                <td id='table-data'><span>6369617469</span></td>
+                <td id='table-data'><span>{tripSheetData.mobileNo}</span></td>
               </tr>
             </table>
           </div>
@@ -102,15 +102,15 @@ const PrintableInvoice = () => {
                 <tbody>
                   <tr>
                     <td id='table-datas'><span >Closing</span></td>
-                    <td id='table-datas'><span >24/08/2023</span></td>
-                    <td id='table-datas'><span >01.01</span></td>
-                    <td id='table-datas'><span >285</span></td>
+                    <td id='table-datas'><span >{tripSheetData.closedate}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.closetime}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.closekm}</span></td>
                   </tr>
                   <tr>
                     <td id='table-datas'><span >Starting</span></td>
-                    <td id='table-datas'><span >24/08/2023</span></td>
-                    <td id='table-datas'><span >01.01</span></td>
-                    <td id='table-datas'><span >285</span></td>
+                    <td id='table-datas'><span >{tripSheetData.startdate}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.starttime}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.startkm}</span></td>
                   </tr>
                   <tr>
                     <td id='table-datas'><span >Total</span></td>
@@ -134,16 +134,20 @@ const PrintableInvoice = () => {
           </div>
         </div>
         <div className='total-values'>
-          <div id='Totals'><span id='title'>Total Parking  </span><span>00</span></div>
-          <div id='Totals'><span id='title'>Total Permit  </span><span>00</span></div>
+          <div id='Totals'><span id='title'>Total Parking  </span><span>{tripSheetData.parking}</span></div>
+          <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit}</span></div>
         </div>
       </article>
     </div>
   );
 };
-const Invoice = () => {
+const Invoice = ({ tripSheetData }) => {
+
   const handlePrint = () => {
-    const invoiceContent = ReactDOMServer.renderToString(<PrintableInvoice />);
+    // const invoiceContent = ReactDOMServer.renderToString(<PrintableInvoice />);
+    const invoiceContent = ReactDOMServer.renderToString(
+      <PrintableInvoice tripSheetData={tripSheetData} />
+    );
     const printWindow = window.open('', '_blank');
     printWindow.document.open();
     printWindow.document.write(`
@@ -175,7 +179,7 @@ const Invoice = () => {
           
           .logo-image-invoice img {
             width: 100px;
-            margin: 20px 10px ;
+            margin: 20px 10px;
           }
           
           .invoice-address {
@@ -337,6 +341,7 @@ const Invoice = () => {
           }
           
           .invoice-wrapper #table-data {
+            float:left;
             padding: 6px;
             border: none;
             /* width: 100px; */
@@ -448,8 +453,9 @@ const Invoice = () => {
 
   return (
     <div className="invoice-wrapper">
-      <PrintableInvoice />
-      <Button onClick={handlePrint}>Print</Button>
+      {/* <PrintableInvoice /> */}
+      <PrintableInvoice tripSheetData={tripSheetData} />
+      <Button variant="contained" onClick={handlePrint}>Print</Button>
     </div>
   );
 };

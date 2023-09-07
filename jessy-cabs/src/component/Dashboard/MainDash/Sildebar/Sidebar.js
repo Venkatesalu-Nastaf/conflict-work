@@ -14,7 +14,7 @@ export const Sidebardata = [
   },
   {
     heading: "Billing",
-    key: "/home/billing",
+    key: "/home/billing/billing",
   },
   {
     heading: "Options",

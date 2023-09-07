@@ -109,7 +109,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Billing"
-            to="/home/billing"
+            to="/home/billing/billing"
             menuItemKey="/home/billing"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}

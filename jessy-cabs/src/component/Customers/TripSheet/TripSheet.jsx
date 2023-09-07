@@ -96,7 +96,6 @@ import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 import Invoice from '../Invoice/Invoice';
 
-
 // const serverBaseUrl = 'http://localhost:8081/get-image/:filename';
 
 // UpdateTbaleRowsGPSSlider TABLE START

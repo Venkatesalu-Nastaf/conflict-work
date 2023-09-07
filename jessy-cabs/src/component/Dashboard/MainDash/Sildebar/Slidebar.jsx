@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
-import { useNavigate, Link, useLocation } from "react-router-dom";
 import Logo from "./Logo-Img/logo.png";
-import { AiOutlineBars } from "@react-icons/all-files/ai/AiOutlineBars";
 import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+
+// ICONS
 import { BiHomeAlt } from "@react-icons/all-files/bi/BiHomeAlt";
 import { BiNotepad } from "@react-icons/all-files/bi/BiNotepad";
+import { AiOutlineBars } from "@react-icons/all-files/ai/AiOutlineBars";
 import { HiOutlineUsers } from "@react-icons/all-files/hi/HiOutlineUsers";
-import { AiOutlineFileProtect } from "@react-icons/all-files/ai/AiOutlineFileProtect";
-import { BiBarChartSquare } from "@react-icons/all-files/bi/BiBarChartSquare";
 import { FaUserAstronaut } from "@react-icons/all-files/fa/FaUserAstronaut";
+import { BiBarChartSquare } from "@react-icons/all-files/bi/BiBarChartSquare";
 import { AiOutlineSetting } from "@react-icons/all-files/ai/AiOutlineSetting";
+import { AiOutlineFileProtect } from "@react-icons/all-files/ai/AiOutlineFileProtect";
 
 const MenuItem = ({ label, to, menuItemKey, isActive, handleMenuItemClick, icon: Icon }) => {
   return (

@@ -30,8 +30,8 @@ const MenuItem = ({ label, to, menuItemKey, isActive, handleMenuItemClick, icon:
 
 const Sidebar = () => {
   const location = useLocation();
-  const currentPath = location.pathname;
   const navigate = useNavigate();
+  const currentPath = location.pathname;
   const [expanded, setExpanded] = useState(true);
 
   useEffect(() => {
@@ -39,7 +39,6 @@ const Sidebar = () => {
   }, [navigate]);
 
   const isActive = (itemKey) => {
-    // Check if the current path includes the itemKey
     return currentPath.includes(itemKey);
   };
 

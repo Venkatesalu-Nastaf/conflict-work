@@ -33,7 +33,7 @@ const Billings = () => {
     return (
         <div className='billings-conatiner' id='menu'>
             <div className='menu-bar'>
-                <MenuItem label="Billing" to='/home/billing' menuItemKey="Billing" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Billing" to='/home/billing/billing' menuItemKey="Billing" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Cash Flow" to='/home/billing/cashflow' menuItemKey="Cash Flow" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Profit & Loss" to='/home/billing/profitandloss' menuItemKey="Profit & Loss" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Driver Master" to='/home/customers/drivermaster' menuItemKey="Driver Master" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />

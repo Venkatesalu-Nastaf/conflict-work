@@ -79,7 +79,7 @@ function App() {
                 <Route path="/home/options/employes" element={<Employes />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>
-                <Route path="/home/billing/" element={<Billing />} />
+                <Route path="/home/billing/billing" element={<Billing />} />
                 <Route path="/home/billing/cashflow" element={<CashFlow />} />
                 <Route path="/home/billing/profitandloss" element={<ProfiteLoss />} />
               </Route>

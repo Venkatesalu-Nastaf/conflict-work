@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import { emailValidator, passwordValidator } from "./regexValidator";
 import "./Form.css";
 import portalimg from "../../assets/img/portal-img.jpg";
@@ -17,10 +17,6 @@ const Login = () => {
   const [input, setInput] = React.useState({ username: "", password: "" });
   const [errorMessage, seterrorMessage] = useState("");
   const [successMessage, setsuccessMessage] = useState("");
-  const [formData, setFormData] = useState({
-    username: '',
-    userpassword: '',
-  });
 
   const hidePopup = () => {
     setsuccessMessage(false);
@@ -45,54 +41,29 @@ const Login = () => {
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
   };
 
   React.useEffect(() => {
     if (localStorage.getItem("auth")) navigate("/");
   });
 
-  // const formSumitter = (e) => {
-  //   e.preventDefault();
-  //   setsuccessMessage("");
-  //   if (!emailValidator(input.username))
-  //     return seterrorMessage("Please enter valid user id");
-
-  //   if (!passwordValidator(input.password))
-  //     return seterrorMessage(
-  //       "Password should have minimum 8 character with the combination of uppercase, lowercase, numbers and specialcharaters"
-  //     );
-  //   // setsuccessMessage('Successfully Validated');
-  //   if (input.username !== "admin@gmail.com" || input.password !== "Admin@321")
-  //     return seterrorMessage("Invalid user id");
-
-  //   navigate("/home/dashboard");
-  //   localStorage.setItem("auth", true);
-  // };
-
-  const handleSubmit = async (e) => {
+  const formSumitter = (e) => {
     e.preventDefault();
+    setsuccessMessage("");
+    if (!emailValidator(input.username))
+      return seterrorMessage("Please enter valid user id");
 
-    try {
-      const response = await axios.post('/login', formData);
+    if (!passwordValidator(input.password))
+      return seterrorMessage(
+        "Password should have minimum 8 character with the combination of uppercase, lowercase, numbers and specialcharaters"
+      );
+    // setsuccessMessage('Successfully Validated');
+    if (input.username !== "admin@gmail.com" || input.password !== "Admin@321")
+      return seterrorMessage("Invalid user id");
 
-      if (response.status === 200) {
-        // Successful login
-        setMessage('Login successful');
-        // Redirect or perform other actions here
-      } else {
-        // Failed login
-        setMessage(response.data.error);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setMessage('An error occurred while logging in.');
-    }
+    navigate("/home/dashboard");
+    localStorage.setItem("auth", true);
   };
-  
   return (
     <div className="portal-container">
       <div className="glasses">
@@ -100,7 +71,7 @@ const Login = () => {
           <img className="portalimg" src={portalimg} alt="portalimg"></img>
         </div>
         <div className="right-col">
-          <form className="portal">
+          <form className="portal" onSubmit={formSumitter}>
             <div className="title">login</div>
             {errorMessage.length > 0 && (
               <div className='alert-popup Info'>
@@ -148,7 +119,7 @@ const Login = () => {
               <a href="/">forget password </a>
             </div>
             <div className="group button-group">
-              <button type="submit" className="signup-btn" onClick={hand}>
+              <button type="submit" className="signup-btn">
                 <span>Login</span>
               </button>
             </div>

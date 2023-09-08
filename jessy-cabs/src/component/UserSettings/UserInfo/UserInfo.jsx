@@ -80,22 +80,30 @@ const UserSetting = ({ defaultImage, userid }) => {
         setPasswordsMatch(password === confirmPassword);
     };
 
-
     const handleKeyDown = useCallback(async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`http://localhost:8081/usercreation/${event.target.value}`);
+                const filterValue = event.target.value; // Get the input value
+                const response = await axios.get(`http://localhost:8081/usercreation?filter=${filterValue}`);
                 const bookingDetails = response.data;
-                console.log(bookingDetails);
-                setBook(bookingDetails);
-                setSelectedCustomerData(bookingDetails);
-                setSelectedCustomerId(bookingDetails.customerId);
+
+                // Check if bookingDetails is an array and has at least one object
+                if (Array.isArray(bookingDetails) && bookingDetails.length > 0) {
+                    console.log('user details:', bookingDetails[0]); // Log the first object in the array
+
+                    // Set the state variables with data from the first object in the array
+                    setBook(bookingDetails[0]);
+                    setSelectedCustomerData(bookingDetails[0]);
+                } else {
+                    console.log('No user details found.');
+                }
             } catch (error) {
-                console.error('Error retrieving booking details:', error);
+                console.error('Error retrieving user details:', error);
             }
         }
     }, []);
+
 
     const handleUpdate = async () => {
         if (password === confirmPassword) {
@@ -107,7 +115,7 @@ const UserSetting = ({ defaultImage, userid }) => {
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
             await axios.put(`http://localhost:8081/usercreation/${book.userid}`, updatedCustomer);
-            console.log('Customer updated');    
+            console.log('Customer updated');
             handleCancel();
             validatePasswordMatch();
         } catch (error) {

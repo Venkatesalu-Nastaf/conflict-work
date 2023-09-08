@@ -52,7 +52,7 @@ const BookingChart = () => {
       const bookingData = response.data; // Fetch the booking data from the API response
       const bookingCounts = {};
       bookingData.forEach((booking) => {
-        const vehicleName = booking.vehiclemodule;
+        const vehicleName = booking.vehType;
         const formattedDate = dayjs(booking.bookingdate).format("YYYY-MM-DD");
         if (!bookingCounts[vehicleName]) {
           bookingCounts[vehicleName] = {};

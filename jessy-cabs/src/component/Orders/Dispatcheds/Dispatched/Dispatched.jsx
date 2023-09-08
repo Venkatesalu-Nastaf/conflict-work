@@ -10,7 +10,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Stations } from "./DispatchedData.js";
 import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import DescriptionIcon from "@mui/icons-material/Description";
+// import DescriptionIcon from "@mui/icons-material/Description";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -219,20 +219,6 @@ const Dispatched = () => {
                       <TextField {...params} label="Stations" />
                     }
                   />
-                </div>
-                <div className="input" >
-                  <Button
-                    variant="outlined"
-                    component="label"
-                    startIcon={<DescriptionIcon />}
-                  >
-                    Download
-                    <input
-                      type="file"
-
-                      style={{ display: "none" }}
-                    />
-                  </Button>
                 </div>
                 <div className="input" style={{ width: '170px' }}>
                   <Button variant="contained" onClick={handleButtontripsheet}>

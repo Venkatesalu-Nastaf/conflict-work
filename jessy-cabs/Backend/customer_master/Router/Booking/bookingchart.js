@@ -6,29 +6,33 @@ const db = require('../../../db');
 router.get('/booking', (req, res) => {
     const { fromDate, toDate } = req.query;
     const query = `
-      SELECT vehiclemodule, COUNT(*) AS count
+      SELECT vehType, COUNT(*) AS count
       FROM booking
       WHERE bookingdate BETWEEN ? AND ?
-      GROUP BY vehiclemodule
+      GROUP BY vehType
     `;
     const values = [fromDate, toDate];
-    pool.getConnection((err, connection) => {
+    db.getConnection((err, connection) => {
         if (err) {
             console.error('Error establishing database connection:', err);
             res.status(500).json({ error: 'Failed to connect to the database' });
             return;
         }
+        console.log('Database connection established.');
+
         connection.query(query, values, (err, results) => {
-            connection.release(); // Release the connection back to the pool
+            console.log('Query executed.');
+
+            connection.release();
             if (err) {
                 console.error('Error executing SQL query:', err);
                 res.status(500).json({ error: 'Failed to retrieve booking data' });
                 return;
             }
-            res.json(results); // Send the booking data as JSON response
+            res.json(results);
         });
     });
 });
-// End booking CHART database
 
-module.exports = router;
+// End booking CHART database
+module.exports = router; // Place module.exports here

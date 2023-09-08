@@ -87,7 +87,7 @@ app.use('/', usercreationRouter);
 // End user creation database
 // -----------------------------------------------------------------------------------------------------------
 // login page databse fetch:
-app.post('/login', (req, res) => {
+app.get('/login', (req, res) => {
   const { username, userpassword } = req.body;
   if (!username || !userpassword) {
     return res.status(400).json({ error: 'Username and userpassword are required.' });

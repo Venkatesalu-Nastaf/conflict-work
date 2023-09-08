@@ -35,7 +35,7 @@ const UserSetting = ({ defaultImage, userid }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-    const [selectedCustomerId, setSelectedCustomerId] = useState({});
+    const [selectedCustomerId] = useState({});
 
 
     const [book, setBook] = useState({

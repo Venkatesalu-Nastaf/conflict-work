@@ -4,16 +4,19 @@ import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';
 import Sidebar from "../MainDash/Sildebar/Slidebar";
-import { useNavigate, Outlet } from "react-router-dom"; 
+import { useNavigate, Outlet } from "react-router-dom";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import logoImage from "../MainDash/Sildebar/Logo-Img/logo.png";
-import { useThemes } from '../../UserSettings/Themes/ThemesContext'; 
+import { useThemes } from '../../UserSettings/Themes/ThemesContext';
 import { ThemesProvider } from '../../UserSettings/Themes/ThemesContext';
+import { useUser } from '../../form/UserContext';
 
 const MainDashboard = () => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const { selectedTheme } = useThemes(); // Access selected theme
+  const { user } = useUser();
+  // const navigate = useNavigate();
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -24,8 +27,14 @@ const MainDashboard = () => {
     },
   }));
 
+  // useEffect(() => {
+  //   if (!localStorage.getItem("auth")) navigate("/");
+  // }, [navigate]);
   useEffect(() => {
-    if (!localStorage.getItem("auth")) navigate("/");
+    // Check if user is authenticated
+    if (!localStorage.getItem("auth")) {
+      navigate("/"); // Redirect to the login page
+    }
   }, [navigate]);
 
   const handleLogout = (e) => {
@@ -35,8 +44,12 @@ const MainDashboard = () => {
     navigate("/");
   };
 
+  // const handleButtonClickUserInfo = () => {
+  //   window.location.href = '/home/usersettings/usersetting';
+  // };
   const handleButtonClickUserInfo = () => {
-    window.location.href = '/home/usersettings/usersetting';
+    // Always navigate when the user clicks the user name
+    navigate("/home/usersettings/usersetting");
   };
 
   return (
@@ -53,8 +66,13 @@ const MainDashboard = () => {
               <Avatar alt="userimage" src={logoImage} />
             </StyledBadge>
           </div>
+          {/* <div className="user-name-item">
+            <p onClick={handleButtonClickUserInfo}>{user.username}</p>
+          </div> */}
           <div className="user-name-item">
-            <p onClick={handleButtonClickUserInfo}>abdul fahad</p>
+            {user && user.username && (
+              <p onClick={handleButtonClickUserInfo}>{user.username}</p>
+            )}
           </div>
           <div className="logout-item">
             <FiLogOut className="logout-icon" onClick={handleLogout} />

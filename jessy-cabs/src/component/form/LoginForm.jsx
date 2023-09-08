@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from "react";
-import { emailValidator, passwordValidator } from "./regexValidator";
+import React, { useState, useEffect } from "react";
+// import { emailValidator, passwordValidator } from "./regexValidator";
 import "./Form.css";
 import portalimg from "../../assets/img/portal-img.jpg";
 import { useNavigate } from "react-router-dom";
@@ -8,20 +8,25 @@ import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircle
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
 import { BiHide } from "@react-icons/all-files/bi/BiHide";
 import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
+import axios from "axios"; // Import Axios for making HTTP requests
+import { useUser } from './UserContext'; // Import useUser from UserContext
+
 const Login = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const toggle = () => {
     setOpen(!open);
   };
-  const [input, setInput] = React.useState({ username: "", password: "" });
-  const [errorMessage, seterrorMessage] = useState("");
-  const [successMessage, setsuccessMessage] = useState("");
+  const [input, setInput] = React.useState({ username: "", userpassword: "" });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const { loginUser } = useUser(); 
 
   const hidePopup = () => {
-    setsuccessMessage(false);
-    seterrorMessage(false);
+    setSuccessMessage("");
+    setErrorMessage("");
   };
+
   useEffect(() => {
     if (errorMessage) {
       const timer = setTimeout(() => {
@@ -30,6 +35,7 @@ const Login = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [errorMessage]);
+
   useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
@@ -43,27 +49,32 @@ const Login = () => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (localStorage.getItem("auth")) navigate("/");
   });
 
-  const formSumitter = (e) => {
+  const formSubmitter = async (e) => {
     e.preventDefault();
-    setsuccessMessage("");
-    if (!emailValidator(input.username))
-      return seterrorMessage("Please enter valid user id");
+    setSuccessMessage("");
+    try {
+      const response = await axios.post("http://localhost:8081/login", input); // Make a POST request to your backend
 
-    if (!passwordValidator(input.password))
-      return seterrorMessage(
-        "Password should have minimum 8 character with the combination of uppercase, lowercase, numbers and specialcharaters"
-      );
-    // setsuccessMessage('Successfully Validated');
-    if (input.username !== "admin@gmail.com" || input.password !== "Admin@321")
-      return seterrorMessage("Invalid user id");
-
-    navigate("/home/dashboard");
-    localStorage.setItem("auth", true);
+      if (response.status === 200) {
+        // Successful login
+        loginUser(input.username);
+        setSuccessMessage("Login successful");
+        navigate("/home/dashboard");
+        localStorage.setItem("auth", true);
+      } else {
+        // Failed login
+        setErrorMessage(response.data.error);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setErrorMessage("An error occurred while logging in.");
+    }
   };
+
   return (
     <div className="portal-container">
       <div className="glasses">
@@ -71,17 +82,21 @@ const Login = () => {
           <img className="portalimg" src={portalimg} alt="portalimg"></img>
         </div>
         <div className="right-col">
-          <form className="portal" onSubmit={formSumitter}>
+          <form className="portal" onSubmit={formSubmitter}>
             <div className="title">login</div>
             {errorMessage.length > 0 && (
-              <div className='alert-popup Info'>
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <div className="alert-popup Info">
+                <span className="cancel-btn" onClick={hidePopup}>
+                  x
+                </span>
                 <p>{errorMessage}</p>
               </div>
             )}
             {successMessage.length > 0 && (
-              <div className='alert-popup Error'>
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <div className="alert-popup Error">
+                <span className="cancel-btn" onClick={hidePopup}>
+                  x
+                </span>
                 {successMessage}
               </div>
             )}
@@ -100,7 +115,7 @@ const Login = () => {
             <div className="user-input">
               <input
                 type={open === false ? "password" : "text"}
-                name="password"
+                name="userpassword"
                 autoComplete="off"
                 onChange={handleChange}
                 required

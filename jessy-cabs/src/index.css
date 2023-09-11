@@ -23,9 +23,20 @@ body {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
+.Info .popup-icon {
+  background-color: #60a5fa;
+}
+
+.Warning .popup-icon {
+  background-color: #f59e0b;
+}
+
 .Error .popup-icon {
   background-color: rgb(236, 43, 88);
+}
 
+.Success .popup-icon {
+  background-color: #10b981;
 }
 
 .Info {
@@ -42,9 +53,7 @@ body {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-.Success .popup-icon {
-  background-color: rgb(52, 135, 56);
-}
+
 
 .alert-popup p {
   text-transform: capitalize;

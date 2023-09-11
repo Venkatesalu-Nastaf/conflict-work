@@ -23,9 +23,12 @@ import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 
+// REACT ICONS
+// import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
-import ClearIcon from '@mui/icons-material/Clear';  
+import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -33,6 +36,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -468,11 +472,16 @@ const UserCreation = () => {
           }
           {!passwordsMatch &&
             <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>Passwords do not match. Please try again.</p>
             </div>
           }
+          {/* <div className='alert-popup Info' >
+            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>Info Messages !.</p>
+          </div> */}
           {success &&
             <div className='alert-popup Success' >
               <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>

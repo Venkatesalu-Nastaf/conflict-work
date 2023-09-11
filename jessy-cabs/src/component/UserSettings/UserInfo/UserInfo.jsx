@@ -6,18 +6,24 @@ import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import InputLabel from "@mui/material/InputLabel";
 import { TextField, FormControl } from "@mui/material";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 // ICONS
-import ClearIcon from '@mui/icons-material/Clear';  
+import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import IconButton from '@mui/material/IconButton';
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+
+// REACT ICONS
+// import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+
 // FONTAWESOME
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -441,10 +447,16 @@ const UserSetting = ({ defaultImage, userid }) => {
                                 }
                                 {!passwordsMatch &&
                                     <div className='alert-popup Warning' >
-                                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                                         <p>Passwords do not match. Please try again.</p>
                                     </div>
                                 }
+                                {/* <div className='alert-popup Info' >
+                                    <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                    <p>Info Messages !.</p>
+                                </div> */}
                                 {success &&
                                     <div className='alert-popup Success' >
                                         <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>

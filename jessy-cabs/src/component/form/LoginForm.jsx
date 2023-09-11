@@ -84,8 +84,7 @@ const Login = () => {
           <img className="portalimg" src={portalimg} alt="portalimg"></img>
         </div>
         <div className="right-col">
-          <form className="portal">
-          {/* <form className="portal" onSubmit={formSubmitter} > */}
+          <form className="portal" onSubmit={formSubmitter} >
             <div className="title">login</div>
             {errorMessage.length > 0 && (
               <div className='alert-popup Error' >

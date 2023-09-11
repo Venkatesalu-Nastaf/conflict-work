@@ -64,7 +64,7 @@ body {
   align-items: center;
   position: fixed;
   top: 120px;
-  right: 20px;
+  right: 50px;
   padding: 4px 15px;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -97,7 +97,7 @@ body {
   }
 
   to {
-    transform: translateX(0);
+    transform: translateX(10);
     opacity: 1;
   }
 }

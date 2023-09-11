@@ -17,12 +17,14 @@ import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 
 // REACT ICONS
 // import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+
 
 // FONTAWESOME
 import { faLock } from "@fortawesome/free-solid-svg-icons";
@@ -256,7 +258,7 @@ const UserSetting = ({ defaultImage, userid }) => {
                             </div>
                             <div className='container-userinfo-right'>
                                 <div className="input-field">
-                                    <div className="input">
+                                    <div className="input" style={{ width: "300px" }}>
                                         <div className="icone">
                                             <BadgeIcon color="action" />
                                         </div>
@@ -269,13 +271,43 @@ const UserSetting = ({ defaultImage, userid }) => {
                                             value={selectedCustomerData?.userid || book.userid}
                                             onChange={handleChange}
                                             onKeyDown={handleKeyDown}
-                                            variant="standard"
+                                            disabled={!editMode}
+                                        />
+                                    </div>
+                                    <div className="input" style={{ width: "300px" }}>
+                                        <div className="icone">
+                                            <WorkspacePremiumIcon color="action" />
+                                        </div>
+                                        <TextField
+                                            size="small"
+                                            id="role"
+                                            label="Role"
+                                            name="designation"
+                                            autoComplete="new-password"
+                                            value={selectedCustomerData?.designation || book.designation}
+                                            onChange={handleChange}
+                                            autoFocus
                                             disabled={!editMode}
                                         />
                                     </div>
                                 </div>
                                 <div className="input-field">
-
+                                    <div className="input" >
+                                        <div className="icone">
+                                            <AccountCircleIcon color="action" />
+                                        </div>
+                                        <TextField
+                                            size="small"
+                                            id="role"
+                                            label="UserName"
+                                            name="designation"
+                                            autoComplete="new-password"
+                                            value={selectedCustomerData?.designation || book.designation}
+                                            onChange={handleChange}
+                                            autoFocus
+                                            disabled={!editMode}
+                                        />
+                                    </div>
                                     <div className="input" style={{ width: "200px" }}>
                                         <div className="icone">
                                             <BadgeIcon color="action" />
@@ -305,6 +337,9 @@ const UserSetting = ({ defaultImage, userid }) => {
                                             disabled={!editMode}
                                         />
                                     </div>
+
+                                </div>
+                                <div className="input-field">
                                     <div className="input" >
                                         <div className="icone">
                                             <SettingsPhoneIcon color="action" />
@@ -322,8 +357,6 @@ const UserSetting = ({ defaultImage, userid }) => {
                                             disabled={!editMode}
                                         />
                                     </div>
-                                </div>
-                                <div className="input-field">
                                     <div className="input" style={{ width: "415px" }}>
                                         <div className="icone">
                                             <AttachEmailIcon color="action" />
@@ -341,22 +374,7 @@ const UserSetting = ({ defaultImage, userid }) => {
                                             disabled={!editMode}
                                         />
                                     </div>
-                                    <div className="input" >
-                                        <div className="icone">
-                                            <WorkspacePremiumIcon color="action" />
-                                        </div>
-                                        <TextField
-                                            size="small"
-                                            id="role"
-                                            label="Role"
-                                            name="designation"
-                                            autoComplete="new-password"
-                                            value={selectedCustomerData?.designation || book.designation}
-                                            onChange={handleChange}
-                                            autoFocus
-                                            disabled={!editMode}
-                                        />
-                                    </div>
+
                                 </div>
                                 <div className="input-field">
                                     <div className="input" style={{ width: "309px" }}>

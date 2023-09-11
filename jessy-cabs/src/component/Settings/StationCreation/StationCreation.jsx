@@ -10,6 +10,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 // ICONS
+import ClearIcon from '@mui/icons-material/Clear';  
 import BadgeIcon from "@mui/icons-material/Badge";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ListAltIcon from "@mui/icons-material/ListAlt";
@@ -20,6 +21,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -308,13 +310,15 @@ const StationCreation = () => {
           </div>
           {error &&
             <div className='alert-popup Error' >
-              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>{errorMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>success fully submitted</p>
             </div>
           }

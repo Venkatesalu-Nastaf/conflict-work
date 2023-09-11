@@ -8,6 +8,8 @@ import { CabDriver } from "./EnteryData";
 import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
+import ClearIcon from '@mui/icons-material/Clear';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import Autocomplete from "@mui/material/Autocomplete";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -550,13 +552,15 @@ const Enter = () => {
           </div>
           {error &&
             <div className='alert-popup Error' >
-              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>Something went wrong!</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>success fully submitted</p>
             </div>
           }

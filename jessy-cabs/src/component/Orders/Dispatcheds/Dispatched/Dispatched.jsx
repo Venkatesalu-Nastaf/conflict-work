@@ -10,7 +10,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Stations } from "./DispatchedData.js";
 import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-// import DescriptionIcon from "@mui/icons-material/Description";
+import ClearIcon from '@mui/icons-material/Clear';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -229,13 +230,15 @@ const Dispatched = () => {
             </div>
             {error &&
               <div className='alert-popup Error' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                 <p>Something went wrong!</p>
               </div>
             }
             {success &&
               <div className='alert-popup Success' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                 <p>success fully submitted</p>
               </div>
             }

@@ -37,6 +37,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import SpeedDial from "@mui/material/SpeedDial";
 import { styled } from "@mui/material/styles";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import ClearIcon from '@mui/icons-material/Clear';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ChecklistIcon from "@mui/icons-material/Checklist";
@@ -741,17 +743,19 @@ const PayRoll = () => {
         </div>
         {error &&
           <div className='alert-popup Error' >
-            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
             <p>{errorMessage}</p>
           </div>
         }
         {success &&
           <div className='alert-popup Success' >
-            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
             <p>success fully submitted</p>
           </div>
         }
-        <div className="SpeedDial" style={{ padding: '26px', }}>
+        <div className="SpeedDial" style={{ padding: '26px', }}> 
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

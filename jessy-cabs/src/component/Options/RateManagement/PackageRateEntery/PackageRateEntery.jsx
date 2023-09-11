@@ -11,6 +11,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { RateType, PriceTag, VehicleType, Duty } from "./PackageRateEnteryData.js";
 
 // ICONS
+import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -20,6 +21,7 @@ import RateReviewIcon from '@mui/icons-material/RateReview';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
@@ -190,8 +192,8 @@ const PackageRateEntery = () => {
     try {
       console.log('Add button clicked');
       await axios.post('http://localhost:8081/ratemanagement', book);
-        console.log(book);
-        handleCancel();
+      console.log(book);
+      handleCancel();
     } catch (error) {
       console.error('Error updating customer:', error);
     }
@@ -248,7 +250,7 @@ const PackageRateEntery = () => {
                   <div className="icone">
                     <TypeSpecimenOutlinedIcon color="action" />
                   </div>
-                                   <Autocomplete
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-ratetype"
@@ -272,7 +274,7 @@ const PackageRateEntery = () => {
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
-                                  <Autocomplete
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-pricetag"
@@ -318,7 +320,7 @@ const PackageRateEntery = () => {
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
-                                 <Autocomplete
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-vehicleType"
@@ -352,7 +354,7 @@ const PackageRateEntery = () => {
               <div className="icone">
                 <EngineeringIcon color="action" />
               </div>
-                           <Autocomplete
+              <Autocomplete
                 fullWidth
                 size="small"
                 id="free-solo-demo-duty"
@@ -527,18 +529,15 @@ const PackageRateEntery = () => {
         </div>
         {error &&
           <div className='alert-popup Error' >
-            <span className='cancel-btn' onClick={hidePopup}>x</span>
-            {error &&
-              <div className='alert-popup Error' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
-                <p>{errorMessage}</p>
-              </div>
-            }
+            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{errorMessage}</p>
           </div>
         }
         {success &&
           <div className='alert-popup Success' >
-            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
             <p>success fully submitted</p>
           </div>
         }

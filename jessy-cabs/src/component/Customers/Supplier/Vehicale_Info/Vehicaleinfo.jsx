@@ -19,6 +19,7 @@ import { FaMoneyBillWave } from "react-icons/fa";
 
 // ICONS
 import SpeedIcon from "@mui/icons-material/Speed";
+import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import CommuteIcon from "@mui/icons-material/Commute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
@@ -580,12 +581,14 @@ const Vehicaleinfo = () => {
           </div>
         </div>
         {error && <div className='alert-popup Error' >
-          <span className='cancel-btn' onClick={hidePopup}>x</span>
-          <p>Something went wrong!</p>
+          <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+          <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+          <p>{error}</p>
         </div>}
         {success &&
           <div className='alert-popup Success' >
-            <span className='cancel-btn' onClick={hidePopup}>x</span>
+            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
             <p>success fully submitted</p>
           </div>
         }

@@ -19,6 +19,8 @@ import { styled } from "@mui/material/styles";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import ClearIcon from '@mui/icons-material/Clear';  
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -184,9 +186,9 @@ const TaxSetting = () => {
     const handleAdd = async () => {
         const STax = book.STax;
         if (!STax) {
-          setError(true);
-          setErrorMessage("fill mantatory fields");
-          return;
+            setError(true);
+            setErrorMessage("fill mantatory fields");
+            return;
         }
         try {
             console.log('Add button clicked');
@@ -388,13 +390,15 @@ const TaxSetting = () => {
                 </div>
                 {error &&
                     <div className='alert-popup Error' >
-                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                         <p>{errorMessage}</p>
                     </div>
                 }
                 {success &&
                     <div className='alert-popup Success' >
-                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                         <p>success fully submitted</p>
                     </div>
                 }

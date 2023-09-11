@@ -22,6 +22,8 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import Box from "@mui/material/Box";
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import ClearIcon from '@mui/icons-material/Clear';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
@@ -66,8 +68,8 @@ const Billing = () => {
     const [actionName] = useState('');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-   
-    
+
+
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
@@ -131,7 +133,7 @@ const Billing = () => {
         RoundedOff: '',
         BalanceReceivable: '',
         NetAmount: '',
-        payableamount:'',
+        payableamount: '',
         SavePrint: '',
         document: '',
         Preview: '',
@@ -214,7 +216,7 @@ const Billing = () => {
             RoundedOff: '',
             BalanceReceivable: '',
             NetAmount: '',
-            payableamount:'',
+            payableamount: '',
             SavePrint: '',
             document: '',
             Preview: '',
@@ -1102,13 +1104,15 @@ const Billing = () => {
                 </form>
                 {error &&
                     <div className='alert-popup Error' >
-                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                         <p>Something went wrong!</p>
                     </div>
                 }
                 {success &&
                     <div className='alert-popup Success' >
-                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                         <p>success fully submitted</p>
                     </div>
                 }

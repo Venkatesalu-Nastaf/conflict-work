@@ -20,6 +20,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGasPump, faGaugeHigh, faGaugeSimple } from "@fortawesome/free-solid-svg-icons";
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
+import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import CommuteIcon from '@mui/icons-material/Commute';
 import CarCrashIcon from '@mui/icons-material/CarCrash';
@@ -28,6 +29,7 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+// import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
@@ -404,7 +406,8 @@ const FuelDetails = () => {
             </div>
             {error &&
               <div className='alert-popup Error' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                 <p>{errorMessage}</p>
               </div>
             }

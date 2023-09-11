@@ -9,34 +9,66 @@ body {
 
 /* ERROR POPUP */
 .Error {
-  color: rgb(172, 23, 20);
-  background-color: rgb(253, 237, 237);
+  /* background-color: rgb(253, 237, 237); */
+  -webkit-backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(0.5rem);
+  /* backdrop-filter: blur(0); */
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .Warning {
-  color: rgb(102, 60, 0);
-  background-color: rgb(255, 244, 229);
+  /* background-color: rgb(255, 244, 229); */
+  -webkit-backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(0.5rem);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.Error .popup-icon {
+  background-color: rgb(236, 43, 88);
+
 }
 
 .Info {
-  color: rgb(1, 67, 97);
-  background-color: rgb(229, 246, 253);
+  /* background-color: rgb(229, 246, 253); */
+  -webkit-backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(0.5rem);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .Success {
-  color: rgb(30, 70, 32);
-  background-color: rgb(237, 247, 237);
+  /* background-color: rgb(237, 247, 237); */
+  -webkit-backdrop-filter: blur(0.5rem);
+  backdrop-filter: blur(0.5rem);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.Success .popup-icon {
+  background-color: rgb(52, 135, 56);
+}
+
+.alert-popup p {
+  text-transform: capitalize;
 }
 
 .alert-popup {
+  display: flex;
+  align-items: center;
   position: fixed;
   top: 120px;
   right: 20px;
-  padding: 8px 15px;
+  padding: 4px 15px;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   animation: fadeInOut 1s ease;
+}
+
+.alert-popup .popup-icon {
+  color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px 5px 3px 5px;
+  border-radius: 4px;
+  margin: 3px;
 }
 
 .alert-popup .cancel-btn {
@@ -127,15 +159,18 @@ body {
   cursor: pointer;
   position: absolute;
 }
-.Scroll-Style{
+
+.Scroll-Style {
   overflow: scroll;
 }
+
 .Scroll-Style::-webkit-scrollbar {
-  width: 8px; 
+  width: 8px;
   height: 5px;
   cursor: pointer;
   position: absolute;
 }
+
 .Scroll-Style::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px transparent;
 }
@@ -146,15 +181,18 @@ body {
   cursor: pointer;
   border-radius: 20px;
 }
+
 .css-204u17-MuiDataGrid-main {
   overflow: scroll;
 }
+
 .css-204u17-MuiDataGrid-main ::-webkit-scrollbar {
-  width: 8px; 
+  width: 8px;
   height: 8px;
   cursor: pointer;
   position: absolute;
 }
+
 .css-204u17-MuiDataGrid-main ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px transparent;
 }
@@ -165,6 +203,7 @@ body {
   cursor: pointer;
   border-radius: 20px;
 }
+
 /* dashboard.css or a separate CSS file */
 .loading-container {
   display: flex;
@@ -172,6 +211,7 @@ body {
   align-items: center;
   height: 100vh;
 }
+
 /* .loading-spinner {
   display: inline-block;
   width: 50px;

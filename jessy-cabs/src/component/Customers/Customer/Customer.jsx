@@ -24,6 +24,7 @@ import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup,
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
 import BadgeIcon from "@mui/icons-material/Badge";
+import ClearIcon from '@mui/icons-material/Clear';  
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -36,6 +37,7 @@ import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 
@@ -805,14 +807,16 @@ const Customer = () => {
             </div>
             {error &&
               <div className='alert-popup Error' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
+                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                 <p>{errorMessage}</p>
-              </div>
+              </div>  
             }
             {success &&
               <div className='alert-popup Success' >
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
-                <p>success fully submitted</p>
+                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>Success Fully Submitted</p>
               </div>
             }
             <div className="SpeedDial" style={{ padding: '26px', }}>

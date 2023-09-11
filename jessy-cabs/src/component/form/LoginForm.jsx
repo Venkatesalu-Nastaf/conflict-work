@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";
 import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircleFill";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
+import ClearIcon from '@mui/icons-material/Clear';
 import { BiHide } from "@react-icons/all-files/bi/BiHide";
 import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import axios from "axios"; // Import Axios for making HTTP requests
 import { useUser } from './UserContext'; // Import useUser from UserContext
 
@@ -20,7 +22,7 @@ const Login = () => {
   const [input, setInput] = React.useState({ username: "", userpassword: "" });
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const { loginUser } = useUser(); 
+  const { loginUser } = useUser();
 
   const hidePopup = () => {
     setSuccessMessage("");
@@ -82,22 +84,21 @@ const Login = () => {
           <img className="portalimg" src={portalimg} alt="portalimg"></img>
         </div>
         <div className="right-col">
-          <form className="portal" onSubmit={formSubmitter}>
+          <form className="portal">
+          {/* <form className="portal" onSubmit={formSubmitter} > */}
             <div className="title">login</div>
             {errorMessage.length > 0 && (
-              <div className="alert-popup Info">
-                <span className="cancel-btn" onClick={hidePopup}>
-                  x
-                </span>
+              <div className='alert-popup Error' >
+                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                 <p>{errorMessage}</p>
               </div>
             )}
             {successMessage.length > 0 && (
-              <div className="alert-popup Error">
-                <span className="cancel-btn" onClick={hidePopup}>
-                  x
-                </span>
-                {successMessage}
+              <div className='alert-popup Success' >
+                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{successMessage}</p>
               </div>
             )}
             <div className="user-input">

@@ -16,42 +16,51 @@ const MainDashboard = () => {
   const [expanded, setExpanded] = useState(true);
   const { selectedTheme } = useThemes(); // Access selected theme
   const { user } = useUser();
-  // const navigate = useNavigate();
-
+  // const [successMessage, setSuccessMessage] = useState('');
+  const [success, setSuccess] = useState(false);
+  // const initialUsername = localStorage.getItem("username") || "";
+  // const [username] = useState(initialUsername);
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
-      // StyledBadge styles
     },
     '@keyframes ripple': {
-      // Ripple animation styles
     },
   }));
 
-  // useEffect(() => {
-  //   if (!localStorage.getItem("auth")) navigate("/");
-  // }, [navigate]);
   useEffect(() => {
-    // Check if user is authenticated
     if (!localStorage.getItem("auth")) {
       navigate("/"); // Redirect to the login page
     }
   }, [navigate]);
-
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem("auth");
+    localStorage.removeItem("username"); // Clear the username from localStorage
     setExpanded(true);
     navigate("/");
   };
-
-  // const handleButtonClickUserInfo = () => {
-  //   window.location.href = '/home/usersettings/usersetting';
-  // };
-  const handleButtonClickUserInfo = () => {
-    // Always navigate when the user clicks the user name
-    navigate("/home/usersettings/usersetting");
+  const hidePopup = () => {
+    setSuccess(false);
   };
-
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
+  useEffect(() => {
+    if (user && user.username) {
+      const username = user.username;
+      localStorage.setItem("username", username);
+      const successMessagepopup = `Login successful ${user.username}`;
+      // alert(successMessage);
+      // setSuccessMessage(successMessagepopup);
+      setSuccess(successMessagepopup);
+    }
+  }, [user]);
+  const storedUsername = localStorage.getItem("username");
   return (
     <section className={`dash-board ${selectedTheme}`}>
       <div className="glass">
@@ -66,12 +75,23 @@ const MainDashboard = () => {
               <Avatar alt="userimage" src={logoImage} />
             </StyledBadge>
           </div>
-          {/* <div className="user-name-item">
-            <p onClick={handleButtonClickUserInfo}>{user.username}</p>
-          </div> */}
           <div className="user-name-item">
-            {user && user.username && (
-              <p onClick={handleButtonClickUserInfo}>{user.username}</p>
+            {/* {user && user.username ? ( */}
+            {storedUsername ? (
+              <div>
+                {/* <p>{user.username}</p> */}
+                <p>{storedUsername}</p>
+                {success &&
+                  <div className='alert-popup Success' >
+                    <span className='cancel-btn' onClick={hidePopup}>x</span>
+                    <p>{success}</p>
+                  </div>
+                }
+              </div>
+            ) : (
+              <div>
+                <p>User not logged in</p>
+              </div>
             )}
           </div>
           <div className="logout-item">
@@ -90,5 +110,4 @@ const WrappedMainDashboard = () => {
     </ThemesProvider>
   );
 };
-
 export default WrappedMainDashboard;

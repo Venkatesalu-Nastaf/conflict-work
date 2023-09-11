@@ -73,6 +73,8 @@ import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
 import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
@@ -167,12 +169,19 @@ const TripSheet = () => {
   const [closetime2, setCloseTime2] = useState('');
   const [formData, setFormData] = useState({});
   const location = useLocation();
-  const [errorMessage, setErrorMessage] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [imgpopupOpen, setimgPopupOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
+
 
   // const [isInvoiceDialogOpen, setIsInvoiceDialogOpen] = useState(false);
   const [tripSheetData, setTripSheetData] = useState({
@@ -304,9 +313,12 @@ const TripSheet = () => {
     }
   };
 
+
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -316,6 +328,7 @@ const TripSheet = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -324,6 +337,22 @@ const TripSheet = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [success]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -578,11 +607,6 @@ const TripSheet = () => {
     setFormValues({});
   };
 
-  // const handleETripsheetClick = () => {
-  //   // Navigate to the invoice page when the button is clicked
-  //   navigate('/home/customers/invoice'); // Replace '/invoice' with the actual path of your invoice page
-  // };
-
   const handleDelete = async () => {
     if (!selectedCustomerData.tripid) {
       console.log('No tripsheet number provided for deletion.');
@@ -595,8 +619,10 @@ const TripSheet = () => {
       setFormData({});
       setSelectedCustomerData({});
       handleCancel();
+      setSuccessMessage("Successfully Deleted");
     } catch (error) {
       console.error('Error deleting customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -609,8 +635,10 @@ const TripSheet = () => {
       await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || formData.tripid}`, updatedCustomer);
       console.log('Customer updated');
       handleCancel();
+      setSuccessMessage("Successfully updated");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -638,8 +666,10 @@ const TripSheet = () => {
       handleCancel();
       setSuccess(true);
       handlecheck();
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -1702,11 +1732,25 @@ const TripSheet = () => {
               <p>{errorMessage}</p>
             </div>
           }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
+            </div>
+          }
           {success &&
             <div className='alert-popup Success' >
               <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>success fully submitted</p>
+              <p>{successMessage}</p>
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
             </div>
           }
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>

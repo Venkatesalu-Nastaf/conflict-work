@@ -23,7 +23,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 
 // REACT ICONS
-// import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
 
 // FONTAWESOME
@@ -42,10 +42,16 @@ const UserSetting = ({ defaultImage, userid }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [editMode, setEditMode] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [info, setInfo] = useState(false);
+    const [warning, setWarning] = useState(false);
     const [selectedCustomerId] = useState({});
+    const [successMessage, setSuccessMessage] = useState({});
+    const [errorMessage, setErrorMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage] = useState({});
+
 
 
     const [book, setBook] = useState({
@@ -128,8 +134,10 @@ const UserSetting = ({ defaultImage, userid }) => {
             console.log('Customer updated');
             handleCancel();
             validatePasswordMatch();
+            setSuccessMessage("Successfully updated");
         } catch (error) {
             console.error('Error updating customer:', error);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -192,8 +200,8 @@ const UserSetting = ({ defaultImage, userid }) => {
 
     const handleUpload = () => {
         if (!file) {
-            setErrorMessage('Please select an image to upload.');
-            setError(true);
+            // setErrorMessage('Please select an image to upload.');
+            setErrorMessage("Check your Network Connection");
             return;
         }
     };
@@ -201,15 +209,15 @@ const UserSetting = ({ defaultImage, userid }) => {
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
-        setErrorMessage('');
+        setInfo(false);
+        setWarning(false);
     };
-
     useEffect(() => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000); // 3 seconds
-            return () => clearTimeout(timer);
+            return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [error]);
 
@@ -218,9 +226,25 @@ const UserSetting = ({ defaultImage, userid }) => {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000); // 3 seconds
-            return () => clearTimeout(timer);
+            return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [success]);
+    useEffect(() => {
+        if (warning) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [warning]);
+    useEffect(() => {
+        if (info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [info]);
 
     const toggleEditMode = () => {
         setEditMode((prevEditMode) => !prevEditMode);
@@ -456,13 +480,6 @@ const UserSetting = ({ defaultImage, userid }) => {
                                         </IconButton>
                                     </div>
                                 )}
-                                {error &&
-                                    <div className='alert-popup Error' >
-                                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                        <p>{errorMessage}</p>
-                                    </div>
-                                }
                                 {!passwordsMatch &&
                                     <div className='alert-popup Warning' >
                                         <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
@@ -470,16 +487,32 @@ const UserSetting = ({ defaultImage, userid }) => {
                                         <p>Passwords do not match. Please try again.</p>
                                     </div>
                                 }
-                                {/* <div className='alert-popup Info' >
-                                    <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                    <p>Info Messages !.</p>
-                                </div> */}
+                                {error &&
+                                    <div className='alert-popup Error' >
+                                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                        <p>{errorMessage}</p>
+                                    </div>
+                                }
+                                {warning &&
+                                    <div className='alert-popup Warning' >
+                                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                        <p>{warningMessage}</p>
+                                    </div>
+                                }
                                 {success &&
                                     <div className='alert-popup Success' >
                                         <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                                         <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                        <p>success fully submitted</p>
+                                        <p>{successMessage}</p>
+                                    </div>
+                                }
+                                {info &&
+                                    <div className='alert-popup Info' >
+                                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                        <p>{infoMessage}</p>
                                     </div>
                                 }
                             </div>

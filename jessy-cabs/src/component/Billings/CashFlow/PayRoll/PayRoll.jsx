@@ -46,8 +46,10 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import MonthlyPayDetails from './SliderPaySlips/MonthlyPayDetails';
 import EmployePaySlip from './SliderPaySlips/EmployePaySlip';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 // import { saveAs } from 'file-saver';
 // import jsPDF from 'jspdf';
 
@@ -77,15 +79,22 @@ const PayRoll = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
+  const [warning, setWarning] = useState(false);
+  const [info, setInfo] = useState(false);
   const [actionName] = useState('');
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
 
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -95,6 +104,22 @@ const PayRoll = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -161,18 +186,6 @@ const PayRoll = () => {
     }
   };
 
-  // const handleAutocompleteChange = (event, value, name) => {
-  //   const selectedOption = value ? value.label : '';
-  //   setBook((prevBook) => ({
-  //     ...prevBook,
-  //     [name]: selectedOption,
-  //   }));
-  //   setSelectedCustomerData((prevData) => ({
-  //     ...prevData,
-  //     [name]: selectedOption,
-  //   }));
-  // };
-
   const handleDateChange = (date, name) => {
     const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
     setBook((prevBook) => ({
@@ -216,12 +229,6 @@ const PayRoll = () => {
     setSelectedCustomerData({});
     setFormData({});
   };
-  // const handleRowClick = useCallback((params) => {
-  //   console.log(params.row);
-  //   const customerData = params.row;
-  //   setSelectedCustomerData(customerData);
-  //   setSelectedCustomerId(params.row.customerId);
-  // }, []);
   const handleAdd = async () => {
     const empname = book.empname;
     if (!empname) {
@@ -234,8 +241,11 @@ const PayRoll = () => {
       await axios.post('http://localhost:8081/payroll', book);
       console.log(book);
       handleCancel();// Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
+      setSuccessMessage("Successfully Added");
+
     } catch (error) {
       console.error('Error adding customer:', error);
+      setErrorMessage("Check your Network Connection");
       // You can add error handling code here, like displaying an error message to the user
     }
   };
@@ -247,6 +257,7 @@ const PayRoll = () => {
         const response = await axios.get('http://localhost:8081/payroll');
         const data = response.data;
         setRows(data);
+        setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
@@ -255,6 +266,7 @@ const PayRoll = () => {
         await axios.delete(`http://localhost:8081/payroll/${empid}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
@@ -273,7 +285,6 @@ const PayRoll = () => {
       console.log(err);
       setError(true);
       setErrorMessage("Check Network Connection")
-
     }
   };
   useEffect(() => {
@@ -748,14 +759,28 @@ const PayRoll = () => {
             <p>{errorMessage}</p>
           </div>
         }
+        {info &&
+          <div className='alert-popup Info' >
+            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{infoMessage}</p>
+          </div>
+        }
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{warningMessage}</p>
+          </div>
+        }
         {success &&
           <div className='alert-popup Success' >
             <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>success fully submitted</p>
+            <p>{successMessage}</p>
           </div>
         }
-        <div className="SpeedDial" style={{ padding: '26px', }}> 
+        <div className="SpeedDial" style={{ padding: '26px', }}>
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

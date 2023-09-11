@@ -1,37 +1,36 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import dayjs from "dayjs";
+import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
-import jsPDF from 'jspdf';
-import { TextField } from "@mui/material";
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import Button from "@mui/material/Button";
-import MenuItem from '@mui/material/MenuItem';
-import BadgeIcon from "@mui/icons-material/Badge";
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-// import SpeedDialAction from "@mui/material/SpeedDialAction";
-// import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-// import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-// import ChecklistIcon from "@mui/icons-material/Checklist";
-// import DeleteIcon from "@mui/icons-material/Delete";
-// import ModeEditIcon from "@mui/icons-material/ModeEdit";
-// import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-// import { styled } from "@mui/material/styles";
-// import SpeedDial from "@mui/material/SpeedDial";
-// import Box from "@mui/material/Box";
 import { Menu } from "@mui/material";
-import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import Button from "@mui/material/Button";
+import { TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import MenuItem from '@mui/material/MenuItem';
+import ClearIcon from '@mui/icons-material/Clear';
+import BadgeIcon from "@mui/icons-material/Badge";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import React, { useState, useCallback, useEffect } from 'react';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
 const EmployePaySlip = () => {
-
-
+    const [info, setInfo] = useState(false);
+    const [success, setSuccess] = useState(false);
     const [rows, setRows] = useState([]);
     const [empid, setempid] = useState("");
-    const [fromDate, setFromDate] = useState(dayjs());
-    const [toDate, setToDate] = useState(dayjs());
     const [error, setError] = useState(false);
+    const [warning, setWarning] = useState(false);
+    const [toDate, setToDate] = useState(dayjs());
+    const [fromDate, setFromDate] = useState(dayjs());
+    const [successMessage, setSuccessMessage] = useState({});
+    const [errorMessage, setErrorMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage] = useState({});
 
 
 
@@ -46,37 +45,10 @@ const EmployePaySlip = () => {
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
         saveAs(blob, "Employee_PaySlip.csv");
     };
-    // const handlePdfDownload = () => {
-    //     const pdf = new jsPDF('landscape');
-    //     pdf.setFontSize(12);
-    //     pdf.setFont('helvetica', 'normal');
-    //     pdf.text("Employee_PaySlip", 10, 10);
-    //     // Modify tableData to exclude the index number
-    //     const tableData = rows.map((row) => [
-    //         row['id'],
-    //         row['empid'],
-    //         row['empname'],
-    //         row['jobroll'],
-    //         row['uanid'],
-    //         row['esino'],
-    //         row['salarydate'],
-    //         row['empemailid'],
-    //         row['empmobile'],
-    //         row['takehomeamount']
-    //     ]);
-    //     pdf.autoTable({
-    //         head: [['Sno', 'Employe ID', 'Name', 'Job Roll', 'UAN ID', 'ESI NO', 'Joining Date', 'Email', 'Mobile', 'Take Home Amount']],
-    //         body: tableData,
-    //         startY: 20,
-    //     });
-    //     const pdfBlob = pdf.output('blob');
-    //     saveAs(pdfBlob, 'Employee_PaySlip.pdf');
-    // };
     const handlePdfDownload = () => {
         const pdf = new jsPDF('landscape');
         pdf.setFontSize(14);
         pdf.setFont('helvetica', 'bold');
-        // pdf.text('Employee PaySlip', 10, 10);
         const title = 'Employee PaySlip';
 
         const pageWidth = pdf.internal.pageSize.getWidth();
@@ -95,34 +67,28 @@ const EmployePaySlip = () => {
             row['salarydate'],
             row['empemailid'],
             row['empmobile'],
-            row['takehomeamount'], 
+            row['takehomeamount'],
         ]);
-
 
         pdf.autoTable({
             head: [['Sno', 'Employee ID', 'Name', 'Job Roll', 'UAN ID', 'ESI NO', 'Joining Date', 'Email', 'Mobile', 'Take Home Amount']],
             body: tableData,
             startY: 20,
             theme: 'grid', // Use 'grid' theme for better visual separation
-            width:'auto',
+            width: 'auto',
             styles: {
                 fontSize: 10,
                 cellPadding: 5,
                 valign: 'middle',
             },
         });
-
         pdf.save('Employee_PaySlip.pdf');
-
-
     };
-
-   
-
-
-
     const hidePopup = () => {
+        setSuccess(false);
         setError(false);
+        setInfo(false);
+        setWarning(false);
     };
     useEffect(() => {
         if (error) {
@@ -132,7 +98,30 @@ const EmployePaySlip = () => {
             return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [error]);
-
+    useEffect(() => {
+        if (info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [info]);
+    useEffect(() => {
+        if (warning) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [warning]);
+    useEffect(() => {
+        if (success) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [success]);
 
     const handleInputChange = (event) => {
         setempid(event.target.value);
@@ -143,9 +132,12 @@ const EmployePaySlip = () => {
             const response = await axios.get(`http://localhost:8081/payroll?empid=${empid}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
             const data = response.data;
             setRows(data);
+            setSuccessMessage("Successfully listed");
+
         } catch (error) {
             console.error('Error retrieving data:', error);
             setRows([]);
+            setErrorMessage("Check your Network Connection");
         }
     }, [empid, fromDate, toDate]);
 
@@ -161,7 +153,6 @@ const EmployePaySlip = () => {
         { field: "salarydate", headerName: "Joining Date", width: 130 },
         { field: "empemailid", headerName: "Email", width: 130 },
         { field: "empmobile", headerName: "Mobile", width: 130 },
-        // { field: "AcountNumber", headerName: "Acount Number", width: 130 },
         { field: "PF12", headerName: "EPF", width: 130 },
         { field: "ESIC0_75", headerName: "ESIC", width: 130 },
         { field: "grosspay", headerName: "Gross Pay", width: 130 },
@@ -235,25 +226,32 @@ const EmployePaySlip = () => {
 
             {error &&
                 <div className='alert-popup Error' >
-                    <span className='cancel-btn' onClick={hidePopup}>x</span>
-                    <p>Something went wrong!</p>
+                    <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                    <p>{errorMessage}</p>
                 </div>
             }
-            {/* <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-                <StyledSpeedDial
-                    ariaLabel="SpeedDial playground example"
-                    icon={<SpeedDialIcon />}
-                    direction="left"
-                >
-                    {actions.map((action) => (
-                        <SpeedDialAction
-                            key={action.name}
-                            icon={action.icon}
-                            tooltipTitle={action.name}
-                        />
-                    ))}
-                </StyledSpeedDial>
-            </Box> */}
+            {info &&
+                <div className='alert-popup Info' >
+                    <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                    <p>{infoMessage}</p>
+                </div>
+            }
+            {warning &&
+                <div className='alert-popup Warning' >
+                    <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                    <p>{warningMessage}</p>
+                </div>
+            }
+            {success &&
+                <div className='alert-popup Success' >
+                    <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                    <p>{successMessage}</p>
+                </div>
+            }
             <div className="Download-btn">
                 <PopupState variant="popover" popupId="demo-popup-menu">
                     {(popupState) => (

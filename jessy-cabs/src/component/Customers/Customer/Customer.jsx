@@ -12,9 +12,11 @@ import { styled } from "@mui/material/styles";
 import MenuItem from '@mui/material/MenuItem';
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { UnderGroup, states, Customertype, Select, BillingGroup } from "./Customerdata";
@@ -24,7 +26,7 @@ import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup,
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
 import BadgeIcon from "@mui/icons-material/Badge";
-import ClearIcon from '@mui/icons-material/Clear';  
+import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -80,9 +82,14 @@ const Customer = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [warning, setWarning] = useState(false);
   const [error, setError] = useState(false);
+  const [info, setInfo] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
 
   const convertToCSV = (data) => {
     const header = columns.map((column) => column.headerName).join(",");
@@ -119,15 +126,14 @@ const Customer = () => {
       body: tableData,
       startY: 20,
     });
-
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'Customer_Details.pdf');
   };
-
-
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -137,6 +143,22 @@ const Customer = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -272,9 +294,10 @@ const Customer = () => {
       console.log(book);
       handleCancel();
       setSuccess(true);
-
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -810,13 +833,27 @@ const Customer = () => {
                 <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
                 <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                 <p>{errorMessage}</p>
-              </div>  
+              </div>
+            }
+            {info &&
+              <div className='alert-popup Info' >
+                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{infoMessage}</p>
+              </div>
+            }
+            {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{warningMessage}</p>
+              </div>
             }
             {success &&
               <div className='alert-popup Success' >
                 <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                 <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                <p>Success Fully Submitted</p>
+                <p>{successMessage}</p>
               </div>
             }
             <div className="SpeedDial" style={{ padding: '26px', }}>

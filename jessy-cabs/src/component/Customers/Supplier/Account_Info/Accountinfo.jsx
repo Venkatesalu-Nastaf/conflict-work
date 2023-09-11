@@ -32,6 +32,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { Undergroup, Vehicleinfo } from "./Accountinfo";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import InputAdornment from "@mui/material/InputAdornment";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import MinorCrashIcon from "@mui/icons-material/MinorCrash";
@@ -39,6 +40,7 @@ import RateReviewIcon from "@mui/icons-material/RateReview";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
@@ -75,11 +77,19 @@ const Accuntinfo = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [error, setError] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
 
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -89,6 +99,15 @@ const Accuntinfo = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
+
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -110,20 +129,6 @@ const Accuntinfo = () => {
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
     saveAs(blob, "Account_Info.csv");
   };
-  // const handlePdfDownload = () => {
-  //   const pdf = new jsPDF();
-  //   pdf.setFontSize(12);// Set the font size and font style
-  //   pdf.setFont('helvetica', 'normal');
-  //   pdf.text("Account_Info", 10, 10);// Add a title for the table
-  //   const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
-  //   pdf.autoTable({
-  //     head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-  //     body: tableData,
-  //     startY: 20,
-  //   }); // Create a table to display the data
-  //   const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-  //   saveAs(pdfBlob, 'Account_Info.pdf'); // Download the PDF
-  // };
 
   const handlePdfDownload = () => {
     const pdf = new jsPDF();
@@ -280,9 +285,10 @@ const Accuntinfo = () => {
       await axios.post('http://localhost:8081/accountinfo', book);
       console.log(book);
       handleCancel();
-
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -295,6 +301,7 @@ const Accuntinfo = () => {
         const response = await axios.get('http://localhost:8081/accountinfo');
         const data = response.data;
         setRows(data);
+        setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
@@ -303,6 +310,7 @@ const Accuntinfo = () => {
         await axios.delete(`http://localhost:8081/accountinfo/${accountNo}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
@@ -685,17 +693,30 @@ const Accuntinfo = () => {
             <div className='alert-popup Error' >
               <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>Something went wrong!</p>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
               <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>success fully submitted</p>
+              <p>{successMessage}</p>
             </div>
           }
-
           <div className="SpeedDial" style={{ "paddingTop": "96px" }}>
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>
               <StyledSpeedDial

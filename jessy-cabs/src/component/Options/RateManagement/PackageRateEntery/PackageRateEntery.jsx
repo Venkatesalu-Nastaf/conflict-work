@@ -16,10 +16,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import CarCrashIcon from '@mui/icons-material/CarCrash';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import EngineeringIcon from "@mui/icons-material/Engineering";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -70,13 +72,22 @@ const PackageRateEntery = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
-  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
+
+
 
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -86,6 +97,7 @@ const PackageRateEntery = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -94,6 +106,23 @@ const PackageRateEntery = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [success]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
+
 
   const [book, setBook] = useState({
     ratetype: '',
@@ -185,8 +214,8 @@ const PackageRateEntery = () => {
   const handleAdd = async () => {
     const duty = book.duty;
     if (!duty) {
-      setError(true);
-      setErrorMessage("fill mantatory fields");
+      setErrorMessage("Check your Network Connection");
+      // setErrorMessage("fill mantatory fields");
       return;
     }
     try {
@@ -194,8 +223,10 @@ const PackageRateEntery = () => {
       await axios.post('http://localhost:8081/ratemanagement', book);
       console.log(book);
       handleCancel();
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -206,6 +237,7 @@ const PackageRateEntery = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/ratemanagement');
         const data = response.data;
+        setSuccessMessage("Successfully listed");
         setRows(data);
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
@@ -215,6 +247,7 @@ const PackageRateEntery = () => {
         await axios.delete(`http://localhost:8081/ratemanagement/${id}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
@@ -222,15 +255,14 @@ const PackageRateEntery = () => {
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/ratemanagement/${id}`, updatedCustomer);
         console.log('Customer updated');
+        setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
         handleAdd();
       }
     } catch (err) {
       console.log(err);
-      setError(true);
-      setErrorMessage("Check Network Connection")
-
+      setErrorMessage("Check your Network Connection");
     }
   };
   useEffect(() => {
@@ -534,11 +566,25 @@ const PackageRateEntery = () => {
             <p>{errorMessage}</p>
           </div>
         }
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{warningMessage}</p>
+          </div>
+        }
         {success &&
           <div className='alert-popup Success' >
             <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>success fully submitted</p>
+            <p>{successMessage}</p>
+          </div>
+        }
+        {info &&
+          <div className='alert-popup Info' >
+            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{infoMessage}</p>
           </div>
         }
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>

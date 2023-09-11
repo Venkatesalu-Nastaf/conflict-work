@@ -12,7 +12,10 @@ import { styled } from "@mui/material/styles";
 import MenuItem from '@mui/material/MenuItem';
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 // FontAwesomeIcon Link
@@ -77,11 +80,21 @@ const FuelDetails = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [formData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
+
 
   const hidePopup = () => {
+    setSuccess(false);
     setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -91,6 +104,31 @@ const FuelDetails = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
 
   const [book, setBook] = useState({
     VehicleNo: '',
@@ -163,8 +201,8 @@ const FuelDetails = () => {
   const handleAdd = async () => {
     const VehicleName = book.VehicleName;
     if (!VehicleName) {
-      setError(true);
-      setErrorMessage("fill mantatory fields");
+      setErrorMessage("Check your vehicleName");
+      // setErrorMessage("fill mantatory fields");
       return;
     }
     try {
@@ -172,8 +210,10 @@ const FuelDetails = () => {
       await axios.post('http://localhost:8081/fueldetails', book);
       console.log(book);
       handleCancel();
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -185,6 +225,7 @@ const FuelDetails = () => {
         const response = await axios.get('http://localhost:8081/fueldetails');
         const data = response.data;
         setRows(data);
+        setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
@@ -193,6 +234,7 @@ const FuelDetails = () => {
         await axios.delete(`http://localhost:8081/fueldetails/${VehicleNo}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
@@ -200,13 +242,14 @@ const FuelDetails = () => {
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/fueldetails/${VehicleNo}`, updatedCustomer);
         console.log('Customer updated');
+        setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
         handleAdd();
       }
     } catch (err) {
       console.log(err);
-      setError(true);
+      setErrorMessage("Check your Network Connection");
     }
   };
   useEffect(() => {
@@ -409,6 +452,27 @@ const FuelDetails = () => {
                 <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
                 <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                 <p>{errorMessage}</p>
+              </div>
+            }
+            {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{warningMessage}</p>
+              </div>
+            }
+            {success &&
+              <div className='alert-popup Success' >
+                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{successMessage}</p>
+              </div>
+            }
+            {info &&
+              <div className='alert-popup Info' >
+                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{infoMessage}</p>
               </div>
             }
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>

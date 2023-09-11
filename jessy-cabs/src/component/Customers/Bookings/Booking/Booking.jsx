@@ -30,6 +30,7 @@ import NoCrashIcon from "@mui/icons-material/NoCrash";
 import CommuteIcon from "@mui/icons-material/Commute";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
@@ -40,6 +41,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
@@ -83,8 +85,15 @@ const Booking = () => {
   const [starttime, setStartTime] = useState('');
   const [bookingtime, setBookingTime] = useState('');
   const location = useLocation();
-  const [errorMessage, setErrorMessage] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
+
+  const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({});
   const [formValues, setFormValues] = useState({
@@ -102,8 +111,10 @@ const Booking = () => {
   });
 
   const hidePopup = () => {
-    setError(false);
     setSuccess(false);
+    setError(false);
+    setInfo(false);
+    setWarning(false);
   };
 
   useEffect(() => {
@@ -114,6 +125,22 @@ const Booking = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -384,11 +411,11 @@ const Booking = () => {
       await axios.post('http://localhost:8081/booking', updatedBook);
       console.log(updatedBook);
       handleCancel();
-      setSuccess(true);
+      setSuccessMessage("Successfully Added");
       handlecheck();
     } catch (error) {
       console.error('Error updating customer:', error);
-      setError(true);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -406,6 +433,7 @@ const Booking = () => {
         await axios.delete(`http://localhost:8081/booking/${book.bookingno}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccessMessage("Successfully Deleted");
         setFormData(null);
         handleCancel();
       } else if (actionName === 'Modify') {
@@ -415,6 +443,7 @@ const Booking = () => {
         await axios.put(`http://localhost:8081/booking/${book.bookingno}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
+        setSuccessMessage("Successfully Updated");
       } else if (actionName === 'Copy This') {
         console.log('Copy This button clicked');
         handleClickShow();
@@ -1485,11 +1514,26 @@ const Booking = () => {
               <p>{errorMessage}</p>
             </div>
           }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
+
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
+            </div>
+          }
           {success &&
             <div className='alert-popup Success' >
               <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>success fully submitted</p>
+              <p>{successMessage}</p>
             </div>
           }
         </div>

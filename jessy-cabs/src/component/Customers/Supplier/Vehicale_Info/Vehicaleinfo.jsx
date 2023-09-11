@@ -11,6 +11,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
@@ -30,6 +31,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import MinorCrashIcon from "@mui/icons-material/MinorCrash";
 import PriceChangeIcon from "@mui/icons-material/PriceChange";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import SummarizeTwoToneIcon from "@mui/icons-material/SummarizeTwoTone";
@@ -63,12 +65,21 @@ const actions = [
 const Vehicaleinfo = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [actionName] = useState('');
+  const [info, setInfo] = useState(false);
   const [error, setError] = useState(false);
+  const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
+
 
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -78,6 +89,22 @@ const Vehicaleinfo = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -184,9 +211,10 @@ const Vehicaleinfo = () => {
       await axios.post('http://localhost:8081/vehicleinfo', book);
       console.log(book);
       handleCancel();
-
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -200,8 +228,10 @@ const Vehicaleinfo = () => {
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
+        setSuccessMessage("Successfully listed");
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
+        setSuccessMessage("Successfully Deleted");
         // Perform the desired action when the "Delete" button is clicked
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
@@ -212,6 +242,7 @@ const Vehicaleinfo = () => {
     } catch (error) {
       console.log(error);
       setError(true);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -583,13 +614,27 @@ const Vehicaleinfo = () => {
         {error && <div className='alert-popup Error' >
           <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
           <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-          <p>{error}</p>
+          <p>{errorMessage}</p>
         </div>}
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{warningMessage}</p>
+          </div>
+        }
+        {info &&
+          <div className='alert-popup Info' >
+            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{infoMessage}</p>
+          </div>
+        }
         {success &&
           <div className='alert-popup Success' >
             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>success fully submitted</p>
+            <p>{successMessage}</p>
           </div>
         }
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>

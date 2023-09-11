@@ -24,7 +24,7 @@ import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 
 // REACT ICONS
-// import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -69,12 +69,18 @@ const UserCreation = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
+
 
   // TABLE START
   const columns = [
@@ -164,8 +170,8 @@ const UserCreation = () => {
       setPasswordsMatch(true);
 
       if (!stationname) {
-        setError(true);
-        setErrorMessage("Fill mandatory fields");
+        setErrorMessage("Check your Network Connection");
+        // setErrorMessage("Fill mandatory fields");
         return;
       }
 
@@ -174,8 +180,10 @@ const UserCreation = () => {
         console.log(book);
         handleCancel();
         validatePasswordMatch();
+        setSuccessMessage("Successfully Added");
       } catch (error) {
         console.error('Error adding user:', error);
+        setErrorMessage("Check your Network Connection");
       }
     } else {
       setPasswordsMatch(false);
@@ -190,6 +198,7 @@ const UserCreation = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/usercreation');
         const data = response.data;
+        setSuccessMessage("Successfully listed");
         setRows(data);
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
@@ -199,6 +208,7 @@ const UserCreation = () => {
         await axios.delete(`http://localhost:8081/usercreation/${userid}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
@@ -206,6 +216,7 @@ const UserCreation = () => {
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/usercreation/${userid}`, updatedCustomer);
         console.log('Customer updated');
+        setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
         handleAdd();
@@ -214,14 +225,49 @@ const UserCreation = () => {
     } catch (err) {
       console.log(err);
       setError(true);
-      setErrorMessage("Check Network Connection");
+      setErrorMessage("Check your Network Connection");
+      // setErrorMessage("Check Network Connection");
     }
   };
   const hidePopup = () => {
-    setPasswordsMatch(true);
-    setError(false);
     setSuccess(false);
+    setError(false);
+    setInfo(false);
+    setWarning(false);
   };
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [success]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
   useEffect(() => {
     if (error || !passwordsMatch) {
       const timer = setTimeout(() => {
@@ -231,14 +277,6 @@ const UserCreation = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error, passwordsMatch]);
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [success]);
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -465,9 +503,30 @@ const UserCreation = () => {
           </div>
           {error &&
             <div className='alert-popup Error' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
             </div>
           }
           {!passwordsMatch &&
@@ -475,18 +534,6 @@ const UserCreation = () => {
               <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>Passwords do not match. Please try again.</p>
-            </div>
-          }
-          {/* <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>Info Messages !.</p>
-          </div> */}
-          {success &&
-            <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>Successfully updated</p>
             </div>
           }
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>

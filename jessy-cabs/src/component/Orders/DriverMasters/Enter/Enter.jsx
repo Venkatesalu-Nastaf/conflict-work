@@ -24,6 +24,7 @@ import CallIcon from "@mui/icons-material/Call";
 import BadgeIcon from "@mui/icons-material/Badge";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
@@ -34,19 +35,11 @@ import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-
-
-// TABLE
-// const columns = [
-//   { field: "driverid", headerName: "Driver ID", width: 70 },
-//   { field: "username", headerName: "Driver Name", width: 130 },
-//   { field: "Phoencell", headerName: "Mobile", width: 130 },
-// ];
-// TABLE END
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -76,10 +69,19 @@ const Enter = () => {
   const [actionName] = useState('');
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
+
 
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -89,6 +91,7 @@ const Enter = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -97,6 +100,23 @@ const Enter = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [success]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
+
 
 
   const [book, setBook] = useState({
@@ -198,6 +218,7 @@ const Enter = () => {
         const response = await axios.get('http://localhost:8081/drivermaster');
         const data = response.data;
         setRows(data);
+        setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
@@ -206,6 +227,7 @@ const Enter = () => {
         await axios.delete(`http://localhost:8081/drivermaster/${driverid}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
@@ -213,15 +235,17 @@ const Enter = () => {
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/drivermaster/${driverid}`, updatedCustomer);
         console.log('Customer updated');
+        setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
         await axios.post('http://localhost:8081/drivermaster', book);
         console.log(book);
         handleCancel();
+        setSuccessMessage("Successfully Added");
       }
     } catch (err) {
       console.log(err);
-      setError(true);
+      setErrorMessage("Check your Network Connection");
     }
   };
   useEffect(() => {
@@ -268,11 +292,7 @@ const Enter = () => {
                 />
               </div>
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker name="ddate" label="Date" defaultValue={dayjs()} />
-                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  {/* <DemoItem label="Date"> */}
                   <DatePicker
                     label="Date"
                     value={selectedCustomerData.ddate ? dayjs(selectedCustomerData.ddate) : null}
@@ -282,7 +302,6 @@ const Enter = () => {
                       <TextField {...inputProps} inputRef={inputRef} name='ddate' value={selectedCustomerData.ddate} />
                     )}
                   </DatePicker>
-                  {/* </DemoItem> */}
                 </LocalizationProvider>
               </div>
             </div>
@@ -341,7 +360,6 @@ const Enter = () => {
                   }
                   }
                 />
-
               </div>
             </div>
           </div>
@@ -554,14 +572,28 @@ const Enter = () => {
             <div className='alert-popup Error' >
               <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>Something went wrong!</p>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
               <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>success fully submitted</p>
+              <p>{successMessage}</p>
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
             </div>
           }
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>

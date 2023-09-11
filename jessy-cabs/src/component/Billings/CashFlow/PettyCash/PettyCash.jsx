@@ -25,6 +25,8 @@ import { Menu, TextField } from "@mui/material";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DataGrid } from "@mui/x-data-grid";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 // import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 
@@ -49,33 +51,6 @@ const actions = [
     // { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-// // download function
-// const convertToCSV = (data) => {
-//     const header = columns.map((column) => column.headerName).join(",");
-//     const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-//     return [header, ...rows].join("\n");
-// };
-// const handleExcelDownload = () => {
-//     const csvData = convertToCSV(rows);
-//     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-//     saveAs(blob, "Account_Info.csv");
-// };
-// const handlePdfDownload = () => {
-//     const pdf = new jsPDF();
-//     pdf.setFontSize(12);// Set the font size and font style
-//     pdf.setFont('helvetica', 'normal');
-//     pdf.text("Account_Info", 10, 10);// Add a title for the table
-//     const tableData = rows.map((row, index) => [index + 1, ...Object.values(row)]);
-//     pdf.autoTable({
-//         head: [['Sno', 'Customer ID', 'Name', 'Address', 'Phone', 'Active', 'Rate_Type', 'GST_NO', 'State', 'Driver_App']],
-//         body: tableData,
-//         startY: 20,
-//     }); // Create a table to display the data
-//     const pdfBlob = pdf.output('blob'); // Save the PDF to a Blob
-//     saveAs(pdfBlob, 'Account_Info.pdf'); // Download the PDF
-// };
-
-
 // TABLE
 
 const columns = [
@@ -95,9 +70,15 @@ const PettyCash = () => {
     const [toDate, setToDate] = useState(dayjs());
     const [voucherno] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
-    const [errorMessage, setErrorMessage] = useState(false);
+    // const [errorMessage, setErrorMessage] = useState(false);
     const [error, setError] = useState(false);
+    const [warning, setWarning] = useState(false);
+    const [info, setInfo] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState({});
+    const [errorMessage, setErrorMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage] = useState({});
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -136,6 +117,8 @@ const PettyCash = () => {
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
+        setInfo(false);
+        setWarning(false);
     };
     useEffect(() => {
         if (error) {
@@ -145,6 +128,22 @@ const PettyCash = () => {
             return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [error]);
+    useEffect(() => {
+        if (warning) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [warning]);
+    useEffect(() => {
+        if (info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [info]);
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => {
@@ -223,8 +222,10 @@ const PettyCash = () => {
             const response = await axios.post('http://localhost:8081/pettycash', book);
             console.log('Customer added:', response.data);
             handleCancel(); // Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
+            setSuccessMessage("Successfully Added");
         } catch (error) {
             console.error('Error adding customer:', error);
+            setErrorMessage("Check your Network Connection");
             // You can add error handling code here, like displaying an error message to the user
         }
     };
@@ -236,6 +237,7 @@ const PettyCash = () => {
                 const response = await axios.get('http://localhost:8081/pettycash');
                 const data = response.data;
                 setRows(data);
+                setSuccessMessage("Successfully listed");
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
                 handleCancel();
@@ -244,6 +246,7 @@ const PettyCash = () => {
                 await axios.delete(`http://localhost:8081/pettycash/${voucherno}`);
                 console.log('Customer deleted');
                 setSelectedCustomerData(null);
+                setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
                 console.log('Edit button clicked');
@@ -405,11 +408,26 @@ const PettyCash = () => {
                         <p>{errorMessage}</p>
                     </div>
                 }
+                {warning &&
+                    <div className='alert-popup Warning' >
+                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{warningMessage}</p>
+
+                    </div>
+                }
+                {info &&
+                    <div className='alert-popup Info' >
+                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{infoMessage}</p>
+                    </div>
+                }
                 {success &&
                     <div className='alert-popup Success' >
                         <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                         <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>success fully submitted</p>
+                        <p>{successMessage}</p>
                     </div>
                 }
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>

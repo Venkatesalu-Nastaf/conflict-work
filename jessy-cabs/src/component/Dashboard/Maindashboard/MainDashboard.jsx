@@ -8,6 +8,8 @@ import { useNavigate, Outlet } from "react-router-dom";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import logoImage from "../MainDash/Sildebar/Logo-Img/logo.png";
 import { useThemes } from '../../UserSettings/Themes/ThemesContext';
+import ClearIcon from '@mui/icons-material/Clear';  
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { ThemesProvider } from '../../UserSettings/Themes/ThemesContext';
 import { useUser } from '../../form/UserContext';
 
@@ -83,7 +85,8 @@ const MainDashboard = () => {
                 <p>{storedUsername}</p>
                 {success &&
                   <div className='alert-popup Success' >
-                    <span className='cancel-btn' onClick={hidePopup}>x</span>
+                    <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                     <p>{success}</p>
                   </div>
                 }

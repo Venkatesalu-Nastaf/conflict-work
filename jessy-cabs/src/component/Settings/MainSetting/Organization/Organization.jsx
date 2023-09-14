@@ -244,7 +244,7 @@ const Organization = ({ defaultImage, userid }) => {
                                             margin="normal"
                                             size="small"
                                             id="id"
-                                            label="Organisation Name"
+                                            label="Organization Name"
                                             name=""
                                             sx={{ width: "280px" }}
                                             value={selectedCustomerData?.userid || book.userid}
@@ -260,7 +260,7 @@ const Organization = ({ defaultImage, userid }) => {
                                         <TextField
                                             size="small"
                                             id="role"
-                                            label="Organisation Type"
+                                            label="Organization Type"
                                             name="designation"
                                             sx={{ width: "280px" }}
                                             autoComplete="new-password"

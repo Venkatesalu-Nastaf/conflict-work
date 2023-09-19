@@ -92,8 +92,12 @@
     background-image: url("https://images.pexels.com/photos/5845709/pexels-photo-5845709.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
   }
 
+  .header-user {
+    display: none !important;
+  }
+
   .glass {
-    grid-template-columns: 100% ;
+    grid-template-columns: 100%;
   }
 }
 

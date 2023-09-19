@@ -8,6 +8,10 @@
   border-right: 1px solid #ccc;
 }
 
+.header-user-mobile {
+  display: none;
+}
+
 /* logo */
 .bars {
   display: none;
@@ -107,6 +111,17 @@
 
   }
 
+  .header-user-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #6b6868;
+    width: 100%;
+    box-shadow: 2px 2px 2px #9d9a9a00;
+    border-radius: 10px;
+    padding: 5px;
+  }
+
   /* .menuItem > span {
     display: block;
   } */
@@ -120,7 +135,8 @@
   } */
   .bars {
     display: flex;
-    position: fixed;
+    position: sticky;
+    width: 15px;
     top: 2rem;
     left: 60%;
     background: rgba(255, 255, 255, 0.708);

@@ -3,7 +3,14 @@ import "./Sidebar.css";
 import Logo from "./Logo-Img/logo.png";
 import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
+import Badge from '@mui/material/Badge';
+import Avatar from '@mui/material/Avatar';
+import { styled } from '@mui/material/styles';
+import logoImage from "../Sildebar/Logo-Img/logo.png";
+import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+
+
 
 // ICONS
 import { BiHomeAlt } from "@react-icons/all-files/bi/BiHomeAlt";
@@ -32,7 +39,12 @@ const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(true); const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+    },
+    '@keyframes ripple': {
+    },
+  }));
 
   useEffect(() => {
     if (!localStorage.getItem("auth")) navigate("/");
@@ -139,6 +151,26 @@ const Sidebar = () => {
             handleMenuItemClick={handleMenuItemClick}
             icon={FaUserAstronaut}
           />
+          <div className="header-user-mobile">
+            <div className="logout-item">
+              <FiLogOut className="logout-icon" />
+            </div>
+            <div className="user-name-item">
+              <div>
+                <p>User not logged in</p>
+              </div>
+            </div>
+
+            <div className="avatar-item">
+              <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                variant="dot"
+              >
+                <Avatar alt="userimage" src={logoImage} />
+              </StyledBadge>
+            </div>
+          </div>
         </div>
       </motion.div>
     </>

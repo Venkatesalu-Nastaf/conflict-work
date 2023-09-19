@@ -39,7 +39,9 @@ const Customers = () => {
         <MenuItem label="Booking" to='/home/customers/bookings' menuItemKey="Booking" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
         <MenuItem label="Trip Sheet" to='/home/customers/tripsheet' menuItemKey="Trip Sheet" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
       </div>
-      <Outlet />
+      <div className='mobile-view'>
+        <Outlet />
+      </div>
     </div>
   );
 };

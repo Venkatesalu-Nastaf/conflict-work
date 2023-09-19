@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import { emailValidator, passwordValidator } from "./regexValidator";
 import "./Form.css";
-import portalimg from "../../assets/img/portal-img.jpg";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";
 import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircleFill";
@@ -106,11 +105,8 @@ const Login = () => {
   return (
     <div className="portal-container">
       <div className="glasses">
-        <div className="left-col">
-          <img className="portalimg" src={portalimg} alt="portalimg"></img>
-        </div>
         <div className="right-col">
-          <form className="portal" onSubmit={formSubmitter} >
+          <form className="portal" onSubmit={formSubmitter}  >
             <div className="title">login</div>
             {error &&
               <div className='alert-popup Error' >
@@ -171,7 +167,7 @@ const Login = () => {
               </div>
             </div>
             <div className="forget-link">
-              <a href="/">forget password </a>
+              <a href="/">forget password !</a>
             </div>
             <div className="group button-group">
               <button type="submit" className="signup-btn">

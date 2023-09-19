@@ -1484,6 +1484,19 @@ const TripSheet = () => {
                   id="empolyeeno"
                 />
               </div>
+              <div className="input">
+                <div className="icone">
+                  <BadgeIcon color="action" />
+                </div>
+                <TextField
+                  size="small"
+                  name="customercode"
+                  value={formData.customercode || selectedCustomerData.customercode || book.customercode}
+                  onChange={handleChange}
+                  label="Customer Code"
+                  id="customer-code"
+                />
+              </div>
             </div>
             <div className="input-field">
               <div className="input time">
@@ -1510,7 +1523,7 @@ const TripSheet = () => {
                   name="starttime"
                 />
               </div>
-              <div className="input time">
+              <div className="input time" >
                 <label>Close Time</label>
                 <input
                   type="time"
@@ -1522,7 +1535,7 @@ const TripSheet = () => {
                   name="closetime"
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ width: "300px" }}>
                 <div className="icone">
                   <CurrencyRupeeTwoToneIcon color="action" />
                 </div>
@@ -1537,19 +1550,7 @@ const TripSheet = () => {
                   autoFocus
                 />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <BadgeIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  name="customercode"
-                  value={formData.customercode || selectedCustomerData.customercode || book.customercode}
-                  onChange={handleChange}
-                  label="Customer Code"
-                  id="customer-code"
-                />
-              </div>
+
             </div>
             <div className="input-field">
               <div className="input">

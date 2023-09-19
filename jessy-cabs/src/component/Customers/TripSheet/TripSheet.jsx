@@ -1487,6 +1487,18 @@ const TripSheet = () => {
             </div>
             <div className="input-field">
               <div className="input time">
+                <label>Report Time</label>
+                <input
+                  type="time"
+                  value={formData.closetime || selectedCustomerData.closetime || book.closetime}
+                  onChange={(event) => {
+                    setBook({ ...book, closetime: event.target.value });
+                    setCloseTime(event.target.value);
+                  }}
+                  name="closetime"
+                />
+              </div>
+              <div className="input time">
                 <label>Start Time</label>
                 <input
                   type="time"
@@ -1510,7 +1522,7 @@ const TripSheet = () => {
                   name="closetime"
                 />
               </div>
-              <div className="input" style={{ width: "300px" }}>
+              <div className="input">
                 <div className="icone">
                   <CurrencyRupeeTwoToneIcon color="action" />
                 </div>

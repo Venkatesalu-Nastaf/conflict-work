@@ -99,9 +99,6 @@ const Login = () => {
     } catch (error) {
       console.error("Error:", error);
       setError("An error occurred while logging in.");
-      localStorage.setItem("auth", true);
-
-      navigate("/home/dashboard");
     }
   };
 

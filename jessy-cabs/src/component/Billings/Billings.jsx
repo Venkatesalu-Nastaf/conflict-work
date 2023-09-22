@@ -34,9 +34,9 @@ const Billings = () => {
         <div className='billings-conatiner' id='menu'>
             <div className='menu-bar'>
                 <MenuItem label="Billing" to='/home/billing/billing' menuItemKey="Billing" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-                <MenuItem label="Cash Flow" to='/home/billing/cashflow' menuItemKey="Cash Flow" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Expense" to='/home/billing/expense' menuItemKey="Cash Flow" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Income" to='/home/billing/income' menuItemKey="Driver Master" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Profit & Loss" to='/home/billing/profitandloss' menuItemKey="Profit & Loss" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-                <MenuItem label="Driver Master" to='/home/customers/drivermaster' menuItemKey="Driver Master" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
             </div>
             <Outlet />
         </div>

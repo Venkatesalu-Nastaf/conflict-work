@@ -1,17 +1,19 @@
 import React from 'react'
-import './CashFlow.css'
+import './Expense.css'
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-// import Division from './Division/Division';
 import PettyCash from './PettyCash/PettyCash';
 import PayRoll from './PayRoll/PayRoll';
+import Asset from './Asset/Asset';
+import Liabilities from './Liabilities/Liabilities';
+import Others from './Others/Others';
 
 
 
-const CashFlow = () => {
+const Expense = () => {
   const [value, setValue] = React.useState("pettycash");
 
   const handleChange = (event, newValue) => {
@@ -26,12 +28,16 @@ const CashFlow = () => {
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="Petty Cash" value="pettycash" />
                 <Tab label="Pay Roll" value="payroll" />
-                {/* <Tab label="Division" value="division" /> */}
+                <Tab label="Assets" value="assets" />
+                <Tab label="Liabilities" value="liabilities" />
+                <Tab label="Others" value="others" />
               </TabList>
             </Box>
             <TabPanel value="pettycash"><PettyCash /></TabPanel>
             <TabPanel value="payroll"><PayRoll /></TabPanel>
-            {/* <TabPanel value="division"><Division /></TabPanel> */}
+            <TabPanel value="assets"><Asset /></TabPanel>
+            <TabPanel value="liabilities"><Liabilities /></TabPanel>
+            <TabPanel value="others"><Others /></TabPanel>
           </TabContext>
         </Box>
       </div>
@@ -39,4 +45,4 @@ const CashFlow = () => {
   )
 }
 
-export default CashFlow
+export default Expense

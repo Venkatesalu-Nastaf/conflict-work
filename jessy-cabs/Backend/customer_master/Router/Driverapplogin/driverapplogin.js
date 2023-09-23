@@ -4,9 +4,9 @@ const db = require('../../../db');
 
 // user creation database
 // add user creation database
-router.post('/usercreation', (req, res) => {
+router.post('/drivercreation', (req, res) => {
   const bookData = req.body;
-  db.query('INSERT INTO usercreation SET ?', bookData, (err, result) => {
+  db.query('INSERT INTO drivercreation SET ?', bookData, (err, result) => {
     if (err) {
       console.error('Error inserting data into MySQL:', err);
       return res.status(500).json({ error: "Failed to insert data into MySQL" });
@@ -16,11 +16,11 @@ router.post('/usercreation', (req, res) => {
   });
 });
 // delete user creation data
-router.delete('/usercreation/:userid', (req, res) => {
+router.delete('/drivercreation/:userid', (req, res) => {
   const userid = req.params.userid;
   console.log('Customer ID:', userid); // Log the customer ID
-  console.log('DELETE query:', 'DELETE FROM usercreation WHERE userid = ?', userid);
-  db.query('DELETE FROM usercreation WHERE userid = ?', userid, (err, result) => {
+  console.log('DELETE query:', 'DELETE FROM drivercreation WHERE userid = ?', userid);
+  db.query('DELETE FROM drivercreation WHERE userid = ?', userid, (err, result) => {
     if (err) {
       console.error('Error deleting data from MySQL:', err);
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
@@ -33,12 +33,12 @@ router.delete('/usercreation/:userid', (req, res) => {
   });
 });
 // update user creation details
-router.put('/usercreation/:userid', (req, res) => {
+router.put('/drivercreation/:userid', (req, res) => {
   const userid = req.params.userid;
   const updatedCustomerData = req.body;
   console.log('Customer ID:', userid); // Log the customer ID
   console.log('Updated customer data:', updatedCustomerData);
-  db.query('UPDATE usercreation SET ? WHERE userid = ?', [updatedCustomerData, userid], (err, result) => {
+  db.query('UPDATE drivercreation SET ? WHERE userid = ?', [updatedCustomerData, userid], (err, result) => {
     if (err) {
       console.error('Error updating data in MySQL:', err);
       return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -51,9 +51,9 @@ router.put('/usercreation/:userid', (req, res) => {
   });
 });
 
-router.get('/usercreation', (req, res) => {
+router.get('/drivercreation', (req, res) => {
   const filterValue = req.query.filter; // Assuming you want to filter based on a query parameter 'filter'
-  let query = 'SELECT * FROM usercreation';
+  let query = 'SELECT * FROM drivercreation';
 
   if (filterValue) {
     // Add a WHERE clause to filter based on the query parameter

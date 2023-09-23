@@ -37,8 +37,6 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 // import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 
-
-
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -62,7 +60,7 @@ const actions = [
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "voucherno", headerName: "VoucherNo", width: 130 },
+  { field: "assetno", headerName: "Asset No", width: 130 },
   { field: "date", headerName: "Payment Date", width: 130 },
   { field: "Billname", headerName: "Bill Name", width: 130 },
   { field: "PaymentCategory", headerName: "Payment Category", width: 150 },
@@ -75,9 +73,8 @@ const Asset = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [toDate, setToDate] = useState(dayjs());
-  const [voucherno] = useState("");
+  const [assetno] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
-  // const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
   const [info, setInfo] = useState(false);
@@ -105,7 +102,7 @@ const Asset = () => {
     // Modify tableData to exclude the index number
     const tableData = rows.map((row) => [
       row['id'],
-      row['voucherno'],
+      row['assetno'],
       row['printName'],
       row['Billname'],
       row['date'],
@@ -113,7 +110,7 @@ const Asset = () => {
       row['amount']
     ]);
     pdf.autoTable({
-      head: [['Sno', 'VoucherNo', 'Payment Date', 'Bill Name', 'Payment Category', 'Amount']],
+      head: [['Sno', 'assetno', 'Payment Date', 'Bill Name', 'Payment Category', 'Amount']],
       body: tableData,
       startY: 20,
     });
@@ -161,11 +158,18 @@ const Asset = () => {
   }, [success]);
 
   const [book, setBook] = useState({
-    voucherno: '',
-    Billname: '',
-    date: '',
-    PaymentCategory: '',
-    amount: '',
+    assetno: '',
+    assettype: '',
+    purchaseprice: '',
+    dateofacquisition: '',
+    assetdescription: '',
+    legaldocuments: '',
+    ownerofasset: '',
+    registrationslicenses: '',
+    warrantyinformation: '',
+    maintenancerecords: '',
+    insuranceinformation: '',
+
   });
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
@@ -191,21 +195,35 @@ const Asset = () => {
       }));
     }
   };
-  const handleDateChange = (date) => {
-    const startOfDay = dayjs(date).startOf('day').format();
+  const handleDateChange = (date, name) => {
+    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
     setBook((prevBook) => ({
       ...prevBook,
-      date: startOfDay,
+      [name]: formattedDate,
+    }));
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: formattedDate,
+    }));
+    setTripSheetData((prevValues) => ({
+      ...prevValues,
+      [name]: formattedDate,
     }));
   };
   const handleCancel = () => {
     setBook((prevBook) => ({
       ...prevBook,
-      voucherno: '',
-      Billname: '',
-      date: '',
-      PaymentCategory: '',
-      amount: '',
+      assetno: '',
+      assettype: '',
+      purchaseprice: '',
+      dateofacquisition: '',
+      ownerofasset: '',
+      assetdescription: '',
+      legaldocuments: '',
+      registrationslicenses: '',
+      warrantyinformation: '',
+      maintenancerecords: '',
+      insuranceinformation: '',
     }));
     setSelectedCustomerData({});
   };
@@ -216,32 +234,30 @@ const Asset = () => {
     setSelectedCustomerId(params.row.customerId);
   }, []);
 
-
   const handleAdd = async () => {
-    const Billname = book.Billname;
-    if (!Billname) {
+    const assetno = book.assetno;
+    if (!assetno) {
       setError(true);
       setErrorMessage("fill mantatory fields");
       return;
     }
     try {
       console.log('Add button clicked');
-      const response = await axios.post('http://localhost:8081/pettycash', book);
+      const response = await axios.post('http://localhost:8081/asset', book);
       console.log('Customer added:', response.data);
-      handleCancel(); // Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
+      handleCancel();
       setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error adding customer:', error);
       setErrorMessage("Check your Network Connection");
-      // You can add error handling code here, like displaying an error message to the user
     }
   };
-  const handleClick = async (event, actionName, voucherno) => {
+  const handleClick = async (event, actionName, assetno) => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
         console.log('List button clicked');
-        const response = await axios.get('http://localhost:8081/pettycash');
+        const response = await axios.get('http://localhost:8081/asset');
         const data = response.data;
         setRows(data);
         setSuccessMessage("Successfully listed");
@@ -250,16 +266,16 @@ const Asset = () => {
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/pettycash/${voucherno}`);
+        await axios.delete(`http://localhost:8081/asset/${assetno}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
-        const selectedCustomer = rows.find((row) => row.voucherno === voucherno);
+        const selectedCustomer = rows.find((row) => row.assetno === assetno);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/pettycash/${voucherno}`, updatedCustomer);
+        await axios.put(`http://localhost:8081/asset/${assetno}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
       }
@@ -279,7 +295,7 @@ const Asset = () => {
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/pettycash?voucherno=${encodeURIComponent(voucherno)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}`
+        `http://localhost:8081/asset?assetno=${encodeURIComponent(assetno)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}`
       );
       const data = response.data;
       setRows(data);
@@ -289,7 +305,7 @@ const Asset = () => {
       setError(true);
       setErrorMessage("list is empty")
     }
-  }, [voucherno, fromDate, toDate]);
+  }, [assetno, fromDate, toDate]);
   return (
     <div className="PettyCash-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
@@ -305,7 +321,7 @@ const Asset = () => {
                 label="Asset No"
                 name="assetno"
                 autoComplete="new-password"
-                value={selectedCustomerData?.voucherno || book.voucherno}
+                value={selectedCustomerData?.assetno || book.assetno}
                 onChange={handleChange}
                 autoFocus
               />
@@ -319,6 +335,8 @@ const Asset = () => {
                 id="id"
                 label="Asset Type"
                 name="assettype"
+                value={selectedCustomerData?.assettype || book.assettype}
+                onChange={handleChange}
                 autoFocus
               />
             </div>
@@ -331,20 +349,34 @@ const Asset = () => {
                 id="id"
                 label="Purchase Price"
                 name="purchaseprice"
+                value={selectedCustomerData?.purchaseprice || book.purchaseprice}
+                onChange={handleChange}
                 autoFocus
               />
             </div>
             <div className="input">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Date of Acquisition"
                   value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
                   onChange={handleDateChange}
                 >
                   {({ inputProps, inputRef }) => (
-                    <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
+                    <TextField {...inputProps} name='dateofacquisition' inputRef={inputRef} value={selectedCustomerData?.date} />
                   )}
                 </DatePicker>
+              </LocalizationProvider> */}
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoItem label="Start Date">
+                  <DatePicker
+                    value={selectedCustomerData.dateofacquisition ? dayjs(selectedCustomerData.startdate) : null}
+                    onChange={(date) => handleDateChange(date, 'dateofacquisition')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.dateofacquisition} />
+                    )}
+                  </DatePicker>
+                </DemoItem>
               </LocalizationProvider>
             </div>
           </div>
@@ -357,7 +389,9 @@ const Asset = () => {
                 size="small"
                 id="id"
                 label="Owner Of Asset"
-                name="assettype"
+                name="ownerofasset"
+                value={selectedCustomerData?.ownerofasset || book.ownerofasset}
+                onChange={handleChange}
                 autoFocus
               />
             </div>
@@ -370,6 +404,8 @@ const Asset = () => {
                 id="id"
                 label="Asset Description"
                 name="assetdescription"
+                value={selectedCustomerData?.assetdescription || book.assetdescription}
+                onChange={handleChange}
                 autoComplete="new-password"
                 autoFocus
               />
@@ -383,6 +419,8 @@ const Asset = () => {
                 id="id"
                 label="Legal Documents"
                 name="legaldocuments"
+                value={selectedCustomerData?.legaldocuments || book.legaldocuments}
+                onChange={handleChange}
                 autoFocus
               />
             </div>
@@ -395,6 +433,8 @@ const Asset = () => {
                 id="id"
                 label="Registrations Licenses"
                 name="registrationslicenses"
+                value={selectedCustomerData?.registrationslicenses || book.registrationslicenses}
+                onChange={handleChange}
                 autoComplete="new-password"
                 autoFocus
               />
@@ -410,6 +450,8 @@ const Asset = () => {
                 id="warrantyinformation"
                 label="Warranty Information"
                 name="warrantyinformation"
+                value={selectedCustomerData?.warrantyinformation || book.warrantyinformation}
+                onChange={handleChange}
                 autoFocus
               />
             </div>
@@ -422,6 +464,8 @@ const Asset = () => {
                 id="maintenancerecords"
                 label="Maintenance Records"
                 name="maintenancerecords"
+                value={selectedCustomerData?.maintenancerecords || book.maintenancerecords}
+                onChange={handleChange}
                 autoFocus
               />
             </div>
@@ -434,6 +478,8 @@ const Asset = () => {
                 id="insuranceinformation"
                 label="Insurance Information"
                 name="insuranceinformation"
+                value={selectedCustomerData?.insuranceinformation || book.insuranceinformation}
+                onChange={handleChange}
                 autoFocus
               />
             </div>
@@ -459,24 +505,20 @@ const Asset = () => {
               <div className="input-field">
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    {/* <DemoItem label="From"> */}
                     <DatePicker
                       label="From Date"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
-                    {/* </DemoItem> */}
                   </LocalizationProvider>
                 </div>
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    {/* <DemoItem label="To"> */}
                     <DatePicker
                       label="To Date"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />
-                    {/* </DemoItem> */}
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: '123px', marginTop: "50px" }}>

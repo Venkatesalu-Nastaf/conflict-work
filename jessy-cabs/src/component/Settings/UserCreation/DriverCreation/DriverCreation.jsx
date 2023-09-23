@@ -26,7 +26,6 @@ import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 // REACT ICONS
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
-
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -44,8 +43,6 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -75,7 +72,7 @@ const DriverCreation = () => {
     const [actionName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [passwordsMatch, setPasswordsMatch] = useState(true);
+    const [passwordsMatch, setPasswordsMatch] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
@@ -84,7 +81,6 @@ const DriverCreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
-
 
     // TABLE START
     const columns = [
@@ -100,7 +96,6 @@ const DriverCreation = () => {
         { field: "licenseexpdate", headerName: "License Exp Date", width: 130 },
         { field: "badgeexpdate", headerName: "Badge Exp Date", width: 130 },
         { field: "active", headerName: "Active", width: 160 },
-
     ];
 
     const [book, setBook] = useState({
@@ -117,6 +112,8 @@ const DriverCreation = () => {
         userconfirmpassword: '',
         active: '',
         viewfor: '',
+        licensepath: '',
+        aadharcardpath: '',
     });
 
     // TABLE END
@@ -169,29 +166,32 @@ const DriverCreation = () => {
             userid: '',
             username: '',
             stationname: '',
+            licenseno: '',
+            badgeno: '',
+            aadharno: '',
+            licenseexpdate: '',
+            badgeexpdate: '',
             designation: '',
             userpassword: '',
             userconfirmpassword: '',
             active: '',
             viewfor: '',
+            licensepath: '',
+            aadharcardpath: '',
         }));
         setSelectedCustomerData({});
     };
 
     const handleAdd = async () => {
         const stationname = book.stationname;
-
         if (password === confirmPassword) {
-            setPasswordsMatch(true);
-
+            setPasswordsMatch(false);
             if (!stationname) {
                 setErrorMessage("Check your Network Connection");
-                // setErrorMessage("Fill mandatory fields");
                 return;
             }
-
             try {
-                await axios.post('http://localhost:8081/DriverCreation', book);
+                await axios.post('http://localhost:8081/drivercreation', book);
                 console.log(book);
                 handleCancel();
                 validatePasswordMatch();
@@ -201,17 +201,16 @@ const DriverCreation = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            setPasswordsMatch(false);
+            setPasswordsMatch(true);
         }
     };
-
 
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
                 console.log('List button clicked');
-                const response = await axios.get('http://localhost:8081/DriverCreation');
+                const response = await axios.get('http://localhost:8081/drivercreation');
                 const data = response.data;
                 setSuccessMessage("Successfully listed");
                 setRows(data);
@@ -220,7 +219,7 @@ const DriverCreation = () => {
                 handleCancel();
             } else if (actionName === 'Delete') {
                 console.log('Delete button clicked');
-                await axios.delete(`http://localhost:8081/DriverCreation/${userid}`);
+                await axios.delete(`http://localhost:8081/drivercreation/${userid}`);
                 console.log('Customer deleted');
                 setSelectedCustomerData(null);
                 setSuccessMessage("Successfully Deleted");
@@ -229,19 +228,17 @@ const DriverCreation = () => {
                 console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.userid === userid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`http://localhost:8081/DriverCreation/${userid}`, updatedCustomer);
-                console.log('Customer updated');
+                await axios.put(`http://localhost:8081/drivercreation/${userid}`, updatedCustomer);
+                console.log('Driver updated');
                 setSuccessMessage("Successfully updated");
                 handleCancel();
             } else if (actionName === 'Add') {
                 handleAdd();
-                handleCancel();
             }
         } catch (err) {
             console.log(err);
             setError(true);
             setErrorMessage("Check your Network Connection");
-            // setErrorMessage("Check Network Connection");
         }
     };
     const hidePopup = () => {
@@ -249,6 +246,7 @@ const DriverCreation = () => {
         setError(false);
         setInfo(false);
         setWarning(false);
+        setPasswordsMatch(false);
     };
     useEffect(() => {
         if (error) {
@@ -258,7 +256,6 @@ const DriverCreation = () => {
             return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [error]);
-
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => {
@@ -284,15 +281,13 @@ const DriverCreation = () => {
         }
     }, [info]);
     useEffect(() => {
-        if (error || !passwordsMatch) {
+        if (passwordsMatch) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000); // 3 seconds
-
             return () => clearTimeout(timer); // Clean up the timer on unmount
         }
-    }, [error, passwordsMatch]);
-
+    }, [passwordsMatch]);
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
@@ -516,6 +511,8 @@ const DriverCreation = () => {
                                 <TextField
                                     size="small"
                                     name="licenseno"
+                                    value={selectedCustomerData?.licenseno || book.licenseno}
+                                    onChange={handleChange}
                                     label="License No"
                                     id="licenseno"
                                     variant="standard"
@@ -527,7 +524,9 @@ const DriverCreation = () => {
                                 </div>
                                 <TextField
                                     size="small"
-                                    name="badgeeno"
+                                    name="badgeno"
+                                    value={selectedCustomerData?.badgeno || book.badgeno}
+                                    onChange={handleChange}
                                     label="Badge No"
                                     id="badgeno"
                                     variant="standard"
@@ -545,9 +544,11 @@ const DriverCreation = () => {
                             <div className="input" style={{ width: "170px" }}>
                                 <TextField
                                     size="small"
-                                    name="licenseno"
+                                    name="licenseexpdate"
+                                    value={selectedCustomerData?.licenseexpdate || book.licenseexpdate}
+                                    onChange={handleChange}
                                     label="License Exp Date"
-                                    id="licenseno"
+                                    id="licenseexpdate"
                                     sx={{ m: 1, width: "140ch" }}
                                 // variant="standard"
                                 />
@@ -555,9 +556,11 @@ const DriverCreation = () => {
                             <div className="input" style={{ width: "170px" }}>
                                 <TextField
                                     size="small"
-                                    name="licenseno"
+                                    name="badgeexpdate"
+                                    value={selectedCustomerData?.badgeexpdate || book.badgeexpdate}
+                                    onChange={handleChange}
                                     label="Badge Exp Date"
-                                    id="licenseno"
+                                    id="badgeexpdate"
                                     sx={{ m: 1, width: "140ch" }}
                                 // variant="standard"
                                 />
@@ -570,9 +573,11 @@ const DriverCreation = () => {
                                 </div>
                                 <TextField
                                     size="small"
-                                    name="designation"
+                                    name="aadharno"
+                                    value={selectedCustomerData?.aadharno || book.aadharno}
+                                    onChange={handleChange}
                                     label="Aadhar-card No"
-                                    id="designation"
+                                    id="aadharno"
                                     sx={{ m: 1, width: "230ch" }}
                                     variant="standard"
                                 />
@@ -621,7 +626,7 @@ const DriverCreation = () => {
                             <p>{infoMessage}</p>
                         </div>
                     }
-                    {!passwordsMatch &&
+                    {passwordsMatch &&
                         <div className='alert-popup Warning' >
                             <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
                             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>

@@ -28,6 +28,8 @@ const pettycashRouter = require('./Router/cashflow/pettycash');
 const payrollRouter = require('./Router/cashflow/payroll');
 const fueldetailsRouter = require('./Router/fueldetails/mileage');
 const taxsettingRouter = require('./Router/mainsetting/taxsetting');
+const drivercreationRouter = require('./Router/Driverapplogin/driverapplogin');
+const assetsRouer = require('./Router/cashflow/assets');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -129,6 +131,10 @@ app.use('/', divionRouter);
 app.use('/', driverbataRouter);
 // End RateValidity database
 // -----------------------------------------------------------------------------------------------------------
+// driverbatarate Database
+app.use('/', drivercreationRouter);
+// End RateValidity database
+// -----------------------------------------------------------------------------------------------------------
 // Employees Database
 app.use('/', employeeRouter);
 // End Employees database
@@ -139,6 +145,10 @@ app.use('/', billingRouter);
 // -----------------------------------------------------------------------------------------------------------
 // cashflow Database
 app.use('/', pettycashRouter);
+// End pettycash database
+// -----------------------------------------------------------------------------------------------------------
+// cashflow Database
+app.use('/', assetsRouer);
 // End pettycash database
 // -----------------------------------------------------------------------------------------------------------
 // Add payroll database

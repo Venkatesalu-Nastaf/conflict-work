@@ -35,7 +35,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-// import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -199,14 +199,6 @@ const Asset = () => {
     const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
     setBook((prevBook) => ({
       ...prevBook,
-      [name]: formattedDate,
-    }));
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: formattedDate,
-    }));
-    setTripSheetData((prevValues) => ({
-      ...prevValues,
       [name]: formattedDate,
     }));
   };

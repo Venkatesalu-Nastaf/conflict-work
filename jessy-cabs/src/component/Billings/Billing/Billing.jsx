@@ -23,7 +23,6 @@ import Inventory2Icon from "@mui/icons-material/Inventory2";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import React, { useState, useEffect, useCallback } from 'react';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
@@ -380,16 +379,15 @@ const Billing = () => {
                             </div>
                             <div className="input">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoItem label="Date">
-                                        <DatePicker
-                                            value={formData.Billingdate || selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null}
-                                            onChange={(date) => handleDateChange(date, 'Billingdate')}
-                                        >
-                                            {({ inputProps, inputRef }) => (
-                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.Billingdate} />
-                                            )}
-                                        </DatePicker>
-                                    </DemoItem>
+                                    <DatePicker
+                                        label="Billing Date"
+                                        value={formData.Billingdate || selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null}
+                                        onChange={(date) => handleDateChange(date, 'Billingdate')}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.Billingdate} />
+                                        )}
+                                    </DatePicker>
                                 </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "120px" }}>
@@ -452,16 +450,15 @@ const Billing = () => {
                             </div>
                             <div className="input">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoItem label="Trip Date">
-                                        <DatePicker
-                                            value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
-                                            onChange={(date) => handleDateChange(date, 'startdate')}
-                                        >
-                                            {({ inputProps, inputRef }) => (
-                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
-                                            )}
-                                        </DatePicker>
-                                    </DemoItem>
+                                    <DatePicker
+                                        label="Trip Date"
+                                        value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
+                                        onChange={(date) => handleDateChange(date, 'startdate')}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                                        )}
+                                    </DatePicker>
                                 </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "111px" }}>

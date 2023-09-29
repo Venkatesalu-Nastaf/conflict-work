@@ -9,6 +9,7 @@ import { ThreeCircles } from "react-loader-spinner";
 import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
 import Customers from "./component/Customers/Customers";
+import Income from "./component/Billings/Income/Income";
 import Billing from "./component/Billings/Billing/Billing";
 import Expense from "./component/Billings/Expense/Expense";
 import Employes from "./component/Options/Employes/Employes";
@@ -17,7 +18,6 @@ import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Customer from "./component/Customers/Customer/Customer";
 import Bookings from "./component/Customers/Bookings/Bookings";
 import RateTypes from "./component/Options/RateTypes/RateTypes";
-import Others from "./component/Billings/Expense/Others/Others";
 import Suppliers from "./component/Customers/Supplier/Suppliers";
 import UserSettings from "./component/UserSettings/UserSettings";
 import TripSheet from "./component/Customers/TripSheet/TripSheet";
@@ -83,7 +83,7 @@ function App() {
               <Route path="/home/billing" element={<Billings />}>
                 <Route path="/home/billing/billing" element={<Billing />} />
                 <Route path="/home/billing/expense" element={<Expense />} />
-                <Route path="/home/billing/income" element={<Others />} />
+                <Route path="/home/billing/income" element={<Income />} />
                 <Route path="/home/billing/profitandloss" element={<ProfiteLoss />} />
               </Route>
               <Route path="/home/settings" element={<Settings />}>

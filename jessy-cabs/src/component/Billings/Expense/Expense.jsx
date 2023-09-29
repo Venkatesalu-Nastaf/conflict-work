@@ -20,7 +20,7 @@ const Expense = () => {
     setValue(newValue);
   };
   return (
-    <div className="form-container-pettycash">
+    <div className="form-container-Expense">
       <div className="container-main">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>

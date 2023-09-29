@@ -15,12 +15,12 @@
     width: 70%;
 }
 
-.form-container-pettycash .Title-Name {
+.form-container-Expense .Title-Name {
     font-size: 20px;
     font-weight: 500;
 }
 
-.form-container-pettycash .PettyCash-form {
+.form-container-Expense .PettyCash-form {
     height: 100vh;
     width: 100vw;
     overflow-x: hidden;
@@ -31,12 +31,12 @@
     background-color: var(--glass);
 }
 
-.form-container-pettycash {
+.form-container-Expense {
     display: flex;
     border-radius: 10px;
 }
 
-.form-container-pettycash .container-main::-webkit-scrollbar {
+.form-container-Expense .container-main::-webkit-scrollbar {
     width: 0px;
     height: 0px;
     overflow-x: hidden;
@@ -82,12 +82,12 @@
 }
 
 /* TIMER END */
-.form-container-pettycash .container-main::-webkit-scrollbar-thumb {
+.form-container-Expense .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
 }
 
-.form-container-pettycash .container-main {
+.form-container-Expense .container-main {
     border: 2px solid #ccc;
     overflow: scroll;
     height: 77vh;

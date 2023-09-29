@@ -35,7 +35,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -61,11 +60,17 @@ const actions = [
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "assetno", headerName: "Asset No", width: 130 },
-  { field: "date", headerName: "Payment Date", width: 130 },
-  { field: "Billname", headerName: "Bill Name", width: 130 },
-  { field: "PaymentCategory", headerName: "Payment Category", width: 150 },
-  { field: "amount", headerName: "Amount", width: 130 },
+  { field: "assettype", headerName: "Asset Type", width: 130 },
+  { field: "purchaseprice", headerName: "Purchase Price", width: 130 },
+  { field: "ownerofasset", headerName: "Owner Of Asset", width: 150 },
+  { field: "legaldocuments", headerName: "Legal Documents", width: 130 },
+  { field: "registrationlicense", headerName: "Registration License", width: 130 },
+  { field: "warrantyinformation", headerName: "Warranty Information", width: 130 },
+  { field: "maintenancerecordes", headerName: "Maintenance Records", width: 130 },
+  { field: "insuranceinformation", headerName: "Insurance Information", width: 130 },
+  { field: "invoicecopy", headerName: "Invoice Copy", width: 130 },
 ];
+
 
 const Asset = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -103,14 +108,18 @@ const Asset = () => {
     const tableData = rows.map((row) => [
       row['id'],
       row['assetno'],
-      row['printName'],
-      row['Billname'],
-      row['date'],
-      row['PaymentCategory'],
-      row['amount']
+      row['assettype'],
+      row['purchaseprice'],
+      row['ownerofasset'],
+      row['legaldocuments'],
+      row['registrationlicense'],
+      row['warrantyinformation'],
+      row['maintenancerecordes'],
+      row['insuranceinformation'],
+      row['invoicecopy']
     ]);
     pdf.autoTable({
-      head: [['Sno', 'assetno', 'Payment Date', 'Bill Name', 'Payment Category', 'Amount']],
+      head: [['Sno', 'assetNo', 'Payment Date', 'Bill Name', 'Payment Category', 'Amount']],
       body: tableData,
       startY: 20,
     });
@@ -128,32 +137,32 @@ const Asset = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
 
@@ -299,9 +308,9 @@ const Asset = () => {
     }
   }, [assetno, fromDate, toDate]);
   return (
-    <div className="PettyCash-form Scroll-Style-hide">
+    <div className="Asset-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
-        <div className="PettyCash-page-header">
+        <div className="Asset-page-header">
           <div className="input-field">
             <div className="input">
               <div className="icone">
@@ -359,8 +368,8 @@ const Asset = () => {
                 </DatePicker>
               </LocalizationProvider> */}
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoItem label="Start Date">
                   <DatePicker
+                    label="Date of Acquisition"
                     value={selectedCustomerData.dateofacquisition ? dayjs(selectedCustomerData.startdate) : null}
                     onChange={(date) => handleDateChange(date, 'dateofacquisition')}
                   >
@@ -368,7 +377,6 @@ const Asset = () => {
                       <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.dateofacquisition} />
                     )}
                   </DatePicker>
-                </DemoItem>
               </LocalizationProvider>
             </div>
           </div>
@@ -433,7 +441,7 @@ const Asset = () => {
             </div>
           </div>
           <div className="input-field">
-            <div className="input" style={{ width: "220px" }}>
+            <div className="input" style={{ width: "230px" }}>
               <div className="icone">
                 <GiBackwardTime style={{ fontSize: "25px" }} color="action" />
               </div>
@@ -493,7 +501,7 @@ const Asset = () => {
         </div>
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn-PettyCash">
+            <div className="copy-title-btn-Asset">
               <div className="input-field">
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -580,7 +588,7 @@ const Asset = () => {
             )}
           </PopupState>
         </div>
-        <div className="table-bookingCopy-PettyCash">
+        <div className="table-bookingCopy-Asset">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}

@@ -16,7 +16,6 @@ import WorkOffIcon from '@mui/icons-material/WorkOff';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 import NaturePeopleIcon from '@mui/icons-material/NaturePeople';
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import WorkIcon from '@mui/icons-material/Work';
 import EmailIcon from '@mui/icons-material/Email';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
@@ -412,16 +411,15 @@ const PayRoll = () => {
             </div>
             <div className="input" style={{ width: "215px" }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoItem label="Salary Date">
-                  <DatePicker
-                    value={formData.salarydate || selectedCustomerData.salarydate ? dayjs(selectedCustomerData.salarydate) : null}
-                    onChange={(date) => handleDateChange(date, 'salarydate')}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.salarydate} />
-                    )}
-                  </DatePicker>
-                </DemoItem>
+                <DatePicker
+                  label="Salary Date"
+                  value={formData.salarydate || selectedCustomerData.salarydate ? dayjs(selectedCustomerData.salarydate) : null}
+                  onChange={(date) => handleDateChange(date, 'salarydate')}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.salarydate} />
+                  )}
+                </DatePicker>
               </LocalizationProvider>
 
             </div>

@@ -14,7 +14,6 @@ import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
@@ -415,8 +414,8 @@ const Customer = () => {
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Date">
                     <DatePicker
+                    label="Date"
                       value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
                       onChange={handleDateChange}
                     >
@@ -424,7 +423,6 @@ const Customer = () => {
                         <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
                       )}
                     </DatePicker>
-                  </DemoItem>
                 </LocalizationProvider>
               </div>
             </div>

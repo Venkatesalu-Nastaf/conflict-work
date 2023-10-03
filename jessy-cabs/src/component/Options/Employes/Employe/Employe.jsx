@@ -13,7 +13,6 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import { IconButton, TextField } from "@mui/material";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -419,16 +418,15 @@ const Employe = () => {
                             </div>
                             <div className="input" >
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoItem label="Joining Date">
-                                        <DatePicker
-                                            value={formData.joiningdate || selectedCustomerData.joiningdate ? dayjs(selectedCustomerData.joiningdate) : null}
-                                            onChange={(date) => handleDateChange(date, 'joiningdate')}
-                                        >
-                                            {({ inputProps, inputRef }) => (
-                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.joiningdate} />
-                                            )}
-                                        </DatePicker>
-                                    </DemoItem>
+                                    <DatePicker
+                                        label="Joining Date"
+                                        value={formData.joiningdate || selectedCustomerData.joiningdate ? dayjs(selectedCustomerData.joiningdate) : null}
+                                        onChange={(date) => handleDateChange(date, 'joiningdate')}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.joiningdate} />
+                                        )}
+                                    </DatePicker>
                                 </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "215px" }}>

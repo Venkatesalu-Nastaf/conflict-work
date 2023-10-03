@@ -9,7 +9,6 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -275,16 +274,15 @@ const Vehicaleinfo = () => {
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="D.O.A Date">
-                    <DatePicker
-                      value={selectedCustomerData.doadate ? dayjs(selectedCustomerData.doadate) : null}
-                      onChange={(date) => handleDateChange(date, 'doadate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='doadate' value={selectedCustomerData.doadate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="D.O.A Date"
+                    value={selectedCustomerData.doadate ? dayjs(selectedCustomerData.doadate) : null}
+                    onChange={(date) => handleDateChange(date, 'doadate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='doadate' value={selectedCustomerData.doadate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
@@ -375,44 +373,41 @@ const Vehicaleinfo = () => {
             <div className="input-field">
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="FC Date">
-                    <DatePicker
-                      value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
-                      onChange={(date) => handleDateChange(date, 'fcdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='fcdate' value={selectedCustomerData.fcdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="FC Date"
+                    value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
+                    onChange={(date) => handleDateChange(date, 'fcdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='fcdate' value={selectedCustomerData.fcdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Tax Date">
-                    <DatePicker
-                      value={selectedCustomerData.taxdate ? dayjs(selectedCustomerData.taxdate) : null}
-                      onChange={(date) => handleDateChange(date, 'taxdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='taxdate' value={selectedCustomerData.taxdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="Tax Date"
+                    value={selectedCustomerData.taxdate ? dayjs(selectedCustomerData.taxdate) : null}
+                    onChange={(date) => handleDateChange(date, 'taxdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='taxdate' value={selectedCustomerData.taxdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="National Permit Date">
-                    <DatePicker
-                      value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
-                      onChange={(date) => handleDateChange(date, 'npdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData.npdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="National Permit Date"
+                    value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
+                    onChange={(date) => handleDateChange(date, 'npdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData.npdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
@@ -432,44 +427,41 @@ const Vehicaleinfo = () => {
             <div className="input-field">
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Insurance Date">
-                    <DatePicker
-                      value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null}
-                      onChange={(date) => handleDateChange(date, 'insdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='insdate' value={selectedCustomerData.insdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="Insurance Date"
+                    value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null}
+                    onChange={(date) => handleDateChange(date, 'insdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='insdate' value={selectedCustomerData.insdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="State permit">
-                    <DatePicker
-                      value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
-                      onChange={(date) => handleDateChange(date, 'stpermit')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='stpermit' value={selectedCustomerData.stpermit || ''} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="State permit"
+                    value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
+                    onChange={(date) => handleDateChange(date, 'stpermit')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='stpermit' value={selectedCustomerData.stpermit || ''} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Due Date">
-                    <DatePicker
-                      value={selectedCustomerData.duedate ? dayjs(selectedCustomerData.duedate) : null}
-                      onChange={(date) => handleDateChange(date, 'duedate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="Due Date"
+                    value={selectedCustomerData.duedate ? dayjs(selectedCustomerData.duedate) : null}
+                    onChange={(date) => handleDateChange(date, 'duedate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">

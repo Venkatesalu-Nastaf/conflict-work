@@ -1456,30 +1456,28 @@ const TripSheet = () => {
             <div className="input-field">
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Start Date">
-                    <DatePicker
-                      value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
-                      onChange={(date) => handleDateChange(date, 'startdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="Start Date"
+                    value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
+                    onChange={(date) => handleDateChange(date, 'startdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Close Date">
-                    <DatePicker
-                      value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null}
-                      onChange={(date) => handleDateChange(date, 'closedate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="Close Date"
+                    value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null}
+                    onChange={(date) => handleDateChange(date, 'closedate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">

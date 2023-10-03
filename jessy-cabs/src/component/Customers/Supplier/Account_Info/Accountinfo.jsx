@@ -19,7 +19,6 @@ import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -360,8 +359,8 @@ const Accuntinfo = () => {
               <div className="input">
 
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Date">
                     <DatePicker
+                    label="Date"
                       value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
                       onChange={handleDateChange}
                     >
@@ -369,7 +368,6 @@ const Accuntinfo = () => {
                         <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
                       )}
                     </DatePicker>
-                  </DemoItem>
                 </LocalizationProvider>
               </div>
               <div className="input">

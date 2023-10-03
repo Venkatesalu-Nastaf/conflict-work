@@ -9,8 +9,10 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ClearIcon from '@mui/icons-material/Clear';
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import Box from "@mui/material/Box";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
@@ -28,37 +30,23 @@ import dayjs from "dayjs";
 import { Menu, TextField } from "@mui/material";
 import { AiFillAppstore } from "react-icons/ai";
 import { MdEditDocument } from "react-icons/md";
-import { AiFillCopy } from "react-icons/ai";
 import { HiDocumentText } from "react-icons/hi";
-import { AiFillBook } from "react-icons/ai";
-import { BiReceipt } from "react-icons/bi";
-import { BsPersonExclamation } from "react-icons/bs";
 import { ImPriceTags } from "react-icons/im";
-import { GiBackwardTime } from "react-icons/gi";
-import { AiOutlineContainer } from "react-icons/ai";
-import { CgFileDocument } from "react-icons/cg";
 
 
 // TABLE
 
 const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "descriptionoftheliability", headerName: "Description of the Liability", width: 180 },
-    { field: "creditorinformation", headerName: "Creditor Information", width: 150 },
-    { field: "principalamount", headerName: "Principal Amount", width: 130 },
-    { field: "maturitydate", headerName: "Maturity Date", width: 120 },
-    { field: "interestrate", headerName: "Interest Rate", width: 130 },
+    { field: "id", headerName: "Sno", width: 50 },
+    { field: "rentdescription", headerName: "Rent Description", width: 130 },
+    { field: "advanceamount", headerName: "Advance Amount", width: 130 },
+    { field: "monthlyrent", headerName: "Monthly Rent", width: 130 },
+    { field: "rentdate", headerName: "Rent Date", width: 120 },
+    { field: "address", headerName: "Address", width: 140 },
     { field: "termsandconditions", headerName: "Terms/Conditions", width: 130 },
-    { field: "repaymentshedule", headerName: "Repayment Shedule", width: 150 },
+    { field: "repaymentshedule", headerName: "Repayment Shedule", width: 140 },
     { field: "outstandingbalance", headerName: "Outstanding Balance", width: 150 },
-    { field: "paymenthistory", headerName: "Payment History", width: 130 },
-    { field: "accruedOthers", headerName: "Accrued Others", width: 130 },
-    { field: "contingentOthers", headerName: "Contingent Others", width: 150 },
-    { field: "creditrate", headerName: "Credit Rate", width: 100 },
-    { field: "legaldocumentation", headerName: "Legal Documentation", width: 150 },
-    { field: "inerestexpense", headerName: "Inerest Expense", width: 130 },
-    { field: "debtconvenants", headerName: "Debt Convenants", width: 130 },
-    { field: "amortizationdepreciation", headerName: "Amortization / Depreciation", width: 190 },
+    { field: "agreementcopy", headerName: "Agreement Copy", width: 130 },
 ];
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -176,31 +164,29 @@ const OfficeRent = () => {
     return (
         <>
             <div className="Others-page-header">
-                {/* Display content based on the selected option */}
-
                 <div className="input-field">
-                    <div className="input" style={{ width: "260px" }}>
+                    <div className="input" style={{ width: "230px" }}>
                         <div className="icone">
                             <BadgeIcon color="action" />
                         </div>
                         <TextField
                             size="small"
-                            id="descriptionoftheliability"
-                            label="Description of the Liability"
-                            name="Descriptionoftheliability"
+                            id="RentDescription"
+                            label="Rent Description"
+                            name="RentDescription"
                             autoComplete="new-password"
                             autoFocus
                         />
                     </div>
-                    <div className="input" style={{ width: "220px" }}>
+                    <div className="input" style={{ width: "210px" }}>
                         <div className="icone">
                             <RateReviewIcon color="action" />
                         </div>
                         <TextField
                             size="small"
                             id="id"
-                            label="Creditor Information"
-                            name="CreditorInformation"
+                            label="Advance Amount"
+                            name="AdvanceAmount"
                             autoFocus
                         />
                     </div>
@@ -211,26 +197,15 @@ const OfficeRent = () => {
                         <TextField
                             size="small"
                             id="id"
-                            label="Principal Amount"
-                            name="PrincipalAmount"
+                            label="Monthly Rent"
+                            name="MonthlyRent"
                             autoFocus
                         />
                     </div>
                     <div className="input">
-                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Date of Acquisition"
-                  value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
-                  onChange={handleDateChange}
-                >
-                  {({ inputProps, inputRef }) => (
-                    <TextField {...inputProps} name='dateofacquisition' inputRef={inputRef} value={selectedCustomerData?.date} />
-                  )}
-                </DatePicker>
-              </LocalizationProvider> */}
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                                label="Maturity Date"
+                                label="Rent Date"
                                 value={selectedCustomerData.dateofacquisition ? dayjs(selectedCustomerData.startdate) : null}
                             >
                                 {({ inputProps, inputRef }) => (
@@ -241,16 +216,17 @@ const OfficeRent = () => {
                     </div>
                 </div>
                 <div className="input-field">
-                    <div className="input">
+                    <div className="input" style={{ width: "400px" }}>
                         <div className="icone">
-                            <BsPersonExclamation style={{ fontSize: "25px" }} color="action" />
+                            <AddHomeWorkIcon color="action" />
                         </div>
                         <TextField
                             size="small"
-                            id="id"
-                            label="Interest Rate"
-                            name="Interest Rate"
-                            autoFocus
+                            name="address1"
+                            label="Address"
+                            id="remark"
+                            sx={{ m: 1, width: "200ch" }}
+                            variant="standard"
                         />
                     </div>
                     <div className="input" style={{ width: "230px" }}>
@@ -278,7 +254,21 @@ const OfficeRent = () => {
                             autoFocus
                         />
                     </div>
-                    <div className="input" style={{ width: "220px" }}>
+                </div>
+                <div className="input-field">
+                    <div className="input" style={{ width: "400px" }}>
+                        <div className="icone">
+                            <HomeTwoToneIcon color="action" />
+                        </div>
+                        <TextField
+                            size="small"
+                            name="address2"
+                            id="remark"
+                            sx={{ m: 1, width: "200ch" }}
+                            variant="standard"
+                        />
+                    </div>
+                    <div className="input" style={{ width: "230px" }}>
                         <div className="icone">
                             <FactCheckIcon color="action" />
                         </div>
@@ -291,112 +281,9 @@ const OfficeRent = () => {
                             autoFocus
                         />
                     </div>
-                </div>
-                <div className="input-field">
-                    <div className="input">
-                        <div className="icone">
-                            <GiBackwardTime style={{ fontSize: "25px" }} color="action" />
-                        </div>
-                        <TextField
-                            size="small"
-                            id="warrantyinformation"
-                            label="Payment History"
-                            name="warrantyinformation"
-                            autoFocus
-                        />
-                    </div>
                     <div className="input" style={{ width: "230px" }}>
-                        <div className="icone">
-                            <BiReceipt style={{ fontSize: "25px" }} color="action" />
-                        </div>
-                        <TextField
-                            size="small"
-                            id="maintenancerecords"
-                            label="Accrued Others"
-                            name="maintenancerecords"
-                            autoFocus
-                        />
-                    </div>
-                    <div className="input" style={{ width: "230px" }}>
-                        <div className="icone">
-                            <AiFillCopy style={{ fontSize: "22px" }} color="action" />
-                        </div>
-                        <TextField
-                            size="small"
-                            id="insuranceinformation"
-                            label="Contingent Others"
-                            name="insuranceinformation"
-                            autoFocus
-                        />
-                    </div>
-                    <div className="input" style={{ width: "220px" }}>
-                        <div className="icone">
-                            <AiOutlineContainer style={{ fontSize: "22px" }} />
-                        </div>
-                        <TextField
-                            size="small"
-                            id="insuranceinformation"
-                            label="Debt Covenants"
-                            name="insuranceinformation"
-                            autoFocus
-                        />
-                    </div>
-                </div>
-                <div className="input-field">
-                    <div className="input">
-                        <div className="icone">
-                            <RateReviewIcon color="action" />
-                        </div>
-                        <TextField
-                            size="small"
-                            id="insuranceinformation"
-                            label="Credit Rating"
-                            name="insuranceinformation"
-                            autoFocus
-                        />
-                    </div>
-                    <div className="input" style={{ width: "230px" }}>
-                        <div className="icone">
-                            <CgFileDocument style={{ fontSize: "22px" }} color="action" />
-                        </div>
-                        <TextField
-                            size="small"
-                            id="insuranceinformation"
-                            label="Legal Documentation"
-                            name="insuranceinformation"
-                            autoFocus
-                        />
-                    </div>
-                    <div className="input" style={{ width: "230px" }}>
-                        <div className="icone">
-                            <AiFillBook style={{ fontSize: "22px" }} color="action" />
-                        </div>
-                        <TextField
-                            size="small"
-                            id="insuranceinformation"
-                            label="Interest Expense"
-                            name="insuranceinformation"
-                            autoFocus
-                        />
-                    </div>
-
-                </div>
-                <div className="input-field">
-                    <div className="input" style={{ width: "270px" }}>
-                        <div className="icone">
-                            <MdEditDocument style={{ fontSize: "22px" }} color="action" />
-                        </div>
-                        <TextField
-                            size="small"
-                            id="insuranceinformation"
-                            label="Amortization / Depreciation"
-                            name="insuranceinformation"
-                            autoFocus
-                        />
-                    </div>
-                    <div className="input" style={{ width: "160px" }}>
-                        <Button color="primary" variant="contained" component="label">
-                            Invoice Copy
+                        <Button startIcon={<MdEditDocument />} color="primary" variant="contained" component="label">
+                            Agreement Copy
                             <input
                                 type="file"
                                 style={{ display: "none" }}

@@ -119,7 +119,7 @@ router.get('/name-customers/:printName', (req, res) => {
         return res.status(200).json(customerDetails);
     });
 });
-//send email  from booking page
+//send email from booking page
 router.post('/send-email', async (req, res) => {
     try {
         const { guestname, guestmobileno, email, useage, pickup } = req.body;

@@ -169,7 +169,6 @@ const TripSheet = () => {
   const [closetime2, setCloseTime2] = useState('');
   const [formData, setFormData] = useState({});
   const location = useLocation();
-  // const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
@@ -181,9 +180,6 @@ const TripSheet = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
-
-
-  // const [isInvoiceDialogOpen, setIsInvoiceDialogOpen] = useState(false);
   const [tripSheetData, setTripSheetData] = useState({
     customer: '',
     address1: '',
@@ -207,13 +203,6 @@ const TripSheet = () => {
     parking: '',
     permit: '',
   });
-
-  // const invoiceData = {
-  //   customer: 'Customer Name', // Example data, replace with your actual invoice data
-  // };
-
-  // const [tripSheetDetails] = useState(false);
-
 
   const handleETripsheetClick = (row) => {
     setPopupOpen(true);
@@ -1345,6 +1334,31 @@ const TripSheet = () => {
                   checked={Boolean(formData.gps || selectedCustomerData?.gps || book.gps)}
                 />
               </div>
+              <div className="input">
+                <div className="icone">
+                  <AttachEmailIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "email1")}
+                  value={Email.find((option) => option.optionvalue)?.label || ''}
+                  options={Email.map((option) => ({
+                    label: option.option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = formData.email1 || selectedCustomerData.email1 || ''
+                    return (
+                      <TextField {...params} label="Email" name="email1" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
+              </div>
             </div>
             <div className="input-field">
               <div className="input">
@@ -1425,6 +1439,19 @@ const TripSheet = () => {
                   id="request"
                 />
               </div>
+              <div className="input">
+                <div className="icone">
+                  <BadgeIcon color="action" />
+                </div>
+                <TextField
+                  size="small"
+                  name="customercode"
+                  value={formData.customercode || selectedCustomerData.customercode || book.customercode}
+                  onChange={handleChange}
+                  label="Customer Code"
+                  id="customer-code"
+                />
+              </div>
             </div>
             <div className="input-field">
               <div className="input">
@@ -1480,23 +1507,26 @@ const TripSheet = () => {
                   value={formData.empolyeeno || selectedCustomerData.empolyeeno || book.empolyeeno}
                   onChange={handleChange}
                   name="empolyeeno"
-                  label="Empolyee No"
+                  label="Employee No"
                   id="empolyeeno"
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ width: "300px" }}>
                 <div className="icone">
-                  <BadgeIcon color="action" />
+                  <CurrencyRupeeTwoToneIcon color="action" />
                 </div>
                 <TextField
+                  margin="normal"
                   size="small"
-                  name="customercode"
-                  value={formData.customercode || selectedCustomerData.customercode || book.customercode}
+                  name="advancepaidtovendor"
+                  value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor}
                   onChange={handleChange}
-                  label="Customer Code"
-                  id="customer-code"
+                  label="Advance-Paid-To-Vendor"
+                  id="advance-paid-to-vendor"
+                  autoFocus
                 />
               </div>
+
             </div>
             <div className="input-field">
               <div className="input time">
@@ -1535,22 +1565,30 @@ const TripSheet = () => {
                   name="closetime"
                 />
               </div>
-              <div className="input" style={{ width: "300px" }}>
+              <div className="input">
                 <div className="icone">
-                  <CurrencyRupeeTwoToneIcon color="action" />
+                  <FontAwesomeIcon icon={faStopwatch} size="lg" />
                 </div>
                 <TextField
-                  margin="normal"
-                  size="small"
-                  name="advancepaidtovendor"
-                  value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor}
-                  onChange={handleChange}
-                  label="Advance-Paid-To-Vendor"
-                  id="advance-paid-to-vendor"
-                  autoFocus
+                  name="additionaltime"
+                  value={formData.additionaltime || book.additionaltime}
+                  label="Additional Time"
+                  id="additionaltime"
+                  variant="standard"
                 />
               </div>
-
+              <div className="input">
+                <div className="icone">
+                  <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                </div>
+                <TextField
+                  name="totaltime"
+                  value={formData.totaltime || calculateTotalTime() || book.totaltime}
+                  label="Total Time"
+                  id="total-time"
+                  variant="standard"
+                />
+              </div>
             </div>
             <div className="input-field">
               <div className="input">
@@ -1579,6 +1617,30 @@ const TripSheet = () => {
               </div>
               <div className="input">
                 <div className="icone">
+                  <FontAwesomeIcon icon={faRoad} size="lg" />
+                </div>
+                <TextField
+                  name="totalkm1"
+                  value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1}
+                  label="Additional KM"
+                  id="total-km"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <FontAwesomeIcon icon={faRoad} size="lg" />
+                </div>
+                <TextField
+                  name="totalkm1"
+                  value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1}
+                  label="Total KM"
+                  id="total-km"
+                  variant="standard"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
                   <FontAwesomeIcon icon={faStamp} />
                 </div>
                 <TextField
@@ -1590,6 +1652,10 @@ const TripSheet = () => {
                   variant="standard"
                 />
               </div>
+
+
+            </div>
+            <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <FontAwesomeIcon icon={faSquareParking} />
@@ -1616,8 +1682,6 @@ const TripSheet = () => {
                   variant="standard"
                 />
               </div>
-            </div>
-            <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <BackupTableSharpIcon color="action" />
@@ -1662,31 +1726,7 @@ const TripSheet = () => {
                   autoFocus
                 />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <AttachEmailIcon color="action" />
-                </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "email1")}
-                  value={Email.find((option) => option.optionvalue)?.label || ''}
-                  options={Email.map((option) => ({
-                    label: option.option,
-                  }))}
-                  getOptionLabel={(option) => option.label || ''}
-                  renderInput={(params) => {
-                    params.inputProps.value = formData.email1 || selectedCustomerData.email1 || ''
-                    return (
-                      <TextField {...params} label="Email" name="email1" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
-                />
-              </div>
+
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "450px" }}>
@@ -1723,7 +1763,8 @@ const TripSheet = () => {
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
                   {/* <Invoice tripSheetDetails={tripSheetDetails} /> */}
-                  <Invoice tripSheetData={tripSheetData} />
+                  {/* <Invoice tripSheetData={tripSheetData} /> */}
+                  <Invoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">

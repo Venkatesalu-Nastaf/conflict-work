@@ -71,7 +71,7 @@ const EmployeeCreation = () => {
   const [actionName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [passwordsMatch, setPasswordsMatch] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
@@ -167,16 +167,13 @@ const EmployeeCreation = () => {
     const stationname = book.stationname;
 
     if (password === confirmPassword) {
-      setPasswordsMatch(true);
-
       if (!stationname) {
-        setErrorMessage("Check your Network Connection");
-        // setErrorMessage("Fill mandatory fields");
+        setErrorMessage("Fill mandatory fields");
         return;
       }
 
       try {
-        await axios.post('http://localhost:8081/EmployeeCreation', book);
+        await axios.post('http://localhost:8081/usercreation', book);
         console.log(book);
         handleCancel();
         validatePasswordMatch();
@@ -186,7 +183,7 @@ const EmployeeCreation = () => {
         setErrorMessage("Check your Network Connection");
       }
     } else {
-      setPasswordsMatch(false);
+      setPasswordsMatch(true);
     }
   };
 
@@ -196,7 +193,7 @@ const EmployeeCreation = () => {
     try {
       if (actionName === 'List') {
         console.log('List button clicked');
-        const response = await axios.get('http://localhost:8081/EmployeeCreation');
+        const response = await axios.get('http://localhost:8081/usercreation');
         const data = response.data;
         setSuccessMessage("Successfully listed");
         setRows(data);
@@ -205,7 +202,7 @@ const EmployeeCreation = () => {
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/EmployeeCreation/${userid}`);
+        await axios.delete(`http://localhost:8081/usercreation/${userid}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
         setSuccessMessage("Successfully Deleted");
@@ -214,13 +211,12 @@ const EmployeeCreation = () => {
         console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.userid === userid);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/EmployeeCreation/${userid}`, updatedCustomer);
+        await axios.put(`http://localhost:8081/usercreation/${userid}`, updatedCustomer);
         console.log('Customer updated');
         setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
         handleAdd();
-        handleCancel();
       }
     } catch (err) {
       console.log(err);
@@ -234,6 +230,7 @@ const EmployeeCreation = () => {
     setError(false);
     setInfo(false);
     setWarning(false);
+    setPasswordsMatch(false);
   };
   useEffect(() => {
     if (error) {
@@ -269,14 +266,13 @@ const EmployeeCreation = () => {
     }
   }, [info]);
   useEffect(() => {
-    if (error || !passwordsMatch) {
+    if (passwordsMatch) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000); // 3 seconds
-
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
-  }, [error, passwordsMatch]);
+  }, [passwordsMatch]);
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -309,7 +305,7 @@ const EmployeeCreation = () => {
   const validatePasswordMatch = () => {
     const password = selectedCustomerData?.userpassword || book.userpassword;
     const confirmPassword = selectedCustomerData?.userconfirmpassword || book.userconfirmpassword;
-    setPasswordsMatch(password === confirmPassword);
+    // setPasswordsMatch(password === confirmPassword);
   };
 
   return (
@@ -528,7 +524,7 @@ const EmployeeCreation = () => {
               <p>{infoMessage}</p>
             </div>
           }
-          {!passwordsMatch &&
+          {passwordsMatch &&
             <div className='alert-popup Warning' >
               <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>

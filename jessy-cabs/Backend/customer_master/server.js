@@ -22,7 +22,7 @@ const ratetypeRouter = require('./Router/Ratetype/ratetype');
 const ratevalidityRouter = require('./Router/Ratetype/ratevalidity');
 const divionRouter = require('./Router/Ratetype/division');
 const driverbataRouter = require('./Router/Ratemanagement/driverbatarate');
-const employeeRouter = require('./Router/Employee/employee');
+// const employeeRouter = require('./Router/Employee/employee');
 const billingRouter = require('./Router/Billing/billing');
 const pettycashRouter = require('./Router/cashflow/pettycash');
 const payrollRouter = require('./Router/cashflow/payroll');
@@ -142,7 +142,7 @@ app.use('/', drivercreationRouter);
 // End RateValidity database
 // -----------------------------------------------------------------------------------------------------------
 // Employees Database
-app.use('/', employeeRouter);
+// app.use('/', employeeRouter);
 // End Employees database
 // -----------------------------------------------------------------------------------------------------------
 // Billing Database

@@ -23,10 +23,6 @@ const AppUserList = () => {
   const [apps, setApps] = useState('active'); // Default to 'active'
 
   const handleListButtonClick = () => {
-    let selectedapps = 'active'; // Default to 'Active' status
-    if (apps === 'On_Going') {
-      selectedapps = 'On_Going';
-    }
     // Make an API request to fetch data based on the selected status
     fetch(`http://localhost:8081/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
       .then((response) => response.json())
@@ -41,7 +37,7 @@ const AppUserList = () => {
   };
 
   const handleChangeStatus = (event) => {
-    setApps(event.target.value); 
+    setApps(event.target.value);
   };
   return (
     <div className="appuserlist-form">

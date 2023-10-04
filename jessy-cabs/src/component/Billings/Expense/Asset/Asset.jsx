@@ -493,7 +493,7 @@ const Asset = () => {
               </Button>
             </div>
           </div>
-          <div className="input-field">
+          <div className="input-field" >
             <div className="input" style={{ width: "100px" }}>
               <Button variant="contained" onClick={handleAdd}>Add</Button>
             </div>
@@ -521,7 +521,7 @@ const Asset = () => {
                     />
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: '123px', marginTop: "50px" }}>
+                <div className="input" style={{ width: '123px' }}>
                   <Button variant="contained" onClick={handleShow}>Search</Button>
                 </div>
               </div>

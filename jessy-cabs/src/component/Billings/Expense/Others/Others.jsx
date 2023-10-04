@@ -4,7 +4,11 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import OfficeRent from './Rent/OfficeRent';
+import PropetiesRent from './PropetiesRent/PropetiesRent';
+import Insurance from './Insurance/Insurance';
+import Utilities from './Utilities/Utilities';
+import OfficeSuppliers from './OfficeSuppliers/OfficeSuppliers ';
+import VehicleExpense from './VehicleExpense/VehicleExpense';
 
 const Others = () => {
   const [selectOtherExpense, setSelectOtherExpense] = useState('');
@@ -31,7 +35,7 @@ const Others = () => {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value={10}>Office-Rent</MenuItem>
+                <MenuItem value={10}>Properties-Rent</MenuItem>
                 <MenuItem value={20}>Insurance</MenuItem>
                 <MenuItem value={30}>Utilities</MenuItem>
                 <MenuItem value={40}>Office-Supplies</MenuItem>
@@ -42,13 +46,13 @@ const Others = () => {
             </FormControl>
           </div>
         </div>
-        {selectOtherExpense === 10 && <div><OfficeRent /></div>}
-        {selectOtherExpense === 20 && <div>Content for Option 2</div>}
-        {selectOtherExpense === 30 && <div>Content for Option 3</div>}
-        {selectOtherExpense === 40 && <div>Content for Option 3</div>}
-        {selectOtherExpense === 50 && <div>Content for Option 3</div>}
-        {selectOtherExpense === 60 && <div>Content for Option 3</div>}
-        {selectOtherExpense === 70 && <div>Content for Option 3</div>}
+        {selectOtherExpense === 10 && <div><PropetiesRent /></div>}
+        {selectOtherExpense === 20 && <div><Insurance /></div>}
+        {selectOtherExpense === 30 && <div><Utilities /></div>}
+        {selectOtherExpense === 40 && <div><OfficeSuppliers /></div>}
+        {selectOtherExpense === 50 && <div><VehicleExpense /></div>}
+        {selectOtherExpense === 60 && <div>Business-License & Permits</div>}
+        {selectOtherExpense === 70 && <div>Interst-Payments & Bank-Fees</div>}
       </form>
     </div>
   )

@@ -394,7 +394,7 @@ const PettyCash = () => {
                                         {/* </DemoItem> */}
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input" style={{ width: '123px', marginTop: "50px" }}>
+                                <div className="input" style={{ width: '123px'}}>
                                     <Button variant="contained" onClick={handleShow}>Search</Button>
                                 </div>
                             </div>

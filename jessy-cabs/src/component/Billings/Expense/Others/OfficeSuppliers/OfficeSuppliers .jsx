@@ -15,9 +15,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import Box from "@mui/material/Box";
-import FactCheckIcon from '@mui/icons-material/FactCheck';
 import RateReviewIcon from '@mui/icons-material/RateReview';
-import BadgeIcon from "@mui/icons-material/Badge";
 import Button from "@mui/material/Button";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -30,23 +28,25 @@ import dayjs from "dayjs";
 import { Menu, TextField } from "@mui/material";
 import { AiFillAppstore } from "react-icons/ai";
 import { MdEditDocument } from "react-icons/md";
-import { HiDocumentText } from "react-icons/hi";
+import { BsFillFilePostFill } from "react-icons/bs";
+import { MdContacts } from "react-icons/md";
 import { ImPriceTags } from "react-icons/im";
+import { ImLocation2 } from "react-icons/im";
 
 
 // TABLE
 
 const columns = [
     { field: "id", headerName: "Sno", width: 50 },
-    { field: "rentdescription", headerName: "Rent Description", width: 130 },
-    { field: "advanceamount", headerName: "Advance Amount", width: 130 },
-    { field: "monthlyrent", headerName: "Monthly Rent", width: 130 },
-    { field: "rentdate", headerName: "Rent Date", width: 120 },
-    { field: "address", headerName: "Address", width: 140 },
-    { field: "termsandconditions", headerName: "Terms/Conditions", width: 130 },
-    { field: "repaymentshedule", headerName: "Repayment Shedule", width: 140 },
-    { field: "outstandingbalance", headerName: "Outstanding Balance", width: 150 },
-    { field: "agreementcopy", headerName: "Agreement Copy", width: 130 },
+    { field: "OfficeSuppliersno   ", headerName: "OfficeSuppliers No", width: 150 },
+    { field: "OfficeSupplierstype", headerName: "OfficeSuppliers Type", width: 150 },
+    { field: "OfficeSuppliersdiscription", headerName: "Discription", width: 130 },
+    { field: "parchasedate", headerName: "Parchase Date", width: 120 },
+    { field: "contactno", headerName: "Contact No", width: 130 },
+    { field: "address", headerName: "Address", width: 130 },
+    { field: "location", headerName: "Location", width: 130 },
+    { field: "amount", headerName: "Amount", width: 130 },
+    { field: "parchasecopy", headerName: "parchase Bill", width: 130 },
 ];
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -65,10 +65,9 @@ const actions = [
     { icon: <CancelPresentationIcon />, name: "Cancel" },
     { icon: <DeleteIcon />, name: "Delete" },
     { icon: <ModeEditIcon />, name: "Edit" },
-    // { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-const OfficeRent = () => {
+const OfficeSuppliers = () => {
 
     const [infoMessage] = useState({});
     const [errorMessage] = useState({});
@@ -78,7 +77,6 @@ const OfficeRent = () => {
     const [toDate, setToDate] = useState(dayjs());
     const [fromDate, setFromDate] = useState(dayjs());
     const [rows] = useState([]);
-
     const [error, setError] = useState(false);
     const [warning, setWarning] = useState(false);
     const [info, setInfo] = useState(false);
@@ -111,7 +109,7 @@ const OfficeRent = () => {
             row['registrationlicense'],
             row['warrantyinformation'],
             row['maintenancerecordes'],
-            row['insuranceinformation'],
+            row['OfficeSuppliersinformation'],
             row['invoicecopy']
         ]);
         pdf.autoTable({
@@ -161,51 +159,49 @@ const OfficeRent = () => {
             return () => clearTimeout(timer);
         }
     }, [success]);
+
     return (
         <>
             <div className="Others-page-header">
                 <div className="input-field">
                     <div className="input" style={{ width: "230px" }}>
                         <div className="icone">
-                            <BadgeIcon color="action" />
+                            <BsFillFilePostFill style={{ fontSize: "25px" }} color="action" />
                         </div>
                         <TextField
                             size="small"
-                            id="RentDescription"
-                            label="Rent Description"
-                            name="RentDescription"
-                            autoComplete="new-password"
-                            autoFocus
+                            name="OfficeSuppliersNo"
+                            label="OfficeSuppliers No"
+                            id="remark"
                         />
                     </div>
-                    <div className="input" style={{ width: "210px" }}>
+                    <div className="input" style={{ width: "230px" }}>
                         <div className="icone">
                             <RateReviewIcon color="action" />
                         </div>
                         <TextField
                             size="small"
-                            id="id"
-                            label="Advance Amount"
-                            name="AdvanceAmount"
-                            autoFocus
+                            name="OfficeSuppliers Type"
+                            label="OfficeSuppliers Type"
+                            id="remark"
                         />
                     </div>
-                    <div className="input">
+                    <div className="input" >
                         <div className="icone">
-                            <ImPriceTags style={{ fontSize: "25px" }} color="action" />
+                            <AiFillAppstore style={{ fontSize: "25px" }} color="action" />
                         </div>
                         <TextField
                             size="small"
-                            id="id"
-                            label="Monthly Rent"
-                            name="MonthlyRent"
+                            id="Discription"
+                            label="Discription"
+                            name="Discription"
                             autoFocus
                         />
                     </div>
                     <div className="input">
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                                label="Rent Date"
+                                label="Parchase Date"
                                 value={selectedCustomerData.dateofacquisition ? dayjs(selectedCustomerData.startdate) : null}
                             >
                                 {({ inputProps, inputRef }) => (
@@ -231,26 +227,26 @@ const OfficeRent = () => {
                     </div>
                     <div className="input" style={{ width: "230px" }}>
                         <div className="icone">
-                            <AiFillAppstore style={{ fontSize: "25px" }} color="action" />
+                            <ImLocation2 color="action" style={{ fontSize: "25px" }} />
                         </div>
                         <TextField
                             size="small"
-                            id="id"
-                            label="Terms and Conditions"
-                            name="Othersdescription"
+                            id="Location"
+                            label="Location"
+                            name="Location"
                             autoComplete="new-password"
                             autoFocus
                         />
                     </div>
                     <div className="input" style={{ width: "230px" }}>
                         <div className="icone">
-                            <HiDocumentText style={{ fontSize: "25px" }} color="action" />
+                            <MdContacts style={{ fontSize: "25px" }} color="action" />
                         </div>
                         <TextField
                             size="small"
                             id="id"
-                            label="Repayment Schedule"
-                            name="legaldocuments"
+                            label="Contact No"
+                            name="contact"
                             autoFocus
                         />
                     </div>
@@ -268,37 +264,75 @@ const OfficeRent = () => {
                             variant="standard"
                         />
                     </div>
-                    <div className="input" style={{ width: "230px" }}>
+                    <div className="input" style={{ width: "210px" }}>
                         <div className="icone">
-                            <FactCheckIcon color="action" />
+                            <ImPriceTags style={{ fontSize: "25px" }} color="action" />
                         </div>
                         <TextField
                             size="small"
-                            id="id"
-                            label="Outstanding Balance"
-                            name="registrationslicenses"
-                            autoComplete="new-password"
+                            id="Amount"
+                            label="Amount"
+                            name="Amount"
                             autoFocus
                         />
                     </div>
-                    <div className="input" style={{ width: "230px" }}>
+                    <div className="input">
                         <Button startIcon={<MdEditDocument />} color="primary" variant="contained" component="label">
-                            Agreement Copy
+                            Parchase Bill
                             <input
                                 type="file"
                                 style={{ display: "none" }}
                             />
                         </Button>
                     </div>
-                    <div className="input" style={{ width: "100px" }}>
+                </div>
+                <div className="input-field" style={{ justifyContent: 'center' }}>
+                    <div className="input" style={{ width: "100px", marginTop: "30px" }}>
                         <Button variant="contained">Add</Button>
                     </div>
                 </div>
+                <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+                    <StyledSpeedDial
+                        ariaLabel="SpeedDial playground example"
+                        icon={<SpeedDialIcon />}
+                        direction="left"
+                    >
+                        {actions.map((action) => (
+                            <SpeedDialAction
+                                key={action.name}
+                                icon={action.icon}
+                                tooltipTitle={action.name}
+                            />
+                        ))}
+                    </StyledSpeedDial>
+                </Box>
             </div>
             <div className="detail-container-main">
                 <div className="container-left">
                     <div className="copy-title-btn-Others">
                         <div className="input-field">
+                            <div className="input" style={{ width: "230px" }}>
+                                <div className="icone">
+                                    <BsFillFilePostFill style={{ fontSize: "25px" }} color="action" />
+                                </div>
+                                <TextField
+                                    size="small"
+                                    name="OfficeSuppliersNo"
+                                    label="OfficeSuppliers No"
+                                    id="remark"
+                                />
+                            </div>
+                            <div className="input" style={{ width: "230px" }}>
+                                <div className="icone">
+                                    <RateReviewIcon color="action" />
+                                </div>
+                                <TextField
+                                    size="small"
+                                    name="OfficeSuppliers Type"
+                                    label="OfficeSuppliers Type"
+                                    id="remark"
+                                />
+                            </div>
                             <div className="input">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
@@ -317,10 +351,14 @@ const OfficeRent = () => {
                                     />
                                 </LocalizationProvider>
                             </div>
-                            <div className="input" style={{ width: '123px', marginTop: "50px" }}>
+
+                        </div>
+                        <div className="input-field" style={{ justifyContent: 'center' }}>
+                            <div className="input" style={{ marginTop: "30px" }}>
                                 <Button variant="contained">Search</Button>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -336,7 +374,6 @@ const OfficeRent = () => {
                     <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
                     <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                     <p>{warningMessage}</p>
-
                 </div>
             }
             {info &&
@@ -353,21 +390,7 @@ const OfficeRent = () => {
                     <p>{successMessage}</p>
                 </div>
             }
-            <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-                <StyledSpeedDial
-                    ariaLabel="SpeedDial playground example"
-                    icon={<SpeedDialIcon />}
-                    direction="left"
-                >
-                    {actions.map((action) => (
-                        <SpeedDialAction
-                            key={action.name}
-                            icon={action.icon}
-                            tooltipTitle={action.name}
-                        />
-                    ))}
-                </StyledSpeedDial>
-            </Box>
+
             <div className="Download-btn">
                 <PopupState variant="popover" popupId="demo-popup-menu">
                     {(popupState) => (
@@ -397,4 +420,4 @@ const OfficeRent = () => {
     )
 }
 
-export default OfficeRent
+export default OfficeSuppliers

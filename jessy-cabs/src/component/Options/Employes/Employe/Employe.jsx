@@ -17,6 +17,7 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from '@mui/icons-material/Email';
@@ -34,6 +35,7 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LocationCityIcon from "@mui/icons-material/LocationCity";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
@@ -41,7 +43,6 @@ import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import DeviceHubRoundedIcon from '@mui/icons-material/DeviceHubRounded';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import TransgenderRoundedIcon from '@mui/icons-material/TransgenderRounded';
@@ -161,32 +162,32 @@ const Employe = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [error]);
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [info]);
 

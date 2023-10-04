@@ -350,7 +350,7 @@ const TripSheet = () => {
 
     // Define a list of parameter keys
     const parameterKeys = [
-      'bookingno', 'status', 'tripid', 'customer', 'orderedby', 'mobileNo', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2', 'city', 'report', 'vehType', 'startdate', 'starttime', 'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'emaildoggle', 'hiretypes', 'travelsname', 'vehicleregisterno', 'vehiclemodule', 'driverName', 'driverphone', 'travelsemail'
+      'bookingno', 'status', 'tripid', 'customer', 'orderedby', 'mobileNo', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2', 'city', 'report', 'vehType', 'startdate', 'starttime', 'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'emaildoggle', 'hiretypes', 'travelsname', 'vehRegNo', 'vehiclemodule', 'driverName', 'driverphone', 'travelsemail'
     ];
 
     // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
@@ -407,6 +407,7 @@ const TripSheet = () => {
     startdate: '',
     closedate: '',
     empolyeeno: '',
+    reporttime: '',
     starttime: '',
     closetime: '',
     advancepaidtovendor: '',
@@ -515,6 +516,7 @@ const TripSheet = () => {
       startdate: '',
       closedate: '',
       empolyeeno: '',
+      reporttime: '',
       starttime: '',
       closetime: '',
       advancepaidtovendor: '',
@@ -759,7 +761,6 @@ const TripSheet = () => {
 
     if (startKm !== undefined && closeKm !== undefined) {
       const totalKm = closeKm - startKm;
-      // console.log('Total Kilometers:', totalKm); // Add this line to log the totalKm value
       return totalKm;
     }
 
@@ -875,7 +876,6 @@ const TripSheet = () => {
     console.log(params);
     setSelectedCustomerDatas(params);
   }, []);
-
 
   return (
     <div className="form-container">
@@ -1531,9 +1531,9 @@ const TripSheet = () => {
                 <label>Report Time</label>
                 <input
                   type="time"
-                  value={formData.closetime || selectedCustomerData.closetime || book.closetime}
+                  value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime}
                   onChange={(event) => {
-                    setBook({ ...book, closetime: event.target.value });
+                    setBook({ ...book, reporttime: event.target.value });
                     setCloseTime(event.target.value);
                   }}
                   name="closetime"
@@ -1618,10 +1618,10 @@ const TripSheet = () => {
                   <FontAwesomeIcon icon={faRoad} size="lg" />
                 </div>
                 <TextField
-                  name="totalkm1"
-                  value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1}
-                  label="Additional KM"
-                  id="total-km"
+                  name="shedkm"
+                  value={formData.shedkm || book.shedkm}
+                  label="Shed KM"
+                  id="additionalkm"
                   variant="standard"
                 />
               </div>

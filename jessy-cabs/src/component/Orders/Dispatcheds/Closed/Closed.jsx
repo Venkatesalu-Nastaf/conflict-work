@@ -189,7 +189,6 @@ const Closed = () => {
     window.location.href = bookingPageUrl;
   }
 
-
   const handleButtonClick = () => {
     window.location.href = '/home/customers/tripsheet';
   };

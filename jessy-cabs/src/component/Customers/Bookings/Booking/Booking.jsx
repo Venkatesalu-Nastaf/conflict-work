@@ -163,7 +163,7 @@ const Booking = () => {
       'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
       'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
       'username', 'tripdate', 'triptime', 'emaildoggle', 'hiretypes', 'travelsname',
-      'vehicleregisterno', 'vehiclemodule', 'driverName', 'driverphone', 'travelsemail'
+      'vehRegNo', 'vehiclemodule', 'driverName', 'driverphone', 'travelsemail'
     ];
 
     // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
@@ -232,7 +232,7 @@ const Booking = () => {
     emaildoggle: '',
     hiretypes: '',
     travelsname: '',
-    vehicleregisterno: '',
+    vehRegNo: '',
     vehiclemodule: '',
     driverName: '',
     driverphone: '',
@@ -282,7 +282,7 @@ const Booking = () => {
       emaildoggle: '',
       hiretypes: '',
       travelsname: '',
-      vehicleregisterno: '',
+      vehRegNo: '',
       vehiclemodule: '',
       driverName: '',
       driverphone: '',
@@ -1425,12 +1425,12 @@ const Booking = () => {
                 <CarCrashIcon color="action" />
               </div>
               <TextField
-                name="vehicleregisterno"
+                name="vehRegNo"
                 autoComplete="new-password"
-                value={formData.vehicleregisterno || selectedCustomerData.vehicleregisterno || book.vehicleregisterno || ''}
+                value={formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || ''}
                 onChange={handleChange}
                 label="Vehicle Register No"
-                id="vehicleregisterno"
+                id="vehRegNo"
                 variant="standard"
               />
             </div>

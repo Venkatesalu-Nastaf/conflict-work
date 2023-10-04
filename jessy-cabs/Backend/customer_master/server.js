@@ -30,6 +30,8 @@ const fueldetailsRouter = require('./Router/fueldetails/mileage');
 const taxsettingRouter = require('./Router/mainsetting/taxsetting');
 const drivercreationRouter = require('./Router/Driverapplogin/driverapplogin');
 const assetsRouer = require('./Router/cashflow/assets');
+const driveractiveRouter = require('./Router/tripsheet/appuserlist');
+
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -125,6 +127,10 @@ app.use('/', ratevalidityRouter);
 // -----------------------------------------------------------------------------------------------------------
 // division Database
 app.use('/', divionRouter);
+// End RateValidity database
+// -----------------------------------------------------------------------------------------------------------
+// division Database
+app.use('/', driveractiveRouter);
 // End RateValidity database
 // -----------------------------------------------------------------------------------------------------------
 // driverbatarate Database

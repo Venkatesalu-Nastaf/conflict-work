@@ -80,7 +80,7 @@ const BookingChart = () => {
   });
   const showBookedStatusAll = useCallback(async (from, to) => {
     try {
-      const response = await axios.get(`http://localhost:8081/booking`, {
+      const response = await axios.get(`http://localhost:8081/bookingchart`, {
         params: {
           fromDate: from.format('YYYY-MM-DD'),
           toDate: to.format('YYYY-MM-DD'),

@@ -65,7 +65,7 @@ const actions = [
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "customerId", headerName: "Customer ID", width: 130 },
-  { field: "printName", headerName: "Name", width: 160 },
+  { field: "customer", headerName: "Name", width: 160 },
   { field: "address1", headerName: "Address", width: 130 },
   { field: "phoneno", headerName: "Phone", width: 160 },
   { field: "active", headerName: "Active", width: 80 },
@@ -110,7 +110,7 @@ const Customer = () => {
     const tableData = rows.map((row) => [
       row['id'],
       row['customerId'],
-      row['printName'],
+      row['customer'],
       row['address1'],
       row['phoneno'],
       row['Active'],
@@ -170,7 +170,7 @@ const Customer = () => {
   const [book, setBook] = useState({
     customerId: '',
     name: '',
-    printName: '',
+    customer: '',
     customerType: '',
     date: '',
     address1: '',
@@ -247,7 +247,7 @@ const Customer = () => {
       ...prevBook,
       customerId: '',
       name: '',
-      printName: '',
+      customer: '',
       customerType: '',
       date: '',
       address1: '',
@@ -383,10 +383,10 @@ const Customer = () => {
                   size="small"
                   id="Print Name"
                   label="Print Name"
-                  value={selectedCustomerData?.printName || book.printName}
+                  value={selectedCustomerData?.customer || book.customer}
                   autoComplete="new-password"
                   onChange={handleChange}
-                  name="printName"
+                  name="customer"
                   autoFocus
                 />
               </div>

@@ -85,7 +85,6 @@ const Booking = () => {
   const [starttime, setStartTime] = useState('');
   const [bookingtime, setBookingTime] = useState('');
   const location = useLocation();
-  // const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [info, setInfo] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
@@ -104,10 +103,7 @@ const Booking = () => {
   });
 
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
-    vehType: '',
-    driverName: '',
-    vehRegNo: '',
-    mobileNo: '',
+    customer: '',
   });
 
   const hidePopup = () => {
@@ -158,12 +154,12 @@ const Booking = () => {
     // Define a list of parameter keys
     const parameterKeys = [
       'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby',
-      'mobileno', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2',
+      'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2',
       'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'registertime',
       'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
       'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
       'username', 'tripdate', 'triptime', 'emaildoggle', 'hiretypes', 'travelsname',
-      'vehRegNo', 'vehiclemodule', 'driverName', 'driverphone', 'travelsemail'
+      'vehRegNo', 'vehiclemodule', 'driverName', 'mobileNo', 'travelsemail'
     ];
 
     // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
@@ -198,7 +194,7 @@ const Booking = () => {
     tripid: '',
     customer: '',
     orderedby: '',
-    mobileno: '',
+    mobile: '',
     guestname: '',
     guestmobileno: '',
     email: '',
@@ -235,7 +231,7 @@ const Booking = () => {
     vehRegNo: '',
     vehiclemodule: '',
     driverName: '',
-    driverphone: '',
+    mobileNo: '',
     travelsemail: '',
   });
 
@@ -248,7 +244,7 @@ const Booking = () => {
       tripid: '',
       customer: '',
       orderedby: '',
-      mobileno: '',
+      mobile: '',
       guestname: '',
       guestmobileno: '',
       email: '',
@@ -285,14 +281,13 @@ const Booking = () => {
       vehRegNo: '',
       vehiclemodule: '',
       driverName: '',
-      driverphone: '',
+      mobileNo: '',
       travelsemail: '',
     }));
     setFormValues({});
     setSelectedCustomerData({});
     setFormData({});
   };
-
 
   const getCurrentTime = () => {
     const now = new Date();
@@ -346,6 +341,10 @@ const Booking = () => {
         [name]: fieldValue,
       }));
       setSelectedCustomerData((prevData) => ({
+        ...prevData,
+        [name]: fieldValue,
+      }));
+      setSelectedCustomerDatas((prevData) => ({
         ...prevData,
         [name]: fieldValue,
       }));
@@ -503,12 +502,10 @@ const Booking = () => {
       try {
         const response = await axios.get(`http://localhost:8081/booking/${event.target.value}`);
         const bookingDetails = response.data;
-        console.log(bookingDetails);
-        setBook(bookingDetails);
-        setSelectedCustomerData(bookingDetails);
+        setRows([bookingDetails]);
         setSelectedCustomerId(bookingDetails.customerId);
       } catch (error) {
-        console.error('Error retrieving booking details:', error);
+        console.error('Error retrieving vehicle details:', error.message);
       }
     }
   }, []);
@@ -559,10 +556,10 @@ const Booking = () => {
     }
   }, []);
 
-
   const handleRowClick = useCallback((params) => {
     console.log(params);
     setSelectedCustomerDatas(params);
+    handleChange({ target: { name: "customer", value: params.customer } });
   }, []);
 
   const [sendEmail, setSendEmail] = useState(false);
@@ -686,15 +683,14 @@ const Booking = () => {
                   <PermIdentityIcon color="action" />
                 </div>
                 <TextField
+                  margin="normal"
+                  id="customer"
+                  label="Customer"
                   name="customer"
-                  autoComplete="new-password"
-                  value={formData.customer || selectedCustomerDatas.customer || selectedCustomerData.customer || book.customer || ''}
+                  value={formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || ''}
                   onChange={handleChange}
                   onKeyDown={handleKeyEnter}
-                  label="Customer"
-                  id="customer"
-                  variant="standard"
-                  required
+                  autoComplete="new-password"
                 />
               </div>
             </div>
@@ -1084,7 +1080,6 @@ const Booking = () => {
                 </div>
                 <TextField
                   size='small'
-                  // type="number"
                   name='advance'
                   autoComplete="new-password"
                   value={formData.advance || selectedCustomerData.advance || book.advance || ''}
@@ -1134,7 +1129,7 @@ const Booking = () => {
                             ) : (
                               rows.map((row) => (
                                 <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                  <td>{row.printName}</td>
+                                  <td>{row.customer}</td>
                                   <td>{row.address1}</td>
                                   <td>{row.address2}</td>
                                 </tr>
@@ -1480,12 +1475,12 @@ const Booking = () => {
                 <AddIcCallTwoToneIcon color="action" />
               </div>
               <TextField
-                name="driverphone"
+                name="mobileNo"
                 autoComplete="new-password"
-                value={formData.driverphone || selectedCustomerData.driverphone || book.driverphone || ''}
+                value={formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || ''}
                 onChange={handleChange}
                 label="Driver Phone"
-                id="driverphone"
+                id="mobileNo"
                 variant="standard"
               />
             </div>

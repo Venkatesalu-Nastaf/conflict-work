@@ -104,10 +104,10 @@ router.post('/upload', upload.single('file'), (req, res) => {
     });
 });
 // collect data from vehicleInfo database
-router.get('/name-customers/:printName', (req, res) => {
-    const printName = req.params.printName; // Access the parameter using req.params
+router.get('/name-customers/:customer', (req, res) => {
+    const customer = req.params.customer; // Access the parameter using req.params
     // Modify the query to use the LIKE operator for partial matching
-    db.query('SELECT * FROM customers WHERE printName LIKE ?', [`%${printName}%`], (err, result) => {
+    db.query('SELECT * FROM customers WHERE customer LIKE ?', [`%${customer}%`], (err, result) => {
         if (err) {
             console.error('Error retrieving customer details from MySQL:', err);
             return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });

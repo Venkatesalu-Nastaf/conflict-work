@@ -875,6 +875,7 @@ const TripSheet = () => {
   const handleRowClick = useCallback((params) => {
     console.log(params);
     setSelectedCustomerDatas(params);
+    handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
   }, []);
 
   return (
@@ -897,7 +898,7 @@ const TripSheet = () => {
                   value={formData.tripid || selectedCustomerData.tripid || book.tripid}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -912,7 +913,7 @@ const TripSheet = () => {
                   name="bookingno"
                   value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno}
                   onChange={handleChange}
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -934,7 +935,7 @@ const TripSheet = () => {
                   renderInput={(params) => {
                     params.inputProps.value = formData.status || selectedCustomerData.status || 'Opened'
                     return (
-                      <TextField {...params} label="Status" name="status" inputRef={params.inputRef} />
+                      <TextField {...params} label="Status" autoComplete="password" name="status" inputRef={params.inputRef} />
                     )
                   }
                   }
@@ -952,7 +953,8 @@ const TripSheet = () => {
                   name="billingno"
                   value={formData.billingno || selectedCustomerData.billingno || book.billingno}
                   onChange={handleChange}
-                  autoFocus
+                  autoComplete="password"
+                  required
                 />
               </div>
             </div>
@@ -976,7 +978,7 @@ const TripSheet = () => {
                   renderInput={(params) => {
                     params.inputProps.value = formData.apps || selectedCustomerData.apps || 'Waiting'
                     return (
-                      <TextField {...params} label="Apps" name="apps" inputRef={params.inputRef} />
+                      <TextField {...params} label="Apps" autoComplete="password" name="apps" inputRef={params.inputRef} />
                     )
                   }
                   }
@@ -993,6 +995,8 @@ const TripSheet = () => {
                   label="Customer"
                   id="standard-size-normal"
                   variant="standard"
+                  required
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1006,6 +1010,8 @@ const TripSheet = () => {
                   label="Ordered By"
                   id="standard-size-normal"
                   variant="standard"
+                  autoComplete="password"
+                  required
                 />
               </div>
               <FormControlLabel
@@ -1048,7 +1054,8 @@ const TripSheet = () => {
                   label="Mobile"
                   id="standard-size-normal"
                   size="small"
-                  autoFocus
+                  autoComplete="password"
+                  required
                 />
               </div>
               <div className="input">
@@ -1063,7 +1070,7 @@ const TripSheet = () => {
                   value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname}
                   onChange={handleChange}
                   size="small"
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1077,7 +1084,7 @@ const TripSheet = () => {
                   label="Phone (Cell)"
                   id="Phonecell"
                   size="small"
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1091,7 +1098,7 @@ const TripSheet = () => {
                   label="Email"
                   id="email"
                   size="small"
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
             </div>
@@ -1112,6 +1119,7 @@ const TripSheet = () => {
                     id="remark"
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
+                    autoComplete="password"
                   />
                 </div>
               </div>
@@ -1128,6 +1136,7 @@ const TripSheet = () => {
                     id="remark"
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
+                    autoComplete="password"
                   />
                 </div>
               </div>
@@ -1144,6 +1153,7 @@ const TripSheet = () => {
                     id="address3"
                     sx={{ m: 1, width: "200ch" }}
                     variant="standard"
+                    autoComplete="password"
                   />
                 </div>
               </div>
@@ -1212,7 +1222,7 @@ const TripSheet = () => {
                   renderInput={(params) => {
                     params.inputProps.value = formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || ''
                     return (
-                      <TextField {...params} label="Hire Types" name="hireTypes" inputRef={params.inputRef} />
+                      <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
                     )
                   }
                   }
@@ -1237,7 +1247,7 @@ const TripSheet = () => {
                   renderInput={(params) => {
                     params.inputProps.value = formData.department || formValues.department || selectedCustomerData.department || ''
                     return (
-                      <TextField {...params} label="Department" name="department" inputRef={params.inputRef} />
+                      <TextField {...params} label="Department" autoComplete="password" name="department" inputRef={params.inputRef} />
                     )
                   }
                   }
@@ -1256,7 +1266,7 @@ const TripSheet = () => {
                   value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo}
                   onChange={handleChange}
                   onKeyDown={handleKeyEnter}
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1278,7 +1288,7 @@ const TripSheet = () => {
                   renderInput={(params) => {
                     params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || ''
                     return (
-                      <TextField {...params} label="Vehicle Rate" name="vehType" inputRef={params.inputRef} />
+                      <TextField {...params} label="Vehicle Rate" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                     )
                   }
                   }
@@ -1297,6 +1307,7 @@ const TripSheet = () => {
                   label="Driver Name"
                   id="drivername"
                   variant="standard"
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1310,6 +1321,7 @@ const TripSheet = () => {
                   label="Cell"
                   id="cell"
                   variant="standard"
+                  autoComplete="password"
                 />
               </div>
               <div className="input radio">
@@ -1353,7 +1365,7 @@ const TripSheet = () => {
                   renderInput={(params) => {
                     params.inputProps.value = formData.email1 || selectedCustomerData.email1 || ''
                     return (
-                      <TextField {...params} label="Email" name="email1" inputRef={params.inputRef} />
+                      <TextField {...params} label="Email" autoComplete="new-password" name="email1" inputRef={params.inputRef} />
                     )
                   }
                   }
@@ -1380,7 +1392,7 @@ const TripSheet = () => {
                   renderInput={(params) => {
                     params.inputProps.value = formData.duty || selectedCustomerData.duty || ''
                     return (
-                      <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
+                      <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
                     )
                   }
                   }
@@ -1405,7 +1417,7 @@ const TripSheet = () => {
                   renderInput={(params) => {
                     params.inputProps.value = formData.pickup || selectedCustomerData.pickup || formValues.pickup || ''
                     return (
-                      <TextField {...params} label="Pickup" name="pickup" inputRef={params.inputRef} />
+                      <TextField {...params} label="Pickup" autoComplete="password" name="pickup" inputRef={params.inputRef} />
                     )
                   }
                   }
@@ -1423,7 +1435,7 @@ const TripSheet = () => {
                   onChange={handleChange}
                   label="Usage"
                   id="usage"
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1437,6 +1449,7 @@ const TripSheet = () => {
                   onChange={handleChange}
                   label="Request"
                   id="request"
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1450,6 +1463,7 @@ const TripSheet = () => {
                   onChange={handleChange}
                   label="Customer Code"
                   id="customer-code"
+                  autoComplete="password"
                 />
               </div>
             </div>
@@ -1493,6 +1507,7 @@ const TripSheet = () => {
                     type="number"
                     id="total-days"
                     variant="standard"
+                    autoComplete="password"
                   />
                 </DemoItem>
               </div>
@@ -1507,6 +1522,7 @@ const TripSheet = () => {
                   name="empolyeeno"
                   label="Employee No"
                   id="empolyeeno"
+                  autoComplete="password"
                 />
               </div>
               <div className="input" style={{ width: "300px" }}>
@@ -1521,7 +1537,7 @@ const TripSheet = () => {
                   onChange={handleChange}
                   label="Advance-Paid-To-Vendor"
                   id="advance-paid-to-vendor"
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
 
@@ -1573,6 +1589,7 @@ const TripSheet = () => {
                   label="Additional Time"
                   id="additionaltime"
                   variant="standard"
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1585,6 +1602,7 @@ const TripSheet = () => {
                   label="Total Time"
                   id="total-time"
                   variant="standard"
+                  autoComplete="password"
                 />
               </div>
             </div>
@@ -1599,6 +1617,7 @@ const TripSheet = () => {
                   type="number"
                   id="outlined-start-adornment"
                   sx={{ m: 1, width: "23ch" }}
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1611,6 +1630,7 @@ const TripSheet = () => {
                   type="number"
                   id="outlined-start-adornment"
                   sx={{ m: 1, width: "23ch" }}
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1623,6 +1643,7 @@ const TripSheet = () => {
                   label="Shed KM"
                   id="additionalkm"
                   variant="standard"
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1635,6 +1656,7 @@ const TripSheet = () => {
                   label="Total KM"
                   id="total-km"
                   variant="standard"
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1648,10 +1670,9 @@ const TripSheet = () => {
                   label="Permit"
                   id="permit"
                   variant="standard"
+                  autoComplete="password"
                 />
               </div>
-
-
             </div>
             <div className="input-field">
               <div className="input">
@@ -1665,6 +1686,7 @@ const TripSheet = () => {
                   label="Parking"
                   id="parking"
                   variant="standard"
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1678,6 +1700,7 @@ const TripSheet = () => {
                   label="Toll"
                   id="Toll"
                   variant="standard"
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1692,7 +1715,7 @@ const TripSheet = () => {
                   onChange={handleChange}
                   label="v-permet-To-Vendor"
                   id="v-permet-to-vendor"
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1707,7 +1730,7 @@ const TripSheet = () => {
                   onChange={handleChange}
                   label="Vendor-Toll"
                   id="vendor-toll"
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1721,7 +1744,7 @@ const TripSheet = () => {
                   onChange={handleChange}
                   label="Customer-Advance"
                   id="customer-advance"
-                  autoFocus
+                  autoComplete="password"
                 />
               </div>
 
@@ -1740,6 +1763,7 @@ const TripSheet = () => {
                   id="remark"
                   sx={{ m: 1, width: "300ch" }}
                   variant="standard"
+                  autoComplete="password"
                 />
               </div>
               <div className="input">
@@ -1760,9 +1784,7 @@ const TripSheet = () => {
               </div>
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  {/* <Invoice tripSheetDetails={tripSheetDetails} /> */}
-                  {/* <Invoice tripSheetData={tripSheetData} /> */}
-                  <Invoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} />
+                  <Invoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -1932,7 +1954,7 @@ const TripSheet = () => {
                         renderInput={(params) => {
                           params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || ''
                           return (
-                            <TextField {...params} label="Document Type" name="documenttype" inputRef={params.inputRef} />
+                            <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
                           )
                         }
                         }
@@ -1949,6 +1971,7 @@ const TripSheet = () => {
                         label="Document Notes"
                         id="document-notes"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input" style={{ width: "90px" }}>
@@ -1984,6 +2007,7 @@ const TripSheet = () => {
                         label="Vendor Trip No"
                         id="Vendor-Trip-No"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input" style={{ width: "250px" }}>
@@ -2007,7 +2031,7 @@ const TripSheet = () => {
                           // params.inputProps.value = selectedCustomerData.vehicles || ''
                           params.inputProps.value = formData.vehicleRate || selectedCustomerData.vehicleRate || ''
                           return (
-                            <TextField {...params} label="Vehicle" name="vehicles" inputRef={params.inputRef} />
+                            <TextField {...params} label="Vehicle" autoComplete="password" name="vehicles" inputRef={params.inputRef} />
                           )
                         }
                         }
@@ -2032,7 +2056,7 @@ const TripSheet = () => {
                         renderInput={(params) => {
                           params.inputProps.value = formData.duty || selectedCustomerData.duty || ''
                           return (
-                            <TextField {...params} label="Duty" name="duty1" inputRef={params.inputRef} />
+                            <TextField {...params} label="Duty" autoComplete="password" name="duty1" inputRef={params.inputRef} />
                           )
                         }
                         }
@@ -2062,7 +2086,7 @@ const TripSheet = () => {
                             onChange={(date) => handleDateChange(date, 'closedate1')}
                           >
                             {({ inputProps, inputRef }) => (
-                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.closedate} />
+                              <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.closedate} />
                             )}
                           </DatePicker>
                         </DemoItem>
@@ -2081,6 +2105,7 @@ const TripSheet = () => {
                           type="number"
                           id="total-days"
                           variant="standard"
+                          autoComplete="password"
                         />
                       </DemoItem>
                     </div>
@@ -2131,6 +2156,7 @@ const TripSheet = () => {
                         label="Total Time"
                         id="total-time"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input">
@@ -2148,6 +2174,7 @@ const TripSheet = () => {
                         type="number"
                         id="outlined-start-adornment"
                         sx={{ m: 1, width: "23ch" }}
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input">
@@ -2160,6 +2187,7 @@ const TripSheet = () => {
                         type="number"
                         id="outlined-start-adornment"
                         sx={{ m: 1, width: "23ch" }}
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input">
@@ -2172,6 +2200,7 @@ const TripSheet = () => {
                         label="Total KM"
                         id="total-km"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                   </div>
@@ -2187,6 +2216,7 @@ const TripSheet = () => {
                         label="Remarks"
                         id="remark"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input">
@@ -2200,6 +2230,7 @@ const TripSheet = () => {
                         label="Car Amount"
                         id="car-amount"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input" style={{ width: "90px" }}>
@@ -2236,6 +2267,7 @@ const TripSheet = () => {
                         label="Min.Km"
                         id="min-km"
                         size="small"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input">
@@ -2252,6 +2284,7 @@ const TripSheet = () => {
                         label="Min.Hrs"
                         id="min-hrs"
                         size="small"
+                        autoComplete="password"
                       />
                     </div>
                   </div>
@@ -2269,6 +2302,7 @@ const TripSheet = () => {
                         size="small"
                         variant="standard"
                         sx={{ m: 1, width: "60ch" }}
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input">
@@ -2283,6 +2317,7 @@ const TripSheet = () => {
                         label="Amount"
                         id="amount"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                   </div>
@@ -2299,13 +2334,14 @@ const TripSheet = () => {
                         id="ex-km"
                         size="small"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input" style={{ width: "187px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" />
+                      <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2319,6 +2355,7 @@ const TripSheet = () => {
                         label="Amount"
                         id="amount"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                   </div>
@@ -2335,6 +2372,7 @@ const TripSheet = () => {
                         id="ex-Hrs"
                         size="small"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input" style={{ width: "187px" }}>
@@ -2355,6 +2393,7 @@ const TripSheet = () => {
                         label="Amount"
                         id="amount"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                   </div>
@@ -2371,13 +2410,14 @@ const TripSheet = () => {
                         id="night"
                         size="small"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input" style={{ width: "187px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" />
+                      <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2391,6 +2431,7 @@ const TripSheet = () => {
                         label="Amount"
                         id="amount"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                   </div>
@@ -2407,13 +2448,14 @@ const TripSheet = () => {
                         id="driver-convenience"
                         size="small"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input" style={{ width: "187px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" />
+                      <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2427,6 +2469,7 @@ const TripSheet = () => {
                         label="Amount"
                         id="amount"
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                   </div>
@@ -2451,6 +2494,7 @@ const TripSheet = () => {
                         size="small"
                         label="Net Amount"
                         id="net-amount"
+                        autoComplete="password"
                       />
                     </div>
                   </div>
@@ -2464,6 +2508,7 @@ const TripSheet = () => {
                         label="Veh.Commission"
                         size="small"
                         id="outlined-start-adornment"
+                        autoComplete="password"
                         sx={{ m: 1, width: "25ch" }}
                         InputProps={{
                           startAdornment: (
@@ -2480,6 +2525,7 @@ const TripSheet = () => {
                         size="small"
                         label="Car Amount"
                         id="car-amount"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input radio">
@@ -2511,6 +2557,7 @@ const TripSheet = () => {
                         id="pack"
                         size="small"
                         variant="standard"
+                        autoComplete="password"
                         sx={{ m: 1, width: "60ch" }}
                       />
                     </div>
@@ -2524,6 +2571,7 @@ const TripSheet = () => {
                         onChange={handleChange}
                         size="small"
                         label="Amount"
+                        autoComplete="password"
                         id="amount"
                         variant="standard"
                       />
@@ -2540,6 +2588,7 @@ const TripSheet = () => {
                         onChange={handleChange}
                         label="Ex.Km"
                         id="ex-km"
+                        autoComplete="password"
                         size="small"
                         variant="standard"
                       />
@@ -2560,6 +2609,7 @@ const TripSheet = () => {
                         onChange={handleChange}
                         size="small"
                         label="Amount"
+                        autoComplete="password"
                         id="amount"
                         variant="standard"
                       />
@@ -2577,6 +2627,7 @@ const TripSheet = () => {
                         label="Ex.Hrs"
                         id="ex-Hrs"
                         size="small"
+                        autoComplete="password"
                         variant="standard"
                       />
                     </div>
@@ -2584,7 +2635,7 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" />
+                      <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2596,6 +2647,7 @@ const TripSheet = () => {
                         onChange={handleChange}
                         size="small"
                         label="Amount"
+                        autoComplete="password"
                         id="amount"
                         variant="standard"
                       />
@@ -2612,6 +2664,7 @@ const TripSheet = () => {
                         onChange={handleChange}
                         label="Night"
                         id="night"
+                        autoComplete="password"
                         size="small"
                         variant="standard"
                       />
@@ -2631,6 +2684,7 @@ const TripSheet = () => {
                         value={formData.amount8 || selectedCustomerData.amount8 || book.amount8}
                         onChange={handleChange}
                         size="small"
+                        autoComplete="password"
                         label="Amount"
                         id="amount"
                         variant="standard"
@@ -2647,6 +2701,7 @@ const TripSheet = () => {
                         value={formData.driverconvenience1 || selectedCustomerData.driverconvenience1 || book.driverconvenience1}
                         onChange={handleChange}
                         label="Driver Convenience"
+                        autoComplete="password"
                         id="driver-convenience"
                         size="small"
                         variant="standard"
@@ -2656,7 +2711,7 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" />
+                      <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2669,6 +2724,7 @@ const TripSheet = () => {
                         size="small"
                         label="Amount"
                         id="amount"
+                        autoComplete="password"
                         variant="standard"
                       />
                     </div>
@@ -2685,6 +2741,7 @@ const TripSheet = () => {
                         label="Rud"
                         id="rud"
                         size="small"
+                        autoComplete="password"
                         variant="standard"
                         sx={{ m: 1, width: "60ch" }}
                       />
@@ -2700,6 +2757,7 @@ const TripSheet = () => {
                         size="small"
                         label="Net Amount"
                         id="net-amount"
+                        autoComplete="password"
                         variant="standard"
                       />
                     </div>
@@ -2716,6 +2774,7 @@ const TripSheet = () => {
                         label="Discount"
                         id="discount"
                         size="small"
+                        autoComplete="password"
                         variant="standard"
                       />
                     </div>
@@ -2735,6 +2794,7 @@ const TripSheet = () => {
                         onChange={handleChange}
                         size="small"
                         label="On"
+                        autoComplete="password"
                         id="on"
                         variant="standard"
                       />
@@ -2761,6 +2821,7 @@ const TripSheet = () => {
                         value={formData.balance || selectedCustomerData.balance || book.balance}
                         onChange={handleChange}
                         size="small"
+                        autoComplete="password"
                         label="Balance"
                         id="balance"
                       />
@@ -2768,7 +2829,7 @@ const TripSheet = () => {
                   </div>
                   <div className="input-field">
                     <div className="input">
-                      <TextField size="small" variant="standard" />
+                      <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
                     <div className="input">
                       <div
@@ -2780,7 +2841,7 @@ const TripSheet = () => {
                       >
                         <FontAwesomeIcon icon={faXmark} />
                       </div>
-                      <TextField size="small" variant="standard" />
+                      <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
                   </div>
                 </div>
@@ -2796,7 +2857,7 @@ const TripSheet = () => {
                             onChange={(date) => handleDateChange(date, 'fcdate')}
                           >
                             {({ inputProps, inputRef }) => (
-                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.fcdate} />
+                              <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.fcdate} />
                             )}
                           </DatePicker>
                         </DemoItem>
@@ -2812,6 +2873,7 @@ const TripSheet = () => {
                               <TextField
                                 {...params}
                                 name="taxdate"
+                                autoComplete="password"
                                 value={selectedCustomerData.taxdate || ''}
                                 inputRef={params.inputRef}
                               />
@@ -2830,7 +2892,7 @@ const TripSheet = () => {
                             onChange={(date) => handleDateChange(date, 'insdate')}
                           >
                             {({ inputProps, inputRef }) => (
-                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.insdate} />
+                              <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.insdate} />
                             )}
                           </DatePicker>
                         </DemoItem>
@@ -2844,7 +2906,7 @@ const TripSheet = () => {
                             onChange={(date) => handleDateChange(date, 'stpermit')}
                           >
                             {({ inputProps, inputRef }) => (
-                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.stpermit} />
+                              <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.stpermit} />
                             )}
                           </DatePicker>
                         </DemoItem>
@@ -2859,6 +2921,7 @@ const TripSheet = () => {
                         onChange={handleChange}
                         label="Maintenance Type"
                         id="maintenance-type"
+                        autoComplete="password"
                         size="small"
                         sx={{ m: 1, width: "60ch" }}
                       />
@@ -2869,6 +2932,7 @@ const TripSheet = () => {
                         value={formData.kilometer || selectedCustomerData.kilometer || book.kilometer}
                         onChange={handleChange}
                         size="small"
+                        autoComplete="password"
                         label="Kilometer"
                         id="kilometer"
                       />
@@ -2876,34 +2940,34 @@ const TripSheet = () => {
                   </div>
                   <div className="input-field">
                     <div className="input" style={{ width: "390px" }}>
-                      <TextField size="small" sx={{ m: 1, width: "60ch" }} />
+                      <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
                     </div>
                     <div className="input">
-                      <TextField size="small" />
+                      <TextField size="small" autoComplete="password" />
                     </div>
                   </div>
                   <div className="input-field">
                     <div className="input" style={{ width: "390px" }}>
-                      <TextField size="small" sx={{ m: 1, width: "60ch" }} />
+                      <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
                     </div>
                     <div className="input">
-                      <TextField size="small" />
+                      <TextField size="small" autoComplete="password" />
                     </div>
                   </div>
                   <div className="input-field">
                     <div className="input" style={{ width: "390px" }}>
-                      <TextField size="small" sx={{ m: 1, width: "60ch" }} />
+                      <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
                     </div>
                     <div className="input">
-                      <TextField size="small" />
+                      <TextField size="small" autoComplete="password" />
                     </div>
                   </div>
                   <div className="input-field">
                     <div className="input" style={{ width: "390px" }}>
-                      <TextField size="small" sx={{ m: 1, width: "60ch" }} />
+                      <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
                     </div>
                     <div className="input">
-                      <TextField size="small" />
+                      <TextField size="small" autoComplete="password" />
                     </div>
                   </div>
                   <div className="input-field">
@@ -2926,7 +2990,7 @@ const TripSheet = () => {
                         renderInput={(params) => {
                           params.inputProps.value = formData.selects || selectedCustomerData.selects || ''
                           return (
-                            <TextField {...params} label="Select" name="selects" inputRef={params.inputRef} />
+                            <TextField {...params} label="Select" autoComplete="password" name="selects" inputRef={params.inputRef} />
                           )
                         }
                         }
@@ -2971,7 +3035,7 @@ const TripSheet = () => {
                         renderInput={(params) => {
                           params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || ''
                           return (
-                            <TextField {...params} label="Document Type" name="documenttype" inputRef={params.inputRef} />
+                            <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
                           )
                         }
                         }
@@ -2987,6 +3051,7 @@ const TripSheet = () => {
                         onChange={handleChange}
                         size="document-notes"
                         label="Document Notes"
+                        autoComplete="password"
                         id="document-notes"
                         variant="standard"
                       />
@@ -3004,6 +3069,7 @@ const TripSheet = () => {
                         size="small"
                         sx={{ m: 1, width: "300ch" }}
                         variant="standard"
+                        autoComplete="password"
                       />
                     </div>
                     <div className="input">
@@ -3066,6 +3132,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         size="small"
+                        autoComplete="password"
                         sx={{ m: 1, width: "300ch" }}
                         variant="standard"
                       />

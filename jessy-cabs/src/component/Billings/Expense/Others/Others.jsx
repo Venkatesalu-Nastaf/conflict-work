@@ -8,7 +8,8 @@ import PropetiesRent from './PropetiesRent/PropetiesRent';
 import Insurance from './Insurance/Insurance';
 import Utilities from './Utilities/Utilities';
 import OfficeSuppliers from './OfficeSuppliers/OfficeSuppliers ';
-import VehicleExpense from './VehicleExpense/VehicleExpense';
+import TravelExpense from './TravelExpense/TravelExpense';
+import BusinessExpense from './BusinessExpense/BusinessExpense';
 
 const Others = () => {
   const [selectOtherExpense, setSelectOtherExpense] = useState('');
@@ -39,7 +40,7 @@ const Others = () => {
                 <MenuItem value={20}>Insurance</MenuItem>
                 <MenuItem value={30}>Utilities</MenuItem>
                 <MenuItem value={40}>Office-Supplies</MenuItem>
-                <MenuItem value={50}>Vehicle-Expense</MenuItem>
+                <MenuItem value={50}>Traveling</MenuItem>
                 <MenuItem value={60}>Business-License & Permits</MenuItem>
                 <MenuItem value={70}>Interst-Payments & Bank-Fees</MenuItem>
               </Select>
@@ -50,8 +51,8 @@ const Others = () => {
         {selectOtherExpense === 20 && <div><Insurance /></div>}
         {selectOtherExpense === 30 && <div><Utilities /></div>}
         {selectOtherExpense === 40 && <div><OfficeSuppliers /></div>}
-        {selectOtherExpense === 50 && <div><VehicleExpense /></div>}
-        {selectOtherExpense === 60 && <div>Business-License & Permits</div>}
+        {selectOtherExpense === 50 && <div><TravelExpense /></div>}
+        {selectOtherExpense === 60 && <div><BusinessExpense /></div>}
         {selectOtherExpense === 70 && <div>Interst-Payments & Bank-Fees</div>}
       </form>
     </div>

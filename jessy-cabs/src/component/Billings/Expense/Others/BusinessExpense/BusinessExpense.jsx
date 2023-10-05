@@ -3,7 +3,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DataGrid } from "@mui/x-data-grid";
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
-import { UtilitiesType } from "./UtilitiesData";
 import MenuItem from '@mui/material/MenuItem';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -30,20 +29,17 @@ import dayjs from "dayjs";
 import { Menu, TextField } from "@mui/material";
 import { AiFillAppstore } from "react-icons/ai";
 import { MdEditDocument } from "react-icons/md";
-import Autocomplete from "@mui/material/Autocomplete";
 import { BsFillFilePostFill } from "react-icons/bs";
 import { MdContacts } from "react-icons/md";
 import { ImPriceTags } from "react-icons/im";
 import { ImLocation2 } from "react-icons/im";
 
-
 // TABLE
-
 const columns = [
     { field: "id", headerName: "Sno", width: 50 },
-    { field: "Utilitiesno   ", headerName: "Utilities No", width: 130 },
-    { field: "Utilitiestype", headerName: "Utilities Type", width: 130 },
-    { field: "Utilitiesdiscription", headerName: "Utilities Discription", width: 150 },
+    { field: "BusinessExpenseno   ", headerName: "BusinessExpense No", width: 130 },
+    { field: "BusinessExpensetype", headerName: "BusinessExpense Type", width: 130 },
+    { field: "BusinessExpensediscription", headerName: "BusinessExpense Discription", width: 150 },
     { field: "billdate", headerName: "Bill Date", width: 140 },
     { field: "contactno", headerName: "Contact No", width: 130 },
     { field: "address", headerName: "Address", width: 130 },
@@ -70,7 +66,7 @@ const actions = [
     { icon: <ModeEditIcon />, name: "Edit" },
 ];
 
-const Utilities = () => {
+const BusinessExpense = () => {
 
     const [infoMessage] = useState({});
     const [errorMessage] = useState({});
@@ -112,7 +108,7 @@ const Utilities = () => {
             row['registrationlicense'],
             row['warrantyinformation'],
             row['maintenancerecordes'],
-            row['Utilitiesinformation'],
+            row['BusinessExpenseinformation'],
             row['invoicecopy']
         ]);
         pdf.autoTable({
@@ -173,8 +169,8 @@ const Utilities = () => {
                         </div>
                         <TextField
                             size="small"
-                            name="UtilitiesNo"
-                            label="Utilities No"
+                            name="BusinessExpenseNo"
+                            label="BusinessExpense No"
                             id="remark"
                         />
                     </div>
@@ -182,19 +178,12 @@ const Utilities = () => {
                         <div className="icone">
                             <RateReviewIcon color="action" />
                         </div>
-                        <Autocomplete
-                            fullWidth
-                            id="free-solo-demo"
-                            freeSolo
+                        <TextField
                             size="small"
-                            value={UtilitiesType.map((option) => option.optionvalue)}
-                            options={UtilitiesType.map((option) => ({
-                                label: option.Option,
-                            }))}
-                            getOptionLabel={(option) => option.label || ""}
-                            renderInput={(params) => (
-                                <TextField {...params} label="Utilities Type" />
-                            )}
+                            id="BusinessExpenseType"
+                            label="Expense Type"
+                            name="BusinessExpenseType"
+                            autoFocus
                         />
                     </div>
                     <div className="input" style={{ width: "230px" }}>
@@ -203,9 +192,9 @@ const Utilities = () => {
                         </div>
                         <TextField
                             size="small"
-                            id="UtilitiesDiscription"
-                            label="Utilities Discription"
-                            name="UtilitiesDiscription"
+                            id="BusinessExpenseDiscription"
+                            label="Expense Discription"
+                            name="BusinessExpenseDiscription"
                             autoFocus
                         />
                     </div>
@@ -421,4 +410,4 @@ const Utilities = () => {
     )
 }
 
-export default Utilities
+export default BusinessExpense

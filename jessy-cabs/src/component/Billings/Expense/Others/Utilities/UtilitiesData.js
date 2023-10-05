@@ -25,7 +25,10 @@ export const UtilitiesType = [
         Option: "Telephone Bill",
         optionvalue: "telephonebill",
     },
-    
+    {
+        Option: "Transport Bill",
+        optionvalue: "transportbill",
+    },
     {
         Option: "Tv Subscription / cable Bill",
         optionvalue: "tvsubscription",

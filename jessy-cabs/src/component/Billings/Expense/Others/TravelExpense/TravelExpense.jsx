@@ -3,6 +3,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DataGrid } from "@mui/x-data-grid";
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
+import { TripType } from './TravelExpenseData'
 import MenuItem from '@mui/material/MenuItem';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -12,23 +13,33 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ClearIcon from '@mui/icons-material/Clear';
-import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import Autocomplete from "@mui/material/Autocomplete";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import Box from "@mui/material/Box";
+import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import RateReviewIcon from '@mui/icons-material/RateReview';
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import Button from "@mui/material/Button";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ChecklistIcon from "@mui/icons-material/Checklist";
+import VaccinesIcon from '@mui/icons-material/Vaccines';
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
 import dayjs from "dayjs";
 import { Menu, TextField } from "@mui/material";
 import { AiFillAppstore } from "react-icons/ai";
 import { MdEditDocument } from "react-icons/md";
 import { BsFillFilePostFill } from "react-icons/bs";
+import { BiTrip } from "react-icons/bi";
+import { AiOutlineFileSearch } from "react-icons/ai";
+import PersonIcon from '@mui/icons-material/Person';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import MapIcon from '@mui/icons-material/Map';
 import { MdContacts } from "react-icons/md";
 import { ImPriceTags } from "react-icons/im";
 import { ImLocation2 } from "react-icons/im";
@@ -38,15 +49,24 @@ import { ImLocation2 } from "react-icons/im";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 50 },
-    { field: "VehicleExpenseno   ", headerName: "VehicleExpense No", width: 150 },
-    { field: "VehicleExpensetype", headerName: "VehicleExpense Type", width: 150 },
-    { field: "VehicleExpensediscription", headerName: "Discription", width: 130 },
-    { field: "parchasedate", headerName: "Parchase Date", width: 120 },
-    { field: "contactno", headerName: "Contact No", width: 130 },
-    { field: "address", headerName: "Address", width: 130 },
-    { field: "location", headerName: "Location", width: 130 },
-    { field: "amount", headerName: "Amount", width: 130 },
-    { field: "parchasecopy", headerName: "parchase Bill", width: 130 },
+    { field: "travelexpenseno   ", headerName: "TravelExpense No", width: 150 },
+    { field: "travelexpensetype", headerName: "TravelExpense Type", width: 150 },
+    { field: "travelexpensediscription", headerName: "Discription", width: 130 },
+    { field: "triptype", headerName: "Trip Type", width: 150 },
+    { field: "personname", headerName: "Person Name", width: 120 },
+    { field: "totalmembers", headerName: "Total Members", width: 120 },
+    { field: "contactno", headerName: "Contact No", width: 120 },
+    { field: "email", headerName: "Email Id", width: 120 },
+    { field: "fromlocation", headerName: "From Location", width: 120 },
+    { field: "tolocation", headerName: "To Location", width: 120 },
+    { field: "fromtraveldate", headerName: "From Travel Date", width: 130 },
+    { field: "totraveldate", headerName: "To Travel Date", width: 120 },
+    { field: "totaldays", headerName: "Total Days", width: 120 },
+    { field: "foodexpense", headerName: "Food Expense", width: 120 },
+    { field: "hotelrent", headerName: "Hotel Rent", width: 120 },
+    { field: "medicalexpense", headerName: "Medical Expense", width: 120 },
+    { field: "totalamount", headerName: "Total Amount", width: 120 },
+    { field: "expensebills", headerName: "Expense Bills", width: 120 },
 ];
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -67,7 +87,7 @@ const actions = [
     { icon: <ModeEditIcon />, name: "Edit" },
 ];
 
-const VehicleExpense = () => {
+const TravelExpense = () => {
 
     const [infoMessage] = useState({});
     const [errorMessage] = useState({});
@@ -109,7 +129,7 @@ const VehicleExpense = () => {
             row['registrationlicense'],
             row['warrantyinformation'],
             row['maintenancerecordes'],
-            row['VehicleExpenseinformation'],
+            row['TravelExpenseinformation'],
             row['invoicecopy']
         ]);
         pdf.autoTable({
@@ -166,12 +186,12 @@ const VehicleExpense = () => {
                 <div className="input-field">
                     <div className="input" style={{ width: "230px" }}>
                         <div className="icone">
-                            <BsFillFilePostFill style={{ fontSize: "25px" }} color="action" />
+                            <BsFillFilePostFill style={{ fontSize: "27px" }} color="action" />
                         </div>
                         <TextField
                             size="small"
-                            name="VehicleExpenseNo"
-                            label="VehicleExpense No"
+                            name="TravelExpenseNo"
+                            label="TravelExpense No"
                             id="remark"
                         />
                     </div>
@@ -186,9 +206,9 @@ const VehicleExpense = () => {
                             id="remark"
                         />
                     </div>
-                    <div className="input" >
+                    <div className="input" style={{ width: "230px" }}>
                         <div className="icone">
-                            <AiFillAppstore style={{ fontSize: "25px" }} color="action" />
+                            <AiFillAppstore style={{ fontSize: "27px" }} color="action" />
                         </div>
                         <TextField
                             size="small"
@@ -198,10 +218,118 @@ const VehicleExpense = () => {
                             autoFocus
                         />
                     </div>
+                    <div className="input" style={{ width: "230px" }}>
+                        <div className="icone">
+                            <BiTrip color="action" style={{ fontSize: "27px" }} />
+                        </div>
+                        <Autocomplete
+                            fullWidth
+                            id="free-solo-demo"
+                            freeSolo
+                            size="small"
+                            value={TripType.map((option) => option.optionvalue)}
+                            options={TripType.map((option) => ({
+                                label: option.Option,
+                            }))}
+                            getOptionLabel={(option) => option.label || ""}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Trip Type" />)}
+                        />
+                    </div>
+                </div>
+                <div className="input-field">
+                    <div className="input" style={{ width: "230px" }}>
+                        <div className="icone">
+                            <PersonIcon style={{ fontSize: "27px" }} color="action" />
+                        </div>
+                        <TextField
+                            size="small"
+                            id="id"
+                            label="Person Name"
+                            name="PersonName"
+                            autoFocus
+                        />
+                    </div>
+                    <div className="input" style={{ width: "230px" }}>
+                        <div className="icone">
+                            <GroupAddIcon color="action" />
+                        </div>
+                        <TextField
+                            size="small"
+                            id="id"
+                            label="Total Members"
+                            name="TotalMembers"
+                            autoFocus
+                        />
+                    </div>
+                    <div className="input" style={{ width: "230px" }}>
+                        <div className="icone">
+                            <MdContacts style={{ fontSize: "27px" }} color="action" />
+                        </div>
+                        <TextField
+                            size="small"
+                            id="id"
+                            label="Contact No"
+                            name="contact"
+                            autoFocus
+                        />
+                    </div>
+                    <div className="input" style={{ width: "230px" }}>
+                        <div className="icone">
+                            <AttachEmailIcon style={{ fontSize: "27px" }} color="action" />
+                        </div>
+                        <TextField
+                            size="small"
+                            id="id"
+                            label="Email ID"
+                            name="emailid"
+                            autoFocus
+                        />
+                    </div>
+                </div>
+                <div className="input-field">
+                    <div className="input" style={{ width: "230px" }}>
+                        <div className="icone">
+                            <ImLocation2 color="action" style={{ fontSize: "27px" }} />
+                        </div>
+                        <TextField
+                            size="small"
+                            id="Location"
+                            label="From-Location"
+                            name="Location"
+                            autoComplete="new-password"
+                            autoFocus
+                        />
+                    </div>
+                    <div className="input" style={{ width: "230px" }}>
+                        <div className="icone">
+                            <MapIcon color="action" style={{ fontSize: "27px" }} />
+                        </div>
+                        <TextField
+                            size="small"
+                            id="Location"
+                            label="To-Location"
+                            name="Location"
+                            autoComplete="new-password"
+                            autoFocus
+                        />
+                    </div>
                     <div className="input">
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                                label="Parchase Date"
+                                label="From-Travel-Date"
+                                value={selectedCustomerData.dateofacquisition ? dayjs(selectedCustomerData.startdate) : null}
+                            >
+                                {({ inputProps, inputRef }) => (
+                                    <TextField  {...inputProps} inputRef={inputRef} value={selectedCustomerData?.dateofacquisition} />
+                                )}
+                            </DatePicker>
+                        </LocalizationProvider>
+                    </div>
+                    <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                label="To-Travel-Date"
                                 value={selectedCustomerData.dateofacquisition ? dayjs(selectedCustomerData.startdate) : null}
                             >
                                 {({ inputProps, inputRef }) => (
@@ -212,73 +340,74 @@ const VehicleExpense = () => {
                     </div>
                 </div>
                 <div className="input-field">
-                    <div className="input" style={{ width: "400px" }}>
+                    <div className="input" style={{ width: "220px" }}>
                         <div className="icone">
-                            <AddHomeWorkIcon color="action" />
+                            <CalendarMonthIcon color="action" />
                         </div>
-                        <TextField
-                            size="small"
-                            name="address1"
-                            label="Address"
-                            id="remark"
-                            sx={{ m: 1, width: "200ch" }}
-                            variant="standard"
-                        />
+                        <DemoItem>
+                            <TextField
+                                name="totaldays"
+                                label="Total Days"
+                                size="small"
+                                type="number"
+                                id="total-days"
+                                variant="standard"
+                            />
+                        </DemoItem>
                     </div>
-                    <div className="input" style={{ width: "230px" }}>
+                    <div className="input" style={{ width: "210px" }}>
                         <div className="icone">
-                            <ImLocation2 color="action" style={{ fontSize: "25px" }} />
+                            <FastfoodIcon color="action" />
                         </div>
                         <TextField
                             size="small"
-                            id="Location"
-                            label="Location"
-                            name="Location"
-                            autoComplete="new-password"
+                            id="FoodExpense"
+                            label="Food Expense"
+                            name="FoodExpense"
                             autoFocus
                         />
                     </div>
                     <div className="input" style={{ width: "230px" }}>
-                        <div className="icone">
-                            <MdContacts style={{ fontSize: "25px" }} color="action" />
-                        </div>
-                        <TextField
-                            size="small"
-                            id="id"
-                            label="Contact No"
-                            name="contact"
-                            autoFocus
-                        />
-                    </div>
-                </div>
-                <div className="input-field">
-                    <div className="input" style={{ width: "400px" }}>
                         <div className="icone">
                             <HomeTwoToneIcon color="action" />
                         </div>
                         <TextField
                             size="small"
-                            name="address2"
-                            id="remark"
-                            sx={{ m: 1, width: "200ch" }}
-                            variant="standard"
+                            id="HotelRoomExpense"
+                            label="Hotel Room Expense"
+                            name="HotelRoomExpense"
+                            autoFocus
                         />
                     </div>
                     <div className="input" style={{ width: "210px" }}>
                         <div className="icone">
-                            <ImPriceTags style={{ fontSize: "25px" }} color="action" />
+                            <VaccinesIcon color="action" />
                         </div>
                         <TextField
                             size="small"
-                            id="Amount"
-                            label="Amount"
-                            name="Amount"
+                            id="MedicalExpense"
+                            label="Medical Expense"
+                            name="MedicalExpense"
+                            autoFocus
+                        />
+                    </div>
+                </div>
+                <div className="input-field">
+                    <div className="input" style={{ width: "210px" }}>
+                        <div className="icone">
+                            <ImPriceTags style={{ fontSize: "27px" }} color="action" />
+                        </div>
+                        <TextField
+                            size="small"
+                            id="TotalAmount"
+                            label="Total Amount"
+                            name="TotalAmount"
                             autoFocus
                         />
                     </div>
                     <div className="input">
                         <Button startIcon={<MdEditDocument />} color="primary" variant="contained" component="label">
-                            Parchase Bill
+                            Expense Bills
                             <input
                                 type="file"
                                 style={{ display: "none" }}
@@ -313,24 +442,14 @@ const VehicleExpense = () => {
                         <div className="input-field">
                             <div className="input" style={{ width: "230px" }}>
                                 <div className="icone">
-                                    <BsFillFilePostFill style={{ fontSize: "25px" }} color="action" />
+                                    <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
                                 </div>
                                 <TextField
                                     size="small"
-                                    name="VehicleExpenseNo"
-                                    label="VehicleExpense No"
-                                    id="remark"
-                                />
-                            </div>
-                            <div className="input" style={{ width: "230px" }}>
-                                <div className="icone">
-                                    <RateReviewIcon color="action" />
-                                </div>
-                                <TextField
-                                    size="small"
-                                    name="VehicleExpense Type"
-                                    label="VehicleExpense Type"
-                                    id="remark"
+                                    id="id"
+                                    label="Search"
+                                    name="Search"
+                                    autoFocus
                                 />
                             </div>
                             <div className="input">
@@ -351,14 +470,10 @@ const VehicleExpense = () => {
                                     />
                                 </LocalizationProvider>
                             </div>
-
-                        </div>
-                        <div className="input-field" style={{ justifyContent: 'center' }}>
-                            <div className="input" style={{ marginTop: "30px" }}>
+                            <div className="input" style={{ width: "130px" }}>
                                 <Button variant="contained">Search</Button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -420,4 +535,4 @@ const VehicleExpense = () => {
     )
 }
 
-export default VehicleExpense
+export default TravelExpense

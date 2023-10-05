@@ -319,7 +319,7 @@ const DriverCreation = () => {
     const validatePasswordMatch = () => {
         const password = selectedCustomerData?.userpassword || book.userpassword;
         const confirmPassword = selectedCustomerData?.userconfirmpassword || book.userconfirmpassword;
-        // setPasswordsMatch(password === confirmPassword);
+        setPasswordsMatch(password !== confirmPassword);
     };
     return (
         <div className="DriverCreation-main">

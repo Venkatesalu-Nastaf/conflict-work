@@ -187,7 +187,7 @@ const BusinessExpense = () => {
                         <TextField
                             size="small"
                             id="BusinessExpenseType"
-                            label="Expense Type"
+                            label="Document Type"
                             name="BusinessExpenseType"
                             autoFocus
                         />
@@ -199,7 +199,7 @@ const BusinessExpense = () => {
                         <TextField
                             size="small"
                             id="BusinessExpenseDiscription"
-                            label="Expense Discription"
+                            label="Document Discription"
                             name="BusinessExpenseDiscription"
                             autoFocus
                         />

@@ -95,7 +95,7 @@ router.post('/send-tripsheet-email', async (req, res) => {
             secure: true,
             auth: {
                 user: 'akash02899@gmail.com',
-                pass: 'zrbdlfwjxsgrjncr',
+                pass: 'yocakaoeoajdaawj',
             },
         });
         // Email content for the owner

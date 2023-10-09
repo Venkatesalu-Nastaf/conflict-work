@@ -296,7 +296,7 @@ const Booking = () => {
     return `${hours}:${minutes}`;
   };
 
-  const handleChange = (event) => {
+  const handleChange = useCallback((event) => {
     const { name, value, checked, type } = event.target;
 
     if (type === 'checkbox') {
@@ -317,7 +317,6 @@ const Booking = () => {
         [name]: checked,
       }));
     } else if (type === 'radio') {
-
       setBook((prevBook) => ({
         ...prevBook,
         [name]: value,
@@ -357,7 +356,8 @@ const Booking = () => {
         [name]: fieldValue,
       }));
     }
-  };
+  }, [setBook, setSelectedCustomerData, setFormData, setFormValues, setSelectedCustomerDatas]);
+
 
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
@@ -543,24 +543,71 @@ const Booking = () => {
     }
   };
 
+  const [enterPressCount, setEnterPressCount] = useState(0);
+
+  // const handleKeyEnter = useCallback(async (event) => {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //     if (enterPressCount === 0) {
+  //       // First Enter key press - Display in the table
+  //       try {
+  //         const response = await axios.get(`http://localhost:8081/name-customers/${event.target.value}`);
+  //         const vehicleData = response.data;
+  //         setRows([vehicleData]);
+  //       } catch (error) {
+  //         console.error('Error retrieving vehicle details:', error.message);
+  //       }
+  //     } else if (enterPressCount === 1) {
+  //       // Second Enter key press (double Enter) - Display in the fields
+  //       const selectedRow = rows[0]; // Assuming you want to use the first row
+  //       if (selectedRow) {
+  //         setSelectedCustomerDatas(selectedRow);
+  //         handleChange({ target: { name: "customer", value: selectedRow.customer } });
+  //       }
+  //       // Reset the Enter key press count
+  //       setEnterPressCount(0);
+  //     }
+  //     // Increment the Enter key press count
+  //     setEnterPressCount((prevCount) => prevCount + 1);
+  //   }
+  // }, [handleChange, rows, enterPressCount]);
+
   const handleKeyEnter = useCallback(async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      try {
-        const response = await axios.get(`http://localhost:8081/name-customers/${event.target.value}`);
-        const vehicleData = response.data;
-        setRows([vehicleData]);
-      } catch (error) {
-        console.error('Error retrieving vehicle details:', error.message);
+      if (enterPressCount === 0) {
+        // First Enter key press - Display in the table
+        try {
+          const response = await axios.get(`http://localhost:8081/name-customers/${event.target.value}`);
+          const vehicleData = response.data;
+          setRows([vehicleData]);
+        } catch (error) {
+          console.error('Error retrieving vehicle details:', error.message);
+        }
+      } else if (enterPressCount === 1) {
+        // Second Enter key press (double Enter) - Display in the fields
+        const selectedRow = rows[0]; // Assuming you want to use the first row
+        if (selectedRow) {
+          setSelectedCustomerDatas(selectedRow);
+          handleChange({ target: { name: "customer", value: selectedRow.customer } });
+        }
       }
+      // Increment the Enter key press count
+      setEnterPressCount((prevCount) => prevCount + 1);
     }
-  }, []);
+  
+    // Check if the input value is empty and reset enterPressCount to 0
+    if (event.target.value === '') {
+      setEnterPressCount(0);
+    }
+  }, [handleChange, rows, enterPressCount]);
+  
 
   const handleRowClick = useCallback((params) => {
     console.log(params);
     setSelectedCustomerDatas(params);
     handleChange({ target: { name: "customer", value: params.customer } });
-  }, []);
+  }, [handleChange]);
 
   const [sendEmail, setSendEmail] = useState(false);
   const handlecheck = async () => {

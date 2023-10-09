@@ -8,6 +8,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import Received from './Received/Received';
 import Submited from './Submited/Submited';
 import Pending from './Pending/Pending';
+import VehicleStatement from './VehicleStatement/VehicleStatement';
 
 const Receiveds = () => {
     const [value, setValue] = React.useState("received");
@@ -26,11 +27,13 @@ const Receiveds = () => {
                                     <Tab label="Received" value="received" />
                                     <Tab label="Submited" value="submited" />
                                     <Tab label="Pending" value="pending" />
+                                    <Tab label="Vehicle Statement" value="vehiclestatement" />
                                 </TabList>
                             </Box>
                             <TabPanel value="received"><Received /></TabPanel>
                             <TabPanel value="submited"><Submited /></TabPanel>
                             <TabPanel value="pending"><Pending /></TabPanel>
+                            <TabPanel value="vehiclestatement"><VehicleStatement /></TabPanel>
                         </TabContext>
                     </Box>
                 </div>

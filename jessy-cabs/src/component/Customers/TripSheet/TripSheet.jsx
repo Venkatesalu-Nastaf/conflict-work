@@ -767,11 +767,95 @@ const TripSheet = () => {
     return 0;
   };
 
-  const handleChange = (event) => {
+  // const handleChange = (event) => {
+  //   const { name, value, checked } = event.target;
+  //   setSelectedCustomerData({ ...selectedCustomerData, [name]: value });
+  //   setFormData({ ...formData, [name]: value });
+  //   setTripSheetData({ ...tripSheetData, [name]: value });
+
+  //   if (event.target.type === 'checkbox') {
+  //     setBook((prevBook) => ({
+  //       ...prevBook,
+  //       [name]: checked,
+  //     }));
+  //     setSelectedCustomerData((prevData) => ({
+  //       ...prevData,
+  //       [name]: checked,
+  //     }));
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       [name]: checked,
+  //     }));
+  //     setFormValues((prevValues) => ({
+  //       ...prevValues,
+  //       [name]: checked,
+  //     }));
+  //     setTripSheetData((prevValues) => ({
+  //       ...prevValues,
+  //       [name]: checked,
+  //     }));
+  //   } else {
+  //     // Check if the field is the time field
+  //     if (name === 'starttime') {
+  //       const formattedTime = value; // Modify the time value if needed
+  //       setBook((prevBook) => ({
+  //         ...prevBook,
+  //         [name]: formattedTime,
+  //       }));
+  //       setSelectedCustomerData((prevData) => ({
+  //         ...prevData,
+  //         [name]: formattedTime,
+  //       }));
+  //       setFormData((prevData) => ({
+  //         ...prevData,
+  //         [name]: formattedTime,
+  //       }));
+  //       setTripSheetData((prevData) => ({
+  //         ...prevData,
+  //         [name]: formattedTime,
+  //       }));
+  //     } else {
+  //       setBook((prevBook) => ({
+  //         ...prevBook,
+  //         [name]: value,
+  //       }));
+  //       setSelectedCustomerData((prevData) => ({
+  //         ...prevData,
+  //         [name]: value,
+  //       }));
+  //       setSelectedCustomerDatas((prevData) => ({
+  //         ...prevData,
+  //         [name]: value,
+  //       }));
+  //       setFormData((prevData) => ({
+  //         ...prevData,
+  //         [name]: value,
+  //       }));
+  //       setFormValues((prevValues) => ({
+  //         ...prevValues,
+  //         [name]: value,
+  //       }));
+  //       setTripSheetData((prevValues) => ({
+  //         ...prevValues,
+  //         [name]: value,
+  //       }));
+  //     }
+  //   }
+  // };
+  const handleChange = useCallback((event) => {
     const { name, value, checked } = event.target;
-    setSelectedCustomerData({ ...selectedCustomerData, [name]: value });
-    setFormData({ ...formData, [name]: value });
-    setTripSheetData({ ...tripSheetData, [name]: value });
+    setSelectedCustomerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    setTripSheetData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
 
     if (event.target.type === 'checkbox') {
       setBook((prevBook) => ({
@@ -841,7 +925,8 @@ const TripSheet = () => {
         }));
       }
     }
-  };
+  }, [setSelectedCustomerData, setFormData, setTripSheetData]);
+
 
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === 'Enter') {
@@ -859,24 +944,74 @@ const TripSheet = () => {
     }
   }, []);
 
+  const [enterPressCount, setEnterPressCount] = useState(0);
+
+  // const handleKeyEnter = useCallback(async (event) => {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //     if (enterPressCount === 0) {
+  //       // First Enter key press - Display in the table
+  //       try {
+  //         const response = await axios.get(`http://localhost:8081/vehicleinfo/${event.target.value}`);
+  //         const vehicleData = response.data;
+  //         setRows([vehicleData]);
+  //       } catch (error) {
+  //         console.error('Error retrieving vehicle details:', error.message);
+  //       }
+  //     } else if (enterPressCount === 2) {
+  //       const selectedRow = rows[0];
+  //       if (selectedRow) {
+  //         setSelectedCustomerDatas(selectedRow);
+  //         handleChange({ target: { name: "vehRegNo", value: selectedRow.vehRegNo } });
+  //         handleChange({ target: { name: "vehType", value: selectedRow.vehType } });
+  //         handleChange({ target: { name: "driverName", value: selectedRow.driverName } });
+  //         handleChange({ target: { name: "mobileNo", value: selectedRow.mobileNo } });
+  //       }
+  //       setEnterPressCount(0);
+  //     }
+  //     setEnterPressCount((prevCount) => prevCount + 1);
+  //   }
+  // }, [handleChange, rows, enterPressCount]);
+
   const handleKeyEnter = useCallback(async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      try {
-        const response = await axios.get(`http://localhost:8081/vehicleinfo/${event.target.value}`);
-        const vehicleData = response.data;
-        setRows([vehicleData]);
-      } catch (error) {
-        console.error('Error retrieving vehicle details:', error.message);
+      if (enterPressCount === 0) {
+        // First Enter key press - Display in the table
+        try {
+          const response = await axios.get(`http://localhost:8081/vehicleinfo/${event.target.value}`);
+          const vehicleData = response.data;
+          setRows([vehicleData]);
+        } catch (error) {
+          console.error('Error retrieving vehicle details:', error.message);
+        }
+      } else if (enterPressCount === 1) {
+        // Second Enter key press (double Enter) - Display in the fields
+        const selectedRow = rows[0]; // Assuming you want to use the first row
+        if (selectedRow) {
+          setSelectedCustomerDatas(selectedRow);
+          handleChange({ target: { name: "vehRegNo", value: selectedRow.vehRegNo } });
+          handleChange({ target: { name: "vehType", value: selectedRow.vehType } });
+          handleChange({ target: { name: "driverName", value: selectedRow.driverName } });
+          handleChange({ target: { name: "mobileNo", value: selectedRow.mobileNo } });
+        }
       }
+      // Increment the Enter key press count
+      setEnterPressCount((prevCount) => prevCount + 1);
     }
-  }, []);
+
+    // Check if the input value is empty and reset enterPressCount to 0
+    if (event.target.value === '') {
+      setEnterPressCount(0);
+    }
+  }, [handleChange, rows, enterPressCount]);
+
 
   const handleRowClick = useCallback((params) => {
     console.log(params);
     setSelectedCustomerDatas(params);
     handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
-  }, []);
+  }, [handleChange]);
 
   return (
     <div className="form-container">

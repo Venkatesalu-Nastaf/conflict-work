@@ -439,7 +439,7 @@ const TravelExpense = () => {
             <div className="detail-container-main">
                 <div className="container-left">
                     <div className="copy-title-btn-Others">
-                        <div className="input-field">
+                        <div className="input-field" style={{ justifyContent: 'center' }}>
                             <div className="input" style={{ width: "230px" }}>
                                 <div className="icone">
                                     <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
@@ -470,7 +470,7 @@ const TravelExpense = () => {
                                     />
                                 </LocalizationProvider>
                             </div>
-                            <div className="input" style={{ width: "130px" }}>
+                            <div className="input" style={{ width: "140px" }}>
                                 <Button variant="contained">Search</Button>
                             </div>
                         </div>

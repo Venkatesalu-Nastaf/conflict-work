@@ -23,6 +23,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
+import { AiOutlineFileSearch } from "react-icons/ai";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import dayjs from "dayjs";
 import { Menu, TextField } from "@mui/material";
@@ -310,27 +311,17 @@ const OfficeSuppliers = () => {
             <div className="detail-container-main">
                 <div className="container-left">
                     <div className="copy-title-btn-Others">
-                        <div className="input-field">
+                        <div className="input-field" style={{ justifyContent: 'center' }}>
                             <div className="input" style={{ width: "230px" }}>
                                 <div className="icone">
-                                    <BsFillFilePostFill style={{ fontSize: "25px" }} color="action" />
+                                    <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
                                 </div>
                                 <TextField
                                     size="small"
-                                    name="OfficeSuppliersNo"
-                                    label="OfficeSuppliers No"
-                                    id="remark"
-                                />
-                            </div>
-                            <div className="input" style={{ width: "230px" }}>
-                                <div className="icone">
-                                    <RateReviewIcon color="action" />
-                                </div>
-                                <TextField
-                                    size="small"
-                                    name="OfficeSuppliers Type"
-                                    label="OfficeSuppliers Type"
-                                    id="remark"
+                                    id="id"
+                                    label="Search"
+                                    name="Search"
+                                    autoFocus
                                 />
                             </div>
                             <div className="input">
@@ -351,14 +342,10 @@ const OfficeSuppliers = () => {
                                     />
                                 </LocalizationProvider>
                             </div>
-
-                        </div>
-                        <div className="input-field" style={{ justifyContent: 'center' }}>
-                            <div className="input" style={{ marginTop: "30px" }}>
+                            <div className="input" style={{ width: "140px" }}>
                                 <Button variant="contained">Search</Button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

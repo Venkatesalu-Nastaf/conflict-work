@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-import "./PettyCash.css";
+import "./AssetIncome.css";
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import { AiOutlineFileSearch } from "react-icons/ai";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Button from "@mui/material/Button";
@@ -63,12 +62,13 @@ const columns = [
     { field: "amount", headerName: "Amount", width: 130 },
 ];
 
-const PettyCash = () => {
+const AssetIncome = () => {
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
     const [toDate, setToDate] = useState(dayjs());
+    const [voucherno] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
     // const [errorMessage, setErrorMessage] = useState(false);
     const [error, setError] = useState(false);
@@ -219,7 +219,7 @@ const PettyCash = () => {
         }
         try {
             console.log('Add button clicked');
-            const response = await axios.post('http://localhost:8081/pettycash', book);
+            const response = await axios.post('http://localhost:8081/AssetIncome', book);
             console.log('Customer added:', response.data);
             handleCancel(); // Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
             setSuccessMessage("Successfully Added");
@@ -234,7 +234,7 @@ const PettyCash = () => {
         try {
             if (actionName === 'List') {
                 console.log('List button clicked');
-                const response = await axios.get('http://localhost:8081/pettycash');
+                const response = await axios.get('http://localhost:8081/AssetIncome');
                 const data = response.data;
                 setRows(data);
                 setSuccessMessage("Successfully listed");
@@ -243,7 +243,7 @@ const PettyCash = () => {
                 handleCancel();
             } else if (actionName === 'Delete') {
                 console.log('Delete button clicked');
-                await axios.delete(`http://localhost:8081/pettycash/${voucherno}`);
+                await axios.delete(`http://localhost:8081/AssetIncome/${voucherno}`);
                 console.log('Customer deleted');
                 setSelectedCustomerData(null);
                 setSuccessMessage("Successfully Deleted");
@@ -252,7 +252,7 @@ const PettyCash = () => {
                 console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.voucherno === voucherno);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`http://localhost:8081/pettycash/${voucherno}`, updatedCustomer);
+                await axios.put(`http://localhost:8081/AssetIncome/${voucherno}`, updatedCustomer);
                 console.log('Customer updated');
                 handleCancel();
             }
@@ -268,10 +268,25 @@ const PettyCash = () => {
         }
     });
 
+
+    const handleShow = useCallback(async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:8081/AssetIncome?voucherno=${encodeURIComponent(voucherno)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}`
+            );
+            const data = response.data;
+            setRows(data);
+        } catch (error) {
+            console.error('Error retrieving data:', error);
+            setRows([]);
+            setError(true);
+            setErrorMessage("list is empty")
+        }
+    }, [voucherno, fromDate, toDate]);
     return (
-        <div className="PettyCash-form Scroll-Style-hide">
+        <div className="AssetIncome-form Scroll-Style-hide">
             <form onSubmit={handleClick}>
-                <div className="PettyCash-page-header">
+                <div className="AssetIncome-page-header">
                     <div className="input-field">
                         <div className="input" style={{ width: "300px" }}>
                             <div className="icone">
@@ -355,40 +370,32 @@ const PettyCash = () => {
                 </div>
                 <div className="detail-container-main">
                     <div className="container-left">
-                        <div className="copy-title-btn-PettyCash">
-                            <div className="input-field" style={{ justifyContent: 'center' }}>
-                                <div className="input" style={{ width: "230px" }}>
-                                    <div className="icone">
-                                        <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
-                                    </div>
-                                    <TextField
-                                        size="small"
-                                        id="id"
-                                        label="Search"
-                                        name="Search"
-                                        autoFocus
-                                    />
-                                </div>
+                        <div className="copy-title-btn-AssetIncome">
+                            <div className="input-field">
                                 <div className="input">
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        {/* <DemoItem label="From"> */}
                                         <DatePicker
                                             label="From Date"
                                             value={fromDate}
                                             onChange={(date) => setFromDate(date)}
                                         />
+                                        {/* </DemoItem> */}
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input">
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        {/* <DemoItem label="To"> */}
                                         <DatePicker
                                             label="To Date"
                                             value={toDate}
                                             onChange={(date) => setToDate(date)}
                                         />
+                                        {/* </DemoItem> */}
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained">Search</Button>
+                                <div className="input" style={{ width: '123px'}}>
+                                    <Button variant="contained" onClick={handleShow}>Search</Button>
                                 </div>
                             </div>
                         </div>
@@ -454,7 +461,7 @@ const PettyCash = () => {
                         )}
                     </PopupState>
                 </div>
-                <div className="table-bookingCopy-PettyCash">
+                <div className="table-bookingCopy-AssetIncome">
                     <div style={{ height: 400, width: "100%" }}>
                         <DataGrid
                             rows={rows}
@@ -470,4 +477,4 @@ const PettyCash = () => {
     )
 }
 
-export default PettyCash
+export default AssetIncome

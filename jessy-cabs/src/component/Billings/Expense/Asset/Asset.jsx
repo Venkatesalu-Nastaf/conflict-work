@@ -19,6 +19,7 @@ import { BsPersonExclamation } from "react-icons/bs";
 import { ImPriceTags } from "react-icons/im";
 import { GiBackwardTime } from "react-icons/gi";
 import MenuItem from '@mui/material/MenuItem';
+import { AiOutlineFileSearch } from "react-icons/ai";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -78,7 +79,6 @@ const Asset = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [toDate, setToDate] = useState(dayjs());
-  const [assetno] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
@@ -292,21 +292,6 @@ const Asset = () => {
     }
   });
 
-
-  const handleShow = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8081/asset?assetno=${encodeURIComponent(assetno)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}`
-      );
-      const data = response.data;
-      setRows(data);
-    } catch (error) {
-      console.error('Error retrieving data:', error);
-      setRows([]);
-      setError(true);
-      setErrorMessage("list is empty")
-    }
-  }, [assetno, fromDate, toDate]);
   return (
     <div className="Asset-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
@@ -368,15 +353,15 @@ const Asset = () => {
                 </DatePicker>
               </LocalizationProvider> */}
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Date of Acquisition"
-                    value={selectedCustomerData.dateofacquisition ? dayjs(selectedCustomerData.startdate) : null}
-                    onChange={(date) => handleDateChange(date, 'dateofacquisition')}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.dateofacquisition} />
-                    )}
-                  </DatePicker>
+                <DatePicker
+                  label="Date of Acquisition"
+                  value={selectedCustomerData.dateofacquisition ? dayjs(selectedCustomerData.startdate) : null}
+                  onChange={(date) => handleDateChange(date, 'dateofacquisition')}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.dateofacquisition} />
+                  )}
+                </DatePicker>
               </LocalizationProvider>
             </div>
           </div>
@@ -502,7 +487,19 @@ const Asset = () => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Asset">
-              <div className="input-field">
+              <div className="input-field" style={{ justifyContent: 'center' }}>
+                <div className="input" style={{ width: "230px" }}>
+                  <div className="icone">
+                    <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="id"
+                    label="Search"
+                    name="Search"
+                    autoFocus
+                  />
+                </div>
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
@@ -521,8 +518,8 @@ const Asset = () => {
                     />
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: '123px' }}>
-                  <Button variant="contained" onClick={handleShow}>Search</Button>
+                <div className="input" style={{ width: "140px" }}>
+                  <Button variant="contained">Search</Button>
                 </div>
               </div>
             </div>

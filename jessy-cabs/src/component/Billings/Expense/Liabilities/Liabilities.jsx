@@ -27,6 +27,7 @@ import { CgFileDocument } from "react-icons/cg";
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { AiOutlineFileSearch } from "react-icons/ai";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
@@ -93,7 +94,6 @@ const Liabilities = () => {
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
   const [toDate, setToDate] = useState(dayjs());
-  const [descriptionoftheliability] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
   const [error, setError] = useState(false);
   const [warning, setWarning] = useState(false);
@@ -308,20 +308,6 @@ const Liabilities = () => {
   });
 
 
-  const handleShow = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8081/Liabilities?descriptionoftheliability=${encodeURIComponent(descriptionoftheliability)}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(toDate.toISOString())}`
-      );
-      const data = response.data;
-      setRows(data);
-    } catch (error) {
-      console.error('Error retrieving data:', error);
-      setRows([]);
-      setError(true);
-      setErrorMessage("list is empty")
-    }
-  }, [descriptionoftheliability, fromDate, toDate]);
   return (
     <div className="Liabilities-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
@@ -644,7 +630,19 @@ const Liabilities = () => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Liabilities">
-              <div className="input-field">
+              <div className="input-field" style={{ justifyContent: 'center' }}>
+                <div className="input" style={{ width: "230px" }}>
+                  <div className="icone">
+                    <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="id"
+                    label="Search"
+                    name="Search"
+                    autoFocus
+                  />
+                </div>
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
@@ -663,8 +661,8 @@ const Liabilities = () => {
                     />
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: '123px'}}>
-                  <Button variant="contained" onClick={handleShow}>Search</Button>
+                <div className="input" style={{ width: "140px" }}>
+                  <Button variant="contained">Search</Button>
                 </div>
               </div>
             </div>

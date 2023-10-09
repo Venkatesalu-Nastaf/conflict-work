@@ -30,6 +30,7 @@ import dayjs from "dayjs";
 import { Menu, TextField } from "@mui/material";
 import { AiFillAppstore } from "react-icons/ai";
 import { MdEditDocument } from "react-icons/md";
+import { AiOutlineFileSearch } from "react-icons/ai";
 import { HiDocumentText } from "react-icons/hi";
 import { BsFillFilePostFill } from "react-icons/bs";
 import { BsGenderTrans } from "react-icons/bs";
@@ -454,13 +455,14 @@ const Insurance = () => {
                         <div className="input-field" >
                             <div className="input" style={{ width: "230px" }}>
                                 <div className="icone">
-                                    <BsFillFilePostFill style={{ fontSize: "25px" }} color="action" />
+                                    <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
                                 </div>
                                 <TextField
                                     size="small"
-                                    name="InsuranceNo"
-                                    label="Insurance No"
-                                    id="remark"
+                                    id="id"
+                                    label="Search"
+                                    name="Search"
+                                    autoFocus
                                 />
                             </div>
                             <div className="input">

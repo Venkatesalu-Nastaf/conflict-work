@@ -42,7 +42,6 @@ const Others = () => {
                 <MenuItem value={40}>Office-Supplies</MenuItem>
                 <MenuItem value={50}>Traveling</MenuItem>
                 <MenuItem value={60}>Business-License & Permits</MenuItem>
-                <MenuItem value={70}>Interst-Payments & Bank-Fees</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -53,7 +52,6 @@ const Others = () => {
         {selectOtherExpense === 40 && <div><OfficeSuppliers /></div>}
         {selectOtherExpense === 50 && <div><TravelExpense /></div>}
         {selectOtherExpense === 60 && <div><BusinessExpense /></div>}
-        {selectOtherExpense === 70 && <div>Interst-Payments & Bank-Fees</div>}
       </form>
     </div>
   )

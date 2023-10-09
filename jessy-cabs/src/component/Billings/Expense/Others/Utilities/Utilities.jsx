@@ -321,7 +321,7 @@ const Utilities = () => {
             <div className="detail-container-main">
                 <div className="container-left">
                     <div className="copy-title-btn-Others">
-                        <div className="input-field">
+                        <div className="input-field" style={{ justifyContent: 'center' }}>
                             <div className="input" style={{ width: "230px" }}>
                                 <div className="icone">
                                     <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
@@ -352,14 +352,10 @@ const Utilities = () => {
                                     />
                                 </LocalizationProvider>
                             </div>
-
-                        </div>
-                        <div className="input-field" style={{ justifyContent: 'center' }}>
-                            <div className="input" style={{ marginTop: "30px" }}>
+                            <div className="input" style={{ width: "140px" }}>
                                 <Button variant="contained">Search</Button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

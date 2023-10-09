@@ -29,6 +29,8 @@ import dayjs from "dayjs";
 import { Menu, TextField } from "@mui/material";
 import { AiFillAppstore } from "react-icons/ai";
 import { MdEditDocument } from "react-icons/md";
+import FilePresentIcon from '@mui/icons-material/FilePresent';
+import RestoreIcon from '@mui/icons-material/Restore';
 import { BsFillFilePostFill } from "react-icons/bs";
 import { MdContacts } from "react-icons/md";
 import { ImPriceTags } from "react-icons/im";
@@ -37,15 +39,19 @@ import { ImLocation2 } from "react-icons/im";
 // TABLE
 const columns = [
     { field: "id", headerName: "Sno", width: 50 },
-    { field: "BusinessExpenseno   ", headerName: "BusinessExpense No", width: 130 },
-    { field: "BusinessExpensetype", headerName: "BusinessExpense Type", width: 130 },
-    { field: "BusinessExpensediscription", headerName: "BusinessExpense Discription", width: 150 },
-    { field: "billdate", headerName: "Bill Date", width: 140 },
+    { field: "BusinessExpenseno   ", headerName: "BusinessExpense No", width: 140 },
+    { field: "Expensetype", headerName: "Expense Type", width: 130 },
+    { field: "Expensediscription", headerName: "Expense Discription", width: 150 },
+    { field: "billdate", headerName: "Bill Date", width: 143 },
     { field: "contactno", headerName: "Contact No", width: 130 },
     { field: "address", headerName: "Address", width: 130 },
     { field: "location", headerName: "Location", width: 130 },
     { field: "amount", headerName: "Amount", width: 130 },
-    { field: "amountcopy", headerName: "Amount Copy", width: 150 },
+    { field: "amountcopy", headerName: "Amount Copy", width: 130 },
+    { field: "documentno", headerName: "Document No", width: 130 },
+    { field: "renewaldate", headerName: "Renewal Date", width: 130 },
+    { field: "renewalamount", headerName: "Renewal Amount", width: 130 },
+    { field: "documentcopy", headerName: "Document Copy", width: 130 },
 ];
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -264,7 +270,7 @@ const BusinessExpense = () => {
                             variant="standard"
                         />
                     </div>
-                    <div className="input" style={{ width: "210px" }}>
+                    <div className="input" style={{ width: "230px" }}>
                         <div className="icone">
                             <ImPriceTags style={{ fontSize: "25px" }} color="action" />
                         </div>
@@ -279,6 +285,53 @@ const BusinessExpense = () => {
                     <div className="input">
                         <Button startIcon={<MdEditDocument />} color="primary" variant="contained" component="label">
                             Bill Copy
+                            <input
+                                type="file"
+                                style={{ display: "none" }}
+                            />
+                        </Button>
+                    </div>
+                </div>
+                <div className="input-field">
+                    <div className="input" style={{ width: "230px" }}>
+                        <div className="icone">
+                            <FilePresentIcon style={{ fontSize: "25px" }} color="action" />
+                        </div>
+                        <TextField
+                            size="small"
+                            id="documentno"
+                            label="Document No"
+                            name="documentno"
+                            autoFocus
+                        />
+                    </div>
+                    <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                label="Renewal Date"
+                                value={selectedCustomerData.dateofacquisition ? dayjs(selectedCustomerData.startdate) : null}
+                            >
+                                {({ inputProps, inputRef }) => (
+                                    <TextField  {...inputProps} inputRef={inputRef} value={selectedCustomerData?.dateofacquisition} />
+                                )}
+                            </DatePicker>
+                        </LocalizationProvider>
+                    </div>
+                    <div className="input" style={{ width: "230px" }}>
+                        <div className="icone">
+                            <RestoreIcon style={{ fontSize: "25px" }} color="action" />
+                        </div>
+                        <TextField
+                            size="small"
+                            id="renewwalamount"
+                            label="Renewal Amount"
+                            name="renewwalamount"
+                            autoFocus
+                        />
+                    </div>
+                    <div className="input">
+                        <Button startIcon={<MdEditDocument />} color="primary" variant="contained" component="label">
+                            Document Copy
                             <input
                                 type="file"
                                 style={{ display: "none" }}
@@ -307,10 +360,10 @@ const BusinessExpense = () => {
                     </StyledSpeedDial>
                 </Box>
             </div>
-            <div className="detail-container-main">
-                <div className="container-left">
-                    <div className="copy-title-btn-Others">
-                        <div className="input-field">
+            <div className="detail-container-main" >
+                <div className="container-left" >
+                    <div className="copy-title-btn-Others" >
+                        <div className="input-field" style={{ justifyContent: 'center' }}>
                             <div className="input" style={{ width: "230px" }}>
                                 <div className="icone">
                                     <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
@@ -341,10 +394,7 @@ const BusinessExpense = () => {
                                     />
                                 </LocalizationProvider>
                             </div>
-
-                        </div>
-                        <div className="input-field" style={{ justifyContent: 'center' }}>
-                            <div className="input" style={{ marginTop: "30px" }}>
+                            <div className="input" style={{ width: "140px" }}>
                                 <Button variant="contained">Search</Button>
                             </div>
                         </div>

@@ -2,14 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import "./Booking.css";
 import dayjs from "dayjs";
 import axios from "axios";
-import { Table } from "@mui/joy";
+import jsPDF from 'jspdf';
 import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
+import { saveAs } from 'file-saver';
+import Menu from '@mui/material/Menu';
 import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
-import TabContext from "@mui/lab/TabContext";
+import MenuItem from '@mui/material/MenuItem';
 import { useLocation } from "react-router-dom";
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -17,6 +17,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { Duty, Hire, PayType, Report, VehicleModel, Service_Station } from "./Booking";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
 // ICONS
@@ -26,6 +28,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import FmdBadIcon from "@mui/icons-material/FmdBad";
+import { AiOutlineFileSearch } from "react-icons/ai";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
 import CommuteIcon from "@mui/icons-material/Commute";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
@@ -73,18 +76,63 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
+const columns = [
+  { field: "id", headerName: "Sno", width: 70 },
+  { field: "bookingno", headerName: "Booking No", width: 130 },
+  { field: "bookingdate", headerName: "Booking Date", width: 130 },
+  { field: "bookingtime", headerName: "Booking Time", width: 130 },
+  { field: "status", headerName: "Status", width: 120 },
+  { field: "tripid", headerName: "Trip ID", width: 130 },
+  { field: "customer", headerName: "Customer", width: 90 },
+  { field: "orderedby", headerName: "Ordered-By", width: 160 },
+  { field: "mobileno", headerName: "Mobile No", width: 130 },
+  { field: "guestname", headerName: "Guest-Name", width: 130 },
+  { field: "guestmobileno", headerName: "Guest-Mobile-No", width: 130 },
+  { field: "email", headerName: "Email", width: 130 },
+  { field: "employeeno", headerName: "Employee No", width: 130 },
+  { field: "address", headerName: "Address", width: 130 },
+  { field: "report", headerName: "Report", width: 130 },
+  { field: "vehicletype", headerName: "Vehicle Type", width: 130 },
+  { field: "paymenttype", headerName: "Payment Type", width: 130 },
+  { field: "usage", headerName: "Usage", width: 130 },
+  { field: "username", headerName: "User Name", width: 130 },
+  { field: "reportdate", headerName: "Report Date", width: 130 },
+  { field: "startdate", headerName: "Start Time", width: 130 },
+  { field: "reporttime", headerName: "Report Time", width: 130 },
+  { field: "duty", headerName: "Duty", width: 130 },
+  { field: "pickup", headerName: "Pickup", width: 130 },
+  { field: "costcode", headerName: "Cost Code", width: 130 },
+  { field: "requestno", headerName: "Request No", width: 130 },
+  { field: "flightno", headerName: "Flight No", width: 130 },
+  { field: "orderbyemail", headerName: "Order By Email", width: 130 },
+  { field: "remarks", headerName: "Remarks", width: 130 },
+  { field: "servicestation", headerName: "Service Station", width: 130 },
+  { field: "advance", headerName: "Advance", width: 130 },
+  { field: "hiretype", headerName: "Hire Type", width: 130 },
+  { field: "travelsname", headerName: "Travels Name", width: 130 },
+  { field: "vehicleregisterno", headerName: "Vehicle Register No", width: 130 },
+  { field: "vehiclemodle", headerName: "Vehicle Modle", width: 130 },
+  { field: "drivername", headerName: "Driver Name", width: 130 },
+  { field: "driverphone", headerName: "Driver Phone", width: 130 },
+  { field: "travelsemail", headerName: "Travels Email", width: 130 },
+];
+
 const Booking = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [actionName] = useState('');
   const [rows, setRows] = useState([]);
   const [displayCopy, setDisplayCopy] = useState(false);
-  const [value, setValue] = React.useState("list");
+  const [toDate, setToDate] = useState(dayjs());
+  const [fromDate, setFromDate] = useState(dayjs());
+  // const [value, setValue] = React.useState("list");
   const [triptime, setTripTime] = useState('');
   const [registertime, setRegisterTime] = useState('');
   const [starttime, setStartTime] = useState('');
   const [bookingtime, setBookingTime] = useState('');
   const location = useLocation();
+  // const [selectedRow, setSelectedRow] = useState(null);
+  // const [popupOpen, setPopupOpen] = useState(false); 
   const [error, setError] = useState(false);
   const [info, setInfo] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
@@ -288,6 +336,47 @@ const Booking = () => {
     setSelectedCustomerData({});
     setFormData({});
   };
+  const convertToCSV = (data) => {
+    const header = columns.map((column) => column.headerName).join(",");
+    const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+    return [header, ...rows].join("\n");
+  };
+  const handleExcelDownload = () => {
+    const csvData = convertToCSV(rows);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "VehicleStatement Reports.csv");
+  };
+  const handlePdfDownload = () => {
+    const pdf = new jsPDF('Landscape');
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text("VehicleStatement Reports", 10, 10);
+
+    // Modify tableData to exclude the index number
+    const tableData = rows.map((row) => [
+      row['id'],
+      row['status'],
+      row['bookingno'],
+      row['tripid'],
+      row['bookingdate'],
+      row['bookingtime'],
+      row['guestname'],
+      row['mobileno'],
+      row['address1'],
+      row['address2'],
+      row['customer'],
+      row['vehRegNo'],
+    ]);
+
+    pdf.autoTable({
+      head: [['Sno', 'Status', 'Booking ID', 'Tripsheet No', 'Date', 'Time', 'Guest Name', 'Mobile', 'R.Address', 'R.Address1', 'R.Address2', 'Company', 'Register NO']],
+      body: tableData,
+      startY: 20,
+    });
+
+    const pdfBlob = pdf.output('blob');
+    saveAs(pdfBlob, 'VehicleStatement Reports.pdf');
+  };
 
   const getCurrentTime = () => {
     const now = new Date();
@@ -359,9 +448,9 @@ const Booking = () => {
   }, [setBook, setSelectedCustomerData, setFormData, setFormValues, setSelectedCustomerDatas]);
 
 
-  const handleTabChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  // const handleTabChange = (event, newValue) => {
+  //   setValue(newValue);
+  // };
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
     setBook((prevBook) => ({
@@ -479,7 +568,14 @@ const Booking = () => {
     { icon: <BookmarkAddedIcon />, name: "Add" },
   ];
   // Local Storage
-
+  // const handleButtonClick = (row) => {
+  // setSelectedRow(row);
+  // setPopupOpen(true);
+  // };
+  // const handlePopupClose = () => {
+  //   setSelectedRow(null);
+  //   setPopupOpen(false);
+  // };
   useEffect(() => {
     // Retrieve the previously stored actives menu item from localStorage
     const activeMenuItem = localStorage.getItem("activeMenuItem");
@@ -595,13 +691,13 @@ const Booking = () => {
       // Increment the Enter key press count
       setEnterPressCount((prevCount) => prevCount + 1);
     }
-  
+
     // Check if the input value is empty and reset enterPressCount to 0
     if (event.target.value === '') {
       setEnterPressCount(0);
     }
   }, [handleChange, rows, enterPressCount]);
-  
+
 
   const handleRowClick = useCallback((params) => {
     console.log(params);
@@ -647,7 +743,7 @@ const Booking = () => {
                 </div>
                 <TextField
                   name="bookingno"
-                  label="Booking"
+                  label="Booking No"
                   id="standard-size-normal"
                   autoComplete="new-password"
                   value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
@@ -1145,141 +1241,35 @@ const Booking = () => {
           </div>
           <div className="container-right">
             <div className="booking-update-main">
-              <Box sx={{ width: "100%", typography: "body1" }}>
-                <TabContext value={value}>
-                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    <TabList
-                      onChange={handleTabChange}
-                      aria-label="lab API tabs example"
-                    >
-                      <Tab label="List" value="list" />
-                      <Tab label="Billing Address" value="billingaddress" />
-                      <Tab label="Email" value="email" />
-                    </TabList>
-                  </Box>
-                  <TabPanel value="list">
-                    <div className="booking-update">
-                      <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
-                        <Table hoverRow borderAxis="y">
-                          <thead>
-                            <tr>
-                              <th>Customer Name</th>
-                              <th>Address</th>
-                              <th>Address 1</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {rows.length === 0 ? (
-                              <tr>
-                                <td colSpan={6}>No data available.</td>
-                              </tr>
-                            ) : (
-                              rows.map((row) => (
-                                <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                  <td>{row.customer}</td>
-                                  <td>{row.address1}</td>
-                                  <td>{row.address2}</td>
-                                </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </Table>
-                      </div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel value="billingaddress">
-                    <div className="booking-update">
-                      <div className="booking-update-content">
-                        <div className="input-field billing">
-                          <div className="input">
-                            <div className="icone">
-                              <PermIdentityIcon color="action" />
-                            </div>
-                            <TextField
-                              margin="normal"
-                              size="small"
-                              name="nameupdate"
-                              autoComplete="new-password"
-                              value={formData.guestname || selectedCustomerData.guestname || book.guestname || ''}
-                              onChange={handleChange}
-                              label="Name"
-                              id="name"
-                              autoFocus
-                            />
-                          </div>
-                          <div className="input">
-                            <div className="icone">
-                              <AddHomeWorkIcon color="action" />
-                            </div>
-                            <TextField
-                              margin="normal"
-                              size="small"
-                              id="streetnameupdate"
-                              label="No.Street Name"
-                              name="address3"
-                              autoComplete="new-password"
-                              value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
-                              onChange={handleChange}
-                              autoFocus
-                            />
-                          </div>
-                        </div>
-                        <div className="input-field billing">
-                          <div className="input">
-                            <div className="icone">
-                              <HomeTwoToneIcon color="action" />
-                            </div>
-                            <TextField
-                              name="address4"
-                              autoComplete="new-password"
-                              value={formData.address2 || selectedCustomerData.address2 || book.address2 || ''}
-                              onChange={handleChange}
-                              label="Address"
-                              id="address4"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="input">
-                            <div className="icone">
-                              <LocationCityIcon color="action" />
-                            </div>
-                            <TextField
-                              name="cityupdate"
-                              autoComplete="new-password"
-                              value={formData.city || selectedCustomerData.city || book.city || ''}
-                              onChange={handleChange}
-                              label="City"
-                              id="cityupdate"
-                              variant="standard"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel value="email">
-                    <div className="booking-update">
-                      <div className="booking-update-content list-update">
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                      </div>
-                    </div>
-                  </TabPanel>
-
-                </TabContext>
-              </Box>
+              <div className="booking-update">
+                <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
+                  <table >
+                    <thead id='update-header'>
+                      <tr>
+                        <th>Customer Name</th>
+                        <th>Customer Name</th>
+                        {/* <th>Address</th> */}
+                        <th>Address 1</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.length === 0 ? (
+                        <tr>
+                          <td >No data available.</td>
+                        </tr>
+                      ) : (
+                        rows.map((row) => (
+                          <tr id='update-row' key={row.id} onClick={() => handleRowClick(row)}>
+                            <td>{row.customer}</td>
+                            <td>{row.address1}</td>
+                            <td>{row.address2}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
             <div className="inpu-field">
               <div className="input">
@@ -1421,6 +1411,21 @@ const Booking = () => {
             </div>
           </div>
         </div>
+        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <StyledSpeedDial
+            ariaLabel="SpeedDial playground example"
+            icon={<SpeedDialIcon />}
+          >
+            {actions.map((action) => (
+              <SpeedDialAction
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={action.name}
+                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
+              />
+            ))}
+          </StyledSpeedDial>
+        </Box>
         <div className="vehicle-confirm">
           <div className="input-field">
             <div className="input">
@@ -1579,21 +1584,73 @@ const Booking = () => {
             </div>
           }
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-          <StyledSpeedDial
-            ariaLabel="SpeedDial playground example"
-            icon={<SpeedDialIcon />}
-          >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-              />
-            ))}
-          </StyledSpeedDial>
-        </Box>
+        <div className="detail-container-main">
+          <div className="container-left">
+            <div className="copy-title-btn-Booking">
+              <div className="input-field" style={{ justifyContent: 'center' }}>
+                <div className="input" style={{ width: "230px" }}>
+                  <div className="icone">
+                    <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="id"
+                    label="Search"
+                    name="Search"
+                    autoFocus
+                  />
+                </div>
+                <div className="input">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="From Date"
+                      value={fromDate}
+                      onChange={(date) => setFromDate(date)}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div className="input">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="To Date"
+                      value={toDate}
+                      onChange={(date) => setToDate(date)}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div className="input" style={{ width: "140px" }}>
+                  <Button variant="contained">Search</Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="Download-btn">
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  Download
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
+        </div>
+        <div className="table-bookingCopy-Booking">
+          <div style={{ height: 400, width: "100%" }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              onRowClick={handleRowClick}
+              pageSize={5}
+              checkboxSelection
+            />
+          </div>
+        </div>
       </form>
     </div>
   );

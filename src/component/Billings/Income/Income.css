@@ -1,0 +1,55 @@
+.form-container-Income .Title-Name {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.form-container-Income {
+    display: flex;
+    border-radius: 10px;
+}
+
+.form-container-Income .container-main::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    overflow-x: hidden;
+}
+
+.input-field .times input {
+    width: 181px;
+    margin-top: 28px;
+    margin-bottom: 25px;
+    background: transparent;
+    text-align: inherit;
+    border: 1px solid #457cdc;
+    padding: 9px 8px 9px 10px;
+    border-radius: 4px;
+    font-size: 17px;
+}
+
+.input-field .times label {
+    position: absolute;
+    color: #272626;
+    font-size: 14px;
+    top: 0px;
+    font-weight: 500;
+    left: 5px;
+}
+
+/* TIMER END */
+.form-container-Income .container-main::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    outline: 1px solid transparent;
+}
+
+.form-container-Income .container-main {
+    border: 2px solid #ccc;
+    overflow: scroll;
+    height: 77vh;
+    width: 81vw;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    border-radius: 20px;
+    color: #000;
+    background-color: var(--glass);
+}

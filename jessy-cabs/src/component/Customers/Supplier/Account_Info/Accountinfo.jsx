@@ -4,15 +4,11 @@ import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import axios from "axios";
 import "./Accountinfo.css";
-import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { saveAs } from 'file-saver';
 import Menu from '@mui/material/Menu';
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import TabContext from "@mui/lab/TabContext";
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -22,7 +18,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
@@ -71,7 +67,7 @@ const actions = [
 ];
 const Accuntinfo = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-  const [value, setValue] = React.useState("online_password");
+  // const [value, setValue] = React.useState("online_password");
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
@@ -219,9 +215,9 @@ const Accuntinfo = () => {
       }));
     }
   };
-  const handleTabChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  // const handleTabChange = (event, newValue) => {
+  //   setValue(newValue);
+  // };
 
 
   const handleAutocompleteChange = (event, value, name) => {
@@ -359,15 +355,15 @@ const Accuntinfo = () => {
               <div className="input">
 
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
+                  <DatePicker
                     label="Date"
-                      value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
-                      onChange={handleDateChange}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
-                      )}
-                    </DatePicker>
+                    value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
+                    onChange={handleDateChange}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
@@ -384,9 +380,23 @@ const Accuntinfo = () => {
                   variant="standard"
                 />
               </div>
+              <div className="input">
+                <div className="icone">
+                  <ContactPhoneIcon color="action" />
+                </div>
+                <TextField
+                  name="phone"
+                  autoComplete="new-password"
+                  value={selectedCustomerData?.phone || book.phone}
+                  onChange={handleChange}
+                  label="Phone"
+                  id="phone"
+                  variant="standard"
+                />
+              </div>
             </div>
             <div className="input-field">
-              <div className="input" style={{ width: "400px" }}>
+              <div className="input" style={{ width: "415px" }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
@@ -416,9 +426,31 @@ const Accuntinfo = () => {
                   variant="standard"
                 />
               </div>
+              <div className="input radio">
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo-vehicleInfo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
+                  value={Undergroup.find((option) => option.Option)?.label || ''}
+                  options={Undergroup.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData?.underGroup || ''
+                    return (
+                      <TextField {...params} label="Under Group" name="underGroup" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
+              </div>
             </div>
             <div className="input-field">
-              <div className="input" style={{ width: "400px" }}>
+              <div className="input" style={{ width: "415px" }}>
                 <div className="icone">
                   <HomeTwoToneIcon color="action" />
                 </div>
@@ -447,9 +479,27 @@ const Accuntinfo = () => {
                   variant="standard"
                 />
               </div>
+              <div className="input">
+                <TextField
+                  type="number"
+                  name='vehCommission'
+                  autoComplete="new-password"
+                  value={selectedCustomerData?.vehCommission || book.vehCommission}
+                  onChange={handleChange}
+                  label="Veh.Commission"
+                  size="small"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "25ch" }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">%</InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
             </div>
             <div className="input-field">
-              <div className="input" style={{ width: "400px" }}>
+              <div className="input" style={{ width: "415px" }}>
                 <div className="icone">
                   <LocationCityIcon color="action" />
                 </div>
@@ -464,276 +514,151 @@ const Accuntinfo = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input">
+              <div className="input radio">
                 <div className="icone">
-                  <ContactPhoneIcon color="action" />
+                  <StoreIcon color="action" />
                 </div>
                 <TextField
-                  name="phone"
+                  name="entity"
                   autoComplete="new-password"
-                  value={selectedCustomerData?.phone || book.phone}
+                  value={selectedCustomerData?.entity || book.entity}
                   onChange={handleChange}
-                  label="Phone"
-                  id="phone"
+                  label="Opening Balance"
+                  id="standard-size-normal"
                   variant="standard"
+                />
+              </div>
+              <div className="input">
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo-vehicleInfo"
+                  freeSolo
+                  sx={{ m: 1, width: "25ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleInfo")}
+                  value={Vehicleinfo.find((option) => option.Option)?.label || ''}
+                  options={Vehicleinfo.map((option) => ({
+                    label: option.Option,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData?.vehicleInfo || ''
+                    return (
+                      <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
             </div>
           </div>
-          <div className="container-right-account">
-            <div className="textbox-account">
-              <div>
-                <Box sx={{ width: "100%", typography: "body1" }}>
-                  <TabContext value={value}>
-                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                      <TabList
-                        onChange={handleTabChange}
-                        aria-label="lab API tabs example"
-                      >
-                        <Tab label="Online Password" value="online_password" />
-                      </TabList>
-                    </Box>
-                    <TabPanel value="online_password">
-                      <div
-                        className="booking-update"
-                        style={{
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          className="booking-update-content list-update"
-                          style={{ overflow: "hidden" }}
-                        >
-                          <span className="temp-pass">
-                            <div className="input-field">
-                              <div className="input">
-                                <div className="icone">
-                                  <RateReviewIcon color="action" />
-                                </div>
-                                <TextField
-                                  name="temporary_password"
-                                  autoComplete="new-password"
-                                  value={selectedCustomerData?.customerId || book.customerId}
-                                  onChange={handleChange}
-                                  label="Temporary Password"
-                                  id="standard-size-normal"
-                                  variant="standard"
-                                />
-                              </div>
-                            </div>
-                            <div
-                              className="input-field"
-                              style={{ display: "block" }}
-                            >
-                              <div className="input">
-                                <Button variant="outlined">Update</Button>
-                              </div>
-                            </div>
-                          </span>
-                        </div>
-                      </div>
-                    </TabPanel>
-                  </TabContext>
-                </Box>
-              </div>
-            </div>
-          </div>
         </div>
-        <div>
-          <div className="input-field">
-            <div className="input">
-              <TextField
-                type="number"
-                name='vehCommission'
+        <div className="input-field">
+          <div className="input">
+            <FormControl>
+              <FormLabel id="demo-row-radio-buttons-group-label">
+                Is Runing
+              </FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="isRunning"
                 autoComplete="new-password"
-                value={selectedCustomerData?.vehCommission || book.vehCommission}
                 onChange={handleChange}
-                label="Veh.Commission"
-                size="small"
-                id="outlined-start-adornment"
-                sx={{ m: 1, width: "25ch" }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">%</InputAdornment>
-                  ),
-                }}
-              />
-            </div>
-            <div className="input radio">
-              <Autocomplete
-                fullWidth
-                size="small"
-                id="free-solo-demo-vehicleInfo"
-                freeSolo
-                sx={{ width: "20ch" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
-                value={Undergroup.find((option) => option.Option)?.label || ''}
-                options={Undergroup.map((option) => ({
-                  label: option.Option,
-                }))}
-                getOptionLabel={(option) => option.label || ''}
-                renderInput={(params) => {
-                  params.inputProps.value = selectedCustomerData?.underGroup || ''
-                  return (
-                    <TextField {...params} label="Under Group" name="underGroup" inputRef={params.inputRef} />
-                  )
-                }
-                }
-              />
-            </div>
-            <div className="input">
-              <Autocomplete
-                fullWidth
-                size="small"
-                id="free-solo-demo-vehicleInfo"
-                freeSolo
-                sx={{ width: "20ch" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleInfo")}
-                value={Vehicleinfo.find((option) => option.Option)?.label || ''}
-                options={Vehicleinfo.map((option) => ({
-                  label: option.Option,
-                }))}
-                getOptionLabel={(option) => option.label || ''}
-                renderInput={(params) => {
-                  params.inputProps.value = selectedCustomerData?.vehicleInfo || ''
-                  return (
-                    <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
-                  )
-                }
-                }
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <RateReviewIcon color="action" />
-              </div>
-              <TextField
-                name="rateType"
-                autoComplete="new-password"
-                value={selectedCustomerData?.rateType || book.rateType}
-                onChange={handleChange}
-                label="Rate Type"
-                id="standard-size-normal"
-                variant="standard"
-              />
-            </div>
-            <div className="input radio">
-              <div className="icone">
-                <StoreIcon color="action" />
-              </div>
-              <TextField
-                name="entity"
-                autoComplete="new-password"
-                value={selectedCustomerData?.entity || book.entity}
-                onChange={handleChange}
-                label="Opening Balance"
-                id="standard-size-normal"
-                variant="standard"
-              />
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input">
-              <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">
-                  Is Runing
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="isRunning"
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                  value={selectedCustomerData?.isRunning || book.isRunning}
-                >
-                  <FormControlLabel
-                    value="yes"
-                    control={<Radio />}
-                    label="Yes"
-                  />
-                  <FormControlLabel value="no" control={<Radio />} label="No" />
-                </RadioGroup>
-              </FormControl>
-            </div>
-            <div className="input radio">
-              <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">
-                  A/C Type
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="acType"
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                  value={selectedCustomerData?.acType || book.acType}
-                >
-                  <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
-                  <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
-                </RadioGroup>
-              </FormControl>
-            </div>
-            <div className="input radio">
-              <FormControlLabel
-                name='printBill'
-                onChange={handleChange}
-                checked={Boolean(selectedCustomerData?.printBill || book.printBill)}
-                control={<Checkbox size="small" />}
-                value="Rate"
-                label="Rate"
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <Button variant="contained" onClick={handleAdd}>Add</Button>
-            </div>
-          </div>
-          {error &&
-            <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errorMessage}</p>
-            </div>
-          }
-          {warning &&
-            <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{warningMessage}</p>
-            </div>
-          }
-          {info &&
-            <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{infoMessage}</p>
-            </div>
-          }
-          {success &&
-            <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{successMessage}</p>
-            </div>
-          }
-          <div className="SpeedDial" style={{ "paddingTop": "96px" }}>
-            <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-              <StyledSpeedDial
-                ariaLabel="SpeedDial playground example"
-                icon={<SpeedDialIcon />}
-                direction="left"
+                value={selectedCustomerData?.isRunning || book.isRunning}
               >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                  />
-                ))}
-              </StyledSpeedDial>
-            </Box>
+                <FormControlLabel
+                  value="yes"
+                  control={<Radio />}
+                  label="Yes"
+                />
+                <FormControlLabel value="no" control={<Radio />} label="No" />
+              </RadioGroup>
+            </FormControl>
+          </div>
+          <div className="input radio">
+            <FormControl>
+              <FormLabel id="demo-row-radio-buttons-group-label">
+                A/C Type
+              </FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="acType"
+                autoComplete="new-password"
+                onChange={handleChange}
+                value={selectedCustomerData?.acType || book.acType}
+              >
+                <FormControlLabel value="Dr" control={<Radio />} label="Dr" />
+                <FormControlLabel value="Cr" control={<Radio />} label="Cr" />
+              </RadioGroup>
+            </FormControl>
+          </div>
+          <div className="input">
+            <div className="icone">
+              <RateReviewIcon color="action" />
+            </div>
+            <TextField
+              name="rateType"
+              autoComplete="new-password"
+              value={selectedCustomerData?.rateType || book.rateType}
+              onChange={handleChange}
+              label="Rate Type"
+              id="standard-size-normal"
+              variant="standard"
+            />
+          </div>
+          <div className="input" style={{ width: "100px" }}>
+            <Button variant="contained" onClick={handleAdd}>Add</Button>
           </div>
         </div>
+        {error &&
+          <div className='alert-popup Error' >
+            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{errorMessage}</p>
+          </div>
+        }
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{warningMessage}</p>
+          </div>
+        }
+        {info &&
+          <div className='alert-popup Info' >
+            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{infoMessage}</p>
+          </div>
+        }
+        {success &&
+          <div className='alert-popup Success' >
+            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{successMessage}</p>
+          </div>
+        }
+        <div className="SpeedDial" style={{ "paddingTop": "96px" }}>
+          <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+            <StyledSpeedDial
+              ariaLabel="SpeedDial playground example"
+              icon={<SpeedDialIcon />}
+              direction="left"
+            >
+              {actions.map((action) => (
+                <SpeedDialAction
+                  key={action.name}
+                  icon={action.icon}
+                  tooltipTitle={action.name}
+                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
+                />
+              ))}
+            </StyledSpeedDial>
+          </Box>
+        </div>
+
         <div className="Download-btn">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (

@@ -1,13 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
+import ClearIcon from '@mui/icons-material/Clear';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import './OnlineBooking.css'
 
 const OnlineBooking = () => {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
+
+  const [formValues, setFormValues] = useState({
+    guestname: '',
+    guestmobileno: '',
+    email: '',
+    startdate: '',
+    starttime: '',
+    pickup: '',
+    useage: '',
+    duty: '',
+    vehType: '',
+    remarks: '',
+  });
   const hidePopup = () => {
-    setError(false);
     setSuccess(false);
+    setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -17,6 +42,7 @@ const OnlineBooking = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -25,9 +51,25 @@ const OnlineBooking = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [success]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
   const [book, setBook] = useState({
     guestname: '',
-    mobileno: '',
+    guestmobileno: '',
     email: '',
     startdate: '',
     starttime: '',
@@ -41,7 +83,7 @@ const OnlineBooking = () => {
     setBook((prevBook) => ({
       ...prevBook,
       guestname: '',
-      mobileno: '',
+      guestmobileno: '',
       email: '',
       startdate: '',
       starttime: '',
@@ -60,24 +102,59 @@ const OnlineBooking = () => {
         ...prevBook,
         [name]: checked,
       }));
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: checked,
+      }));
     } else {
       const fieldValue = type === 'time' ? value : value;
       setBook((prevBook) => ({
         ...prevBook,
         [name]: fieldValue,
       }));
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: fieldValue,
+      }));
     }
   };
   const handleAdd = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     try {
       console.log('Add button clicked');
       await axios.post('http://localhost:8081/booking', book);
       handleCancel();
-      setSuccess(true);
+      handlecheck();
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
-      setError(true);
+      setErrorMessage("Check your Network Connection");
+    }
+  };
+
+  const handlecheck = async () => {
+
+    try {
+      const dataToSend = {
+        guestname: formValues.guestname,
+        guestmobileno: formValues.guestmobileno,
+        email: formValues.email,
+        startdate: formValues.startdate,
+        starttime: formValues.starttime,
+        pickup: formValues.pickup,
+        useage: formValues.useage,
+        duty: formValues.duty,
+        vehType: formValues.vehType,
+        remarks: formValues.remarks,
+      };
+
+      await axios.post('http://localhost:8081/send-onbook-email', dataToSend);
+      // alert('Email sent successfully');
+      setSuccessMessage("Mail sented Successfully");
+      console.log(dataToSend);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -92,7 +169,7 @@ const OnlineBooking = () => {
             type="text"
             id="name"
             name="guestname"
-            value={book.guestname || ''}
+            value={book.guestname || formValues.guestname || ''}
             onChange={handleChange}
             required
           />
@@ -103,8 +180,8 @@ const OnlineBooking = () => {
             className='input-item'
             type="text"
             id="mobile"
-            name="mobileno"
-            value={book.mobileno || ''}
+            name="guestmobileno"
+            value={book.guestmobileno || formValues.guestmobileno || ''}
             onChange={handleChange}
             required
           />
@@ -116,7 +193,7 @@ const OnlineBooking = () => {
             type="email"
             id="email"
             name="email"
-            value={book.email || ''}
+            value={book.email || formValues.email || ''}
             onChange={handleChange}
             required
           />
@@ -127,7 +204,7 @@ const OnlineBooking = () => {
             <input
               type="date"
               name='startdate'
-              value={book.startdate || ''}
+              value={book.startdate || formValues.startdate || ''}
               onChange={handleChange}
               className='input-item'
             />
@@ -137,7 +214,7 @@ const OnlineBooking = () => {
             <input type="time"
               name='starttime'
               onChange={handleChange}
-              value={book.starttime || ''}
+              value={book.starttime || formValues.starttime || ''}
               className='input-item'
             />
           </div>
@@ -149,7 +226,7 @@ const OnlineBooking = () => {
             type="text"
             id="pickup"
             name="pickup"
-            value={book.pickup || ''}
+            value={book.pickup || formValues.pickup || ''}
             onChange={handleChange}
             required
           />
@@ -161,7 +238,7 @@ const OnlineBooking = () => {
             type="text"
             id="drop"
             name="useage"
-            value={book.useage || ''}
+            value={book.useage || formValues.useage || ''}
             onChange={handleChange}
             required
           />
@@ -171,7 +248,7 @@ const OnlineBooking = () => {
           <select
             id='selects'
             name="duty"
-            value={book.duty || ''}
+            value={book.duty || formValues.duty || ''}
             onChange={handleChange}
             required
           >
@@ -187,7 +264,7 @@ const OnlineBooking = () => {
           <select
             id='selects'
             name="vehType"
-            value={book.vehType || ''}
+            value={book.vehType || formValues.vehType || ''}
             onChange={handleChange}
             required
           >
@@ -205,7 +282,7 @@ const OnlineBooking = () => {
           <label className='input-lable' htmlFor="usage">Remark:</label>
           <textarea
             name='remarks'
-            value={book.remarks || ''}
+            value={book.remarks || formValues.remarks || ''}
             onChange={handleChange}
             className='textareas'
             placeholder='Enter Your Remarks'>
@@ -214,14 +291,30 @@ const OnlineBooking = () => {
         <button className='btns-online' type="button" onClick={handleAdd}>Submit</button>
         {error &&
           <div className='alert-popup Error' >
-            <span className='cancel-btn' onClick={hidePopup}>x</span>
-            <p>Something went wrong!</p>
+            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{errorMessage}</p>
+          </div>
+        }
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{warningMessage}</p>
           </div>
         }
         {success &&
-          <div className='alert-popup Error' >
-            <span className='cancel-btn' onClick={hidePopup}>x</span>
-            <p>success fully submitted</p>
+          <div className='alert-popup Success' >
+            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{successMessage}</p>
+          </div>
+        }
+        {info &&
+          <div className='alert-popup Info' >
+            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{infoMessage}</p>
           </div>
         }
       </form>

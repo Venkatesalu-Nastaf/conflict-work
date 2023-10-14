@@ -1,5 +1,3 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import axios from "axios";
 import "./Billing.css";
 import {
     InputAdornment,
@@ -7,37 +5,37 @@ import {
     FormControlLabel,
     Checkbox,
 } from "@mui/material";
-import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
-import CarCrashIcon from '@mui/icons-material/CarCrash';
-import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
-import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import { styled } from "@mui/material/styles";
-import BadgeIcon from "@mui/icons-material/Badge";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import PrintIcon from '@mui/icons-material/Print';
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Box from "@mui/material/Box";
-import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import axios from "axios";
+import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
+import SpeedDial from "@mui/material/SpeedDial";
+import ClearIcon from '@mui/icons-material/Clear';
+import BadgeIcon from "@mui/icons-material/Badge";
+import PrintIcon from '@mui/icons-material/Print';
+import DeleteIcon from "@mui/icons-material/Delete";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import CarCrashIcon from '@mui/icons-material/CarCrash';
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
-// import MyInput from '@mui/icons-material/TollTwoTone';
-// FontAwesomeIcon Link
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import React, { useState, useEffect, useCallback } from 'react';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
+import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import { faArrowRightArrowLeft, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore } from "@fortawesome/free-solid-svg-icons"
-
-// date
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -60,17 +58,24 @@ const actions = [
 
 const Billing = () => {
     const [formData] = useState({});
-    const [selectedCustomerData, setSelectedCustomerData] = useState({});
-    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-    const [rows, setRows] = useState([]);
+    const [info, setInfo] = useState(false);
     const [actionName] = useState('');
+    const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
+    const [warning, setWarning] = useState(false);
     const [success, setSuccess] = useState(false);
-   
-    
+    const [successMessage, setSuccessMessage] = useState({});
+    const [errorMessage, setErrorMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage] = useState({});
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    //for popup
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
+        setInfo(false);
+        setWarning(false);
     };
     useEffect(() => {
         if (error) {
@@ -88,6 +93,22 @@ const Billing = () => {
             return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [success]);
+    useEffect(() => {
+        if (warning) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [warning]);
+    useEffect(() => {
+        if (info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [info]);
 
     const [book, setBook] = useState({
         tripid: '',
@@ -131,7 +152,7 @@ const Billing = () => {
         RoundedOff: '',
         BalanceReceivable: '',
         NetAmount: '',
-        payableamount:'',
+        payableamount: '',
         SavePrint: '',
         document: '',
         Preview: '',
@@ -214,7 +235,7 @@ const Billing = () => {
             RoundedOff: '',
             BalanceReceivable: '',
             NetAmount: '',
-            payableamount:'',
+            payableamount: '',
             SavePrint: '',
             document: '',
             Preview: '',
@@ -239,6 +260,7 @@ const Billing = () => {
                 await axios.delete(`http://localhost:8081/billing/${tripid}`);
                 console.log('Customer deleted');
                 setSelectedCustomerData(null);
+                setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
                 console.log('Edit button clicked');
@@ -255,10 +277,12 @@ const Billing = () => {
                 await axios.post('http://localhost:8081/billing', updatedBook);
                 console.log(updatedBook);
                 handleCancel();
+                setSuccessMessage("Successfully Added");
             }
         } catch (err) {
             console.log(err);
             setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
     useEffect(() => {
@@ -270,20 +294,16 @@ const Billing = () => {
     const calculateTotalAmount = () => {
         const totalkm1 = selectedCustomerData.totalkm1 || book.totalkm1;
         const ChargesForExtraamount = selectedCustomerData.ChargesForExtraamount || book.ChargesForExtraamount;
-
         if (totalkm1 !== undefined && ChargesForExtraamount !== undefined) {
             const totalKm = totalkm1 * ChargesForExtraamount;
             return totalKm;
         }
-
         return 0;
     };
 
     const calculatePayableAmount = () => {
-        // const GrossAmount = selectedCustomerData.GrossAmount || book.GrossAmount;; // Replace with the actual GrossAmount
         const DiscountAmount = selectedCustomerData.DiscountAmount || book.DiscountAmount;; // Replace with the actual DiscountAmount
         const AdvanceReceived = selectedCustomerData.AdvanceReceived || book.AdvanceReceived;; // Replace with the actual AdvanceReceived
-
         const netAmount = calculateGrossAmount() - DiscountAmount - AdvanceReceived;
         return netAmount;
     };
@@ -297,17 +317,13 @@ const Billing = () => {
             permitothertax,
             parkingtollcharges
         } = selectedCustomerData || book;
-
         const parsedValues = [
             calculateTotalAmount(), cfehamount, nhamount, dbamount,
             OtherChargesamount, permitothertax, parkingtollcharges
         ].map(value => parseFloat(value) || 0); // Convert to numbers, default to 0 if NaN
-
         const gross = parsedValues.reduce((sum, value) => sum + value, 0);
-
         return gross;
     };
-
 
     const handleKeyDown = useCallback(async (event) => {
         if (event.key === 'Enter') {
@@ -363,16 +379,15 @@ const Billing = () => {
                             </div>
                             <div className="input">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoItem label="Date">
-                                        <DatePicker
-                                            value={formData.Billingdate || selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null}
-                                            onChange={(date) => handleDateChange(date, 'Billingdate')}
-                                        >
-                                            {({ inputProps, inputRef }) => (
-                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.Billingdate} />
-                                            )}
-                                        </DatePicker>
-                                    </DemoItem>
+                                    <DatePicker
+                                        label="Billing Date"
+                                        value={formData.Billingdate || selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null}
+                                        onChange={(date) => handleDateChange(date, 'Billingdate')}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.Billingdate} />
+                                        )}
+                                    </DatePicker>
                                 </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "120px" }}>
@@ -389,7 +404,6 @@ const Billing = () => {
                             </div>
                             <div className="input" style={{ width: "120px" }}>
                                 <TextField
-
                                     margin="normal"
                                     size="small"
                                     id="TotalHours"
@@ -436,18 +450,16 @@ const Billing = () => {
                             </div>
                             <div className="input">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoItem label="Trip Date">
-                                        <DatePicker
-                                            value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
-                                            onChange={(date) => handleDateChange(date, 'startdate')}
-                                        >
-                                            {({ inputProps, inputRef }) => (
-                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
-                                            )}
-                                        </DatePicker>
-                                    </DemoItem>
+                                    <DatePicker
+                                        label="Trip Date"
+                                        value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
+                                        onChange={(date) => handleDateChange(date, 'startdate')}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                                        )}
+                                    </DatePicker>
                                 </LocalizationProvider>
-
                             </div>
                             <div className="input" style={{ width: "111px" }}>
                                 <TextField
@@ -1027,16 +1039,6 @@ const Billing = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faCoins} size="lg" />
                                     </div>
-                                    {/* <TextField
-                                        margin="normal"
-                                        size="small"
-                                        id="payableamount"
-                                        label="Payable Amount"
-                                        name="payableamount"
-                                        autoComplete="new-password"
-                                        value={selectedCustomerData?.payableamount || calculatePayableAmount() || book.payableamount}
-                                        onChange={handleChange}
-                                    /> */}
                                     <TextField
                                         margin="normal"
                                         size="small"
@@ -1102,14 +1104,30 @@ const Billing = () => {
                 </form>
                 {error &&
                     <div className='alert-popup Error' >
-                        <span className='cancel-btn' onClick={hidePopup}>x</span>
-                        <p>Something went wrong!</p>
+                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{errorMessage}</p>
+                    </div>
+                }
+                {info &&
+                    <div className='alert-popup Info' >
+                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{infoMessage}</p>
+                    </div>
+                }
+                {warning &&
+                    <div className='alert-popup Warning' >
+                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{warningMessage}</p>
                     </div>
                 }
                 {success &&
                     <div className='alert-popup Success' >
-                        <span className='cancel-btn' onClick={hidePopup}>x</span>
-                        <p>success fully submitted</p>
+                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{successMessage}</p>
                     </div>
                 }
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>

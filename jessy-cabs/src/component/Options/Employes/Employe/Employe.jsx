@@ -13,13 +13,15 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import { IconButton, TextField } from "@mui/material";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from '@mui/icons-material/Email';
+import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -33,11 +35,13 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LocationCityIcon from "@mui/icons-material/LocationCity";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import EscalatorWarningIcon from '@mui/icons-material/EscalatorWarning';
 import DeviceHubRoundedIcon from '@mui/icons-material/DeviceHubRounded';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 import WorkOutlineRoundedIcon from '@mui/icons-material/WorkOutlineRounded';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -90,11 +94,15 @@ const Employe = () => {
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
-    const [errorMessage, setErrorMessage] = useState(false);
-    const [error, setError] = useState(false);
     const [formData] = useState({});
+    const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-
+    const [info, setInfo] = useState(false);
+    const [warning, setWarning] = useState(false);
+    const [successMessage, setSuccessMessage] = useState({});
+    const [errorMessage, setErrorMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage] = useState({});
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -144,28 +152,44 @@ const Employe = () => {
         saveAs(pdfBlob, 'Customer_Details.pdf');
     };
 
-
-
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
+        setInfo(false);
+        setWarning(false);
     };
     useEffect(() => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [error]);
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [success]);
+    useEffect(() => {
+        if (warning) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); 
+            return () => clearTimeout(timer); 
+        }
+    }, [warning]);
+    useEffect(() => {
+        if (info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); 
+            return () => clearTimeout(timer); 
+        }
+    }, [info]);
 
     const [book, setBook] = useState({
         empid: '',
@@ -254,8 +278,7 @@ const Employe = () => {
     const handleAdd = async () => {
         const empname = book.empname;
         if (!empname) {
-            setError(true);
-            setErrorMessage("fill mantatory fields");
+            setErrorMessage("Check your Employee ID");
             return;
         }
         try {
@@ -263,6 +286,7 @@ const Employe = () => {
             await axios.post('http://localhost:8081/employees', book);
             console.log(book);
             handleCancel();
+            setSuccessMessage("Successfully Added");
         } catch (error) {
             console.error('Error updating customer:', error);
         }
@@ -277,6 +301,7 @@ const Employe = () => {
                 const response = await axios.get('http://localhost:8081/employees');
                 const data = response.data;
                 setRows(data);
+                setSuccessMessage("Successfully listed");
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
                 handleCancel();
@@ -285,6 +310,7 @@ const Employe = () => {
                 await axios.delete(`http://localhost:8081/employees/${empid}`);
                 console.log('Customer deleted');
                 setSelectedCustomerData(null);
+                setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
                 console.log('Edit button clicked');
@@ -292,13 +318,14 @@ const Employe = () => {
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/employees/${empid}`, updatedCustomer);
                 console.log('Customer updated');
+                setSuccessMessage("Successfully updated");
                 handleCancel();
             } else if (actionName === 'Add') {
                 handleAdd();
             }
         } catch (err) {
             console.log(err);
-            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
     useEffect(() => {
@@ -392,16 +419,15 @@ const Employe = () => {
                             </div>
                             <div className="input" >
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoItem label="Joining Date">
-                                        <DatePicker
-                                            value={formData.joiningdate || selectedCustomerData.joiningdate ? dayjs(selectedCustomerData.joiningdate) : null}
-                                            onChange={(date) => handleDateChange(date, 'joiningdate')}
-                                        >
-                                            {({ inputProps, inputRef }) => (
-                                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.joiningdate} />
-                                            )}
-                                        </DatePicker>
-                                    </DemoItem>
+                                    <DatePicker
+                                        label="Joining Date"
+                                        value={formData.joiningdate || selectedCustomerData.joiningdate ? dayjs(selectedCustomerData.joiningdate) : null}
+                                        onChange={(date) => handleDateChange(date, 'joiningdate')}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.joiningdate} />
+                                        )}
+                                    </DatePicker>
                                 </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -595,14 +621,30 @@ const Employe = () => {
                 </div>
                 {error &&
                     <div className='alert-popup Error' >
-                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                         <p>{errorMessage}</p>
+                    </div>
+                }
+                {warning &&
+                    <div className='alert-popup Warning' >
+                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{warningMessage}</p>
                     </div>
                 }
                 {success &&
                     <div className='alert-popup Success' >
-                        <span className='cancel-btn' onClick={hidePopup}>x</span>
-                        <p>success fully submitted</p>
+                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{successMessage}</p>
+                    </div>
+                }
+                {info &&
+                    <div className='alert-popup Info' >
+                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{infoMessage}</p>
                     </div>
                 }
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>

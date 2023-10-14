@@ -1,90 +1,141 @@
-import React, { useState,useEffect } from "react";
-import { emailValidator, passwordValidator } from "./regexValidator";
+import React, { useState, useEffect } from "react";
+// import { emailValidator, passwordValidator } from "./regexValidator";
 import "./Form.css";
-import portalimg from "../../assets/img/portal-img.jpg";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";
 import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircleFill";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
+import ClearIcon from '@mui/icons-material/Clear';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { BiHide } from "@react-icons/all-files/bi/BiHide";
 import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import axios from "axios"; // Import Axios for making HTTP requests
+import { useUser } from './UserContext'; // Import useUser from UserContext
+
 const Login = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const toggle = () => {
     setOpen(!open);
   };
-  const [input, setInput] = React.useState({ username: "", password: "" });
-  const [errorMessage, seterrorMessage] = useState("");
-  const [successMessage, setsuccessMessage] = useState("");
+  const [input, setInput] = React.useState({ username: "", userpassword: "" });
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const { loginUser } = useUser();
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
 
   const hidePopup = () => {
-    setsuccessMessage(false);
-    seterrorMessage(false);
+    setSuccess(false);
+    setError(false);
+    setInfo(false);
+    setWarning(false);
   };
+
   useEffect(() => {
-    if (errorMessage) {
+    if (error) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000); // 3 seconds
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
-  }, [errorMessage]);
+  }, [error]);
+
   useEffect(() => {
-    if (successMessage) {
+    if (success) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000); // 3 seconds
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
-  }, [successMessage]);
+  }, [success]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (localStorage.getItem("auth")) navigate("/");
   });
 
-  const formSumitter = (e) => {
+  const formSubmitter = async (e) => {
     e.preventDefault();
-    setsuccessMessage("");
-    if (!emailValidator(input.username))
-      return seterrorMessage("Please enter valid user id");
+    setSuccess("");
+    try {
+      const response = await axios.post("http://localhost:8081/login", input); // Make a POST request to your backend
 
-    if (!passwordValidator(input.password))
-      return seterrorMessage(
-        "Password should have minimum 8 character with the combination of uppercase, lowercase, numbers and specialcharaters"
-      );
-    setsuccessMessage('Successfully Validated');
-    if (input.username !== "admin@gmail.com" || input.password !== "Admin@321")
-      return seterrorMessage("Invalid user id");
-
-    navigate("/home/dashboard");
-    localStorage.setItem("auth", true);
+      if (response.status === 200) {
+        // Successful login
+        loginUser(input.username);
+        setSuccessMessage("Successfully Added");
+        navigate("/home/dashboard");
+        localStorage.setItem("auth", true);
+      } else {
+        // Failed login
+        setErrorMessage("Check your Network Connection");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("An error occurred while logging in.");
+    }
   };
+
   return (
     <div className="portal-container">
       <div className="glasses">
-        <div className="left-col">
-          <img className="portalimg" src={portalimg} alt="portalimg"></img>
-        </div>
         <div className="right-col">
-          <form className="portal" onSubmit={formSumitter}>
+          <form className="portal" onSubmit={formSubmitter}  >
             <div className="title">login</div>
-            {errorMessage.length > 0 && (
-              <div className='alert-popup Info'>
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
+            {error &&
+              <div className='alert-popup Error' >
+                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                 <p>{errorMessage}</p>
               </div>
-            )}
-            {successMessage.length > 0 && (
-              <div className='alert-popup Error'>
-                <span className='cancel-btn' onClick={hidePopup}>x</span>
-                {successMessage}
+            }
+            {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{warningMessage}</p>
               </div>
-            )}
+            }
+            {success &&
+              <div className='alert-popup Success' >
+                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{successMessage}</p>
+              </div>
+            }
+            {info &&
+              <div className='alert-popup Info' >
+                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{infoMessage}</p>
+              </div>
+            }
             <div className="user-input">
               <input
                 type="text"
@@ -100,7 +151,7 @@ const Login = () => {
             <div className="user-input">
               <input
                 type={open === false ? "password" : "text"}
-                name="password"
+                name="userpassword"
                 autoComplete="off"
                 onChange={handleChange}
                 required
@@ -116,7 +167,7 @@ const Login = () => {
               </div>
             </div>
             <div className="forget-link">
-              <a href="/">forget password </a>
+              <a href="/">forget password !</a>
             </div>
             <div className="group button-group">
               <button type="submit" className="signup-btn">

@@ -10,16 +10,20 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 // ICONS
+import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ChecklistIcon from "@mui/icons-material/Checklist";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -54,13 +58,22 @@ const StationCreation = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
-  const [errorMessage, setErrorMessage] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+ const [warningMessage] = useState({});
+   const [infoMessage] = useState({});
+
+
 
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -70,6 +83,7 @@ const StationCreation = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -78,6 +92,22 @@ const StationCreation = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [success]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
 
   const [book, setBook] = useState({
     stationid: '',
@@ -137,8 +167,8 @@ const StationCreation = () => {
   const handleAdd = async () => {
     const Stationname = book.Stationname;
     if (!Stationname) {
-      setError(true);
-      setErrorMessage("fill mantatory fields");
+      setErrorMessage("Check your Network Connection");
+      // setErrorMessage("fill mantatory fields");
       return;
     }
     try {
@@ -146,9 +176,10 @@ const StationCreation = () => {
       await axios.post('http://localhost:8081/stationcreation', book);
       console.log(book);
       handleCancel();
-
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -159,6 +190,7 @@ const StationCreation = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/stationcreation');
         const data = response.data;
+        setSuccessMessage("Successfully listed");
         setRows(data);
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
@@ -168,6 +200,7 @@ const StationCreation = () => {
         await axios.delete(`http://localhost:8081/stationcreation/${stationid}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
@@ -175,14 +208,15 @@ const StationCreation = () => {
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/stationcreation/${stationid}`, updatedCustomer);
         console.log('Customer updated');
+        setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
         handleAdd();
       }
     } catch (err) {
       console.log(err);
-      setError(true);
-      setErrorMessage("Check Network Connection")
+      setErrorMessage("Check your Network Connection");
+      // setErrorMessage("Check Network Connection")
     }
   };
   useEffect(() => {
@@ -308,14 +342,30 @@ const StationCreation = () => {
           </div>
           {error &&
             <div className='alert-popup Error' >
-              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <span className='cancel-btn' onClick={hidePopup}>x</span>
-              <p>success fully submitted</p>
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
             </div>
           }
 

@@ -14,9 +14,11 @@
 .dash-board.default {
   background-image: url("https://images.pexels.com/photos/4039921/pexels-photo-4039921.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
 }
+
 .dash-board.theme1 {
   background-image: url('https://images.pexels.com/photos/3601426/pexels-photo-3601426.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
+
 .dash-board.theme2 {
   background-image: url("https://images.pexels.com/photos/4039921/pexels-photo-4039921.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
 }
@@ -24,18 +26,23 @@
 .dash-board.theme3 {
   background-image: url('https://images.pexels.com/photos/1036657/pexels-photo-1036657.jpeg?auto=compress&cs=tinysrgb&w=600');
 }
-.dash-board.theme4{
+
+.dash-board.theme4 {
   background-image: url('https://images.pexels.com/photos/2816903/pexels-photo-2816903.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
+
 .dash-board.theme5 {
   background-image: url('https://images.pexels.com/photos/7476134/pexels-photo-7476134.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
 }
+
 .dash-board.theme6 {
   background-image: url('https://images2.alphacoders.com/131/1311486.jpg');
 }
+
 .dash-board.theme7 {
   background-image: url('https://cdn.pixabay.com/photo/2017/10/10/07/48/hills-2836301_1280.jpg');
 }
+
 .dash-board.theme8 {
   background-image: url('https://i.pinimg.com/564x/5a/07/e4/5a07e41bcec71b2985edeb6a0e885461.jpg');
 }
@@ -80,11 +87,17 @@
 
 @media screen and (max-width: 768px) {
   .dash-board {
+    background-size: cover;
+    background-position: 50%;
     background-image: url("https://images.pexels.com/photos/5845709/pexels-photo-5845709.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
   }
 
+  .header-user {
+    display: none !important;
+  }
+
   .glass {
-    grid-template-columns: 1fr;
+    grid-template-columns: 100%;
   }
 }
 

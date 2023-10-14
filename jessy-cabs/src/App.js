@@ -9,9 +9,10 @@ import { ThreeCircles } from "react-loader-spinner";
 import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
 import Customers from "./component/Customers/Customers";
+import Income from "./component/Billings/Income/Income";
 import Billing from "./component/Billings/Billing/Billing";
+import Expense from "./component/Billings/Expense/Expense";
 import Employes from "./component/Options/Employes/Employes";
-import CashFlow from "./component/Billings/CashFlow/CashFlow";
 import Received from "./component/Orders/Receiveds/Receiveds";
 import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Customer from "./component/Customers/Customer/Customer";
@@ -35,6 +36,7 @@ import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import RateManagement from "./component/Options/RateManagement/RateManagement";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
+
 
 
 function App() {
@@ -79,8 +81,9 @@ function App() {
                 <Route path="/home/options/employes" element={<Employes />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>
-                <Route path="/home/billing/" element={<Billing />} />
-                <Route path="/home/billing/cashflow" element={<CashFlow />} />
+                <Route path="/home/billing/billing" element={<Billing />} />
+                <Route path="/home/billing/expense" element={<Expense />} />
+                <Route path="/home/billing/income" element={<Income />} />
                 <Route path="/home/billing/profitandloss" element={<ProfiteLoss />} />
               </Route>
               <Route path="/home/settings" element={<Settings />}>

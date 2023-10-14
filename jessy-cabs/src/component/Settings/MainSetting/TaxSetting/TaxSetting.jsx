@@ -15,10 +15,14 @@ import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { styled } from "@mui/material/styles";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import ClearIcon from '@mui/icons-material/Clear';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -74,13 +78,22 @@ const TaxSetting = () => {
     const [rows, setRows] = useState([]);
     const [formData] = useState({});
     const [actionName] = useState('');
-    const [errorMessage, setErrorMessage] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [info, setInfo] = useState(false);
+    const [warning, setWarning] = useState(false);
+    const [successMessage, setSuccessMessage] = useState({});
+    const [errorMessage, setErrorMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage] = useState({});
+
+
 
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
+        setInfo(false);
+        setWarning(false);
     };
     useEffect(() => {
         if (error) {
@@ -90,6 +103,7 @@ const TaxSetting = () => {
             return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [error]);
+
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => {
@@ -98,10 +112,22 @@ const TaxSetting = () => {
             return () => clearTimeout(timer); // Clean up the timer on unmount
         }
     }, [success]);
-
-
-
-
+    useEffect(() => {
+        if (warning) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [warning]);
+    useEffect(() => {
+        if (info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000); // 3 seconds
+            return () => clearTimeout(timer); // Clean up the timer on unmount
+        }
+    }, [info]);
 
     const [book, setBook] = useState({
         DateTaxFrom: '',
@@ -184,17 +210,19 @@ const TaxSetting = () => {
     const handleAdd = async () => {
         const STax = book.STax;
         if (!STax) {
-          setError(true);
-          setErrorMessage("fill mantatory fields");
-          return;
+            setErrorMessage("Check your Network Connection");
+            // setErrorMessage("fill mantatory fields");
+            return;
         }
         try {
             console.log('Add button clicked');
             const response = await axios.post('http://localhost:8081/taxsettings', book);
             console.log('Customer added:', response.data);
             handleCancel(); // Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
+            setSuccessMessage("Successfully Added");
         } catch (error) {
             console.error('Error adding customer:', error);
+            setErrorMessage("Check your Network Connection");
             // You can add error handling code here, like displaying an error message to the user
         }
     };
@@ -206,6 +234,7 @@ const TaxSetting = () => {
                 const response = await axios.get('http://localhost:8081/taxsettings');
                 const data = response.data;
                 setRows(data);
+                setSuccessMessage("Successfully listed");
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
                 handleCancel();
@@ -214,6 +243,7 @@ const TaxSetting = () => {
                 await axios.delete(`http://localhost:8081/taxsettings/${id}`);
                 console.log('Customer deleted');
                 setSelectedCustomerData(null);
+                setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
                 console.log('Edit button clicked');
@@ -221,12 +251,13 @@ const TaxSetting = () => {
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/taxsettings/${id}`, updatedCustomer);
                 console.log('Customer updated');
+                setSuccessMessage("Successfully updated");
                 handleCancel();
             }
         } catch (err) {
             console.log(err);
-            setError(true);
-            setErrorMessage("Check Network Connection")
+            setErrorMessage("Check your Network Connection");
+            // setErrorMessage("Check Network Connection")
         }
     };
     useEffect(() => {
@@ -388,14 +419,30 @@ const TaxSetting = () => {
                 </div>
                 {error &&
                     <div className='alert-popup Error' >
-                        <span className='cancel-btn' onClick={hidePopup}>x</span>
+                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                         <p>{errorMessage}</p>
+                    </div>
+                }
+                {warning &&
+                    <div className='alert-popup Warning' >
+                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{warningMessage}</p>
                     </div>
                 }
                 {success &&
                     <div className='alert-popup Success' >
-                        <span className='cancel-btn' onClick={hidePopup}>x</span>
-                        <p>success fully submitted</p>
+                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{successMessage}</p>
+                    </div>
+                }
+                {info &&
+                    <div className='alert-popup Info' >
+                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{infoMessage}</p>
                     </div>
                 }
                 <div className="TaxSetting-table-container">

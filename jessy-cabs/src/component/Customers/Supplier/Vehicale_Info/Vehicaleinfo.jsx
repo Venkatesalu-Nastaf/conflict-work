@@ -9,8 +9,8 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
@@ -19,6 +19,7 @@ import { FaMoneyBillWave } from "react-icons/fa";
 
 // ICONS
 import SpeedIcon from "@mui/icons-material/Speed";
+import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import CommuteIcon from "@mui/icons-material/Commute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
@@ -29,6 +30,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import MinorCrashIcon from "@mui/icons-material/MinorCrash";
 import PriceChangeIcon from "@mui/icons-material/PriceChange";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import SummarizeTwoToneIcon from "@mui/icons-material/SummarizeTwoTone";
@@ -62,12 +64,21 @@ const actions = [
 const Vehicaleinfo = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [actionName] = useState('');
+  const [info, setInfo] = useState(false);
   const [error, setError] = useState(false);
+  const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
+
 
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
+    setInfo(false);
+    setWarning(false);
   };
   useEffect(() => {
     if (error) {
@@ -77,6 +88,22 @@ const Vehicaleinfo = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -183,9 +210,10 @@ const Vehicaleinfo = () => {
       await axios.post('http://localhost:8081/vehicleinfo', book);
       console.log(book);
       handleCancel();
-
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -199,8 +227,10 @@ const Vehicaleinfo = () => {
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
+        setSuccessMessage("Successfully listed");
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
+        setSuccessMessage("Successfully Deleted");
         // Perform the desired action when the "Delete" button is clicked
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
@@ -211,6 +241,7 @@ const Vehicaleinfo = () => {
     } catch (error) {
       console.log(error);
       setError(true);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -243,16 +274,15 @@ const Vehicaleinfo = () => {
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="D.O.A Date">
-                    <DatePicker
-                      value={selectedCustomerData.doadate ? dayjs(selectedCustomerData.doadate) : null}
-                      onChange={(date) => handleDateChange(date, 'doadate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='doadate' value={selectedCustomerData.doadate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="D.O.A Date"
+                    value={selectedCustomerData.doadate ? dayjs(selectedCustomerData.doadate) : null}
+                    onChange={(date) => handleDateChange(date, 'doadate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='doadate' value={selectedCustomerData.doadate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
@@ -343,44 +373,41 @@ const Vehicaleinfo = () => {
             <div className="input-field">
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="FC Date">
-                    <DatePicker
-                      value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
-                      onChange={(date) => handleDateChange(date, 'fcdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='fcdate' value={selectedCustomerData.fcdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="FC Date"
+                    value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
+                    onChange={(date) => handleDateChange(date, 'fcdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='fcdate' value={selectedCustomerData.fcdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Tax Date">
-                    <DatePicker
-                      value={selectedCustomerData.taxdate ? dayjs(selectedCustomerData.taxdate) : null}
-                      onChange={(date) => handleDateChange(date, 'taxdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='taxdate' value={selectedCustomerData.taxdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="Tax Date"
+                    value={selectedCustomerData.taxdate ? dayjs(selectedCustomerData.taxdate) : null}
+                    onChange={(date) => handleDateChange(date, 'taxdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='taxdate' value={selectedCustomerData.taxdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="National Permit Date">
-                    <DatePicker
-                      value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
-                      onChange={(date) => handleDateChange(date, 'npdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData.npdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="National Permit Date"
+                    value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
+                    onChange={(date) => handleDateChange(date, 'npdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData.npdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
@@ -400,44 +427,41 @@ const Vehicaleinfo = () => {
             <div className="input-field">
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Insurance Date">
-                    <DatePicker
-                      value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null}
-                      onChange={(date) => handleDateChange(date, 'insdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='insdate' value={selectedCustomerData.insdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="Insurance Date"
+                    value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null}
+                    onChange={(date) => handleDateChange(date, 'insdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='insdate' value={selectedCustomerData.insdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="State permit">
-                    <DatePicker
-                      value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
-                      onChange={(date) => handleDateChange(date, 'stpermit')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='stpermit' value={selectedCustomerData.stpermit || ''} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="State permit"
+                    value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null}
+                    onChange={(date) => handleDateChange(date, 'stpermit')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='stpermit' value={selectedCustomerData.stpermit || ''} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Due Date">
-                    <DatePicker
-                      value={selectedCustomerData.duedate ? dayjs(selectedCustomerData.duedate) : null}
-                      onChange={(date) => handleDateChange(date, 'duedate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="Due Date"
+                    value={selectedCustomerData.duedate ? dayjs(selectedCustomerData.duedate) : null}
+                    onChange={(date) => handleDateChange(date, 'duedate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
@@ -580,13 +604,29 @@ const Vehicaleinfo = () => {
           </div>
         </div>
         {error && <div className='alert-popup Error' >
-          <span className='cancel-btn' onClick={hidePopup}>x</span>
-          <p>Something went wrong!</p>
+          <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+          <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+          <p>{errorMessage}</p>
         </div>}
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{warningMessage}</p>
+          </div>
+        }
+        {info &&
+          <div className='alert-popup Info' >
+            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{infoMessage}</p>
+          </div>
+        }
         {success &&
           <div className='alert-popup Success' >
-            <span className='cancel-btn' onClick={hidePopup}>x</span>
-            <p>success fully submitted</p>
+            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>{successMessage}</p>
           </div>
         }
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>

@@ -26,7 +26,7 @@ export const Apps = [
     optionvalue: "accept",
   },
   {
-    Option: "On Going",
+    Option: "On_Going",
     optionvalue: "ongoing",
   },
   {
@@ -34,7 +34,7 @@ export const Apps = [
     optionvalue: "closed",
   },
   {
-    Option: "Be Closed",
+    Option: "Be_Closed",
     optionvalue: "beclosed",
   },
 ];

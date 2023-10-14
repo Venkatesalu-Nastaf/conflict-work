@@ -1,63 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Settings.css';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-const Settings = () => {
+
+const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
   const location = useLocation();
+  const isActive = location.pathname === to;
+
+  return (
+    <Link
+      className={`menu-link ${isActive ? 'actives' : ''}`}
+      to={to}
+      onClick={() => handleMenuItemClick(label)}
+    >
+      {label}
+    </Link>
+  );
+};
+
+const Settings = () => {
+  const [activeMenuItem, setActiveMenuItem] = useState('');
 
   useEffect(() => {
-    // Retrieve the previously stored actives menu item from localStorage
-    const activeMenuItem = localStorage.getItem('activeMenuItem');
+    const storedActiveMenuItem = localStorage.getItem('activeMenuItem');
+    setActiveMenuItem(storedActiveMenuItem || '');
+  }, []);
 
-    // Add 'actives' class to the actives menu item if it exists
-    if (activeMenuItem) {
-      const menuItems = document.querySelectorAll('.menu-link');
-      menuItems.forEach((item) => {
-        if (item.textContent === activeMenuItem) {
-          item.classList.add('actives');
-        } else {
-          item.classList.remove('actives');
-        }
-      });
-    }
-  }, [location]);
-
-  // Function to handle menu item clicks
   const handleMenuItemClick = (menuItem) => {
-    // Store the clicked menu item in localStorage
     localStorage.setItem('activeMenuItem', menuItem);
+    setActiveMenuItem(menuItem);
   };
 
   return (
     <div className="Settings-main">
       <div className='menu-bar'>
-        <Link
-          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'User Creation' ? 'actives' : ''}`}
-          to='/home/settings/usercreation'
-          onClick={() => handleMenuItemClick('User Creation')}
-        >
-          User Creation
-        </Link>
-        <Link
-          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Permission' ? 'actives' : ''}`}
-          to='/home/settings/permission'
-          onClick={() => handleMenuItemClick('Permission')}
-        >
-          Permission
-        </Link>
-        <Link
-          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Staton Creation' ? 'actives' : ''}`}
-          to='/home/settings/stationcreation'
-          onClick={() => handleMenuItemClick('Station Creation')}
-        >
-          Station Creation
-        </Link>
-        <Link
-          className={`menu-link ${localStorage.getItem('activeMenuItem') === 'Main setting' ? 'actives' : ''}`}
-          to='/home/settings/mainsetting'
-          onClick={() => handleMenuItemClick('Main setting')}
-        >
-          Main setting
-        </Link>
+        <MenuItem label="User Creation" to='/home/settings/usercreation' menuItemKey="User Creation" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+        <MenuItem label="Permission" to='/home/settings/permission' menuItemKey="Permission" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+        <MenuItem label="Station Creation" to='/home/settings/stationcreation' menuItemKey="Station Creation" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+        <MenuItem label="Main setting" to='/home/settings/mainsetting' menuItemKey="Main setting" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
       </div>
       <Outlet />
     </div>

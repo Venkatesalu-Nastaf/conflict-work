@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import "./AppUserList.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -8,35 +8,37 @@ import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mu
 // TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "DriverName", headerName: "Driver Name", width: 130 },
-  { field: "UserId", headerName: "User Id", width: 130 },
-  { field: "DriverType", headerName: "Driver Type", width: 130 },
-  { field: "Active", headerName: "Active", width: 130 },
-  { field: "Mobile", headerName: "Mobile", width: 130 },
+  { field: "driverName", headerName: "Driver Name", width: 130 },
+  { field: "startdate", headerName: "Date", width: 130 },
+  { field: "vehType", headerName: "Vehicle Type", width: 130 },
+  { field: "apps", headerName: "Active", width: 130 },
+  { field: "mobileNo", headerName: "Mobile", width: 130 },
 ];
 
-const rows = [
-  {
-    id: 1,
-    DriverName: "Surash",
-    UserId: 71,
-    DriverType: "Morning",
-    Active: "Booking",
-    Mobile: 9232889403,
-
-  },
-  {
-    id: 2,
-    DriverName: "Mani",
-    UserId: 32,
-    DriverType: "Evening",
-    Active: "Closed",
-    Mobile: 9933809403,
-  },
-];
 // TABLE END
 
 const AppUserList = () => {
+
+  const [rows, setRows] = useState([]);
+  const [apps, setApps] = useState('active'); // Default to 'active'
+
+  const handleListButtonClick = () => {
+    // Make an API request to fetch data based on the selected status
+    fetch(`http://localhost:8081/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the data as needed (e.g., update state to display it)
+        console.log('driver details', data);
+        setRows(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  };
+
+  const handleChangeStatus = (event) => {
+    setApps(event.target.value);
+  };
   return (
     <div className="appuserlist-form">
       <form action="">
@@ -47,29 +49,31 @@ const AppUserList = () => {
                 <div className="input radio">
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
-                      App User Active /<br /> Not Active 
+                      App User Active /<br /> Not Active
                     </FormLabel>
                     <RadioGroup
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="AppUserActive"
                       autoComplete="new-password"
+                      value={apps}
+                      onChange={handleChangeStatus}
                     >
                       <FormControlLabel
-                        value="Yes"
+                        value="active"
                         control={<Radio />}
-                        label="Yes"
+                        label="Active"
                       />
                       <FormControlLabel
-                        value="No"
+                        value="not_active"
                         control={<Radio />}
-                        label="No"
+                        label="Not_Active"
                       />
                     </RadioGroup>
                   </FormControl>
                 </div>
                 <div className="input" style={{ width: "130px" }}>
-                  <Button variant="contained">List</Button>
+                  <Button variant="contained" onClick={handleListButtonClick}>List</Button>
                 </div>
                 <div className="input" style={{ width: "130px" }}>
                   <Button
@@ -80,7 +84,6 @@ const AppUserList = () => {
                     Excel
                     <input
                       type="file"
-
                       style={{ display: "none" }}
                     />
                   </Button>

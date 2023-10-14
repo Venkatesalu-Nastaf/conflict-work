@@ -2,14 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import "./Booking.css";
 import dayjs from "dayjs";
 import axios from "axios";
-import { Table } from "@mui/joy";
+import jsPDF from 'jspdf';
 import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
+import { saveAs } from 'file-saver';
+import Menu from '@mui/material/Menu';
 import Button from "@mui/material/Button";
+import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
-import TabContext from "@mui/lab/TabContext";
+import MenuItem from '@mui/material/MenuItem';
 import { useLocation } from "react-router-dom";
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -17,18 +17,23 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { Duty, Hire, PayType, Report, VehicleModel, Service_Station } from "./Booking";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
 // ICONS
 import InfoIcon from "@mui/icons-material/Info";
 import SellIcon from "@mui/icons-material/Sell";
+import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import FmdBadIcon from "@mui/icons-material/FmdBad";
+import { AiOutlineFileSearch } from "react-icons/ai";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
 import CommuteIcon from "@mui/icons-material/Commute";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
@@ -39,6 +44,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
@@ -51,6 +57,7 @@ import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import TaxiAlertTwoToneIcon from "@mui/icons-material/TaxiAlertTwoTone";
 import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -69,21 +76,71 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
+const columns = [
+  { field: "id", headerName: "Sno", width: 70 },
+  { field: "bookingno", headerName: "Booking No", width: 130 },
+  { field: "bookingdate", headerName: "Booking Date", width: 130 },
+  { field: "bookingtime", headerName: "Booking Time", width: 130 },
+  { field: "status", headerName: "Status", width: 120 },
+  { field: "tripid", headerName: "Trip ID", width: 130 },
+  { field: "customer", headerName: "Customer", width: 90 },
+  { field: "orderedby", headerName: "Ordered-By", width: 160 },
+  { field: "mobileno", headerName: "Mobile No", width: 130 },
+  { field: "guestname", headerName: "Guest-Name", width: 130 },
+  { field: "guestmobileno", headerName: "Guest-Mobile-No", width: 130 },
+  { field: "email", headerName: "Email", width: 130 },
+  { field: "employeeno", headerName: "Employee No", width: 130 },
+  { field: "address", headerName: "Address", width: 130 },
+  { field: "report", headerName: "Report", width: 130 },
+  { field: "vehicletype", headerName: "Vehicle Type", width: 130 },
+  { field: "paymenttype", headerName: "Payment Type", width: 130 },
+  { field: "usage", headerName: "Usage", width: 130 },
+  { field: "username", headerName: "User Name", width: 130 },
+  { field: "reportdate", headerName: "Report Date", width: 130 },
+  { field: "startdate", headerName: "Start Time", width: 130 },
+  { field: "reporttime", headerName: "Report Time", width: 130 },
+  { field: "duty", headerName: "Duty", width: 130 },
+  { field: "pickup", headerName: "Pickup", width: 130 },
+  { field: "costcode", headerName: "Cost Code", width: 130 },
+  { field: "requestno", headerName: "Request No", width: 130 },
+  { field: "flightno", headerName: "Flight No", width: 130 },
+  { field: "orderbyemail", headerName: "Order By Email", width: 130 },
+  { field: "remarks", headerName: "Remarks", width: 130 },
+  { field: "servicestation", headerName: "Service Station", width: 130 },
+  { field: "advance", headerName: "Advance", width: 130 },
+  { field: "hiretype", headerName: "Hire Type", width: 130 },
+  { field: "travelsname", headerName: "Travels Name", width: 130 },
+  { field: "vehicleregisterno", headerName: "Vehicle Register No", width: 130 },
+  { field: "vehiclemodle", headerName: "Vehicle Modle", width: 130 },
+  { field: "drivername", headerName: "Driver Name", width: 130 },
+  { field: "driverphone", headerName: "Driver Phone", width: 130 },
+  { field: "travelsemail", headerName: "Travels Email", width: 130 },
+];
+
 const Booking = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [actionName] = useState('');
   const [rows, setRows] = useState([]);
   const [displayCopy, setDisplayCopy] = useState(false);
-  const [value, setValue] = React.useState("list");
+  const [toDate, setToDate] = useState(dayjs());
+  const [fromDate, setFromDate] = useState(dayjs());
+  // const [value, setValue] = React.useState("list");
   const [triptime, setTripTime] = useState('');
   const [registertime, setRegisterTime] = useState('');
   const [starttime, setStartTime] = useState('');
   const [bookingtime, setBookingTime] = useState('');
-  // const [formData, setFormData] = useState({});
   const location = useLocation();
-  const [errorMessage, setErrorMessage] = useState(false);
+  // const [selectedRow, setSelectedRow] = useState(null);
+  // const [popupOpen, setPopupOpen] = useState(false); 
   const [error, setError] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
+
+  const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({});
   const [formValues, setFormValues] = useState({
@@ -94,15 +151,14 @@ const Booking = () => {
   });
 
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
-    vehType: '',
-    driverName: '',
-    vehRegNo: '',
-    mobileNo: '',
+    customer: '',
   });
 
   const hidePopup = () => {
-    setError(false);
     setSuccess(false);
+    setError(false);
+    setInfo(false);
+    setWarning(false);
   };
 
   useEffect(() => {
@@ -113,6 +169,22 @@ const Booking = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [info]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -130,12 +202,12 @@ const Booking = () => {
     // Define a list of parameter keys
     const parameterKeys = [
       'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby',
-      'mobileno', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2',
+      'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2',
       'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'registertime',
       'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
       'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
       'username', 'tripdate', 'triptime', 'emaildoggle', 'hiretypes', 'travelsname',
-      'vehicleregisterno', 'vehiclemodule', 'driverName', 'driverphone', 'travelsemail'
+      'vehRegNo', 'vehiclemodule', 'driverName', 'mobileNo', 'travelsemail'
     ];
 
     // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
@@ -170,7 +242,7 @@ const Booking = () => {
     tripid: '',
     customer: '',
     orderedby: '',
-    mobileno: '',
+    mobile: '',
     guestname: '',
     guestmobileno: '',
     email: '',
@@ -204,10 +276,10 @@ const Booking = () => {
     emaildoggle: '',
     hiretypes: '',
     travelsname: '',
-    vehicleregisterno: '',
+    vehRegNo: '',
     vehiclemodule: '',
     driverName: '',
-    driverphone: '',
+    mobileNo: '',
     travelsemail: '',
   });
 
@@ -220,7 +292,7 @@ const Booking = () => {
       tripid: '',
       customer: '',
       orderedby: '',
-      mobileno: '',
+      mobile: '',
       guestname: '',
       guestmobileno: '',
       email: '',
@@ -254,16 +326,57 @@ const Booking = () => {
       emaildoggle: '',
       hiretypes: '',
       travelsname: '',
-      vehicleregisterno: '',
+      vehRegNo: '',
       vehiclemodule: '',
       driverName: '',
-      driverphone: '',
+      mobileNo: '',
       travelsemail: '',
     }));
+    setFormValues({});
     setSelectedCustomerData({});
     setFormData({});
   };
+  const convertToCSV = (data) => {
+    const header = columns.map((column) => column.headerName).join(",");
+    const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+    return [header, ...rows].join("\n");
+  };
+  const handleExcelDownload = () => {
+    const csvData = convertToCSV(rows);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "VehicleStatement Reports.csv");
+  };
+  const handlePdfDownload = () => {
+    const pdf = new jsPDF('Landscape');
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text("VehicleStatement Reports", 10, 10);
 
+    // Modify tableData to exclude the index number
+    const tableData = rows.map((row) => [
+      row['id'],
+      row['status'],
+      row['bookingno'],
+      row['tripid'],
+      row['bookingdate'],
+      row['bookingtime'],
+      row['guestname'],
+      row['mobileno'],
+      row['address1'],
+      row['address2'],
+      row['customer'],
+      row['vehRegNo'],
+    ]);
+
+    pdf.autoTable({
+      head: [['Sno', 'Status', 'Booking ID', 'Tripsheet No', 'Date', 'Time', 'Guest Name', 'Mobile', 'R.Address', 'R.Address1', 'R.Address2', 'Company', 'Register NO']],
+      body: tableData,
+      startY: 20,
+    });
+
+    const pdfBlob = pdf.output('blob');
+    saveAs(pdfBlob, 'VehicleStatement Reports.pdf');
+  };
 
   const getCurrentTime = () => {
     const now = new Date();
@@ -272,7 +385,7 @@ const Booking = () => {
     return `${hours}:${minutes}`;
   };
 
-  const handleChange = (event) => {
+  const handleChange = useCallback((event) => {
     const { name, value, checked, type } = event.target;
 
     if (type === 'checkbox') {
@@ -293,7 +406,6 @@ const Booking = () => {
         [name]: checked,
       }));
     } else if (type === 'radio') {
-
       setBook((prevBook) => ({
         ...prevBook,
         [name]: value,
@@ -320,6 +432,10 @@ const Booking = () => {
         ...prevData,
         [name]: fieldValue,
       }));
+      setSelectedCustomerDatas((prevData) => ({
+        ...prevData,
+        [name]: fieldValue,
+      }));
       setFormData((prevData) => ({
         ...prevData,
         [name]: fieldValue,
@@ -329,11 +445,12 @@ const Booking = () => {
         [name]: fieldValue,
       }));
     }
-  };
+  }, [setBook, setSelectedCustomerData, setFormData, setFormValues, setSelectedCustomerDatas]);
 
-  const handleTabChange = (event, newValue) => {
-    setValue(newValue);
-  };
+
+  // const handleTabChange = (event, newValue) => {
+  //   setValue(newValue);
+  // };
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
     setBook((prevBook) => ({
@@ -382,10 +499,11 @@ const Booking = () => {
       await axios.post('http://localhost:8081/booking', updatedBook);
       console.log(updatedBook);
       handleCancel();
-      setSuccess(true);
+      setSuccessMessage("Successfully Added");
       handlecheck();
     } catch (error) {
       console.error('Error updating customer:', error);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -403,6 +521,7 @@ const Booking = () => {
         await axios.delete(`http://localhost:8081/booking/${book.bookingno}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccessMessage("Successfully Deleted");
         setFormData(null);
         handleCancel();
       } else if (actionName === 'Modify') {
@@ -412,6 +531,7 @@ const Booking = () => {
         await axios.put(`http://localhost:8081/booking/${book.bookingno}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
+        setSuccessMessage("Successfully Updated");
       } else if (actionName === 'Copy This') {
         console.log('Copy This button clicked');
         handleClickShow();
@@ -448,7 +568,14 @@ const Booking = () => {
     { icon: <BookmarkAddedIcon />, name: "Add" },
   ];
   // Local Storage
-
+  // const handleButtonClick = (row) => {
+  // setSelectedRow(row);
+  // setPopupOpen(true);
+  // };
+  // const handlePopupClose = () => {
+  //   setSelectedRow(null);
+  //   setPopupOpen(false);
+  // };
   useEffect(() => {
     // Retrieve the previously stored actives menu item from localStorage
     const activeMenuItem = localStorage.getItem("activeMenuItem");
@@ -471,12 +598,10 @@ const Booking = () => {
       try {
         const response = await axios.get(`http://localhost:8081/booking/${event.target.value}`);
         const bookingDetails = response.data;
-        console.log(bookingDetails);
-        setBook(bookingDetails);
-        setSelectedCustomerData(bookingDetails);
+        setRows([bookingDetails]);
         setSelectedCustomerId(bookingDetails.customerId);
       } catch (error) {
-        console.error('Error retrieving booking details:', error);
+        console.error('Error retrieving vehicle details:', error.message);
       }
     }
   }, []);
@@ -514,44 +639,72 @@ const Booking = () => {
     }
   };
 
+  const [enterPressCount, setEnterPressCount] = useState(0);
+
+  // const handleKeyEnter = useCallback(async (event) => {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //     if (enterPressCount === 0) {
+  //       // First Enter key press - Display in the table
+  //       try {
+  //         const response = await axios.get(`http://localhost:8081/name-customers/${event.target.value}`);
+  //         const vehicleData = response.data;
+  //         setRows([vehicleData]);
+  //       } catch (error) {
+  //         console.error('Error retrieving vehicle details:', error.message);
+  //       }
+  //     } else if (enterPressCount === 1) {
+  //       // Second Enter key press (double Enter) - Display in the fields
+  //       const selectedRow = rows[0]; // Assuming you want to use the first row
+  //       if (selectedRow) {
+  //         setSelectedCustomerDatas(selectedRow);
+  //         handleChange({ target: { name: "customer", value: selectedRow.customer } });
+  //       }
+  //       // Reset the Enter key press count
+  //       setEnterPressCount(0);
+  //     }
+  //     // Increment the Enter key press count
+  //     setEnterPressCount((prevCount) => prevCount + 1);
+  //   }
+  // }, [handleChange, rows, enterPressCount]);
+
   const handleKeyEnter = useCallback(async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      try {
-        const response = await axios.get(`http://localhost:8081/name-customers/${event.target.value}`);
-        const vehicleData = response.data;
-        setRows([vehicleData]);
-      } catch (error) {
-        console.error('Error retrieving vehicle details:', error.message);
+      if (enterPressCount === 0) {
+        // First Enter key press - Display in the table
+        try {
+          const response = await axios.get(`http://localhost:8081/name-customers/${event.target.value}`);
+          const vehicleData = response.data;
+          setRows([vehicleData]);
+        } catch (error) {
+          console.error('Error retrieving vehicle details:', error.message);
+        }
+      } else if (enterPressCount === 1) {
+        // Second Enter key press (double Enter) - Display in the fields
+        const selectedRow = rows[0]; // Assuming you want to use the first row
+        if (selectedRow) {
+          setSelectedCustomerDatas(selectedRow);
+          handleChange({ target: { name: "customer", value: selectedRow.customer } });
+        }
       }
+      // Increment the Enter key press count
+      setEnterPressCount((prevCount) => prevCount + 1);
     }
-  }, []);
+
+    // Check if the input value is empty and reset enterPressCount to 0
+    if (event.target.value === '') {
+      setEnterPressCount(0);
+    }
+  }, [handleChange, rows, enterPressCount]);
 
 
   const handleRowClick = useCallback((params) => {
     console.log(params);
     setSelectedCustomerDatas(params);
-  }, []);
+    handleChange({ target: { name: "customer", value: params.customer } });
+  }, [handleChange]);
 
-  // const handlecheck = async (event) => {
-  //   event.preventDefault();
-
-  //   try {
-  //     const dataToSend = {
-  //       name: formValues.name,
-  //       email: formValues.email,
-  //       contactNo: formValues.contactNo,
-  //       message: formValues.message
-  //     };
-
-  //     await axios.post('http://localhost:8081/send-email', dataToSend);
-  //     alert('Email sent successfully');
-  //     console.log(dataToSend);
-  //   } catch (error) {
-  //     console.error('Error sending email:', error);
-  //     alert('An error occurred while sending the email');
-  //   }
-  // };
   const [sendEmail, setSendEmail] = useState(false);
   const handlecheck = async () => {
 
@@ -566,7 +719,8 @@ const Booking = () => {
         };
 
         await axios.post('http://localhost:8081/send-email', dataToSend);
-        alert('Email sent successfully');
+        // alert('Email sent successfully');
+        setSuccess(true);
         console.log(dataToSend);
       } catch (error) {
         console.error('Error sending email:', error);
@@ -576,7 +730,6 @@ const Booking = () => {
       console.log('Send mail checkbox is not checked. Email not sent.');
     }
   };
-
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -673,15 +826,14 @@ const Booking = () => {
                   <PermIdentityIcon color="action" />
                 </div>
                 <TextField
+                  margin="normal"
+                  id="customer"
+                  label="Customer"
                   name="customer"
-                  autoComplete="new-password"
-                  value={formData.customer || selectedCustomerDatas.customer || selectedCustomerData.customer || book.customer || ''}
+                  value={formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || ''}
                   onChange={handleChange}
                   onKeyDown={handleKeyEnter}
-                  label="Customer"
-                  id="customer"
-                  variant="standard"
-                  required
+                  autoComplete="new-password"
                 />
               </div>
             </div>
@@ -1071,7 +1223,6 @@ const Booking = () => {
                 </div>
                 <TextField
                   size='small'
-                  // type="number"
                   name='advance'
                   autoComplete="new-password"
                   value={formData.advance || selectedCustomerData.advance || book.advance || ''}
@@ -1090,145 +1241,38 @@ const Booking = () => {
           </div>
           <div className="container-right">
             <div className="booking-update-main">
-              <Box sx={{ width: "100%", typography: "body1" }}>
-                <TabContext value={value}>
-                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    <TabList
-                      onChange={handleTabChange}
-                      aria-label="lab API tabs example"
-                    >
-                      <Tab label="List" value="list" />
-                      <Tab label="Billing Address" value="billingaddress" />
-                      <Tab label="Email" value="email" />
-                    </TabList>
-                  </Box>
-                  <TabPanel value="list">
-                    <div className="booking-update">
-                      <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
-                        <Table hoverRow borderAxis="y">
-                          <thead>
-                            <tr>
-                              <th>Customer Name</th>
-                              <th>Address</th>
-                              <th>Address 1</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {rows.length === 0 ? (
-                              <tr>
-                                <td colSpan={6}>No data available.</td>
-                              </tr>
-                            ) : (
-                              rows.map((row) => (
-                                <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                  <td>{row.printName}</td>
-                                  <td>{row.address1}</td>
-                                  <td>{row.address2}</td>
-                                </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </Table>
-                      </div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel value="billingaddress">
-                    <div className="booking-update">
-                      <div className="booking-update-content">
-                        <div className="input-field billing">
-                          <div className="input">
-                            <div className="icone">
-                              <PermIdentityIcon color="action" />
-                            </div>
-                            <TextField
-                              margin="normal"
-                              size="small"
-                              name="nameupdate"
-                              autoComplete="new-password"
-                              value={formData.guestname || selectedCustomerData.guestname || book.guestname || ''}
-                              onChange={handleChange}
-                              label="Name"
-                              id="name"
-                              autoFocus
-                            />
-                          </div>
-                          <div className="input">
-                            <div className="icone">
-                              <AddHomeWorkIcon color="action" />
-                            </div>
-                            <TextField
-                              margin="normal"
-                              size="small"
-                              id="streetnameupdate"
-                              label="No.Street Name"
-                              name="address3"
-                              autoComplete="new-password"
-                              value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
-                              onChange={handleChange}
-                              autoFocus
-                            />
-                          </div>
-                        </div>
-                        <div className="input-field billing">
-                          <div className="input">
-                            <div className="icone">
-                              <HomeTwoToneIcon color="action" />
-                            </div>
-                            <TextField
-                              name="address4"
-                              autoComplete="new-password"
-                              value={formData.address2 || selectedCustomerData.address2 || book.address2 || ''}
-                              onChange={handleChange}
-                              label="Address"
-                              id="address4"
-                              variant="standard"
-                            />
-                          </div>
-                          <div className="input">
-                            <div className="icone">
-                              <LocationCityIcon color="action" />
-                            </div>
-                            <TextField
-                              name="cityupdate"
-                              autoComplete="new-password"
-                              value={formData.city || selectedCustomerData.city || book.city || ''}
-                              onChange={handleChange}
-                              label="City"
-                              id="cityupdate"
-                              variant="standard"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel value="email">
-                    <div className="booking-update">
-                      <div className="booking-update-content list-update">
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                        <p className="bottom-line">demo@gmail.com</p>
-                      </div>
-                    </div>
-                  </TabPanel>
-
-                </TabContext>
-              </Box>
+              <div className="booking-update">
+                <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
+                  <table >
+                    <thead id='update-header'>
+                      <tr>
+                        <th>Customer Name</th>
+                        <th>Customer Name</th>
+                        {/* <th>Address</th> */}
+                        <th>Address 1</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.length === 0 ? (
+                        <tr>
+                          <td >No data available.</td>
+                        </tr>
+                      ) : (
+                        rows.map((row) => (
+                          <tr id='update-row' key={row.id} onClick={() => handleRowClick(row)}>
+                            <td>{row.customer}</td>
+                            <td>{row.address1}</td>
+                            <td>{row.address2}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
             <div className="inpu-field">
               <div className="input">
-
                 <FormControlLabel
                   value="vehiclechanges"
                   control={<Checkbox size="small" />}
@@ -1367,6 +1411,21 @@ const Booking = () => {
             </div>
           </div>
         </div>
+        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <StyledSpeedDial
+            ariaLabel="SpeedDial playground example"
+            icon={<SpeedDialIcon />}
+          >
+            {actions.map((action) => (
+              <SpeedDialAction
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={action.name}
+                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
+              />
+            ))}
+          </StyledSpeedDial>
+        </Box>
         <div className="vehicle-confirm">
           <div className="input-field">
             <div className="input">
@@ -1413,12 +1472,12 @@ const Booking = () => {
                 <CarCrashIcon color="action" />
               </div>
               <TextField
-                name="vehicleregisterno"
+                name="vehRegNo"
                 autoComplete="new-password"
-                value={formData.vehicleregisterno || selectedCustomerData.vehicleregisterno || book.vehicleregisterno || ''}
+                value={formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || ''}
                 onChange={handleChange}
                 label="Vehicle Register No"
-                id="vehicleregisterno"
+                id="vehRegNo"
                 variant="standard"
               />
             </div>
@@ -1468,12 +1527,12 @@ const Booking = () => {
                 <AddIcCallTwoToneIcon color="action" />
               </div>
               <TextField
-                name="driverphone"
+                name="mobileNo"
                 autoComplete="new-password"
-                value={formData.driverphone || selectedCustomerData.driverphone || book.driverphone || ''}
+                value={formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || ''}
                 onChange={handleChange}
                 label="Driver Phone"
-                id="driverphone"
+                id="mobileNo"
                 variant="standard"
               />
             </div>
@@ -1497,32 +1556,101 @@ const Booking = () => {
           </div>
           {error &&
             <div className='alert-popup Error' >
-              <span className='cancel-btn' onClick={hidePopup}>x</span>
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
+
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
-              <span className='cancel-btn' onClick={hidePopup}>x</span>
-              <p>success fully submitted</p>
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
             </div>
           }
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-          <StyledSpeedDial
-            ariaLabel="SpeedDial playground example"
-            icon={<SpeedDialIcon />}
-          >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-              />
-            ))}
-          </StyledSpeedDial>
-        </Box>
+        <div className="detail-container-main">
+          <div className="container-left">
+            <div className="copy-title-btn-Booking">
+              <div className="input-field" style={{ justifyContent: 'center' }}>
+                <div className="input" style={{ width: "230px" }}>
+                  <div className="icone">
+                    <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="id"
+                    label="Search"
+                    name="Search"
+                    autoFocus
+                  />
+                </div>
+                <div className="input">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="From Date"
+                      value={fromDate}
+                      onChange={(date) => setFromDate(date)}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div className="input">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="To Date"
+                      value={toDate}
+                      onChange={(date) => setToDate(date)}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div className="input" style={{ width: "140px" }}>
+                  <Button variant="contained">Search</Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="Download-btn">
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  Download
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
+        </div>
+        <div className="table-bookingCopy-Booking">
+          <div style={{ height: 400, width: "100%" }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              onRowClick={handleRowClick}
+              pageSize={5}
+              checkboxSelection
+            />
+          </div>
+        </div>
       </form>
     </div>
   );

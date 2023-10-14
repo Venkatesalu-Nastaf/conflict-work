@@ -4,7 +4,7 @@ import './invoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 
-const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas, book }) => {
+const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas }) => {
   return (
     <div className="invoice-wrapper">
       <article>
@@ -26,27 +26,27 @@ const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustome
             <table id='table-invoice' className="firstleftTable">
               <tr>
                 <th id='table-header'><span>Client Name:</span></th>
-                <td id='table-data'><span >{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}</span></td>
+                <td id='table-data'><span >{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span>Address:</span></th>
-                <td id='table-data'><span >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1}</span></td>
+                <td id='table-data'><span >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span>Ordered By:</span></th>
-                <td id='table-data'><span>{tripSheetData.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby || book.orderedby}</span></td>
+                <td id='table-data'><span>{tripSheetData.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.orderedby}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span>Emp. No:</span></th>
-                <td id='table-data'><span>{tripSheetData.empolyeeno || selectedCustomerData.empolyeeno || selectedCustomerDatas.empolyeeno || book.empolyeeno}</span></td>
+                <td id='table-data'><span>{tripSheetData.empolyeeno || selectedCustomerData.empolyeeno || selectedCustomerDatas.empolyeeno}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span>CCode:</span></th>
-                <td id='table-data'><span>{tripSheetData.customercode || selectedCustomerData.customercode || selectedCustomerDatas.customercode || book.customercode}</span></td>
+                <td id='table-data'><span>{tripSheetData.customercode || selectedCustomerData.customercode || selectedCustomerDatas.customercode}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span>Report To</span></th>
-                <td id='table-data'><span>{tripSheetData.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname || book.guestname}</span></td>
+                <td id='table-data'><span>{tripSheetData.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span >Reporting @</span></th>
@@ -54,37 +54,37 @@ const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustome
               </tr>
               <tr>
                 <th id='table-header'><span>Remarks:</span></th>
-                <td id='table-data'><span>{tripSheetData.remark || selectedCustomerData.remark || selectedCustomerDatas.remark || book.remark}</span></td>
+                <td id='table-data'><span>{tripSheetData.remark || selectedCustomerData.remark || selectedCustomerDatas.remark}</span></td>
               </tr>
             </table>
             <table id='table-invoice' className="firstTable">
               <tr>
                 <th id='table-header'>Log No:</th>
-                <td id='table-data'>{tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid}</td>
+                <td id='table-data'>{tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid}</td>
               </tr>
               <tr>
                 <th id='table-header'>Date:</th>
-                <td id='table-data'>{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate}</td>
+                <td id='table-data'>{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate}</td>
               </tr>
               <tr>
                 <th id='table-header'>Duty Type:</th>
-                <td id='table-data'>{tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty}</td>
+                <td id='table-data'>{tripSheetData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty}</td>
               </tr>
               <tr>
                 <th id='table-header'>Vehicle Type:</th>
-                <td id='table-data'><span>{tripSheetData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType}</span></td>
+                <td id='table-data'><span>{tripSheetData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span >Vehicle No:</span></th>
-                <td id='table-data'><span>{tripSheetData.vehRegNo || selectedCustomerData.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo}</span></td>
+                <td id='table-data'><span>{tripSheetData.vehRegNo || selectedCustomerData.vehRegNo || selectedCustomerDatas.vehRegNo}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span >Driver Name:</span></th>
-                <td id='table-data'><span>{tripSheetData.driverName || selectedCustomerData.driverName || selectedCustomerDatas.driverName || book.driverName}</span></td>
+                <td id='table-data'><span>{tripSheetData.driverName || selectedCustomerData.driverName || selectedCustomerDatas.driverName}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span >Driver Mobile:</span></th>
-                <td id='table-data'><span>{tripSheetData.mobileNo || selectedCustomerData.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo}</span></td>
+                <td id='table-data'><span>{tripSheetData.mobileNo || selectedCustomerData.mobileNo || selectedCustomerDatas.mobileNo}</span></td>
               </tr>
             </table>
           </div>
@@ -102,21 +102,21 @@ const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustome
                 <tbody>
                   <tr>
                     <td id='table-datas'><span >Closing</span></td>
-                    <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate || book.closedate}</span></td>
-                    <td id='table-datas'><span >{tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime}</span></td>
-                    <td id='table-datas'><span >{tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.closedate || selectedCustomerData.closedate || selectedCustomerDatas.closedate}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm}</span></td>
                   </tr>
                   <tr>
                     <td id='table-datas'><span >Starting</span></td>
-                    <td id='table-datas'><span >{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || book.startdate}</span></td>
-                    <td id='table-datas'><span >{tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime || book.starttime}</span></td>
-                    <td id='table-datas'><span >{tripSheetData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm || book.startkm}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.starttime || selectedCustomerData.starttime || selectedCustomerDatas.starttime}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.startkm || selectedCustomerData.startkm || selectedCustomerDatas.startkm}</span></td>
                   </tr>
                   <tr>
                     <td id='table-datas'><span >Total</span></td>
-                    <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span></td>
-                    <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime}</span></td>
-                    <td id='table-datas'><span >{tripSheetData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1 || book.totalkm1}</span></td>
+                    <td id='table-datas'><span >0</span></td>
+                    <td id='table-datas'><span >0</span></td>
+                    <td id='table-datas'><span >0</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -134,19 +134,19 @@ const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustome
           </div>
         </div>
         <div className='total-values'>
-          <div id='Totals'><span id='title'>Total Parking  </span><span>{tripSheetData.parking || selectedCustomerData.parking || selectedCustomerDatas.parking || book.parking}</span></div>
-          <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
+          <div id='Totals'><span id='title'>Total Parking  </span><span>{tripSheetData.parking || selectedCustomerData.parking || selectedCustomerDatas.parking}</span></div>
+          <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit}</span></div>
         </div>
       </article>
     </div>
   );
 };
-const Invoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas, book }) => {
+const Invoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas }) => {
 
   const handlePrint = () => {
     // const invoiceContent = ReactDOMServer.renderToString(<PrintableInvoice />);
     const invoiceContent = ReactDOMServer.renderToString(
-      <PrintableInvoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} book={book} />
+      <PrintableInvoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} />
     );
     const printWindow = window.open('', '_blank');
     printWindow.document.open();
@@ -452,7 +452,7 @@ const Invoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas, b
   return (
     <div className="invoice-wrapper">
       {/* <PrintableInvoice /> */}
-      <PrintableInvoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} book={book} />
+      <PrintableInvoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} />
       <Button variant="contained" onClick={handlePrint}>Print</Button>
     </div>
   );

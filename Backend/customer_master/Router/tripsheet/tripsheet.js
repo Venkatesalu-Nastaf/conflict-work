@@ -195,24 +195,7 @@ router.get('/get-image/:filename', (req, res) => {
         }
     });
 });
-//end tripsheet file upload
+  //end tripsheet file upload
 // End tripsheet database
-// updating trip app status
-router.post('/update_status_booking', (req, res) => {
-    const { status, bookingno } = req.body;
-
-    // Update the database with the new status
-    const query = 'UPDATE booking SET status = ? WHERE bookingno = ?';
-
-    db.query(query, [status, bookingno], (err, results) => {
-        if (err) {
-            res.status(500).json({ message: 'Internal server error' });
-            return;
-        }
-
-        res.status(200).json({ message: 'Status updated successfully' });
-    });
-});
-//end
 
 module.exports = router;

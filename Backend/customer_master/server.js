@@ -14,7 +14,6 @@ const bookingchartRouter = require('./Router/Booking/bookingchart');
 const tripsheetRouter = require('./Router/tripsheet/tripsheet');
 const pendingRouter = require('./Router/Recieved/pending');
 const closedRouter = require('./Router/Dispatch/closed');
-const dispatchRouter = require('./Router/Dispatch/dispatch');
 const driverRouter = require('./Router/driver/driver');
 const usercreationRouter = require('./Router/usercreation/usercreation');
 const stationcreationRouter = require('./Router/stationcreation/stationcreation');
@@ -82,10 +81,6 @@ app.use('/', pendingRouter);
 // order/Dispatch/closed data collect from database
 app.use('/', closedRouter);
 // End order/Dispatch/closed database
-// -----------------------------------------------------------------------------------------------------------
-// order/Dispatch/dispatch data collect from database
-app.use('/', dispatchRouter);
-// End order/Dispatch/dispatch database
 // -----------------------------------------------------------------------------------------------------------
 // driver master database
 app.use('/', driverRouter);

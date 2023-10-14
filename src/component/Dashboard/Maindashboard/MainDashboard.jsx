@@ -8,7 +8,7 @@ import { useNavigate, Outlet } from "react-router-dom";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import logoImage from "../MainDash/Sildebar/Logo-Img/logo.png";
 import { useThemes } from '../../UserSettings/Themes/ThemesContext';
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from '@mui/icons-material/Clear';  
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { ThemesProvider } from '../../UserSettings/Themes/ThemesContext';
 import { useUser } from '../../form/UserContext';
@@ -18,7 +18,10 @@ const MainDashboard = () => {
   const [expanded, setExpanded] = useState(true);
   const { selectedTheme } = useThemes(); // Access selected theme
   const { user } = useUser();
+  // const [successMessage, setSuccessMessage] = useState('');
   const [success, setSuccess] = useState(false);
+  // const initialUsername = localStorage.getItem("username") || "";
+  // const [username] = useState(initialUsername);
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
     },
@@ -54,6 +57,8 @@ const MainDashboard = () => {
       const username = user.username;
       localStorage.setItem("username", username);
       const successMessagepopup = `Login successful ${user.username}`;
+      // alert(successMessage);
+      // setSuccessMessage(successMessagepopup);
       setSuccess(successMessagepopup);
     }
   }, [user]);
@@ -73,8 +78,10 @@ const MainDashboard = () => {
             </StyledBadge>
           </div>
           <div className="user-name-item">
+            {/* {user && user.username ? ( */}
             {storedUsername ? (
               <div>
+                {/* <p>{user.username}</p> */}
                 <p>{storedUsername}</p>
                 {success &&
                   <div className='alert-popup Success' >

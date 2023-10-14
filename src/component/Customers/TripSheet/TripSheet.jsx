@@ -100,6 +100,8 @@ import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 import Invoice from '../Invoice/Invoice';
 
+// const serverBaseUrl = 'http://localhost:8081/get-image/:filename';
+
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -178,8 +180,6 @@ const TripSheet = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
-  const [additionalTime, setAdditionalTime] = useState(''); //for additional time
-  const [shedKilometers, setShedKilometers] = useState('');
   const [tripSheetData, setTripSheetData] = useState({
     customer: '',
     address1: '',
@@ -290,6 +290,7 @@ const TripSheet = () => {
           mobileNo: formValues.mobileNo
         };
         await axios.post('http://localhost:8081/send-tripsheet-email', dataToSend);
+        // alert('Email sent successfully');
         setSuccess(true);
         console.log(dataToSend);
       } catch (error) {
@@ -300,6 +301,7 @@ const TripSheet = () => {
       console.log('Send mail checkbox is not checked. Email not sent.');
     }
   };
+
 
   const hidePopup = () => {
     setSuccess(false);
@@ -312,7 +314,7 @@ const TripSheet = () => {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000); // 3 seconds
-      return () => clearTimeout(timer);
+      return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [error]);
 
@@ -321,7 +323,7 @@ const TripSheet = () => {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000); // 3 seconds
-      return () => clearTimeout(timer);
+      return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [success]);
   useEffect(() => {
@@ -329,7 +331,7 @@ const TripSheet = () => {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000); // 3 seconds
-      return () => clearTimeout(timer);
+      return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [warning]);
   useEffect(() => {
@@ -337,13 +339,13 @@ const TripSheet = () => {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000); // 3 seconds
-      return () => clearTimeout(timer);
+      return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [info]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const statusValue = params.get('status') || 'Opened';
+    const statusValue = params.get('status') || 'opened';
     const formData = {};
 
     // Define a list of parameter keys
@@ -371,7 +373,7 @@ const TripSheet = () => {
     window.history.replaceState(null, document.title, window.location.pathname);
 
     // Reset form data to initial/default values
-    const initialFormData = {};
+    const initialFormData = {}; // You can set the initial/default values here
     setFormData(initialFormData);
   }, []);
 
@@ -408,7 +410,6 @@ const TripSheet = () => {
     reporttime: '',
     starttime: '',
     closetime: '',
-    additionaltime: '',
     advancepaidtovendor: '',
     customercode: '',
     startkm: '',
@@ -621,8 +622,8 @@ const TripSheet = () => {
     try {
       console.log('Edit button clicked');
       const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid);
-      const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData, ...formData, ...selectedCustomerData };
-      await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || formData.tripid || selectedCustomerData.tripid}`, updatedCustomer);
+      const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData, ...formData };
+      await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || formData.tripid}`, updatedCustomer);
       console.log('Customer updated');
       handleCancel();
       setSuccessMessage("Successfully updated");
@@ -657,7 +658,6 @@ const TripSheet = () => {
       setSuccess(true);
       handlecheck();
       setSuccessMessage("Successfully Added");
-      handleUpdatestatus();
     } catch (error) {
       console.error('Error updating customer:', error);
       setErrorMessage("Check your Network Connection");
@@ -724,7 +724,7 @@ const TripSheet = () => {
       setErrorMessage("Check Network Connection")
     }
   };
-
+  // Function to calculate total time
   const calculateTotalTime = () => {
     const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
     const closeTime = formData.closetime || selectedCustomerData.closetime || book.closetime;
@@ -732,14 +732,7 @@ const TripSheet = () => {
     if (startTime && closeTime) {
       const startTimeObj = dayjs(startTime, 'HH:mm');
       const closeTimeObj = dayjs(closeTime, 'HH:mm');
-      let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
-
-      // Add additional time if it is a valid number
-      const additionalTimeValue = parseInt(additionalTime);
-      if (!isNaN(additionalTimeValue)) {
-        totalTimeMinutes += additionalTimeValue * 60;
-      }
-
+      const totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
       const hours = Math.floor(totalTimeMinutes / 60);
       const minutes = totalTimeMinutes % 60;
       return `${hours}h ${minutes}m`;
@@ -747,7 +740,6 @@ const TripSheet = () => {
 
     return '';
   };
-
 
   const calculateTotalDays = () => {
     const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
@@ -768,14 +760,7 @@ const TripSheet = () => {
     const closeKm = formData.closekm || selectedCustomerData.closekm || book.closekm;
 
     if (startKm !== undefined && closeKm !== undefined) {
-      let totalKm = closeKm - startKm;
-
-      // Add shed kilometers if it is a valid number
-      const shedKmValue = parseInt(shedKilometers);
-      if (!isNaN(shedKmValue)) {
-        totalKm += shedKmValue;
-      }
-
+      const totalKm = closeKm - startKm;
       return totalKm;
     }
 
@@ -867,6 +852,7 @@ const TripSheet = () => {
     }
   }, [setSelectedCustomerData, setFormData, setTripSheetData]);
 
+
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -874,7 +860,7 @@ const TripSheet = () => {
         const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
         const bookingDetails = response.data;
         console.log(bookingDetails);
-        setSelectedCustomerDatas(bookingDetails);
+
         setSelectedCustomerData(bookingDetails);
         setSelectedCustomerId(bookingDetails.tripid);
       } catch (error) {
@@ -911,34 +897,19 @@ const TripSheet = () => {
       // Increment the Enter key press count
       setEnterPressCount((prevCount) => prevCount + 1);
     }
+
     // Check if the input value is empty and reset enterPressCount to 0
     if (event.target.value === '') {
       setEnterPressCount(0);
     }
   }, [handleChange, rows, enterPressCount]);
 
+
   const handleRowClick = useCallback((params) => {
     console.log(params);
     setSelectedCustomerDatas(params);
     handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
   }, [handleChange]);
-
-  const handleUpdatestatus = () => {
-    const updatedData = {
-      bookingno: book.bookingno,
-      status: 'Opened',
-    };
-
-    axios
-      .post('http://localhost:8081/update_status_booking', updatedData)
-      .then((response) => {
-   
-      })
-      .catch((error) => {
-   
-      });
-  };
-
 
   return (
     <div className="form-container">
@@ -1605,19 +1576,6 @@ const TripSheet = () => {
 
             </div>
             <div className="input-field">
-
-              <div className="input time">
-                <label>Start Time</label>
-                <input
-                  type="time"
-                  value={formData.starttime || selectedCustomerData.starttime || book.starttime}
-                  onChange={(event) => {
-                    setBook({ ...book, starttime: event.target.value });
-                    setStartTime(event.target.value);
-                  }}
-                  name="starttime"
-                />
-              </div>
               <div className="input time">
                 <label>Report Time</label>
                 <input
@@ -1628,6 +1586,18 @@ const TripSheet = () => {
                     setCloseTime(event.target.value);
                   }}
                   name="closetime"
+                />
+              </div>
+              <div className="input time">
+                <label>Start Time</label>
+                <input
+                  type="time"
+                  value={formData.starttime || selectedCustomerData.starttime || book.starttime}
+                  onChange={(event) => {
+                    setBook({ ...book, starttime: event.target.value });
+                    setStartTime(event.target.value);
+                  }}
+                  name="starttime"
                 />
               </div>
               <div className="input time" >
@@ -1648,9 +1618,8 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="additionaltime"
-                  value={formData.additionaltime || book.additionaltime || additionalTime}
+                  value={formData.additionaltime || book.additionaltime}
                   label="Additional Time"
-                  onChange={(event) => setAdditionalTime(event.target.value)}
                   id="additionaltime"
                   variant="standard"
                   autoComplete="password"
@@ -1703,8 +1672,7 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="shedkm"
-                  value={formData.shedkm || book.shedkm || shedKilometers}
-                  onChange={(event) => setShedKilometers(event.target.value)}
+                  value={formData.shedkm || book.shedkm}
                   label="Shed KM"
                   id="additionalkm"
                   variant="standard"
@@ -1849,7 +1817,7 @@ const TripSheet = () => {
               </div>
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  <Invoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} book={book} />
+                  <Invoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">

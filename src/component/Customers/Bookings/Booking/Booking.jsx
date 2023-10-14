@@ -743,7 +743,7 @@ const Booking = () => {
                 </div>
                 <TextField
                   name="bookingno"
-                  label="Booking"
+                  label="Booking No"
                   id="standard-size-normal"
                   autoComplete="new-password"
                   value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}

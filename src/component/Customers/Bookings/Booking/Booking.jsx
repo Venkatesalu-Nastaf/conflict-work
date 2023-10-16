@@ -334,6 +334,7 @@ const Booking = () => {
     }));
     setFormValues({});
     setSelectedCustomerData({});
+    setSelectedCustomerDatas({});
     setFormData({});
   };
   const convertToCSV = (data) => {

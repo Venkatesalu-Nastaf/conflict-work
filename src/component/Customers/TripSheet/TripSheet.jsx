@@ -170,6 +170,8 @@ const TripSheet = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
   const [error, setError] = useState(false);
+  const [shedKilometers, setShedKilometers] = useState('');
+  const [additionalTime, setAdditionalTime] = useState('');
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
   const [warning, setWarning] = useState(false);
@@ -221,8 +223,8 @@ const TripSheet = () => {
   //file upload
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    if (!file) return; // If no file selected, exit the function
-    const tripid = book.tripid; // Access the bookingno from the book object
+    if (!file) return;
+    const tripid = book.tripid;
     const formData = new FormData();
     formData.append('file', file);
     formData.append('tripid', tripid);
@@ -350,7 +352,7 @@ const TripSheet = () => {
 
     // Define a list of parameter keys
     const parameterKeys = [
-      'bookingno', 'status', 'tripid', 'customer', 'orderedby', 'mobileNo', 'guestname', 'guestmobileno', 'email', 'address1', 'address2', 'city', 'report', 'vehType', 'startdate', 'starttime', 'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'emaildoggle', 'hiretypes', 'travelsname', 'vehRegNo', 'vehiclemodule', 'driverName', 'mobileNo', 'travelsemail'
+      'bookingno', 'status', 'billingno', 'apps', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'address2', 'city', 'report', 'vehType', 'startdate', 'starttime', 'duty', 'pickup', 'costcode', 'vehRegNo', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'emaildoggle', 'hireTypes', 'travelsname', 'driverName', 'mobileNo', 'travelsemail'
     ];
 
     // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
@@ -732,7 +734,14 @@ const TripSheet = () => {
     if (startTime && closeTime) {
       const startTimeObj = dayjs(startTime, 'HH:mm');
       const closeTimeObj = dayjs(closeTime, 'HH:mm');
-      const totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
+      let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
+
+      // Add additional time if it is a valid number
+      const additionalTimeValue = parseInt(additionalTime);
+      if (!isNaN(additionalTimeValue)) {
+        totalTimeMinutes += additionalTimeValue * 60;
+      }
+
       const hours = Math.floor(totalTimeMinutes / 60);
       const minutes = totalTimeMinutes % 60;
       return `${hours}h ${minutes}m`;
@@ -740,6 +749,7 @@ const TripSheet = () => {
 
     return '';
   };
+
 
   const calculateTotalDays = () => {
     const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
@@ -760,12 +770,20 @@ const TripSheet = () => {
     const closeKm = formData.closekm || selectedCustomerData.closekm || book.closekm;
 
     if (startKm !== undefined && closeKm !== undefined) {
-      const totalKm = closeKm - startKm;
+      let totalKm = closeKm - startKm;
+
+      // Add shed kilometers if it is a valid number
+      const shedKmValue = parseInt(shedKilometers);
+      if (!isNaN(shedKmValue)) {
+        totalKm += shedKmValue;
+      }
+
       return totalKm;
     }
 
     return 0;
   };
+
 
   const handleChange = useCallback((event) => {
     const { name, value, checked } = event.target;
@@ -1618,7 +1636,8 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="additionaltime"
-                  value={formData.additionaltime || book.additionaltime}
+                  value={formData.additionaltime || book.additionaltime || additionalTime}
+                  onChange={(event) => setAdditionalTime(event.target.value)}
                   label="Additional Time"
                   id="additionaltime"
                   variant="standard"
@@ -1672,9 +1691,10 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="shedkm"
-                  value={formData.shedkm || book.shedkm}
+                  value={formData.shedkm || book.shedkm || shedKilometers}
+                  onChange={(event) => setShedKilometers(event.target.value)}
                   label="Shed KM"
-                  id="additionalkm"
+                  id="shedkm"
                   variant="standard"
                   autoComplete="password"
                 />

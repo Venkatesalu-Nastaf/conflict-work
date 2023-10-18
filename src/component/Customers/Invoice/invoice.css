@@ -1,3 +1,9 @@
+.guest-sign #guestsign{
+  margin-top: 25px;
+  width: 95px;
+
+}
+
 .invoice-wrapper {
   border: 0;
   box-sizing: content-box;

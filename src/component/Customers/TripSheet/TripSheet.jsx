@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
+// import { v4 as uuidv4 } from 'uuid';
 import "./TripSheet.css";
 import {
   Apps,
@@ -182,33 +183,55 @@ const TripSheet = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
-  const [tripSheetData, setTripSheetData] = useState({
-    customer: '',
-    address1: '',
-    orderedby: '',
-    empolyeeno: '',
-    customercode: '',
-    guestname: '',
-    tripid: '',
-    startdate: '',
-    duty: '',
-    vehType: '',
-    vehRegNo: '',
-    driverName: '',
-    mobileNo: '',
-    closedate: '',
-    starttime: '',
-    startkm: '',
-    closetime: '',
-    closekm: '',
-    remark: '',
-    parking: '',
-    permit: '',
-  });
 
-  const handleETripsheetClick = (row) => {
-    setPopupOpen(true);
+  const [tripsheetid, setTripsheetId] = useState('');
+  const [link, setLink] = useState('');
+  const [isSignatureSubmitted, setIsSignatureSubmitted] = useState(false);
+
+  //generate link
+
+  const generateLink = async () => {
+    try {
+      // Send a request to your API to generate a new link
+      const response = await axios.post('http://localhost:8081/generate-link', { tripsheetid });
+      // Assuming the response contains the generated link
+      setLink(response.data.link);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const copyLinkToClipboard = () => {
+    // Create a temporary input field to copy the link
+    const tempInput = document.createElement('input');
+    tempInput.value = link;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    alert('Link copied to clipboard');
+  };
+
+  useEffect(() => {
+    // Check if the link has expired or if the signature is submitted
+    if (link) {
+      axios.get(`http://localhost:8081/check-link/${link}`)
+        .then((response) => {
+          if (response.data.isSignatureSubmitted) {
+            setIsSignatureSubmitted(true);
+            // Handle the case where the signature is already submitted
+          } else {
+            setIsSignatureSubmitted(false);
+            // Handle the case where the link is still valid
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [link]);
+
+
   const handlePopupClose = () => {
     setPopupOpen(false);
   };
@@ -599,6 +622,15 @@ const TripSheet = () => {
     setFormData({});
     setFormValues({});
   };
+  const handleETripsheetClick = (row) => {
+    const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid; // Extract tripid from row
+    console.log('Received tripid:', tripid); // Debugging line
+    if (tripid) {
+      // Set tripid in localStorage
+      localStorage.setItem('selectedTripid', tripid);
+      setPopupOpen(true);
+    }
+  };
 
   const handleDelete = async () => {
     if (!selectedCustomerData.tripid) {
@@ -650,6 +682,8 @@ const TripSheet = () => {
         closetime: closetime,
         starttime2: starttime2,
         closetime2: closetime2,
+        additionaltime: additionalTime,
+        shedkm: shedKilometers,
         totaldays: calculateTotalDays(), // Add the totaldays field here
         totalkm1: calculateTotalKilometers(), // Add the totaldays field here
         totaltime: calculateTotalTime(), // Add the totaldays field here
@@ -693,6 +727,10 @@ const TripSheet = () => {
       [name]: formattedDate,
     }));
     setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: formattedDate,
+    }));
+    setSelectedCustomerData((prevValues) => ({
       ...prevValues,
       [name]: formattedDate,
     }));
@@ -784,9 +822,39 @@ const TripSheet = () => {
     return 0;
   };
 
+  const [tripSheetData, setTripSheetData] = useState({
+    customer: '',
+    address1: '',
+    orderedby: '',
+    empolyeeno: '',
+    customercode: '',
+    guestname: '',
+    tripid: '',
+    startdate: '',
+    duty: '',
+    vehType: '',
+    vehRegNo: '',
+    driverName: '',
+    mobileNo: '',
+    closedate: '',
+    starttime: '',
+    startkm: '',
+    closetime: '',
+    closekm: '',
+    totalkm1: '',
+    totaltime: '',
+    totalDays: '',
+    remark: '',
+    parking: '',
+    permit: '',
+  });
 
   const handleChange = useCallback((event) => {
     const { name, value, checked } = event.target;
+    setTripsheetId((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
     setSelectedCustomerData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -929,6 +997,7 @@ const TripSheet = () => {
     handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
   }, [handleChange]);
 
+
   return (
     <div className="form-container">
       <div className="Tripsheet-form">
@@ -946,7 +1015,7 @@ const TripSheet = () => {
                   id="tripid"
                   label="Trip Sheet No"
                   name="tripid"
-                  value={formData.tripid || selectedCustomerData.tripid || book.tripid}
+                  value={formData.tripid || selectedCustomerData.tripid || book.tripid || tripsheetid}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   autoComplete="password"
@@ -1600,6 +1669,8 @@ const TripSheet = () => {
                   type="time"
                   value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime}
                   onChange={(event) => {
+                    setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                     setBook({ ...book, reporttime: event.target.value });
                     setCloseTime(event.target.value);
                   }}
@@ -1612,6 +1683,8 @@ const TripSheet = () => {
                   type="time"
                   value={formData.starttime || selectedCustomerData.starttime || book.starttime}
                   onChange={(event) => {
+                    setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, starttime: event.target.value });
                     setBook({ ...book, starttime: event.target.value });
                     setStartTime(event.target.value);
                   }}
@@ -1624,6 +1697,8 @@ const TripSheet = () => {
                   type="time"
                   value={formData.closetime || selectedCustomerData.closetime || book.closetime}
                   onChange={(event) => {
+                    setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
                     setBook({ ...book, closetime: event.target.value });
                     setCloseTime(event.target.value);
                   }}
@@ -1837,7 +1912,7 @@ const TripSheet = () => {
               </div>
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  <Invoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} />
+                  <Invoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -1845,6 +1920,7 @@ const TripSheet = () => {
                   </Button>
                 </DialogActions>
               </Dialog>
+
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "175px" }}>
@@ -2181,6 +2257,8 @@ const TripSheet = () => {
                         type="time"
                         value={formData.starttime || selectedCustomerData.starttime || book.starttime}
                         onChange={(event) => {
+                          setSelectedCustomerData({ ...selectedCustomerData, starttime2: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, starttime2: event.target.value });
                           setBook({ ...book, starttime2: event.target.value });
                           setStartTime2(event.target.value);
                         }}
@@ -2193,6 +2271,8 @@ const TripSheet = () => {
                         type="time"
                         value={formData.closetime || selectedCustomerData.closetime || book.closetime}
                         onChange={(event) => {
+                          setSelectedCustomerData({ ...selectedCustomerData, closetime2: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime2: event.target.value });
                           setBook({ ...book, closetime2: event.target.value });
                           setCloseTime2(event.target.value);
                         }}
@@ -3179,6 +3259,24 @@ const TripSheet = () => {
                     <div className="input" style={{ "padding-right": "300px" }}>
                       <Button>Manual Marking</Button>
                     </div>
+                    <div>
+                      <Button onClick={generateLink}>Generate Link</Button>
+                    </div>
+                    {link && (
+                      <div>
+                        {isSignatureSubmitted ? (
+                          <p>Signature already submitted. Cannot access this link.</p>
+                        ) : (
+                          <div>
+                            <p>Copy this link to send to the passenger:</p>
+                            <div>
+                              <input type="text" value={link} readOnly />
+                              <button onClick={copyLinkToClipboard}>Copy Link</button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     <div className="input" style={{ width: "300px" }}>
                       <div className="icone">
                         <MarkChatReadIcon color="action" />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
+// import { v4 as uuidv4 } from 'uuid';
 import "./TripSheet.css";
 import {
   Apps,
@@ -170,6 +171,8 @@ const TripSheet = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
   const [error, setError] = useState(false);
+  const [shedKilometers, setShedKilometers] = useState('');
+  const [additionalTime, setAdditionalTime] = useState('');
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
   const [warning, setWarning] = useState(false);
@@ -180,33 +183,55 @@ const TripSheet = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
-  const [tripSheetData, setTripSheetData] = useState({
-    customer: '',
-    address1: '',
-    orderedby: '',
-    empolyeeno: '',
-    customercode: '',
-    guestname: '',
-    tripid: '',
-    startdate: '',
-    duty: '',
-    vehType: '',
-    vehRegNo: '',
-    driverName: '',
-    mobileNo: '',
-    closedate: '',
-    starttime: '',
-    startkm: '',
-    closetime: '',
-    closekm: '',
-    remark: '',
-    parking: '',
-    permit: '',
-  });
 
-  const handleETripsheetClick = (row) => {
-    setPopupOpen(true);
+  const [tripsheetid, setTripsheetId] = useState('');
+  const [link, setLink] = useState('');
+  const [isSignatureSubmitted, setIsSignatureSubmitted] = useState(false);
+
+  //generate link
+
+  const generateLink = async () => {
+    try {
+      // Send a request to your API to generate a new link
+      const response = await axios.post('http://localhost:8081/generate-link', { tripsheetid });
+      // Assuming the response contains the generated link
+      setLink(response.data.link);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const copyLinkToClipboard = () => {
+    // Create a temporary input field to copy the link
+    const tempInput = document.createElement('input');
+    tempInput.value = link;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    alert('Link copied to clipboard');
+  };
+
+  useEffect(() => {
+    // Check if the link has expired or if the signature is submitted
+    if (link) {
+      axios.get(`http://localhost:8081/check-link/${link}`)
+        .then((response) => {
+          if (response.data.isSignatureSubmitted) {
+            setIsSignatureSubmitted(true);
+            // Handle the case where the signature is already submitted
+          } else {
+            setIsSignatureSubmitted(false);
+            // Handle the case where the link is still valid
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [link]);
+
+
   const handlePopupClose = () => {
     setPopupOpen(false);
   };
@@ -221,8 +246,8 @@ const TripSheet = () => {
   //file upload
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    if (!file) return; // If no file selected, exit the function
-    const tripid = book.tripid; // Access the bookingno from the book object
+    if (!file) return;
+    const tripid = book.tripid;
     const formData = new FormData();
     formData.append('file', file);
     formData.append('tripid', tripid);
@@ -350,7 +375,7 @@ const TripSheet = () => {
 
     // Define a list of parameter keys
     const parameterKeys = [
-      'bookingno', 'status', 'tripid', 'customer', 'orderedby', 'mobileNo', 'guestname', 'guestmobileno', 'email', 'address1', 'address2', 'city', 'report', 'vehType', 'startdate', 'starttime', 'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'emaildoggle', 'hiretypes', 'travelsname', 'vehRegNo', 'vehiclemodule', 'driverName', 'mobileNo', 'travelsemail'
+      'bookingno', 'status', 'billingno', 'apps', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'address2', 'city', 'report', 'vehType', 'startdate', 'starttime', 'duty', 'pickup', 'costcode', 'vehRegNo', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'emaildoggle', 'hireTypes', 'travelsname', 'driverName', 'mobileNo', 'travelsemail'
     ];
 
     // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
@@ -597,6 +622,15 @@ const TripSheet = () => {
     setFormData({});
     setFormValues({});
   };
+  const handleETripsheetClick = (row) => {
+    const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid; // Extract tripid from row
+    console.log('Received tripid:', tripid); // Debugging line
+    if (tripid) {
+      // Set tripid in localStorage
+      localStorage.setItem('selectedTripid', tripid);
+      setPopupOpen(true);
+    }
+  };
 
   const handleDelete = async () => {
     if (!selectedCustomerData.tripid) {
@@ -648,6 +682,8 @@ const TripSheet = () => {
         closetime: closetime,
         starttime2: starttime2,
         closetime2: closetime2,
+        additionaltime: additionalTime,
+        shedkm: shedKilometers,
         totaldays: calculateTotalDays(), // Add the totaldays field here
         totalkm1: calculateTotalKilometers(), // Add the totaldays field here
         totaltime: calculateTotalTime(), // Add the totaldays field here
@@ -694,6 +730,10 @@ const TripSheet = () => {
       ...prevValues,
       [name]: formattedDate,
     }));
+    setSelectedCustomerData((prevValues) => ({
+      ...prevValues,
+      [name]: formattedDate,
+    }));
     setTripSheetData((prevValues) => ({
       ...prevValues,
       [name]: formattedDate,
@@ -732,7 +772,14 @@ const TripSheet = () => {
     if (startTime && closeTime) {
       const startTimeObj = dayjs(startTime, 'HH:mm');
       const closeTimeObj = dayjs(closeTime, 'HH:mm');
-      const totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
+      let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
+
+      // Add additional time if it is a valid number
+      const additionalTimeValue = parseInt(additionalTime);
+      if (!isNaN(additionalTimeValue)) {
+        totalTimeMinutes += additionalTimeValue * 60;
+      }
+
       const hours = Math.floor(totalTimeMinutes / 60);
       const minutes = totalTimeMinutes % 60;
       return `${hours}h ${minutes}m`;
@@ -740,6 +787,7 @@ const TripSheet = () => {
 
     return '';
   };
+
 
   const calculateTotalDays = () => {
     const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
@@ -760,15 +808,53 @@ const TripSheet = () => {
     const closeKm = formData.closekm || selectedCustomerData.closekm || book.closekm;
 
     if (startKm !== undefined && closeKm !== undefined) {
-      const totalKm = closeKm - startKm;
+      let totalKm = closeKm - startKm;
+
+      // Add shed kilometers if it is a valid number
+      const shedKmValue = parseInt(shedKilometers);
+      if (!isNaN(shedKmValue)) {
+        totalKm += shedKmValue;
+      }
+
       return totalKm;
     }
 
     return 0;
   };
 
+  const [tripSheetData, setTripSheetData] = useState({
+    customer: '',
+    address1: '',
+    orderedby: '',
+    empolyeeno: '',
+    customercode: '',
+    guestname: '',
+    tripid: '',
+    startdate: '',
+    duty: '',
+    vehType: '',
+    vehRegNo: '',
+    driverName: '',
+    mobileNo: '',
+    closedate: '',
+    starttime: '',
+    startkm: '',
+    closetime: '',
+    closekm: '',
+    totalkm1: '',
+    totaltime: '',
+    totalDays: '',
+    remark: '',
+    parking: '',
+    permit: '',
+  });
+
   const handleChange = useCallback((event) => {
     const { name, value, checked } = event.target;
+    setTripsheetId((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
     setSelectedCustomerData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -911,6 +997,7 @@ const TripSheet = () => {
     handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
   }, [handleChange]);
 
+
   return (
     <div className="form-container">
       <div className="Tripsheet-form">
@@ -928,7 +1015,7 @@ const TripSheet = () => {
                   id="tripid"
                   label="Trip Sheet No"
                   name="tripid"
-                  value={formData.tripid || selectedCustomerData.tripid || book.tripid}
+                  value={formData.tripid || selectedCustomerData.tripid || book.tripid || tripsheetid}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   autoComplete="password"
@@ -1582,6 +1669,8 @@ const TripSheet = () => {
                   type="time"
                   value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime}
                   onChange={(event) => {
+                    setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                     setBook({ ...book, reporttime: event.target.value });
                     setCloseTime(event.target.value);
                   }}
@@ -1594,6 +1683,8 @@ const TripSheet = () => {
                   type="time"
                   value={formData.starttime || selectedCustomerData.starttime || book.starttime}
                   onChange={(event) => {
+                    setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, starttime: event.target.value });
                     setBook({ ...book, starttime: event.target.value });
                     setStartTime(event.target.value);
                   }}
@@ -1606,6 +1697,8 @@ const TripSheet = () => {
                   type="time"
                   value={formData.closetime || selectedCustomerData.closetime || book.closetime}
                   onChange={(event) => {
+                    setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
                     setBook({ ...book, closetime: event.target.value });
                     setCloseTime(event.target.value);
                   }}
@@ -1618,7 +1711,8 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="additionaltime"
-                  value={formData.additionaltime || book.additionaltime}
+                  value={formData.additionaltime || book.additionaltime || additionalTime}
+                  onChange={(event) => setAdditionalTime(event.target.value)}
                   label="Additional Time"
                   id="additionaltime"
                   variant="standard"
@@ -1672,9 +1766,10 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="shedkm"
-                  value={formData.shedkm || book.shedkm}
+                  value={formData.shedkm || book.shedkm || shedKilometers}
+                  onChange={(event) => setShedKilometers(event.target.value)}
                   label="Shed KM"
-                  id="additionalkm"
+                  id="shedkm"
                   variant="standard"
                   autoComplete="password"
                 />
@@ -1817,7 +1912,7 @@ const TripSheet = () => {
               </div>
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  <Invoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} />
+                  <Invoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -1825,6 +1920,7 @@ const TripSheet = () => {
                   </Button>
                 </DialogActions>
               </Dialog>
+
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "175px" }}>
@@ -2161,6 +2257,8 @@ const TripSheet = () => {
                         type="time"
                         value={formData.starttime || selectedCustomerData.starttime || book.starttime}
                         onChange={(event) => {
+                          setSelectedCustomerData({ ...selectedCustomerData, starttime2: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, starttime2: event.target.value });
                           setBook({ ...book, starttime2: event.target.value });
                           setStartTime2(event.target.value);
                         }}
@@ -2173,6 +2271,8 @@ const TripSheet = () => {
                         type="time"
                         value={formData.closetime || selectedCustomerData.closetime || book.closetime}
                         onChange={(event) => {
+                          setSelectedCustomerData({ ...selectedCustomerData, closetime2: event.target.value });
+                          setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime2: event.target.value });
                           setBook({ ...book, closetime2: event.target.value });
                           setCloseTime2(event.target.value);
                         }}
@@ -3159,6 +3259,24 @@ const TripSheet = () => {
                     <div className="input" style={{ "padding-right": "300px" }}>
                       <Button>Manual Marking</Button>
                     </div>
+                    <div>
+                      <Button onClick={generateLink}>Generate Link</Button>
+                    </div>
+                    {link && (
+                      <div>
+                        {isSignatureSubmitted ? (
+                          <p>Signature already submitted. Cannot access this link.</p>
+                        ) : (
+                          <div>
+                            <p>Copy this link to send to the passenger:</p>
+                            <div>
+                              <input type="text" value={link} readOnly />
+                              <button onClick={copyLinkToClipboard}>Copy Link</button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     <div className="input" style={{ width: "300px" }}>
                       <div className="icone">
                         <MarkChatReadIcon color="action" />

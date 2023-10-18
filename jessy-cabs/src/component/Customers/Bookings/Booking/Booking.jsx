@@ -139,7 +139,7 @@ const Booking = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
-
+  const [searchText, setSearchText] = useState('');
   const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({});
@@ -334,6 +334,7 @@ const Booking = () => {
     }));
     setFormValues({});
     setSelectedCustomerData({});
+    setSelectedCustomerDatas({});
     setFormData({});
   };
   const convertToCSV = (data) => {
@@ -592,19 +593,35 @@ const Booking = () => {
     }
   }, [location]);
 
+  // const handleKeyDown = useCallback(async (event) => {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //     try {
+  //       const response = await axios.get(`http://localhost:8081/booking/${event.target.value}`);
+  //       const bookingDetails = response.data;
+  //       setRows([bookingDetails]);
+  //       setSelectedCustomerId(bookingDetails.customerId);
+  //     } catch (error) {
+  //       console.error('Error retrieving vehicle details:', error.message);
+  //     }
+  //   }
+  // }, []);
+
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       try {
         const response = await axios.get(`http://localhost:8081/booking/${event.target.value}`);
         const bookingDetails = response.data;
-        setRows([bookingDetails]);
-        setSelectedCustomerId(bookingDetails.customerId);
+        console.log(bookingDetails);
+        setSelectedCustomerData(bookingDetails);
+        setSelectedCustomerId(bookingDetails.tripid);
       } catch (error) {
-        console.error('Error retrieving vehicle details:', error.message);
+        console.error('Error retrieving booking details:', error);
       }
     }
   }, []);
+
 
   const [currentYear, setCurrentYear] = useState("");
 
@@ -625,8 +642,8 @@ const Booking = () => {
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    if (!file) return; // If no file selected, exit the function
-    const bookingno = book.bookingno; // Access the bookingno from the book object
+    if (!file) return;
+    const bookingno = book.bookingno;
     const formData = new FormData();
     formData.append('file', file);
     formData.append('bookingno', bookingno);
@@ -640,33 +657,6 @@ const Booking = () => {
   };
 
   const [enterPressCount, setEnterPressCount] = useState(0);
-
-  // const handleKeyEnter = useCallback(async (event) => {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //     if (enterPressCount === 0) {
-  //       // First Enter key press - Display in the table
-  //       try {
-  //         const response = await axios.get(`http://localhost:8081/name-customers/${event.target.value}`);
-  //         const vehicleData = response.data;
-  //         setRows([vehicleData]);
-  //       } catch (error) {
-  //         console.error('Error retrieving vehicle details:', error.message);
-  //       }
-  //     } else if (enterPressCount === 1) {
-  //       // Second Enter key press (double Enter) - Display in the fields
-  //       const selectedRow = rows[0]; // Assuming you want to use the first row
-  //       if (selectedRow) {
-  //         setSelectedCustomerDatas(selectedRow);
-  //         handleChange({ target: { name: "customer", value: selectedRow.customer } });
-  //       }
-  //       // Reset the Enter key press count
-  //       setEnterPressCount(0);
-  //     }
-  //     // Increment the Enter key press count
-  //     setEnterPressCount((prevCount) => prevCount + 1);
-  //   }
-  // }, [handleChange, rows, enterPressCount]);
 
   const handleKeyEnter = useCallback(async (event) => {
     if (event.key === 'Enter') {
@@ -705,6 +695,13 @@ const Booking = () => {
     handleChange({ target: { name: "customer", value: params.customer } });
   }, [handleChange]);
 
+  const handletableClick = useCallback((params) => {
+    console.log(params.row);
+    const customerData = params.row;
+    setSelectedCustomerData(customerData);
+    setSelectedCustomerId(params.row.customerId);
+  }, []);
+
   const [sendEmail, setSendEmail] = useState(false);
   const handlecheck = async () => {
 
@@ -730,6 +727,27 @@ const Booking = () => {
       console.log('Send mail checkbox is not checked. Email not sent.');
     }
   };
+
+  //for filter the booking data
+
+  const handleShowAll = useCallback(async () => {
+    try {
+      const response = await axios.get('http://localhost:8081/booking_for_table', {
+        params: {
+          search: searchText, // Search text entered by the user
+          fromDate: fromDate, // From date selected by the user
+          toDate: toDate, // To date selected by the user
+        },
+      });
+      const data = response.data;
+      setRows(data);
+      setSuccessMessage("Successfully listed");
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      setRows([]);
+      setErrorMessage("Check your Network Connection");
+    }
+  }, [searchText, fromDate, toDate]);
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -1255,7 +1273,7 @@ const Booking = () => {
                     <tbody>
                       {rows.length === 0 ? (
                         <tr>
-                          <td >No data available.</td>
+                          <td colSpan={6}>No data available.</td>
                         </tr>
                       ) : (
                         rows.map((row) => (
@@ -1596,14 +1614,18 @@ const Booking = () => {
                     size="small"
                     id="id"
                     label="Search"
-                    name="Search"
+                    name="searchText"
                     autoFocus
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
                   />
+
                 </div>
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="From Date"
+                      name='fromDate'
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
@@ -1613,13 +1635,14 @@ const Booking = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="To Date"
+                      name="toDate"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained">Search</Button>
+                  <Button variant="contained" onClick={handleShowAll}>Search</Button>
                 </div>
               </div>
             </div>
@@ -1645,7 +1668,7 @@ const Booking = () => {
             <DataGrid
               rows={rows}
               columns={columns}
-              onRowClick={handleRowClick}
+              onRowClick={handletableClick}
               pageSize={5}
               checkboxSelection
             />

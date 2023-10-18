@@ -1,10 +1,16 @@
 import React from 'react';
+// import axios from "axios";
 import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 import './invoice.css';
+// import Sign from './signature-1692258849846.png'
+
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 
 const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas }) => {
+ 
+
+
   return (
     <div className="invoice-wrapper">
       <article>
@@ -50,7 +56,7 @@ const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustome
               </tr>
               <tr>
                 <th id='table-header'><span >Reporting @</span></th>
-                <td id='table-data'><span></span></td>
+                <td id='table-data'><span>{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span>Remarks:</span></th>
@@ -60,7 +66,7 @@ const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustome
             <table id='table-invoice' className="firstTable">
               <tr>
                 <th id='table-header'>Log No:</th>
-                <td id='table-data'>{tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid}</td>
+                <td id='table-data'>TS{tripSheetData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid}</td>
               </tr>
               <tr>
                 <th id='table-header'>Date:</th>
@@ -114,9 +120,9 @@ const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustome
                   </tr>
                   <tr>
                     <td id='table-datas'><span >Total</span></td>
-                    <td id='table-datas'><span >0</span></td>
-                    <td id='table-datas'><span >0</span></td>
-                    <td id='table-datas'><span >0</span></td>
+                    <td id='table-datas'><span >{tripSheetData.totalDays || selectedCustomerData.totalDays || selectedCustomerDatas.totalDays}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1}</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -128,6 +134,11 @@ const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustome
                 <p id='line'>------------------</p>
               </div>
               <div className="guest-sign">
+                
+                <img id='guestsign'
+                  alt="Signature_image"
+                  src={`../../../../Backend/customer_master/path_to_save_images`} // Make sure the path is correct
+                ></img>
                 <p>Guest Signature</p>
               </div>
             </div>
@@ -135,6 +146,7 @@ const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustome
         </div>
         <div className='total-values'>
           <div id='Totals'><span id='title'>Total Parking  </span><span>{tripSheetData.parking || selectedCustomerData.parking || selectedCustomerDatas.parking}</span></div>
+          <div id='Totals'><span id='title'>Total Toll  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll}</span></div>
           <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit}</span></div>
         </div>
       </article>

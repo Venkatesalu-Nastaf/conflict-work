@@ -3,7 +3,23 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
+const fs = require('fs'); // Import the fs module
 const db = require('../db');
+const uuid = require('uuid');
+const multer = require('multer');
+const path = require('path'); // Import the path module
+app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+
+
+
+const upload = multer({ dest: 'uploads/' });
+
+app.get('/', (req, res) => {
+  return res.json({ message: "Hello from the backend side" });
+});
+
 //connect using route
 const customerRoutes = require('./Router/customer/Customer');
 const accountinfoRoutes = require('./Router/supplier/accountinginfo');
@@ -22,7 +38,6 @@ const ratetypeRouter = require('./Router/Ratetype/ratetype');
 const ratevalidityRouter = require('./Router/Ratetype/ratevalidity');
 const divionRouter = require('./Router/Ratetype/division');
 const driverbataRouter = require('./Router/Ratemanagement/driverbatarate');
-// const employeeRouter = require('./Router/Employee/employee');
 const billingRouter = require('./Router/Billing/billing');
 const pettycashRouter = require('./Router/cashflow/pettycash');
 const payrollRouter = require('./Router/cashflow/payroll');
@@ -31,15 +46,9 @@ const taxsettingRouter = require('./Router/mainsetting/taxsetting');
 const drivercreationRouter = require('./Router/Driverapplogin/driverapplogin');
 const assetsRouer = require('./Router/cashflow/assets');
 const driveractiveRouter = require('./Router/tripsheet/appuserlist');
+// const signatureRouter = require('./Router/signature/signature');
 
 
-app.use(bodyParser.json());
-app.use(cors());
-app.use(express.json());
-
-app.get('/', (req, res) => {
-  return res.json({ message: "Hello from the backend side" });
-});
 // -----------------------------------------------------------------------------------------------------------
 // // Customer Master Database
 app.use('/', customerRoutes);
@@ -73,6 +82,79 @@ app.use('/', bookingchartRouter);
 // trip sheet database:
 app.use('/', tripsheetRouter);
 // End tripsheet database
+
+// Invoice signature get
+// app.get('/signature_photos', (req, res) => {
+//   const { tripid } = req.query;
+//   const selectQuery = 'SELECT tripid FROM signatures WHERE tripid = ?';
+//   db.query(selectQuery, [tripid], (err, results) => {
+//     if (err) {
+//       res.status(500).json({ message: 'Internal server error' });
+//       return;
+//     }
+//     if (results.length === 0) {
+//       res.status(404).json({ message: 'Signature not found' });
+//       return;
+//     }
+//     const uploadedImagePath = results[0].signature_path;
+
+//     // Calculate the relative path
+//     const baseImagePath = path.join(__dirname, 'path_to_save_images');
+//     const relativeImagePath = path.relative(baseImagePath, uploadedImagePath);
+
+//     // Remove any `..` segments from the relative path
+//     const cleanedRelativePath = relativeImagePath
+//       .split(path.sep)
+//       .filter(segment => segment !== '..')
+//       .join(path.sep);
+
+//     res.status(200).json({ uploadedImagePath: cleanedRelativePath });
+//   });
+// });
+//file upload in tripsheet
+app.post('/uploads', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded.' });
+  }
+  const fileData = {
+    name: req.file.originalname,
+    mimetype: req.file.mimetype,
+    size: req.file.size,
+    path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
+    tripid: req.body.tripid,
+  };
+  const query = 'INSERT INTO tripsheetupload SET ?';
+  db.query(query, fileData, (err, result) => {
+    if (err) {
+      console.error('Error storing file in the database:', err);
+      return res.status(500).json({ error: 'Error storing file in the database.' });
+    }
+    return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
+  });
+});
+//space
+const imageDirectory = path.join(__dirname, 'uploads'); // Adjust the path as needed
+// Serve static files from the imageDirectory
+app.use('/images', express.static(imageDirectory));
+// Example route to serve an image by its filename
+app.get('/get-image/:filename', (req, res) => {
+  const { filename } = req.params;
+  const imagePath = path.join(imageDirectory, filename);
+  fs.access(imagePath, fs.constants.R_OK, (err) => {
+    if (err) {
+      console.error('Error accessing image:', err);
+      res.status(404).send('Image not found');
+    } else {
+      res.sendFile(imagePath, (err) => {
+        if (err) {
+          console.error('Error sending image:', err);
+          res.status(404).send('Image not found');
+        }
+      });
+    }
+  });
+});
+//end tripsheet file upload
 // -----------------------------------------------------------------------------------------------------------
 // order/Received/Pending data collect from database
 app.use('/', pendingRouter);
@@ -173,6 +255,106 @@ app.use('/', taxsettingRouter);
 app.use('/', taxsettingRouter);
 //End signature database
 // -----------------------------------------------------------------------------------------------------------
+//signature database
+// app.use('/', signatureRouter);
+
+// const baseImagePath = path.join(__dirname, 'path_to_save_images');
+
+// app.post('/api/saveSignature', (req, res) => {
+//     const { tripid, signatureData } = req.body;
+
+//     const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
+//     const imageBuffer = Buffer.from(base64Data, 'base64');
+
+//     const imageName = `signature-${Date.now()}.png`;
+//     const imagePath = path.join(baseImagePath, imageName); // Use the base path
+
+//     fs.writeFile(imagePath, imageBuffer, (error) => {
+//         if (error) {
+//             res.status(500).json({ error: 'Failed to save signature' });
+//         } else {
+//             const relativeImagePath = path.relative(baseImagePath, imagePath); // Calculate relative path
+//             const sql = 'INSERT INTO signatures (tripid, signature_path) VALUES (?, ?)';
+//             db.query(sql, [tripid, relativeImagePath], (dbError, results) => {
+//                 if (dbError) {
+//                     res.status(500).json({ error: 'Failed to save signature' });
+//                 } else {
+//                     res.json({ message: 'Signature saved successfully' });
+//                 }
+//             });
+//         }
+//     });
+// });
+
+
+
+const baseImagePath = path.join(__dirname, 'path_to_save_images');
+
+app.post('/api/saveSignature', (req, res) => {
+  const { signatureData } = req.body;
+
+  const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
+  const imageBuffer = Buffer.from(base64Data, 'base64');
+
+  const imageName = `signature-${Date.now()}.png`;
+  const imagePath = path.join(baseImagePath, imageName); // Use the base path
+
+  fs.writeFile(imagePath, imageBuffer, (error) => {
+    if (error) {
+      res.status(500).json({ error: 'Failed to save signature' });
+    } else {
+      const relativeImagePath = path.relative(baseImagePath, imagePath); // Calculate relative path
+      const sql = 'INSERT INTO signatures (signature_path) VALUES (?)';
+      db.query(sql, [relativeImagePath], (dbError, results) => {
+        if (dbError) {
+          res.status(500).json({ error: 'Failed to save signature' });
+        } else {
+          res.json({ message: 'Signature saved successfully' });
+        }
+      });
+    }
+  });
+});
+
+//End signature database
+// -----------------------------------------------------------------------------------------------------------
+
+
+const tripSheets = {};
+
+// Endpoint to generate a new link
+app.post('/generate-link', (req, res) => {
+  const tripid = req.body.tripid;
+  // Generate a unique token for this trip sheet
+  const token = uuid.v4();
+  // Store the token in the database along with trip sheet data
+  tripSheets[token] = { tripid, isSignatureSubmitted: false };
+  const link = `http://localhost:3000/onlinedigital/digitalsignature?token=${token}`;
+  res.json({ link });
+});
+
+// Endpoint to check if a link is still valid
+app.get('/check-link/:token', (req, res) => {
+  const token = req.params.token;
+  if (tripSheets[token]) {
+    res.json(tripSheets[token]);
+  } else {
+    res.status(404).json({ error: 'Link not found or expired' });
+  }
+});
+
+// Mark the trip sheet as signed when the signature is submitted
+app.post('/submit-signature/:token', (req, res) => {
+  const token = req.params.token;
+  if (tripSheets[token]) {
+    tripSheets[token].isSignatureSubmitted = true;
+    res.json({ message: 'Signature submitted successfully' });
+  } else {
+    res.status(404).json({ error: 'Link not found or expired' });
+  }
+});
+
+
 const port = 8081;
 app.listen(port, () => {
   console.log(`Connected to backend on port ${port}`);

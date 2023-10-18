@@ -226,8 +226,59 @@ router.post('/send-onbook-email', async (req, res) => {
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
-  //end online-booking mail
+//end online-booking mail
 //End booking page database 
+// router.get('/booking_for_table', async (req, res) => {
+//     const { search, fromDate, toDate } = req.query;
+//     try {
+//         const connection = await db.getConnection();
 
+//         // Build a SQL query to fetch filtered bookings
+//         let query = 'SELECT * FROM booking WHERE 1=1'; // Initial query
+//         const params = []; // Placeholder for query parameters
+
+//         if (search) {
+//             query += ' AND bookingno LIKE ?';
+//             params.push(`%${search}%`);
+//         }
+
+//         if (fromDate && toDate) {
+//             query += ' AND bookingdate BETWEEN ? AND ?';
+//             params.push(fromDate);
+//             params.push(toDate);
+//         }
+
+//         const [results] = await connection.query(query, params);
+
+//         res.json(results);
+//         connection.release();
+//     } catch (error) {
+//         console.error('Error retrieving data:', error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// });
+
+router.get('/booking', (req, res) => {
+    const { search, fromDate, toDate } = req.query;
+    // Query and parameters for fetching booking details based on the query parameters
+    let query = 'SELECT * FROM booking WHERE 1=1';
+    let params = [];
+    if (search) {
+        query += ' AND bookingno LIKE ?';
+        params.push(`%${search}%`);
+    }
+    if (fromDate && toDate) {
+        query += ' AND bookingdate BETWEEN ? AND ?';
+        params.push(fromDate);
+        params.push(toDate);
+    }
+    db.query(query, params, (err, result) => {
+        if (err) {
+            console.error('Error retrieving booking details from MySQL:', err);
+            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+        }
+        return res.status(200).json(result);
+    });
+});
 
 module.exports = router;

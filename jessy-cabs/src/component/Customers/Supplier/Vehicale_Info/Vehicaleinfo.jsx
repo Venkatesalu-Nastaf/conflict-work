@@ -12,10 +12,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
@@ -178,8 +178,8 @@ const Vehicaleinfo = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [success]);
 

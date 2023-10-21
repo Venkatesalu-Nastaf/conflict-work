@@ -319,15 +319,12 @@ app.post('/api/saveSignature', (req, res) => {
 //End signature database
 // -----------------------------------------------------------------------------------------------------------
 
-
 const tripSheets = {};
 
-// Endpoint to generate a new link
+// Endpoint to generate a new link based on tripid
 app.post('/generate-link', (req, res) => {
   const tripid = req.body.tripid;
-  // Generate a unique token for this trip sheet
   const token = uuid.v4();
-  // Store the token in the database along with trip sheet data
   tripSheets[token] = { tripid, isSignatureSubmitted: false };
   const link = `http://localhost:3000/onlinedigital/digitalsignature?token=${token}`;
   res.json({ link });
@@ -339,21 +336,21 @@ app.get('/check-link/:token', (req, res) => {
   if (tripSheets[token]) {
     res.json(tripSheets[token]);
   } else {
-    res.status(404).json({ error: 'Link not found or expired' });
+    res.status(404).json({ isSignatureSubmitted: false });
   }
 });
 
-// Mark the trip sheet as signed when the signature is submitted
-app.post('/submit-signature/:token', (req, res) => {
-  const token = req.params.token;
-  if (tripSheets[token]) {
+// Endpoint to submit a signature for a trip
+app.post('/submit-signature', (req, res) => {
+  const tripid = req.body.tripid;
+  const token = Object.keys(tripSheets).find((t) => tripSheets[t].tripid === tripid);
+  if (token) {
     tripSheets[token].isSignatureSubmitted = true;
     res.json({ message: 'Signature submitted successfully' });
   } else {
     res.status(404).json({ error: 'Link not found or expired' });
   }
 });
-
 
 const port = 8081;
 app.listen(port, () => {

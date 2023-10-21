@@ -141,6 +141,7 @@ const PackageRateEntery = () => {
     AKMS: '',
     NHalt: '',
     Bata: '',
+    chtime: '',
     ChKMS: '',
   });
   const handleChange = (event) => {
@@ -202,6 +203,7 @@ const PackageRateEntery = () => {
       NHalt: '',
       Bata: '',
       ChKMS: '',
+      chtime: '',
     }));
     setSelectedCustomerData({});
   };
@@ -494,6 +496,18 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
+            <div className="input" style={{ width: "100px" }}>
+              <TextField
+                type='number'
+                size="small"
+                id="chtime"
+                label="ChTime"
+                name="chtime"
+                autoComplete="new-password"
+                value={selectedCustomerData?.chtime || book.chtime}
+                onChange={handleChange}
+              />
+            </div>
             <div className="input" style={{ width: "110px" }}>
               <TextField
                 type='number'
@@ -610,7 +624,7 @@ const PackageRateEntery = () => {
               columns={columns}
               onRowClick={handleRowClick}
               pageSize={5}
-              checkboxSelection
+              // checkboxSelection
             />
           </div>
 

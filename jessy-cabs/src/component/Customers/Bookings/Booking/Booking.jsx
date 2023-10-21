@@ -125,14 +125,11 @@ const Booking = () => {
   const [displayCopy, setDisplayCopy] = useState(false);
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
-  // const [value, setValue] = React.useState("list");
   const [triptime, setTripTime] = useState('');
   const [registertime, setRegisterTime] = useState('');
   const [starttime, setStartTime] = useState('');
   const [bookingtime, setBookingTime] = useState('');
   const location = useLocation();
-  // const [selectedRow, setSelectedRow] = useState(null);
-  // const [popupOpen, setPopupOpen] = useState(false); 
   const [error, setError] = useState(false);
   const [info, setInfo] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
@@ -448,10 +445,6 @@ const Booking = () => {
     }
   }, [setBook, setSelectedCustomerData, setFormData, setFormValues, setSelectedCustomerDatas]);
 
-
-  // const handleTabChange = (event, newValue) => {
-  //   setValue(newValue);
-  // };
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
     setBook((prevBook) => ({
@@ -500,10 +493,12 @@ const Booking = () => {
       await axios.post('http://localhost:8081/booking', updatedBook);
       console.log(updatedBook);
       handleCancel();
+      setSuccess(true);
       setSuccessMessage("Successfully Added");
       handlecheck();
     } catch (error) {
       console.error('Error updating customer:', error);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -522,6 +517,7 @@ const Booking = () => {
         await axios.delete(`http://localhost:8081/booking/${book.bookingno}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         setFormData(null);
         handleCancel();
@@ -568,19 +564,9 @@ const Booking = () => {
     { icon: <ContentCopyIcon />, name: "Copy This" },
     { icon: <BookmarkAddedIcon />, name: "Add" },
   ];
-  // Local Storage
-  // const handleButtonClick = (row) => {
-  // setSelectedRow(row);
-  // setPopupOpen(true);
-  // };
-  // const handlePopupClose = () => {
-  //   setSelectedRow(null);
-  //   setPopupOpen(false);
-  // };
+
   useEffect(() => {
-    // Retrieve the previously stored actives menu item from localStorage
     const activeMenuItem = localStorage.getItem("activeMenuItem");
-    // Add 'actives' class to the actives menu item if it exists
     if (activeMenuItem) {
       const menuItems = document.querySelectorAll(".menu-link");
       menuItems.forEach((item) => {
@@ -592,20 +578,6 @@ const Booking = () => {
       });
     }
   }, [location]);
-
-  // const handleKeyDown = useCallback(async (event) => {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //     try {
-  //       const response = await axios.get(`http://localhost:8081/booking/${event.target.value}`);
-  //       const bookingDetails = response.data;
-  //       setRows([bookingDetails]);
-  //       setSelectedCustomerId(bookingDetails.customerId);
-  //     } catch (error) {
-  //       console.error('Error retrieving vehicle details:', error.message);
-  //     }
-  //   }
-  // }, []);
 
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === 'Enter') {
@@ -651,8 +623,12 @@ const Booking = () => {
     try {
       const response = await axios.post('http://localhost:8081/upload', formData);
       console.log(response.data);
+      setSuccess(true);
+      setErrorMessage("file uploaded successfully")
     } catch (error) {
       console.error('Error uploading file:', error);
+      setError(true);
+      setErrorMessage("Error occured")
     }
   };
 
@@ -681,7 +657,6 @@ const Booking = () => {
       // Increment the Enter key press count
       setEnterPressCount((prevCount) => prevCount + 1);
     }
-
     // Check if the input value is empty and reset enterPressCount to 0
     if (event.target.value === '') {
       setEnterPressCount(0);
@@ -718,10 +693,12 @@ const Booking = () => {
         await axios.post('http://localhost:8081/send-email', dataToSend);
         // alert('Email sent successfully');
         setSuccess(true);
+        setSuccessMessage("Mail Sent Successfully")
         console.log(dataToSend);
       } catch (error) {
         console.error('Error sending email:', error);
-        alert('An error occurred while sending the email');
+        setError(true);
+        setErrorMessage("An error occured while sending mail")
       }
     } else {
       console.log('Send mail checkbox is not checked. Email not sent.');
@@ -732,19 +709,16 @@ const Booking = () => {
 
   const handleShowAll = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:8081/booking_for_table', {
-        params: {
-          search: searchText, // Search text entered by the user
-          fromDate: fromDate, // From date selected by the user
-          toDate: toDate, // To date selected by the user
-        },
-      });
+      const response = await axios.get('http://localhost:8081/booking_for_table');
       const data = response.data;
       setRows(data);
+      console.log('search listed data from booking database', response.data)
+      setSuccess(true);
       setSuccessMessage("Successfully listed");
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   }, [searchText, fromDate, toDate]);
@@ -845,6 +819,7 @@ const Booking = () => {
                 </div>
                 <TextField
                   margin="normal"
+                  size='small'
                   id="customer"
                   label="Customer"
                   name="customer"

@@ -188,6 +188,19 @@ const TripSheet = () => {
   const [link, setLink] = useState('');
   const [isSignatureSubmitted, setIsSignatureSubmitted] = useState(false);
 
+  const [packageData, setPackageData] = useState({
+    customer: '',
+    vehType: '',
+    duty: '',
+    totalkm1: '',
+    totaltime: '',
+  });
+  const [packageDetails, setPackageDetails] = useState({
+    KMS: '',
+    Hours: '',
+    duty: '',
+  });
+
   //generate link
 
   const generateLink = async () => {
@@ -201,22 +214,13 @@ const TripSheet = () => {
     }
   };
 
-  const copyLinkToClipboard = () => {
-    // Create a temporary input field to copy the link
-    const tempInput = document.createElement('input');
-    tempInput.value = link;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempInput);
-    alert('Link copied to clipboard');
-  };
-
   useEffect(() => {
     // Check if the link has expired or if the signature is submitted
     if (link) {
       axios.get(`http://localhost:8081/check-link/${link}`)
         .then((response) => {
+          console.log('check link', response);
+
           if (response.data.isSignatureSubmitted) {
             setIsSignatureSubmitted(true);
             // Handle the case where the signature is already submitted
@@ -230,7 +234,6 @@ const TripSheet = () => {
         });
     }
   }, [link]);
-
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -625,7 +628,16 @@ const TripSheet = () => {
   const handleETripsheetClick = (row) => {
     const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid; // Extract tripid from row
     console.log('Received tripid:', tripid); // Debugging line
-    if (tripid) {
+    if (!tripid) {
+      // // Set tripid in localStorage
+      // localStorage.setItem('selectedTripid', tripid);
+      // setPopupOpen(true);
+      setError(true);
+      setErrorMessage("please enter the tripid");
+
+    }
+    else {
+      // setErrorMessage("Check your Network Connection");
       // Set tripid in localStorage
       localStorage.setItem('selectedTripid', tripid);
       setPopupOpen(true);
@@ -644,9 +656,11 @@ const TripSheet = () => {
       setFormData({});
       setSelectedCustomerData({});
       handleCancel();
+      setSuccess(true);
       setSuccessMessage("Successfully Deleted");
     } catch (error) {
       console.error('Error deleting customer:', error);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -660,9 +674,11 @@ const TripSheet = () => {
       await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || formData.tripid}`, updatedCustomer);
       console.log('Customer updated');
       handleCancel();
+      setSuccess(true);
       setSuccessMessage("Successfully updated");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -687,6 +703,8 @@ const TripSheet = () => {
         totaldays: calculateTotalDays(), // Add the totaldays field here
         totalkm1: calculateTotalKilometers(), // Add the totaldays field here
         totaltime: calculateTotalTime(), // Add the totaldays field here
+        minhrs: packageDetails.Hours,
+        minkm: packageDetails.KMS,
       };
       await axios.post('http://localhost:8081/tripsheet', updatedBook);
       console.log(updatedBook);
@@ -696,6 +714,7 @@ const TripSheet = () => {
       setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -809,16 +828,13 @@ const TripSheet = () => {
 
     if (startKm !== undefined && closeKm !== undefined) {
       let totalKm = closeKm - startKm;
-
       // Add shed kilometers if it is a valid number
       const shedKmValue = parseInt(shedKilometers);
       if (!isNaN(shedKmValue)) {
         totalKm += shedKmValue;
       }
-
       return totalKm;
     }
-
     return 0;
   };
 
@@ -852,6 +868,14 @@ const TripSheet = () => {
   const handleChange = useCallback((event) => {
     const { name, value, checked } = event.target;
     setTripsheetId((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    setPackageData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    setPackageDetails((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -892,7 +916,7 @@ const TripSheet = () => {
     } else {
       // Check if the field is the time field
       if (name === 'starttime') {
-        const formattedTime = value; // Modify the time value if needed
+        const formattedTime = value;
         setBook((prevBook) => ({
           ...prevBook,
           [name]: formattedTime,
@@ -937,7 +961,6 @@ const TripSheet = () => {
       }
     }
   }, [setSelectedCustomerData, setFormData, setTripSheetData]);
-
 
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === 'Enter') {
@@ -990,12 +1013,67 @@ const TripSheet = () => {
     }
   }, [handleChange, rows, enterPressCount]);
 
-
   const handleRowClick = useCallback((params) => {
     console.log(params);
     setSelectedCustomerDatas(params);
     handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
   }, [handleChange]);
+
+  //calculate package details
+  // const fetchPackageDetails = async () => {
+  // useEffect(() => {
+  //   try {
+  //     const response = await axios.get('http://localhost:8081/getPackageDetails', {
+  //       params: {
+  //         totalkm1: packageData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1 || book.totalkm1 || formData.totalkm1 || calculateTotalKilometers(),
+  //         totaltime: packageData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime || calculateTotalTime(),
+  //         vehType: packageData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType || formData.vehType,
+  //         customer: packageData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || formData.customer,
+  //         duty: packageData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty || formData.duty,
+  //       },
+  //     });
+  //     const packagedet = response.data;
+  //     console.log('API Response:', response.data);
+  //     setPackageDetails(packagedet);
+  //     console.log('package Hours details', packagedet[0].KMS);
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // }, []); 
+
+  const totalKilometers = packageData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1 || book.totalkm1 || formData.totalkm1 || calculateTotalKilometers();
+  const totalTime = packageData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime || calculateTotalTime();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get('http://localhost:8081/getPackageDetails', {
+          params: {
+            totalkm1: totalKilometers,
+            totaltime: totalTime,
+            vehType: packageData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType || formData.vehType,
+            customer: packageData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || formData.customer,
+            duty: packageData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty || formData.duty,
+          },
+        });
+        const packagedet = response.data;
+        console.log('API Response:', response.data);
+        setPackageDetails(packagedet);
+        console.log('package Hours details', packagedet[0].KMS);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    fetchData();
+  }, [
+    book.duty, book.vehType, book.customer,
+    formData.duty, formData.vehType, formData.customer,
+    packageData.duty, packageData.vehType, packageData.customer,
+    selectedCustomerData.customer, selectedCustomerData.duty, selectedCustomerData.vehType,
+    selectedCustomerDatas.customer, selectedCustomerDatas.duty, selectedCustomerDatas.vehType,
+    totalKilometers, totalTime
+  ]);
+
 
 
   return (
@@ -1110,7 +1188,7 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="customer"
-                  value={formData.customer || selectedCustomerData.customer || book.customer}
+                  value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer}
                   onChange={handleChange}
                   label="Customer"
                   id="standard-size-normal"
@@ -1406,7 +1484,7 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || ''
+                    params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || ''
                     return (
                       <TextField {...params} label="Vehicle Rate" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                     )
@@ -1725,7 +1803,7 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="totaltime"
-                  value={formData.totaltime || calculateTotalTime() || book.totaltime}
+                  value={formData.totaltime || calculateTotalTime() || book.totaltime || packageData.totaltime}
                   label="Total Time"
                   id="total-time"
                   variant="standard"
@@ -1780,7 +1858,7 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="totalkm1"
-                  value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1}
+                  value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1 || packageData.totalkm1}
                   label="Total KM"
                   id="total-km"
                   variant="standard"
@@ -2329,7 +2407,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="totalkm1"
-                        value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1}
+                        value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1 || packageData.totalkm1}
                         label="Total KM"
                         id="total-km"
                         variant="standard"
@@ -2388,21 +2466,7 @@ const TripSheet = () => {
               <TabPanel value={2} sx={{ p: 2 }}>
                 <div className="Customer-Vendor-Bill-Slider">
                   <div className="input-field">
-                    <div className="input">
-                      <div
-                        className="icone"
-                        style={{ padding: "0px 10px 0px 5px" }}
-                      >
-                        <FontAwesomeIcon icon={faRoad} size="lg" />
-                      </div>
-                      <TextField
-                        name="minkm"
-                        label="Min.Km"
-                        id="min-km"
-                        size="small"
-                        autoComplete="password"
-                      />
-                    </div>
+                    {/* <Button onClick={fetchPackageDetails}>Fetch Package Details</Button> */}
                     <div className="input">
                       <div
                         className="icone"
@@ -2412,10 +2476,27 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="minhrs"
-                        value={formData.minhrs || selectedCustomerData.minhrs || book.minhrs}
+                        value={formData.minhrs || selectedCustomerData.minhrs || book.minhrs || packageDetails[0]?.Hours}
                         onChange={handleChange}
                         label="Min.Hrs"
                         id="min-hrs"
+                        size="small"
+                        autoComplete="password"
+                      />
+                    </div>
+                    <div className="input">
+                      <div
+                        className="icone"
+                        style={{ padding: "0px 10px 0px 5px" }}
+                      >
+                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                      </div>
+                      <TextField
+                        name="minkm"
+                        value={formData.minkm || packageDetails[0]?.KMS || book.minkm || selectedCustomerData.KMS}
+                        label="Min.Km"
+                        id="minkm"
+                        // variant="standard"
                         size="small"
                         autoComplete="password"
                       />
@@ -2444,7 +2525,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount"
-                        value={formData.amount || selectedCustomerData.amount || book.amount}
+                        value={formData.amount || selectedCustomerData.amount || book.amount || packageDetails[0]?.Rate}
                         onChange={handleChange}
                         size="small"
                         label="Amount"
@@ -2461,7 +2542,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="exkm"
-                        value={formData.exkm || selectedCustomerData.exkm || book.exkm}
+                        value={formData.exkm || selectedCustomerData.exkm || book.exkm || packageDetails[0]?.extraKMS}
                         onChange={handleChange}
                         label="Ex.Km"
                         id="ex-km"
@@ -2499,7 +2580,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="exHrs"
-                        value={formData.exHrs || selectedCustomerData.exHrs || book.exHrs}
+                        value={formData.exHrs || selectedCustomerData.exHrs || book.exHrs || packageDetails[0]?.extraHours}
                         onChange={handleChange}
                         label="Ex.Hrs"
                         id="ex-Hrs"
@@ -2537,7 +2618,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="night"
-                        value={formData.night || selectedCustomerData.night || book.night}
+                        value={formData.night || selectedCustomerData.night || book.night || packageDetails[0]?.NHalt}
                         onChange={handleChange}
                         label="Night"
                         id="night"
@@ -3256,9 +3337,6 @@ const TripSheet = () => {
               <TabPanel value={6} sx={{ p: 2 }}>
                 <div className="Customer-Message-Slider">
                   <div className="input-field">
-                    <div className="input" style={{ "padding-right": "300px" }}>
-                      <Button>Manual Marking</Button>
-                    </div>
                     <div>
                       <Button onClick={generateLink}>Generate Link</Button>
                     </div>
@@ -3270,8 +3348,7 @@ const TripSheet = () => {
                           <div>
                             <p>Copy this link to send to the passenger:</p>
                             <div>
-                              <input type="text" value={link} readOnly />
-                              <button onClick={copyLinkToClipboard}>Copy Link</button>
+                              <textarea readOnly>{link}</textarea>
                             </div>
                           </div>
                         )}

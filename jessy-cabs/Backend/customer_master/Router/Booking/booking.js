@@ -258,7 +258,7 @@ router.post('/send-onbook-email', async (req, res) => {
 //     }
 // });
 
-router.get('/booking', (req, res) => {
+router.get('/booking_for_table', (req, res) => {
     const { search, fromDate, toDate } = req.query;
     // Query and parameters for fetching booking details based on the query parameters
     let query = 'SELECT * FROM booking WHERE 1=1';

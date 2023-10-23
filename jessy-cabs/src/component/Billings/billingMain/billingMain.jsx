@@ -6,7 +6,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Billing from './Billing/Billing';
-import PaymentDetails from './PaymentDetail/PaymentDetail';
+import PaymentDetail from './PaymentDetail/PaymentDetail';
+import BankAccount from './BankAccount/BankAccount';
 
 
 
@@ -24,11 +25,13 @@ const BillingMain = () => {
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="Billing" value="billing" />
-                <Tab label="Payment Details" value="billingdetails" />
+                <Tab label="Payment" value="payment" />
+                <Tab label="BankAccount Details" value="bankAccountdetails" />
               </TabList>
             </Box>
             <TabPanel value="billing"><Billing /></TabPanel>
-            <TabPanel value="billingdetails"><PaymentDetails /></TabPanel>
+            <TabPanel value="payment"><PaymentDetail /></TabPanel>
+            <TabPanel value="bankAccountdetails"><BankAccount /></TabPanel>
           </TabContext>
         </Box>
       </div>

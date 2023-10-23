@@ -59,9 +59,9 @@ const columns = [
   { field: "fromdate", headerName: "From Date", width: 130 },
   { field: "todate", headerName: "To Date", width: 130 },
   { field: "totalamount", headerName: "Total Amount", width: 150 },
-  { field: "paid", headerName: "Paid", width: 150 },
+  { field: "paid", headerName: "Paid", width: 130 },
   { field: "Pending", headerName: "Pending", width: 130 },
-  { field: "bankaccount", headerName: "Bank Account", width: 130 },
+  { field: "bankaccount", headerName: "Bank Account", width: 150 },
 ];
 
 const PaymentDetail = () => {

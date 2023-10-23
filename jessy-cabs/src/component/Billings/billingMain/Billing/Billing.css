@@ -1,19 +1,19 @@
 /* HEADER CONTAINER */
 .Billing-page-header {
-  border-top: solid 1px #ccc;
-  background: var(--glass);
+  /* border-top: solid 1px #ccc; */
+  /* background: var(--glass); */
   padding: 20px;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   margin-bottom: -10px;
 }
 
 /*SECEND-CONTAINER  */
-.Customer-page-secend-container {
+.Billing-page-secend-container {
   display: flex;
   border-top: solid 1px #ccc;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
   padding: 20px;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 
 /* Button */
@@ -26,7 +26,7 @@
 .customer-list-table-container {
   border: 1px solid #ccc;
   padding: 20px;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
 }
 
 .table-customer-list {
@@ -54,7 +54,7 @@
 
 .detail-container-main-customer {
   border-top: 1px solid #ccc;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
   padding: 20px;
 }
 
@@ -90,14 +90,14 @@
 }
 
 .form-container .Billing-form {
-  border: 2px solid #ccc;
+  /* border: 2px solid #ccc; */
   overflow: scroll;
   height: 75vh;
   width: 81vw;
   display: flex;
   flex-direction: column;
-  padding-top: 28px;
-  border-radius: 20px;
+  /* padding-top: 28px; */
+  /* border-radius: 20px; */
   color: #000;
   background-color: var(--glass);
 }
@@ -188,6 +188,7 @@
 .Billing-secend-right {
   border: 2px solid #ccc;
   border-radius: 30px;
+  background-color: var(--glass);
   padding: 0px 15px 0px 12px;
   margin-left: 13px;
 }

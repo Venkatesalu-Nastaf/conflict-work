@@ -355,7 +355,7 @@ const Billing = () => {
         <div className="form-container">
             <div className="Billing-form">
                 <form onSubmit={handleClick}>
-                    <span className="Title-Name">Billing</span>
+                    {/* <span className="Title-Name">Billing</span> */}
                     <div className="Billing-page-header">
                         <div className="input-field">
                             <div className="input">
@@ -537,7 +537,7 @@ const Billing = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="Customer-page-secend-container">
+                    <div className="Billing-page-secend-container">
                         <div className="Billing-secend-left">
                             <div className="input-field">
                                 <div className="input" style={{ width: "360px" }}>

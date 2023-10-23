@@ -10,7 +10,6 @@ import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
 import Customers from "./component/Customers/Customers";
 import Income from "./component/Billings/Income/Income";
-import Billing from "./component/Billings/Billing/Billing";
 import Expense from "./component/Billings/Expense/Expense";
 import Employes from "./component/Options/Employes/Employes";
 import Received from "./component/Orders/Receiveds/Receiveds";
@@ -29,6 +28,7 @@ import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
 import FuelDetails from "./component/Options/FuelDetails/FuelDetails";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
 import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
+import BillingMain from "./component/Billings/billingMain/billingMain";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
 import DriverMasters from "./component/Orders/DriverMasters/DriverMasters";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
@@ -81,7 +81,7 @@ function App() {
                 <Route path="/home/options/employes" element={<Employes />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>
-                <Route path="/home/billing/billing" element={<Billing />} />
+                <Route path="/home/billing/billing" element={<BillingMain />} />
                 <Route path="/home/billing/expense" element={<Expense />} />
                 <Route path="/home/billing/income" element={<Income />} />
                 <Route path="/home/billing/profitandloss" element={<ProfiteLoss />} />

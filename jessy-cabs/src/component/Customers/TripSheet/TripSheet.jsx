@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-// import { v4 as uuidv4 } from 'uuid';
 import "./TripSheet.css";
 import {
   Apps,
@@ -26,7 +25,6 @@ import { styled } from "@mui/material/styles";
 import Tab, { tabClasses } from "@mui/joy/Tab";
 import { useLocation } from "react-router-dom";
 import SpeedDial from "@mui/material/SpeedDial";
-import IconButton from "@mui/material/IconButton";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -53,7 +51,6 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import DataUsageIcon from "@mui/icons-material/DataUsage";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -101,8 +98,6 @@ import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 import Invoice from '../Invoice/Invoice';
 
-// const serverBaseUrl = 'http://localhost:8081/get-image/:filename';
-
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -110,7 +105,6 @@ const columns = [
   { field: "path", headerName: "Attach Path", width: 130 },
   { field: "tripid", headerName: "Trip ID", width: 90 },
 ];
-
 // Update Table
 const UpdateTbaleColumns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -132,7 +126,6 @@ const UpdateTbaleRows = [
     documentname: "Band 2",
     filename: "Employee 2",
   },
-  // Add more rows as needed
 ];
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -205,9 +198,7 @@ const TripSheet = () => {
 
   const generateLink = async () => {
     try {
-      // Send a request to your API to generate a new link
       const response = await axios.post('http://localhost:8081/generate-link', { tripsheetid });
-      // Assuming the response contains the generated link
       setLink(response.data.link);
     } catch (error) {
       console.error(error);
@@ -215,7 +206,6 @@ const TripSheet = () => {
   };
 
   useEffect(() => {
-    // Check if the link has expired or if the signature is submitted
     if (link) {
       axios.get(`http://localhost:8081/check-link/${link}`)
         .then((response) => {
@@ -223,10 +213,8 @@ const TripSheet = () => {
 
           if (response.data.isSignatureSubmitted) {
             setIsSignatureSubmitted(true);
-            // Handle the case where the signature is already submitted
           } else {
             setIsSignatureSubmitted(false);
-            // Handle the case where the link is still valid
           }
         })
         .catch((error) => {
@@ -318,7 +306,6 @@ const TripSheet = () => {
           mobileNo: formValues.mobileNo
         };
         await axios.post('http://localhost:8081/send-tripsheet-email', dataToSend);
-        // alert('Email sent successfully');
         setSuccess(true);
         console.log(dataToSend);
       } catch (error) {
@@ -330,7 +317,6 @@ const TripSheet = () => {
     }
   };
 
-
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
@@ -341,8 +327,8 @@ const TripSheet = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -350,24 +336,24 @@ const TripSheet = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
 
@@ -626,19 +612,13 @@ const TripSheet = () => {
     setFormValues({});
   };
   const handleETripsheetClick = (row) => {
-    const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid; // Extract tripid from row
-    console.log('Received tripid:', tripid); // Debugging line
+    const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+    console.log('Received tripid:', tripid);
     if (!tripid) {
-      // // Set tripid in localStorage
-      // localStorage.setItem('selectedTripid', tripid);
-      // setPopupOpen(true);
       setError(true);
       setErrorMessage("please enter the tripid");
-
     }
     else {
-      // setErrorMessage("Check your Network Connection");
-      // Set tripid in localStorage
       localStorage.setItem('selectedTripid', tripid);
       setPopupOpen(true);
     }
@@ -669,9 +649,27 @@ const TripSheet = () => {
 
     try {
       console.log('Edit button clicked');
-      const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid);
-      const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData, ...formData };
-      await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || formData.tripid}`, updatedCustomer);
+      const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || packageDetails.tripid);
+      const updatedCustomer = {
+        ...selectedCustomer,
+        ...selectedCustomerData,
+        ...formData,
+        ...packageDetails,
+        netamount: calculateTotalAmount(),
+        exkm: packageDetails[0]?.extraKMS,
+        exHrs: packageDetails[0]?.extraHours,
+        night: packageDetails[0]?.NHalt,
+        amount: packageDetails[0]?.Rate,
+        package: packageDetails[0]?.package,
+        minhrs: packageDetails[0]?.Hours,
+        minkm: packageDetails[0]?.KMS,
+      };
+      for (const key in updatedCustomer) {
+        if (key === '0') {
+          delete updatedCustomer[key];
+        }
+      }
+      await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
       console.log('Customer updated');
       handleCancel();
       setSuccess(true);
@@ -837,6 +835,23 @@ const TripSheet = () => {
     }
     return 0;
   };
+
+
+  function calculateTotalAmount() {
+    const amount = parseFloat(formData.amount || selectedCustomerData.amount || book.amount || packageDetails[0]?.Rate) || 0;
+    const amount1 = parseFloat(formData.amount1 || selectedCustomerData.amount1 || book.amount1) || 0;
+    const amount2 = parseFloat(formData.amount2 || selectedCustomerData.amount2 || book.amount2) || 0;
+    const amount3 = parseFloat(formData.amount3 || selectedCustomerData.amount3 || book.amount3) || 0;
+    const amount4 = parseFloat(formData.amount4 || selectedCustomerData.amount4 || book.amount4) || 0;
+
+    // Calculate the total amount
+    const totalAmount = amount + amount1 + amount2 + amount3 + amount4;
+
+    return totalAmount;
+  }
+
+
+
 
   const [tripSheetData, setTripSheetData] = useState({
     customer: '',
@@ -1019,28 +1034,6 @@ const TripSheet = () => {
     handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
   }, [handleChange]);
 
-  //calculate package details
-  // const fetchPackageDetails = async () => {
-  // useEffect(() => {
-  //   try {
-  //     const response = await axios.get('http://localhost:8081/getPackageDetails', {
-  //       params: {
-  //         totalkm1: packageData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1 || book.totalkm1 || formData.totalkm1 || calculateTotalKilometers(),
-  //         totaltime: packageData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime || calculateTotalTime(),
-  //         vehType: packageData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType || formData.vehType,
-  //         customer: packageData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || formData.customer,
-  //         duty: packageData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty || formData.duty,
-  //       },
-  //     });
-  //     const packagedet = response.data;
-  //     console.log('API Response:', response.data);
-  //     setPackageDetails(packagedet);
-  //     console.log('package Hours details', packagedet[0].KMS);
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // }, []); 
-
   const totalKilometers = packageData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1 || book.totalkm1 || formData.totalkm1 || calculateTotalKilometers();
   const totalTime = packageData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime || calculateTotalTime();
 
@@ -1073,8 +1066,6 @@ const TripSheet = () => {
     selectedCustomerDatas.customer, selectedCustomerDatas.duty, selectedCustomerDatas.vehType,
     totalKilometers, totalTime
   ]);
-
-
 
   return (
     <div className="form-container">
@@ -2227,18 +2218,16 @@ const TripSheet = () => {
                         id="free-solo-demo"
                         freeSolo
                         sx={{ width: "20ch" }}
-                        onChange={(event, value) => handleAutocompleteChange(event, value, "vehicles")}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
                         value={VehicleRate.find((option) => option.optionvalue)?.label || ''}
-
                         options={VehicleRate.map((option) => ({
                           label: option.option,
                         }))}
                         getOptionLabel={(option) => option.label || ''}
                         renderInput={(params) => {
-                          // params.inputProps.value = selectedCustomerData.vehicles || ''
-                          params.inputProps.value = formData.vehicleRate || selectedCustomerData.vehicleRate || ''
+                          params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || ''
                           return (
-                            <TextField {...params} label="Vehicle" autoComplete="password" name="vehicles" inputRef={params.inputRef} />
+                            <TextField {...params} label="Vehicle type" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                           )
                         }
                         }
@@ -2316,7 +2305,7 @@ const TripSheet = () => {
                         />
                       </DemoItem>
                     </div>
-                    <div className="input radio">
+                    {/* <div className="input radio">
                       <FormControlLabel
                         name="locks"
                         value="lock"
@@ -2326,7 +2315,7 @@ const TripSheet = () => {
                         onChange={handleChange}
                         checked={Boolean(formData.locks || selectedCustomerData?.locks || book.locks)}
                       />
-                    </div>
+                    </div> */}
                   </div>
                   <div className="input-field">
                     <div className="input time">
@@ -2370,9 +2359,9 @@ const TripSheet = () => {
                         autoComplete="password"
                       />
                     </div>
-                    <div className="input">
+                    {/* <div className="input">
                       <Button>Billing</Button>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="input-field">
                     <div className="input">
@@ -2444,14 +2433,14 @@ const TripSheet = () => {
                         autoComplete="password"
                       />
                     </div>
-                    <div className="input" style={{ width: "90px" }}>
+                    {/* <div className="input" style={{ width: "90px" }}>
                       <Button variant="outlined">Update</Button>
                     </div>
                     <div className="input" style={{ width: "250px" }}>
                       <Button variant="contained">Update Vendor Advance</Button>
-                    </div>
+                    </div> */}
                   </div>
-                  <div className="input-field">
+                  {/* <div className="input-field">
                     <div className="input" style={{ width: "250px" }}>
                       <Button>Click Here Load Original</Button>
                     </div>
@@ -2460,7 +2449,7 @@ const TripSheet = () => {
                         Give What Is The Status Of Trip Sheet
                       </p>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </TabPanel>
               <TabPanel value={2} sx={{ p: 2 }}>
@@ -2509,7 +2498,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="package"
-                        value={formData.package || selectedCustomerData.package || book.package}
+                        value={formData.package || selectedCustomerData.package || book.package || packageDetails[0]?.package}
                         onChange={handleChange}
                         label="Package"
                         id="package"
@@ -2688,12 +2677,12 @@ const TripSheet = () => {
                     </div>
                   </div>
                   <div className="input-field">
-                    <div className="input" style={{ width: "90px" }}>
+                    {/* <div className="input" style={{ width: "90px" }}>
                       <Button variant="outlined">Uplock</Button>
-                    </div>
-                    <div className="input" style={{ width: "90px" }}>
+                    </div> */}
+                    {/* <div className="input" style={{ width: "90px" }}>
                       <Button variant="contained">Update</Button>
-                    </div>
+                    </div> */}
                     <div className="input">
                       <div
                         className="icone"
@@ -2703,7 +2692,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="netamount"
-                        value={formData.netamount || selectedCustomerData.netamount || book.netamount}
+                        value={formData.netamount || selectedCustomerData.netamount || book.netamount || calculateTotalAmount()}
                         onChange={handleChange}
                         size="small"
                         label="Net Amount"
@@ -2740,17 +2729,6 @@ const TripSheet = () => {
                         label="Car Amount"
                         id="car-amount"
                         autoComplete="password"
-                      />
-                    </div>
-                    <div className="input radio">
-                      <FormControlLabel
-                        name="manualbillss"
-                        value="manual-bills"
-                        control={<Checkbox size="small" />}
-                        label="Manual Bills"
-                        autoComplete="new-password"
-                        onChange={handleChange}
-                        checked={Boolean(formData.manualbillss || selectedCustomerData?.manualbillss || book.manualbillss)}
                       />
                     </div>
                   </div>
@@ -3067,11 +3045,11 @@ const TripSheet = () => {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoItem label="FC">
                           <DatePicker
-                            value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
+                            value={selectedCustomerDatas.fcdate || selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
                             onChange={(date) => handleDateChange(date, 'fcdate')}
                           >
                             {({ inputProps, inputRef }) => (
-                              <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.fcdate} />
+                              <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerDatas.fcdate || selectedCustomerData?.fcdate} />
                             )}
                           </DatePicker>
                         </DemoItem>
@@ -3348,13 +3326,13 @@ const TripSheet = () => {
                           <div>
                             <p>Copy this link to send to the passenger:</p>
                             <div>
-                              <textarea readOnly>{link}</textarea>
+                              <textarea readOnly style={{ width: '400px', height: '8  0px' }}>{link}</textarea>
                             </div>
                           </div>
                         )}
                       </div>
                     )}
-                    <div className="input" style={{ width: "300px" }}>
+                    {/* <div className="input" style={{ width: "300px" }}>
                       <div className="icone">
                         <MarkChatReadIcon color="action" />
                       </div>
@@ -3364,15 +3342,15 @@ const TripSheet = () => {
                         sx={{ m: 1, width: "300ch" }}
                         variant="standard"
                       />
-                    </div>
-                    <div className="input" style={{ width: "50px" }}>
+                    </div> */}
+                    {/* <div className="input" style={{ width: "50px" }}>
                       <IconButton color="primary" aria-label="delete">
                         <WhatsAppIcon
                           fontSize="inherit"
                           sx={{ color: "#47dc53" }}
                         />
                       </IconButton>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </TabPanel>

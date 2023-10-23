@@ -198,8 +198,8 @@ const DriverBataRate = () => {
     setSelectedCustomerId(params.row.customerId);
   }, []);
   const handleAdd = async () => {
-    const DivisionName = book.DivisionName;
-    if (!DivisionName) {
+    const VehicleType = book.VehicleType;
+    if (!VehicleType) {
       setErrorMessage("Check your Network Connection");
       // setErrorMessage("fill mantatory fields");
       return;
@@ -232,16 +232,16 @@ const DriverBataRate = () => {
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/driverbatarate/${id}`);
+        await axios.delete(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
-        const selectedCustomer = rows.find((row) => row.id === id);
+        const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/driverbatarate/${id}`, updatedCustomer);
+        await axios.put(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`, updatedCustomer);
         console.log('Customer updated');
         setSuccessMessage("Successfully updated");
         handleCancel();

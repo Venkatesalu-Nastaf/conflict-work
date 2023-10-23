@@ -129,6 +129,7 @@ const PackageRateEntery = () => {
     pricetag: '',
     Validity: '',
     vehicleType: '',
+    package: '',
     duty: '',
     Hours: '',
     KMS: '',
@@ -188,6 +189,7 @@ const PackageRateEntery = () => {
       ...prevBook,
       ratetype: '',
       pricetag: '',
+      package: '',
       Validity: '',
       vehicleType: '',
       duty: '',
@@ -232,7 +234,7 @@ const PackageRateEntery = () => {
     }
   };
 
-  const handleClick = async (event, actionName, id) => {
+  const handleClick = async (event, actionName, duty) => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
@@ -245,17 +247,21 @@ const PackageRateEntery = () => {
         console.log('Cancel button clicked');
         handleCancel();
       } else if (actionName === 'Delete') {
+        console.log('Client-side id before DELETE request:', selectedCustomerData.id);
         console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/ratemanagement/${id}`);
+        await axios.delete(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`);
+        console.log('DELETE request URL:', `http://localhost:8081/ratemanagement/${selectedCustomerData.id}`);
+        console.log('DELETE request sent');
+        console.log(selectedCustomerData.id);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
-        console.log('Edit button clicked');
-        const selectedCustomer = rows.find((row) => row.id === id);
+        console.log('Edit button clicked'); 
+        const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/ratemanagement/${id}`, updatedCustomer);
+        await axios.put(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
         console.log('Customer updated');
         setSuccessMessage("Successfully updated");
         handleCancel();
@@ -330,7 +336,17 @@ const PackageRateEntery = () => {
                   />
                 </div>
                 <div className="input">
-                  <Button variant="contained">Show Rates</Button>
+                  <TextField
+                    size="small"
+                    id="id"
+                    sx={{ width: "300px" }}
+                    label="Package"
+                    name="package"
+                    autoComplete="new-password"
+                    value={selectedCustomerData?.package || book.package}
+                    onChange={handleChange}
+                    variant="standard"
+                  />
                 </div>
               </div>
               <div className="input-field">
@@ -419,7 +435,6 @@ const PackageRateEntery = () => {
                 autoComplete="new-password"
                 value={selectedCustomerData?.Hours || book.Hours}
                 onChange={handleChange}
-              // variant="standard"
               />
             </div>
             <div className="input" style={{ width: "100px" }}>
@@ -624,7 +639,6 @@ const PackageRateEntery = () => {
               columns={columns}
               onRowClick={handleRowClick}
               pageSize={5}
-              // checkboxSelection
             />
           </div>
 

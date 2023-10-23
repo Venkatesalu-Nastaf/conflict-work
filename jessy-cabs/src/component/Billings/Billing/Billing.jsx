@@ -300,17 +300,29 @@ const Billing = () => {
         }
         return 0;
     };
+    // const calculateTotalAmount2 = () => {
+    //     const totalkm1 = selectedCustomerData.totalkm1 || book.totalkm1;
+    //     const ChargesForExtraamount = selectedCustomerData.ChargesForExtraamount || book.ChargesForExtraamount;
+    //     if (totalkm1 !== undefined && ChargesForExtraamount !== undefined) {
+    //         const totalKm = totalkm1 * ChargesForExtraamount;
+    //         return totalKm;
+    //     }
+    //     return 0;
+    // };
 
     const calculatePayableAmount = () => {
-        const DiscountAmount = selectedCustomerData.DiscountAmount || book.DiscountAmount;; // Replace with the actual DiscountAmount
-        const AdvanceReceived = selectedCustomerData.AdvanceReceived || book.AdvanceReceived;; // Replace with the actual AdvanceReceived
+        const DiscountAmount = selectedCustomerData.DiscountAmount || book.DiscountAmount;
+        const AdvanceReceived = selectedCustomerData.AdvanceReceived || book.AdvanceReceived;
         const netAmount = calculateGrossAmount() - DiscountAmount - AdvanceReceived;
         return netAmount;
     };
 
     const calculateGrossAmount = () => {
         const {
+            minchargeamount,
+            netamount,
             cfehamount,
+            cfeamount,
             nhamount,
             dbamount,
             OtherChargesamount,
@@ -318,7 +330,7 @@ const Billing = () => {
             parkingtollcharges
         } = selectedCustomerData || book;
         const parsedValues = [
-            calculateTotalAmount(), cfehamount, nhamount, dbamount,
+            calculateTotalAmount(), minchargeamount, cfeamount, netamount, cfehamount, nhamount, dbamount,
             OtherChargesamount, permitothertax, parkingtollcharges
         ].map(value => parseFloat(value) || 0); // Convert to numbers, default to 0 if NaN
         const gross = parsedValues.reduce((sum, value) => sum + value, 0);
@@ -397,8 +409,8 @@ const Billing = () => {
                                     size="small"
                                     label="Total Kms"
                                     name="totalkm1"
-                                    autoComplete="new-password"
                                     value={selectedCustomerData?.totalkm1 || book.totalkm1}
+                                    autoComplete="new-password"
                                     onChange={handleChange}
                                 />
                             </div>
@@ -566,7 +578,7 @@ const Billing = () => {
                                     <TextField
                                         name="MinCharges"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.MinCharges || book.MinCharges}
+                                        value={selectedCustomerData?.package || book.MinCharges}
                                         onChange={handleChange}
                                         label="Min.Charges"
                                         id="MinCharges"
@@ -582,7 +594,7 @@ const Billing = () => {
                                     <TextField
                                         name="minchargeamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.minchargeamount || book.minchargeamount}
+                                        value={selectedCustomerData?.netamount || book.minchargeamount}
                                         onChange={handleChange}
                                         size="small"
                                         id="amount"
@@ -656,7 +668,7 @@ const Billing = () => {
                                         type='number'
                                         name="ChargesForExtraHRS"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.ChargesForExtraHRS || book.ChargesForExtraHRS}
+                                        value={selectedCustomerData?.totaltime || book.ChargesForExtraHRS}
                                         onChange={handleChange}
                                         label="Charges For Extra"
                                         id="ChargesForExtra"
@@ -714,7 +726,7 @@ const Billing = () => {
                                         type='number'
                                         name="NightHalt"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData?.NightHalt || book.NightHalt}
+                                        value={selectedCustomerData?.night || book.NightHalt}
                                         onChange={handleChange}
                                         label="Night Halt"
                                         id="NightHalt"

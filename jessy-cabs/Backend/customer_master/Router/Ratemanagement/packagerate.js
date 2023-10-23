@@ -16,10 +16,10 @@ router.post('/ratemanagement', (req, res) => {
 });
 // delete Rate Management data
 router.delete('/ratemanagement/:id', (req, res) => {
-    const customerId = req.params.id;
-    console.log('Customer ID:', customerId); // Log the customer ID
-    console.log('DELETE query:', 'DELETE FROM ratemanagement WHERE id = ?', customerId);
-    db.query('DELETE FROM ratemanagement WHERE id = ?', customerId, (err, result) => {
+    const customerid = req.params.id;
+    console.log('Customer ID:', customerid); // Log the customer ID
+    console.log('DELETE query:', 'DELETE FROM ratemanagement WHERE id = ?', customerid);
+    db.query('DELETE FROM ratemanagement WHERE id = ?', customerid, (err, result) => {
         if (err) {
             console.error('Error deleting data from MySQL:', err);
             return res.status(500).json({ error: "Failed to delete data from MySQL" });

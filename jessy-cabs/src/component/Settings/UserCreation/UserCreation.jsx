@@ -7,6 +7,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import EmployeeCreation from "./EmployeeCreation/EmployeeCreation";
 import DriverCreation from "./DriverCreation/DriverCreation";
+import AppUserList from "./AppUserList/AppUserList";
 
 const UserCreation = () => {
     const [value, setValue] = React.useState("Employee");
@@ -20,20 +21,15 @@ const UserCreation = () => {
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                            <TabList
-                                onChange={handleChange}
-                                aria-label="lab API tabs example"
-                            >
+                            <TabList onChange={handleChange}>
                                 <Tab label="Employee" value="Employee" />
                                 <Tab label="Driver" value="Driver" />
+                                <Tab label="App User List" value="appuserlist" />
                             </TabList>
                         </Box>
-                        <TabPanel value="Employee">
-                            <EmployeeCreation />
-                        </TabPanel>
-                        <TabPanel value="Driver">
-                            <DriverCreation />
-                        </TabPanel>
+                        <TabPanel value="Employee"><EmployeeCreation /></TabPanel>
+                        <TabPanel value="Driver"><DriverCreation /></TabPanel>
+                        <TabPanel value="appuserlist"> <AppUserList /></TabPanel>
                     </TabContext>
                 </Box>
             </div>

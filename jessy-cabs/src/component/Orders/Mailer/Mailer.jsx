@@ -1,34 +1,33 @@
 import React from 'react';
-import './DriverMasters.css';
+import './Mailer.css'
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import Enter from './Enter/Enter';
-import AppUserList from './AppUserList/AppUserList';
+import TabContext from "@mui/lab/TabContext";
+import SMSReport from './SMSReport/SMSReport';
+import MailDetails from './MailDetails/MailDetails';
 
-const DriverMasters = () => {
+const Mailer = () => {
 
-    const [value, setValue] = React.useState("entry");
-
+    const [value, setValue] = React.useState("Mailer");
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     return (
-        <div className="form-container-drivermaster">
+        <div className="form-container-Mailer">
             <div className="container-main">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Entry" value="entry" />
-                                <Tab label="App USer List" value="appuserlist" />
+                                <Tab label="Mailer" value="Mailer" />
+                                <Tab label="SMS Report" value="SMSReport" />
                             </TabList>
                         </Box>
-                        <TabPanel value="entry"><Enter /></TabPanel>
-                        <TabPanel value="appuserlist"><AppUserList /></TabPanel>
+                        <TabPanel value="Mailer"><MailDetails /></TabPanel>
+                        <TabPanel value="SMSReport"><SMSReport /></TabPanel>
                     </TabContext>
                 </Box>
             </div>
@@ -36,4 +35,4 @@ const DriverMasters = () => {
     )
 }
 
-export default DriverMasters
+export default Mailer

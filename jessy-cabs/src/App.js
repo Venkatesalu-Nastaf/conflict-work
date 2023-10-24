@@ -8,6 +8,7 @@ import Options from "./component/Options/Options";
 import { ThreeCircles } from "react-loader-spinner";
 import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
+import Mailer from "./component/Orders/Mailer/Mailer";
 import Customers from "./component/Customers/Customers";
 import Income from "./component/Billings/Income/Income";
 import Expense from "./component/Billings/Expense/Expense";
@@ -20,7 +21,6 @@ import RateTypes from "./component/Options/RateTypes/RateTypes";
 import Suppliers from "./component/Customers/Supplier/Suppliers";
 import UserSettings from "./component/UserSettings/UserSettings";
 import TripSheet from "./component/Customers/TripSheet/TripSheet";
-import Collecteds from "./component/Orders/Collecteds/Collecteds";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
 import Permission from "./component/Settings/Permission/Permission";
 import Dispatcheds from "./component/Orders/Dispatcheds/Dispatcheds";
@@ -30,7 +30,7 @@ import MainSetting from "./component/Settings/MainSetting/MainSetting";
 import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import BillingMain from "./component/Billings/billingMain/billingMain";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
-import DriverMasters from "./component/Orders/DriverMasters/DriverMasters";
+// import DriverMasters from "./component/Orders/DriverMasters/DriverMasters";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import RateManagement from "./component/Options/RateManagement/RateManagement";
@@ -40,13 +40,12 @@ import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLog
 
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true); // Initialize loading state
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading delay with setTimeout
     setTimeout(() => {
-      setIsLoading(false); // Once loading is done, set isLoading to false
-    }, 1500); // Adjust the delay time as needed
+      setIsLoading(false);
+    }, 1500);
   }, []);
 
   return (
@@ -71,8 +70,8 @@ function App() {
               <Route path="/home/orders" element={<Orders />}>
                 <Route path="/home/orders/received" element={<Received />} />
                 <Route path="/home/orders/dispatched" element={<Dispatcheds />} />
-                <Route path="/home/orders/collected" element={<Collecteds />} />
-                <Route path="/home/orders/drivermaster" element={<DriverMasters />} />
+                <Route path="/home/orders/mailer" element={<Mailer />} />
+                {/* <Route path="/home/orders/drivermaster" element={<DriverMasters />} /> */}
               </Route>
               <Route path="/home/options" element={<Options />} >
                 <Route path="/home/options/ratetype" element={<RateTypes />} />

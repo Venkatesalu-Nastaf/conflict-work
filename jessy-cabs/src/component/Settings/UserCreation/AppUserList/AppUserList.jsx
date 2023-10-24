@@ -48,8 +48,8 @@ const AppUserList = () => {
               <div className="input-field">
                 <div className="input radio">
                   <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      App User Active /<br /> Not Active
+                    <FormLabel style={{ textAlign: 'center' }} id="demo-row-radio-buttons-group-label">
+                      Active / Inactive
                     </FormLabel>
                     <RadioGroup
                       row
@@ -63,11 +63,13 @@ const AppUserList = () => {
                         value="active"
                         control={<Radio />}
                         label="Active"
+                        labelPlacement="end"
                       />
                       <FormControlLabel
-                        value="not_active"
+                        value="inactive"
                         control={<Radio />}
-                        label="Not_Active"
+                        label="Inactive"
+                        labelPlacement="end"
                       />
                     </RadioGroup>
                   </FormControl>

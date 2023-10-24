@@ -36,7 +36,7 @@ const Orders = () => {
       <div className='menu-bar'>
         <MenuItem label="Received" to='/home/orders/received' menuItemKey="Received" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
         <MenuItem label="Dispatched" to='/home/orders/dispatched' menuItemKey="Dispatched" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-        <MenuItem label="Collected" to='/home/orders/collected' menuItemKey="Collected" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+        <MenuItem label="Mailers" to='/home/orders/mailer' menuItemKey="Mailers" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
         <MenuItem label="Drivers" to='/home/orders/drivermaster' menuItemKey="Drivers" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
       </div>
       <Outlet />

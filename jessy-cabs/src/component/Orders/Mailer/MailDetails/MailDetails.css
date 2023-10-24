@@ -16,15 +16,15 @@
     margin: 15px;
     border: 2px solid #ccc;
     border-radius: 10px;
-    /* height: 320px; */
     background: var(--glass);
-    padding: 20px 10px;
+    padding: 20px ;
 }
 
 .detail-container-main-mailDetails {
     border-top: 1px solid #ccc;
     display: flex;
-    padding: 20px 30px;
+    justify-content: center;
+    padding: 30px;
 }
 
 .mailDetails-form-container .mailDetails-form::-webkit-scrollbar {
@@ -105,16 +105,15 @@
     padding: 20px 10px;
     margin-left: 15px;
     margin-top: 15px;
-    background-color: #fff;
+    background-color: var(--glass);
     border-radius: 10px;
     border: 2px solid #ccc;
-    /* height: 320px; */
 }
 
 .mailDetails-list-update {
     margin-top: 10px;
     overflow: scroll;
-    height: 220px;
+    height: 190px;
 }
 
 .textboxlist-mailDetails .mailDetails-list-update::-webkit-scrollbar {

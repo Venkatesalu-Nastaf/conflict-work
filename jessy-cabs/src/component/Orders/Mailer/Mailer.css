@@ -6,11 +6,11 @@
     display: flex;
     width: 70%;
   }
-  .form-container-drivermaster .Title-Name {
+  .form-container-Mailer .Title-Name {
     font-size: 20px;
     font-weight: 500;
   }
-  .form-container-drivermaster .received-form {
+  .form-container-Mailer .Mailer-form {
     height: 100vh;
     width: 100vw;
     overflow-x: hidden;
@@ -20,11 +20,11 @@
     color: #000;
     background-color: var(--glass);
   }
-  .form-container-drivermaster {
+  .form-container-Mailer {
     display: flex;
     border-radius: 10px;
   }
-  .form-container-drivermaster .container-main::-webkit-scrollbar {
+  .form-container-Mailer .container-main::-webkit-scrollbar {
     width: 0px;
     height: 0px;
     overflow-x: hidden;
@@ -35,11 +35,11 @@
     margin-top: 30px;
   }
   
-  .form-container-drivermaster .container-main::-webkit-scrollbar-thumb {
+  .form-container-Mailer .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
   }
-  .form-container-drivermaster .container-main {
+  .form-container-Mailer .container-main {
     border: 2px solid #ccc;
     overflow: scroll;
     height: 77vh;
@@ -51,7 +51,7 @@
     color: #000;
     background-color: var(--glass);
   }
-  .received-form .Title-Name {
+  .Mailer-form .Title-Name {
     position: relative;
   }
   .copy-title-btn {
@@ -62,7 +62,7 @@
     border-radius: 10px;
   }
   
-  .received-form .Title-Name::after {
+  .Mailer-form .Title-Name::after {
     content: "";
     position: absolute;
     bottom: -10px;

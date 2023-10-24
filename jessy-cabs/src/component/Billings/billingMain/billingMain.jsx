@@ -13,7 +13,6 @@ import BankAccount from './BankAccount/BankAccount';
 
 const BillingMain = () => {
   const [value, setValue] = React.useState("billing");
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -34,6 +33,7 @@ const BillingMain = () => {
             <TabPanel value="bankAccountdetails"><BankAccount /></TabPanel>
           </TabContext>
         </Box>
+       
       </div>
     </div >
   )

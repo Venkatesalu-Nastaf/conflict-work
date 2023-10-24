@@ -3,9 +3,9 @@ import axios from "axios";
 import "./PaymentDetail.css";
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
+import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import { AiOutlineFileSearch } from "react-icons/ai";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Button from "@mui/material/Button";
@@ -20,13 +20,14 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import Box from "@mui/material/Box";
-import { Menu, TextField } from "@mui/material";
+import { Autocomplete, Menu, TextField } from "@mui/material";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DataGrid } from "@mui/x-data-grid";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { Organization } from './PaymentDetailData';
 // import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 
 
@@ -51,13 +52,11 @@ const actions = [
 ];
 
 // TABLE
-
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "tripsheetno", headerName: "TripSheet No", width: 130 },
   { field: "organization", headerName: "Organization", width: 130 },
-  { field: "fromdate", headerName: "From Date", width: 130 },
-  { field: "todate", headerName: "To Date", width: 130 },
+  { field: "billingdate", headerName: "Billing Date", width: 130 },
   { field: "totalamount", headerName: "Total Amount", width: 150 },
   { field: "paid", headerName: "Paid", width: 130 },
   { field: "Pending", headerName: "Pending", width: 130 },
@@ -240,14 +239,25 @@ const PaymentDetail = () => {
                 </div>
                 <div className="input" style={{ width: "230px" }}>
                   <div className="icone">
-                    <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
+                  <HailOutlinedIcon color="action" />
                   </div>
-                  <TextField
+                  <Autocomplete
+                    fullWidth
                     size="small"
-                    id="id"
-                    label="Organization"
-                    name="organization"
-                    autoFocus
+                    id="free-solo-demo-BankAccount"
+                    freeSolo
+                    sx={{ width: "20ch" }}
+                    options={Organization.map((option) => ({
+                      label: option.Option,
+                    }))}
+                    getOptionLabel={(option) => option.label || ''}
+                    renderInput={(params) => {
+                      params.inputProps.value = selectedCustomerData?.Organization || ''
+                      return (
+                        <TextField   {...params} label="Organization" name="Organization" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
                   />
                 </div>
                 <div className="input">

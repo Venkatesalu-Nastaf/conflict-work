@@ -1,13 +1,13 @@
 import "./Billing.css";
 import {
+    Autocomplete,
     InputAdornment,
     TextField,
-    FormControlLabel,
-    Checkbox,
 } from "@mui/material";
 import dayjs from "dayjs";
 import axios from "axios";
 import Box from "@mui/material/Box";
+import { BankAccount } from "./BillingData";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -30,12 +30,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import { GiMoneyStack } from "@react-icons/all-files/gi/GiMoneyStack";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
-import { faArrowRightArrowLeft, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRightArrowLeft, faMoneyBillTransfer, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
+
+// IONIC 
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -1047,16 +1051,31 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field">
-                                <div className="input" style={{ width: "220px" }}>
+                                <div className="input" >
                                     <div className="icone">
-                                        <FontAwesomeIcon icon={faCoins} size="lg" />
+                                        <GiMoneyStack style={{ fontSize: '23px' }} />
                                     </div>
                                     <TextField
                                         margin="normal"
                                         size="small"
-                                        id="payableamount"
-                                        label="Payable Amount"
-                                        name="payableamount"
+                                        id="Totalamount"
+                                        label="Total Amount"
+                                        name="Totalamount"
+                                        autoComplete="new-password"
+                                        value={selectedCustomerData?.payableamount || calculatePayableAmount() || book.payableamount}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="input">
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faMoneyBillTrendUp} size="lg" />
+                                    </div>
+                                    <TextField
+                                        margin="normal"
+                                        size="small"
+                                        id="paidamount"
+                                        label="Paid Amount"
+                                        name="paidamount"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.payableamount || calculatePayableAmount() || book.payableamount}
                                         onChange={handleChange}
@@ -1064,50 +1083,42 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field">
-                                <div className="input">
-                                    <FormControlLabel
-                                        name="SavePrint"
-                                        onChange={handleChange}
-                                        checked={Boolean(selectedCustomerData?.SavePrint || book.SavePrint)}
-                                        value="SavePrint"
-                                        control={<Checkbox size="small" />}
-                                        label="Save Print"
+                                <div className="input" >
+                                    <div className="icone">
+                                        <PendingActionsIcon />
+                                    </div>
+                                    <TextField
+                                        margin="normal"
+                                        size="small"
+                                        id="pendingamount"
+                                        label="Pending Amount"
+                                        name="pendingamount"
                                         autoComplete="new-password"
+                                        value={selectedCustomerData?.payableamount || calculatePayableAmount() || book.payableamount}
+                                        onChange={handleChange}
                                     />
                                 </div>
                                 <div className="input">
-                                    <FormControlLabel
-                                        name="document"
-                                        onChange={handleChange}
-                                        checked={Boolean(selectedCustomerData?.document || book.document)}
-                                        value="document"
-                                        control={<Checkbox size="small" />}
-                                        label="Document"
-                                        autoComplete="new-password"
-                                    />
-                                </div>
-                            </div>
-                            <div className="input-field">
-                                <div className="input">
-                                    <FormControlLabel
-                                        name="Preview"
-                                        onChange={handleChange}
-                                        checked={Boolean(selectedCustomerData?.Preview || book.Preview)}
-                                        value="Preview"
-                                        control={<Checkbox size="small" />}
-                                        label="Preview"
-                                        autoComplete="new-password"
-                                    />
-                                </div>
-                                <div className="input">
-                                    <FormControlLabel
-                                        name="Monthly"
-                                        onChange={handleChange}
-                                        checked={Boolean(selectedCustomerData?.Monthly || book.Monthly)}
-                                        value="Monthly"
-                                        control={<Checkbox size="small" />}
-                                        label="Monthly"
-                                        autoComplete="new-password"
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faMoneyBillTransfer} size="lg" />
+                                    </div>
+                                    <Autocomplete
+                                        fullWidth
+                                        size="small"
+                                        id="free-solo-demo-BankAccount"
+                                        freeSolo
+                                        sx={{ width: "20ch" }}
+                                        options={BankAccount.map((option) => ({
+                                            label: option.Option,
+                                        }))}
+                                        getOptionLabel={(option) => option.label || ''}
+                                        renderInput={(params) => {
+                                            params.inputProps.value = selectedCustomerData?.BankAccount || ''
+                                            return (
+                                                <TextField   {...params} label="Bank Account" name="BankAccount" inputRef={params.inputRef} />
+                                            )
+                                        }
+                                        }
                                     />
                                 </div>
                             </div>

@@ -122,6 +122,7 @@ const Booking = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [actionName] = useState('');
   const [rows, setRows] = useState([]);
+  const [row, setRow] = useState([]);
   const [displayCopy, setDisplayCopy] = useState(false);
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
@@ -162,32 +163,32 @@ const Booking = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
 
@@ -528,6 +529,7 @@ const Booking = () => {
         await axios.put(`http://localhost:8081/booking/${book.bookingno}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
+        setSuccess(true);
         setSuccessMessage("Successfully Updated");
       } else if (actionName === 'Copy This') {
         console.log('Copy This button clicked');
@@ -590,10 +592,11 @@ const Booking = () => {
         setSelectedCustomerId(bookingDetails.tripid);
       } catch (error) {
         console.error('Error retrieving booking details:', error);
+        setError(true);
+        setErrorMessage("Error retrieving booking details");
       }
     }
   }, []);
-
 
   const [currentYear, setCurrentYear] = useState("");
 
@@ -611,7 +614,7 @@ const Booking = () => {
     input.onchange = handleFileChange;
     input.click();
   };
-
+  //file upload
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -621,14 +624,10 @@ const Booking = () => {
     formData.append('bookingno', bookingno);
     console.log(formData);
     try {
-      const response = await axios.post('http://localhost:8081/upload', formData);
+      const response = await axios.post('http://localhost:8081/uploads', formData);
       console.log(response.data);
-      setSuccess(true);
-      setErrorMessage("file uploaded successfully")
     } catch (error) {
       console.error('Error uploading file:', error);
-      setError(true);
-      setErrorMessage("Error occured")
     }
   };
 
@@ -707,18 +706,34 @@ const Booking = () => {
 
   //for filter the booking data
 
+  // const handleShowAll = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:8081/booking_for_table');
+  //     const data = response.data;
+  //     setRows(data);
+  //     console.log('search listed data from booking database', response.data)
+  //     setSuccess(true);
+  //     setSuccessMessage("Successfully listed");
+  //   } catch (error) {
+  //     console.error('Error retrieving data:', error);
+  //     setRows([]);
+  //     setError(true);
+  //     setErrorMessage("Check your Network Connection");
+  //   }
+  // }, []);
+
   const handleShowAll = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:8081/booking_for_table');
+      const response = await axios.get(
+        `http://localhost:8081/booking_for_table?search=${encodeURIComponent(searchText)}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`
+      );
       const data = response.data;
-      setRows(data);
-      console.log('search listed data from booking database', response.data)
-      setSuccess(true);
+      console.log(data);
+      setRow(data);
       setSuccessMessage("Successfully listed");
     } catch (error) {
       console.error('Error retrieving data:', error);
-      setRows([]);
-      setError(true);
+      setRow([]);
       setErrorMessage("Check your Network Connection");
     }
   }, [searchText, fromDate, toDate]);
@@ -852,7 +867,7 @@ const Booking = () => {
                 <TextField
                   name="mobileno"
                   autoComplete="new-password"
-                  value={formData.mobileno || selectedCustomerData.mobileno || book.mobileno || ''}
+                  value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
                   onChange={handleChange}
                   label="Mobile No"
                   id="mobileno"
@@ -1397,9 +1412,10 @@ const Booking = () => {
                 </FormControl>
               </div>
               <div className="input">
-                <Button color="primary" onClick={handleUpload} size="md" variant="outlined">
+                {/* <Button color="primary" onClick={handleUpload} size="md" variant="outlined">
                   Attach File
-                </Button>
+                </Button> */}
+                <Button variant="contained" onClick={handleUpload}>Attach File</Button>
               </div>
             </div>
           </div>
@@ -1641,7 +1657,7 @@ const Booking = () => {
         <div className="table-bookingCopy-Booking">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              rows={row}
               columns={columns}
               onRowClick={handletableClick}
               pageSize={5}

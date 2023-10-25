@@ -130,6 +130,7 @@ const BankAccount = () => {
                     <FontAwesomeIcon icon={faSackDollar} size="xl" />
                   </div>
                   <TextField
+                    type='number'
                     size="small"
                     label="Capital Amount"
                     name="capital"

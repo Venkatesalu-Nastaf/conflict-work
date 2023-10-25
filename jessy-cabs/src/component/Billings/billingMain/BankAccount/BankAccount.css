@@ -11,7 +11,7 @@
 
 .BankAccount-main-container {
     padding: 20px;
-    width: 70%;
+    width: 90%;
 }
 
 .BankAccount-detail-container-main {
@@ -132,13 +132,14 @@
 #bank-btn-amountOUT label {
     color: red;
 }
-
+.button-container-bankAccount{
+    display: flex;
+}
 .bank-btn-amount-main label {
     text-align: center;
     display: flex;
     justify-content: center;
 }
-
 .bank-amount-input {
     text-align: center;
     display: flex;
@@ -159,10 +160,14 @@
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-
-.addedbanks-Details-BankAccount {
+.BankDetails-mainContainer{
     margin-top: 80px;
-    /* width: 100%; */
+
+}
+.addedbanks-Details-BankAccount {
+    display: flex;
+    width: auto;
+    margin-top: 30px;
     background-color: var(--glass);
     padding: 10px 20px 35px;
     border: 1px solid #ccc;

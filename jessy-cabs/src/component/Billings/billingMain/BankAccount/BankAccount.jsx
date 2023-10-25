@@ -4,12 +4,15 @@ import Button from "@mui/material/Button";
 import ClearIcon from '@mui/icons-material/Clear';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ListAltIcon from "@mui/icons-material/ListAlt";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, IconButton, TextField } from "@mui/material";
 import { AiFillBank } from "@react-icons/all-files/ai/AiFillBank";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+import EditIcon from '@mui/icons-material/Edit';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
 import { AccountType } from './BankAccountData';
@@ -27,6 +30,7 @@ const BankAccount = () => {
   const [infoMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [bankDetails, setBankDetails] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
 
   const hidePopup = () => {
     setError(false);
@@ -63,6 +67,53 @@ const BankAccount = () => {
     setBankName('');
     setCapitalAmount('');
     setShowAddBankForm(false);
+  };
+
+  // const handleDeleteBank = (index) => {
+  //   // Create a copy of the bank details array without the item at the specified index
+  //   const updatedBankDetails = bankDetails.filter((_, i) => i !== index);
+  //   setBankDetails(updatedBankDetails);
+  // };
+
+  const handleDeleteBank = (index) => {
+    const updatedBankDetails = [...bankDetails];
+    updatedBankDetails.splice(index, 1);
+    setBankDetails(updatedBankDetails);
+  };
+
+  const handleEditBank = (index) => {
+    setEditingIndex(index);
+    const editedBank = bankDetails[index];
+    setBankName(editedBank.bankName);
+    setCapitalAmount(editedBank.capitalAmount);
+  };
+
+  const handleSaveEdit = () => {
+    if (editingIndex !== null) {
+      if (!bankName || !capitalAmount) {
+        setError(true);
+        setErrorMessage('Please fill in all required fields.');
+        return;
+      }
+
+      const updatedBankDetails = [...bankDetails];
+      updatedBankDetails[editingIndex] = {
+        ...updatedBankDetails[editingIndex],
+        bankName,
+        capitalAmount,
+        netBalance: capitalAmount,
+      };
+
+      setBankDetails(updatedBankDetails);
+
+      setSuccess(true);
+      setSuccessMessage('Bank details updated successfully');
+
+      setEditingIndex(null);
+      setErrorMessage('');
+      setBankName('');
+      setCapitalAmount('');
+    }
   };
 
   useEffect(() => {
@@ -173,43 +224,68 @@ const BankAccount = () => {
             </div>
           )}
         </div>
-        {bankDetails.map((bank, index) => (
-          <div className="addedbanks-Details-BankAccount" key={index}>
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <AiFillBank color="action" style={{ fontSize: "27px" }} />
+        <div className='BankDetails-mainContainer'>
+          {bankDetails.map((bank, index) => (
+            <div className="addedbanks-Details-BankAccount" key={index}>
+              <div className="input-field">
+                <div className="input">
+                  <div className="icone">
+                    <AiFillBank color="action" style={{ fontSize: "27px" }} />
+                  </div>
+                  <TextField
+                    size="small"
+                    label="Bank Name"
+                    name="bankname"
+                    autoFocus
+                    value={editingIndex === index ? bankName : bank.bankName}
+                    onChange={(e) => setBankName(e.target.value)}
+                  />
                 </div>
-                <TextField
-                  size="small"
-                  label="Bank Name"
-                  name="bankname"
-                  autoFocus
-                  value={bank.bankName}
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <AiFillBank color="action" style={{ fontSize: "27px" }} />
+                <div className="input">
+                  <div className="icone">
+                    <AiFillBank color="action" style={{ fontSize: "27px" }} />
+                  </div>
+                  <TextField
+                    size="small"
+                    label="Net Balance"
+                    name="netBalance"
+                    type='number'
+                    // value={bank.netBalance}
+                    value={editingIndex === index ? capitalAmount : bank.capitalAmount}
+                    onChange={(e) => setCapitalAmount(e.target.value)}
+                  />
                 </div>
-                <TextField
-                  size="small"
-                  label="Net Balance"
-                  name="netBalance"
-                  value={bank.netBalance}
-                />
-              </div>
-              <div className="bank-btn-amount-main" id="bank-btn-amountIN">
-                <label htmlFor={`totalIn-${index}`}>Total-In</label>
-                <input className='bank-amount-input' type="number" id={`totalIn-${index}`} value={bank.totalIn} />
-              </div>
-              <div className="bank-btn-amount-main" id="bank-btn-amountOUT">
-                <label htmlFor={`totalOut-${index}`}>Total-Out</label>
-                <input className='bank-amount-input' type="number" id={`totalOut-${index}`} value={bank.totalOut} />
+                <div className="bank-btn-amount-main" id="bank-btn-amountIN">
+                  <label htmlFor={`totalIn-${index}`}>Total-In</label>
+                  <input className='bank-amount-input' type="number" id={`totalIn-${index}`} value={bank.totalIn} />
+                </div>
+                <div className="bank-btn-amount-main" id="bank-btn-amountOUT">
+                  <label htmlFor={`totalOut-${index}`}>Total-Out</label>
+                  <input className='bank-amount-input' type="number" id={`totalOut-${index}`} value={bank.totalOut} />
+                </div>
+                <div className="button-container-bankAccount">
+                  <div className="input" style={{ width: "80px" }}>
+                    {editingIndex === index ? (
+                      <IconButton color="primary" variant="contained" onClick={handleSaveEdit}>
+                        <SaveIcon />
+                      </IconButton>
+                    ) : (
+                      <IconButton color="primary" variant="contained" onClick={() => handleEditBank(index)}>
+                        <EditIcon />
+                      </IconButton>
+                    )}
+                  </div>
+                  <div className="input" style={{ width: "80px" }}>
+                    <IconButton color="error" variant="contained" onClick={() => handleDeleteBank(index)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
         {error && (
           <div className='alert-popup Error' >
             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>

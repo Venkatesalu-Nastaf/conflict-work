@@ -69,11 +69,6 @@ const BankAccount = () => {
     setShowAddBankForm(false);
   };
 
-  // const handleDeleteBank = (index) => {
-  //   // Create a copy of the bank details array without the item at the specified index
-  //   const updatedBankDetails = bankDetails.filter((_, i) => i !== index);
-  //   setBankDetails(updatedBankDetails);
-  // };
 
   const handleDeleteBank = (index) => {
     const updatedBankDetails = [...bankDetails];

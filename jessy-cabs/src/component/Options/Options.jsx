@@ -36,7 +36,7 @@ const Options = () => {
                 <MenuItem label="Rate Type" to='/home/options/ratetype' menuItemKey="Rate Type" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Rate Management" to='/home/options/ratemanagement' menuItemKey="Rate Management" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Employees" to='/home/options/employes' menuItemKey="Employees" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-                <MenuItem label="Fuel Details" to='/home/options/fuledetails' menuItemKey="Fuel Details" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Fuel Info" to='/home/options/fuelinfo' menuItemKey="FuelInfo" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
             </div>
             <Outlet />
         </div>

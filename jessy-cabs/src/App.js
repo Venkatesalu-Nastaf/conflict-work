@@ -25,12 +25,11 @@ import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
 import Permission from "./component/Settings/Permission/Permission";
 import Dispatcheds from "./component/Orders/Dispatcheds/Dispatcheds";
 import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
-import FuelDetails from "./component/Options/FuelDetails/FuelDetails";
+import FuelInfo from "./component/Options/FuelInfo/FuelInfo";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
 import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import BillingMain from "./component/Billings/billingMain/billingMain";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
-// import DriverMasters from "./component/Orders/DriverMasters/DriverMasters";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import RateManagement from "./component/Options/RateManagement/RateManagement";
@@ -76,7 +75,7 @@ function App() {
               <Route path="/home/options" element={<Options />} >
                 <Route path="/home/options/ratetype" element={<RateTypes />} />
                 <Route path="/home/options/ratemanagement" element={<RateManagement />} />
-                <Route path="/home/options/fuledetails" element={<FuelDetails />} />
+                <Route path="/home/options/fuelinfo" element={<FuelInfo />} />
                 <Route path="/home/options/employes" element={<Employes />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>

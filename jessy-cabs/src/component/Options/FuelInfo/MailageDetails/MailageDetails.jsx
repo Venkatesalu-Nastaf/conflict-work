@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
-import './FuelDetails.css';
+import './MailageDetails.css';
 import "jspdf-autotable";
 import Box from "@mui/material/Box";
 import Menu from '@mui/material/Menu';
@@ -69,7 +69,7 @@ const columns = [
 
 // TABLE END
 
-const FuelDetails = () => {
+const MailageDetails = () => {
 
   const [initialOdometer, setInitialOdometer] = useState(0);
   const [finalOdometer, setFinalOdometer] = useState(0);
@@ -207,7 +207,7 @@ const FuelDetails = () => {
     }
     try {
       console.log('Add button clicked');
-      await axios.post('http://localhost:8081/fueldetails', book);
+      await axios.post('http://localhost:8081/MailageDetails', book);
       console.log(book);
       handleCancel();
       setSuccessMessage("Successfully Added");
@@ -222,7 +222,7 @@ const FuelDetails = () => {
     try {
       if (actionName === 'List') {
         console.log('List button clicked');
-        const response = await axios.get('http://localhost:8081/fueldetails');
+        const response = await axios.get('http://localhost:8081/MailageDetails');
         const data = response.data;
         setRows(data);
         setSuccessMessage("Successfully listed");
@@ -231,7 +231,7 @@ const FuelDetails = () => {
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/fueldetails/${VehicleNo}`);
+        await axios.delete(`http://localhost:8081/MailageDetails/${VehicleNo}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
         setSuccessMessage("Successfully Deleted");
@@ -240,7 +240,7 @@ const FuelDetails = () => {
         console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.VehicleNo === VehicleNo);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/fueldetails/${VehicleNo}`, updatedCustomer);
+        await axios.put(`http://localhost:8081/MailageDetails/${VehicleNo}`, updatedCustomer);
         console.log('Customer updated');
         setSuccessMessage("Successfully updated");
         handleCancel();
@@ -274,11 +274,11 @@ const FuelDetails = () => {
 
 
   return (
-    <div className="form-container">
-      <div className="FuelDetails-form">
+    <div className="form-container-FuelInfo">
+      <div className="MailageDetails-Main">
         <form >
-          <span className="Title-Name" >Mailage Details</span>
-          <div className="FuelDetails-page-header">
+          {/* <span className="Title-Name" >Mailage Details</span> */}
+          <div className="MailageDetails-page-header">
             <div className="detailsFuel">
               <div className="input-field">
                 <div className="input" >
@@ -526,4 +526,4 @@ const FuelDetails = () => {
   )
 }
 
-export default FuelDetails
+export default MailageDetails

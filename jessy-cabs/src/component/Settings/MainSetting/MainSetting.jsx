@@ -5,7 +5,6 @@ import Tab from "@mui/material/Tab";
 import BackUp from "./BackUp/BackUp";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import FuelRate from "./FuelRate/FuelRate";
 import TabContext from "@mui/lab/TabContext";
 import SMSFormat from "./SMSFromat/SMSFormat";
 import TaxSetting from "./TaxSetting/TaxSetting";
@@ -13,7 +12,7 @@ import Organization from "./Organization/Organization";
 
 
 const MainSetting = () => {
-  const [value, setValue] = React.useState("fuel_rate");
+  const [value, setValue] = React.useState("Back_Up");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -28,16 +27,12 @@ const MainSetting = () => {
                 onChange={handleChange}
                 aria-label="lab API tabs example"
               >
-                <Tab label="Fuel Rate" value="fuel_rate" />
                 <Tab label="BackUp" value="Back_Up" />
                 <Tab label="SMS Format" value="SMS_Format" />
                 <Tab label="Tax Setting" value="Tax_Setting" />
                 <Tab label="Organization Details" value="Organization" />
               </TabList>
             </Box>
-            <TabPanel value="fuel_rate">
-              <FuelRate />
-            </TabPanel>
             <TabPanel value="Back_Up">
               <BackUp />
             </TabPanel>

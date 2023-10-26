@@ -96,12 +96,12 @@ const columns = [
   { field: "paymenttype", headerName: "Payment Type", width: 130 },
   { field: "usage", headerName: "Usage", width: 130 },
   { field: "username", headerName: "User Name", width: 130 },
-  { field: "reportdate", headerName: "Report Date", width: 130 },
-  { field: "startdate", headerName: "Start Time", width: 130 },
+  { field: "startdate", headerName: "Report Date", width: 130 },
+  { field: "starttime", headerName: "Start Time", width: 130 },
   { field: "reporttime", headerName: "Report Time", width: 130 },
   { field: "duty", headerName: "Duty", width: 130 },
   { field: "pickup", headerName: "Pickup", width: 130 },
-  { field: "costcode", headerName: "Cost Code", width: 130 },
+  { field: "customercode", headerName: "Cost Code", width: 130 },
   { field: "requestno", headerName: "Request No", width: 130 },
   { field: "flightno", headerName: "Flight No", width: 130 },
   { field: "orderbyemail", headerName: "Order By Email", width: 130 },
@@ -200,9 +200,9 @@ const Booking = () => {
     // Define a list of parameter keys
     const parameterKeys = [
       'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby',
-      'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2',
+      'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno',
       'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'registertime',
-      'duty', 'pickup', 'costcode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
+      'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
       'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
       'username', 'tripdate', 'triptime', 'emaildoggle', 'hiretypes', 'travelsname',
       'vehRegNo', 'vehiclemodule', 'driverName', 'mobileNo', 'travelsemail'
@@ -246,7 +246,7 @@ const Booking = () => {
     email: '',
     employeeno: '',
     address1: '',
-    address2: '',
+    streetno: '',
     city: '',
     report: '',
     vehType: '',
@@ -256,7 +256,7 @@ const Booking = () => {
     registertime: '',
     duty: '',
     pickup: '',
-    costcode: '',
+    customercode: '',
     registerno: '',
     flightno: '',
     orderbyemail: '',
@@ -296,7 +296,7 @@ const Booking = () => {
       email: '',
       employeeno: '',
       address1: '',
-      address2: '',
+      streetno: '',
       city: '',
       report: '',
       vehType: '',
@@ -306,7 +306,7 @@ const Booking = () => {
       registertime: '',
       duty: '',
       pickup: '',
-      costcode: '',
+      customercode: '',
       registerno: '',
       flightno: '',
       orderbyemail: '',
@@ -362,7 +362,7 @@ const Booking = () => {
       row['guestname'],
       row['mobileno'],
       row['address1'],
-      row['address2'],
+      row['streetno'],
       row['customer'],
       row['vehRegNo'],
     ]);
@@ -524,11 +524,20 @@ const Booking = () => {
         handleCancel();
       } else if (actionName === 'Modify') {
         console.log('Edit button clicked');
-        const selectedCustomer = rows.find((row) => row.bookingno === bookingno);
-        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/booking/${book.bookingno}`, updatedCustomer);
+        const selectedCustomer = rows.find((row) => row.bookingno === selectedCustomerData.bookingno || formData.bookingno);
+        const updatedCustomer = {
+          ...selectedCustomer,
+          ...selectedCustomerData,
+          bookingtime: bookingtime || getCurrentTime(),
+          starttime: starttime,
+          registertime: registertime,
+          triptime: triptime,
+          bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
+        };
+        await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
+        handlecheck();
         setSuccess(true);
         setSuccessMessage("Successfully Updated");
       } else if (actionName === 'Copy This') {
@@ -703,24 +712,6 @@ const Booking = () => {
       console.log('Send mail checkbox is not checked. Email not sent.');
     }
   };
-
-  //for filter the booking data
-
-  // const handleShowAll = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get('http://localhost:8081/booking_for_table');
-  //     const data = response.data;
-  //     setRows(data);
-  //     console.log('search listed data from booking database', response.data)
-  //     setSuccess(true);
-  //     setSuccessMessage("Successfully listed");
-  //   } catch (error) {
-  //     console.error('Error retrieving data:', error);
-  //     setRows([]);
-  //     setError(true);
-  //     setErrorMessage("Check your Network Connection");
-  //   }
-  // }, []);
 
   const handleShowAll = useCallback(async () => {
     try {
@@ -955,9 +946,9 @@ const Booking = () => {
                   <HomeTwoToneIcon color="action" />
                 </div>
                 <TextField
-                  name="address2"
+                  name="streetno"
                   autoComplete="new-password"
-                  value={formData.address2 || selectedCustomerData.address2 || book.address2 || ''}
+                  value={formData.streetno || selectedCustomerData.streetno || book.streetno || ''}
                   onChange={handleChange}
                   label="Address"
                   id="address"
@@ -996,7 +987,7 @@ const Booking = () => {
                   renderInput={(params) => {
                     params.inputProps.value = formData.report || selectedCustomerData.report || ''
                     return (
-                      <TextField {...params} label="Report" name="report" inputRef={params.inputRef} />
+                      <TextField {...params} label="Report" autoComplete="password" name="report" inputRef={params.inputRef} />
                     )
                   }
                   }
@@ -1046,16 +1037,15 @@ const Booking = () => {
             <div className="input-field">
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Report Date">
-                    <DatePicker
-                      value={book.startdate ? dayjs(book.startdate) : dayjs()}
-                      onChange={(date) => handleDateChange(date, 'startdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
+                  <DatePicker
+                    label="Report Date"
+                    value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
+                    onChange={(date) => handleDateChange(date, 'startdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input time">
@@ -1064,6 +1054,8 @@ const Booking = () => {
                   type="time"
                   value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
                   onChange={(event) => {
+                    setFormData({ ...formData, starttime: event.target.value });
+                    setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
                     setBook({ ...book, starttime: event.target.value });
                     setStartTime(event.target.value);
                   }}
@@ -1129,12 +1121,12 @@ const Booking = () => {
                   <QrCodeIcon color="action" />
                 </div>
                 <TextField
-                  name="costcode"
+                  name="customercode"
                   autoComplete="new-password"
-                  value={formData.costcode || selectedCustomerData.costcode || book.costcode || ''}
+                  value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
                   onChange={handleChange}
-                  label="Cost Code"
-                  id="costcode"
+                  label="Customer code"
+                  id="customercode"
                   variant="standard"
                 />
               </div>
@@ -1268,7 +1260,7 @@ const Booking = () => {
                           <tr id='update-row' key={row.id} onClick={() => handleRowClick(row)}>
                             <td>{row.customer}</td>
                             <td>{row.address1}</td>
-                            <td>{row.address2}</td>
+                            <td>{row.streetno}</td>
                           </tr>
                         ))
                       )}

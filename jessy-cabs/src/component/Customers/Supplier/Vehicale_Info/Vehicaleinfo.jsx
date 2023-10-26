@@ -107,7 +107,7 @@ const actions = [
 const Vehicaleinfo = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [actionName] = useState('');
-  const [rows, setRows] = useState([]);
+  const [rows] = useState([]);
   const [info, setInfo] = useState(false);
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
@@ -178,8 +178,8 @@ const Vehicaleinfo = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
 

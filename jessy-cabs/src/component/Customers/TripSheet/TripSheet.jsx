@@ -178,7 +178,7 @@ const TripSheet = () => {
   const [infoMessage] = useState({});
 
   const [link, setLink] = useState('');
-  const [isSignatureSubmitted, setIsSignatureSubmitted] = useState(false);
+  const [isSignatureSubmitted] = useState(false);
 
   const [packageData, setPackageData] = useState({
     customer: '',
@@ -388,7 +388,7 @@ const TripSheet = () => {
 
     // Define a list of parameter keys
     const parameterKeys = [
-      'bookingno', 'status', 'billingno', 'apps', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'address2', 'city', 'report', 'vehType', 'startdate', 'starttime', 'duty', 'pickup', 'costcode', 'vehRegNo', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'emaildoggle', 'hireTypes', 'travelsname', 'driverName', 'mobileNo', 'travelsemail'
+      'bookingno', 'status', 'billingno', 'apps', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'report', 'vehType', 'startdate', 'starttime', 'duty', 'pickup', 'customercode', 'vehRegNo', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'emaildoggle', 'hireTypes', 'travelsname', 'driverName', 'mobileNo', 'travelsemail'
     ];
 
     // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
@@ -444,7 +444,7 @@ const TripSheet = () => {
     request: '',
     startdate: '',
     closedate: '',
-    empolyeeno: '',
+    employeeno: '',
     reporttime: '',
     starttime: '',
     closetime: '',
@@ -553,7 +553,7 @@ const TripSheet = () => {
       request: '',
       startdate: '',
       closedate: '',
-      empolyeeno: '',
+      employeeno: '',
       reporttime: '',
       starttime: '',
       closetime: '',
@@ -994,7 +994,7 @@ const TripSheet = () => {
     customer: '',
     address1: '',
     orderedby: '',
-    empolyeeno: '',
+    employeeno: '',
     customercode: '',
     guestname: '',
     tripid: '',
@@ -1852,11 +1852,11 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   size="small"
-                  value={formData.empolyeeno || selectedCustomerData.empolyeeno || book.empolyeeno || ''}
+                  value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
                   onChange={handleChange}
-                  name="empolyeeno"
+                  name="employeeno"
                   label="Employee No"
-                  id="empolyeeno"
+                  id="employeeno"
                   autoComplete="password"
                 />
               </div>

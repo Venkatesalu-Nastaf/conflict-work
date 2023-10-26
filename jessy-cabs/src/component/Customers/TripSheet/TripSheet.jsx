@@ -177,7 +177,6 @@ const TripSheet = () => {
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
 
-  const [tripsheetid, setTripsheetId] = useState('');
   const [link, setLink] = useState('');
   const [isSignatureSubmitted, setIsSignatureSubmitted] = useState(false);
 
@@ -198,7 +197,7 @@ const TripSheet = () => {
 
   const generateLink = async () => {
     try {
-      const response = await axios.post('http://localhost:8081/generate-link', { tripsheetid });
+      const response = await axios.post('http://localhost:8081/generate-link');
       setLink(response.data.link);
     } catch (error) {
       console.error(error);
@@ -289,21 +288,22 @@ const TripSheet = () => {
     mobileNo: '',
   });
   const [sendEmail, setSendEmail] = useState(false);
+
   const handlecheck = async () => {
     if (sendEmail) {
       try {
         const dataToSend = {
-          guestname: formValues.guestname,
-          guestmobileno: formValues.guestmobileno,
-          email: formValues.email,
-          pickup: formValues.pickup,
-          useage: formValues.useage,
-          hireTypes: formValues.hireTypes,
-          department: formValues.department,
-          vehRegNo: formValues.vehRegNo,
-          vehType: formValues.vehType,
-          driverName: formValues.driverName,
-          mobileNo: formValues.mobileNo
+          guestname: formValues.guestname || selectedCustomerData.guestname,
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno,
+          email: formValues.email || selectedCustomerData.email,
+          pickup: formValues.pickup || selectedCustomerData.pickup,
+          useage: formValues.useage || selectedCustomerData.useage,
+          hireTypes: formValues.hireTypes || selectedCustomerData.hireTypes,
+          department: formValues.department || selectedCustomerData.department,
+          vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo,
+          vehType: formValues.vehType || selectedCustomerData.vehType,
+          driverName: formValues.driverName || selectedCustomerData.driverName,
+          mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo
         };
         await axios.post('http://localhost:8081/send-tripsheet-email', dataToSend);
         setSuccess(true);
@@ -655,12 +655,30 @@ const TripSheet = () => {
         ...selectedCustomerData,
         ...formData,
         ...packageDetails,
+        starttime: starttime,
+        closetime: closetime,
+        starttime2: starttime2,
+        closetime2: closetime2,
+        additionaltime: additionalTime,
+        shedkm: shedKilometers,
+        totaldays: calculateTotalDays(),
+        totalkm1: calculateTotalKilometers(),
+        totaltime: calculateTotalTime(),
         netamount: calculateTotalAmount(),
         exkm: packageDetails[0]?.extraKMS,
         exHrs: packageDetails[0]?.extraHours,
         night: packageDetails[0]?.NHalt,
         amount: packageDetails[0]?.Rate,
+        exkm1: packageDetails[0]?.extraKMS,
+        exHrs1: packageDetails[0]?.extraHours,
+        night1: packageDetails[0]?.NHalt,
+        amount5: packageDetails[0]?.Rate,
+        amount1: calculateExkmAmount(),
+        amount2: calculateExHrsAmount(),
+        amount3: calculateNightAmount(),
+        amount4: calculatedriverconvienceAmount(),
         package: packageDetails[0]?.package,
+        pack: packageDetails[0]?.package,
         minhrs: packageDetails[0]?.Hours,
         minkm: packageDetails[0]?.KMS,
       };
@@ -672,6 +690,7 @@ const TripSheet = () => {
       await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
       console.log('Customer updated');
       handleCancel();
+      handlecheck();
       setSuccess(true);
       setSuccessMessage("Successfully updated");
     } catch (error) {
@@ -805,6 +824,86 @@ const TripSheet = () => {
     return '';
   };
 
+  const calculateExkmAmount = () => {
+    const exkm = formData.exkm || selectedCustomerData.exkm || book.exkm || packageDetails[0]?.extraKMS;
+    const exkmTkm = formData.exkmTkm || selectedCustomerData.exkmTkm || book.exkmTkm;
+    if (exkm !== undefined && exkmTkm !== undefined) {
+      const totalexKm = exkm * exkmTkm;
+      return totalexKm;
+    }
+    return 0;
+  };
+
+  const calculateExHrsAmount = () => {
+    const exHrs = formData.exHrs || selectedCustomerData.exHrs || book.exHrs || packageDetails[0]?.extraHours;
+    const exHrsTHrs = formData.exHrsTHrs || selectedCustomerData.exHrsTHrs || book.exHrsTHrs;
+    if (exHrs !== undefined && exHrsTHrs !== undefined) {
+      const totalexhrs = exHrs * exHrsTHrs;
+      return totalexhrs;
+    }
+    return 0;
+  };
+
+  const calculateNightAmount = () => {
+    const night = formData.night || selectedCustomerData.night || book.night || packageDetails[0]?.NHalt;
+    const nightThrs = formData.nightThrs || selectedCustomerData.nightThrs || book.nightThrs;
+    if (night !== undefined && nightThrs !== undefined) {
+      const totalnight = night * nightThrs;
+      return totalnight;
+    }
+    return 0;
+  };
+
+  const calculatedriverconvienceAmount = () => {
+    const driverconvenience = formData.driverconvenience || selectedCustomerData.driverconvenience || book.driverconvenience;
+    const dtc = formData.dtc || selectedCustomerData.dtc || book.dtc;
+    if (driverconvenience !== undefined && dtc !== undefined) {
+      const totaldriverconvience = driverconvenience * dtc;
+      return totaldriverconvience;
+    }
+    return 0;
+  };
+
+
+  const calculateExkmAmount2 = () => {
+    const exkm1 = formData.exkm1 || selectedCustomerData.exkm1 || book.exkm1 || packageDetails[0]?.extraKMS;
+    const exkmTkm2 = formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2;
+    if (exkm1 !== undefined && exkmTkm2 !== undefined) {
+      const totalexKm = exkm1 * exkmTkm2;
+      return totalexKm;
+    }
+    return 0;
+  };
+
+  const calculateExHrsAmount2 = () => {
+    const exHrs1 = formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours;
+    const exHrsTHrs2 = formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2;
+    if (exHrs1 !== undefined && exHrsTHrs2 !== undefined) {
+      const totalexhrs = exHrs1 * exHrsTHrs2;
+      return totalexhrs;
+    }
+    return 0;
+  };
+
+  const calculateNightAmount2 = () => {
+    const night1 = formData.night || selectedCustomerData.night1 || book.night1 || packageDetails[0]?.NHalt;
+    const nightThrs2 = formData.nightThrs2 || selectedCustomerData.nightThrs2 || book.nightThrs2;
+    if (night1 !== undefined && nightThrs2 !== undefined) {
+      const totalnight = night1 * nightThrs2;
+      return totalnight;
+    }
+    return 0;
+  };
+
+  const calculatedriverconvienceAmount2 = () => {
+    const driverconvenience1 = formData.driverconvenience1 || selectedCustomerData.driverconvenience1 || book.driverconvenience1;
+    const dtc2 = formData.dtc2 || selectedCustomerData.dtc2 || book.dtc2;
+    if (driverconvenience1 !== undefined && dtc2 !== undefined) {
+      const totaldriverconvience = driverconvenience1 * dtc2;
+      return totaldriverconvience;
+    }
+    return 0;
+  };
 
   const calculateTotalDays = () => {
     const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
@@ -839,13 +938,27 @@ const TripSheet = () => {
 
   function calculateTotalAmount() {
     const amount = parseFloat(formData.amount || selectedCustomerData.amount || book.amount || packageDetails[0]?.Rate) || 0;
-    const amount1 = parseFloat(formData.amount1 || selectedCustomerData.amount1 || book.amount1) || 0;
-    const amount2 = parseFloat(formData.amount2 || selectedCustomerData.amount2 || book.amount2) || 0;
-    const amount3 = parseFloat(formData.amount3 || selectedCustomerData.amount3 || book.amount3) || 0;
-    const amount4 = parseFloat(formData.amount4 || selectedCustomerData.amount4 || book.amount4) || 0;
+    const amount1 = parseFloat(formData.amount1 || selectedCustomerData.amount1 || book.amount1) || calculateExkmAmount() || 0;
+    const amount2 = parseFloat(formData.amount2 || selectedCustomerData.amount2 || book.amount2) || calculateExHrsAmount() || 0;
+    const amount3 = parseFloat(formData.amount3 || selectedCustomerData.amount3 || book.amount3) || calculateNightAmount() || 0;
+    const amount4 = parseFloat(formData.amount4 || selectedCustomerData.amount4 || book.amount4) || calculatedriverconvienceAmount() || 0;
 
     // Calculate the total amount
     const totalAmount = amount + amount1 + amount2 + amount3 + amount4;
+
+    return totalAmount;
+  }
+
+
+  function calculateTotalAmount2() {
+    const amount5 = parseFloat(formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate);
+    const amount6 = parseFloat(formData.amount6 || selectedCustomerData.amount6 || book.amount6) || calculateExkmAmount2();
+    const amount7 = parseFloat(formData.amount7 || selectedCustomerData.amount7 || book.amount7) || calculateExHrsAmount2();
+    const amount8 = parseFloat(formData.amount8 || selectedCustomerData.amount8 || book.amount8) || calculateNightAmount2();
+    const amount9 = parseFloat(formData.amount9 || selectedCustomerData.amount9 || book.amount9) || calculatedriverconvienceAmount2();
+
+    // Calculate the total amount
+    const totalAmount = amount5 + amount6 + amount7 + amount8 + amount9;
 
     return totalAmount;
   }
@@ -882,10 +995,7 @@ const TripSheet = () => {
 
   const handleChange = useCallback((event) => {
     const { name, value, checked } = event.target;
-    setTripsheetId((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
     setPackageData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -975,7 +1085,7 @@ const TripSheet = () => {
         }));
       }
     }
-  }, [setSelectedCustomerData, setFormData, setTripSheetData]);
+  }, [setSelectedCustomerData, setFormData, setTripSheetData, setPackageDetails]);
 
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === 'Enter') {
@@ -1084,10 +1194,11 @@ const TripSheet = () => {
                   id="tripid"
                   label="Trip Sheet No"
                   name="tripid"
-                  value={formData.tripid || selectedCustomerData.tripid || book.tripid || tripsheetid}
+                  value={formData.tripid || selectedCustomerData.tripid || book.tripid}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   autoComplete="password"
+                  autoFocus
                 />
               </div>
               <div className="input">
@@ -1780,7 +1891,7 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="additionaltime"
-                  value={formData.additionaltime || book.additionaltime || additionalTime}
+                  value={formData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || additionalTime}
                   onChange={(event) => setAdditionalTime(event.target.value)}
                   label="Additional Time"
                   id="additionaltime"
@@ -1794,9 +1905,10 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="totaltime"
-                  value={formData.totaltime || calculateTotalTime() || book.totaltime || packageData.totaltime}
+                  value={formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime()}
+                  onChange={handleChange}
                   label="Total Time"
-                  id="total-time"
+                  id="totaltime"
                   variant="standard"
                   autoComplete="password"
                 />
@@ -1835,7 +1947,7 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="shedkm"
-                  value={formData.shedkm || book.shedkm || shedKilometers}
+                  value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers}
                   onChange={(event) => setShedKilometers(event.target.value)}
                   label="Shed KM"
                   id="shedkm"
@@ -1849,9 +1961,10 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   name="totalkm1"
-                  value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1 || packageData.totalkm1}
+                  value={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers()}
+                  onChange={handleChange}
                   label="Total KM"
-                  id="total-km"
+                  id="totalkm1"
                   variant="standard"
                   autoComplete="password"
                 />
@@ -2352,7 +2465,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="totaltime"
-                        value={formData.totaltime || calculateTotalTime() || book.totaltime}
+                        value={formData.totaltime || calculateTotalTime() || book.totaltime || selectedCustomerData.totaltime}
                         label="Total Time"
                         id="total-time"
                         variant="standard"
@@ -2396,7 +2509,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="totalkm1"
-                        value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1 || packageData.totalkm1}
+                        value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1 || packageData.totalkm1 || selectedCustomerData.totalkm1}
                         label="Total KM"
                         id="total-km"
                         variant="standard"
@@ -2482,7 +2595,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="minkm"
-                        value={formData.minkm || packageDetails[0]?.KMS || book.minkm || selectedCustomerData.KMS}
+                        value={formData.minkm || packageDetails[0]?.KMS || book.minkm || selectedCustomerData.minkm}
                         label="Min.Km"
                         id="minkm"
                         // variant="standard"
@@ -2531,7 +2644,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="exkm"
-                        value={formData.exkm || selectedCustomerData.exkm || book.exkm || packageDetails[0]?.extraKMS}
+                        value={book.exkm || packageDetails[0]?.extraKMS}
                         onChange={handleChange}
                         label="Ex.Km"
                         id="ex-km"
@@ -2544,7 +2657,13 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" autoComplete="password" />
+                      <TextField size="small"
+                        name='exkmTkm'
+                        value={formData.exkmTkm || selectedCustomerData.exkmTkm || book.exkmTkm}
+                        onChange={handleChange}
+                        id="exkmTkm"
+                        variant="standard"
+                        autoComplete="password" />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2552,7 +2671,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount1"
-                        value={formData.amount1 || selectedCustomerData.amount1 || book.amount1}
+                        value={book.amount1 || calculateExkmAmount()}
                         onChange={handleChange}
                         size="small"
                         label="Amount"
@@ -2582,7 +2701,12 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" />
+                      <TextField
+                        size="small"
+                        name='exHrsTHrs'
+                        value={formData.exHrsTHrs || selectedCustomerData.exHrsTHrs || book.exHrsTHrs}
+                        onChange={handleChange}
+                        variant="standard" />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2590,7 +2714,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount2"
-                        value={formData.amount2 || selectedCustomerData.amount2 || book.amount2}
+                        value={book.amount2 || calculateExHrsAmount()}
                         onChange={handleChange}
                         size="small"
                         label="Amount"
@@ -2620,7 +2744,13 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" autoComplete="password" />
+                      <TextField
+                        size="small"
+                        name='nightThrs'
+                        value={formData.nightThrs || selectedCustomerData.nightThrs || book.nightThrs}
+                        onChange={handleChange}
+                        variant="standard"
+                        autoComplete="password" />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2628,7 +2758,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount3"
-                        value={formData.amount3 || selectedCustomerData.amount3 || book.amount3}
+                        value={book.amount3 || calculateNightAmount()}
                         onChange={handleChange}
                         size="small"
                         label="Amount"
@@ -2658,7 +2788,13 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" autoComplete="password" />
+                      <TextField
+                        size="small"
+                        name='dtc'
+                        value={formData.dtc || selectedCustomerData.dtc || book.dtc}
+                        onChange={handleChange}
+                        variant="standard"
+                        autoComplete="password" />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2666,7 +2802,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount4"
-                        value={formData.amount4 || selectedCustomerData.amount4 || book.amount4}
+                        value={book.amount4 || calculatedriverconvienceAmount()}
                         onChange={handleChange}
                         size="small"
                         label="Amount"
@@ -2677,12 +2813,7 @@ const TripSheet = () => {
                     </div>
                   </div>
                   <div className="input-field">
-                    {/* <div className="input" style={{ width: "90px" }}>
-                      <Button variant="outlined">Uplock</Button>
-                    </div> */}
-                    {/* <div className="input" style={{ width: "90px" }}>
-                      <Button variant="contained">Update</Button>
-                    </div> */}
+
                     <div className="input">
                       <div
                         className="icone"
@@ -2692,7 +2823,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="netamount"
-                        value={formData.netamount || selectedCustomerData.netamount || book.netamount || calculateTotalAmount()}
+                        value={book.netamount || calculateTotalAmount()}
                         onChange={handleChange}
                         size="small"
                         label="Net Amount"
@@ -2743,7 +2874,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="pack"
-                        value={formData.pack || selectedCustomerData.pack || book.pack}
+                        value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package}
                         onChange={handleChange}
                         label="Pack"
                         id="pack"
@@ -2759,7 +2890,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount5"
-                        value={formData.amount5 || selectedCustomerData.amount5 || book.amount5}
+                        value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate}
                         onChange={handleChange}
                         size="small"
                         label="Amount"
@@ -2776,7 +2907,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="exkm1"
-                        value={formData.exkm1 || selectedCustomerData.exkm1 || book.exkm1}
+                        value={book.exkm1 || packageDetails[0]?.extraKMS}
                         onChange={handleChange}
                         label="Ex.Km"
                         id="ex-km"
@@ -2789,7 +2920,14 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" />
+                      <TextField size="small"
+                        name='exkmTkm2'
+                        value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2}
+                        onChange={handleChange}
+                        id="exkmTkm"
+                        variant="standard"
+                        autoComplete="password"
+                      />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2797,7 +2935,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount6"
-                        value={formData.amount6 || selectedCustomerData.amount6 || book.amount6}
+                        value={book.amount6 || calculateExkmAmount2()}
                         onChange={handleChange}
                         size="small"
                         label="Amount"
@@ -2814,7 +2952,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="exHrs1"
-                        value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1}
+                        value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours}
                         onChange={handleChange}
                         label="Ex.Hrs"
                         id="ex-Hrs"
@@ -2827,7 +2965,14 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" autoComplete="password" />
+                      <TextField
+                        size="small"
+                        name='exHrsTHrs2'
+                        value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2}
+                        onChange={handleChange}
+                        variant="standard"
+                      />
+
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2835,7 +2980,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount7"
-                        value={formData.amount7 || selectedCustomerData.amount7 || book.amount7}
+                        value={book.amount7 || calculateExHrsAmount2()}
                         onChange={handleChange}
                         size="small"
                         label="Amount"
@@ -2852,7 +2997,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="night1"
-                        value={formData.night1 || selectedCustomerData.night1 || book.night1}
+                        value={formData.night1 || selectedCustomerData.night1 || book.night1 || packageDetails[0]?.NHalt}
                         onChange={handleChange}
                         label="Night"
                         id="night"
@@ -2865,7 +3010,14 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" />
+                      <TextField
+                        size="small"
+                        name='nightThrs2'
+                        value={formData.nightThrs2 || selectedCustomerData.nightThrs2 || book.nightThrs2}
+                        onChange={handleChange}
+                        variant="standard"
+                        autoComplete="password"
+                      />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2873,7 +3025,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount8"
-                        value={formData.amount8 || selectedCustomerData.amount8 || book.amount8}
+                        value={formData.amount8 || selectedCustomerData.amount8 || book.amount8 || calculateNightAmount2()}
                         onChange={handleChange}
                         size="small"
                         autoComplete="password"
@@ -2903,7 +3055,14 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
-                      <TextField size="small" variant="standard" autoComplete="password" />
+                      <TextField
+                        size="small"
+                        name='dtc2'
+                        value={formData.dtc2 || selectedCustomerData.dtc2 || book.dtc2}
+                        onChange={handleChange}
+                        variant="standard"
+                        autoComplete="password"
+                      />
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2911,7 +3070,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount9"
-                        value={formData.amount9 || selectedCustomerData.amount9 || book.amount9}
+                        value={book.amount9 || calculatedriverconvienceAmount2()}
                         onChange={handleChange}
                         size="small"
                         label="Amount"
@@ -2944,7 +3103,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="netamount1"
-                        value={formData.netamount1 || selectedCustomerData.netamount1 || book.netamount1}
+                        value={book.netamount1 || calculateTotalAmount2()}
                         onChange={handleChange}
                         size="small"
                         label="Net Amount"

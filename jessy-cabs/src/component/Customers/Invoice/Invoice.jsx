@@ -1,11 +1,16 @@
 import React from 'react';
+// import axios from "axios";
 import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 import './invoice.css';
+// import Sign from './signature-1692258849846.png'
+
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 
 const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas }) => {
  
+
+
   return (
     <div className="invoice-wrapper">
       <article>
@@ -115,7 +120,7 @@ const PrintableInvoice = ({ tripSheetData, selectedCustomerData, selectedCustome
                   </tr>
                   <tr>
                     <td id='table-datas'><span >Total</span></td>
-                    <td id='table-datas'><span >{tripSheetData.totalDays || selectedCustomerData.totalDays || selectedCustomerDatas.totalDays}</span></td>
+                    <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays}</span>days</td>
                     <td id='table-datas'><span >{tripSheetData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime}</span></td>
                     <td id='table-datas'><span >{tripSheetData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1}</span></td>
                   </tr>

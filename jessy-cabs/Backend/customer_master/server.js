@@ -319,38 +319,34 @@ app.post('/api/saveSignature', (req, res) => {
 //End signature database
 // -----------------------------------------------------------------------------------------------------------
 
-const tripSheets = {};
-
 // Endpoint to generate a new link based on tripid
-app.post('/generate-link', (req, res) => {
-  const tripid = req.body.tripid;
-  const token = uuid.v4();
-  tripSheets[token] = { tripid, isSignatureSubmitted: false };
-  const link = `http://localhost:3000/onlinedigital/digitalsignature?token=${token}`;
+app.post('/generate-link/:tripid', (req, res) => {
+  const tripid = req.params.tripid; // Use req.params to access route parameters
+  const link = `http://localhost:3000/onlinedigital/digitalsignature?tripid=${tripid}`;
   res.json({ link });
 });
 
 // Endpoint to check if a link is still valid
-app.get('/check-link/:token', (req, res) => {
-  const token = req.params.token;
-  if (tripSheets[token]) {
-    res.json(tripSheets[token]);
-  } else {
-    res.status(404).json({ isSignatureSubmitted: false });
-  }
-});
+// app.get('/check-link/:token', (req, res) => {
+//   const token = req.params.token;
+//   if (tripSheets[token]) {
+//     res.json(tripSheets[token]);
+//   } else {
+//     res.status(404).json({ isSignatureSubmitted: false });
+//   }
+// });
 
 // Endpoint to submit a signature for a trip
-app.post('/submit-signature', (req, res) => {
-  const tripid = req.body.tripid;
-  const token = Object.keys(tripSheets).find((t) => tripSheets[t].tripid === tripid);
-  if (token) {
-    tripSheets[token].isSignatureSubmitted = true;
-    res.json({ message: 'Signature submitted successfully' });
-  } else {
-    res.status(404).json({ error: 'Link not found or expired' });
-  }
-});
+// app.post('/submit-signature', (req, res) => {
+//   const tripid = req.body.tripid;
+//   const token = Object.keys(tripSheets).find((t) => tripSheets[t].tripid === tripid);
+//   if (token) {
+//     tripSheets[token].isSignatureSubmitted = true;
+//     res.json({ message: 'Signature submitted successfully' });
+//   } else {
+//     res.status(404).json({ error: 'Link not found or expired' });
+//   }
+// });
 
 const port = 8081;
 app.listen(port, () => {

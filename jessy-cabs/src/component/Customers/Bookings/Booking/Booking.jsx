@@ -778,7 +778,7 @@ const Booking = () => {
                 <label>Booking Time</label>
                 <input
                   type="time"
-                  value={formData.bookingtime || selectedCustomerData.bookingtime || book.bookingtime || getCurrentTime()}
+                  value={formData.bookingtime || selectedCustomerData.bookingtime || book.bookingtime || getCurrentTime() || ''}
                   onChange={(event) => {
                     setBook({ ...book, bookingtime: event.target.value });
                     setBookingTime(event.target.value);
@@ -798,7 +798,7 @@ const Booking = () => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="status"
                     autoComplete="new-password"
-                    value={formData.status || selectedCustomerData.status || book.status}
+                    value={formData.status || selectedCustomerData.status || book.status || ''}
                     onChange={handleChange}
                   >
                     <FormControlLabel
@@ -865,12 +865,12 @@ const Booking = () => {
                   <AddIcCallTwoToneIcon color="action" />
                 </div>
                 <TextField
-                  name="mobileno"
+                  name="mobile"
                   autoComplete="new-password"
                   value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
                   onChange={handleChange}
                   label="Mobile No"
-                  id="mobileno"
+                  id="mobile"
                   variant="standard"
                 />
               </div>
@@ -1062,7 +1062,7 @@ const Booking = () => {
                 <label>Start Time</label>
                 <input
                   type="time"
-                  value={formData.starttime || selectedCustomerData.starttime || book.starttime}
+                  value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
                   onChange={(event) => {
                     setBook({ ...book, starttime: event.target.value });
                     setStartTime(event.target.value);
@@ -1075,7 +1075,7 @@ const Booking = () => {
                 <input
                   type="time"
                   name='registertime'
-                  value={formData.registertime || selectedCustomerData.registertime || book.registertime}
+                  value={formData.registertime || selectedCustomerData.registertime || book.registertime || ''}
                   onChange={(event) => {
                     setBook({ ...book, registertime: event.target.value });
                     setRegisterTime(event.target.value);
@@ -1120,7 +1120,7 @@ const Booking = () => {
                   label="PickUp"
                   name="pickup"
                   autoComplete="new-password"
-                  value={formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup}
+                  value={formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
                   onChange={handleChange}
                 />
               </div>
@@ -1602,7 +1602,7 @@ const Booking = () => {
                     id="id"
                     label="Search"
                     name="searchText"
-                    value={searchText}
+                    value={searchText || ''}
                     onChange={(e) => setSearchText(e.target.value)}
                   />
 

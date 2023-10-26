@@ -97,7 +97,7 @@ router.post('/send-tripsheet-email', async (req, res) => {
         // Email content for the owner
         const ownerMailOptions = {
             from: 'akash02899@gmail.com',
-            to: 'akash02899@gmail.com', // Set the owner's email address
+            to: 'akash02899@gmail.com', 
             subject: `${guestname} sent you a feedback`,
             text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nHireTypes: ${hireTypes}\nDepartment: ${department}\nVehicle Type: ${vehType}\nVehicle RegNo: ${vehRegNo}\nDriver Name: ${driverName}\nDriver-MobileNo: ${mobileNo}\nPickup: ${pickup}\nUsage: ${useage}`,
         };
@@ -150,98 +150,12 @@ router.get('/tripuploadcollect', (req, res) => {
 //end collect data
 // End tripsheet database
 //get data from ratemanagement for package database
-// router.get('/getPackageDetails', (req, res) => {
-//     const { totalkm1, totaltime, vehType, customerName } = req.query;
-
-//     db.query('SELECT * FROM ratemanagement WHERE minKm <= ? AND maxKm >= ? AND minHrs <= ? AND maxHrs >= ? AND vehicleType = ? AND customerName = ?',
-//         [totalKm, totalTime, totalTime, vehicleType, customerName],
-//         (err, result) => {
-//             if (err) {
-//                 console.error('Error retrieving package details:', err);
-//                 return res.status(500).json({ error: 'Failed to retrieve package details' });
-//             }
-//             const packageDetails = result[0]; // Assuming it's a single row
-//             return res.status(200).json(packageDetails);
-//         }
-//     );
-// });
-
-// router.get('/getPackageDetails', (req, res) => {
-//     const { totalkm1, totaltime, vehType, customer, duty } = req.query;
-
-//     // Use these parameters to query your database and retrieve package details
-//     // const query = `SELECT * FROM ratemanagement WHERE (KMS <= ?) AND (KMS >= ?) AND (Hours <= ?) AND (Hours >= ?) AND (vehicleType = ?) AND (pricetag = ?) AND (duty = ?)`;
-//     const query = `
-//     SELECT * FROM ratemanagement 
-//     WHERE (KMS <= ?) AND (KMS >= ?) 
-//     AND (Hours <= ?) AND (Hours >= ?) 
-//     AND (vehicleType = ?) AND (pricetag = ?) 
-//     AND (duty = ?)
-// `;
-//     db.query(query, [totalkm1, totaltime, vehType, customer, duty], (err, result) => {
-//         if (err) {
-//             console.log('Error retrieving package details:', err);
-//             return res.status(500).json({ error: 'Failed to retrieve package details' });
-//         }
-//         const packageDetails = result[0]; // Assuming it's a single row
-//         return res.status(200).json(packageDetails);
-//     }
-//     );
-// });
-
-
-
-// router.get('/getPackageDetails', (req, res) => {
-//     const { totalkm1, totaltime, vehType, customer, duty } = req.query;
-
-//     let query = 'SELECT * FROM ratemanagement WHERE 1=1';
-//     let params = [];
-
-//     if (totalkm1) {
-//         query += ' AND KMS <= ?';
-//         params.push(totalkm1);
-//     }
-//     if (totaltime) {
-//         query += ' AND Hours <= ?';
-//         params.push(totaltime);
-//     }
-//     if (vehType) {
-//         query += ' AND vehicleType = ?';
-//         params.push(vehType);
-//     }
-//     if (customer) {
-//         query += ' AND pricetag = ?';
-//         params.push(customer);
-//     }
-//     if (duty) {
-//         query += ' AND duty = ?';
-//         params.push(duty);
-//     }
-
-//     db.query(query, params, (err, result) => {
-//         if (err) {
-//             console.error('Error retrieving package details from MySQL:', err);
-//             return res.status(500).json({ error: 'Failed to retrieve package details from MySQL' });
-//         }
-//         return res.status(200).json(result);
-//     });
-// });
-
 router.get('/getPackageDetails', (req, res) => {
-    const { totalkm1, totaltime, vehType, customer, duty } = req.query;
+    const { vehType, customer, duty, totaltime, totalkm1 } = req.query;
     console.log('backend console result', req.query);
-    const query = `
-    SELECT * 
-    FROM ratemanagement 
-    WHERE 
-      (KMS >= ? OR KMS <= ?) AND 
-      (Hours >= ? OR Hours <= ?) AND 
-      vehicleType = ? AND 
-      pricetag = ? AND 
-      duty = ?;
-    `;
+    const query = `SELECT * FROM ratemanagement WHERE vehicleType = ? AND pricetag = ? AND duty = ? ORDER BY ABS(Hours - ?), ABS(KMS - ?) LIMIT 1;`;
 
-    const params = [totalkm1, totalkm1, totaltime, totaltime, vehType, customer, duty];
+    const params = [vehType, customer, duty, totaltime, totalkm1];
     console.log('collected query data from package', query);
     console.log('collected data from package', params);
 
@@ -262,6 +176,8 @@ router.get('/getPackageDetails', (req, res) => {
         }
     });
 });
+//end package database
+
 
 
 module.exports = router;

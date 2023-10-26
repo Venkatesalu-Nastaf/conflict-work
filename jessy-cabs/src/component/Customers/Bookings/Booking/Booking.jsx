@@ -948,7 +948,6 @@ const Booking = () => {
                   autoComplete="new-password"
                   value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
                   onChange={handleChange}
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -1123,7 +1122,6 @@ const Booking = () => {
                   autoComplete="new-password"
                   value={formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup}
                   onChange={handleChange}
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -1315,7 +1313,6 @@ const Booking = () => {
                   autoComplete="new-password"
                   value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
                   onChange={handleChange}
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -1328,7 +1325,6 @@ const Booking = () => {
                   autoComplete="new-password"
                   value={formData.username || selectedCustomerData.username || book.username || ''}
                   onChange={handleChange}
-                  autoFocus
                 />
               </div>
             </div>
@@ -1606,7 +1602,6 @@ const Booking = () => {
                     id="id"
                     label="Search"
                     name="searchText"
-                    autoFocus
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                   />

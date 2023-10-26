@@ -352,7 +352,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empid || book.empid}
                                     onChange={handleChange}
-                                    autoFocus
                                 />
                             </div>
                             <div className="input">
@@ -367,7 +366,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empname || book.empname}
                                     onChange={handleChange}
-                                    autoFocus
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -382,7 +380,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empemailid || book.empemailid}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -397,7 +395,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empmobile || book.empmobile}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                         </div>
@@ -414,7 +412,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.jobroll || book.jobroll}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                             <div className="input" >
@@ -442,7 +440,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.gender || book.gender}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -457,7 +455,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.bloodgroup || book.bloodgroup}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                         </div>
@@ -490,7 +488,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.aadharcard || book.aadharcard}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -505,7 +503,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.pancard || book.pancard}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                         </div>
@@ -537,7 +535,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.guardian || book.guardian}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -552,7 +550,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.fixedsalary || book.fixedsalary}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                         </div>
@@ -569,7 +567,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.uanid || book.uanid}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                             <div className="input" style={{ width: "260px" }}>
@@ -584,7 +582,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.esino || book.esino}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                             <div className="input" style={{ width: "250px" }}>
@@ -599,7 +597,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.licenceno || book.licenceno}
                                     onChange={handleChange}
-                                    autoFocus
+                                  
                                 />
                             </div>
                             <div className="input" style={{ width: "20px" }}>

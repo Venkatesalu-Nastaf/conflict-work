@@ -256,7 +256,6 @@ const Ratevalidity = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
                                         onChange={handleChange}
-                                        autoFocus
                                     />
                                 </div>
                                 <div className="input">
@@ -271,7 +270,6 @@ const Ratevalidity = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ratename || book.ratename}
                                         onChange={handleChange}
-                                        autoFocus
                                     />
                                 </div>
                                 <div className="input" style={{ width: "30%" }}>
@@ -319,7 +317,6 @@ const Ratevalidity = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ReMarks || book.ReMarks}
                                         onChange={handleChange}
-                                        autoFocus
                                     />
                                 </div>
                                 <div className="input radio" style={{ width: "120px" }}>

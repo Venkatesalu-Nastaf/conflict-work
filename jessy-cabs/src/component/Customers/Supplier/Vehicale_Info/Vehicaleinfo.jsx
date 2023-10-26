@@ -366,7 +366,6 @@ const Vehicaleinfo = () => {
                   name="vehRegNo"
                   value={selectedCustomerData.vehRegNo || book.vehRegNo}
                   onChange={handleChange}
-                  autoFocus
                 />
               </div>
               <div className="input" style={{ width: "240px" }}>
@@ -450,7 +449,6 @@ const Vehicaleinfo = () => {
                   value={selectedCustomerData.yearModel || book.yearModel}
                   onChange={handleChange}
                   label="Year Model"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -463,7 +461,6 @@ const Vehicaleinfo = () => {
                   name="insuranceno"
                   label="Insurance No"
                   id="tank_cap"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -494,7 +491,6 @@ const Vehicaleinfo = () => {
                   name="licenseno"
                   label="License No"
                   id="tank_cap"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -507,7 +503,6 @@ const Vehicaleinfo = () => {
                   name="licensebatchno"
                   label="License Batch No"
                   id="tank_cap"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -538,7 +533,6 @@ const Vehicaleinfo = () => {
                   name="nationalpermito"
                   label="National Permit No"
                   id="tank_cap"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -584,7 +578,6 @@ const Vehicaleinfo = () => {
                   name="statepermito"
                   label="State Permit No"
                   id="tank_cap"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -630,7 +623,6 @@ const Vehicaleinfo = () => {
                   name="rcbookno"
                   label="RC Book No"
                   id="tank_cap"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -681,7 +673,6 @@ const Vehicaleinfo = () => {
                   onChange={handleChange}
                   label="Tank Cap"
                   id="tank_cap"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -696,7 +687,6 @@ const Vehicaleinfo = () => {
                   onChange={handleChange}
                   label="Route No"
                   id="routeno"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -711,7 +701,6 @@ const Vehicaleinfo = () => {
                   onChange={handleChange}
                   label="Remarks"
                   id="remarks"
-                  autoFocus
                 />
               </div>
             </div>
@@ -823,7 +812,6 @@ const Vehicaleinfo = () => {
                     id="id"
                     label="Search"
                     name="searchText"
-                    autoFocus
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                   />

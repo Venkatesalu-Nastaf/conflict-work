@@ -341,7 +341,6 @@ const EmployeeCreation = () => {
                   name="username"
                   value={selectedCustomerData?.username || book.username}
                   onChange={handleChange}
-                  autoFocus
                 />
               </div>
               <div className="input">

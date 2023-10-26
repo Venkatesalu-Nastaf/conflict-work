@@ -360,7 +360,6 @@ const DriverCreation = () => {
                                     name="username"
                                     value={selectedCustomerData?.username || book.username}
                                     onChange={handleChange}
-                                    autoFocus
                                 />
                             </div>
                             <div className="input">
@@ -531,7 +530,6 @@ const DriverCreation = () => {
                                     id="basicsalary"
                                     label="Basic Salary"
                                     name="basicsalary"
-                                    autoFocus
                                 />
                             </div>
                             <div className="input">

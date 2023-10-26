@@ -253,7 +253,6 @@ const Division = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.driverid || book.driverid}
                     onChange={handleChange}
-                    autoFocus
                   />
                 </div>
                 <div className="input" style={{ width: "300px" }}>
@@ -268,7 +267,6 @@ const Division = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.DivisionName || book.DivisionName}
                     onChange={handleChange}
-                    autoFocus
                   />
                 </div>
               </div>

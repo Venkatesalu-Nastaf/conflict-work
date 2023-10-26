@@ -312,7 +312,6 @@ const RateType = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
                                         onChange={handleChange}
-                                        autoFocus
                                     />
                                 </div>
                                 <div className="input" style={{ width: "300px" }}>
@@ -352,7 +351,6 @@ const RateType = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ratename || book.ratename}
                                         onChange={handleChange}
-                                        autoFocus
                                     />
                                 </div>
                             </div>
@@ -369,7 +367,6 @@ const RateType = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.validity || book.validity}
                                         onChange={handleChange}
-                                        autoFocus
                                     />
                                 </div>
                                 <div className="input radio" style={{ width: "120px" }}>

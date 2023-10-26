@@ -119,7 +119,6 @@ const BookingCopy = () => {
                   name="bookingno"
                   label="Booking No"
                   id="bookingno"
-                  autoFocus
                   value={bookingno}
                   onChange={handleInputChange}
                 />

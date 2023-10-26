@@ -348,12 +348,9 @@ const Accuntinfo = () => {
                   value={selectedCustomerData?.accountNo || book.accountNo}
                   onChange={handleChange}
                   variant="standard"
-                  autoFocus
                 />
-
               </div>
               <div className="input">
-
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"

@@ -357,7 +357,6 @@ const Customer = () => {
                   value={selectedCustomerData?.customerId || book.customerId}
                   onChange={handleChange}
                   variant="standard"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -374,7 +373,6 @@ const Customer = () => {
                   variant="standard"
                   onChange={handleChange}
                   name="name"
-                  autoFocus
                 />
               </div>
               <div className="input">
@@ -387,7 +385,6 @@ const Customer = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                   name="customer"
-                  autoFocus
                 />
               </div>
               <div className="input">

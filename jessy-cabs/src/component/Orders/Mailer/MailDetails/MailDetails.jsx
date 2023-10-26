@@ -96,7 +96,6 @@ const MailDetails = () => {
                       label="Mail Message"
                       id="MailMessage"
                       sx={{ m: 1, width: "200ch" }}
-                      autoFocus
                     />
                   </div>
                 </div>
@@ -127,7 +126,6 @@ const MailDetails = () => {
                           label="Template Name"
                           name="templatename"
                           sx={{ m: 1, width: "200ch" }}
-                          autoFocus
                         />
                       </div>
                       <div className="input" style={{ width: "100px" }}>
@@ -173,7 +171,6 @@ const MailDetails = () => {
                       label="Template Name"
                       name="templatename"
                       sx={{ width: "200ch" }}
-                      autoFocus
                     />
                   </div>
                   <div className="input">
@@ -185,7 +182,6 @@ const MailDetails = () => {
                       id="usedfor"
                       label="Used For"
                       name="usedfor"
-                      autoFocus
                     />
                   </div>
                 </div>
@@ -201,7 +197,6 @@ const MailDetails = () => {
                       label="Create Mail Template"
                       id="CreateMailTemplate"
                       sx={{ m: 1, width: "200ch" }}
-                      autoFocus
                     />
                   </div>
                 </div>

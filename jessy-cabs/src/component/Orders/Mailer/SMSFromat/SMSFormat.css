@@ -14,8 +14,12 @@
 }
 
 .SMSFormat-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
     background: var(--glass);
-    padding: 10px;
     padding-bottom: 30px;
 }
 
@@ -26,6 +30,7 @@
 .input-field .inputs .sms-box{
     background-color: var(--glass);
 }
+
 .Title-Names {
     font-size: 20px;
     padding-left: 20px;

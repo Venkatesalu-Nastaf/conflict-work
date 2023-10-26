@@ -6,7 +6,6 @@ import BackUp from "./BackUp/BackUp";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
-import SMSFormat from "./SMSFromat/SMSFormat";
 import TaxSetting from "./TaxSetting/TaxSetting";
 import Organization from "./Organization/Organization";
 
@@ -27,23 +26,19 @@ const MainSetting = () => {
                 onChange={handleChange}
                 aria-label="lab API tabs example"
               >
-                <Tab label="BackUp" value="Back_Up" />
-                <Tab label="SMS Format" value="SMS_Format" />
-                <Tab label="Tax Setting" value="Tax_Setting" />
                 <Tab label="Organization Details" value="Organization" />
+                <Tab label="Tax Setting" value="Tax_Setting" />
+                <Tab label="BackUp" value="Back_Up" />
               </TabList>
             </Box>
-            <TabPanel value="Back_Up">
-              <BackUp />
-            </TabPanel>
-            <TabPanel value="SMS_Format">
-              <SMSFormat />
+            <TabPanel value="Organization">
+              <Organization />
             </TabPanel>
             <TabPanel value="Tax_Setting">
               <TaxSetting />
             </TabPanel>
-            <TabPanel value="Organization">
-              <Organization />
+            <TabPanel value="Back_Up">
+              <BackUp />
             </TabPanel>
           </TabContext>
         </Box>

@@ -234,7 +234,6 @@ const PaymentDetail = () => {
                     id="id"
                     label="Tripsheet No"
                     name="tripsheetno"
-                    autoFocus
                   />
                 </div>
                 <div className="input" style={{ width: "230px" }}>

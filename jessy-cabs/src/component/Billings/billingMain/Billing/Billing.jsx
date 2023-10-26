@@ -372,6 +372,7 @@ const Billing = () => {
                                     id="tripid"
                                     label="Trip Sheet No"
                                     name="tripid"
+                                    autoFocus
                                     autoComplete="off"
                                     value={selectedCustomerData?.tripid || book.tripid}
                                     onChange={handleChange}

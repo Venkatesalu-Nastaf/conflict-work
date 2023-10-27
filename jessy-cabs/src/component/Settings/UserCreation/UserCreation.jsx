@@ -22,7 +22,7 @@ const UserCreation = () => {
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <TabList onChange={handleChange}>
-                                <Tab label="Employee" value="Employee" />
+                                <Tab label="User" value="Employee" />
                                 <Tab label="Driver" value="Driver" />
                                 <Tab label="App User List" value="appuserlist" />
                             </TabList>

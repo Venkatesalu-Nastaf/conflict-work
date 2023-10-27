@@ -104,7 +104,7 @@ const Sidebar = () => {
             icon={BiHomeAlt}
           />
           <MenuItem
-            label="Customer"
+            label="Booking"
             to="/home/customers/customers"
             menuItemKey="/home/customers"
             isActive={isActive}

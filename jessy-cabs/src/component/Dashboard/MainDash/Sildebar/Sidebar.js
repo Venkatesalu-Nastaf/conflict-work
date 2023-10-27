@@ -5,7 +5,7 @@ export const Sidebardata = [
     key: "/home/dashboard",
   },
   {
-    heading: "Customers",
+    heading: "Booking",
     key: "/home/customers/customers",
   },
   {

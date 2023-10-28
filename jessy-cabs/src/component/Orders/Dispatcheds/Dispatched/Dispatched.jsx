@@ -7,7 +7,7 @@ import "./Dispatched.css";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import { Stations } from "./DispatchedData.js";
+import { Department } from "./DispatchedData.js";
 import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -31,10 +31,10 @@ const columns = [
   { field: "status", headerName: "Status", width: 130 },
   { field: "bookingno", headerName: "Booking ID", width: 130 },
   { field: "tripid", headerName: "Tripsheet No", width: 130 },
-  { field: "bookingdate", headerName: "Date", width: 130 },
-  { field: "bookingtime", headerName: "Time", width: 90 },
+  { field: "startdate", headerName: "Date", width: 130 },
+  { field: "starttime", headerName: "Time", width: 90 },
   { field: "guestname", headerName: "Guest Name", width: 160 },
-  { field: "mobileno", headerName: "Mobile", width: 130 },
+  { field: "mobileNo", headerName: "Mobile", width: 130 },
   { field: "address1", headerName: "R.Address", width: 130 },
   { field: "streetno", headerName: "R.Address1", width: 130 },
   { field: "city", headerName: "R.Address2", width: 130 },
@@ -44,7 +44,7 @@ const columns = [
 
 const Dispatched = () => {
   const [rows, setRows] = useState([]);
-  const [servicestation, setServiceStation] = useState("");
+  const [department, setdepartment] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [error, setError] = useState(false);
@@ -141,27 +141,28 @@ const Dispatched = () => {
   };
 
   const handleInputChange = (event, newValue) => {
-    setServiceStation(newValue ? newValue.label : ''); // Assuming the label field contains the station name
+    setdepartment(newValue ? newValue.label : ''); // Assuming the label field contains the station name
   };
 
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/pending-bookings?servicestation=${encodeURIComponent(
-          servicestation
+        `http://localhost:8081/pending-tripsheet?department=${encodeURIComponent(
+          department
         )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
           toDate.toISOString()
         )}`
       );
       const data = response.data;
       setRows(data);
+      console.log(data);
       setSuccessMessage("Successfully listed");
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
       setErrorMessage("Check your Network Connection");
     }
-  }, [servicestation, fromDate, toDate]);
+  }, [department, fromDate, toDate]);
 
 
   const handleShowAll = useCallback(async () => {
@@ -171,10 +172,13 @@ const Dispatched = () => {
       );
       const data = response.data;
       setRows(data);
+      console.log('dispatch colected data', data);
+      setSuccess(true);
       setSuccessMessage("Successfully listed");
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
       setErrorMessage("Check your Network Connection");
 
     }
@@ -189,20 +193,20 @@ const Dispatched = () => {
     setPopupOpen(false);
   };
   const handleBookingClick = () => {
-    const bookingPageUrl = `/home/customers/bookings?bookingno=${selectedRow.bookingno}&bookingdate=${selectedRow.bookingdate}&bookingtime=${selectedRow.bookingtime}&status=${selectedRow.status}&tripid=${selectedRow.tripid}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobile=${selectedRow.mobile}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&employeeno=${selectedRow.employeeno}&address1=${selectedRow.address1}&streetno=${selectedRow.streetno}&city=${selectedRow.city}&report=${selectedRow.report}&vehType=${selectedRow.vehType}&paymenttype=${selectedRow.paymenttype}&startdate=${selectedRow.startdate}&starttime=${selectedRow.starttime}&registertime=${selectedRow.registertime}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&customercode=${selectedRow.customercode}&registerno=${selectedRow.registerno}&flightno=${selectedRow.flightno}&orderbyemail=${selectedRow.orderbyemail}&remarks=${selectedRow.remarks}&servicestation=${selectedRow.servicestation}&advance=${selectedRow.advance}&nameupdate=${selectedRow.nameupdate}&address3=${selectedRow.address3}&address4=${selectedRow.address4}&cityupdate=${selectedRow.cityupdate}&useage=${selectedRow.useage}&username=${selectedRow.username}&tripdate=${selectedRow.tripdate}&triptime=${selectedRow.triptime}&emaildoggle=${selectedRow.emaildoggle}&hiretypes=${selectedRow.hiretypes}&travelsname=${selectedRow.travelsname}&vehRegNo=${selectedRow.vehRegNo}&vehiclemodule=${selectedRow.vehiclemodule}&driverName=${selectedRow.driverName}&mobileNo=${selectedRow.mobileNo}&travelsemail=${selectedRow.travelsemail}`;
+    const bookingPageUrl = `/home/customers/bookings?bookingno=${selectedRow.bookingno}&bookingdate=${selectedRow.bookingdate}&bookingtime=${selectedRow.bookingtime}&status=${selectedRow.status}&tripid=${selectedRow.tripid}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobile=${selectedRow.mobile}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&employeeno=${selectedRow.employeeno}&address1=${selectedRow.address1}&streetno=${selectedRow.streetno}&city=${selectedRow.city}&report=${selectedRow.report}&vehType=${selectedRow.vehType}&paymenttype=${selectedRow.paymenttype}&startdate=${selectedRow.startdate}&starttime=${selectedRow.starttime}&reporttime=${selectedRow.reporttime}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&customercode=${selectedRow.customercode}&registerno=${selectedRow.registerno}&flightno=${selectedRow.flightno}&orderbyemail=${selectedRow.orderbyemail}shedkm=${selectedRow.shedkm}shedin=${selectedRow.shedin}shedout=${selectedRow.shedout}&remarks=${selectedRow.remarks}&servicestation=${selectedRow.servicestation}&advance=${selectedRow.advance}&nameupdate=${selectedRow.nameupdate}&address3=${selectedRow.address3}&address4=${selectedRow.address4}&cityupdate=${selectedRow.cityupdate}&useage=${selectedRow.useage}&username=${selectedRow.username}&tripdate=${selectedRow.tripdate}&triptime=${selectedRow.triptime}&emaildoggle=${selectedRow.emaildoggle}&hireTypes=${selectedRow.hireTypes}&travelsname=${selectedRow.travelsname}&vehRegNo=${selectedRow.vehRegNo}&vehType=${selectedRow.vehType}&driverName=${selectedRow.driverName}&mobileNo=${selectedRow.mobileNo}&travelsemail=${selectedRow.travelsemail}`;
     window.location.href = bookingPageUrl;
   };
 
 
   const handleTripsheetClick = () => {
-    const bookingPageUrl = `/home/customers/tripsheet?tripid=${selectedRow.tripid}&bookingno=${selectedRow.bookingno}&status=${selectedRow.status}&billingno=${selectedRow.billingno}&apps=${selectedRow.apps}&customer=${selectedRow.customer}&orderedby=${selectedRow.orderedby}&mobile=${selectedRow.mobile}&guestname=${selectedRow.guestname}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&employeeno=${selectedRow.employeeno}&guestmobileno=${selectedRow.guestmobileno}&email=${selectedRow.email}&address1=${selectedRow.address1}&streetno=${selectedRow.streetno}&city=${selectedRow.city}&hireTypes=${selectedRow.hireTypes}&department=${selectedRow.department}&vehRegNo=${selectedRow.vehRegNo}&vehType=${selectedRow.vehType}&driverName=${selectedRow.driverName}&mobileNo=${selectedRow.mobileNo}&driversmsexbetta=${selectedRow.driversmsexbetta}&gps=${selectedRow.gps}&duty=${selectedRow.duty}&pickup=${selectedRow.pickup}&useage=${selectedRow.useage}&request=${selectedRow.request}&startdate=${selectedRow.startdate}&closedate=${selectedRow.closedate}&totaldays=${selectedRow.totaldays}&employeeno=${selectedRow.employeeno}&reporttime=${selectedRow.reporttime}&starttime=${selectedRow.starttime}&closetime=${selectedRow.closetime}&additionaltime=${selectedRow.additionaltime}&advancepaidtovendor=${selectedRow.advancepaidtovendor}&customercode=${selectedRow.customercode}&startkm=${selectedRow.startkm}&closekm=${selectedRow.closekm}&permit=${selectedRow.permit}&parking=${selectedRow.parking}&toll=${selectedRow.toll}&vpermettovendor=${selectedRow.vpermettovendor}&vendortoll=${selectedRow.vendortoll}customeradvance=${selectedRow.customeradvance}&email1=${selectedRow.email1}&remark=${selectedRow.remark}&smsguest=${selectedRow.smsguest}&documentnotes=${selectedRow.documentnotes}&VendorTripNo=${selectedRow.VendorTripNo}&vehicles=${selectedRow.vehicles}&duty1=${selectedRow.duty1}&startdate1=${selectedRow.startdate1}&closedate1=${selectedRow.closedate1}&totaldays1=${selectedRow.totaldays1}&locks=${selectedRow.locks}&starttime2=${selectedRow.starttime2}&closetime2=${selectedRow.closetime2}&totaltime=${selectedRow.totaltime}&startkm1=${selectedRow.startkm1}&closekm1=${selectedRow.closekm1}&totalkm1=${selectedRow.totalkm1}&remark1=${selectedRow.remark1}&caramount=${selectedRow.caramount}&minkm=${selectedRow.minkm}&minhrs=${selectedRow.minhrs}&package=${selectedRow.package}&amount=${selectedRow.amount}&exkm=${selectedRow.exkm}&amount1=${selectedRow.amount1}&exHrs=${selectedRow.exHrs}&amount2=${selectedRow.amount2}&night=${selectedRow.night}&amount3=${selectedRow.amount3}&driverconvenience=${selectedRow.driverconvenience}&amount4=${selectedRow.amount4}&netamount=${selectedRow.netamount}&vehcommission=${selectedRow.vehcommission}&caramount1=${selectedRow.caramount1}&manualbills=${selectedRow.manualbills}&pack=${selectedRow.pack}&amount5=${selectedRow.amount5}&exkm1=${selectedRow.exkm1}&amount6=${selectedRow.amount6}&exHrs1=${selectedRow.exHrs1}&amount7=${selectedRow.amount7}&night1=${selectedRow.night1}&amount8=${selectedRow.amount8}&driverconvenience1=${selectedRow.driverconvenience1}&amount9=${selectedRow.amount9}&rud=${selectedRow.rud}&netamount1=${selectedRow.netamount1}&discount=${selectedRow.discount}&ons=${selectedRow.ons}&manualbills1=${selectedRow.manualbills1}&balance=${selectedRow.balance}&fcdate=${selectedRow.fcdate}&taxdate=${selectedRow.taxdate}&insdate=${selectedRow.insdate}&stpermit=${selectedRow.stpermit}&maintenancetype=${selectedRow.maintenancetype}&kilometer=${selectedRow.kilometer}&selects=${selectedRow.selects}&documenttype=${selectedRow.documenttype}&on1=${selectedRow.on1}&smsgust=${selectedRow.smsgust}&booker=${selectedRow.booker}&emailcheck=${selectedRow.emailcheck}&valueprint=${selectedRow.valueprint}&manualbillss=${selectedRow.manualbillss}&reload=${selectedRow.reload}`;
+    const bookingPageUrl = `/home/customers/tripsheet?tripid=${selectedRow.tripid || ''}&bookingno=${selectedRow.bookingno || ''}&status=${selectedRow.status || ''}&billingno=${selectedRow.billingno || ''}&apps=${selectedRow.apps || ''}&customer=${selectedRow.customer || ''}&orderedby=${selectedRow.orderedby || ''}&mobile=${selectedRow.mobile || ''}&guestname=${selectedRow.guestname || ''}&guestmobileno=${selectedRow.guestmobileno || ''}&email=${selectedRow.email || ''}&employeeno=${selectedRow.employeeno || ''}&guestmobileno=${selectedRow.guestmobileno || ''}&email=${selectedRow.email || ''}&address1=${selectedRow.address1 || ''}&streetno=${selectedRow.streetno || ''}&city=${selectedRow.city || ''}&hireTypes=${selectedRow.hireTypes || ''}&department=${selectedRow.department || ''}&vehRegNo=${selectedRow.vehRegNo || ''}&vehType=${selectedRow.vehType || ''}&driverName=${selectedRow.driverName || ''}&mobileNo=${selectedRow.mobileNo || ''}&driversmsexbetta=${selectedRow.driversmsexbetta || ''}&gps=${selectedRow.gps || ''}&duty=${selectedRow.duty || ''}&pickup=${selectedRow.pickup || ''}&useage=${selectedRow.useage || ''}&request=${selectedRow.request || ''}&startdate=${selectedRow.startdate || ''}&closedate=${selectedRow.closedate || ''}&totaldays=${selectedRow.totaldays || ''}&employeeno=${selectedRow.employeeno || ''}&reporttime=${selectedRow.reporttime || ''}&shedkm=${selectedRow.shedkm || ''}&shedin=${selectedRow.shedin || ''}&shedout=${selectedRow.shedout || ''}&starttime=${selectedRow.starttime || ''}&closetime=${selectedRow.closetime || ''}&additionaltime=${selectedRow.additionaltime || ''}&advancepaidtovendor=${selectedRow.advancepaidtovendor || ''}&customercode=${selectedRow.customercode || ''}&startkm=${selectedRow.startkm || ''}&closekm=${selectedRow.closekm || ''}&permit=${selectedRow.permit || ''}&parking=${selectedRow.parking || ''}&toll=${selectedRow.toll || ''}&vpermettovendor=${selectedRow.vpermettovendor || ''}&vendortoll=${selectedRow.vendortoll || ''}&customeradvance=${selectedRow.customeradvance || ''}&email1=${selectedRow.email1 || ''}&remark=${selectedRow.remark || ''}&smsguest=${selectedRow.smsguest || ''}&documentnotes=${selectedRow.documentnotes || ''}&VendorTripNo=${selectedRow.VendorTripNo || ''}&vehicles=${selectedRow.vehicles || ''}&duty1=${selectedRow.duty1 || ''}&startdate1=${selectedRow.startdate1 || ''}&closedate1=${selectedRow.closedate1 || ''}&totaldays1=${selectedRow.totaldays1 || ''}&locks=${selectedRow.locks || ''}&starttime2=${selectedRow.starttime2 || ''}&closetime2=${selectedRow.closetime2 || ''}&totaltime=${selectedRow.totaltime || ''}&startkm1=${selectedRow.startkm1 || ''}&closekm1=${selectedRow.closekm1 || ''}&totalkm1=${selectedRow.totalkm1 || ''}&remark1=${selectedRow.remark1 || ''}&caramount=${selectedRow.caramount || ''}&minkm=${selectedRow.minkm || ''}&minhrs=${selectedRow.minhrs || ''}&package=${selectedRow.package || ''}&amount=${selectedRow.amount || ''}&exkm=${selectedRow.exkm || ''}&amount1=${selectedRow.amount1 || ''}&exHrs=${selectedRow.exHrs || ''}&amount2=${selectedRow.amount2 || ''}&night=${selectedRow.night || ''}&amount3=${selectedRow.amount3 || ''}&driverconvenience=${selectedRow.driverconvenience || ''}&amount4=${selectedRow.amount4 || ''}&netamount=${selectedRow.netamount || ''}&vehcommission=${selectedRow.vehcommission || ''}&caramount1=${selectedRow.caramount1 || ''}&manualbills=${selectedRow.manualbills || ''}&pack=${selectedRow.pack || ''}&amount5=${selectedRow.amount5 || ''}&exkm1=${selectedRow.exkm1 || ''}&amount6=${selectedRow.amount6 || ''}&exHrs1=${selectedRow.exHrs1 || ''}&amount7=${selectedRow.amount7 || ''}&night1=${selectedRow.night1 || ''}&amount8=${selectedRow.amount8 || ''}&driverconvenience1=${selectedRow.driverconvenience1 || ''}&amount9=${selectedRow.amount9 || ''}&rud=${selectedRow.rud || ''}&netamount1=${selectedRow.netamount1 || ''}&discount=${selectedRow.discount || ''}&ons=${selectedRow.ons || ''}&manualbills1=${selectedRow.manualbills1 || ''}&balance=${selectedRow.balance || ''}&fcdate=${selectedRow.fcdate || ''}&taxdate=${selectedRow.taxdate || ''}&insdate=${selectedRow.insdate || ''}&stpermit=${selectedRow.stpermit || ''}&maintenancetype=${selectedRow.maintenancetype || ''}&kilometer=${selectedRow.kilometer || ''}&selects=${selectedRow.selects || ''}&documenttype=${selectedRow.documenttype || ''}&on1=${selectedRow.on1 || ''}&smsgust=${selectedRow.smsgust || ''}&booker=${selectedRow.booker || ''}&emailcheck=${selectedRow.emailcheck || ''}&valueprint=${selectedRow.valueprint || ''}&manualbillss=${selectedRow.manualbillss || ''}&reload=${selectedRow.reload || ''}`;
+    console.log(bookingPageUrl);
     window.location.href = bookingPageUrl;
   };
 
   const handleButtontripsheet = () => {
     window.location.href = '/home/customers/tripsheet';
   };
-
 
   return (
     <div className="dispatched-form Scroll-Style-hide">
@@ -240,14 +244,14 @@ const Dispatched = () => {
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={servicestation}
-                    options={Stations.map((option) => ({
-                      label: option.optionvalue,
+                    value={department}
+                    options={Department.map((option) => ({
+                      label: option.option,
                     }))}
                     getOptionLabel={(option) => option.label || ""}
                     onChange={handleInputChange}
                     renderInput={(params) =>
-                      <TextField {...params} label="Stations" />
+                      <TextField {...params} label="Department" />
                     }
                   />
                 </div>

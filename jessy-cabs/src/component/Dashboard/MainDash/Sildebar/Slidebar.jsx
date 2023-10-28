@@ -112,9 +112,9 @@ const Sidebar = () => {
             icon={HiOutlineUsers}
           />
           <MenuItem
-            label="Customer"
-            to="/home/customers/customer"
-            menuItemKey="/home/customers"
+            label="Registration"
+            to="/home/registration/customer"
+            menuItemKey="/home/registration"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}
@@ -128,9 +128,9 @@ const Sidebar = () => {
             icon={BiBarChartSquare}
           />
           <MenuItem
-            label="Options"
-            to="/home/options/ratetype"
-            menuItemKey="/home/options"
+            label="Maintenance"
+            to="/home/maintenance/ratetype"
+            menuItemKey="/home/maintenance"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineFileProtect}

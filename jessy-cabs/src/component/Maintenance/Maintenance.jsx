@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Options.css'
+import './Maintenance.css'
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
@@ -17,7 +17,7 @@ const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
     );
 };
 
-const Options = () => {
+const Maintenance = () => {
     const [activeMenuItem, setActiveMenuItem] = useState('');
 
     useEffect(() => {
@@ -31,16 +31,16 @@ const Options = () => {
     };
 
     return (
-        <div className='customer-conatiner' id='menu'>
+        <div className='Maintenance-conatiner' id='menu'>
             <div className='menu-bar'>
-                <MenuItem label="Rate Type" to='/home/options/ratetype' menuItemKey="Rate Type" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-                <MenuItem label="Rate Management" to='/home/options/ratemanagement' menuItemKey="Rate Management" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-                <MenuItem label="Employees" to='/home/options/employes' menuItemKey="Employees" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-                <MenuItem label="Fuel Info" to='/home/options/fuelinfo' menuItemKey="FuelInfo" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Rate Type" to='/home/maintenance/ratetype' menuItemKey="Rate Type" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Rate Management" to='/home/maintenance/ratemanagement' menuItemKey="Rate Management" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Employees" to='/home/maintenance/employes' menuItemKey="Employees" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Fuel Info" to='/home/maintenance/fuelinfo' menuItemKey="FuelInfo" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
             </div>
             <Outlet />
         </div>
     )
 }
 
-export default Options;
+export default Maintenance;

@@ -105,16 +105,16 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Booking"
-            to="/home/customers/customers"
-            menuItemKey="/home/customers"
+            to="/home/bookings/booking"
+            menuItemKey="/home/bookings"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={HiOutlineUsers}
           />
           <MenuItem
-            label="Orders"
-            to="/home/orders/received"
-            menuItemKey="/home/orders"
+            label="Customer"
+            to="/home/customers/customer"
+            menuItemKey="/home/customers"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}

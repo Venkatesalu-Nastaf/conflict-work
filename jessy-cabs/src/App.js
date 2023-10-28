@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
 import Login from "./component/form/LoginForm";
-import Orders from "./component/Orders/Orders";
+import Costomers from "./component/Customers/Costomers";
 import { Route, Routes } from "react-router-dom";
 import Page404 from "./component/Page404/page404";
 import Options from "./component/Options/Options";
 import { ThreeCircles } from "react-loader-spinner";
 import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
-import Mailer from "./component/Orders/Mailer/Mailer";
-import Customers from "./component/Customers/Customers";
+import Mailer from "./component/Customers/Mailer/Mailer";
+import Customer from "./component/Customers/Customer/Customer";
 import Income from "./component/Billings/Income/Income";
 import Expense from "./component/Billings/Expense/Expense";
 import Employes from "./component/Options/Employes/Employes";
-import Received from "./component/Orders/Receiveds/Receiveds";
+import Received from "./component/Bookings/Receiveds/Receiveds";
 import MainDash from "./component/Dashboard/MainDash/MainDash";
-import Customer from "./component/Customers/Customer/Customer";
-import Bookings from "./component/Customers/Bookings/Bookings";
+import Bookings from "./component/Bookings/Bookings";
+import BookingMani from "./component/Bookings/BookingMani/BookingMani";
 import RateTypes from "./component/Options/RateTypes/RateTypes";
 import Suppliers from "./component/Customers/Supplier/Suppliers";
 import UserSettings from "./component/UserSettings/UserSettings";
-import TripSheet from "./component/Customers/TripSheet/TripSheet";
+import TripSheet from "./component/Bookings/TripSheet/TripSheet";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
 import Permission from "./component/Settings/Permission/Permission";
-import Dispatcheds from "./component/Orders/Dispatcheds/Dispatcheds";
+import Dispatcheds from "./component/Bookings/Dispatcheds/Dispatcheds";
 import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
 import FuelInfo from "./component/Options/FuelInfo/FuelInfo";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
@@ -60,16 +60,20 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<MainDashboard />}>
               <Route path="/home/dashboard" element={<MainDash />} />
-              <Route path="/home/customers" element={<Customers />} >
-                <Route path="/home/customers/customers" element={<Customer />} />
-                <Route path="/home/customers/supplier" element={<Suppliers />} />
-                <Route path="/home/customers/bookings" element={<Bookings />} />
-                <Route path="/home/customers/tripsheet" element={<TripSheet />} />
+              <Route path="/home/bookings" element={<Bookings />} >
+                <Route path="/home/bookings/booking" element={<BookingMani />} />
+                <Route path="/home/bookings/tripsheet" element={<TripSheet />} />
+                <Route path="/home/bookings/received" element={<Received />} />
+                <Route path="/home/bookings/dispatched" element={<Dispatcheds />} />
+                {/* <Route path="/home/customers/customers" element={<Customer />} />
+                <Route path="/home/customers/supplier" element={<Suppliers />} /> */}
               </Route>
-              <Route path="/home/orders" element={<Orders />}>
-                <Route path="/home/orders/received" element={<Received />} />
-                <Route path="/home/orders/dispatched" element={<Dispatcheds />} />
-                <Route path="/home/orders/mailer" element={<Mailer />} />
+              <Route path="/home/customers" element={<Costomers />}>
+                <Route path="/home/customers/customer" element={<Customer />} />
+                <Route path="/home/customers/supplier" element={<Suppliers />} />
+                {/* <Route path="/home/orders/received" element={<Received />} />
+                <Route path="/home/orders/dispatched" element={<Dispatcheds />} /> */}
+                <Route path="/home/customers/mailer" element={<Mailer />} />
                 {/* <Route path="/home/orders/drivermaster" element={<DriverMasters />} /> */}
               </Route>
               <Route path="/home/options" element={<Options />} >

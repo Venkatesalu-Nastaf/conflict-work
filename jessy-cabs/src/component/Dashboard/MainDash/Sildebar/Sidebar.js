@@ -6,11 +6,11 @@ export const Sidebardata = [
   },
   {
     heading: "Booking",
-    key: "/home/customers/customers",
+    key: "/home/bookings/booking",
   },
   {
-    heading: "Orders",
-    key: "/home/orders/received",
+    heading: "Customer",
+    key: "/home/customers/customer",
   },
   {
     heading: "Billing",

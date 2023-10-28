@@ -9,7 +9,7 @@ import BookingCopy from "./BookingCopy/BookingCopy.jsx";
 import Excelimport from "./Excelimport/Excelimport.jsx";
 import BokkingChart from "./BookingChart/BookingChart.jsx";
 
-const Bookings = () => {
+const BookingMani = () => {
   const [value, setValue] = React.useState("booking");
 
   const handleChange = (event, newValue) => {
@@ -50,4 +50,4 @@ const Bookings = () => {
   );
 };
 
-export default Bookings;
+export default BookingMani;

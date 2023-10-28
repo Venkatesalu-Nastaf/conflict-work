@@ -103,6 +103,7 @@ const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "name", headerName: "Attach Name", width: 130 },
   { field: "path", headerName: "Attach Path", width: 130 },
+  { field: "documenttype", headerName: "Document Type", width: 130 },
   { field: "tripid", headerName: "Trip ID", width: 90 },
 ];
 // Update Table
@@ -146,6 +147,12 @@ const actions = [
   { icon: <ModeEditIcon />, name: "Edit" },
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
+
+// const updateFormData = () => {
+//   const totalTime = calculateTotalTime();
+//   setFormData({ ...formData, totalTime });
+// };
+
 
 const TripSheet = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -195,6 +202,8 @@ const TripSheet = () => {
     duty: '',
   });
 
+
+
   //generate link
 
   const generateLink = async () => {
@@ -211,35 +220,12 @@ const TripSheet = () => {
     setPopupOpen(false);
   };
 
-  const handleUpload = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.pdf, .jpg, .jpeg, .png';
-    input.onchange = handleFileChange;
-    input.click();
-  };
-  //file upload
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    const tripid = book.tripid;
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('tripid', tripid);
-    console.log(formData);
-    try {
-      const response = await axios.post('http://localhost:8081/uploads', formData);
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    }
-  };
-  //end file upload
   //refresh button function
   const handleRefresh = async () => {
+    const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
     try {
       console.log('Refresh button clicked');
-      const response = await axios.get('http://localhost:8081/tripuploadcollect');
+      const response = await axios.get(`http://localhost:8081/tripuploadcollect/${tripid}`);
       const data = response.data;
       setRows(data);
     } catch (error) {
@@ -346,17 +332,6 @@ const TripSheet = () => {
     const params = new URLSearchParams(location.search);
     const statusValue = params.get('status') || 'opened';
     const formData = {};
-
-    // Define a list of parameter keys
-    // const parameterKeys = [
-    //   'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby',
-    //   'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno',
-    //   'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'reporttime',
-    //   'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
-    //   'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
-    //   'username', 'tripdate', 'triptime', 'emaildoggle', 'hireTypes', 'travelsname',
-    //   'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'travelsemail'
-    // ];
 
     const parameterKeys = [
       'tripid', 'bookingno', 'status', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'chireTypesity', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime	', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'caramount', 'minkm', 'minhrs', 'package', 'amount', 'exkm', 'amount1', 'exHrs', 'amount2', 'night', 'amount3', 'driverconvenience', 'amount4', 'exkmTkm', 'exHrsTHrs', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
@@ -492,7 +467,7 @@ const TripSheet = () => {
     smsguest: '',
     booker: '',
     emailcheck: '',
-   
+
     manualbillss: '',
     reload: '',
     locks: '',
@@ -605,7 +580,7 @@ const TripSheet = () => {
       smsguest: '',
       booker: '',
       emailcheck: '',
-     
+
       manualbillss: '',
       reload: '',
       locks: '',
@@ -615,6 +590,8 @@ const TripSheet = () => {
     setFormData({});
     setFormValues({});
   };
+
+
   const handleETripsheetClick = (row) => {
     const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
     console.log('Received tripid:', tripid);
@@ -808,8 +785,35 @@ const TripSheet = () => {
       setErrorMessage("Check Network Connection")
     }
   };
+
+
+
+  const handleUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf, .jpg, .jpeg, .png';
+    input.onchange = handleFileChange;
+    input.click();
+  };
+  //file upload
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const formDataUpload = new FormData();
+    formDataUpload.append('file', file);
+    formDataUpload.append('documenttype', book.tripid || selectedCustomerData.tripid || formData.tripid);
+    formDataUpload.append('tripid', book.documenttype || selectedCustomerData.documenttype || formData.documenttype);
+    console.log('uploaded file details', formDataUpload);
+    try {
+      const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
+      console.log('uploaded file details 2', response.data);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+  //end file upload
   // Function to calculate total time
-  const calculateTotalTime = () => {
+  const calculateTotalTime = useCallback(() => {
     const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
     const closeTime = formData.closetime || selectedCustomerData.closetime || book.closetime;
 
@@ -828,9 +832,8 @@ const TripSheet = () => {
       const minutes = totalTimeMinutes % 60;
       return `${hours}h ${minutes}m`;
     }
-
     return '';
-  };
+  }, [formData, selectedCustomerData, book, additionalTime]);
 
   const calculateExkmAmount = () => {
     const exkm = formData.exkm || selectedCustomerData.exkm || book.exkm || packageDetails[0]?.extraKMS;
@@ -970,8 +973,6 @@ const TripSheet = () => {
 
     return totalAmount;
   }
-
-
 
 
   const [tripSheetData, setTripSheetData] = useState({
@@ -1922,12 +1923,10 @@ const TripSheet = () => {
                 <TextField
                   name="shedkm"
                   value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
-                  // onChange={(event) => setShedKilometers(event.target.value)}
                   onChange={handleChange}
                   label="Shed KM"
                   id="shedkm"
                   size='small'
-                  // variant="standard"
                   autoComplete="password"
                 />
               </div>
@@ -2149,7 +2148,7 @@ const TripSheet = () => {
 
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  <Invoice tripSheetData={tripSheetData} formData={formData} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
+                  <Invoice tripSheetData={tripSheetData} formData={calculateTotalTime} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -2470,17 +2469,6 @@ const TripSheet = () => {
                         />
                       </DemoItem>
                     </div>
-                    {/* <div className="input radio">
-                      <FormControlLabel
-                        name="locks"
-                        value="lock"
-                        control={<Checkbox size="small" />}
-                        label="Lock"
-                        autoComplete="new-password"
-                        onChange={handleChange}
-                        checked={Boolean(formData.locks || selectedCustomerData?.locks || book.locks)}
-                      />
-                    </div> */}
                   </div>
                   <div className="input-field">
                     <div className="input time">

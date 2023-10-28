@@ -84,34 +84,6 @@ app.use('/', bookingchartRouter);
 app.use('/', tripsheetRouter);
 // End tripsheet database
 
-// Invoice signature get
-// app.get('/signature_photos', (req, res) => {
-//   const { tripid } = req.query;
-//   const selectQuery = 'SELECT tripid FROM signatures WHERE tripid = ?';
-//   db.query(selectQuery, [tripid], (err, results) => {
-//     if (err) {
-//       res.status(500).json({ message: 'Internal server error' });
-//       return;
-//     }
-//     if (results.length === 0) {
-//       res.status(404).json({ message: 'Signature not found' });
-//       return;
-//     }
-//     const uploadedImagePath = results[0].signature_path;
-
-//     // Calculate the relative path
-//     const baseImagePath = path.join(__dirname, 'path_to_save_images');
-//     const relativeImagePath = path.relative(baseImagePath, uploadedImagePath);
-
-//     // Remove any `..` segments from the relative path
-//     const cleanedRelativePath = relativeImagePath
-//       .split(path.sep)
-//       .filter(segment => segment !== '..')
-//       .join(path.sep);
-
-//     res.status(200).json({ uploadedImagePath: cleanedRelativePath });
-//   });
-// });
 //file upload in tripsheet
 app.post('/uploads', upload.single('file'), (req, res) => {
   if (!req.file) {
@@ -123,6 +95,7 @@ app.post('/uploads', upload.single('file'), (req, res) => {
     size: req.file.size,
     path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
     tripid: req.body.tripid,
+    tripid: req.body.documenttype,
   };
   const query = 'INSERT INTO tripsheetupload SET ?';
   db.query(query, fileData, (err, result) => {

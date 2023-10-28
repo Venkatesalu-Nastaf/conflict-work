@@ -276,7 +276,7 @@ const Booking = () => {
     hireTypes: '',
     travelsname: '',
     vehRegNo: '',
-    vehType: '',
+    vehiclemodule: '',
     driverName: '',
     mobileNo: '',
     travelsemail: '',
@@ -326,7 +326,7 @@ const Booking = () => {
       hireTypes: '',
       travelsname: '',
       vehRegNo: '',
-      vehType: '',
+      vehiclemodule: '',
       driverName: '',
       mobileNo: '',
       travelsemail: '',
@@ -1407,9 +1407,6 @@ const Booking = () => {
                 </FormControl>
               </div>
               <div className="input">
-                {/* <Button color="primary" onClick={handleUpload} size="md" variant="outlined">
-                  Attach File
-                </Button> */}
                 <Button variant="contained" onClick={handleUpload}>Attach File</Button>
               </div>
             </div>
@@ -1495,16 +1492,16 @@ const Booking = () => {
                 id="free-solo-demo"
                 freeSolo
                 sx={{ width: "20ch" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
+                onChange={(event, value) => handleAutocompleteChange(event, value, "vehiclemodule")}
                 value={VehicleModel.find((option) => option.carmodel)?.label || ''}
                 options={VehicleModel.map((option) => ({
                   label: option.carmodel,
                 }))}
                 getOptionLabel={(option) => option.label || ''}
                 renderInput={(params) => {
-                  params.inputProps.value = formData.vehType || selectedCustomerData.vehType || book.vehType || ''
+                  params.inputProps.value = formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || ''
                   return (
-                    <TextField {...params} label="Vehicle Model" name="vehType" inputRef={params.inputRef} />
+                    <TextField {...params} label="Vehicle Model" name="vehiclemodule" inputRef={params.inputRef} />
                   )
                 }
                 }

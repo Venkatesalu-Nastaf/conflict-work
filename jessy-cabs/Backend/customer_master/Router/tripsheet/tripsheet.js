@@ -97,7 +97,7 @@ router.post('/send-tripsheet-email', async (req, res) => {
         // Email content for the owner
         const ownerMailOptions = {
             from: 'akash02899@gmail.com',
-            to: 'akash02899@gmail.com', 
+            to: 'akash02899@gmail.com',
             subject: `${guestname} sent you a feedback`,
             text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nHireTypes: ${hireTypes}\nDepartment: ${department}\nVehicle Type: ${vehType}\nVehicle RegNo: ${vehRegNo}\nDriver Name: ${driverName}\nDriver-MobileNo: ${mobileNo}\nPickup: ${pickup}\nUsage: ${useage}`,
         };
@@ -138,8 +138,9 @@ router.post('/send-tripsheet-email', async (req, res) => {
 });
 //end tripsheet mail
 //collect data
-router.get('/tripuploadcollect', (req, res) => {
-    db.query('SELECT * FROM tripsheetupload', (err, results) => {
+router.get('/tripuploadcollect/:tripid', (req, res) => {
+    const tripid = req.params.tripid;
+    db.query("SELECT * FROM tripsheetupload where tripid=?", [tripid], (err, results) => {
         if (err) {
             console.error('Error fetching data from MySQL:', err);
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });

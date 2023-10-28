@@ -127,7 +127,7 @@ const Booking = () => {
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
   const [triptime, setTripTime] = useState('');
-  const [registertime, setRegisterTime] = useState('');
+  const [reporttime, setreporttime] = useState('');
   const [starttime, setStartTime] = useState('');
   const [bookingtime, setBookingTime] = useState('');
   const location = useLocation();
@@ -196,16 +196,17 @@ const Booking = () => {
     const params = new URLSearchParams(location.search);
     const statusValue = params.get('status') || 'pending';
     const formData = {};
+    console.log('formdata console details', formData);
 
     // Define a list of parameter keys
     const parameterKeys = [
       'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby',
       'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno',
-      'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'registertime',
+      'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'reporttime',
       'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
       'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
-      'username', 'tripdate', 'triptime', 'emaildoggle', 'hiretypes', 'travelsname',
-      'vehRegNo', 'vehiclemodule', 'driverName', 'mobileNo', 'travelsemail'
+      'username', 'tripdate', 'triptime', 'emaildoggle', 'hireTypes', 'travelsname',
+      'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'travelsemail'
     ];
 
     // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
@@ -253,7 +254,7 @@ const Booking = () => {
     paymenttype: '',
     startdate: '',
     starttime: '',
-    registertime: '',
+    reporttime: '',
     duty: '',
     pickup: '',
     customercode: '',
@@ -272,10 +273,10 @@ const Booking = () => {
     tripdate: '',
     triptime: '',
     emaildoggle: '',
-    hiretypes: '',
+    hireTypes: '',
     travelsname: '',
     vehRegNo: '',
-    vehiclemodule: '',
+    vehType: '',
     driverName: '',
     mobileNo: '',
     travelsemail: '',
@@ -303,7 +304,7 @@ const Booking = () => {
       paymenttype: '',
       startdate: '',
       starttime: '',
-      registertime: '',
+      reporttime: '',
       duty: '',
       pickup: '',
       customercode: '',
@@ -322,10 +323,10 @@ const Booking = () => {
       tripdate: '',
       triptime: '',
       emaildoggle: '',
-      hiretypes: '',
+      hireTypes: '',
       travelsname: '',
       vehRegNo: '',
-      vehiclemodule: '',
+      vehType: '',
       driverName: '',
       mobileNo: '',
       travelsemail: '',
@@ -470,6 +471,10 @@ const Booking = () => {
       ...prevData,
       [fieldName]: date,
     }));
+    setFormData((prevData) => ({
+      ...prevData,
+      [fieldName]: date,
+    }));
   };
 
   const handleAdd = async () => {
@@ -487,7 +492,7 @@ const Booking = () => {
         ...book,
         bookingtime: bookingtime || getCurrentTime(),
         starttime: starttime,
-        registertime: registertime,
+        reporttime: reporttime,
         triptime: triptime,
         bookingdate: selectedBookingDate,
       };
@@ -530,7 +535,7 @@ const Booking = () => {
           ...selectedCustomerData,
           bookingtime: bookingtime || getCurrentTime(),
           starttime: starttime,
-          registertime: registertime,
+          reporttime: reporttime,
           triptime: triptime,
           bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
         };
@@ -985,7 +990,7 @@ const Booking = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.report || selectedCustomerData.report || ''
+                    params.inputProps.value = formData.report || selectedCustomerData.report || book.report || ''
                     return (
                       <TextField {...params} label="Report" autoComplete="password" name="report" inputRef={params.inputRef} />
                     )
@@ -1025,7 +1030,7 @@ const Booking = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.paymenttype || selectedCustomerData.paymenttype || ''
+                    params.inputProps.value = formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''
                     return (
                       <TextField {...params} label="Payment Type" name="paymenttype" inputRef={params.inputRef} />
                     )
@@ -1039,7 +1044,7 @@ const Booking = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Report Date"
-                    value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
+                    value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.bookingdate ? dayjs(book.bookingdate) : null}
                     onChange={(date) => handleDateChange(date, 'startdate')}
                   >
                     {({ inputProps, inputRef }) => (
@@ -1066,11 +1071,13 @@ const Booking = () => {
                 <label>Report Time</label>
                 <input
                   type="time"
-                  name='registertime'
-                  value={formData.registertime || selectedCustomerData.registertime || book.registertime || ''}
+                  name='reporttime'
+                  value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
                   onChange={(event) => {
-                    setBook({ ...book, registertime: event.target.value });
-                    setRegisterTime(event.target.value);
+                    setBook({ ...book, reporttime: event.target.value });
+                    setreporttime(event.target.value);
+                    setFormData({ ...formData, reporttime: event.target.value });
+                    setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
                   }}
                 />
               </div>
@@ -1093,7 +1100,7 @@ const Booking = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.duty || selectedCustomerData.duty || ''
+                    params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
                     return (
                       <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
                     )
@@ -1207,7 +1214,7 @@ const Booking = () => {
                   }))}
                   getOptionLabel={(option) => option.label || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.servicestation || selectedCustomerData.servicestation || ''
+                    params.inputProps.value = formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''
                     return (
                       <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
                     )
@@ -1435,16 +1442,16 @@ const Booking = () => {
                 id="free-solo-demo"
                 freeSolo
                 sx={{ width: "20ch" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "hiretypes")}
+                onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
                 value={Hire.find((option) => option.Option)?.label || ''}
                 options={Hire.map((option) => ({
                   label: option.Option,
                 }))}
                 getOptionLabel={(option) => option.label || ''}
                 renderInput={(params) => {
-                  params.inputProps.value = formData.hiretypes || selectedCustomerData.hiretypes || ''
+                  params.inputProps.value = formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''
                   return (
-                    <TextField {...params} label="Hire Types" name="hiretypes" inputRef={params.inputRef} />
+                    <TextField {...params} label="Hire Types" name="hireTypes" inputRef={params.inputRef} />
                   )
                 }
                 }
@@ -1488,16 +1495,16 @@ const Booking = () => {
                 id="free-solo-demo"
                 freeSolo
                 sx={{ width: "20ch" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "vehiclemodule")}
+                onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
                 value={VehicleModel.find((option) => option.carmodel)?.label || ''}
                 options={VehicleModel.map((option) => ({
                   label: option.carmodel,
                 }))}
                 getOptionLabel={(option) => option.label || ''}
                 renderInput={(params) => {
-                  params.inputProps.value = formData.vehiclemodule || selectedCustomerData.vehiclemodule || ''
+                  params.inputProps.value = formData.vehType || selectedCustomerData.vehType || book.vehType || ''
                   return (
-                    <TextField {...params} label="Vehicle Model" name="vehiclemodule" inputRef={params.inputRef} />
+                    <TextField {...params} label="Vehicle Model" name="vehType" inputRef={params.inputRef} />
                   )
                 }
                 }

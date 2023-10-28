@@ -112,7 +112,7 @@ const Sidebar = () => {
             icon={HiOutlineUsers}
           />
           <MenuItem
-            label="Registration"
+            label="Register"
             to="/home/registration/customer"
             menuItemKey="/home/registration"
             isActive={isActive}

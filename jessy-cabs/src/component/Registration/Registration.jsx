@@ -36,10 +36,7 @@ const Registration = () => {
       <div className='menu-bar'>
          <MenuItem label="Customer" to='/home/registration/customer' menuItemKey="Customer" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
         <MenuItem label="Supplier" to='/home/registration/supplier' menuItemKey="Supplier" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-        {/* <MenuItem label="Received" to='/home/orders/received' menuItemKey="Received" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-        <MenuItem label="Dispatched" to='/home/orders/dispatched' menuItemKey="Dispatched" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} /> */}
-        <MenuItem label="Mailers" to='/home/registration/mailer' menuItemKey="Mailers" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-        {/* <MenuItem label="Drivers" to='/home/orders/drivermaster' menuItemKey="Drivers" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} /> */}
+        <MenuItem label="Employees" to='/home/registration/employes' menuItemKey="Employees" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
       </div>
       <Outlet />
     </div>

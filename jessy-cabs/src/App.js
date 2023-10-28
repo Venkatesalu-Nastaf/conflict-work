@@ -72,6 +72,8 @@ function App() {
                 <Route path="/home/registration/customer" element={<Customer />} />
                 <Route path="/home/registration/supplier" element={<Suppliers />} />
                 <Route path="/home/registration/employes" element={<Employes />} />
+
+
                 {/* <Route path="/home/orders/received" element={<Received />} />
                 <Route path="/home/orders/dispatched" element={<Dispatcheds />} /> */}
                 {/* <Route path="/home/orders/drivermaster" element={<DriverMasters />} /> */}

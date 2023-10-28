@@ -35,7 +35,7 @@ const Maintenance = () => {
             <div className='menu-bar'>
                 <MenuItem label="Rate Type" to='/home/maintenance/ratetype' menuItemKey="Rate Type" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Rate Management" to='/home/maintenance/ratemanagement' menuItemKey="Rate Management" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-                <MenuItem label="Employees" to='/home/maintenance/employes' menuItemKey="Employees" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Mailers" to='/home/maintenance/mailer' menuItemKey="Mailers" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Fuel Info" to='/home/maintenance/fuelinfo' menuItemKey="FuelInfo" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
             </div>
             <Outlet />

@@ -38,8 +38,6 @@ const Bookings = () => {
         <MenuItem label="Trip Sheet" to='/home/bookings/tripsheet' menuItemKey="Trip Sheet" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
         <MenuItem label="Received" to='/home/bookings/received' menuItemKey="Received" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
         <MenuItem label="Dispatched" to='/home/bookings/dispatched' menuItemKey="Dispatched" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-        {/* <MenuItem label="Customer" to='/home/customers/customers' menuItemKey="Customer" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
-        <MenuItem label="Supplier" to='/home/customers/supplier' menuItemKey="Supplier" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} /> */}
       </div>
       <div className='mobile-view'>
         <Outlet />

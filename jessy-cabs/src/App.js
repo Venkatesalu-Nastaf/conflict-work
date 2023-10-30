@@ -1,42 +1,40 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
-import Login from "./component/form/LoginForm";
 import Info from "./component/Info/Info";
+import Login from "./component/form/LoginForm";
 import { Route, Routes } from "react-router-dom";
 import Page404 from "./component/Page404/page404";
-import Registration from "./component/Registration/Registration";
 import { ThreeCircles } from "react-loader-spinner";
+import Mailer from "./component/Info/Mailer/Mailer";
 import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
-import Mailer from "./component/Registration/Mailer/Mailer";
-import Customer from "./component/Registration/Customer/Customer";
-import Income from "./component/Billings/Income/Income";
-import Expense from "./component/Billings/Expense/Expense";
-import Employes from "./component/Info/Employes/Employes";
-import Received from "./component/Bookings/Receiveds/Receiveds";
-import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Bookings from "./component/Bookings/Bookings";
-import BookingMani from "./component/Bookings/BookingMani/BookingMani";
+import Income from "./component/Billings/Income/Income";
+import FuelInfo from "./component/Info/FuelInfo/FuelInfo";
+import Expense from "./component/Billings/Expense/Expense";
 import RateTypes from "./component/Info/RateTypes/RateTypes";
-import Suppliers from "./component/Registration/Supplier/Suppliers";
+import MainDash from "./component/Dashboard/MainDash/MainDash";
+import Received from "./component/Bookings/Receiveds/Receiveds";
+import Registration from "./component/Registration/Registration";
 import UserSettings from "./component/UserSettings/UserSettings";
 import TripSheet from "./component/Bookings/TripSheet/TripSheet";
+import Employes from "./component/Registration/Employes/Employes";
+import Customer from "./component/Registration/Customer/Customer";
+import Suppliers from "./component/Registration/Supplier/Suppliers";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
 import Permission from "./component/Settings/Permission/Permission";
-import Dispatcheds from "./component/Bookings/Dispatcheds/Dispatcheds";
 import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
-import FuelInfo from "./component/Info/FuelInfo/FuelInfo";
+import BookingMani from "./component/Bookings/BookingMani/BookingMani";
+import Dispatcheds from "./component/Bookings/Dispatcheds/Dispatcheds";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
 import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import BillingMain from "./component/Billings/billingMain/billingMain";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
+import RateManagement from "./component/Info/RateManagement/RateManagement";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
-import RateManagement from "./component/Info/RateManagement/RateManagement";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
-
-
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -65,18 +63,11 @@ function App() {
                 <Route path="/home/bookings/tripsheet" element={<TripSheet />} />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route path="/home/bookings/dispatched" element={<Dispatcheds />} />
-                {/* <Route path="/home/Info/Info" element={<Customer />} />
-                <Route path="/home/Info/supplier" element={<Suppliers />} /> */}
               </Route>
               <Route path="/home/registration" element={<Registration />} >
                 <Route path="/home/registration/customer" element={<Customer />} />
                 <Route path="/home/registration/supplier" element={<Suppliers />} />
                 <Route path="/home/registration/employes" element={<Employes />} />
-
-
-                {/* <Route path="/home/orders/received" element={<Received />} />
-                <Route path="/home/orders/dispatched" element={<Dispatcheds />} /> */}
-                {/* <Route path="/home/orders/drivermaster" element={<DriverMasters />} /> */}
               </Route>
               <Route path="/home/info" element={<Info />}>
                 <Route path="/home/info/ratetype" element={<RateTypes />} />
@@ -107,7 +98,6 @@ function App() {
                 <Route path="/home/usersettings/usersetting" element={<UserSetting />} />
               </Route>
             </Route>
-
             <Route path="/onlinelogin" element={<OnlineLoginForm />} />
             <Route path="/onlinebooking" element={<OnlineBooking />} />
             <Route path="/onlinedigital/digitalsignature" element={<DigitalSignature />} />

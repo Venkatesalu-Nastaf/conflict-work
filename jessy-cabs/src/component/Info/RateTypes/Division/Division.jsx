@@ -1,35 +1,32 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from "axios";
 import "./Division.css";
+import axios from "axios";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { CustomerName } from "./DivisionData.js";
-import Autocomplete from "@mui/material/Autocomplete";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ChecklistIcon from "@mui/icons-material/Checklist";
+import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
+import { CustomerName } from "./DivisionData.js";
+import Autocomplete from "@mui/material/Autocomplete";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Box from "@mui/material/Box";
-import WarehouseIcon from '@mui/icons-material/Warehouse';
-import ClearIcon from '@mui/icons-material/Clear';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import RateReviewIcon from '@mui/icons-material/RateReview';
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, } from "@mui/material";
+
+// ICONS
+import ClearIcon from "@mui/icons-material/Clear";
 import BadgeIcon from "@mui/icons-material/Badge";
-import {
-  TextField,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import WarehouseIcon from "@mui/icons-material/Warehouse";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",

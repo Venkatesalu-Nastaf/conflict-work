@@ -4,8 +4,8 @@ import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
-import PackageRateEntery from './PackageRateEntery/PackageRateEntery';
 import DriverBataRate from './DriverBataRate/DriverBataRate';
+import PackageRateEntery from './PackageRateEntery/PackageRateEntery';
 
 const RateManagement = () => {
 

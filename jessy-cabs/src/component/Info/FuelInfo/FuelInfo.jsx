@@ -4,9 +4,9 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import MailageDetails from "./MailageDetails/MailageDetails";
-import TabContext from "@mui/lab/TabContext";
 import FuelRate from "./FuelRate/FuelRate";
+import TabContext from "@mui/lab/TabContext";
+import MailageDetails from "./MailageDetails/MailageDetails";
 
 
 const FuelInfo = () => {

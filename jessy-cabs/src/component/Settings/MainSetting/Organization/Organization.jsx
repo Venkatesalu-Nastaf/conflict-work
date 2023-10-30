@@ -17,11 +17,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 
 // REACT ICONS
-// import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
-
-
-
 
 const Organization = ({ defaultImage, userid }) => {
     const [selectedCustomerData, setSelectedCustomerData] = useState({});

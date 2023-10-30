@@ -11,7 +11,7 @@ import Organization from "./Organization/Organization";
 
 
 const MainSetting = () => {
-  const [value, setValue] = React.useState("Back_Up");
+  const [value, setValue] = React.useState("Organization");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

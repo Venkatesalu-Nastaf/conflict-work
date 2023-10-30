@@ -2,12 +2,12 @@ import React from 'react'
 import './RateTypes.css'
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import RateType from './RateType/RateType';
-import Ratevalidity from './Ratevalidity/Ratevalidity';
 import Division from './Division/Division';
+import TabContext from "@mui/lab/TabContext";
+import Ratevalidity from './Ratevalidity/Ratevalidity';
 
 
 const RateTypes = () => {

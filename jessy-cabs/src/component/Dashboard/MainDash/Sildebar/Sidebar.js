@@ -9,12 +9,12 @@ export const Sidebardata = [
     key: "/home/bookings/booking",
   },
   {
-    heading: "Registration",
-    key: "/home/registration/customer",
-  },
-  {
     heading: "Billing",
     key: "/home/billing/billing",
+  },
+  {
+    heading: "Registration",
+    key: "/home/registration/customer",
   },
   {
     heading: "Info",

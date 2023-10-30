@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
 import Login from "./component/form/LoginForm";
-import Maintenance from "./component/Maintenance/Maintenance";
+import Info from "./component/Info/Info";
 import { Route, Routes } from "react-router-dom";
 import Page404 from "./component/Page404/page404";
 import Registration from "./component/Registration/Registration";
@@ -12,12 +12,12 @@ import Mailer from "./component/Registration/Mailer/Mailer";
 import Customer from "./component/Registration/Customer/Customer";
 import Income from "./component/Billings/Income/Income";
 import Expense from "./component/Billings/Expense/Expense";
-import Employes from "./component/Maintenance/Employes/Employes";
+import Employes from "./component/Info/Employes/Employes";
 import Received from "./component/Bookings/Receiveds/Receiveds";
 import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Bookings from "./component/Bookings/Bookings";
 import BookingMani from "./component/Bookings/BookingMani/BookingMani";
-import RateTypes from "./component/Maintenance/RateTypes/RateTypes";
+import RateTypes from "./component/Info/RateTypes/RateTypes";
 import Suppliers from "./component/Registration/Supplier/Suppliers";
 import UserSettings from "./component/UserSettings/UserSettings";
 import TripSheet from "./component/Bookings/TripSheet/TripSheet";
@@ -25,14 +25,14 @@ import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
 import Permission from "./component/Settings/Permission/Permission";
 import Dispatcheds from "./component/Bookings/Dispatcheds/Dispatcheds";
 import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
-import FuelInfo from "./component/Maintenance/FuelInfo/FuelInfo";
+import FuelInfo from "./component/Info/FuelInfo/FuelInfo";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
 import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import BillingMain from "./component/Billings/billingMain/billingMain";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
-import RateManagement from "./component/Maintenance/RateManagement/RateManagement";
+import RateManagement from "./component/Info/RateManagement/RateManagement";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 
@@ -65,8 +65,8 @@ function App() {
                 <Route path="/home/bookings/tripsheet" element={<TripSheet />} />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route path="/home/bookings/dispatched" element={<Dispatcheds />} />
-                {/* <Route path="/home/maintenance/maintenance" element={<Customer />} />
-                <Route path="/home/maintenance/supplier" element={<Suppliers />} /> */}
+                {/* <Route path="/home/Info/Info" element={<Customer />} />
+                <Route path="/home/Info/supplier" element={<Suppliers />} /> */}
               </Route>
               <Route path="/home/registration" element={<Registration />} >
                 <Route path="/home/registration/customer" element={<Customer />} />
@@ -78,11 +78,11 @@ function App() {
                 <Route path="/home/orders/dispatched" element={<Dispatcheds />} /> */}
                 {/* <Route path="/home/orders/drivermaster" element={<DriverMasters />} /> */}
               </Route>
-              <Route path="/home/maintenance" element={<Maintenance />}>
-                <Route path="/home/maintenance/ratetype" element={<RateTypes />} />
-                <Route path="/home/maintenance/ratemanagement" element={<RateManagement />} />
-                <Route path="/home/maintenance/mailer" element={<Mailer />} />
-                <Route path="/home/maintenance/fuelinfo" element={<FuelInfo />} />
+              <Route path="/home/info" element={<Info />}>
+                <Route path="/home/info/ratetype" element={<RateTypes />} />
+                <Route path="/home/info/ratemanagement" element={<RateManagement />} />
+                <Route path="/home/info/mailer" element={<Mailer />} />
+                <Route path="/home/info/fuelinfo" element={<FuelInfo />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>
                 <Route path="/home/billing/billing" element={<BillingMain />} />

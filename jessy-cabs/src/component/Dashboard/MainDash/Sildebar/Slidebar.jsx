@@ -128,9 +128,9 @@ const Sidebar = () => {
             icon={BiBarChartSquare}
           />
           <MenuItem
-            label="Maintenance"
-            to="/home/maintenance/ratetype"
-            menuItemKey="/home/maintenance"
+            label="Info"
+            to="/home/info/ratetype"
+            menuItemKey="/home/info"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineFileProtect}

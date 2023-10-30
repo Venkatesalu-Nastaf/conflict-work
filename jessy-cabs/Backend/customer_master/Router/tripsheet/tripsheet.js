@@ -2,10 +2,6 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const db = require('../../../db');
-const multer = require('multer');
-const path = require('path');
-
-const upload = multer({ dest: 'uploads/' });
 
 // trip sheet database:
 // add tripsheet database
@@ -101,7 +97,7 @@ router.post('/send-tripsheet-email', async (req, res) => {
         // Email content for the owner
         const ownerMailOptions = {
             from: 'akash02899@gmail.com',
-            to: 'akash02899@gmail.com', // Set the owner's email address
+            to: 'akash02899@gmail.com',
             subject: `${guestname} sent you a feedback`,
             text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nHireTypes: ${hireTypes}\nDepartment: ${department}\nVehicle Type: ${vehType}\nVehicle RegNo: ${vehRegNo}\nDriver Name: ${driverName}\nDriver-MobileNo: ${mobileNo}\nPickup: ${pickup}\nUsage: ${useage}`,
         };
@@ -142,8 +138,9 @@ router.post('/send-tripsheet-email', async (req, res) => {
 });
 //end tripsheet mail
 //collect data
-router.get('/tripuploadcollect', (req, res) => {
-    db.query('SELECT * FROM tripsheetupload', (err, results) => {
+router.get('/tripuploadcollect/:tripid', (req, res) => {
+    const tripid = req.params.tripid;
+    db.query("SELECT * FROM tripsheetupload where tripid=?", [tripid], (err, results) => {
         if (err) {
             console.error('Error fetching data from MySQL:', err);
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
@@ -152,50 +149,36 @@ router.get('/tripuploadcollect', (req, res) => {
     });
 });
 //end collect data
-//file upload in tripsheet
-router.post('/uploads', upload.single('file'), (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded.' });
-    }
-    const fileData = {
-        name: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size,
-        path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
-        tripid: req.body.tripid,
-    };
-    const query = 'INSERT INTO tripsheetupload SET ?';
-    db.query(query, fileData, (err, result) => {
-        if (err) {
-            console.error('Error storing file in the database:', err);
-            return res.status(500).json({ error: 'Error storing file in the database.' });
-        }
-        return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
-    });
-});
-//space
-const imageDirectory = path.join(__dirname, 'uploads'); // Adjust the path as needed
-// Serve static files from the imageDirectory
-router.use('/images', express.static(imageDirectory));
-// Example route to serve an image by its filename
-router.get('/get-image/:filename', (req, res) => {
-    const { filename } = req.params;
-    const imagePath = path.join(imageDirectory, filename);
-    fs.access(imagePath, fs.constants.R_OK, (err) => {
-        if (err) {
-            console.error('Error accessing image:', err);
-            res.status(404).send('Image not found');
-        } else {
-            res.sendFile(imagePath, (err) => {
-                if (err) {
-                    console.error('Error sending image:', err);
-                    res.status(404).send('Image not found');
-                }
-            });
-        }
-    });
-});
-  //end tripsheet file upload
 // End tripsheet database
+//get data from ratemanagement for package database
+router.get('/getPackageDetails', (req, res) => {
+    const { vehType, customer, duty, totaltime, totalkm1 } = req.query;
+    console.log('backend console result', req.query);
+    const query = `SELECT * FROM ratemanagement WHERE vehicleType = ? AND pricetag = ? AND duty = ? ORDER BY ABS(Hours - ?), ABS(KMS - ?) LIMIT 1;`;
+
+    const params = [vehType, customer, duty, totaltime, totalkm1];
+    console.log('collected query data from package', query);
+    console.log('collected data from package', params);
+
+    db.query(query, params, (err, result) => {
+        console.log('collected result data', result);
+        if (err) {
+            console.error('Error retrieving package details from MySQL:', err);
+            return res.status(500).json({ error: 'Failed to retrieve package details from MySQL' });
+        }
+
+        // Check if there are matching records
+        if (result.length > 0) {
+            // Send the matching records as a response
+            return res.status(200).json(result);
+        } else {
+            // No matching records found
+            return res.status(404).json({ message: 'No matching records found' });
+        }
+    });
+});
+//end package database
+
+
 
 module.exports = router;

@@ -10,8 +10,6 @@ import logoImage from "../Sildebar/Logo-Img/logo.png";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
-
-
 // ICONS
 import { BiHomeAlt } from "@react-icons/all-files/bi/BiHomeAlt";
 import { BiNotepad } from "@react-icons/all-files/bi/BiNotepad";
@@ -20,7 +18,7 @@ import { HiOutlineUsers } from "@react-icons/all-files/hi/HiOutlineUsers";
 import { FaUserAstronaut } from "@react-icons/all-files/fa/FaUserAstronaut";
 import { BiBarChartSquare } from "@react-icons/all-files/bi/BiBarChartSquare";
 import { AiOutlineSetting } from "@react-icons/all-files/ai/AiOutlineSetting";
-import { AiOutlineFileProtect } from "@react-icons/all-files/ai/AiOutlineFileProtect";
+import { AiOutlineInfoCircle } from "@react-icons/all-files/ai/AiOutlineInfoCircle";
 
 const MenuItem = ({ label, to, menuItemKey, isActive, handleMenuItemClick, icon: Icon }) => {
   return (
@@ -104,20 +102,12 @@ const Sidebar = () => {
             icon={BiHomeAlt}
           />
           <MenuItem
-            label="Customer"
-            to="/home/customers/customers"
-            menuItemKey="/home/customers"
+            label="Booking"
+            to="/home/bookings/booking"
+            menuItemKey="/home/bookings"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={HiOutlineUsers}
-          />
-          <MenuItem
-            label="Orders"
-            to="/home/orders/received"
-            menuItemKey="/home/orders"
-            isActive={isActive}
-            handleMenuItemClick={handleMenuItemClick}
-            icon={BiNotepad}
           />
           <MenuItem
             label="Billing"
@@ -128,12 +118,20 @@ const Sidebar = () => {
             icon={BiBarChartSquare}
           />
           <MenuItem
-            label="Options"
-            to="/home/options/ratetype"
-            menuItemKey="/home/options"
+            label="Register"
+            to="/home/registration/customer"
+            menuItemKey="/home/registration"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
-            icon={AiOutlineFileProtect}
+            icon={BiNotepad}
+          />
+          <MenuItem
+            label="Info"
+            to="/home/info/ratetype"
+            menuItemKey="/home/info"
+            isActive={isActive}
+            handleMenuItemClick={handleMenuItemClick}
+            icon={AiOutlineInfoCircle}
           />
           <MenuItem
             label="Settings"
@@ -160,7 +158,6 @@ const Sidebar = () => {
                 <p>User not logged in</p>
               </div>
             </div>
-
             <div className="avatar-item">
               <StyledBadge
                 overlap="circular"

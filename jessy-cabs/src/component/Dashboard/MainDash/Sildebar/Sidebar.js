@@ -5,20 +5,20 @@ export const Sidebardata = [
     key: "/home/dashboard",
   },
   {
-    heading: "Customers",
-    key: "/home/customers/customers",
-  },
-  {
-    heading: "Orders",
-    key: "/home/orders/received",
+    heading: "Booking",
+    key: "/home/bookings/booking",
   },
   {
     heading: "Billing",
     key: "/home/billing/billing",
   },
   {
-    heading: "Options",
-    key: "/home/options/ratetype",
+    heading: "Registration",
+    key: "/home/registration/customer",
+  },
+  {
+    heading: "Info",
+    key: "/home/info/ratetype",
   },
   {
     heading: "Settings",

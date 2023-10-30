@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs'); // signature png
 const db = require('../../../db');
+const path = require('path'); // Import the path module
 
 router.post('/api/saveSignature', (req, res) => {
     const { signatureData } = req.body;

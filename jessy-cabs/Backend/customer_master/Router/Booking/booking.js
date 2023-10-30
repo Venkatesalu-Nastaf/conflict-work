@@ -226,8 +226,69 @@ router.post('/send-onbook-email', async (req, res) => {
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
-  //end online-booking mail
+//end online-booking mail
 //End booking page database 
+// router.get('/booking_for_table', async (req, res) => {
+//     const { search, fromDate, toDate } = req.query;
+//     try {
+//         const connection = await db.getConnection();
 
+//         // Build a SQL query to fetch filtered bookings
+//         let query = 'SELECT * FROM booking WHERE 1=1'; // Initial query
+//         const params = []; // Placeholder for query parameters
+
+//         if (search) {
+//             query += ' AND bookingno LIKE ?';
+//             params.push(`%${search}%`);
+//         }
+
+//         if (fromDate && toDate) {
+//             query += ' AND bookingdate BETWEEN ? AND ?';
+//             params.push(fromDate);
+//             params.push(toDate);
+//         }
+
+//         const [results] = await connection.query(query, params);
+
+//         res.json(results);
+//         connection.release();
+//     } catch (error) {
+//         console.error('Error retrieving data:', error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// });
+router.get('/booking_for_table', (req, res) => {
+    const { search, fromDate, toDate } = req.query;
+    // Construct your SQL query based on the provided parameters
+    let query = 'SELECT * FROM booking WHERE 1=1';
+    const params = [search, fromDate, toDate];
+
+    // if (search) {
+    //     const columns = ['bookingno', 'status', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2', 'city', 'vehType', 'duty', 'pickup', 'useage', 'username', /* Add other column names here */];
+    //     const columnConditions = columns.map(column => `${column} LIKE ?`).join(' OR ');
+    //     query += ` AND (${columnConditions})`;
+
+    //     // Push the search value for each column
+    //     columns.forEach(() => params.push(`%${search}%`));
+    // }
+
+    if (search) {
+        query += ' AND bookingno LIKE ?';
+        params.push(`%${search}%`);
+    }
+    if (fromDate && toDate) {
+        query += ' AND bookingdate BETWEEN ? AND ?';
+        params.push(fromDate);
+        params.push(toDate);
+    }
+    // Execute the query and return the results
+    db.query(query, params, (err, result) => {
+        if (err) {
+            console.error('Error retrieving booking details:', err);
+            return res.status(500).json({ error: 'Failed to retrieve booking details' });
+        }
+        return res.status(200).json(result);
+    });
+});
 
 module.exports = router;

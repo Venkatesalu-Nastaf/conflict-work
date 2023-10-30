@@ -11,8 +11,8 @@ import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
-import { StationName, ViewFor } from "./EmployeeCreationData";
 import InputAdornment from '@mui/material/InputAdornment';
+import { StationName, ViewFor } from "./EmployeeCreationData";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
@@ -341,7 +341,6 @@ const EmployeeCreation = () => {
                   name="username"
                   value={selectedCustomerData?.username || book.username}
                   onChange={handleChange}
-                  autoFocus
                 />
               </div>
               <div className="input">

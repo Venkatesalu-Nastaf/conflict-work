@@ -1,11 +1,14 @@
+
 .RightSide {
   display: flex;
   flex-direction: column;
   /* padding-top: 1rem; */
-  width: 95%;
+  /* width: 95%; */
   justify-content: space-evenly;
 }
 .RightSide h3 {
+  letter-spacing: .5px;
+  font-size: 20px;
   color: #fff;
 }
 

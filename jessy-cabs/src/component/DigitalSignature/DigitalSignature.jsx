@@ -21,7 +21,9 @@ const DigitalSignature = () => {
                 },
                 body: JSON.stringify({ signatureData: dataUrl }), // Store the data URL string
             });
-    
+            console.log('signature result',response.data);
+           
+            clearSignature();
             if (response.ok) {
                 // Signature saved successfully
                 console.log('Signature saved successfully');

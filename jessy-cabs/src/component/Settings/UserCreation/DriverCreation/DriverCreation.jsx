@@ -17,11 +17,12 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 // FONTAWESOME
-import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { faFileInvoice, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
+import { faSheetPlastic } from "@fortawesome/free-solid-svg-icons";
 
 // REACT ICONS
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -37,12 +38,17 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import TaxiAlertIcon from '@mui/icons-material/TaxiAlert';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -354,7 +360,6 @@ const DriverCreation = () => {
                                     name="username"
                                     value={selectedCustomerData?.username || book.username}
                                     onChange={handleChange}
-                                    autoFocus
                                 />
                             </div>
                             <div className="input">
@@ -394,7 +399,7 @@ const DriverCreation = () => {
                                     label="Designation"
                                     id="designation"
                                     sx={{ m: 1, width: "200ch" }}
-                                    variant="standard"
+                                // variant="standard"
                                 />
                             </div>
                         </div>
@@ -487,8 +492,6 @@ const DriverCreation = () => {
                                     id="free-solo-demo-viewfor"
                                     freeSolo
                                     sx={{ width: "20ch" }}
-                                    value={selectedCustomerData?.viewfor || ''}
-                                    onChange={(event, value) => handleAutocompleteChange(event, value, "viewfor")}
                                     options={ViewFor.map((option) => ({
                                         label: option.Option,
                                     }))}
@@ -504,6 +507,31 @@ const DriverCreation = () => {
                             </div>
                         </div>
                         <div className="input-field">
+                            <div className="input" style={{ width: "400px" }}>
+                                <div className="icone">
+                                    <AddHomeWorkIcon color="action" />
+                                </div>
+                                <TextField
+                                    size="small"
+                                    name="address1"
+                                    label="Address"
+                                    id="address1"
+                                    sx={{ m: 1, width: "200ch" }}
+                                    variant="standard"
+                                />
+                            </div>
+                            <div className="input">
+                                <div className="icone">
+                                    <AccountBalanceWalletIcon color="action" />
+                                </div>
+                                <TextField
+                                    margin="normal"
+                                    size="small"
+                                    id="basicsalary"
+                                    label="Basic Salary"
+                                    name="basicsalary"
+                                />
+                            </div>
                             <div className="input">
                                 <div className="icone">
                                     <TaxiAlertIcon color="action" />
@@ -515,31 +543,8 @@ const DriverCreation = () => {
                                     onChange={handleChange}
                                     label="License No"
                                     id="licenseno"
-                                    variant="standard"
+                                // variant="standard"
                                 />
-                            </div>
-                            <div className="input">
-                                <div className="icone">
-                                    <PostAddIcon color="action" />
-                                </div>
-                                <TextField
-                                    size="small"
-                                    name="badgeno"
-                                    value={selectedCustomerData?.badgeno || book.badgeno}
-                                    onChange={handleChange}
-                                    label="Badge No"
-                                    id="badgeno"
-                                    variant="standard"
-                                />
-                            </div>
-                            <div className="input" style={{ width: "160px" }}>
-                                <Button color="primary" variant="contained" component="label">
-                                    License
-                                    <input
-                                        type="file"
-                                        style={{ display: "none" }}
-                                    />
-                                </Button>
                             </div>
                             <div className="input" style={{ width: "170px" }}>
                                 <TextField
@@ -553,6 +558,45 @@ const DriverCreation = () => {
                                 // variant="standard"
                                 />
                             </div>
+                        </div>
+                        <div className="input-field">
+                            <div className="input" style={{ width: "400px" }}>
+                                <div className="icone">
+                                    <HomeTwoToneIcon color="action" />
+                                </div>
+                                <TextField
+                                    size="small"
+                                    name="streetno"
+                                    id="streetno"
+                                    sx={{ m: 1, width: "200ch" }}
+                                    variant="standard"
+                                />
+                            </div>
+                            <div className="input">
+                                <div className="icone">
+                                    <RateReviewIcon color="action" />
+                                </div>
+                                <TextField
+                                    size="small"
+                                    name="esino"
+                                    label="ESI No"
+                                    id="ESINo"
+                                />
+                            </div>
+                            <div className="input">
+                                <div className="icone">
+                                    <PostAddIcon color="action" />
+                                </div>
+                                <TextField
+                                    size="small"
+                                    name="badgeno"
+                                    value={selectedCustomerData?.badgeno || book.badgeno}
+                                    onChange={handleChange}
+                                    label="Badge No"
+                                    id="badgeno"
+                                // variant="standard"
+                                />
+                            </div>
                             <div className="input" style={{ width: "170px" }}>
                                 <TextField
                                     size="small"
@@ -563,6 +607,55 @@ const DriverCreation = () => {
                                     id="badgeexpdate"
                                     sx={{ m: 1, width: "140ch" }}
                                 // variant="standard"
+                                />
+                            </div>
+                        </div>
+                        <div className="input-field">
+                            <div className="input" style={{ width: "400px" }}>
+                                <div className="icone">
+                                    <LocationCityIcon color="action" />
+                                </div>
+                                <TextField
+                                    size="small"
+                                    name="city"
+                                    id="address3"
+                                    sx={{ m: 1, width: "200ch" }}
+                                    variant="standard"
+                                />
+                            </div>
+
+                            <div className="input">
+                                <div className="icone">
+                                    <FontAwesomeIcon icon={faSheetPlastic} size="lg" />
+                                </div>
+                                <TextField
+                                    size="small"
+                                    name="pfno"
+                                    label="PF No"
+                                    id="PFNo"
+                                />
+                            </div>
+                            <div className="input" style={{ width: "160px" }}>
+                                <Button color="primary" variant="contained" component="label">
+                                    License
+                                    <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                    />
+                                </Button>
+                            </div>
+                            <div className="input" >
+                                <div className="icone">
+                                    <FontAwesomeIcon icon={faFileInvoice} size="lg" />
+                                </div>
+                                <TextField
+                                    margin="normal"
+                                    size="small"
+                                    id="durationofyears"
+                                    label="Duration Of Years"
+                                    value={selectedCustomerData?.durationofyears || book.durationofyears}
+                                    onChange={handleChange}
+                                    name="durationofyears"
                                 />
                             </div>
                         </div>
@@ -591,8 +684,6 @@ const DriverCreation = () => {
                                     />
                                 </Button>
                             </div>
-                        </div>
-                        <div className="input-field">
                             <div className="input" style={{ width: "160px" }}>
                                 <Button variant="contained" onClick={handleAdd}>Add</Button>
                             </div>

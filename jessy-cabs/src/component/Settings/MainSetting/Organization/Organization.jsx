@@ -17,11 +17,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 
 // REACT ICONS
-// import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
-
-
-
 
 const Organization = ({ defaultImage, userid }) => {
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -266,7 +262,6 @@ const Organization = ({ defaultImage, userid }) => {
                                             autoComplete="new-password"
                                             value={selectedCustomerData?.designation || book.designation}
                                             onChange={handleChange}
-                                            autoFocus
                                             disabled={!editMode}
                                         />
                                     </div>
@@ -286,7 +281,6 @@ const Organization = ({ defaultImage, userid }) => {
                                             autoComplete="new-password"
                                             value={selectedCustomerData?.mobileno || book.mobileno}
                                             onChange={handleChange}
-                                            autoFocus
                                             disabled={!editMode}
                                         />
                                     </div>
@@ -303,7 +297,6 @@ const Organization = ({ defaultImage, userid }) => {
                                             autoComplete="new-password"
                                             value={selectedCustomerData?.email || book.email}
                                             onChange={handleChange}
-                                            autoFocus
                                             disabled={!editMode}
                                         />
                                     </div>
@@ -373,7 +366,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="organizationName"
                                 name="organizationName"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -386,7 +378,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="organizationType"
                                 name="organizationType"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -402,7 +393,6 @@ const Organization = ({ defaultImage, userid }) => {
                                     size="small"
                                     id="addressLine1"
                                     name="addressLine1"
-                                    autoFocus
                                     label="Address"
                                     variant="standard"
                                 />
@@ -413,7 +403,6 @@ const Organization = ({ defaultImage, userid }) => {
                                     size="small"
                                     id="addressLine2"
                                     name="addressLine2"
-                                    autoFocus
                                     variant="standard"
                                 />
                             </div>
@@ -423,7 +412,6 @@ const Organization = ({ defaultImage, userid }) => {
                                     size="small"
                                     id="city"
                                     name="city"
-                                    autoFocus
                                     variant="standard"
                                 />
                             </div>
@@ -438,7 +426,6 @@ const Organization = ({ defaultImage, userid }) => {
                                     size="small"
                                     id="contactPhoneNumber"
                                     name="contactPhoneNumber"
-                                    autoFocus
                                     // variant="standard"
                                     label="Phone Number"
                                 />
@@ -449,7 +436,6 @@ const Organization = ({ defaultImage, userid }) => {
                                     size="small"
                                     id="contactEmail"
                                     name="contactEmail"
-                                    autoFocus
                                     // variant="standard"
                                     label="Email Address"
                                 />
@@ -466,7 +452,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="location"
                                 name="location"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -479,7 +464,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="website"
                                 name="website"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -494,7 +478,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="ownershipLeadership"
                                 name="ownershipLeadership"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -507,7 +490,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="productsServices"
                                 name="productsServices"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -522,7 +504,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="marketPresence"
                                 name="marketPresence"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -535,7 +516,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="employees"
                                 name="employees"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -550,7 +530,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="legalStructure"
                                 name="legalStructure"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -563,7 +542,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="customerBase"
                                 name="customerBase"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -578,7 +556,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="partnershipsAlliances"
                                 name="partnershipsAlliances"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -591,7 +568,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="recentNewsDevelopments"
                                 name="recentNewsDevelopments"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -606,7 +582,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="financialStatements"
                                 name="financialStatements"
-                                autoFocus
                                 variant="standard"
                             />
                         </div>
@@ -621,7 +596,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="taxIDNumber"
                                 name="taxIDNumber"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -634,7 +608,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="taxIDNumber"
                                 name="taxIDNumber"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -649,7 +622,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="socialMediaPresence"
                                 name="socialMediaPresence"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -662,7 +634,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="sustainabilityCSR"
                                 name="sustainabilityCSR"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -677,7 +648,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="customerReviewsFeedback"
                                 name="customerReviewsFeedback"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>
@@ -690,7 +660,6 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="industrySpecificDetails"
                                 name="industrySpecificDetails"
-                                autoFocus
                             // variant="standard"
                             />
                         </div>

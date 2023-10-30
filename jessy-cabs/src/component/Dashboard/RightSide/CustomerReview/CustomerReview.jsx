@@ -1,63 +1,39 @@
 import React from "react";
 import Chart from "react-apexcharts";
-
-
+import './CustomerReview.css'
 const CustomerReview = () => {
   const data = {
     series: [
       {
-        name: "Review",
-        data: [10, 50, 30, 90, 40, 120, 100],
+        name: "Booking",
+        data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
       },
     ],
     options: {
       chart: {
-        type: "area",
-        height: "auto",
-      },
-
-      fill: {
-        colors: ["#fff"],
-        type: "gradient",
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: "smooth",
-        colors: ["#ff929f"],
-      },
-      tooltip: {
-        x: {
-          format: "dd/MM/yy HH:mm",
-        },
-      },
-      grid: {
-        show: false,
+        type: "line",
       },
       xaxis: {
-        type: "datetime",
         categories: [
-          "2018-09-19T00:00:00.000Z",
-          "2018-09-19T01:30:00.000Z",
-          "2018-09-19T02:30:00.000Z",
-          "2018-09-19T03:30:00.000Z",
-          "2018-09-19T04:30:00.000Z",
-          "2018-09-19T05:30:00.000Z",
-          "2018-09-19T06:30:00.000Z",
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
         ],
       },
-      yaxis: {
-        show: false
-      },
-      toolbar:{
-        show: false
-      }
     },
   };
-  return <div className="CustomerReview">
-        <Chart options={data.options} series={data.series} type="area" />
-  </div>;
+
+  return (
+    <div className="CustomerReview" id="areachart">
+      <Chart options={data.options} series={data.series} type="bar" />
+    </div>
+  );
 };
 
 export default CustomerReview;

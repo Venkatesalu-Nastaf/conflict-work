@@ -9,12 +9,12 @@
   padding: 0px 10px;
 }
 .Table .MuiPaper-root {
-  height: 250px;
+  height: 280px;
 }
 .Table thead th {
   top: 0;
-  background-color: #92ea69;
-  color: #312e2e;
+  background-color: #797777;
+  color: #fff;
   position: sticky;
 }
 .Table tbody tr{

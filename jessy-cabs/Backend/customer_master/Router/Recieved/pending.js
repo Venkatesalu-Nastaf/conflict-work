@@ -14,7 +14,7 @@ router.get('/pending-bookings', (req, res) => {
     params.push(servicestation);
   }
   if (fromDate && toDate) {
-    query += ' AND bookingdate BETWEEN ? AND ?';
+    query += ' AND bookingdate >= ? AND bookingdate <= ?';
     params.push(fromDate);
     params.push(toDate);
   }

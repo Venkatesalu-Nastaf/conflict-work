@@ -334,7 +334,7 @@ const TripSheet = () => {
     const formData = {};
 
     const parameterKeys = [
-      'tripid', 'bookingno', 'status', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'chireTypesity', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime	', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'caramount', 'minkm', 'minhrs', 'package', 'amount', 'exkm', 'amount1', 'exHrs', 'amount2', 'night', 'amount3', 'driverconvenience', 'amount4', 'exkmTkm', 'exHrsTHrs', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
+      'tripid', 'bookingno', 'status', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'chireTypesity', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'caramount', 'minkm', 'minhrs', 'package', 'amount', 'exkm', 'amount1', 'exHrs', 'amount2', 'night', 'amount3', 'driverconvenience', 'amount4', 'exkmTkm', 'exHrsTHrs', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
     ];
     console.log('tripsheet colected data from dispatch', parameterKeys.value);
 
@@ -467,7 +467,6 @@ const TripSheet = () => {
     smsguest: '',
     booker: '',
     emailcheck: '',
-
     manualbillss: '',
     reload: '',
     locks: '',
@@ -580,7 +579,6 @@ const TripSheet = () => {
       smsguest: '',
       booker: '',
       emailcheck: '',
-
       manualbillss: '',
       reload: '',
       locks: '',
@@ -589,6 +587,8 @@ const TripSheet = () => {
     setSelectedCustomerData({});
     setFormData({});
     setFormValues({});
+    setPackageData({});
+    setPackageDetails({});
   };
 
 
@@ -785,8 +785,6 @@ const TripSheet = () => {
       setErrorMessage("Check Network Connection")
     }
   };
-
-
 
   const handleUpload = () => {
     const input = document.createElement('input');
@@ -1484,18 +1482,18 @@ const TripSheet = () => {
                         <Table hoverRow borderAxis="y">
                           <thead>
                             <tr>
-                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Vehicle Name</th>
-                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Vehicle Type</th>
-                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Dname</th>
-                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Dphone</th>
-                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Supplier</th>
-                              <th style={{ minWidth: '150px', whiteSpace: 'normal', overflow: 'hidden', textOverflow: 'ellipsis' }}>Online Access</th>
+                              <th>Vehicle_Name</th>
+                              <th>Vehicle_Type</th>
+                              <th>Driver_name</th>
+                              <th>Driver_phone</th>
+                              <th>Supplier</th>
+                              <th>Online_Access</th>
                             </tr>
                           </thead>
                           <tbody>
                             {rows.length === 0 ? (
                               <tr>
-                                <td colSpan={6}>No data available.</td>
+                                <td colSpan={7}>No data available.</td>
                               </tr>
                             ) : (
                               rows.map((row) => (

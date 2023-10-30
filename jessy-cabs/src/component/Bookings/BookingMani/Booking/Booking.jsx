@@ -757,7 +757,7 @@ const Booking = () => {
                 />
               </div>
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">
                     <DatePicker
                       value={book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
@@ -768,6 +768,17 @@ const Booking = () => {
                       )}
                     </DatePicker>
                   </DemoItem>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Booking Date"
+                    value={formData.bookingdate || selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
+                    onChange={(date) => handleDateChange(date, 'bookingdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input time">
@@ -1251,10 +1262,10 @@ const Booking = () => {
                   <table >
                     <thead id='update-header'>
                       <tr>
-                        <th>Customer Name</th>
-                        <th>Customer Name</th>
-                        {/* <th>Address</th> */}
-                        <th>Address 1</th>
+                        <th>Customer_Name</th>
+                        <th>Address</th>
+                        <th>Phone_No</th>
+                        <th>Email_Id</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1267,7 +1278,8 @@ const Booking = () => {
                           <tr id='update-row' key={row.id} onClick={() => handleRowClick(row)}>
                             <td>{row.customer}</td>
                             <td>{row.address1}</td>
-                            <td>{row.streetno}</td>
+                            <td>{row.phoneno}</td>
+                            <td>{row.email}</td>
                           </tr>
                         ))
                       )}

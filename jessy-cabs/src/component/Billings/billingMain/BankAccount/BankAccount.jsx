@@ -111,6 +111,10 @@ const BankAccount = () => {
     }
   };
 
+  const calculateTotalIn = (capitalAmount, totalOut) => {
+    return parseFloat(capitalAmount) + parseFloat(totalOut);
+  };
+
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -143,7 +147,6 @@ const BankAccount = () => {
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
   }, [success]);
-
   return (
     <div className="BankAccount-form Scroll-Style-hide">
       <form className='BankAccount-main-container'>
@@ -252,7 +255,22 @@ const BankAccount = () => {
                 </div>
                 <div className="bank-btn-amount-main" id="bank-btn-amountIN">
                   <label htmlFor={`totalIn-${index}`}>Total-In</label>
-                  <input className='bank-amount-input' type="number" id={`totalIn-${index}`} value={bank.totalIn} />
+                  <input
+                    className='bank-amount-input'
+                    type="number"
+                    id={`totalIn-${index}`}
+                    value={
+                      editingIndex === index
+                        ? capitalAmount
+                        : calculateTotalIn(bank.capitalAmount, bank.totalOut)
+                    }
+                    onChange={(e) => {
+                      if (editingIndex === index) {
+                        setCapitalAmount(e.target.value);
+                      }
+                    }}
+                  />
+
                 </div>
                 <div className="bank-btn-amount-main" id="bank-btn-amountOUT">
                   <label htmlFor={`totalOut-${index}`}>Total-Out</label>

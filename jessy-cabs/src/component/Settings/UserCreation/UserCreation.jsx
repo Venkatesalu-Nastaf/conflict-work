@@ -5,9 +5,9 @@ import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
-import EmployeeCreation from "./EmployeeCreation/EmployeeCreation";
-import DriverCreation from "./DriverCreation/DriverCreation";
 import AppUserList from "./AppUserList/AppUserList";
+import DriverCreation from "./DriverCreation/DriverCreation";
+import EmployeeCreation from "./EmployeeCreation/EmployeeCreation";
 
 const UserCreation = () => {
     const [value, setValue] = React.useState("Employee");

@@ -16,7 +16,6 @@ const columns = [
 ];
 
 // TABLE END
-
 const AppUserList = () => {
 
   const [rows, setRows] = useState([]);

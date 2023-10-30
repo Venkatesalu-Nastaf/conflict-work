@@ -155,10 +155,12 @@ const Pending = () => {
       );
       const data = response.data;
       setRows(data);
+      setSuccess(true);
       setSuccessMessage("Successfully listed");
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   }, [servicestation, fromDate, toDate]);
@@ -171,10 +173,12 @@ const Pending = () => {
       );
       const data = response.data;
       setRows(data);
+      setSuccess(true);
       setSuccessMessage("Successfully listed");
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   }, []);

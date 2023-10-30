@@ -144,26 +144,74 @@ const Dispatched = () => {
     setdepartment(newValue ? newValue.label : ''); // Assuming the label field contains the station name
   };
 
+  // const handleShow = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:8081/pending-tripsheet?department=${encodeURIComponent(
+  //         department
+  //       )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+  //         toDate.toISOString()
+  //       )}`
+  //     );
+  //     const data = response.data;
+  //     setRows(data);
+  //     console.log(data);
+  //     setSuccessMessage("Successfully listed");
+  //   } catch (error) {
+  //     console.error('Error retrieving data:', error);
+  //     setRows([]);
+  //     setErrorMessage("Check your Network Connection");
+  //   }
+  // }, [department, fromDate, toDate]);
+
+  // const handleShow = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:8081/pending-tripsheet?department=${encodeURIComponent(
+  //         department
+  //       )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
+  //         toDate.toISOString()
+  //       )}`
+  //     );
+  //     const data = response.data;
+  //     setRows(data);
+  //     setSuccess(true);
+  //     setSuccessMessage("Successfully listed");
+  //   } catch (error) {
+  //     console.error('Error retrieving data:', error);
+  //     setRows([]);
+  //     setError(true);
+  //     setErrorMessage("Check your Network Connection");
+  //   }
+  // }, [department, fromDate, toDate]);
+
+
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/pending-tripsheet?department=${encodeURIComponent(
+        `http://localhost:8081/pending_tripsheet?department=${encodeURIComponent(
           department
         )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
           toDate.toISOString()
         )}`
       );
       const data = response.data;
-      setRows(data);
-      console.log(data);
-      setSuccessMessage("Successfully listed");
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed");
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found");
+      }
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
-      setErrorMessage("Check your Network Connection");
+      setError(true);
+      setErrorMessage("Error retrieving data");
     }
   }, [department, fromDate, toDate]);
-
 
   const handleShowAll = useCallback(async () => {
     try {

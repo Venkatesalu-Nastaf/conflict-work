@@ -13,8 +13,9 @@ router.get('/pending-bookings', (req, res) => {
     query += ' AND servicestation = ?';
     params.push(servicestation);
   }
+ 
   if (fromDate && toDate) {
-    query += ' AND bookingdate >= ? AND bookingdate <= ?';
+    query += ' AND bookingdate >= ? AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
     params.push(fromDate);
     params.push(toDate);
   }

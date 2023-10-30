@@ -24,6 +24,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
+  { field: "status", headerName: "Status", width: 130 },
   { field: "tripid", headerName: "Trip Sheet No", width: 130 },
   { field: "startdate", headerName: "Trip Date", width: 130 },
   { field: "guestname", headerName: "User Name", width: 130 },
@@ -36,7 +37,6 @@ const columns = [
   { field: "totaltime", headerName: "Total Time", width: 130 },
   { field: "vehRegNo", headerName: "Vehicle No", width: 130 },
   { field: "driverName", headerName: "Driver", width: 130 },
-  { field: "status", headerName: "Status", width: 130 },
   { field: "billingno", headerName: "Billing No", width: 130 },
 ];
 
@@ -154,7 +154,7 @@ const Closed = () => {
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/tripsheet?department=${encodeURIComponent(
+        `http://localhost:8081/closed-tripsheet?department=${encodeURIComponent(
           department
         )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
           toDate.toISOString()

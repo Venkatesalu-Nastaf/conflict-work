@@ -344,13 +344,13 @@ const Booking = () => {
   const handleExcelDownload = () => {
     const csvData = convertToCSV(rows);
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "VehicleStatement Reports.csv");
+    saveAs(blob, "BookingStatement Reports.csv");
   };
   const handlePdfDownload = () => {
     const pdf = new jsPDF('Landscape');
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'normal');
-    pdf.text("VehicleStatement Reports", 10, 10);
+    pdf.text("Booking Statement Reports", 10, 10);
 
     // Modify tableData to exclude the index number
     const tableData = rows.map((row) => [
@@ -375,7 +375,7 @@ const Booking = () => {
     });
 
     const pdfBlob = pdf.output('blob');
-    saveAs(pdfBlob, 'VehicleStatement Reports.pdf');
+    saveAs(pdfBlob, 'BookingStatement Reports.pdf');
   };
 
   const getCurrentTime = () => {
@@ -770,15 +770,16 @@ const Booking = () => {
                   </DemoItem>
                 </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Booking Date"
-                    value={formData.bookingdate || selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
-                    onChange={(date) => handleDateChange(date, 'bookingdate')}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
-                    )}
-                  </DatePicker>
+                  <DemoItem label="Booking Date">
+                    <DatePicker
+                      value={formData.bookingdate || selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
+                      onChange={(date) => handleDateChange(date, 'bookingdate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
                 </LocalizationProvider>
               </div>
               <div className="input time">
@@ -1055,7 +1056,7 @@ const Booking = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Report Date"
-                    value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.bookingdate ? dayjs(book.bookingdate) : null}
+                    value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
                     onChange={(date) => handleDateChange(date, 'startdate')}
                   >
                     {({ inputProps, inputRef }) => (

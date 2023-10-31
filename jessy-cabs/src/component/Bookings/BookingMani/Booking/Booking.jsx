@@ -63,6 +63,7 @@ import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
+import { useUser } from '../../../form/UserContext';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -147,6 +148,8 @@ const Booking = () => {
     email: '',
     useage: '',
   });
+
+  const { user } = useUser();
 
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
     customer: '',
@@ -494,6 +497,7 @@ const Booking = () => {
         starttime: starttime,
         reporttime: reporttime,
         triptime: triptime,
+        username: storedUsername,
         bookingdate: selectedBookingDate,
       };
       await axios.post('http://localhost:8081/booking', updatedBook);
@@ -537,6 +541,7 @@ const Booking = () => {
           starttime: starttime,
           reporttime: reporttime,
           triptime: triptime,
+          username: storedUsername,
           bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
         };
         await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
@@ -696,11 +701,11 @@ const Booking = () => {
     if (sendEmail) {
       try {
         const dataToSend = {
-          guestname: formValues.guestname,
-          guestmobileno: formValues.guestmobileno,
-          email: formValues.email,
-          pickup: formValues.pickup,
-          useage: formValues.useage
+          guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno, 
+          email: formValues.email || selectedCustomerData.email || book.email,
+          pickup: formValues.pickup || selectedCustomerData.pickup || book.pickup || formData.pickup,
+          useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage
         };
 
         await axios.post('http://localhost:8081/send-email', dataToSend);
@@ -734,6 +739,18 @@ const Booking = () => {
     }
   }, [searchText, fromDate, toDate]);
 
+  useEffect(() => {
+    if (user && user.username) {
+      const username = user.username;
+      localStorage.setItem("username", username);
+      const successMessagepopup = `Login successful ${user.username}`;
+      // alert(successMessage);
+      // setSuccessMessage(successMessagepopup);
+      setSuccess(successMessagepopup);
+    }
+  }, [user]);
+  const storedUsername = localStorage.getItem("username");
+
   return (
     <div className="booking-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
@@ -757,18 +774,6 @@ const Booking = () => {
                 />
               </div>
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Booking Date">
-                    <DatePicker
-                      value={book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
-                      onChange={(date) => handleDateChange(date, 'bookingdate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
-                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">
                     <DatePicker
@@ -1335,7 +1340,7 @@ const Booking = () => {
                   label="User Name"
                   name="username"
                   autoComplete="new-password"
-                  value={formData.username || selectedCustomerData.username || book.username || ''}
+                  value={formData.username || selectedCustomerData.username || book.username || storedUsername || ''}
                   onChange={handleChange}
                 />
               </div>

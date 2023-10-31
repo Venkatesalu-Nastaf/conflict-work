@@ -131,7 +131,7 @@ router.post('/send-email', async (req, res) => {
             secure: true,
             auth: {
                 user: 'akash02899@gmail.com',
-                pass: 'zrbdlfwjxsgrjncr',
+                pass: 'yocakaoeoajdaawj',
             },
         });
 
@@ -177,7 +177,7 @@ router.post('/send-onbook-email', async (req, res) => {
             secure: true,
             auth: {
                 user: 'akash02899@gmail.com',
-                pass: 'zrbdlfwjxsgrjncr',
+                pass: 'yocakaoeoajdaawj',
             },
         });
 

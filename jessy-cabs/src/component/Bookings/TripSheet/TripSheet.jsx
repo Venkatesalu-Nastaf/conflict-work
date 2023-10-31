@@ -264,17 +264,17 @@ const TripSheet = () => {
     if (sendEmail) {
       try {
         const dataToSend = {
-          guestname: formValues.guestname || selectedCustomerData.guestname,
-          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno,
-          email: formValues.email || selectedCustomerData.email,
-          pickup: formValues.pickup || selectedCustomerData.pickup,
-          useage: formValues.useage || selectedCustomerData.useage,
-          hireTypes: formValues.hireTypes || selectedCustomerData.hireTypes,
-          department: formValues.department || selectedCustomerData.department,
-          vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo,
-          vehType: formValues.vehType || selectedCustomerData.vehType,
-          driverName: formValues.driverName || selectedCustomerData.driverName,
-          mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo
+          guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
+          email: formValues.email || selectedCustomerData.email || book.email || formData.email,
+          pickup: formValues.pickup || selectedCustomerData.pickup || book.pickup || formData.pickup,
+          useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage,
+          hireTypes: formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || formData.hireTypes,
+          department: formValues.department || selectedCustomerData.department || book.department || formData.department,
+          vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
+          vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+          driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
+          mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo
         };
         await axios.post('http://localhost:8081/send-tripsheet-email', dataToSend);
         setSuccess(true);
@@ -1395,7 +1395,7 @@ const TripSheet = () => {
                 <TextField
                   margin="normal"
                   id="username"
-                  label="User Name"
+                  label="Guest Name"
                   name="guestname"
                   value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
                   onChange={handleChange}

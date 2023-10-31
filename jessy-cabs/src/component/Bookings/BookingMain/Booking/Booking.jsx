@@ -198,19 +198,14 @@ const Booking = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const statusValue = params.get('status') || 'pending';
+    const stationValue = params.get('servicestation') || 'Chennai';
+    const payValue = params.get('paymenttype') || 'BTC';
     const formData = {};
     console.log('formdata console details', formData);
 
     // Define a list of parameter keys
     const parameterKeys = [
-      'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby',
-      'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno',
-      'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'reporttime',
-      'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
-      'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
-      'username', 'tripdate', 'triptime', 'emaildoggle', 'hireTypes', 'travelsname',
-      'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'travelsemail'
-    ];
+      'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno', 'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'reporttime', 'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'triptime', 'emaildoggle', 'hireTypes', 'travelsname', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'travelsemail'];
 
     // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
     parameterKeys.forEach(key => {
@@ -222,6 +217,8 @@ const Booking = () => {
 
     // Set the status separately
     formData['status'] = statusValue;
+    formData['servicestation'] = stationValue;
+    formData['paymenttype'] = payValue;
 
     setBook(formData);
     setFormData(formData);
@@ -537,7 +534,7 @@ const Booking = () => {
         const updatedCustomer = {
           ...selectedCustomer,
           ...selectedCustomerData,
-          bookingtime: bookingtime || getCurrentTime(),
+          bookingtime: bookingtime || selectedCustomerData.bookingtime,
           starttime: starttime,
           reporttime: reporttime,
           triptime: triptime,
@@ -702,7 +699,7 @@ const Booking = () => {
       try {
         const dataToSend = {
           guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
-          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno, 
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
           email: formValues.email || selectedCustomerData.email || book.email,
           pickup: formValues.pickup || selectedCustomerData.pickup || book.pickup || formData.pickup,
           useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage
@@ -802,6 +799,7 @@ const Booking = () => {
                   value={formData.bookingtime || selectedCustomerData.bookingtime || book.bookingtime || getCurrentTime() || ''}
                   onChange={(event) => {
                     setBook({ ...book, bookingtime: event.target.value });
+                    setSelectedCustomerData({ ...selectedCustomerData, bookingtime: event.target.value });
                     setBookingTime(event.target.value);
                   }}
                   name="bookingtime"
@@ -874,7 +872,7 @@ const Booking = () => {
                 <TextField
                   name="orderedby"
                   autoComplete="new-password"
-                  value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
+                  value={formData.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.name || book.orderedby || ''}
                   onChange={handleChange}
                   label="Ordered by"
                   id="orderedby"
@@ -888,7 +886,7 @@ const Booking = () => {
                 <TextField
                   name="mobile"
                   autoComplete="new-password"
-                  value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
+                  value={formData.mobile || selectedCustomerData.mobile || selectedCustomerDatas.phoneno || book.mobile || ''}
                   onChange={handleChange}
                   label="Mobile No"
                   id="mobile"
@@ -1027,7 +1025,7 @@ const Booking = () => {
                 <div className="icone">
                   <TaxiAlertTwoToneIcon color="action" />
                 </div>
-                <TextField
+                {/* <TextField
                   name="vehType"
                   autoComplete="new-password"
                   value={formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
@@ -1036,6 +1034,27 @@ const Booking = () => {
                   id="vehicaltype"
                   variant="standard"
                   required
+                /> */}
+
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
+                  value={VehicleModel.find((option) => option.carmodel)?.label || ''}
+                  options={VehicleModel.map((option) => ({
+                    label: option.carmodel,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = formData.vehType || selectedCustomerData.vehType || book.vehType || ''
+                    return (
+                      <TextField {...params} label="Vehicle Type" name="vehType" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
@@ -1199,7 +1218,7 @@ const Booking = () => {
                 <TextField
                   name="orderbyemail"
                   autoComplete="new-password"
-                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || book.orderbyemail || ''}
+                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.email || book.orderbyemail || ''}
                   onChange={handleChange}
                   label="Order By Email"
                   id="orederbyemail"
@@ -1276,10 +1295,11 @@ const Booking = () => {
                   <table >
                     <thead id='update-header'>
                       <tr>
-                        <th>Customer_Name</th>
+                        <th>Organization_Name</th>
+                        <th>Organizer</th>
+                        <th>Email_Id</th>
                         <th>Address</th>
                         <th>Phone_No</th>
-                        <th>Email_Id</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1291,9 +1311,10 @@ const Booking = () => {
                         rows.map((row) => (
                           <tr id='update-row' key={row.id} onClick={() => handleRowClick(row)}>
                             <td>{row.customer}</td>
+                            <td>{row.name}</td>
+                            <td>{row.email}</td>
                             <td>{row.address1}</td>
                             <td>{row.phoneno}</td>
-                            <td>{row.email}</td>
                           </tr>
                         ))
                       )}
@@ -1512,7 +1533,7 @@ const Booking = () => {
               <div className="icone">
                 <CommuteIcon color="action" />
               </div>
-              <Autocomplete
+              {/* <Autocomplete
                 fullWidth
                 size="small"
                 id="free-solo-demo"
@@ -1531,6 +1552,17 @@ const Booking = () => {
                   )
                 }
                 }
+              /> */}
+
+              <TextField
+                name="vehiclemodule"
+                autoComplete="new-password"
+                value={formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || ''}
+                onChange={handleChange}
+                label="Vehical Type"
+                id="vehiclemodule"
+                variant="standard"
+                required
               />
             </div>
           </div>

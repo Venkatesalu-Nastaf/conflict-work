@@ -383,25 +383,25 @@ const Customer = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  id="name"
-                  label="Name"
-                  value={selectedCustomerData?.name || book.name}
+                  id="customer"
+                  label="Organization Name"
+                  value={selectedCustomerData?.customer || book.customer}
                   autoComplete="new-password"
                   variant="standard"
                   onChange={handleChange}
-                  name="name"
+                  name="customer"
                 />
               </div>
               <div className="input">
                 <TextField
                   margin="normal"
                   size="small"
-                  id="Print Name"
-                  label="Print Name"
-                  value={selectedCustomerData?.customer || book.customer}
+                  id="name"
+                  label="Organizer Name"
+                  value={selectedCustomerData?.name || book.name}
                   autoComplete="new-password"
                   onChange={handleChange}
-                  name="customer"
+                  name="name"
                 />
               </div>
               <div className="input">

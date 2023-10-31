@@ -1872,94 +1872,7 @@ const TripSheet = () => {
               </div>
 
             </div>
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <FontAwesomeIcon icon={faRoad} size="lg" />
-                </div>
-                <TextField
-                  name="shedout"
-                  value={formData.shedout || book.shedout || selectedCustomerData.shedout || ''}
-                  onChange={handleChange}
-                  label="Shed Out"
-                  id="shedout"
-                  size='small'
-                  // variant="standard"/
-                  autoComplete="password"
-                />
-              </div>
-              <div className="input">
-                <TextField
-                  name="startkm"
-                  value={formData.startkm || selectedCustomerData.startkm || book.startkm || ''}
-                  onChange={handleChange}
-                  size="small"
-                  label="Start KM"
-                  type="number"
-                  id="outlined-start-adornment"
-                  sx={{ m: 1, width: "23ch" }}
-                  autoComplete="password"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <FontAwesomeIcon icon={faRoad} size="lg" />
-                </div>
-                <TextField
-                  name="shedin"
-                  value={formData.shedin || book.shedin || selectedCustomerData.shedin || ''}
-                  onChange={handleChange}
-                  label="Shed In"
-                  id="shedin"
-                  size='small'
-                  // variant="standard"/
-                  autoComplete="password"
-                />
-              </div>
-              <div className="input">
-                <TextField
-                  name="closekm"
-                  value={formData.closekm || selectedCustomerData.closekm || book.closekm || ''}
-                  onChange={handleChange}
-                  label="Close KM"
-                  size="small"
-                  type="number"
-                  id="outlined-start-adornment"
-                  sx={{ m: 1, width: "23ch" }}
-                  autoComplete="password"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <FontAwesomeIcon icon={faRoad} size="lg" />
-                </div>
-                <TextField
-                  name="shedkm"
-                  value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
-                  onChange={handleChange}
-                  label="Shed KM"
-                  id="shedkm"
-                  size='small'
-                  autoComplete="password"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <FontAwesomeIcon icon={faRoad} size="lg" />
-                </div>
-                <TextField
-                  name="totalkm1"
-                  value={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''}
-                  onChange={handleChange}
-                  label="Total KM"
-                  id="totalkm1"
-                  size='small'
-                  // variant="standard"/
-                  autoComplete="password"
-                />
-              </div>
 
-            </div>
             <div className="input-field">
               <div className="input time">
                 <label>shed out Time</label>
@@ -2015,6 +1928,97 @@ const TripSheet = () => {
                     setBook({ ...book, shedintime: event.target.value });
                     setshedintime(event.target.value);
                   }}
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <FontAwesomeIcon icon={faRoad} size="lg" />
+                </div>
+                <TextField
+                  name="shedout"
+                  value={formData.shedout || book.shedout || selectedCustomerData.shedout || ''}
+                  onChange={handleChange}
+                  label="Shed Out"
+                  id="shedout"
+                  size='small'
+                  type="number"
+                  // variant="standard"/
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input" style={{ width: "180px" }}>
+                <TextField
+                  name="startkm"
+                  value={formData.startkm || selectedCustomerData.startkm || book.startkm || ''}
+                  onChange={handleChange}
+                  size="small"
+                  label="Start KM"
+                  type="number"
+                  id="outlined-start-adornment"
+                  // sx={{ m: 1, width: "23ch" }}/
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input" style={{ width: "180px" }}>
+                <TextField
+                  name="closekm"
+                  value={formData.closekm || selectedCustomerData.closekm || book.closekm || ''}
+                  onChange={handleChange}
+                  label="Close KM"
+                  size="small"
+                  type="number"
+                  id="outlined-start-adornment"
+                  // sx={{ m: 1, width: "23ch" }}
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input" style={{ width: "180px" }}>
+                <div className="icone">
+                  <FontAwesomeIcon icon={faRoad} size="lg" />
+                </div>
+                <TextField
+                  name="shedin"
+                  value={formData.shedin || book.shedin || selectedCustomerData.shedin || ''}
+                  onChange={handleChange}
+                  label="Shed In"
+                  type="number"
+                  id="shedin"
+                  size='small'
+                  // variant="standard"/
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <FontAwesomeIcon icon={faRoad} size="lg" />
+                </div>
+                <TextField
+                  name="shedkm"
+                  value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
+                  onChange={handleChange}
+                  label="Add KM"
+                  type="number"
+                  id="shedkm"
+                  size='small'
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <FontAwesomeIcon icon={faRoad} size="lg" />
+                </div>
+                <TextField
+                  name="totalkm1"
+                  value={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''}
+                  onChange={handleChange}
+                  label="Total KM"
+                  id="totalkm1"
+                  type="number"
+                  size='small'
+                  // variant="standard"/
+                  autoComplete="password"
                 />
               </div>
             </div>
@@ -2153,8 +2157,10 @@ const TripSheet = () => {
                   onChange={handleChange}
                   label="Remark"
                   id="remark"
-                  sx={{ m: 1, width: "300ch" }}
-                  variant="standard"
+                  multiline
+                  rows={5}
+                  sx={{ m: 2, width: "400ch" }}
+                  // variant="standard"
                   autoComplete="password"
                 />
               </div>

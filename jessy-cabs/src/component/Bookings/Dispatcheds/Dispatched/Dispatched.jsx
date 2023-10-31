@@ -219,10 +219,19 @@ const Dispatched = () => {
         `http://localhost:8081/tripsheet`
       );
       const data = response.data;
-      setRows(data);
-      console.log('dispatch colected data', data);
-      setSuccess(true);
-      setSuccessMessage("Successfully listed");
+      // setRows(data);
+      // console.log('dispatch colected data', data);
+      // setSuccess(true);
+      // setSuccessMessage("Successfully listed");
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed");
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found");
+      }
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);

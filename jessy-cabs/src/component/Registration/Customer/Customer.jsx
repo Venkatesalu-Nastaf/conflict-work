@@ -13,12 +13,13 @@ import MenuItem from '@mui/material/MenuItem';
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { UnderGroup, states, Customertype, Select, BillingGroup } from "./Customerdata";
+import { UnderGroup, states, Customertype, Select, BillingGroup, Service_Station } from "./Customerdata";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
 
@@ -128,6 +129,7 @@ const Customer = () => {
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'Customer_Details.pdf');
   };
+
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
@@ -172,6 +174,7 @@ const Customer = () => {
     name: '',
     customer: '',
     customerType: '',
+    servicestation: '',
     date: '',
     address1: '',
     address2: '',
@@ -196,6 +199,7 @@ const Customer = () => {
     enableDriverApp: '',
     billingGroup: '',
   });
+
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
 
@@ -242,6 +246,7 @@ const Customer = () => {
       date: startOfDay,
     }));
   };
+
   const handleCancel = () => {
     setBook((prevBook) => ({
       ...prevBook,
@@ -249,6 +254,7 @@ const Customer = () => {
       name: '',
       customer: '',
       customerType: '',
+      servicestation: '',
       date: '',
       address1: '',
       address2: '',
@@ -275,12 +281,14 @@ const Customer = () => {
     }));
     setSelectedCustomerData({});
   };
+
   const handleRowClick = useCallback((params) => {
     console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+
   const handleAdd = async () => {
     const name = book.name;
     if (!name) {
@@ -307,7 +315,16 @@ const Customer = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/customers');
         const data = response.data;
-        setRows(data);
+        // setRows(data);
+        if (data.length > 0) {
+          setRows(data);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
@@ -411,15 +428,15 @@ const Customer = () => {
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
+                  <DatePicker
                     label="Date"
-                      value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
-                      onChange={handleDateChange}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
-                      )}
-                    </DatePicker>
+                    value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
+                    onChange={handleDateChange}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
             </div>
@@ -562,7 +579,16 @@ const Customer = () => {
                 onChange={handleChange}
                 checked={Boolean(selectedCustomerData?.division || book.division)}
               />
-
+              <FormControlLabel
+                size="small"
+                name="hourRoundedOff"
+                value="Hourroundedoff"
+                control={<Checkbox size="small" />}
+                label="Hour Roundedoff"
+                autoComplete="new-password"
+                onChange={handleChange}
+                checked={Boolean(selectedCustomerData?.hourRoundedOff || book.hourRoundedOff)}
+              />
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "400px" }}>
@@ -580,16 +606,31 @@ const Customer = () => {
                   variant="standard"
                 />
               </div>
-              <FormControlLabel
-                size="small"
-                name="hourRoundedOff"
-                value="Hourroundedoff"
-                control={<Checkbox size="small" />}
-                label="Hour Roundedoff"
-                autoComplete="new-password"
-                onChange={handleChange}
-                checked={Boolean(selectedCustomerData?.hourRoundedOff || book.hourRoundedOff)}
-              />
+              <div className="input">
+                <div className="icone">
+                  <DomainAddIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
+                  value={Service_Station.find((option) => option.optionvalue)?.label || ''}
+                  options={Service_Station.map((option) => ({
+                    label: option.optionvalue,
+                  }))}
+                  getOptionLabel={(option) => option.label || ''}
+                  renderInput={(params) => {
+                    params.inputProps.value = selectedCustomerData.servicestation || book.servicestation || ''
+                    return (
+                      <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
+              </div>
               <div className="input">
                 <Autocomplete
                   fullWidth

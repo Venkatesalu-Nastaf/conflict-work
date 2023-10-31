@@ -241,8 +241,17 @@ const PackageRateEntery = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/ratemanagement');
         const data = response.data;
-        setSuccessMessage("Successfully listed");
-        setRows(data);
+        // setSuccessMessage("Successfully listed");
+        // setRows(data);
+        if (data.length > 0) {
+          setRows(data);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
@@ -258,7 +267,7 @@ const PackageRateEntery = () => {
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
-        console.log('Edit button clicked'); 
+        console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);

@@ -730,11 +730,19 @@ const Booking = () => {
       );
       const data = response.data;
       console.log(data);
-      setRow(data);
-      setSuccessMessage("Successfully listed");
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed");
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found");
+      }
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRow([]);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   }, [searchText, fromDate, toDate]);

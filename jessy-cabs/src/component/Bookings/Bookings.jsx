@@ -17,7 +17,6 @@ const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
   );
 };
 
-
 const Bookings = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('');
 

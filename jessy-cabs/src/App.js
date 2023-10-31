@@ -24,7 +24,7 @@ import Suppliers from "./component/Registration/Supplier/Suppliers";
 import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
 import Permission from "./component/Settings/Permission/Permission";
 import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
-import BookingMani from "./component/Bookings/BookingMani/BookingMani";
+import BookingMain from "./component/Bookings/BookingMain/BookingMain";
 import Dispatcheds from "./component/Bookings/Dispatcheds/Dispatcheds";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
 import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
@@ -59,7 +59,7 @@ function App() {
             <Route path="/home" element={<MainDashboard />}>
               <Route path="/home/dashboard" element={<MainDash />} />
               <Route path="/home/bookings" element={<Bookings />} >
-                <Route path="/home/bookings/booking" element={<BookingMani />} />
+                <Route path="/home/bookings/booking" element={<BookingMain />} />
                 <Route path="/home/bookings/tripsheet" element={<TripSheet />} />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route path="/home/bookings/dispatched" element={<Dispatcheds />} />
@@ -82,13 +82,8 @@ function App() {
                 <Route path="/home/billing/profitandloss" element={<ProfiteLoss />} />
               </Route>
               <Route path="/home/settings" element={<Settings />}>
-                <Route
-                  path="/home/settings/usercreation"
-                  element={<UserCreation />}
-                />
-                <Route
-                  path="/home/settings/stationcreation"
-                  element={<StationCreation />}
+                <Route path="/home/settings/usercreation" element={<UserCreation />} />
+                <Route path="/home/settings/stationcreation" element={<StationCreation />}
                 />
                 <Route path="/home/settings/permission" element={<Permission />} />
                 <Route path="/home/settings/mainsetting" element={<MainSetting />} />

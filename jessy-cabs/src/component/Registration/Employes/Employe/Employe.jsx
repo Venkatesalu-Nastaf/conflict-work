@@ -162,32 +162,32 @@ const Employe = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
@@ -300,8 +300,17 @@ const Employe = () => {
                 console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/employees');
                 const data = response.data;
-                setRows(data);
-                setSuccessMessage("Successfully listed");
+                // setRows(data);
+                // setSuccessMessage("Successfully listed");
+                if (data.length > 0) {
+                    setRows(data);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
                 handleCancel();
@@ -380,7 +389,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empemailid || book.empemailid}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -395,7 +404,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empmobile || book.empmobile}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                         </div>
@@ -412,7 +421,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.jobroll || book.jobroll}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" >
@@ -440,7 +449,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.gender || book.gender}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -455,7 +464,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.bloodgroup || book.bloodgroup}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                         </div>
@@ -488,7 +497,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.aadharcard || book.aadharcard}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -503,7 +512,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.pancard || book.pancard}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                         </div>
@@ -535,7 +544,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.guardian || book.guardian}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -550,7 +559,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.fixedsalary || book.fixedsalary}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                         </div>
@@ -567,7 +576,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.uanid || book.uanid}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "260px" }}>
@@ -582,7 +591,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.esino || book.esino}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "250px" }}>
@@ -597,7 +606,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.licenceno || book.licenceno}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "20px" }}>

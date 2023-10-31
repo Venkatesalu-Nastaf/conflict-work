@@ -257,8 +257,17 @@ const RateType = () => {
                 console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/ratetype');
                 const data = response.data;
-                setSuccessMessage("Successfully listed");
-                setRows(data);
+                // setSuccessMessage("Successfully listed");
+                // setRows(data);
+                if (data.length > 0) {
+                    setRows(data);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
                 handleCancel();

@@ -295,7 +295,16 @@ const Accuntinfo = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/accountinfo');
         const data = response.data;
-        setRows(data);
+        // setRows(data);
+        if (data.length > 0) {
+          setRows(data);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');

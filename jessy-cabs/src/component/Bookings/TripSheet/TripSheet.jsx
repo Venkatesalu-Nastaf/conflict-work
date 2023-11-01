@@ -1870,9 +1870,7 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div>
-
             </div>
-
             <div className="input-field">
               <div className="input time">
                 <label>shed out Time</label>
@@ -1882,7 +1880,7 @@ const TripSheet = () => {
                   value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
                   onChange={(event) => {
                     setBook({ ...book, starttime: event.target.value });
-                    setreporttime(event.target.value);
+                    setStartTime(event.target.value);
                     setFormData({ ...formData, starttime: event.target.value });
                     setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
                   }}
@@ -1898,26 +1896,12 @@ const TripSheet = () => {
                     setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
                     setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                     setBook({ ...book, reporttime: event.target.value });
-                    setStartTime(event.target.value);
+                    setreporttime(event.target.value);
                   }}
                 />
               </div>
               <div className="input time" >
                 <label>Close Time</label>
-                <input
-                  type="time"
-                  name="closetime"
-                  value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
-                  onChange={(event) => {
-                    setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
-                    setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
-                    setBook({ ...book, closetime: event.target.value });
-                    setCloseTime(event.target.value);
-                  }}
-                />
-              </div>
-              <div className="input time" >
-                <label>Shed-In Time</label>
                 <input
                   type="time"
                   name="shedintime"
@@ -1927,6 +1911,20 @@ const TripSheet = () => {
                     setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
                     setBook({ ...book, shedintime: event.target.value });
                     setshedintime(event.target.value);
+                  }}
+                />
+              </div>
+              <div className="input time" >
+                <label>Shed-In Time</label>
+                <input
+                  type="time"
+                  name="closetime"
+                  value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                  onChange={(event) => {
+                    setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
+                    setBook({ ...book, closetime: event.target.value });
+                    setCloseTime(event.target.value);
                   }}
                 />
               </div>

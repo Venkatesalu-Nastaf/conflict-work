@@ -289,13 +289,13 @@ const Division = () => {
                     freeSolo
                     // sx={{ width: "20ch" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "customername")}
-                    value={CustomerName.find((option) => option.optionvalue)?.label || ''}
+                    value={CustomerName.find((option) => option.optionvalue)?.label || selectedCustomerData?.customername || ''}
                     options={CustomerName.map((option) => ({
                       label: option.Option,
                     }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    getOptionLabel={(option) => option.label || selectedCustomerData?.customername || ''}
                     renderInput={(params) => {
-                      params.inputProps.value = selectedCustomerData?.customername || ''
+                      // params.inputProps.value = selectedCustomerData?.customername || ''
                       return (
                         <TextField {...params} label="Customer Name" name="customername" inputRef={params.inputRef} />
                       )

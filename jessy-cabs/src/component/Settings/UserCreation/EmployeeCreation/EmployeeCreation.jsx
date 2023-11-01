@@ -362,14 +362,14 @@ const EmployeeCreation = () => {
                   id="free-solo-demo-stationname"
                   freeSolo
                   sx={{ width: "20ch" }}
-                  value={selectedCustomerData?.stationname || ''}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
+                  value={StationName.find((option) => option.Option)?.label || selectedCustomerData?.stationname || ''}
                   options={StationName.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.stationname || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.stationname || ''
+                    // params.inputProps.value = selectedCustomerData?.stationname || ''
                     return (
                       <TextField {...params} label="Station Name" name="stationname" />
                     )
@@ -482,14 +482,15 @@ const EmployeeCreation = () => {
                   id="free-solo-demo-viewfor"
                   freeSolo
                   sx={{ width: "20ch" }}
-                  value={selectedCustomerData?.viewfor || ''}
+                  // value={selectedCustomerData?.viewfor || ''}
+                  value={ViewFor.find((option) => option.Option)?.label || selectedCustomerData?.viewfor || ''}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "viewfor")}
                   options={ViewFor.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.viewfor || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.viewfor || ''
+                    // params.inputProps.value = selectedCustomerData?.viewfor || ''
                     return (
                       <TextField {...params} label="View For" name="viewfor" />
                     )

@@ -440,13 +440,13 @@ const Accuntinfo = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
-                  value={Undergroup.find((option) => option.Option)?.label || ''}
+                  value={Undergroup.find((option) => option.Option)?.label || selectedCustomerData?.underGroup || ''}
                   options={Undergroup.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.underGroup || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.underGroup || ''
+                    // params.inputProps.value = selectedCustomerData?.underGroup || ''
                     return (
                       <TextField {...params} label="Under Group" name="underGroup" inputRef={params.inputRef} />
                     )
@@ -542,13 +542,13 @@ const Accuntinfo = () => {
                   freeSolo
                   sx={{ m: 1, width: "25ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleInfo")}
-                  value={Vehicleinfo.find((option) => option.Option)?.label || ''}
+                  value={Vehicleinfo.find((option) => option.Option)?.label || selectedCustomerData?.vehicleInfo || ''}
                   options={Vehicleinfo.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleInfo || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.vehicleInfo || ''
+                    // params.inputProps.value = selectedCustomerData?.vehicleInfo || ''
                     return (
                       <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
                     )

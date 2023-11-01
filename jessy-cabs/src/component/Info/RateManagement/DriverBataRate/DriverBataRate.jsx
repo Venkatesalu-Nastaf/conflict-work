@@ -317,13 +317,13 @@ const DriverBataRate = () => {
                     id="free-solo-demo-VehicleType"
                     freeSolo
                     onChange={(event, value) => handleAutocompleteChange(event, value, "VehicleType")}
-                    value={VehicleType.find((option) => option.optionvalue)?.label || ''}
+                    value={VehicleType.find((option) => option.optionvalue)?.label || selectedCustomerData?.VehicleType || ''}
                     options={VehicleType.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    getOptionLabel={(option) => option.label || selectedCustomerData?.VehicleType || ''}
                     renderInput={(params) => {
-                      params.inputProps.value = selectedCustomerData?.VehicleType || ''
+                      // params.inputProps.value = selectedCustomerData?.VehicleType || ''
                       return (
                         <TextField {...params} label="Vehicle Type" name="VehicleType" inputRef={params.inputRef} />
                       )
@@ -347,13 +347,13 @@ const DriverBataRate = () => {
                     freeSolo
                     // sx={{ width: "20ch" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "Duty")}
-                    value={Duty.find((option) => option.optionvalue)?.label || ''}
+                    value={Duty.find((option) => option.optionvalue)?.label || selectedCustomerData?.Duty || ''}
                     options={Duty.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    getOptionLabel={(option) => option.label || selectedCustomerData?.Duty || ''}
                     renderInput={(params) => {
-                      params.inputProps.value = selectedCustomerData?.Duty || ''
+                      // params.inputProps.value = selectedCustomerData?.Duty || ''
                       return (
                         <TextField {...params} label="Duty" name="Duty" inputRef={params.inputRef} />
                       )

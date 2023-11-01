@@ -1257,13 +1257,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
-                  value={Status.find((option) => option.optionvalue)?.label || ''}
+                  value={Status.find((option) => option.optionvalue)?.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                   options={Status.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.status || selectedCustomerData.status || book.status || 'Opened'
+                    // params.inputProps.value = formData.status || selectedCustomerData.status || book.status || 'Opened'
                     return (
                       <TextField {...params} label="Status" autoComplete="password" name="status" inputRef={params.inputRef} />
                     )
@@ -1300,13 +1300,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "apps")}
-                  value={Apps.find((option) => option.optionvalue)?.label || ''}
+                  value={Apps.find((option) => option.optionvalue)?.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
                   options={Apps.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'
+                    // params.inputProps.value = formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'
                     return (
                       <TextField {...params} label="Apps" autoComplete="password" name="apps" inputRef={params.inputRef} />
                     )
@@ -1544,13 +1544,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
-                  value={HireTypes.find((option) => option.option)?.label || ''}
+                  value={HireTypes.find((option) => option.option)?.label || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                   options={HireTypes.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''
+                    // params.inputProps.value = formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''
                     return (
                       <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
                     )
@@ -1569,13 +1569,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
-                  value={Department.find((option) => option.optionvalue)?.label || ''}
+                  value={Department.find((option) => option.optionvalue)?.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                   options={Department.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.department || formValues.department || selectedCustomerData.department || book.department || ''
+                    // params.inputProps.value = formData.department || formValues.department || selectedCustomerData.department || book.department || ''
                     return (
                       <TextField {...params} label="Department" autoComplete="password" name="department" inputRef={params.inputRef} />
                     )
@@ -1610,13 +1610,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                  value={VehicleRate.find((option) => option.optionvalue)?.label || ''}
+                  value={VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                   options={VehicleRate.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''
+                    // params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''
                     return (
                       <TextField {...params} label="Vehicle Rate" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                     )
@@ -1687,11 +1687,11 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "email1")}
-                  value={Email.find((option) => option.optionvalue)?.label || ''}
+                  value={Email.find((option) => option.optionvalue)?.label || formData.email1 || selectedCustomerData.email1 || book.email1 || ''}
                   options={Email.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.email1 || selectedCustomerData.email1 || book.email1 || ''}
                   renderInput={(params) => {
                     params.inputProps.value = formData.email1 || selectedCustomerData.email1 || book.email1 || ''
                     return (
@@ -1714,13 +1714,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                  value={Duty.find((option) => option.optionvalue)?.label || ''}
+                  value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                   options={Duty.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
+                    // params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
                     return (
                       <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
                     )
@@ -1739,13 +1739,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "pickup")}
-                  value={Pickup.find((option) => option.optionvalue)?.label || ''}
+                  value={Pickup.find((option) => option.optionvalue)?.label || formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
                   options={Pickup.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''
+                    // params.inputProps.value = formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''
                     return (
                       <TextField {...params} label="Pickup" autoComplete="password" name="pickup" inputRef={params.inputRef} />
                     )
@@ -2325,13 +2325,13 @@ const TripSheet = () => {
                         freeSolo
                         sx={{ width: "20ch" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
-                        value={DocumentType.find((option) => option.optionvalue)?.label || ''}
+                        value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                         options={DocumentType.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || ''}
+                        getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                         renderInput={(params) => {
-                          params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''
+                          // params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''
                           return (
                             <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
                           )
@@ -2400,13 +2400,13 @@ const TripSheet = () => {
                         freeSolo
                         sx={{ width: "20ch" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                        value={VehicleRate.find((option) => option.optionvalue)?.label || ''}
+                        value={VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                         options={VehicleRate.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || ''}
+                        getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                         renderInput={(params) => {
-                          params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''
+                          // params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''
                           return (
                             <TextField {...params} label="Vehicle type" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                           )
@@ -2425,13 +2425,13 @@ const TripSheet = () => {
                         freeSolo
                         sx={{ width: "20ch" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "duty1")}
-                        value={Duty.find((option) => option.optionvalue)?.label || ''}
+                        value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                         options={Duty.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || ''}
+                        getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                         renderInput={(params) => {
-                          params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
+                          // params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
                           return (
                             <TextField {...params} label="Duty" autoComplete="password" name="duty1" inputRef={params.inputRef} />
                           )
@@ -3371,11 +3371,11 @@ const TripSheet = () => {
                         freeSolo
                         sx={{ width: "20ch" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "selects")}
-                        value={Select.find((option) => option.optionvalue)?.label || ''}
+                        value={Select.find((option) => option.optionvalue)?.label || formData.selects || selectedCustomerData.selects || book.selects || ''}
                         options={Select.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || ''}
+                        getOptionLabel={(option) => option.label || formData.selects || selectedCustomerData.selects || book.selects || ''}
                         renderInput={(params) => {
                           params.inputProps.value = formData.selects || selectedCustomerData.selects || book.selects || ''
                           return (
@@ -3416,13 +3416,13 @@ const TripSheet = () => {
                         freeSolo
                         sx={{ width: "20ch" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
-                        value={DocumentType.find((option) => option.optionvalue)?.label || ''}
+                        value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                         options={DocumentType.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || ''}
+                        getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                         renderInput={(params) => {
-                          params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''
+                          // params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''
                           return (
                             <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
                           )

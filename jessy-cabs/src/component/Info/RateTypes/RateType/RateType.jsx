@@ -334,13 +334,13 @@ const RateType = () => {
                                         id="free-solo-demo-customerType"
                                         freeSolo
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
-                                        value={Stations.find((option) => option.Option)?.label || ''}
+                                        value={Stations.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
                                         options={Stations.map((option) => ({
                                             label: option.Option,
                                         }))}
-                                        getOptionLabel={(option) => option.label || ''}
+                                        getOptionLabel={(option) => option.label || selectedCustomerData?.stations || ''}
                                         renderInput={(params) => {
-                                            params.inputProps.value = selectedCustomerData?.stations || ''
+                                            // params.inputProps.value = selectedCustomerData?.stations || ''
                                             return (
                                                 <TextField   {...params} label="Stations" name="stations" inputRef={params.inputRef} />
                                             )

@@ -994,13 +994,13 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "report")}
-                  value={Report.find((option) => option.Option)?.label || ''}
+                  value={Report.find((option) => option.Option)?.label || formData.report || selectedCustomerData.report || book.report || ''}
                   options={Report.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.report || selectedCustomerData.report || book.report || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.report || selectedCustomerData.report || book.report || ''
+                    // params.inputProps.value = formData.report || selectedCustomerData.report || book.report || ''
                     return (
                       <TextField {...params} label="Report" autoComplete="password" name="report" inputRef={params.inputRef} />
                     )
@@ -1019,13 +1019,13 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                  value={VehicleModel.find((option) => option.carmodel)?.label || ''}
+                  value={VehicleModel.find((option) => option.carmodel)?.label || formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
                   options={VehicleModel.map((option) => ({
                     label: option.carmodel,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.vehType || selectedCustomerData.vehType || book.vehType || ''
+                    // params.inputProps.value = formData.vehType || selectedCustomerData.vehType || book.vehType || ''
                     return (
                       <TextField {...params} label="Vehicle Type" name="vehType" inputRef={params.inputRef} />
                     )
@@ -1044,13 +1044,13 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "paymenttype")}
-                  value={PayType.find((option) => option.Option)?.label || ''}
+                  value={PayType.find((option) => option.Option)?.label || formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''}
                   options={PayType.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''
+                    // params.inputProps.value = formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''
                     return (
                       <TextField {...params} label="Payment Type" name="paymenttype" inputRef={params.inputRef} />
                     )
@@ -1114,13 +1114,13 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                  value={Duty.find((option) => option.Option)?.label || ''}
+                  value={Duty.find((option) => option.Option)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                   options={Duty.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
+                    // params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
                     return (
                       <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
                     )
@@ -1228,13 +1228,13 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
-                  value={Service_Station.find((option) => option.optionvalue)?.label || ''}
+                  value={Service_Station.find((option) => option.optionvalue)?.label || formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''}
                   options={Service_Station.map((option) => ({
                     label: option.optionvalue,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''
+                    // params.inputProps.value = formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''
                     return (
                       <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
                     )
@@ -1463,13 +1463,13 @@ const Booking = () => {
                 freeSolo
                 sx={{ width: "20ch" }}
                 onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
-                value={Hire.find((option) => option.Option)?.label || ''}
+                value={Hire.find((option) => option.Option)?.label || formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                 options={Hire.map((option) => ({
                   label: option.Option,
                 }))}
-                getOptionLabel={(option) => option.label || ''}
+                getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                 renderInput={(params) => {
-                  params.inputProps.value = formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''
+                  // params.inputProps.value = formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''
                   return (
                     <TextField {...params} label="Hire Types" name="hireTypes" inputRef={params.inputRef} />
                   )

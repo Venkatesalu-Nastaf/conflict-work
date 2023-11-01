@@ -412,13 +412,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
-                  value={Customertype.find((option) => option.Option)?.label || ''}
+                  value={Customertype.find((option) => option.Option)?.label || selectedCustomerData?.customerType || ''}
                   options={Customertype.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.customerType || book.customerType || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.customerType || ''
+                    // params.inputProps.value = selectedCustomerData?.customerType || ''
                     return (
                       <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
                     )
@@ -617,13 +617,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
-                  value={Service_Station.find((option) => option.optionvalue)?.label || ''}
+                  value={Service_Station.find((option) => option.optionvalue)?.label ||  selectedCustomerData.servicestation || book.servicestation || ''}
                   options={Service_Station.map((option) => ({
                     label: option.optionvalue,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData.servicestation || book.servicestation || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData.servicestation || book.servicestation || ''
+                    // params.inputProps.value = selectedCustomerData.servicestation || book.servicestation || ''
                     return (
                       <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
                     )
@@ -639,13 +639,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "selectOption")}
-                  value={Select.find((option) => option.Option)?.label || ''}
+                  value={Select.find((option) => option.Option)?.label ||selectedCustomerData?.selectOption || ''}
                   options={Select.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.selectOption || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.selectOption || ''
+                    // params.inputProps.value = selectedCustomerData?.selectOption || ''
                     return (
                       <TextField   {...params} label="Select" name="selectOption" inputRef={params.inputRef} />
                     )
@@ -692,13 +692,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "state")}
-                  value={states.find((option) => option.state)?.label || ''}
+                  value={states.find((option) => option.state)?.label || selectedCustomerData?.state || ''}
                   options={states.map((option) => ({
                     label: option.state,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.state || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.state || ''
+                    // params.inputProps.value = selectedCustomerData?.state || ''
                     return (
                       <TextField {...params} label="State" name="state" inputRef={params.inputRef} />
                     )
@@ -714,13 +714,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
-                  value={UnderGroup.find((option) => option.option)?.label || ''}
+                  value={UnderGroup.find((option) => option.option)?.label || selectedCustomerData?.underGroup || ''}
                   options={UnderGroup.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.underGroup || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.underGroup || ''
+                    // params.inputProps.value = selectedCustomerData?.underGroup || ''
                     return (
                       <TextField {...params} label="UnderGroup" name="underGroup" inputRef={params.inputRef} />
                     )
@@ -736,13 +736,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "billingGroup")}
-                  value={BillingGroup.find((option) => option.option)?.label || ''}
+                  value={BillingGroup.find((option) => option.option)?.label || selectedCustomerData?.billingGroup || ''}
                   options={BillingGroup.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.billingGroup || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.billingGroup || ''
+                    // params.inputProps.value = selectedCustomerData?.billingGroup || ''
                     return (
                       <TextField {...params} label="Billing Group" name="billingGroup" inputRef={params.inputRef} />
                     )

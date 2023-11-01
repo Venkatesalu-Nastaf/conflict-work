@@ -583,19 +583,6 @@ const Booking = () => {
     { icon: <BookmarkAddedIcon />, name: "Add" },
   ];
 
-  useEffect(() => {
-    const activeMenuItem = localStorage.getItem("activeMenuItem");
-    if (activeMenuItem) {
-      const menuItems = document.querySelectorAll(".menu-link");
-      menuItems.forEach((item) => {
-        if (item.textContent === activeMenuItem) {
-          item.classList.add("actives");
-        } else {
-          item.classList.remove("actives");
-        }
-      });
-    }
-  }, [location]);
 
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === 'Enter') {

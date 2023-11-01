@@ -1,4 +1,4 @@
-.order-conatiner {
+.Bookings-main {
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -20,7 +20,6 @@
   padding: 0 10px;
   gap: 1rem;
 }
-
 .menu-link {
   text-decoration: none;
   list-style: none;
@@ -32,9 +31,7 @@
   position: relative;
   cursor: pointer;
   white-space: nowrap;
-
 }
-
 .menu-link.actives {
   &::before {
     content: " ";
@@ -47,14 +44,12 @@
     transition: 0.4s;
     border-radius: 25px;
   }
-
   & {
     &::before {
       background: linear-gradient(to bottom, #eaebeb89, #d2d1d36e);
       box-shadow: 0px 3px 10px 0px rgb(109, 107, 107);
       transform: scale(1.2);
     }
-
     color: black;
   }
 }
@@ -68,11 +63,5 @@
 @media screen and (max-width: 768px) {
   .menu-bar {
     gap: 0;
-  }
-
-  .mobile-view {
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 }

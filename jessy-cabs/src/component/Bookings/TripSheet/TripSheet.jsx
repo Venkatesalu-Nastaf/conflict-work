@@ -1878,13 +1878,13 @@ const TripSheet = () => {
                 <label>shed out Time</label>
                 <input
                   type="time"
-                  name='reporttime'
-                  value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
+                  name='starttime'
+                  value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
                   onChange={(event) => {
-                    setBook({ ...book, reporttime: event.target.value });
+                    setBook({ ...book, starttime: event.target.value });
                     setreporttime(event.target.value);
-                    setFormData({ ...formData, reporttime: event.target.value });
-                    setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                    setFormData({ ...formData, starttime: event.target.value });
+                    setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
                   }}
                 />
               </div>
@@ -1892,12 +1892,12 @@ const TripSheet = () => {
                 <label>Report Time</label>
                 <input
                   type="time"
-                  name="starttime"
-                  value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
+                  name="reporttime"
+                  value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
                   onChange={(event) => {
-                    setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
-                    setSelectedCustomerDatas({ ...selectedCustomerDatas, starttime: event.target.value });
-                    setBook({ ...book, starttime: event.target.value });
+                    setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
+                    setBook({ ...book, reporttime: event.target.value });
                     setStartTime(event.target.value);
                   }}
                 />

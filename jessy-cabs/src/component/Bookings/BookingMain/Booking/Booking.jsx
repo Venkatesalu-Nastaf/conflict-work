@@ -1025,17 +1025,6 @@ const Booking = () => {
                 <div className="icone">
                   <TaxiAlertTwoToneIcon color="action" />
                 </div>
-                {/* <TextField
-                  name="vehType"
-                  autoComplete="new-password"
-                  value={formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
-                  onChange={handleChange}
-                  label="Vehical Type"
-                  id="vehicaltype"
-                  variant="standard"
-                  required
-                /> */}
-
                 <Autocomplete
                   fullWidth
                   size="small"

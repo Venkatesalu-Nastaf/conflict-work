@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import "./BankAccount.css";
 import Button from "@mui/material/Button";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -16,21 +17,23 @@ import EditIcon from '@mui/icons-material/Edit';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
 import { AccountType } from './BankAccountData';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 
 const BankAccount = () => {
   const [showAddBankForm, setShowAddBankForm] = useState(false);
-  const [bankName, setBankName] = useState('');
-  const [capitalAmount, setCapitalAmount] = useState('');
   const [error, setError] = useState(false);
-  const [warning, setWarning] = useState(false);
-  const [info, setInfo] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [warningMessage] = useState('');
-  const [infoMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const [bankDetails, setBankDetails] = useState([]);
+  const [popupOpen, setPopupOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
+  const [infoMessage] = useState('');
+  const [warningMessage] = useState('');
+  const [info, setInfo] = useState(false);
+  const [successMessage, setSuccesMessage] = useState('');
+  const [warning, setWarning] = useState(false);
 
   const hidePopup = () => {
     setError(false);
@@ -39,117 +42,177 @@ const BankAccount = () => {
     setSuccess(false);
   };
 
-  const handleAddBankClick = () => {
-    setShowAddBankForm(true);
-  };
-
-  const handleAddBank = () => {
-    if (!bankName || !capitalAmount) {
-      setError(true);
-      setErrorMessage('Please fill in all required fields.');
-      return;
-    }
-
-    const newBank = {
-      bankName,
-      capitalAmount,
-      netBalance: capitalAmount,
-      totalIn: capitalAmount,
-      totalOut: 0,
-    };
-
-    setBankDetails([...bankDetails, newBank]);
-
-    setSuccess(true);
-    setSuccessMessage('Bank added successfully');
-
-    setErrorMessage('');
-    setBankName('');
-    setCapitalAmount('');
-    setShowAddBankForm(false);
-  };
-
-
-  const handleDeleteBank = (index) => {
-    const updatedBankDetails = [...bankDetails];
-    updatedBankDetails.splice(index, 1);
-    setBankDetails(updatedBankDetails);
-  };
-
-  const handleEditBank = (index) => {
-    setEditingIndex(index);
-    const editedBank = bankDetails[index];
-    setBankName(editedBank.bankName);
-    setCapitalAmount(editedBank.capitalAmount);
-  };
-
-  const handleSaveEdit = () => {
-    if (editingIndex !== null) {
-      if (!bankName || !capitalAmount) {
-        setError(true);
-        setErrorMessage('Please fill in all required fields.');
-        return;
-      }
-
-      const updatedBankDetails = [...bankDetails];
-      updatedBankDetails[editingIndex] = {
-        ...updatedBankDetails[editingIndex],
-        bankName,
-        capitalAmount,
-        netBalance: capitalAmount,
-      };
-
-      setBankDetails(updatedBankDetails);
-
-      setSuccess(true);
-      setSuccessMessage('Bank details updated successfully');
-
-      setEditingIndex(null);
-      setErrorMessage('');
-      setBankName('');
-      setCapitalAmount('');
-    }
-  };
-
-  const calculateTotalIn = (capitalAmount, totalOut) => {
-    return parseFloat(capitalAmount) + parseFloat(totalOut);
-  };
-
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
+
+  const handleAddBankClick = () => {
+    setShowAddBankForm(true);
+  };
+  const [book, setBook] = useState({
+    bankname: '',
+    capital: '',
+    AccountType: '',
+    bankname2: '',
+    netbalance: '',
+    totalin: '',
+    totalout: '',
+  });
+
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      bankname: '',
+      capital: '',
+      AccountType: '',
+    }));
+  };
+
+  const handleAddBank = () => {
+    const bankname = book.bankname;
+    const capital = book.capital;
+    if (!bankname || !capital) {
+      setError(true);
+      setErrorMessage('Please fill in all required fields.');
+      return;
+    }
+    const newBank = {
+      bankname,
+      bankname2: book.bankname,
+      capital,
+      netbalance: book.capital,
+      totalin: book.capital,
+      totalout: 0,
+    };
+    setBankDetails((prevBankDetails) => [...prevBankDetails, newBank]);
+    setEditingIndex(null);
+  };
+
+  const handleDeleteBank = (index) => {
+    const updatedBankDetails = [...bankDetails];
+    updatedBankDetails.splice(index, 1);
+    setBankDetails(updatedBankDetails);
+    setPopupOpen(false); // Close the dialog
+
+  };
+
+  const handleEditBank = (index) => {
+    setEditingIndex(index);
+  };
+
+  const handleSaveEdit = () => {
+    const bankname = book.bankname;
+    const capital = book.capital;
+    if (editingIndex !== null) {
+      if (!bankname || !capital) {
+        setError(true);
+        setErrorMessage('Please fill in all required fields.');
+        return;
+      }
+      const updatedBankDetails = [...bankDetails];
+      updatedBankDetails[editingIndex] = {
+        ...updatedBankDetails[editingIndex],
+        bankname,
+        capital,
+        netbalance: capital,
+      };
+      setBankDetails(updatedBankDetails);
+      setSuccess(true);
+      setSuccesMessage('Successfully Added');
+      setEditingIndex(null);
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: value,
+    }));
+  };
+
+  const handleAutocompleteChange = (event, newValue, name) => {
+    const selectedOption = newValue ? newValue.label : '';
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: selectedOption,
+    }));
+  };
+
+  const handleAdd = async () => {
+    try {
+      const updatebook = {
+        ...book,
+        bankname2: book.bankname,
+        netbalance: book.capital,
+        totalin: book.capital,
+        totalout: 0,
+      }
+      await axios.post('http://localhost:8081/bankdetails', updatebook);
+      handleAddBank();
+      handleCancel();
+
+    } catch (error) {
+      console.error('Error updating customer:', error);
+      setError(true);
+      setErrorMessage('Check your Network Connection');
+    }
+  };
+
+  useEffect(() => {
+    // Make a GET request to fetch the bankDetails from the backend
+    fetch('http://localhost:8081/getbankdetails')
+      .then((response) => response.json())
+      .then((data) => {
+        // Set the retrieved data to your component's state
+        setBankDetails(data);
+      })
+      .catch(() => {
+        setError(true);
+        setErrorMessage('Error fetching Bank details')
+      });
+  }, []);
+
+  const handlePopupClose = () => {
+    setPopupOpen(false);
+  };
+
+  const handleDelete = () => {
+    setPopupOpen(true);
+  };
+
   return (
     <div className="BankAccount-form Scroll-Style-hide">
-      <form className='BankAccount-main-container'>
+      <form className="BankAccount-main-container">
         <div className="BankAccount-detail-container-main">
           <div className="BankAccount-first-container">
             <div className="input bankaddbtn">
@@ -170,8 +233,8 @@ const BankAccount = () => {
                     label="Bank Name"
                     name="bankname"
                     autoFocus
-                    value={bankName}
-                    onChange={(e) => setBankName(e.target.value)}
+                    value={book.bankname}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="input">
@@ -179,12 +242,12 @@ const BankAccount = () => {
                     <FontAwesomeIcon icon={faSackDollar} size="xl" />
                   </div>
                   <TextField
-                    type='number'
+                    type="number"
                     size="small"
                     label="Capital Amount"
                     name="capital"
-                    value={capitalAmount}
-                    onChange={(e) => setCapitalAmount(e.target.value)}
+                    value={book.capital}
+                    onChange={handleChange} // Fixed the 'name' property here
                   />
                 </div>
                 <div className="input" style={{ width: "230px" }}>
@@ -194,22 +257,25 @@ const BankAccount = () => {
                   <Autocomplete
                     fullWidth
                     size="small"
-                    id="free-solo-demo-BankAccount"
+                    id="free-solo-demo-AccountType"
                     freeSolo
                     sx={{ width: "20ch" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "AccountType")}
+                    value={AccountType.find((option) => option.Option)?.label || book.AccountType || ''}
                     options={AccountType.map((option) => ({
                       label: option.Option,
                     }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    getOptionLabel={(option) => option.label || book.AccountType || ''}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="Account Type" name="AccountType" inputRef={params.inputRef} />
-                      );
-                    }}
+                        <TextField   {...params} label="Account Type" name="AccountType" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
                   />
                 </div>
                 <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBank}>
+                  <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
                     Add
                   </Button>
                 </div>
@@ -222,7 +288,7 @@ const BankAccount = () => {
             </div>
           )}
         </div>
-        <div className='BankDetails-mainContainer'>
+        <div className="BankDetails-mainContainer">
           {bankDetails.map((bank, index) => (
             <div className="addedbanks-Details-BankAccount" key={index}>
               <div className="input-field">
@@ -233,10 +299,9 @@ const BankAccount = () => {
                   <TextField
                     size="small"
                     label="Bank Name"
-                    name="bankname"
-                    autoFocus
-                    value={editingIndex === index ? bankName : bank.bankName}
-                    onChange={(e) => setBankName(e.target.value)}
+                    name="bankname2"
+                    value={bank.bankname2}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="input">
@@ -246,35 +311,33 @@ const BankAccount = () => {
                   <TextField
                     size="small"
                     label="Net Balance"
-                    name="netBalance"
-                    type='number'
-                    // value={bank.netBalance}
-                    value={editingIndex === index ? capitalAmount : bank.capitalAmount}
-                    onChange={(e) => setCapitalAmount(e.target.value)}
-                  />
-                </div>
-                <div className="bank-btn-amount-main" id="bank-btn-amountIN">
-                  <label htmlFor={`totalIn-${index}`}>Total-In</label>
-                  <input
-                    className='bank-amount-input'
+                    name="netbalance"
                     type="number"
-                    id={`totalIn-${index}`}
-                    value={
-                      editingIndex === index
-                        ? capitalAmount
-                        : calculateTotalIn(bank.capitalAmount, bank.totalOut)
-                    }
-                    onChange={(e) => {
-                      if (editingIndex === index) {
-                        setCapitalAmount(e.target.value);
-                      }
-                    }}
+                    value={bank.netbalance}
+                    onChange={handleChange}
                   />
-
                 </div>
-                <div className="bank-btn-amount-main" id="bank-btn-amountOUT">
-                  <label htmlFor={`totalOut-${index}`}>Total-Out</label>
-                  <input className='bank-amount-input' type="number" id={`totalOut-${index}`} value={bank.totalOut} />
+                <div className="bank-btn-amount-main" id={`bank-btn-amountIN`}>
+                  <label htmlFor={`totalin-${index}`}>Total-In</label>
+                  <input
+                    className="bank-amount-input"
+                    name="totalin"
+                    type="number"
+                    id={`totalin-${index}`}
+                    value={bank.totalin}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="bank-btn-amount-main" id={`bank-btn-amountOUT`}>
+                  <label htmlFor={`totalout-${index}`}>Total-Out</label>
+                  <input
+                    className="bank-amount-input"
+                    name="totalout"
+                    type="number"
+                    id={`totalout-${index}`}
+                    value={bank.totalout}
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="button-container-bankAccount">
                   <div className="input" style={{ width: "80px" }}>
@@ -289,16 +352,28 @@ const BankAccount = () => {
                     )}
                   </div>
                   <div className="input" style={{ width: "80px" }}>
-                    <IconButton color="error" variant="contained" onClick={() => handleDeleteBank(index)}>
+                    <IconButton color="error" variant="contained" onClick={handleDelete}>
                       <DeleteIcon />
                     </IconButton>
                   </div>
+                  <Dialog open={popupOpen} onClose={handlePopupClose}>
+                    <DialogContent>
+                      Are you sure you want to Delete this
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleDeleteBank} variant="contained" color="primary">
+                        Yes
+                      </Button>
+                      <Button onClick={handlePopupClose} variant="contained" color="primary">
+                        No
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </div>
               </div>
             </div>
           ))}
         </div>
-
         {error && (
           <div className='alert-popup Error' >
             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>

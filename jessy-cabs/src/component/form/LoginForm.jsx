@@ -96,9 +96,9 @@ const Login = () => {
         // Failed login
         setErrorMessage("Check your Network Connection");
       }
-    } catch (error) {
-      console.error("Error:", error);
-      setError("An error occurred while logging in.");
+    } catch {
+      setError(true);
+      setErrorMessage("An error occurred while logging in.");
     }
   };
 

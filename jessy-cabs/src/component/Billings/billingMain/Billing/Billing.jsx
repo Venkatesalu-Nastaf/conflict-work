@@ -7,7 +7,8 @@ import {
 import dayjs from "dayjs";
 import axios from "axios";
 import Box from "@mui/material/Box";
-import { BankAccount } from "./BillingData";
+// import { BankAccount } from "./BillingData";
+import { fetchBankOptions } from './BillingData';//get data from billingdata
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -61,6 +62,11 @@ const actions = [
 ];
 
 const Billing = () => {
+
+    const [bankOptions, setBankOptions] = useState([]);
+    // const [selectedBank] = useState('');
+    // const [error, setError] = useState(null);
+
     const [formData] = useState({});
     const [info, setInfo] = useState(false);
     const [actionName] = useState('');
@@ -72,7 +78,6 @@ const Billing = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
-    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [selectedCustomerData, setSelectedCustomerData] = useState({
         totalkm1: ''
     });
@@ -87,32 +92,32 @@ const Billing = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
@@ -188,6 +193,19 @@ const Billing = () => {
                 [name]: value,
             }));
         }
+    };
+
+    const handleAutocompleteChange = (event, newValue, name) => {
+        const selectedOption = newValue ? newValue.label : '';
+
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: selectedOption,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: selectedOption,
+        }));
     };
 
     const handleDateChange = (date, name) => {
@@ -316,14 +334,19 @@ const Billing = () => {
         }
         return ' ';
     };
+
     const calculateTotalAmount2 = () => {
         const totaltime = selectedCustomerData?.totaltime || book.ChargesForExtraHRS;
         const ChargesForExtraHRSamount = selectedCustomerData?.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount;
+
         if (totaltime !== undefined && ChargesForExtraHRSamount !== undefined) {
-            const totaltimes = totaltime * ChargesForExtraHRSamount;
-            return totaltimes;
+            const [hours, minutes] = totaltime.split('h');
+            const hoursInMinutes = parseFloat(hours) * 60 + parseFloat(minutes);
+            const ratePerHour = parseFloat(ChargesForExtraHRSamount);
+            const totalAmount = hoursInMinutes * (ratePerHour / 60);
+            return totalAmount.toFixed(2);
         }
-        return ' ';
+        return 0.00;
     };
 
     const calculateTotalAmount3 = () => {
@@ -380,18 +403,45 @@ const Billing = () => {
                 const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
                 const bookingDetails = response.data;
                 setSelectedCustomerData(bookingDetails);
-                setSelectedCustomerId(bookingDetails.customerId);
+                // setSelectedCustomerId(bookingDetails.customerId);
             } catch (error) {
                 console.error('Error retrieving booking details:', error);
             }
         }
     }, []);
+    //get banknames from database
+    // useEffect(() => {
+    //     fetchBankOptions()
+    //         .then((data) => {
+    //             console.log('banknames', data);
+    //             setBankOptions(data);
+    //         })
+    //         .catch((error) => {
+    //             setError(error);
+    //         });
+    // }, []);
+
+    useEffect(() => {
+        fetchBankOptions()
+            .then((data) => {
+                if (data) {
+                    console.log('banknames', data);
+                    setBankOptions(data);
+                } else {
+                    alert('Failed to fetch bank options. Please check your network connection.');
+                }
+            })
+            .catch(() => {
+                setError(true);
+                setErrorMessage('Failed to fetch bank options. Please check your network connection.');
+            });
+    }, []);
+
 
     return (
         <div className="form-container">
             <div className="Billing-form">
                 <form onSubmit={handleClick}>
-                    {/* <span className="Title-Name">Billing</span> */}
                     <div className="Billing-page-header">
                         <div className="input-field">
                             <div className="input">
@@ -1141,17 +1191,14 @@ const Billing = () => {
                                         id="free-solo-demo-BankAccount"
                                         freeSolo
                                         sx={{ width: "20ch" }}
-                                        options={BankAccount.map((option) => ({
-                                            label: option.Option,
-                                        }))}
-                                        getOptionLabel={(option) => option.label || ''}
+                                        onChange={(event, value) => handleAutocompleteChange(event, value, "BankAccount")}
+                                        value={selectedCustomerData.BankAccount || ''}
+                                        options={bankOptions}
                                         renderInput={(params) => {
-                                            params.inputProps.value = selectedCustomerData.BankAccount || ''
                                             return (
-                                                <TextField   {...params} label="Bank Account" name="BankAccount" inputRef={params.inputRef} />
-                                            )
-                                        }
-                                        }
+                                                <TextField {...params} label="Bank Account" name="BankAccount" inputRef={params.inputRef} />
+                                            );
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -1197,7 +1244,7 @@ const Billing = () => {
                                 key={action.name}
                                 icon={action.icon}
                                 tooltipTitle={action.name}
-                                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
+                                onClick={(event) => handleClick(event, action.name)}
 
                             />
                         ))}

@@ -707,6 +707,8 @@ const Booking = () => {
     }
   };
 
+  const reversedRows = [...row].reverse();
+
   const handleShowAll = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -1682,7 +1684,7 @@ const Booking = () => {
         <div className="table-bookingCopy-Booking">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={row}
+              rows={reversedRows}
               columns={columns}
               onRowClick={handletableClick}
               pageSize={5}

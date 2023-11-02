@@ -66,8 +66,8 @@ const Closed = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [error]);
 
@@ -75,24 +75,24 @@ const Closed = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [info]);
 
@@ -151,6 +151,8 @@ const Closed = () => {
     setDepartment(newValue ? newValue.label : ''); // Assuming the label field contains the station name
   };
 
+  const reversedRows = [...rows].reverse();
+
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -161,9 +163,6 @@ const Closed = () => {
         )}`
       );
       const data = response.data;
-      // setRows(data);
-      // setSuccess(true);
-      // setSuccessMessage("Successfully listed");
       if (data.length > 0) {
         setRows(data);
         setSuccess(true);
@@ -187,9 +186,6 @@ const Closed = () => {
         `http://localhost:8081/tripsheet`
       );
       const data = response.data;
-      // setRows(data);
-      // setSuccess(true);
-      // setSuccessMessage("Successfully listed");
       if (data.length > 0) {
         setRows(data);
         setSuccess(true);
@@ -318,7 +314,7 @@ const Closed = () => {
         <div className="table-bookingCopy-Closed">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              rows={reversedRows}
               columns={columns}
               onRowClick={(event) => handleButtonClickTripsheet(event.row)}
               pageSize={5}

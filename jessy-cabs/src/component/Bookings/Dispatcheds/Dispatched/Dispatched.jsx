@@ -69,8 +69,8 @@ const Dispatched = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [error]);
 
@@ -78,24 +78,24 @@ const Dispatched = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [info]);
 
@@ -144,47 +144,7 @@ const Dispatched = () => {
     setdepartment(newValue ? newValue.label : ''); // Assuming the label field contains the station name
   };
 
-  // const handleShow = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:8081/pending-tripsheet?department=${encodeURIComponent(
-  //         department
-  //       )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
-  //         toDate.toISOString()
-  //       )}`
-  //     );
-  //     const data = response.data;
-  //     setRows(data);
-  //     console.log(data);
-  //     setSuccessMessage("Successfully listed");
-  //   } catch (error) {
-  //     console.error('Error retrieving data:', error);
-  //     setRows([]);
-  //     setErrorMessage("Check your Network Connection");
-  //   }
-  // }, [department, fromDate, toDate]);
-
-  // const handleShow = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:8081/pending-tripsheet?department=${encodeURIComponent(
-  //         department
-  //       )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
-  //         toDate.toISOString()
-  //       )}`
-  //     );
-  //     const data = response.data;
-  //     setRows(data);
-  //     setSuccess(true);
-  //     setSuccessMessage("Successfully listed");
-  //   } catch (error) {
-  //     console.error('Error retrieving data:', error);
-  //     setRows([]);
-  //     setError(true);
-  //     setErrorMessage("Check your Network Connection");
-  //   }
-  // }, [department, fromDate, toDate]);
-
+  const reversedRows = [...rows].reverse();
 
   const handleShow = useCallback(async () => {
     try {
@@ -219,10 +179,6 @@ const Dispatched = () => {
         `http://localhost:8081/tripsheet`
       );
       const data = response.data;
-      // setRows(data);
-      // console.log('dispatch colected data', data);
-      // setSuccess(true);
-      // setSuccessMessage("Successfully listed");
       if (data.length > 0) {
         setRows(data);
         setSuccess(true);
@@ -366,7 +322,7 @@ const Dispatched = () => {
           </div>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              rows={reversedRows}
               columns={columns}
               onRowClick={(event) => handleButtonClick(event.row)}
               pageSize={5}

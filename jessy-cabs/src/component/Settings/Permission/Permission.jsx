@@ -83,8 +83,8 @@ const Permission = () => {
             <div className="secondary-table">
               <span className="Title-Name">Permission Table</span>
               <div className="table-Permission">
-                <div class="table-container Scroll-Style">
-                  <table class="responsive-table ">
+                <div className="table-container Scroll-Style">
+                  <table className="responsive-table ">
                     <thead>
                       <tr>
                         <th>ID</th>

@@ -68,8 +68,8 @@ const Pending = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [error]);
 
@@ -77,24 +77,24 @@ const Pending = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [info]);
 
@@ -144,6 +144,9 @@ const Pending = () => {
     setServiceStation(newValue ? newValue.label : ''); // Assuming the label field contains the station name
   };
 
+  const reversedRows = [...rows].reverse();
+
+
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -154,9 +157,6 @@ const Pending = () => {
         )}`
       );
       const data = response.data;
-      // setRows(data);
-      // setSuccess(true);
-      // setSuccessMessage("Successfully listed");
       if (data.length > 0) {
         setRows(data);
         setSuccess(true);
@@ -181,9 +181,6 @@ const Pending = () => {
         `http://localhost:8081/booking`
       );
       const data = response.data;
-      // setRows(data);
-      // setSuccess(true);
-      // setSuccessMessage("Successfully listed");
       if (data.length > 0) {
         setRows(data);
         setSuccess(true);
@@ -332,7 +329,8 @@ const Pending = () => {
           </div>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              // rows={rows}
+              rows={reversedRows}
               columns={columns}
               onRowClick={(event) => handleButtonClick(event.row)}
               pageSize={5}

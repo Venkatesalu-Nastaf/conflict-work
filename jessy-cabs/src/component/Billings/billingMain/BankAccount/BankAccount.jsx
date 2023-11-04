@@ -32,8 +32,9 @@ const BankAccount = () => {
   const [infoMessage] = useState('');
   const [warningMessage] = useState('');
   const [info, setInfo] = useState(false);
-  const [successMessage, setSuccesMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [warning, setWarning] = useState(false);
+  // const [bank, setBank] = useState({ bankname2: '' });
 
   const hidePopup = () => {
     setError(false);
@@ -114,50 +115,69 @@ const BankAccount = () => {
       totalout: 0,
     };
     setBankDetails((prevBankDetails) => [...prevBankDetails, newBank]);
+    fetchData();
     setEditingIndex(null);
-  };
-
-  const handleDeleteBank = (index) => {
-    const updatedBankDetails = [...bankDetails];
-    updatedBankDetails.splice(index, 1);
-    setBankDetails(updatedBankDetails);
-    setPopupOpen(false); // Close the dialog
-
   };
 
   const handleEditBank = (index) => {
     setEditingIndex(index);
   };
 
-  const handleSaveEdit = () => {
-    const bankname = book.bankname;
-    const capital = book.capital;
-    if (editingIndex !== null) {
-      if (!bankname || !capital) {
-        setError(true);
-        setErrorMessage('Please fill in all required fields.');
-        return;
+  const handleSaveEdit = async (index, id) => {
+    try {
+      if (index >= 0 && index < bankDetails.length) {
+        const updatedBank = bankDetails[index];
+        const updateData = {
+          id: updatedBank.id,
+          bankname2: book.bankname2 || updatedBank.bankname2,
+          netbalance: book.netbalance || updatedBank.netbalance,
+          totalin: book.totalin || updatedBank.totalin,
+          totalout: book.totalout || updatedBank.totalout,
+        };
+        console.log('updated bankdetails', updateData);
+        await axios.put(`http://localhost:8081/updatebankdetails/${updatedBank.id}`, updateData);
+        setSuccess(true);
+        setSuccessMessage('Successfully Updated');
+        setEditingIndex(null);
+      } else {
+        console.error('Invalid index:', index);
       }
-      const updatedBankDetails = [...bankDetails];
-      updatedBankDetails[editingIndex] = {
-        ...updatedBankDetails[editingIndex],
-        bankname,
-        capital,
-        netbalance: capital,
-      };
-      setBankDetails(updatedBankDetails);
-      setSuccess(true);
-      setSuccesMessage('Successfully Added');
-      setEditingIndex(null);
+    } catch (error) {
+      console.error('Error updating bank account:', error);
+      setError(true);
+      setErrorMessage('Error updating bank account. Please check your Network Connection.');
     }
   };
 
-  const handleChange = (event) => {
+  const handleDeleteBank = async (index) => {
+    const idToDelete = document.querySelector('input[name="id"]').value;
+    if (!idToDelete) {
+      return;
+    }
+    try {
+      await axios.delete(`http://localhost:8081/deletebankdetails/${idToDelete}`);
+      fetchData();
+      handlePopupClose();
+    } catch (error) {
+      console.error('Error deleting bank account:', error);
+      setError(true);
+      setErrorMessage('Error deleting bank account. Please check your Network Connection.');
+    }
+  };
+
+  const handleChange = (event, index) => {
     const { name, value } = event.target;
+    const updatedBankDetails = [...bankDetails];
     setBook((prevBook) => ({
       ...prevBook,
       [name]: value,
     }));
+
+    updatedBankDetails[index] = {
+      ...updatedBankDetails[index],
+      [name]: value,
+    };
+    setBankDetails(updatedBankDetails);
   };
 
   const handleAutocompleteChange = (event, newValue, name) => {
@@ -170,36 +190,46 @@ const BankAccount = () => {
 
   const handleAdd = async () => {
     try {
-      const updatebook = {
-        ...book,
+      const newBank = {
+        bankname: book.bankname,
+        capital: book.capital,
+        AccountType: book.AccountType,
         bankname2: book.bankname,
         netbalance: book.capital,
         totalin: book.capital,
         totalout: 0,
-      }
-      await axios.post('http://localhost:8081/bankdetails', updatebook);
+      };
+      await axios.post('http://localhost:8081/bankdetails', newBank);
       handleAddBank();
       handleCancel();
-
-    } catch (error) {
-      console.error('Error updating customer:', error);
+    } catch {
       setError(true);
-      setErrorMessage('Check your Network Connection');
+      setErrorMessage('Error adding bank account. Please check your Network Connection.');
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8081/getbankdetails');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.length > 0) {
+          setBankDetails(data);
+        } else {
+          setBankDetails([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
+      } else {
+        console.error('Error fetching bank details');
+      }
+    } catch (error) {
+      console.error('Error fetching bank details:', error);
     }
   };
 
   useEffect(() => {
-    // Make a GET request to fetch the bankDetails from the backend
-    fetch('http://localhost:8081/getbankdetails')
-      .then((response) => response.json())
-      .then((data) => {
-        // Set the retrieved data to your component's state
-        setBankDetails(data);
-      })
-      .catch(() => {
-        setError(true);
-        setErrorMessage('Error fetching Bank details')
-      });
+    fetchData();
   }, []);
 
   const handlePopupClose = () => {
@@ -233,7 +263,7 @@ const BankAccount = () => {
                     label="Bank Name"
                     name="bankname"
                     autoFocus
-                    value={book.bankname}
+                    value={book.bankname || ''}
                     onChange={handleChange}
                   />
                 </div>
@@ -246,8 +276,8 @@ const BankAccount = () => {
                     size="small"
                     label="Capital Amount"
                     name="capital"
-                    value={book.capital}
-                    onChange={handleChange} // Fixed the 'name' property here
+                    value={book.capital || ''}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="input" style={{ width: "230px" }}>
@@ -289,10 +319,11 @@ const BankAccount = () => {
           )}
         </div>
         <div className="BankDetails-mainContainer">
-          {bankDetails.map((bank, index) => (
+          {bankDetails.map((bankDetail, index) => (
             <div className="addedbanks-Details-BankAccount" key={index}>
               <div className="input-field">
                 <div className="input">
+                  <input type="hidden" name="id" value={bankDetails[index]?.id} />
                   <div className="icone">
                     <AiFillBank color="action" style={{ fontSize: "27px" }} />
                   </div>
@@ -300,8 +331,8 @@ const BankAccount = () => {
                     size="small"
                     label="Bank Name"
                     name="bankname2"
-                    value={bank.bankname2}
-                    onChange={handleChange}
+                    value={bankDetails[index]?.bankname2 || book.bankname2 || ''}
+                    onChange={(event) => handleChange(event, index)}
                   />
                 </div>
                 <div className="input">
@@ -313,8 +344,9 @@ const BankAccount = () => {
                     label="Net Balance"
                     name="netbalance"
                     type="number"
-                    value={bank.netbalance}
-                    onChange={handleChange}
+                    value={bankDetails[index]?.netbalance || book.netbalance || ''}
+                    // onChange={handleChange}
+                    onChange={(event) => handleChange(event, index)}
                   />
                 </div>
                 <div className="bank-btn-amount-main" id={`bank-btn-amountIN`}>
@@ -324,8 +356,9 @@ const BankAccount = () => {
                     name="totalin"
                     type="number"
                     id={`totalin-${index}`}
-                    value={bank.totalin}
-                    onChange={handleChange}
+                    value={bankDetails[index]?.totalin || book.totalin || ''}
+                    // onChange={handleChange}
+                    onChange={(event) => handleChange(event, index)}
                   />
                 </div>
                 <div className="bank-btn-amount-main" id={`bank-btn-amountOUT`}>
@@ -335,14 +368,14 @@ const BankAccount = () => {
                     name="totalout"
                     type="number"
                     id={`totalout-${index}`}
-                    value={bank.totalout}
-                    onChange={handleChange}
+                    value={bankDetails[index]?.totalout || book.totalout || ''}
+                    onChange={(event) => handleChange(event, index)}
                   />
                 </div>
                 <div className="button-container-bankAccount">
                   <div className="input" style={{ width: "80px" }}>
                     {editingIndex === index ? (
-                      <IconButton color="primary" variant="contained" onClick={handleSaveEdit}>
+                      <IconButton color="primary" variant="contained" onClick={() => handleSaveEdit(index)}>
                         <SaveIcon />
                       </IconButton>
                     ) : (

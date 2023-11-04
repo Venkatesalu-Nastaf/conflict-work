@@ -409,17 +409,7 @@ const Billing = () => {
             }
         }
     }, []);
-    //get banknames from database
-    // useEffect(() => {
-    //     fetchBankOptions()
-    //         .then((data) => {
-    //             console.log('banknames', data);
-    //             setBankOptions(data);
-    //         })
-    //         .catch((error) => {
-    //             setError(error);
-    //         });
-    // }, []);
+   
 
     useEffect(() => {
         fetchBankOptions()

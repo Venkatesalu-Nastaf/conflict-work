@@ -26,12 +26,12 @@ router.get('/getbankdetails', (req, res) => {
 });
 
 router.get('/bankoptions', (req, res) => {
-    db.query('SELECT DISTINCT bankname FROM bankaccountdetails', (err, rows) => {
+    db.query('SELECT DISTINCT bankname2 FROM bankaccountdetails', (err, rows) => {
         if (err) {
             console.error('Error fetching bank names from MySQL:', err);
             return res.status(500).json({ error: 'Failed to fetch bank names from MySQL' });
         }
-        const bankNames = rows.map((row) => row.bankname); // Corrected column name
+        const bankNames = rows.map((row) => row.bankname2); // Corrected column name
         console.log(bankNames);
         return res.status(200).json(bankNames);
     });

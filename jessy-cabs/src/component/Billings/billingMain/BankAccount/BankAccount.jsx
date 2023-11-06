@@ -119,9 +119,10 @@ const BankAccount = () => {
     setEditingIndex(null);
   };
 
-  const handleEditBank = (index) => {
-    setEditingIndex(index);
-  };
+  // const handleEditBank = (index) => {
+  //   setEditingIndex(index);
+  // };
+
 
   const handleSaveEdit = async (index, id) => {
     try {
@@ -131,7 +132,7 @@ const BankAccount = () => {
           id: updatedBank.id,
           bankname2: book.bankname2 || updatedBank.bankname2,
           netbalance: book.netbalance || updatedBank.netbalance,
-          totalin: book.totalin || updatedBank.totalin,
+          totalin: book.netbalance || updatedBank.totalin,
           totalout: book.totalout || updatedBank.totalout,
         };
         console.log('updated bankdetails', updateData);
@@ -240,6 +241,10 @@ const BankAccount = () => {
     setPopupOpen(true);
   };
 
+  const handleEditBank = (index) => {
+    setEditingIndex(index);
+  };
+
   return (
     <div className="BankAccount-form Scroll-Style-hide">
       <form className="BankAccount-main-container">
@@ -331,8 +336,10 @@ const BankAccount = () => {
                     size="small"
                     label="Bank Name"
                     name="bankname2"
-                    value={bankDetails[index]?.bankname2 || book.bankname2 || ''}
+                    // value={bankDetails[index]?.bankname2 || book.bankname2 || ''}
+                    value={editingIndex === index ? bankDetail.bankname2 : (bankDetail.bankname2 || book.bankname2 || '')}
                     onChange={(event) => handleChange(event, index)}
+                    disabled={editingIndex !== index}
                   />
                 </div>
                 <div className="input">
@@ -344,9 +351,11 @@ const BankAccount = () => {
                     label="Net Balance"
                     name="netbalance"
                     type="number"
-                    value={bankDetails[index]?.netbalance || book.netbalance || ''}
+                    // value={bankDetails[index]?.netbalance || book.netbalance || ''}
+                    value={editingIndex === index ? bankDetail.netbalance : (bankDetail.netbalance || book.netbalance || '')}
                     // onChange={handleChange}
                     onChange={(event) => handleChange(event, index)}
+                    disabled={editingIndex !== index}
                   />
                 </div>
                 <div className="bank-btn-amount-main" id={`bank-btn-amountIN`}>
@@ -356,9 +365,11 @@ const BankAccount = () => {
                     name="totalin"
                     type="number"
                     id={`totalin-${index}`}
-                    value={bankDetails[index]?.totalin || book.totalin || ''}
+                    // value={bankDetails[index]?.totalin || book.netbalance || ''}
+                    value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || book.netbalance || '')}
                     // onChange={handleChange}
                     onChange={(event) => handleChange(event, index)}
+                    disabled={editingIndex !== index}
                   />
                 </div>
                 <div className="bank-btn-amount-main" id={`bank-btn-amountOUT`}>
@@ -368,8 +379,10 @@ const BankAccount = () => {
                     name="totalout"
                     type="number"
                     id={`totalout-${index}`}
-                    value={bankDetails[index]?.totalout || book.totalout || ''}
+                    // value={bankDetails[index]?.totalout || book.totalout || ''}
+                    value={editingIndex === index ? bankDetail.totalout : (bankDetail.totalout || book.totalout || '')}
                     onChange={(event) => handleChange(event, index)}
+                    disabled={editingIndex !== index}
                   />
                 </div>
                 <div className="button-container-bankAccount">

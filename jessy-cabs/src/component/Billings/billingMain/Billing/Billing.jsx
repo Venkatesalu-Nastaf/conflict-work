@@ -418,12 +418,12 @@ const Billing = () => {
                     console.log('banknames', data);
                     setBankOptions(data);
                 } else {
-                    alert('Failed to fetch bank options. Please check your network connection.');
+                    alert('Failed to fetch bank options.');
                 }
             })
             .catch(() => {
                 setError(true);
-                setErrorMessage('Failed to fetch bank options. Please check your network connection.');
+                setErrorMessage('Failed to fetch bank options.');
             });
     }, []);
 

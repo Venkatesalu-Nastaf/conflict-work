@@ -41,6 +41,7 @@ const divionRouter = require('./Router/Ratetype/division');
 const driverbataRouter = require('./Router/Ratemanagement/driverbatarate');
 const billingRouter = require('./Router/Billing/billing');
 const bankaccountRouter = require('./Router/Billing/bankaccountdetails/backaccountddetails');
+const paymentRouter = require('./Router/Billing/payment/payment');
 const pettycashRouter = require('./Router/cashflow/pettycash');
 const payrollRouter = require('./Router/cashflow/payroll');
 const fueldetailsRouter = require('./Router/fueldetails/mileage');
@@ -212,6 +213,10 @@ app.use('/', billingRouter);
 // -----------------------------------------------------------------------------------------------------------
 // Billing Database
 app.use('/', bankaccountRouter);
+// End Billing database
+// -----------------------------------------------------------------------------------------------------------
+// Billing Database
+app.use('/', paymentRouter);
 // End Billing database
 // -----------------------------------------------------------------------------------------------------------
 // cashflow Database

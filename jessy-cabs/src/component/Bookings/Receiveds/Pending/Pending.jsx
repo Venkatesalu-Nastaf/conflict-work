@@ -68,8 +68,8 @@ const Pending = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -77,24 +77,24 @@ const Pending = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
 
@@ -264,11 +264,12 @@ const Pending = () => {
                     options={Stations.map((option) => ({
                       label: option.optionvalue,
                     }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    onChange={handleInputChange}
-                    renderInput={(params) =>
-                      <TextField {...params} label="Stations" />
-                    }
+                    onChange={(event, value) => handleInputChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                      );
+                    }}
                   />
                 </div>
                 <div className="input" style={{ width: "140px" }}>

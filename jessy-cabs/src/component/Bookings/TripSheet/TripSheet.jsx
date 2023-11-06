@@ -626,6 +626,13 @@ const TripSheet = () => {
     }
   };
 
+  const vehilcedetails = {
+    vehRegNo: selectedCustomerDatas.vehRegNo || '',
+    vehType: selectedCustomerDatas.vehType || '',
+    driverName: selectedCustomerDatas.driverName || '',
+    mobileNo: selectedCustomerDatas.mobileNo || '',
+  }
+
   const handleEdit = async () => {
 
     try {
@@ -634,6 +641,8 @@ const TripSheet = () => {
       const updatedCustomer = {
         ...book,
         ...selectedCustomer,
+        // ...selectedCustomerDatas,
+        ...vehilcedetails,
         ...selectedCustomerData,
         ...formData,
         starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
@@ -696,8 +705,8 @@ const TripSheet = () => {
         ...book,
         starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
         closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
-        reporttime: reporttime,
-        shedintime: shedintime,
+        reporttime: reporttime || book.reporttime || formData.reporttime || selectedCustomerData.reporttime,
+        shedintime: shedintime || book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
         starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
         closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
         additionaltime: additionalTime.additionaltime,

@@ -78,6 +78,7 @@ const Billing = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
+    const [selectedBankAccount, setSelectedBankAccount] = useState('');
     const [selectedCustomerData, setSelectedCustomerData] = useState({
         totalkm1: ''
     });
@@ -265,7 +266,56 @@ const Billing = () => {
             BankAccount: '',
         }));
         setSelectedCustomerData({});
+        setSelectedBankAccount('');
     };
+
+    // const selecting = {
+    //     tripid: selectedCustomerData.tripid || book.tripid || '',
+    //     billingno: selectedCustomerData.billingno || book.billingno || '',
+    //     Billingdate: formData.Billingdate || selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null,
+    //     totalkm1: selectedCustomerData.totalkm1 || '',
+    //     totaltime: selectedCustomerData.totaltime || '',
+    //     customer: selectedCustomerData.customer || '',
+    //     supplier: selectedCustomerData.supplier || '',
+    //     startdate: selectedCustomerData.startdate || '',
+    //     totaldays: selectedCustomerData.totaldays || '',
+    //     guestname: selectedCustomerData.guestname || '',
+    //     rateType: selectedCustomerData.rateType || '',
+    //     vehRegNo: selectedCustomerData.vehRegNo || '',
+    //     vehType: selectedCustomerData.vehType || '',
+    //     duty: selectedCustomerData.duty || '',
+    //     MinCharges: selectedCustomerData.package || book.MinCharges || '',
+    //     minchargeamount: selectedCustomerData.minchargeamount || '',
+    //     ChargesForExtra: selectedCustomerData.ChargesForExtra || '',
+    //     ChargesForExtraamount: selectedCustomerData.ChargesForExtraamount || '',
+    //     cfeamount: selectedCustomerData.cfeamount || '',
+    //     ChargesForExtraHRS: selectedCustomerData.ChargesForExtraHRS || '',
+    //     ChargesForExtraHRSamount: selectedCustomerData.ChargesForExtraHRSamount || '',
+    //     cfehamount: selectedCustomerData.cfehamount || '',
+    //     NightHalt: selectedCustomerData.NightHalt || '',
+    //     NightHaltamount: selectedCustomerData.NightHaltamount || '',
+    //     nhamount: selectedCustomerData.nhamount || '',
+    //     driverbata: selectedCustomerData.driverbata || '',
+    //     driverbataamount: selectedCustomerData.driverbataamount || '',
+    //     dbamount: selectedCustomerData.dbamount || '',
+    //     OtherCharges: selectedCustomerData.OtherCharges || '',
+    //     OtherChargesamount: selectedCustomerData.OtherChargesamount || '',
+    //     permitothertax: selectedCustomerData.permitothertax || '',
+    //     parkingtollcharges: selectedCustomerData.parkingtollcharges || '',
+    //     MinKilometers: selectedCustomerData.MinKilometers || '',
+    //     GrossAmount: selectedCustomerData.GrossAmount || '',
+    //     AfterTaxAmount: selectedCustomerData.AfterTaxAmount || '',
+    //     DiscountAmount: selectedCustomerData.DiscountAmount || '',
+    //     DiscountAmount2: selectedCustomerData.DiscountAmount2 || '',
+    //     AdvanceReceived: selectedCustomerData.AdvanceReceived || '',
+    //     RoundedOff: selectedCustomerData.RoundedOff || '',
+    //     BalanceReceivable: selectedCustomerData.BalanceReceivable || '',
+    //     NetAmount: selectedCustomerData.NetAmount || '',
+    //     Totalamount: selectedCustomerData.Totalamount || '',
+    //     paidamount: selectedCustomerData.paidamount || '',
+    //     pendingamount: selectedCustomerData.pendingamount || '',
+    //     BankAccount: selectedCustomerData.BankAccount || selectedBankAccount || '',
+    // }
 
     const handleClick = async (event, actionName, tripid) => {
         event.preventDefault();
@@ -302,7 +352,7 @@ const Billing = () => {
             } else if (actionName === 'Add') {
                 const updatedBook = {
                     ...book,
-                    ...selectedCustomerData,
+                    ...selecting,
                     cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || book.cfeamount,
                     cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || book.cfehamount,
                     nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || book.nhamount,
@@ -311,6 +361,7 @@ const Billing = () => {
                 await axios.post('http://localhost:8081/billing', updatedBook);
                 console.log(updatedBook);
                 handleCancel();
+                setSuccess(true);
                 setSuccessMessage("Successfully Added");
             }
         } catch (err) {
@@ -354,7 +405,8 @@ const Billing = () => {
         const NightHaltamount = selectedCustomerData.NightHaltamount || book.NightHaltamount;
         if (NightHalt !== undefined && NightHaltamount !== undefined) {
             const totalnights = NightHalt * NightHaltamount;
-            return totalnights;
+            // return totalnights;
+            return totalnights.toFixed(2);
         }
         return ' ';
     };
@@ -364,7 +416,8 @@ const Billing = () => {
         const driverbataamount = selectedCustomerData.driverbataamount || book.driverbataamount;
         if (driverbata !== undefined && driverbataamount !== undefined) {
             const totaldriverbata = driverbata * driverbataamount;
-            return totaldriverbata;
+            // return totaldriverbata;
+            return totaldriverbata.toFixed(2);
         }
         return ' ';
     };
@@ -373,7 +426,8 @@ const Billing = () => {
         const DiscountAmount = selectedCustomerData.DiscountAmount || book.DiscountAmount;
         const AdvanceReceived = selectedCustomerData.AdvanceReceived || book.AdvanceReceived;
         const netAmount = calculateGrossAmount() - DiscountAmount - AdvanceReceived;
-        return netAmount;
+        // return netAmount;
+        return netAmount.toFixed(2);
     };
 
     const calculateGrossAmount = () => {
@@ -393,7 +447,8 @@ const Billing = () => {
             OtherChargesamount, permitothertax, parkingtollcharges
         ].map(value => parseFloat(value) || 0); // Convert to numbers, default to 0 if NaN
         const gross = parsedValues.reduce((sum, value) => sum + value, 0);
-        return gross;
+        // return gross;
+        return gross.toFixed(2);
     };
 
     const handleKeyDown = useCallback(async (event) => {
@@ -409,7 +464,54 @@ const Billing = () => {
             }
         }
     }, []);
-   
+
+    const selecting = {
+        tripid: selectedCustomerData.tripid || '',
+        billingno: selectedCustomerData.billingno || '',
+        Billingdate: selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs(),
+        totalkm1: selectedCustomerData.totalkm1 || '',
+        totaltime: selectedCustomerData.totaltime || '',
+        customer: selectedCustomerData.customer || '',
+        supplier: selectedCustomerData.supplier || '',
+        startdate: selectedCustomerData.startdate || '',
+        totaldays: selectedCustomerData.totaldays || '',
+        guestname: selectedCustomerData.guestname || '',
+        rateType: selectedCustomerData.rateType || '',
+        vehRegNo: selectedCustomerData.vehRegNo || '',
+        vehType: selectedCustomerData.vehType || '',
+        duty: selectedCustomerData.duty || '',
+        MinCharges: selectedCustomerData.package || '',
+        minchargeamount: selectedCustomerData.netamount || '',
+        ChargesForExtra: selectedCustomerData.totalkm1 || '',
+        ChargesForExtraamount: selectedCustomerData.ChargesForExtraamount || '',
+        cfeamount: selectedCustomerData.cfeamount || calculateTotalAmount() || '',
+        ChargesForExtraHRS: selectedCustomerData.totaltime || '',
+        ChargesForExtraHRSamount: selectedCustomerData.ChargesForExtraHRSamount || '',
+        cfehamount: selectedCustomerData.cfehamount || calculateTotalAmount2() || '',
+        NightHalt: selectedCustomerData.night || book.NightHalt || '',
+        NightHaltamount: selectedCustomerData.NightHaltamount || '',
+        nhamount: selectedCustomerData.nhamount || calculateTotalAmount3() || '',
+        driverbata: selectedCustomerData.driverbata || '',
+        driverbataamount: selectedCustomerData.driverbataamount || '',
+        dbamount: selectedCustomerData.dbamount || calculateTotalAmount4() || '',
+        OtherCharges: selectedCustomerData.OtherCharges || '',
+        OtherChargesamount: selectedCustomerData.OtherChargesamount || '',
+        permitothertax: selectedCustomerData.permitothertax || '',
+        parkingtollcharges: selectedCustomerData.parkingtollcharges || '',
+        MinKilometers: selectedCustomerData.MinKilometers || '',
+        GrossAmount: selectedCustomerData.GrossAmount || calculateGrossAmount() || '',
+        AfterTaxAmount: selectedCustomerData.AfterTaxAmount || '',
+        DiscountAmount: selectedCustomerData.DiscountAmount || '',
+        DiscountAmount2: selectedCustomerData.DiscountAmount2 || '',
+        AdvanceReceived: selectedCustomerData.AdvanceReceived || '',
+        RoundedOff: selectedCustomerData.RoundedOff || '',
+        BalanceReceivable: selectedCustomerData.BalanceReceivable || calculatePayableAmount() || '',
+        NetAmount: selectedCustomerData.NetAmount || calculatePayableAmount() || '',
+        Totalamount: selectedCustomerData.Totalamount || calculatePayableAmount() || '',
+        paidamount: selectedCustomerData.paidamount || calculatePayableAmount() || '',
+        pendingamount: selectedCustomerData.pendingamount || calculatePayableAmount() || '',
+        BankAccount: selectedCustomerData.BankAccount || selectedBankAccount || '',
+    }
 
     useEffect(() => {
         fetchBankOptions()
@@ -470,11 +572,11 @@ const Billing = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Billing Date"
-                                        value={formData.Billingdate || selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null}
-                                        onChange={(date) => handleDateChange(date, 'Billingdate')}
+                                        value={selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
+                                        onChange={(date) => handleDateChange(date, 'bookingdate')}
                                     >
                                         {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.Billingdate} />
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
                                         )}
                                     </DatePicker>
                                 </LocalizationProvider>
@@ -902,7 +1004,7 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
                                     <TextField
-                                        type='number'
+                                        // type='number'
                                         name="OtherCharges"
                                         autoComplete="new-password"
                                         value={selectedCustomerData.OtherCharges || book.OtherCharges}
@@ -1181,8 +1283,11 @@ const Billing = () => {
                                         id="free-solo-demo-BankAccount"
                                         freeSolo
                                         sx={{ width: "20ch" }}
-                                        onChange={(event, value) => handleAutocompleteChange(event, value, "BankAccount")}
-                                        value={selectedCustomerData.BankAccount || ''}
+                                        onChange={(event, value) => {
+                                            setSelectedBankAccount(value);
+                                            handleAutocompleteChange(event, value, "BankAccount")
+                                        }}
+                                        value={selectedBankAccount || selectedCustomerData.BankAccount || ''}
                                         options={bankOptions}
                                         renderInput={(params) => {
                                             return (

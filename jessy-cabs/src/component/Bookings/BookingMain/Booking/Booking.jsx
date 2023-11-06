@@ -462,18 +462,19 @@ const Booking = () => {
       [name]: selectedOption,
     }));
   };
-  const handleDateChange = (date, fieldName) => {
-    setBook((prevData) => ({
-      ...prevData,
-      [fieldName]: date,
+  const handleDateChange = (date, name) => {
+    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: formattedDate,
     }));
-    setSelectedCustomerData((prevData) => ({
-      ...prevData,
-      [fieldName]: date,
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: formattedDate,
     }));
-    setFormData((prevData) => ({
-      ...prevData,
-      [fieldName]: date,
+    setSelectedCustomerData((prevValues) => ({
+      ...prevValues,
+      [name]: formattedDate,
     }));
   };
 

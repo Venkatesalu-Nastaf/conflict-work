@@ -69,8 +69,8 @@ const Dispatched = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -78,24 +78,24 @@ const Dispatched = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
 
@@ -115,7 +115,6 @@ const Dispatched = () => {
     pdf.setFont('helvetica', 'normal');
     pdf.text("Pending Reports", 10, 10);
 
-    // Modify tableData to exclude the index number
     const tableData = rows.map((row) => [
       row['id'],
       row['status'],
@@ -141,7 +140,7 @@ const Dispatched = () => {
   };
 
   const handleInputChange = (event, newValue) => {
-    setdepartment(newValue ? newValue.label : ''); // Assuming the label field contains the station name
+    setdepartment(newValue ? newValue.label : ''); 
   };
 
   const reversedRows = [...rows].reverse();
@@ -260,11 +259,12 @@ const Dispatched = () => {
                     options={Department.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    onChange={handleInputChange}
-                    renderInput={(params) =>
-                      <TextField {...params} label="Department" />
-                    }
+                    onChange={(event, value) => handleInputChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Department" inputRef={params.inputRef} />
+                      );
+                    }}
                   />
                 </div>
                 <div className="input" style={{ width: '170px' }}>

@@ -132,11 +132,12 @@
     padding: 10px 25px ;
 }
 .total-container .amount-calculator{
-    border: 2px solid #ccc;
+    /* border: 2px solid #ccc; */
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    padding-bottom: 50px;
     border-radius: 10px;
 }
 .total-container  .total-inputs{

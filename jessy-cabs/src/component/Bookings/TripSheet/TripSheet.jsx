@@ -331,6 +331,7 @@ const TripSheet = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const statusValue = params.get('status') || 'opened';
+    const appsValue = params.get('apps') || 'Waiting';
     const formData = {};
 
     const parameterKeys = [
@@ -348,6 +349,7 @@ const TripSheet = () => {
 
     // Set the status separately
     formData['status'] = statusValue;
+    formData['apps'] = appsValue;
     setTripSheetData(formData);
     setBook(formData);
     setFormData(formData);
@@ -935,7 +937,7 @@ const TripSheet = () => {
       const totaldriverconvience = driverconvenience1 * dtc2;
       return totaldriverconvience;
     }
-    return 0;
+    return '';
   };
 
   const calculateTotalDays = () => {

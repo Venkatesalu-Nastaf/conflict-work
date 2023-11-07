@@ -192,7 +192,7 @@ const PaymentDetail = () => {
                 </div>
                 <div className="input" style={{ width: "230px" }}>
                   <div className="icone">
-                    <HailOutlinedIcon color="actions" />
+                    <HailOutlinedIcon color="action" />
                   </div>
                   <Autocomplete
                     fullWidth

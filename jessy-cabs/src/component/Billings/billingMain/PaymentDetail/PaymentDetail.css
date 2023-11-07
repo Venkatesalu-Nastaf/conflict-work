@@ -125,29 +125,31 @@
     /* Adjust color as needed */
 }
 
-.total-container{
+.total-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 25px ;
+    padding: 10px 25px;
 }
-.total-container .amount-calculator{
-    /* border: 2px solid #ccc; */
+
+.total-container .amount-calculator {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    padding-bottom: 50px;
+    padding: 10px;
     border-radius: 10px;
 }
-.total-container  .total-inputs{
-display: flex;
+
+.total-container .total-inputs {
+    display: flex;
 }
-.total-container  .total-inputs label{
+
+.total-container .total-inputs label {
     padding: 0px 10px;
     font-weight: 500;
 }
-.total-container  .total-inputs input{
+
+.total-container .total-inputs input {
     background-color: transparent;
     border: 1.5px solid #ccc;
     border-radius: 5px;

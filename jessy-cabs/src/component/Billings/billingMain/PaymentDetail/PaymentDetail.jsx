@@ -23,18 +23,22 @@ import { Organization } from './PaymentDetailData';
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "tripsheetno", headerName: "TripSheet No", width: 130 },
-  { field: "organization", headerName: "Organization", width: 130 },
-  { field: "billdate", headerName: "Bill Date", width: 130 },
-  { field: "totalamount", headerName: "Total Amount", width: 130 },
-  { field: "paid", headerName: "Paid", width: 130 },
-  { field: "Pending", headerName: "Pending", width: 130 },
-  { field: "bankaccount", headerName: "Bank Account", width: 150 },
+  { field: "tripid", headerName: "TripSheet No", width: 130 },
+  { field: "customer", headerName: "Organization", width: 130 },
+  { field: "Billingdate", headerName: "Bill Date", width: 130 },
+  { field: "Totalamount", headerName: "Total Amount", width: 130 },
+  { field: "paidamount", headerName: "Paid", width: 130 },
+  { field: "pendingamount", headerName: "Pending", width: 130 },
+  { field: "BankAccount", headerName: "Bank Account", width: 150 },
 ];
 
 const PaymentDetail = () => {
-  const [organization, setOrganization] = useState("");
-  const [tripsheetno, setTripsheetno] = useState("");
+  // const [tableData, setTableData] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [paidAmount, setPaidAmount] = useState(0);
+  const [pendingAmount, setPendingAmount] = useState(0);
+  const [customer, setCustomer] = useState("");
+  const [billingno, setBillingNo] = useState("");
   const [rows, setRows] = useState([]);
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
@@ -121,20 +125,19 @@ const PaymentDetail = () => {
   }, [success]);
 
   const handleInputChange = (event, newValue) => {
-    setOrganization(newValue ? newValue.label : '');
-    setTripsheetno(newValue ? newValue.label : '');
+    if (event.target.name === 'customer') {
+      setCustomer(newValue ? newValue.label : '');
+    } else if (event.target.name === 'billingno') {
+      setBillingNo(event.target.value);
+    }
   };
 
   const handleShow = useCallback(async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8081/payment-details?customer=${encodeURIComponent(
-          organization
-        )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
-          toDate.toISOString()
-        )}`
-      );
+      const response = await axios.get(`http://localhost:8081/payment-details?billingno=${billingno}&customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+      console.log('selected billing data', response.params);
       const data = response.data;
+      console.log('collected billing data', data);
       if (data.length > 0) {
         setRows(data);
         setSuccess(true);
@@ -150,7 +153,7 @@ const PaymentDetail = () => {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
-  }, [organization, fromDate, toDate]);
+  }, [billingno, customer, fromDate, toDate]);
 
   useEffect(() => {
     Organization()
@@ -169,6 +172,39 @@ const PaymentDetail = () => {
       });
   }, []);
 
+  //calculate total amount in column
+  useEffect(() => {
+    const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.Totalamount || 0), 0);
+    console.log('calculatedTotalAmount', calculatedTotalAmount);
+    if (!isNaN(calculatedTotalAmount)) {
+      setTotalAmount(calculatedTotalAmount.toFixed(2));
+    } else {
+      setTotalAmount("0");
+    }
+  }, [rows]);
+
+  //calculate paid amount in column
+  useEffect(() => {
+    const calculatedPaidAmount = rows.reduce((total, row) => total + parseFloat(row.paidamount || 0), 0);
+    console.log('calculatedTotalAmount', calculatedPaidAmount);
+    if (!isNaN(calculatedPaidAmount)) {
+      setPaidAmount(calculatedPaidAmount.toFixed(2));
+    } else {
+      setPaidAmount("0");
+    }
+  }, [rows]);
+
+  //calculate pending amount in column
+  useEffect(() => {
+    const calculatedPendingAmount = rows.reduce((total, row) => total + parseFloat(row.pendingamount || 0), 0);
+    console.log('calculatedTotalAmount', calculatedPendingAmount);
+    if (!isNaN(calculatedPendingAmount)) {
+      setPendingAmount(calculatedPendingAmount.toFixed(2));
+    } else {
+      setPendingAmount("0");
+    }
+  }, [rows]);
+
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
       <form >
@@ -183,9 +219,9 @@ const PaymentDetail = () => {
                   <TextField
                     size="small"
                     id="id"
-                    label="Tripsheet No"
-                    name="tripsheetno"
-                    value={tripsheetno}
+                    label="Billing No"
+                    name="billingno"
+                    value={billingno || ''}
                     onChange={(event, value) => handleInputChange(event, value)}
                     autoComplete='off'
                   />
@@ -199,13 +235,12 @@ const PaymentDetail = () => {
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    onChange={(event, value) => handleInputChange(event, value)}
-                    value={organization || ''}
+                    value={customer}
                     options={bankOptions}
-                    autoComplete='off'
+                    onChange={(event, value) => handleInputChange(event, value)}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="Organization" name="customer" inputRef={params.inputRef} />
+                        <TextField {...params} label="Organization" inputRef={params.inputRef} />
                       );
                     }}
                   />
@@ -281,40 +316,23 @@ const PaymentDetail = () => {
           <div className='amount-calculator'>
             <div className='total-inputs' >
               <label htmlFor="">Total Amount:</label>
-              <input type="number" />
+              <input type="number" value={totalAmount} />
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Paid Amount:</label>
-              <input type="number" />
+              <input type="number" value={paidAmount} />
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Pending Amount:</label>
-              <input type="number" />
+              <input type="number" value={pendingAmount} />
             </div>
           </div>
         </div>
-        {/* <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-          <StyledSpeedDial
-            ariaLabel="SpeedDial playground example"
-            icon={<SpeedDialIcon />}
-            direction="left"
-          >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-              />
-            ))}
-          </StyledSpeedDial>
-        </Box> */}
         <div className="table-bookingCopy-PaymentDetail">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}
               columns={columns}
-              // onRowClick={handleRowClick}
               pageSize={5}
               checkboxSelection
             />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./dashboard.css";
+import "./MainDashboard.css";
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';

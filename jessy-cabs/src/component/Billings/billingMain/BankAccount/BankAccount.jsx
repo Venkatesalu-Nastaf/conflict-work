@@ -248,6 +248,22 @@ const BankAccount = () => {
   return (
     <div className="BankAccount-form Scroll-Style-hide">
       <form className="BankAccount-main-container">
+      <div className="total-account">
+              <div className='amount-calculate'>
+                <div className='total-inputs' >
+                  <label htmlFor="">Total Capital:</label>
+                  <input type="number" />
+                </div>
+                <div className='total-inputs'id={`bank-btn-amountIN`} >
+                  <label htmlFor="">Total-In:</label>
+                  <input type="number" />
+                </div>
+                <div className='total-inputs'id={`bank-btn-amountOUT`} >
+                  <label htmlFor="">Total-Out:</label>
+                  <input type="number" />
+                </div>
+              </div>
+            </div>
         <div className="BankAccount-detail-container-main">
           <div className="BankAccount-first-container">
             <div className="input bankaddbtn">

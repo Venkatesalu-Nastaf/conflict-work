@@ -262,21 +262,36 @@ const PaymentDetail = () => {
             <p>{successMessage}</p>
           </div>
         }
-
-        <div className="Download-btn">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
+        <div className='total-container'>
+          <div className="Download-btn">
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                    Download
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+          </div>
+          <div className='amount-calculator'>
+            <div className='total-inputs' >
+              <label htmlFor="">Total Amount:</label>
+              <input type="number" />
+            </div>
+            <div className='total-inputs' >
+              <label htmlFor="">Paid Amount:</label>
+              <input type="number" />
+            </div>
+            <div className='total-inputs' >
+              <label htmlFor="">Pending Amount:</label>
+              <input type="number" />
+            </div>
+          </div>
         </div>
         {/* <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial

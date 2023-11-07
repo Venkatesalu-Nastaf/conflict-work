@@ -82,6 +82,7 @@ const Billing = () => {
     const [selectedCustomerData, setSelectedCustomerData] = useState({
         totalkm1: ''
     });
+    const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
     //for popup
     const hidePopup = () => {
         setSuccess(false);
@@ -156,6 +157,7 @@ const Billing = () => {
         permitothertax: '',
         parkingtollcharges: '',
         MinKilometers: '',
+        MinHours: '',
         GrossAmount: '',
         AfterTaxAmount: '',
         DiscountAmount: '',
@@ -174,7 +176,6 @@ const Billing = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -184,12 +185,15 @@ const Billing = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
             }));
             setSelectedCustomerData((prevValues) => ({
+                ...prevValues,
+                [name]: value,
+            }));
+            setSelectedCustomerDatas((prevValues) => ({
                 ...prevValues,
                 [name]: value,
             }));
@@ -204,6 +208,10 @@ const Billing = () => {
             [name]: selectedOption,
         }));
         setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: selectedOption,
+        }));
+        setSelectedCustomerDatas((prevData) => ({
             ...prevData,
             [name]: selectedOption,
         }));
@@ -252,6 +260,7 @@ const Billing = () => {
             permitothertax: '',
             parkingtollcharges: '',
             MinKilometers: '',
+            MinHours: '',
             GrossAmount: '',
             AfterTaxAmount: '',
             DiscountAmount: '',
@@ -268,54 +277,6 @@ const Billing = () => {
         setSelectedCustomerData({});
         setSelectedBankAccount('');
     };
-
-    // const selecting = {
-    //     tripid: selectedCustomerData.tripid || book.tripid || '',
-    //     billingno: selectedCustomerData.billingno || book.billingno || '',
-    //     Billingdate: formData.Billingdate || selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null,
-    //     totalkm1: selectedCustomerData.totalkm1 || '',
-    //     totaltime: selectedCustomerData.totaltime || '',
-    //     customer: selectedCustomerData.customer || '',
-    //     supplier: selectedCustomerData.supplier || '',
-    //     startdate: selectedCustomerData.startdate || '',
-    //     totaldays: selectedCustomerData.totaldays || '',
-    //     guestname: selectedCustomerData.guestname || '',
-    //     rateType: selectedCustomerData.rateType || '',
-    //     vehRegNo: selectedCustomerData.vehRegNo || '',
-    //     vehType: selectedCustomerData.vehType || '',
-    //     duty: selectedCustomerData.duty || '',
-    //     MinCharges: selectedCustomerData.package || book.MinCharges || '',
-    //     minchargeamount: selectedCustomerData.minchargeamount || '',
-    //     ChargesForExtra: selectedCustomerData.ChargesForExtra || '',
-    //     ChargesForExtraamount: selectedCustomerData.ChargesForExtraamount || '',
-    //     cfeamount: selectedCustomerData.cfeamount || '',
-    //     ChargesForExtraHRS: selectedCustomerData.ChargesForExtraHRS || '',
-    //     ChargesForExtraHRSamount: selectedCustomerData.ChargesForExtraHRSamount || '',
-    //     cfehamount: selectedCustomerData.cfehamount || '',
-    //     NightHalt: selectedCustomerData.NightHalt || '',
-    //     NightHaltamount: selectedCustomerData.NightHaltamount || '',
-    //     nhamount: selectedCustomerData.nhamount || '',
-    //     driverbata: selectedCustomerData.driverbata || '',
-    //     driverbataamount: selectedCustomerData.driverbataamount || '',
-    //     dbamount: selectedCustomerData.dbamount || '',
-    //     OtherCharges: selectedCustomerData.OtherCharges || '',
-    //     OtherChargesamount: selectedCustomerData.OtherChargesamount || '',
-    //     permitothertax: selectedCustomerData.permitothertax || '',
-    //     parkingtollcharges: selectedCustomerData.parkingtollcharges || '',
-    //     MinKilometers: selectedCustomerData.MinKilometers || '',
-    //     GrossAmount: selectedCustomerData.GrossAmount || '',
-    //     AfterTaxAmount: selectedCustomerData.AfterTaxAmount || '',
-    //     DiscountAmount: selectedCustomerData.DiscountAmount || '',
-    //     DiscountAmount2: selectedCustomerData.DiscountAmount2 || '',
-    //     AdvanceReceived: selectedCustomerData.AdvanceReceived || '',
-    //     RoundedOff: selectedCustomerData.RoundedOff || '',
-    //     BalanceReceivable: selectedCustomerData.BalanceReceivable || '',
-    //     NetAmount: selectedCustomerData.NetAmount || '',
-    //     Totalamount: selectedCustomerData.Totalamount || '',
-    //     paidamount: selectedCustomerData.paidamount || '',
-    //     pendingamount: selectedCustomerData.pendingamount || '',
-    //     BankAccount: selectedCustomerData.BankAccount || selectedBankAccount || '',
-    // }
 
     const handleClick = async (event, actionName, tripid) => {
         event.preventDefault();
@@ -340,13 +301,13 @@ const Billing = () => {
                 const selectedCustomer = rows.find((row) => row.tripid === tripid);
                 const updatedCustomer = {
                     ...selectedCustomer,
-                    ...selectedCustomerData,
+                    ...selecting,
                     cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || book.cfeamount,
                     cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || book.cfehamount,
                     nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || book.nhamount,
                     dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || book.dbamount
                 };
-                await axios.put(`http://localhost:8081/billing/${tripid}`, updatedCustomer);
+                await axios.put(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid}`, updatedCustomer);
                 console.log('Customer updated');
                 handleCancel();
             } else if (actionName === 'Add') {
@@ -381,11 +342,24 @@ const Billing = () => {
         const ChargesForExtraamount = selectedCustomerData?.ChargesForExtraamount || book.ChargesForExtraamount;
         if (totalkm1 !== undefined && ChargesForExtraamount !== undefined) {
             const totalKm = totalkm1 * ChargesForExtraamount;
-            return totalKm;
+            return totalKm.toFixed(2);
         }
-        return ' ';
+        return '';
     };
 
+    // const calculateTotalAmount2 = () => {
+    //     const totaltime = selectedCustomerData?.totaltime || book.ChargesForExtraHRS;
+    //     const ChargesForExtraHRSamount = selectedCustomerData?.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount;
+
+    //     if (totaltime !== undefined && ChargesForExtraHRSamount !== undefined) {
+    //         const [hours, minutes] = totaltime.split('h');
+    //         const hoursInMinutes = parseFloat(hours) * 60 + parseFloat(minutes);
+    //         const ratePerHour = parseFloat(ChargesForExtraHRSamount);
+    //         const totalAmount = hoursInMinutes * (ratePerHour / 60);
+    //         return totalAmount.toFixed(2);
+    //     }
+    //     return 0.00;
+    // };
     const calculateTotalAmount2 = () => {
         const totaltime = selectedCustomerData?.totaltime || book.ChargesForExtraHRS;
         const ChargesForExtraHRSamount = selectedCustomerData?.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount;
@@ -395,20 +369,25 @@ const Billing = () => {
             const hoursInMinutes = parseFloat(hours) * 60 + parseFloat(minutes);
             const ratePerHour = parseFloat(ChargesForExtraHRSamount);
             const totalAmount = hoursInMinutes * (ratePerHour / 60);
-            return totalAmount.toFixed(2);
+
+            if (isNaN(totalAmount)) {
+                return "0.00";
+            } else {
+                return totalAmount.toFixed(2);
+            }
         }
-        return 0.00;
+        return "0.00";
     };
+
 
     const calculateTotalAmount3 = () => {
         const NightHalt = selectedCustomerData.night || book.NightHalt;
         const NightHaltamount = selectedCustomerData.NightHaltamount || book.NightHaltamount;
         if (NightHalt !== undefined && NightHaltamount !== undefined) {
             const totalnights = NightHalt * NightHaltamount;
-            // return totalnights;
             return totalnights.toFixed(2);
         }
-        return ' ';
+        return '';
     };
 
     const calculateTotalAmount4 = () => {
@@ -416,18 +395,42 @@ const Billing = () => {
         const driverbataamount = selectedCustomerData.driverbataamount || book.driverbataamount;
         if (driverbata !== undefined && driverbataamount !== undefined) {
             const totaldriverbata = driverbata * driverbataamount;
-            // return totaldriverbata;
             return totaldriverbata.toFixed(2);
         }
-        return ' ';
+        return '';
     };
 
     const calculatePayableAmount = () => {
         const DiscountAmount = selectedCustomerData.DiscountAmount || book.DiscountAmount;
         const AdvanceReceived = selectedCustomerData.AdvanceReceived || book.AdvanceReceived;
         const netAmount = calculateGrossAmount() - DiscountAmount - AdvanceReceived;
-        // return netAmount;
         return netAmount.toFixed(2);
+    };
+
+    const calculatePendingAmount = () => {
+        const totalamount = selectedCustomerData.Totalamount || calculateroundedPayableAmount() || book.Totalamount;
+        const paidamount = selectedCustomerData.paidamount || book.paidamoun;
+        if (totalamount !== undefined && paidamount !== undefined) {
+            const totalpending = totalamount - paidamount;
+            return totalpending.toFixed(2);
+        }
+        return '';
+    };
+
+    const calculateRoundOff = () => {
+        const balanceAmount = parseFloat(selectedCustomerData.BalanceReceivable || calculatePayableAmount() || book.BalanceReceivable) || 0;
+        const roundedGrossAmount = Math.round(balanceAmount);
+        const roundOff = (roundedGrossAmount - balanceAmount).toFixed(2);
+        console.log('roundedoff value', roundOff);
+        return (Math.abs(roundOff)).toFixed(2);
+    };
+
+    const calculateroundedPayableAmount = () => {
+        const balanceAmount = parseFloat(selectedCustomerData.BalanceReceivable || calculatePayableAmount() || book.BalanceReceivable) || 0;
+        const roundOff = parseFloat(selectedCustomerData.RoundedOff || calculateRoundOff() || book.RoundedOff) || 0;
+
+        const totalAmount = balanceAmount + roundOff;
+        return totalAmount.toFixed(2);
     };
 
     const calculateGrossAmount = () => {
@@ -445,9 +448,8 @@ const Billing = () => {
         const parsedValues = [
             calculateTotalAmount(), calculateTotalAmount2(), calculateTotalAmount3(), calculateTotalAmount4(), minchargeamount, cfeamount, netamount, cfehamount, nhamount, dbamount,
             OtherChargesamount, permitothertax, parkingtollcharges
-        ].map(value => parseFloat(value) || 0); // Convert to numbers, default to 0 if NaN
+        ].map(value => parseFloat(value) || 0);
         const gross = parsedValues.reduce((sum, value) => sum + value, 0);
-        // return gross;
         return gross.toFixed(2);
     };
 
@@ -458,9 +460,21 @@ const Billing = () => {
                 const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
                 const bookingDetails = response.data;
                 setSelectedCustomerData(bookingDetails);
-                // setSelectedCustomerId(bookingDetails.customerId);
             } catch (error) {
                 console.error('Error retrieving booking details:', error);
+            }
+        }
+    }, []);
+
+    const handleKeyenter = useCallback(async (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            try {
+                const response = await axios.get(`http://localhost:8081/billing/${event.target.value}`);
+                const billingDetails = response.data;
+                setSelectedCustomerDatas(billingDetails);
+            } catch (error) {
+                console.error('Error retrieving billings details:', error);
             }
         }
     }, []);
@@ -468,7 +482,7 @@ const Billing = () => {
     const selecting = {
         tripid: selectedCustomerData.tripid || '',
         billingno: selectedCustomerData.billingno || '',
-        Billingdate: selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs(),
+        Billingdate: selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
         totalkm1: selectedCustomerData.totalkm1 || '',
         totaltime: selectedCustomerData.totaltime || '',
         customer: selectedCustomerData.customer || '',
@@ -498,18 +512,19 @@ const Billing = () => {
         OtherChargesamount: selectedCustomerData.OtherChargesamount || '',
         permitothertax: selectedCustomerData.permitothertax || '',
         parkingtollcharges: selectedCustomerData.parkingtollcharges || '',
-        MinKilometers: selectedCustomerData.MinKilometers || '',
+        MinKilometers: selectedCustomerData.minkm || '',
+        MinHours: selectedCustomerData.minhrs || '',
         GrossAmount: selectedCustomerData.GrossAmount || calculateGrossAmount() || '',
         AfterTaxAmount: selectedCustomerData.AfterTaxAmount || '',
         DiscountAmount: selectedCustomerData.DiscountAmount || '',
         DiscountAmount2: selectedCustomerData.DiscountAmount2 || '',
         AdvanceReceived: selectedCustomerData.AdvanceReceived || '',
-        RoundedOff: selectedCustomerData.RoundedOff || '',
+        RoundedOff: selectedCustomerData.RoundedOff || calculateRoundOff() || '',
         BalanceReceivable: selectedCustomerData.BalanceReceivable || calculatePayableAmount() || '',
-        NetAmount: selectedCustomerData.NetAmount || calculatePayableAmount() || '',
-        Totalamount: selectedCustomerData.Totalamount || calculatePayableAmount() || '',
+        NetAmount: selectedCustomerData.NetAmount || calculateroundedPayableAmount() || '',
+        Totalamount: selectedCustomerData.Totalamount || calculateroundedPayableAmount() || '',
         paidamount: selectedCustomerData.paidamount || calculatePayableAmount() || '',
-        pendingamount: selectedCustomerData.pendingamount || calculatePayableAmount() || '',
+        pendingamount: selectedCustomerData.pendingamount || calculatePendingAmount() || '',
         BankAccount: selectedCustomerData.BankAccount || selectedBankAccount || '',
     }
 
@@ -548,7 +563,7 @@ const Billing = () => {
                                     name="tripid"
                                     autoFocus
                                     autoComplete="off"
-                                    value={selectedCustomerData.tripid || book.tripid}
+                                    value={selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid}
                                     onChange={handleChange}
                                     onKeyDown={handleKeyDown}
                                 />
@@ -564,19 +579,20 @@ const Billing = () => {
                                     label="Billing No"
                                     name="billingno"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData.billingno || book.billingno}
+                                    value={selectedCustomerData.billingno || selectedCustomerDatas.billingno || book.billingno}
                                     onChange={handleChange}
+                                    onKeyDown={handleKeyenter}
                                 />
                             </div>
                             <div className="input">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Billing Date"
-                                        value={selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
-                                        onChange={(date) => handleDateChange(date, 'bookingdate')}
+                                        value={selectedCustomerDatas.Billingdate ? dayjs(selectedCustomerDatas.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs()}
+                                        onChange={(date) => handleDateChange(date, 'Billingdate')}
                                     >
                                         {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.Billingdate} />
                                         )}
                                     </DatePicker>
                                 </LocalizationProvider>
@@ -588,7 +604,7 @@ const Billing = () => {
                                     size="small"
                                     label="Total Kms"
                                     name="totalkm1"
-                                    value={selectedCustomerData.totalkm1 || book.totalkm1}
+                                    value={selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1 || book.totalkm1}
                                     autoComplete="new-password"
                                     onChange={handleChange}
                                 />
@@ -601,7 +617,7 @@ const Billing = () => {
                                     label="Total Hours"
                                     name="totaltime"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData.totaltime || book.totaltime}
+                                    value={selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -619,7 +635,7 @@ const Billing = () => {
                                     label="Customer"
                                     name="customer"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData.customer || book.customer}
+                                    value={selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -635,7 +651,7 @@ const Billing = () => {
                                     label="Supplier"
                                     name="supplier"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData.supplier || book.supplier}
+                                    value={selectedCustomerData.supplier || selectedCustomerDatas.supplier || book.supplier}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -643,11 +659,11 @@ const Billing = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Trip Date"
-                                        value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null}
+                                        value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || selectedCustomerDatas.startdate ? dayjs(selectedCustomerDatas.startdate) : null}
                                         onChange={(date) => handleDateChange(date, 'startdate')}
                                     >
                                         {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData.startdate} />
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData.startdate || selectedCustomerDatas.startdate} />
                                         )}
                                     </DatePicker>
                                 </LocalizationProvider>
@@ -661,7 +677,7 @@ const Billing = () => {
                                     label="Total Days"
                                     name="totaldays"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData.totaldays || book.totaldays}
+                                    value={selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -679,7 +695,7 @@ const Billing = () => {
                                     label="Gust Name"
                                     name="guestname"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData.guestname || book.guestname}
+                                    value={selectedCustomerData.guestname || selectedCustomerDatas.guestname || book.guestname}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -695,7 +711,7 @@ const Billing = () => {
                                     label="Rate Type"
                                     name="rateType"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData.rateType || book.rateType}
+                                    value={selectedCustomerData.rateType || selectedCustomerDatas.rateType || book.rateType}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -710,7 +726,7 @@ const Billing = () => {
                                     label="Vehicle No"
                                     name="vehRegNo"
                                     autoComplete="new-password"
-                                    value={selectedCustomerData.vehRegNo || book.vehRegNo}
+                                    value={selectedCustomerData.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -726,7 +742,7 @@ const Billing = () => {
                                     <TextField
                                         name="vehType"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.vehType || book.vehType}
+                                        value={selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType}
                                         onChange={handleChange}
                                         label="Vehicle Type"
                                         id="vehType"
@@ -742,7 +758,7 @@ const Billing = () => {
                                         label='Duty'
                                         name="duty"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.duty || book.duty}
+                                        value={selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty}
                                         onChange={handleChange}
                                         size="small"
                                         id="duty"
@@ -757,7 +773,7 @@ const Billing = () => {
                                     <TextField
                                         name="MinCharges"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.package || book.MinCharges}
+                                        value={selectedCustomerData.package || selectedCustomerDatas.MinCharges || book.MinCharges}
                                         onChange={handleChange}
                                         label="Min.Charges"
                                         id="MinCharges"
@@ -773,7 +789,7 @@ const Billing = () => {
                                     <TextField
                                         name="minchargeamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.netamount || book.minchargeamount}
+                                        value={selectedCustomerData.netamount || selectedCustomerDatas.minchargeamount || book.minchargeamount}
                                         onChange={handleChange}
                                         size="small"
                                         id="amount"
@@ -790,7 +806,7 @@ const Billing = () => {
                                         type='number'
                                         name="ChargesForExtra"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.totalkm1 || book.ChargesForExtra}
+                                        value={selectedCustomerData.totalkm1 || selectedCustomerDatas.ChargesForExtra || book.ChargesForExtra}
                                         onChange={handleChange}
                                         label="Charges For Extra"
                                         id="ChargesForExtra"
@@ -811,7 +827,7 @@ const Billing = () => {
                                         type='number'
                                         name='ChargesForExtraamount'
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.ChargesForExtraamount || book.ChargesForExtraamount}
+                                        value={selectedCustomerData.ChargesForExtraamount || selectedCustomerDatas.ChargesForExtraamount || book.ChargesForExtraamount}
                                         onChange={handleChange}
                                         variant="standard"
                                         InputProps={{
@@ -829,7 +845,7 @@ const Billing = () => {
                                     <TextField
                                         name="cfeamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.cfeamount || calculateTotalAmount() || book.cfeamount}
+                                        value={selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || calculateTotalAmount() || book.cfeamount}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
@@ -847,7 +863,7 @@ const Billing = () => {
                                         // type='number'
                                         name="ChargesForExtraHRS"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.totaltime || book.ChargesForExtraHRS}
+                                        value={selectedCustomerData.totaltime || selectedCustomerDatas.ChargesForExtraHRS || book.ChargesForExtraHRS}
                                         onChange={handleChange}
                                         label="Charges For Extra"
                                         id="ChargesForExtra"
@@ -868,7 +884,7 @@ const Billing = () => {
                                         type='number'
                                         name='ChargesForExtraHRSamount'
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount}
+                                        value={selectedCustomerData.ChargesForExtraHRSamount || selectedCustomerDatas.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount}
                                         onChange={handleChange}
                                         variant="standard"
                                         InputProps={{
@@ -884,10 +900,9 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
                                     <TextField
-                                        type='number'
                                         name="cfehamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.cfehamount || book.cfehamount || calculateTotalAmount2()}
+                                        value={selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || calculateTotalAmount2() || book.cfehamount}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
@@ -905,7 +920,7 @@ const Billing = () => {
                                         type='number'
                                         name="NightHalt"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.night || book.NightHalt}
+                                        value={selectedCustomerData.night || selectedCustomerDatas.NightHalt || book.NightHalt}
                                         onChange={handleChange}
                                         label="Night Halt"
                                         id="NightHalt"
@@ -921,7 +936,7 @@ const Billing = () => {
                                         type='number'
                                         name='NightHaltamount'
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.NightHaltamount || book.NightHaltamount}
+                                        value={selectedCustomerData.NightHaltamount || selectedCustomerDatas.NightHaltamount || book.NightHaltamount}
                                         onChange={handleChange}
                                         InputProps={{
                                             startAdornment: (
@@ -938,7 +953,7 @@ const Billing = () => {
                                         type='number'
                                         name="nhamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.nhamount || book.nhamount || calculateTotalAmount3()}
+                                        value={selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount || calculateTotalAmount3()}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
@@ -957,7 +972,7 @@ const Billing = () => {
                                         label="Driver Bata"
                                         name='driverbata'
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.driverbata || book.driverbata}
+                                        value={selectedCustomerData.driverbata || selectedCustomerDatas.driverbata || book.driverbata}
                                         onChange={handleChange}
                                         id="driverbata"
                                         size="small"
@@ -972,7 +987,7 @@ const Billing = () => {
                                         type='number'
                                         name='driverbataamount'
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.driverbataamount || book.driverbataamount}
+                                        value={selectedCustomerData.driverbataamount || selectedCustomerDatas.driverbataamount || book.driverbataamount}
                                         onChange={handleChange}
                                         InputProps={{
                                             startAdornment: (
@@ -989,7 +1004,7 @@ const Billing = () => {
                                         type='number'
                                         name="dbamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.dbamount || book.dbamount || calculateTotalAmount4()}
+                                        value={selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount || calculateTotalAmount4()}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
@@ -1007,7 +1022,7 @@ const Billing = () => {
                                         // type='number'
                                         name="OtherCharges"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.OtherCharges || book.OtherCharges}
+                                        value={selectedCustomerData.OtherCharges || selectedCustomerDatas.OtherCharges || book.OtherCharges}
                                         onChange={handleChange}
                                         label="Other Charges"
                                         id="OtherCharges"
@@ -1024,7 +1039,7 @@ const Billing = () => {
                                         type='number'
                                         name="OtherChargesamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.OtherChargesamount || book.OtherChargesamount}
+                                        value={selectedCustomerData.OtherChargesamount || selectedCustomerDatas.OtherChargesamount || book.OtherChargesamount}
                                         onChange={handleChange}
                                         size="small"
                                         id="amount"
@@ -1042,7 +1057,7 @@ const Billing = () => {
                                         name='permitothertax'
                                         label="Permit / Other Tax"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.permitothertax || book.permitothertax}
+                                        value={selectedCustomerData.permitothertax || selectedCustomerDatas.permitothertax || book.permitothertax}
                                         onChange={handleChange}
                                         size="small"
                                         id="amount"
@@ -1057,7 +1072,7 @@ const Billing = () => {
                                         label="Parking / Toll Charges"
                                         name='parkingtollcharges'
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.parkingtollcharges || book.parkingtollcharges}
+                                        value={selectedCustomerData.parkingtollcharges || selectedCustomerDatas.parkingtollcharges || book.parkingtollcharges}
                                         onChange={handleChange}
                                         size="small"
                                         id="amount"
@@ -1078,7 +1093,7 @@ const Billing = () => {
                                         label="Min Kilometers"
                                         name="MinKilometers"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.MinKilometers || book.MinKilometers}
+                                        value={selectedCustomerData.minkm || selectedCustomerDatas.MinKilometers || book.MinKilometers}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1093,7 +1108,7 @@ const Billing = () => {
                                         label="Min Hours"
                                         name="MinHours"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.MinHours || book.MinHours}
+                                        value={selectedCustomerData.minhrs || selectedCustomerDatas.MinHours || book.MinHours}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1111,7 +1126,7 @@ const Billing = () => {
                                         label="Gross Amount"
                                         name="GrossAmount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.GrossAmount || calculateGrossAmount() || book.GrossAmount}
+                                        value={selectedCustomerData.GrossAmount || selectedCustomerDatas.GrossAmount || calculateGrossAmount() || book.GrossAmount}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1126,7 +1141,7 @@ const Billing = () => {
                                         label="After Tax Amount"
                                         name="AfterTaxAmount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.AfterTaxAmount || book.AfterTaxAmount}
+                                        value={selectedCustomerData.AfterTaxAmount || selectedCustomerDatas.AfterTaxAmount || book.AfterTaxAmount}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1143,7 +1158,7 @@ const Billing = () => {
                                         label="Discount Amount"
                                         name="DiscountAmount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.DiscountAmount || book.DiscountAmount}
+                                        value={selectedCustomerData.DiscountAmount || selectedCustomerDatas.DiscountAmount || book.DiscountAmount}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1156,7 +1171,7 @@ const Billing = () => {
                                         name='DiscountAmount2'
                                         size="small"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.DiscountAmount2 || book.DiscountAmount2}
+                                        value={selectedCustomerData.DiscountAmount2 || selectedCustomerDatas.DiscountAmount2 || book.DiscountAmount2}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1173,27 +1188,10 @@ const Billing = () => {
                                         label="Advance Received"
                                         name="AdvanceReceived"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.AdvanceReceived || book.AdvanceReceived}
+                                        value={selectedCustomerData.AdvanceReceived || selectedCustomerDatas.AdvanceReceived || book.AdvanceReceived}
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "180px" }}>
-                                    <div className="icone">
-                                        <ChangeCircleIcon color="active" />
-                                    </div>
-                                    <TextField
-                                        margin="normal"
-                                        size="small"
-                                        id="RoundedOff"
-                                        label="Rounded Off"
-                                        name="RoundedOff"
-                                        autoComplete="new-password"
-                                        value={selectedCustomerData.RoundedOff || book.RoundedOff}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            </div>
-                            <div className="input-field">
                                 <div className="input" style={{ width: "220px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faCoins} size="lg" />
@@ -1205,7 +1203,25 @@ const Billing = () => {
                                         label="Balance Receivable"
                                         name="BalanceReceivable"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.BalanceReceivable || calculatePayableAmount() || book.BalanceReceivable}
+                                        value={selectedCustomerData.BalanceReceivable || selectedCustomerDatas.BalanceReceivable || calculatePayableAmount() || book.BalanceReceivable}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="input-field">
+
+                                <div className="input" style={{ width: "180px" }}>
+                                    <div className="icone">
+                                        <ChangeCircleIcon color="active" />
+                                    </div>
+                                    <TextField
+                                        margin="normal"
+                                        size="small"
+                                        id="RoundedOff"
+                                        label="Rounded Off"
+                                        name="RoundedOff"
+                                        autoComplete="new-password"
+                                        value={selectedCustomerData.RoundedOff || selectedCustomerDatas.RoundedOff || calculateRoundOff() || book.RoundedOff}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1220,7 +1236,7 @@ const Billing = () => {
                                         label="Net Amount"
                                         name="NetAmount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.NetAmount || calculatePayableAmount() || book.NetAmount}
+                                        value={selectedCustomerData.NetAmount || selectedCustomerDatas.NetAmount || calculateroundedPayableAmount() || book.NetAmount}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1237,7 +1253,7 @@ const Billing = () => {
                                         label="Total Amount"
                                         name="Totalamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.Totalamount || calculatePayableAmount() || book.Totalamount}
+                                        value={selectedCustomerData.Totalamount || selectedCustomerDatas.Totalamount || calculateroundedPayableAmount() || book.Totalamount}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1252,7 +1268,7 @@ const Billing = () => {
                                         label="Paid Amount"
                                         name="paidamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.paidamount || calculatePayableAmount() || book.paidamount}
+                                        value={selectedCustomerData.paidamount || selectedCustomerDatas.paidamount || book.paidamount}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1269,7 +1285,7 @@ const Billing = () => {
                                         label="Pending Amount"
                                         name="pendingamount"
                                         autoComplete="new-password"
-                                        value={selectedCustomerData.pendingamount || calculatePayableAmount() || book.pendingamount}
+                                        value={selectedCustomerData.pendingamount || selectedCustomerDatas.pendingamount || calculatePendingAmount() || book.pendingamount}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1287,7 +1303,7 @@ const Billing = () => {
                                             setSelectedBankAccount(value);
                                             handleAutocompleteChange(event, value, "BankAccount")
                                         }}
-                                        value={selectedBankAccount || selectedCustomerData.BankAccount || ''}
+                                        value={selectedBankAccount || selectedCustomerData.BankAccount || selectedCustomerDatas.BankAccount || ''}
                                         options={bankOptions}
                                         renderInput={(params) => {
                                             return (

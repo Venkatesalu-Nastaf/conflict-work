@@ -14,23 +14,74 @@ router.get('/organizationoptions', (req, res) => {
     });
 });
 
+// router.get('/payment-details', (req, res) => {
+//     const { organization, fromDate, toDate } = req.query;
+
+//     let query = 'SELECT * FROM billing';
+//     let params = [];
+
+//     if (organization) {
+//         query += ' AND customer = ?';
+//         params.push(organization);
+//     }
+
+//     if (fromDate && toDate) {
+//         query += ' AND Billingdate >= ? AND Billingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+//         params.push(fromDate);
+//         params.push(toDate);
+//     }
+
+//     db.query(query, params, (err, result) => {
+//         if (err) {
+//             console.error('Error retrieving booking details from MySQL:', err);
+//             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//         }
+//         return res.status(200).json(result);
+//     });
+// });
+
+// router.get('/payment-details', (req, res) => {
+//     const { billingno, customer, fromDate, toDate } = req.query;
+//     console.log('Query parameters:', billingno, customer, fromDate, toDate);
+//     // const query = `SELECT * FROM billing WHERE billingno=? AND customer = ? AND Billingdate >= ? AND Billingdate <= ? AND Billingdate = ?`;
+//     const query = `
+//     SELECT *
+//     FROM billing
+//     WHERE billingno = ? 
+//     AND customer = ? 
+//     AND Billingdate >= ? 
+//     AND Billingdate <= ?;
+// `;
+//     db.query(query, [billingno, customer, fromDate, toDate], (err, results) => {
+//         if (err) {
+//             console.error('Database query error: ', err);
+//             res.status(500).json({ error: 'Error fetching data' });
+//             return;
+//         }
+//         console.log('collected billing', results);
+//         res.json(results);
+//     }
+//     );
+// });
+
 router.get('/payment-details', (req, res) => {
-    const { organization, fromDate, toDate } = req.query;
-
-    let query = 'SELECT * FROM billing';
+    const { billingno, customer, fromDate, toDate } = req.query;
+    // Query and parameters for fetching booking details based on the query parameters
+    let query = 'SELECT * FROM billing WHERE 1=1';
     let params = [];
-
-    if (organization) {
-        query += ' AND customer = ?';
-        params.push(organization);
+    if (billingno) {
+        query += ' AND billingno = ?';
+        params.push(billingno);
     }
-
+    if (customer) {
+        query += ' AND customer = ?';
+        params.push(customer);
+    }
     if (fromDate && toDate) {
-        query += ' AND Billingdate >= ? AND Billingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+        query += ' AND Billingdate BETWEEN ? AND ?';
         params.push(fromDate);
         params.push(toDate);
     }
-
     db.query(query, params, (err, result) => {
         if (err) {
             console.error('Error retrieving booking details from MySQL:', err);

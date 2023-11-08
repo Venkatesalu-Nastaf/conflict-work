@@ -23,6 +23,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 const BankAccount = () => {
   const [showAddBankForm, setShowAddBankForm] = useState(false);
+  const [totalcapital, setTotalCapital] = useState(0);
+  const [totalIn, setTotalIn] = useState(0);
+  const [totalOut, setTotalOut] = useState(0);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -244,26 +247,40 @@ const BankAccount = () => {
   const handleEditBank = (index) => {
     setEditingIndex(index);
   };
-
+  //calculate totalout amount
+  useEffect(() => {
+    const calculatedTotalOut = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalout, 10) || parseInt(book.totalout, 10) || 0), 0);
+    setTotalOut(calculatedTotalOut);
+  }, [bankDetails, book]);
+  //calculate totalin amount
+  useEffect(() => {
+    const calculatedTotalIn = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalin, 10) || parseInt(book.totalin, 10) || 0), 0);
+    setTotalIn(calculatedTotalIn);
+  }, [bankDetails, book]);
+  //calculate totalcapital amount
+  useEffect(() => {
+    const calculatedTotalCapital = bankDetails.reduce((total, item) => total + (parseFloat(item.capital) || 0), 0);
+    setTotalCapital(calculatedTotalCapital);
+  }, [bankDetails]);
   return (
     <div className="BankAccount-form Scroll-Style-hide">
       <form className="BankAccount-main-container">
-      <div className="total-account">
-              <div className='amount-calculate'>
-                <div className='total-inputs' >
-                  <label htmlFor="">Total Capital:</label>
-                  <input type="number" />
-                </div>
-                <div className='total-inputs'id={`bank-btn-amountIN`} >
-                  <label htmlFor="">Total-In:</label>
-                  <input type="number" />
-                </div>
-                <div className='total-inputs'id={`bank-btn-amountOUT`} >
-                  <label htmlFor="">Total-Out:</label>
-                  <input type="number" />
-                </div>
-              </div>
+        <div className="total-account">
+          <div className='amount-calculate'>
+            <div className='total-inputs' >
+              <label htmlFor="">Total Capital:</label>
+              <input type="number" value={totalcapital} />
             </div>
+            <div className='total-inputs' id={`bank-btn-amountIN`} >
+              <label htmlFor="">Total-In:</label>
+              <input type="number" value={totalIn} />
+            </div>
+            <div className='total-inputs' id={`bank-btn-amountOUT`} >
+              <label htmlFor="">Total-Out:</label>
+              <input type="number" value={totalOut} />
+            </div>
+          </div>
+        </div>
         <div className="BankAccount-detail-container-main">
           <div className="BankAccount-first-container">
             <div className="input bankaddbtn">

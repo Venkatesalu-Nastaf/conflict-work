@@ -205,6 +205,11 @@ const PaymentDetail = () => {
     }
   }, [rows]);
 
+  const handleButtonClickTripsheet = (selectedRow) => {
+    const billingPageUrl = `/home/billing/billing?tripid=${selectedRow.tripid || ''}&billingno=${selectedRow.billingno || ''}&Billingdate=${selectedRow.Billingdate || ''}&totalkm1=${selectedRow.totalkm1 || ''}&totaltime=${selectedRow.totaltime || ''}&customer=${selectedRow.customer || ''}&supplier=${selectedRow.supplier || ''}&startdate=${selectedRow.startdate || ''}&totaldays=${selectedRow.totaldays || ''}&guestname=${selectedRow.guestname || ''}&rateType=${selectedRow.rateType || ''}&vehRegNo=${selectedRow.vehRegNo || ''}&vehType=${selectedRow.vehType || ''}&duty=${selectedRow.duty || ''}&MinCharges=${selectedRow.MinCharges || ''}&minchargeamount=${selectedRow.minchargeamount || ''}&ChargesForExtra=${selectedRow.ChargesForExtra || ''}&ChargesForExtraamount=${selectedRow.ChargesForExtraamount || ''}&cfeamount=${selectedRow.cfeamount || ''}&ChargesForExtraHRS=${selectedRow.ChargesForExtraHRS || ''}&ChargesForExtraHRSamount=${selectedRow.ChargesForExtraHRSamount || ''}&cfehamount=${selectedRow.cfehamount || ''}&NightHalt=${selectedRow.NightHalt || ''}&NightHaltamount=${selectedRow.NightHaltamount || ''}&nhamount=${selectedRow.nhamount || ''}&driverbata=${selectedRow.driverbata || ''}&driverbataamount=${selectedRow.driverbataamount || ''}&dbamount=${selectedRow.dbamount || ''}&OtherCharges=${selectedRow.OtherCharges || ''}&OtherChargesamount=${selectedRow.OtherChargesamount || ''}&permitothertax=${selectedRow.permitothertax || ''}&parkingtollcharges=${selectedRow.parkingtollcharges || ''}&MinKilometers=${selectedRow.MinKilometers || ''}&MinHours=${selectedRow.MinHours || ''}&GrossAmount=${selectedRow.GrossAmount || ''}&AfterTaxAmount=${selectedRow.AfterTaxAmount || ''}&DiscountAmount=${selectedRow.DiscountAmount || ''}&DiscountAmount2=${selectedRow.DiscountAmount2 || ''}&AdvanceReceived=${selectedRow.AdvanceReceived || ''}&RoundedOff=${selectedRow.RoundedOff || ''}&BalanceReceivable=${selectedRow.BalanceReceivable || ''}&NetAmount=${selectedRow.NetAmount || ''}&Totalamount=${selectedRow.Totalamount || ''}&paidamount=${selectedRow.paidamount || ''}&pendingamount=${selectedRow.pendingamount || ''}&BankAccount=${selectedRow.BankAccount || ''}`;
+    window.location.href = billingPageUrl;
+  }
+
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
       <form >
@@ -333,6 +338,7 @@ const PaymentDetail = () => {
             <DataGrid
               rows={rows}
               columns={columns}
+              onRowClick={(event) => handleButtonClickTripsheet(event.row)}
               pageSize={5}
               checkboxSelection
             />

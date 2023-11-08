@@ -259,9 +259,10 @@ const BankAccount = () => {
   }, [bankDetails, book]);
   //calculate totalcapital amount
   useEffect(() => {
-    const calculatedTotalCapital = bankDetails.reduce((total, item) => total + (parseFloat(item.capital) || 0), 0);
+    const calculatedTotalCapital = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalin, 10) || parseInt(book.totalin, 10) || 0), 0);
     setTotalCapital(calculatedTotalCapital);
-  }, [bankDetails]);
+  }, [bankDetails, book]);
+  
   return (
     <div className="BankAccount-form Scroll-Style-hide">
       <form className="BankAccount-main-container">

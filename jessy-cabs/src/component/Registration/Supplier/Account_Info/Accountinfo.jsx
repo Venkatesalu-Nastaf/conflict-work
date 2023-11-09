@@ -680,7 +680,7 @@ const Accuntinfo = () => {
             )}
           </PopupState>
         </div>
-        <div className="table-customer-list">
+        <div className="table-customer-lists">
           <DataGrid
             rows={rows}
             columns={columns}

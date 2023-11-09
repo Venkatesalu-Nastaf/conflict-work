@@ -2,24 +2,26 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import "./BankAccount.css";
 import Button from "@mui/material/Button";
-import ClearIcon from '@mui/icons-material/Clear';
-import CancelIcon from '@mui/icons-material/Cancel';
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import { Autocomplete, IconButton, TextField } from "@mui/material";
-import { AiFillBank } from "@react-icons/all-files/ai/AiFillBank";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
-import EditIcon from '@mui/icons-material/Edit';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
-import { AccountType } from './BankAccountData';
 import Dialog from '@material-ui/core/Dialog';
+import { AccountType } from './BankAccountData';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import { AiFillBank } from "@react-icons/all-files/ai/AiFillBank";
+import { Autocomplete, IconButton, TextField } from "@mui/material";
+
+// ICONS
+import SaveIcon from '@mui/icons-material/Save';
+import EditIcon from '@mui/icons-material/Edit';
+import ClearIcon from '@mui/icons-material/Clear';
+import CancelIcon from '@mui/icons-material/Cancel';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 
 const BankAccount = () => {
   const [showAddBankForm, setShowAddBankForm] = useState(false);

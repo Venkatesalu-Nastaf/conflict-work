@@ -7,15 +7,17 @@ import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import React, { useState, useCallback, useEffect } from 'react';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
+// ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import React, { useState, useCallback, useEffect } from 'react';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
 const EmployePaySlip = () => {

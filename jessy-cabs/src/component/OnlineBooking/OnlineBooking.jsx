@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import './OnlineBooking.css';
 import axios from "axios";
 import ClearIcon from '@mui/icons-material/Clear';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import './OnlineBooking.css'
 
 const OnlineBooking = () => {
   const [error, setError] = useState(false);

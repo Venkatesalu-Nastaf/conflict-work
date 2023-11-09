@@ -7,10 +7,16 @@ import {
 import dayjs from "dayjs";
 import axios from "axios";
 import Box from "@mui/material/Box";
-// import { BankAccount } from "./BillingData";
-import { fetchBankOptions } from './BillingData';//get data from billingdata
 import { styled } from "@mui/material/styles";
+import { useLocation } from "react-router-dom";
 import SpeedDial from "@mui/material/SpeedDial";
+import { fetchBankOptions } from './BillingData';
+import React, { useState, useEffect, useCallback } from 'react';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { GiMoneyStack } from "@react-icons/all-files/gi/GiMoneyStack";
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+
+// ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import PrintIcon from '@mui/icons-material/Print';
@@ -20,28 +26,22 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import CarCrashIcon from '@mui/icons-material/CarCrash';
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import { useLocation } from "react-router-dom";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
-import React, { useState, useEffect, useCallback } from 'react';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-import { GiMoneyStack } from "@react-icons/all-files/gi/GiMoneyStack";
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import { faArrowRightArrowLeft, faMoneyBillTransfer, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
 
-// IONIC 
-import PendingActionsIcon from '@mui/icons-material/PendingActions';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",

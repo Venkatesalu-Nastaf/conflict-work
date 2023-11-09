@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
-// import { emailValidator, passwordValidator } from "./regexValidator";
 import "./Form.css";
+import axios from "axios"; 
+import { useUser } from './UserContext'; 
 import { useNavigate } from "react-router-dom";
-import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";
-import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircleFill";
-import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
+
+// ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { BiHide } from "@react-icons/all-files/bi/BiHide";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
 import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import axios from "axios"; // Import Axios for making HTTP requests
-import { useUser } from './UserContext'; // Import useUser from UserContext
+import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";
+import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircleFill";
 
 const Login = () => {
   const navigate = useNavigate();

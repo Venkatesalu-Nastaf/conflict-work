@@ -257,6 +257,8 @@ const TripSheet = () => {
     vehRegNo: '',
     driverName: '',
     mobileNo: '',
+    reporttime: '',
+    startdate: '',
   });
   const [sendEmail, setSendEmail] = useState(false);
 
@@ -684,6 +686,8 @@ const TripSheet = () => {
       await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
       console.log('Customer updated');
       handleCancel();
+      handleDriverSendSMS();
+      handleSendSMS();
       handlecheck();
       setSuccess(true);
       setSuccessMessage("Successfully updated");
@@ -738,6 +742,8 @@ const TripSheet = () => {
       console.log(updatedBook);
       handleCancel();
       setSuccess(true);
+      handleSendSMS();
+      handleDriverSendSMS();
       handlecheck();
       setSuccessMessage("Successfully Added");
     } catch (error) {
@@ -1218,6 +1224,95 @@ const TripSheet = () => {
     totalKilometers, totalTime
   ]);
 
+
+  const [smsguest, setSmsGuest] = useState(false);
+
+  const handleSendSMS = async () => {
+    if (smsguest) {
+      try {
+        const dataToSend = {
+          guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
+          vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
+          vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+          driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
+          mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo,
+          reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
+          startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
+          ofclanno: '044-49105959',
+        };
+
+        console.log("guest sms variables", dataToSend);
+
+        const response = await fetch('http://localhost:8081/tripguest-send-sms', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToSend),
+        });
+
+        console.log('data sent to backend', response.data);
+
+        if (response.ok) {
+          console.log('SMS sent successfully');
+          setSuccess(true);
+          setSuccessMessage("SMS sent correctly");
+        } else {
+          console.error('Failed to send SMS');
+          setError(true);
+          setErrorMessage("Failed to send SMS");
+        }
+      } catch (error) {
+        console.error('Error sending SMS:', error.message);
+      }
+    }
+  };
+  //send sms from tripsheet to driver
+  const [DriverSMS, setDriverSMS] = useState(false);
+
+  const handleDriverSendSMS = async () => {
+    if (smsguest) {
+      try {
+        const dataSend = {
+          guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
+          vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
+          vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+          driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
+          mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo,
+          reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
+          startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
+          ofclanno: '044-49105959',
+        };
+
+        console.log("driver sms variables", dataSend);
+
+        const response = await fetch('http://localhost:8081/tripdriver-send-sms', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataSend),
+        });
+
+        console.log('data sent to backend', response.data);
+
+        if (response.ok) {
+          console.log('SMS sent successfully');
+          setSuccess(true);
+          setSuccessMessage("SMS sent correctly");
+        } else {
+          console.error('Failed to send SMS');
+          setError(true);
+          setErrorMessage("Failed to send SMS");
+        }
+      } catch (error) {
+        console.error('Error sending SMS:', error.message);
+      }
+    }
+  };
+
   return (
     <div className="form-container">
       <div className="Tripsheet-form">
@@ -1355,7 +1450,7 @@ const TripSheet = () => {
                   required
                 />
               </div>
-              <FormControlLabel
+              {/* <FormControlLabel
                 name="smsguest"
                 value="smsguest"
                 control={<Checkbox size="small" />}
@@ -1363,6 +1458,11 @@ const TripSheet = () => {
                 autoComplete="new-password"
                 onChange={handleChange}
                 checked={Boolean(formData.smsguest || selectedCustomerData?.smsguest || book.smsguest)}
+              /> */}
+              <FormControlLabel
+                value="smsguest"
+                control={<Checkbox size="small" checked={smsguest} onChange={(event) => setSmsGuest(event.target.checked)} />}
+                label="SMS Guest"
               />
               <FormControlLabel
                 name="booker"
@@ -1666,7 +1766,7 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input radio">
-                <FormControlLabel
+                {/* <FormControlLabel
                   name="driversmsexbetta"
                   value="Driver SMS"
                   control={<Checkbox size="small" />}
@@ -1674,6 +1774,11 @@ const TripSheet = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                   checked={Boolean(formData.driversmsexbetta || selectedCustomerData?.driversmsexbetta || book.driversmsexbetta)}
+                /> */}
+                <FormControlLabel
+                  value="DriverSMS"
+                  control={<Checkbox size="small" checked={DriverSMS} onChange={(event) => setDriverSMS(event.target.checked)} />}
+                  label="Driver SMS"
                 />
               </div>
               <div className="input radio">

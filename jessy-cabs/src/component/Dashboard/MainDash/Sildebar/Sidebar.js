@@ -17,12 +17,12 @@ export const Sidebardata = [
     key: "/home/registration/customer",
   },
   {
-    heading: "Info",
-    key: "/home/info/ratetype",
-  },
-  {
     heading: "Settings",
     key: "/home/settings/usercreation",
+  },
+  {
+    heading: "Info",
+    key: "/home/info/ratetype",
   },
   {
     heading: "User",

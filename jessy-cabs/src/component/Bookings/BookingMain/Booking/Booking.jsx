@@ -147,6 +147,12 @@ const Booking = () => {
     guestmobileno: '',
     email: '',
     useage: '',
+    tripid: '',
+    reporttime: '',
+    startdate: '',
+    address1: '',
+    streetno: '',
+    city: '',
   });
 
   const { user } = useUser();
@@ -504,6 +510,7 @@ const Booking = () => {
       setSuccess(true);
       setSuccessMessage("Successfully Added");
       handlecheck();
+      handleSendSMS();
     } catch (error) {
       console.error('Error updating customer:', error);
       setError(true);
@@ -546,6 +553,7 @@ const Booking = () => {
         console.log('Customer updated');
         handleCancel();
         handlecheck();
+        handleSendSMS();
         setSuccess(true);
         setSuccessMessage("Successfully Updated");
       } else if (actionName === 'Copy This') {
@@ -745,6 +753,87 @@ const Booking = () => {
     }
   }, [user]);
   const storedUsername = localStorage.getItem("username");
+  //sms send
+  // const [guestsms, setGuestSms] = useState(false);
+  // const handleSendSMS = async () => {
+  //   if (guestsms) {
+  //     try {
+  //       const dataToSend = {
+  //         guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
+  //         guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
+  //         email: formValues.email || selectedCustomerData.email || book.email || formData.pickup,
+  //         pickup: formValues.pickup || selectedCustomerData.pickup || book.pickup || formData.pickup,
+  //         useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage,
+  //         tripid: formValues.tripid || formData.tripid || selectedCustomerData.tripid || book.tripid,
+  //         reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
+  //         startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null,
+  //         address1: formValues.address1 || formData.address1 || selectedCustomerData.address1 || book.address1,
+  //         streetno: formValues.streetno || formData.streetno || selectedCustomerData.streetno || book.streetno,
+  //         city: formValues.city || formData.city || selectedCustomerData.city || book.city,
+  //       };
+  //       console.log("sms variables", dataToSend.value);
+  //       const response = await fetch('http://localhost:8081/send-sms', dataToSend);
+  //       console.log('data sent to backend', response.data);
+  //       if (response.ok) {
+  //         console.log('SMS sent successfully');
+  //         setSuccess(true);
+  //         setSuccessMessage("SMS Send correctly")
+  //       } else {
+  //         console.error('Failed to send SMS');
+  //         setError(true);
+  //         setErrorMessage("faild to send")
+  //       }
+  //     } catch (error) {
+  //       console.error('Error sending SMS:', error.message);
+  //     }
+  //   }
+  // };
+  const [guestsms, setGuestSms] = useState(false);
+
+  const handleSendSMS = async () => {
+    if (guestsms) {
+      try {
+        const dataToSend = {
+          guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
+          email: formValues.email || selectedCustomerData.email || book.email || formData.pickup || '',
+          pickup: formValues.pickup || selectedCustomerData.pickup || book.pickup || formData.pickup || '',
+          useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage || '',
+          tripid: formValues.tripid || formData.tripid || selectedCustomerData.tripid || book.tripid || '',
+          reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
+          startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
+          address1: formValues.address1 || formData.address1 || selectedCustomerData.address1 || book.address1 || '',
+          streetno: formValues.streetno || formData.streetno || selectedCustomerData.streetno || book.streetno || '',
+          city: formValues.city || formData.city || selectedCustomerData.city || book.city || '',
+        };
+
+        console.log("sms variables", dataToSend);
+
+        const response = await fetch('http://localhost:8081/send-sms', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToSend),
+        });
+
+        console.log('data sent to backend', response.data);
+
+        if (response.ok) {
+          console.log('SMS sent successfully');
+          setSuccess(true);
+          setSuccessMessage("SMS sent correctly");
+        } else {
+          console.error('Failed to send SMS');
+          setError(true);
+          setErrorMessage("Failed to send SMS");
+        }
+      } catch (error) {
+        console.error('Error sending SMS:', error.message);
+      }
+    }
+  };
+
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -1313,7 +1402,7 @@ const Booking = () => {
               <div className="input">
                 <FormControlLabel
                   value="guestsms"
-                  control={<Checkbox size="small" />}
+                  control={<Checkbox size="small" checked={guestsms} onChange={(event) => setGuestSms(event.target.checked)} />}
                   label="Guest SMS"
                 />
                 <FormControlLabel

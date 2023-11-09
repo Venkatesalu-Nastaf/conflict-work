@@ -49,6 +49,7 @@ const taxsettingRouter = require('./Router/mainsetting/taxsetting');
 const drivercreationRouter = require('./Router/Driverapplogin/driverapplogin');
 const assetsRouer = require('./Router/cashflow/assets');
 const driveractiveRouter = require('./Router/tripsheet/appuserlist');
+const sendsmsRouter = require('./Router/SMS/sms');
 // const signatureRouter = require('./Router/signature/signature');
 
 
@@ -134,6 +135,10 @@ app.get('/get-image/:filename', (req, res) => {
 // -----------------------------------------------------------------------------------------------------------
 // order/Received/Pending data collect from database
 app.use('/', pendingRouter);
+// End 
+// -----------------------------------------------------------------------------------------------------------
+// order/Received/Pending data collect from database
+app.use('/', sendsmsRouter);
 // End 
 // -----------------------------------------------------------------------------------------------------------
 // order/Dispatch/closed data collect from database

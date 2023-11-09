@@ -1,21 +1,23 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import axios from "axios";
-import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import Button from "@mui/material/Button";
-import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { Menu } from "@mui/material";
 import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { saveAs } from 'file-saver';
+import { Menu } from "@mui/material";
+import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import MenuItem from '@mui/material/MenuItem';
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
+// ICONS
 import ClearIcon from '@mui/icons-material/Clear';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
 const MonthlyPayDetails = () => {
     const [rows, setRows] = useState([]);

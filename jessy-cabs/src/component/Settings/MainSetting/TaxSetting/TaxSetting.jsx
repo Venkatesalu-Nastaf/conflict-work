@@ -2,42 +2,43 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import './TaxSetting.css';
 import dayjs from "dayjs";
+import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import { TaxType } from './TaxSettingData.js'
 import { DataGrid } from "@mui/x-data-grid";
-// import IconButton from '@mui/material/IconButton';
+import { TaxType } from './TaxSettingData.js';
+import { styled } from "@mui/material/styles";
+import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import Box from "@mui/material/Box";
-import SpeedDial from "@mui/material/SpeedDial";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import { styled } from "@mui/material/styles";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import ClearIcon from '@mui/icons-material/Clear';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-// import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+
+
 // FontAwesomeIcon Link
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { faNewspaper } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+
+// ICONS
+import ClearIcon from '@mui/icons-material/Clear';
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 
 // date
 
 
 // TABLE START
-const columns = [
+const columns = [ 
     { field: "id", headerName: "Sno", width: 70 },
     { field: "DateTaxFrom", headerName: "From_Date", width: 130 },
     { field: "DateTaxTo", headerName: "To_Date", width: 130 },

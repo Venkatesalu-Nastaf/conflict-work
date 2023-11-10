@@ -151,7 +151,8 @@ const Ratevalidity = () => {
     };
 
     const handleDateChange = (date, name) => {
-        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+        const formattedDate = dayjs(date).format('DD/MM/YYYY');
+        // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
         setBook((prevBook) => ({
             ...prevBook,
             [name]: formattedDate,

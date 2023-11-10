@@ -220,7 +220,9 @@ const Billing = () => {
     };
 
     const handleDateChange = (date, name) => {
-        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+        // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+        const formattedDate = dayjs(date).format('DD/MM/YYYY');
+
         setBook((prevBook) => ({
             ...prevBook,
             [name]: formattedDate,

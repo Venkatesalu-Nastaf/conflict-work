@@ -140,32 +140,32 @@ const Customer = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
 
@@ -240,7 +240,7 @@ const Customer = () => {
   };
 
   const handleDateChange = (date) => {
-    const startOfDay = dayjs(date).startOf('day').format();
+    const startOfDay = dayjs(date).format('DD/MM/YYYY');
     setBook((prevBook) => ({
       ...prevBook,
       date: startOfDay,
@@ -617,7 +617,7 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
-                  value={Service_Station.find((option) => option.optionvalue)?.label ||  selectedCustomerData.servicestation || book.servicestation || ''}
+                  value={Service_Station.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
                   options={Service_Station.map((option) => ({
                     label: option.optionvalue,
                   }))}
@@ -639,7 +639,7 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "selectOption")}
-                  value={Select.find((option) => option.Option)?.label ||selectedCustomerData?.selectOption || ''}
+                  value={Select.find((option) => option.Option)?.label || selectedCustomerData?.selectOption || ''}
                   options={Select.map((option) => ({
                     label: option.Option,
                   }))}

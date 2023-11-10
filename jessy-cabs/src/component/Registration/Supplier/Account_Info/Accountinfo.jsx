@@ -234,7 +234,7 @@ const Accuntinfo = () => {
 
 
   const handleDateChange = (date) => {
-    const startOfDay = dayjs(date).startOf('day').format();
+    const startOfDay = dayjs(date).format('DD/MM/YYYY');
     setBook((prevBook) => ({
       ...prevBook,
       date: startOfDay,

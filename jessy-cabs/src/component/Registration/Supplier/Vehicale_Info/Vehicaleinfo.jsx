@@ -56,32 +56,32 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "vehicleid", headerName: "Vehicle ID", width: 130 },
-  { field: "attecheddate", headerName: "Atteched Date", width: 130 },
-  { field: "vehicleregno", headerName: "Vehicle Reg No", width: 130 },
-  { field: "costcenterlocation", headerName: "Cost Cennter Location", width: 170 },
-  { field: "vehicletype", headerName: "Vehicle Type", width: 130 },
+  { field: "vehicleId", headerName: "Vehicle ID", width: 130 },
+  { field: "doadate", headerName: "Atteched Date", width: 130 },
+  { field: "vehRegNo", headerName: "Vehicle Reg No", width: 130 },
+  { field: "costCenter", headerName: "Cost Center Location", width: 170 },
+  { field: "vehType", headerName: "Vehicle Type", width: 130 },
   { field: "owner", headerName: "Owner", width: 90 },
-  { field: "mobileno", headerName: "Mobile No", width: 130 },
+  { field: "mobileNo", headerName: "Mobile No", width: 130 },
   { field: "email", headerName: "Email", width: 130 },
-  { field: "yearmodel", headerName: "Year Model", width: 130 },
+  { field: "yearModel", headerName: "Year Model", width: 130 },
   { field: "insuranceno", headerName: "Insurance No", width: 130 },
-  { field: "insuranceduedate", headerName: "Insurance Due Date", width: 150 },
+  { field: "insduedate", headerName: "Insurance Due Date", width: 150 },
   { field: "licenseno", headerName: "License No", width: 130 },
   { field: "licensebatchno", headerName: "License Batch No", width: 140 },
-  { field: "licenseduedate", headerName: "License Due Date", width: 140 },
-  { field: "notionalpermitno", headerName: "Notional Permit No", width: 150 },
-  { field: "notionalpermitdate", headerName: "Notional Permit Date", width: 150 },
-  { field: "statepermitno", headerName: "State Permit No", width: 130 },
-  { field: "statepermitdate", headerName: "State Permit Date", width: 130 },
+  { field: "licduedate", headerName: "License Due Date", width: 140 },
+  { field: "nationalpermito", headerName: "Notional Permit No", width: 150 },
+  { field: "npdate", headerName: "Notional Permit Date", width: 150 },
+  { field: "statepermito", headerName: "State Permit No", width: 130 },
+  { field: "spdate", headerName: "State Permit Date", width: 130 },
   { field: "rcbookno", headerName: "RC Book No", width: 130 },
   { field: "fcdate", headerName: "FC Date", width: 130 },
   { field: "avgmileage", headerName: "AVG Mileage", width: 130 },
-  { field: "drivername", headerName: "Driver Name", width: 130 },
-  { field: "tankcap", headerName: "Tank Cap", width: 130 },
+  { field: "driverName", headerName: "Driver Name", width: 130 },
+  { field: "tankCap", headerName: "Tank Cap", width: 130 },
   { field: "routeno", headerName: "Route No", width: 130 },
   { field: "remarks", headerName: "Remarks", width: 130 },
-  { field: "ownertype", headerName: "Owner Type", width: 130 },
+  { field: "OwnerType", headerName: "Owner Type", width: 130 },
 ];
 
 
@@ -107,7 +107,7 @@ const actions = [
 const Vehicaleinfo = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [actionName] = useState('');
-  const [rows] = useState([]);
+  const [rows, setRows] = useState([]);
   const [info, setInfo] = useState(false);
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
@@ -120,14 +120,6 @@ const Vehicaleinfo = () => {
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
 
-
-
-  const handleUpload = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.pdf, .jpg, .jpeg, .png';
-    input.click();
-  };
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
@@ -198,7 +190,6 @@ const Vehicaleinfo = () => {
     licenseno: '',
     licensebatchno: '',
     licduedate: '',
-    duedate: '',
     nationalpermito: '',
     npdate: '',
     avgmileage: '',
@@ -231,7 +222,7 @@ const Vehicaleinfo = () => {
       insduedate: '',
       licenseno: '',
       licensebatchno: '',
-      duedate: '',
+      licduedate: '',
       nationalpermito: '',
       npdate: '',
       avgmileage: '',
@@ -298,7 +289,6 @@ const Vehicaleinfo = () => {
     }
   };
 
-
   const handleClick = async (event, actionName) => {
     event.preventDefault();
 
@@ -332,6 +322,59 @@ const Vehicaleinfo = () => {
     }
   });
 
+  const handleUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf, .jpg, .jpeg, .png';
+    input.onchange = handleFileChange;
+    input.click();
+  };
+  //file upload
+  const handleFileChange = async (event, documentType) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const uniqueFileName = `${documentType}_${Date.now()}_${file.name}`;
+    const formDataUpload = new FormData();
+    formDataUpload.append('file', file);
+    formDataUpload.append('documenttype', book.documenttype || selectedCustomerData.documenttype);
+    formDataUpload.append('documenttype', documentType);
+    formDataUpload.append('vehicleId', book.vehicleId || selectedCustomerData.vehicleId);
+    formDataUpload.append('filename', uniqueFileName);
+    console.log('uploaded file details', formDataUpload);
+    try {
+      const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
+      console.log('uploaded file details 2', response.data);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+  //end file upload
+  //search funtion
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`http://localhost:8081/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+      console.log(response.value);
+      const data = await response.json();
+      console.log(data);
+      // setRows(data);
+      // setSuccess(true);
+      // setSuccessMessage("successfully listed")
+      if (data.length > 0) {
+        setRows(data);
+        console.log(data);
+        setSuccess(true);
+        setSuccessMessage("successfully listed")
+      } else {
+        setError(true);
+        setErrorMessage("no data find")
+      }
+    } catch {
+      // console.error('Error searching for vehicle info:', error);
+      setError(true);
+      setErrorMessage("sorry")
+    }
+  };
 
   return (
     <div className="vehicale-form">
@@ -477,15 +520,6 @@ const Vehicaleinfo = () => {
                 />
               </div>
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Insurance Due Date"
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Insurance Due Date"
@@ -499,7 +533,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('InsuranceCopy')} size="md" variant="contained">
                   Insurance Copy
                 </Button>
               </div>
@@ -534,15 +568,6 @@ const Vehicaleinfo = () => {
                 />
               </div>
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="License Due Date"
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="License Due Date"
@@ -556,7 +581,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('LicenseCopy')} size="md" variant="contained">
                   License Copy
                 </Button>
               </div>
@@ -590,7 +615,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('NationalPermitCopy')} size="md" variant="contained">
                   National Permit Copy
                 </Button>
               </div>
@@ -628,7 +653,7 @@ const Vehicaleinfo = () => {
                   <DatePicker
                     label="State Permit Date"
                     value={selectedCustomerData.spdate ? dayjs(selectedCustomerData.spdate) : null}
-                    onChange={(date) => handleDateChange(date, 'npdate')}
+                    onChange={(date) => handleDateChange(date, 'spdate')}
                   >
                     {({ inputProps, inputRef }) => (
                       <TextField {...inputProps} inputRef={inputRef} name='spdate' value={selectedCustomerData.spdate} />
@@ -637,7 +662,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('StatePermitCopy')} size="md" variant="contained">
                   State Permit Copy
                 </Button>
               </div>
@@ -671,15 +696,6 @@ const Vehicaleinfo = () => {
                 />
               </div>
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="FC Date"
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider> */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="FC Date"
@@ -693,12 +709,12 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('RCBookCopy')} size="md" variant="contained">
                   RC-Book Copy
                 </Button>
               </div>
               <div className="input" style={{ width: "160px" }}>
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('FCCopy')} size="md" variant="contained">
                   FC Copy
                 </Button>
               </div>
@@ -892,7 +908,7 @@ const Vehicaleinfo = () => {
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained">Search</Button>
+                  <Button variant="contained" onClick={handleSearch}>Search</Button>
                 </div>
               </div>
             </div>

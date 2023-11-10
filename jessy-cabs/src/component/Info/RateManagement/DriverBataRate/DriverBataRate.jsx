@@ -74,9 +74,9 @@ const DriverBataRate = () => {
   const [info, setInfo] = useState(false);
   const [warning, setWarning] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
-  	 const [errorMessage, setErrorMessage] = useState({});
- 	 const [warningMessage] = useState({});
-   	 const [infoMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
 
   const hidePopup = () => {
     setSuccess(false);
@@ -170,7 +170,8 @@ const DriverBataRate = () => {
 
 
   const handleDateChange = (date, name) => {
-    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    const formattedDate = dayjs(date).format('DD/MM/YYYY');
+    // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
     setBook((prevBook) => ({
       ...prevBook,
       [name]: formattedDate,
@@ -209,12 +210,12 @@ const DriverBataRate = () => {
       await axios.post('http://localhost:8081/driverbatarate', book);
       console.log(book);
       handleCancel();
-      
-  setSuccessMessage("Successfully Added");
+
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
       setErrorMessage("Check your Network Connection");
-        
+
     }
   };
 

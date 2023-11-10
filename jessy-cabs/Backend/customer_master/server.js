@@ -98,7 +98,9 @@ app.post('/uploads', upload.single('file'), (req, res) => {
     size: req.file.size,
     path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
     tripid: req.body.tripid,
-    tripid: req.body.documenttype,
+    // documenttype: req.body.documenttype, 
+    vehicleId: req.body.vehicleId,
+    // vehicleId: req.body.documenttype,
   };
   const query = 'INSERT INTO tripsheetupload SET ?';
   db.query(query, fileData, (err, result) => {
@@ -110,7 +112,7 @@ app.post('/uploads', upload.single('file'), (req, res) => {
   });
 });
 //space
-const imageDirectory = path.join(__dirname, 'uploads'); // Adjust the path as needed
+const imageDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
 app.use('/images', express.static(imageDirectory));
 // Example route to serve an image by its filename

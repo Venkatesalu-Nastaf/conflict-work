@@ -4,14 +4,16 @@ import dayjs from "dayjs";
 import "./BookingChart.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import ClearIcon from '@mui/icons-material/Clear';
 import { VehicleModel } from "./BookingChart";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
+// ICONS
+import ClearIcon from '@mui/icons-material/Clear';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 const BookingChart = () => {
   const [fromDate, setFromDate] = useState(dayjs());

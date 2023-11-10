@@ -126,20 +126,20 @@ const Sidebar = () => {
             icon={BiNotepad}
           />
           <MenuItem
-            label="Info"
-            to="/home/info/ratetype"
-            menuItemKey="/home/info"
-            isActive={isActive}
-            handleMenuItemClick={handleMenuItemClick}
-            icon={AiOutlineInfoCircle}
-          />
-          <MenuItem
             label="Settings"
             to="/home/settings/usercreation"
             menuItemKey="/home/settings"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineSetting}
+          />
+          <MenuItem
+            label="Info"
+            to="/home/info/ratetype"
+            menuItemKey="/home/info"
+            isActive={isActive}
+            handleMenuItemClick={handleMenuItemClick}
+            icon={AiOutlineInfoCircle}
           />
           <MenuItem
             label="User"

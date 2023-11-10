@@ -12,6 +12,7 @@ import { styled } from "@mui/material/styles";
 import MenuItem from '@mui/material/MenuItem';
 import { useLocation } from "react-router-dom";
 import SpeedDial from "@mui/material/SpeedDial";
+import { useUser } from '../../../form/UserContext';
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -21,6 +22,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { Duty, Hire, PayType, Report, VehicleModel, Service_Station } from "./Booking";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
+
 // ICONS
 import InfoIcon from "@mui/icons-material/Info";
 import SellIcon from "@mui/icons-material/Sell";
@@ -33,9 +35,9 @@ import NoCrashIcon from "@mui/icons-material/NoCrash";
 import CommuteIcon from "@mui/icons-material/Commute";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import RateReviewIcon from "@mui/icons-material/RateReview";
@@ -63,7 +65,6 @@ import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
-import { useUser } from '../../../form/UserContext';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",

@@ -19,6 +19,7 @@ import Tabs from "@mui/joy/Tabs";
 import Box from "@mui/material/Box";
 import TabList from "@mui/joy/TabList";
 import TabPanel from "@mui/joy/TabPanel";
+import Invoice from '../Invoice/Invoice';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
@@ -52,6 +53,7 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
 import PaymentsIcon from "@mui/icons-material/Payments";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import DataUsageIcon from "@mui/icons-material/DataUsage";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import RateReviewIcon from "@mui/icons-material/RateReview";
@@ -63,6 +65,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
@@ -71,8 +74,6 @@ import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
 import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
@@ -96,7 +97,6 @@ import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
-import Invoice from '../Invoice/Invoice';
 
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
@@ -202,7 +202,11 @@ const TripSheet = () => {
     duty: '',
   });
 
-
+  const handleButtonClick = () => {
+    // with the actual URL you want to open
+    const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
+    newTab.focus();
+  };
 
   //generate link
 
@@ -774,7 +778,7 @@ const TripSheet = () => {
   };
 
   const handleDateChange = (date, name) => {
-    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    const formattedDate = dayjs(date).format('DD/MM/YYYY');
     setBook((prevBook) => ({
       ...prevBook,
       [name]: formattedDate,
@@ -3583,7 +3587,7 @@ const TripSheet = () => {
                   </div>
                   <div className="input-field">
                     <div className="input">
-                      <Button>Manual Marking</Button>
+                      <Button onClick={handleButtonClick}>Manual Marking</Button>
                     </div>
                     <div className="input">
                       <Button>Delete GPS Log</Button>

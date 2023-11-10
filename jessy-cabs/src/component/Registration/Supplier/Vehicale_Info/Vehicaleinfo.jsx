@@ -271,6 +271,10 @@ const Vehicaleinfo = () => {
       ...prevBook,
       [name]: startOfDay,
     }));
+    setSelectedCustomerData((prevBook) => ({
+      ...prevBook,
+      [name]: startOfDay,
+    }));
   };
 
   const handleAdd = async () => {

@@ -469,7 +469,7 @@ const Booking = () => {
     }));
   };
   const handleDateChange = (date, name) => {
-    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    const formattedDate = dayjs(date).format('DD/MM/YYYY');
     setBook((prevBook) => ({
       ...prevBook,
       [name]: formattedDate,
@@ -543,9 +543,9 @@ const Booking = () => {
           ...selectedCustomer,
           ...selectedCustomerData,
           bookingtime: bookingtime || selectedCustomerData.bookingtime,
-          starttime: starttime,
-          reporttime: reporttime,
-          triptime: triptime,
+          starttime: starttime || book.starttime||selectedCustomerData.starttime||formData.starttime,
+          reporttime: reporttime|| book.reporttime||selectedCustomerData.reporttime||formData.reporttime,
+          triptime: triptime|| book.triptime||selectedCustomerData.triptime||formData.triptime,
           username: storedUsername,
           bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
         };

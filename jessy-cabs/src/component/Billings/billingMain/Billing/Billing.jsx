@@ -65,9 +65,6 @@ const actions = [
 const Billing = () => {
 
     const [bankOptions, setBankOptions] = useState([]);
-    // const [selectedBank] = useState('');
-    // const [error, setError] = useState(null);
-
     const [formData, setFormData] = useState({});
     const location = useLocation();
     const [info, setInfo] = useState(false);
@@ -220,14 +217,18 @@ const Billing = () => {
     };
 
     const handleDateChange = (date, name) => {
-        // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
         const formattedDate = dayjs(date).format('DD/MM/YYYY');
 
         setBook((prevBook) => ({
             ...prevBook,
             [name]: formattedDate,
         }));
+        setSelectedCustomerData((prevBook) => ({
+            ...prevBook,
+            [name]: formattedDate,
+        }));
     };
+
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
@@ -296,8 +297,9 @@ const Billing = () => {
                 handleCancel();
             } else if (actionName === 'Delete') {
                 console.log('Delete button clicked');
-                await axios.delete(`http://localhost:8081/billing/${tripid}`);
+                await axios.delete(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
                 console.log('Customer deleted');
+                setFormData(null);
                 setSelectedCustomerData(null);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
@@ -308,6 +310,7 @@ const Billing = () => {
                     ...selectedCustomerDatas,
                     ...selectedCustomer,
                     ...selecting,
+                    ...formData,
                     MinKilometers: selectedCustomerDatas.minkm || selectedCustomerData.minkm || '',
                     MinHours: selectedCustomerDatas.minhrs || selectedCustomerData.minhrs || '',
                     minchargeamount: selectedCustomerData.netamount || selectedCustomerDatas.minchargeamount || book.minchargeamount,
@@ -317,7 +320,7 @@ const Billing = () => {
                     nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
                     dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
                 };
-                await axios.put(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid}`, updatedCustomer);
+                await axios.put(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
                 console.log('Customer updated');
                 handleCancel();
             } else if (actionName === 'Add') {
@@ -497,7 +500,6 @@ const Billing = () => {
     const selecting = {
         tripid: selectedCustomerDatas.tripid || selectedCustomerData.tripid || '',
         billingno: selectedCustomerDatas.billingno || selectedCustomerData.billingno || '',
-        // Billingdate: selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
         totalkm1: selectedCustomerDatas.totalkm1 || selectedCustomerData.totalkm1 || '',
         totaltime: selectedCustomerDatas.totaltime || selectedCustomerData.totaltime || '',
         customer: selectedCustomerDatas.customer || selectedCustomerData.customer || '',
@@ -579,19 +581,13 @@ const Billing = () => {
         });
         setBook(formData);
         setFormData(formData);
-
     }, [location]);
 
     useEffect(() => {
-        // Clear URL parameters
         window.history.replaceState(null, document.title, window.location.pathname);
-        // Reset form data to initial/default values
-        const initialFormData = {}; // You can set the initial/default values here
+        const initialFormData = {};
         setFormData(initialFormData);
     }, []);
-
-
-
 
     return (
         <div className="form-container">

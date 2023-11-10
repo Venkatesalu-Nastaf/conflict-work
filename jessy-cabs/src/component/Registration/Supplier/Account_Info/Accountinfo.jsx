@@ -167,12 +167,12 @@ const Accuntinfo = () => {
     { field: "vehicleInfo", headerName: "Owner_Type", width: 130 },
     { field: "vehCommission", headerName: "Percentage", width: 130 },
     { field: "rateType", headerName: "Rate_Type", width: 130 },
-    { field: "autoRefresh", headerName: "Driver", width: 130 },
+    { field: "acType", headerName: "Driver", width: 130 },
   ];
   // TABLE END
   const [book, setBook] = useState({
     accountNo: '',
-    date: '',
+    Accdate: '',
     vehicleTravels: '',
     address1: '',
     cperson: '',
@@ -232,12 +232,15 @@ const Accuntinfo = () => {
     }));
   };
 
-
-  const handleDateChange = (date) => {
+  const handleDateChange = (date, name) => {
     const startOfDay = dayjs(date).format('DD/MM/YYYY');
     setBook((prevBook) => ({
       ...prevBook,
-      date: startOfDay,
+      [name]: startOfDay,
+    }));
+    setSelectedCustomerData((prevBook) => ({
+      ...prevBook,
+      [name]: startOfDay,
     }));
   };
 
@@ -245,7 +248,7 @@ const Accuntinfo = () => {
     setBook((prevBook) => ({
       ...prevBook,
       accountNo: '',
-      date: '',
+      Accdate: '',
       vehicleTravels: '',
       address1: '',
       cperson: '',
@@ -280,9 +283,11 @@ const Accuntinfo = () => {
       await axios.post('http://localhost:8081/accountinfo', book);
       console.log(book);
       handleCancel();
+      setSuccess(true);
       setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -295,7 +300,6 @@ const Accuntinfo = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/accountinfo');
         const data = response.data;
-        // setRows(data);
         if (data.length > 0) {
           setRows(data);
           setSuccess(true);
@@ -311,24 +315,38 @@ const Accuntinfo = () => {
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/accountinfo/${accountNo}`);
+        await axios.delete(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
+        // console.log('Edit button clicked');
+        // const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+        // const updatedCustomer = {
+        //   ...selectedCustomer,
+        //   ...selectedCustomerData,
+        // };
+        // await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+        // console.log('Customer updated');
+        // handleCancel();
+        // setSuccess(true);
+        // setSuccessMessage("Successfully updated");
         console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/accountinfo/${accountNo}`, updatedCustomer);
+        await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
         console.log('Customer updated');
+        setSuccess(true);
+        setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
         handleAdd();
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       setError(true);
+      setErrorMessage("Check your connection");
     }
   };
   useEffect(() => {
@@ -336,6 +354,8 @@ const Accuntinfo = () => {
       handleClick(null, 'List');
     }
   });
+
+  const reversedRows = [...rows].reverse();
 
   return (
     <div className="account-form">
@@ -363,11 +383,11 @@ const Accuntinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
-                    value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
-                    onChange={handleDateChange}
+                    value={selectedCustomerData.Accdate ? dayjs(selectedCustomerData.Accdate) : null}
+                    onChange={(date) => handleDateChange(date, 'Accdate')}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
+                      <TextField {...inputProps} inputRef={inputRef} name='Accdate' value={selectedCustomerData.Accdate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
@@ -682,7 +702,7 @@ const Accuntinfo = () => {
         </div>
         <div className="table-customer-lists">
           <DataGrid
-            rows={rows}
+            rows={reversedRows}
             columns={columns}
             onRowClick={handleRowClick}
             initialState={{

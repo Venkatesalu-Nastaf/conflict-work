@@ -50,6 +50,7 @@ const drivercreationRouter = require('./Router/Driverapplogin/driverapplogin');
 const assetsRouer = require('./Router/cashflow/assets');
 const driveractiveRouter = require('./Router/tripsheet/appuserlist');
 const sendsmsRouter = require('./Router/SMS/sms');
+const employeeRouter = require('./Router/Employee/employee');
 // const signatureRouter = require('./Router/signature/signature');
 
 
@@ -98,6 +99,7 @@ app.post('/uploads', upload.single('file'), (req, res) => {
     size: req.file.size,
     path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
     tripid: req.body.tripid,
+    empid: req.body.empid,
     // documenttype: req.body.documenttype, 
     vehicleId: req.body.vehicleId,
     // vehicleId: req.body.documenttype,
@@ -211,7 +213,7 @@ app.use('/', drivercreationRouter);
 // End RateValidity database
 // -----------------------------------------------------------------------------------------------------------
 // Employees Database
-// app.use('/', employeeRouter);
+app.use('/', employeeRouter);
 // End Employees database
 // -----------------------------------------------------------------------------------------------------------
 // Billing Database

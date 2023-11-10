@@ -330,7 +330,7 @@ const Customer = () => {
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/customers/${customerId}`);
+        await axios.delete(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
         handleCancel();
@@ -338,7 +338,7 @@ const Customer = () => {
         console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.customerId === customerId);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/customers/${customerId}`, updatedCustomer);
+        await axios.put(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {

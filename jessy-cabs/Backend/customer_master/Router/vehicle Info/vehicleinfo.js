@@ -17,31 +17,6 @@ router.post('/vehicleinfo', (req, res) => {
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
-//search data from vehicleinfo
-// router.get('/searchvehicleinfo', (req, res) => {
-//   const { searchText, fromDate, toDate } = req.query;
-
-//   let query = 'SELECT * FROM vehicleinfo';
-//   let params = [];
-
-//   if (searchText) {
-//     params.push(searchText);
-//   }
-
-//   if (fromDate && toDate) {
-//     query += ' AND doadate >= ? AND doadate <= DATE_ADD(?, INTERVAL 1 DAY)';
-//     params.push(fromDate);
-//     params.push(toDate);
-//   }
-
-//   db.query(query, params, (err, result) => {
-//     if (err) {
-//       console.error('Error retrieving vehicle details from MySQL:', err);
-//       return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
-//     }
-//     return res.status(200).json(result);
-//   });
-// });
 
 router.get('/searchvehicleinfo', (req, res) => {
   const { searchText, fromDate, toDate } = req.query;

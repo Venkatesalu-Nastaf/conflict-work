@@ -34,6 +34,7 @@ import RateManagement from "./component/Info/RateManagement/RateManagement";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
+import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/NavigationMap";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 
 function App() {
@@ -93,6 +94,7 @@ function App() {
                 <Route path="/home/usersettings/usersetting" element={<UserSetting />} />
               </Route>
             </Route>
+            <Route path="/navigationmap" element={<NavigationMap />} />
             <Route path="/onlinelogin" element={<OnlineLoginForm />} />
             <Route path="/onlinebooking" element={<OnlineBooking />} />
             <Route path="/onlinedigital/digitalsignature" element={<DigitalSignature />} />

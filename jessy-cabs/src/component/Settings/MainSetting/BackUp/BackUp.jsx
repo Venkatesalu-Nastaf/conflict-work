@@ -29,7 +29,7 @@ const BackUp = () => {
     const [warning, setWarning] = useState(false);
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
-    const [errorMessage, setErrorMessage] = useState({});
+    const [errorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 

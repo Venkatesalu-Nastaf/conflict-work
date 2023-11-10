@@ -189,25 +189,66 @@ const Vehicaleinfo = () => {
     vehRegNo: '',
     costCenter: '',
     vehType: '',
-    yearModel: '',
     owner: '',
     mobileNo: '',
-    fcdate: '',
-    taxdate: '',
-    npdate: '',
-    insdate: '',
-    stpermit: '',
+    email: '',
+    yearModel: '',
+    insuranceno: '',
+    insduedate: '',
+    licenseno: '',
+    licensebatchno: '',
+    licduedate: '',
     duedate: '',
-    financer: '',
+    nationalpermito: '',
+    npdate: '',
     avgmileage: '',
-    routeno: '',
+    statepermito: '',
+    spdate: '',
+    financer: '',
+    rcbookno: '',
+    fcdate: '',
     driverName: '',
-    dueAmount: '',
     tankCap: '',
+    routeno: '',
     remarks: '',
     OwnerType: '',
     active: '',
   });
+
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      vehicleId: '',
+      doadate: '',
+      vehRegNo: '',
+      costCenter: '',
+      vehType: '',
+      owner: '',
+      mobileNo: '',
+      email: '',
+      yearModel: '',
+      insuranceno: '',
+      insduedate: '',
+      licenseno: '',
+      licensebatchno: '',
+      duedate: '',
+      nationalpermito: '',
+      npdate: '',
+      avgmileage: '',
+      statepermito: '',
+      spdate: '',
+      financer: '',
+      rcbookno: '',
+      fcdate: '',
+      driverName: '',
+      tankCap: '',
+      routeno: '',
+      remarks: '',
+      OwnerType: '',
+      active: '',
+    }));
+    setSelectedCustomerData({});
+  };
 
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
@@ -234,42 +275,11 @@ const Vehicaleinfo = () => {
   };
 
   const handleDateChange = (date, name) => {
-    const startOfDay = dayjs(date).startOf('day').format();
+    const startOfDay = dayjs(date).format('DD/MM/YYYY');
     setBook((prevBook) => ({
       ...prevBook,
       [name]: startOfDay,
     }));
-  };
-
-  const handleCancel = () => {
-    setBook((prevBook) => ({
-      ...prevBook,
-      vehicleId: '',
-      doadate: '',
-      vehRegNo: '',
-      costCenter: '',
-      vehType: '',
-      yearModel: '',
-      owner: '',
-      mobileNo: '',
-      fcdate: '',
-      taxdate: '',
-      npdate: '',
-      insdate: '',
-      stpermit: '',
-      duedate: '',
-      financer: '',
-      avgmileage: '',
-      routeno: '',
-      driverName: '',
-      dueAmount: '',
-      tankCap: '',
-      remarks: '',
-      OwnerType: '',
-      active: '',
-    }));
-    setSelectedCustomerData({});
-
   };
 
   const handleAdd = async () => {
@@ -279,9 +289,11 @@ const Vehicaleinfo = () => {
       await axios.post('http://localhost:8081/vehicleinfo', book);
       console.log(book);
       handleCancel();
+      setSuccess(true);
       setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -296,14 +308,14 @@ const Vehicaleinfo = () => {
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
+        setSuccess(true);
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
+        setSuccess(true);
         setSuccessMessage("Successfully Deleted");
-        // Perform the desired action when the "Delete" button is clicked
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
-        // Perform the desired action when the "Edit" button is clicked
       } else if (actionName === 'Add') {
         handleAdd();
       }
@@ -335,7 +347,6 @@ const Vehicaleinfo = () => {
                   name="vehicleId"
                   value={selectedCustomerData.vehicleId || book.vehicleId}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Vehicle ID"
                   id="standard-size-normal"
                   variant="standard"
@@ -396,7 +407,6 @@ const Vehicaleinfo = () => {
                   size='small'
                 />
               </div>
-
               <div className="input">
                 <div className="icone">
                   <EmojiTransportationIcon color="action" />
@@ -428,8 +438,9 @@ const Vehicaleinfo = () => {
                   <AttachEmailIcon color="action" />
                 </div>
                 <TextField
-                  name="Email"
+                  name="email"
                   size='small'
+                  value={selectedCustomerData.email || book.email}
                   onChange={handleChange}
                   label="Email"
                   id="email"
@@ -459,17 +470,30 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="insuranceno"
+                  value={selectedCustomerData.insuranceno || book.insuranceno}
+                  onChange={handleChange}
                   label="Insurance No"
                   id="tank_cap"
                 />
               </div>
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Insurance Due Date"
                   >
                     {({ inputProps, inputRef }) => (
                       <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
+                    )}
+                  </DatePicker>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Insurance Due Date"
+                    value={selectedCustomerData.insduedate ? dayjs(selectedCustomerData.insduedate) : null}
+                    onChange={(date) => handleDateChange(date, 'insduedate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='insduedate' value={selectedCustomerData.insduedate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
@@ -489,6 +513,8 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="licenseno"
+                  value={selectedCustomerData.licenseno || book.licenseno}
+                  onChange={handleChange}
                   label="License No"
                   id="tank_cap"
                 />
@@ -501,17 +527,30 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="licensebatchno"
+                  value={selectedCustomerData.licensebatchno || book.licensebatchno}
+                  onChange={handleChange}
                   label="License Batch No"
                   id="tank_cap"
                 />
               </div>
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="License Due Date"
                   >
                     {({ inputProps, inputRef }) => (
                       <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
+                    )}
+                  </DatePicker>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="License Due Date"
+                    value={selectedCustomerData.licduedate ? dayjs(selectedCustomerData.licduedate) : null}
+                    onChange={(date) => handleDateChange(date, 'licduedate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='licduedate' value={selectedCustomerData.licduedate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
@@ -531,6 +570,8 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="nationalpermito"
+                  value={selectedCustomerData.nationalpermito || book.nationalpermito}
+                  onChange={handleChange}
                   label="National Permit No"
                   id="tank_cap"
                 />
@@ -576,6 +617,8 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="statepermito"
+                  value={selectedCustomerData.statepermito || book.statepermito}
+                  onChange={handleChange}
                   label="State Permit No"
                   id="tank_cap"
                 />
@@ -584,11 +627,11 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="State Permit Date"
-                    value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
+                    value={selectedCustomerData.spdate ? dayjs(selectedCustomerData.spdate) : null}
                     onChange={(date) => handleDateChange(date, 'npdate')}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData.npdate} />
+                      <TextField {...inputProps} inputRef={inputRef} name='spdate' value={selectedCustomerData.spdate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
@@ -621,17 +664,30 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="rcbookno"
+                  value={selectedCustomerData.rcbookno || book.rcbookno}
+                  onChange={handleChange}
                   label="RC Book No"
                   id="tank_cap"
                 />
               </div>
               <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="FC Date"
                   >
                     {({ inputProps, inputRef }) => (
                       <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
+                    )}
+                  </DatePicker>
+                </LocalizationProvider> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="FC Date"
+                    value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
+                    onChange={(date) => handleDateChange(date, 'fcdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} name='fcdate' value={selectedCustomerData.fcdate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
@@ -785,9 +841,7 @@ const Vehicaleinfo = () => {
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
-            // hidden={hidden}
             icon={<SpeedDialIcon />}
-          // direction={direction}
           >
             {actions.map((action) => (
               <SpeedDialAction

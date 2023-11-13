@@ -12,7 +12,6 @@ import { styled } from "@mui/material/styles";
 import MenuItem from '@mui/material/MenuItem';
 import { useLocation } from "react-router-dom";
 import SpeedDial from "@mui/material/SpeedDial";
-import { useUser } from '../../../form/UserContext';
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -22,7 +21,6 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { Duty, Hire, PayType, Report, VehicleModel, Service_Station } from "./Booking";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
-
 // ICONS
 import InfoIcon from "@mui/icons-material/Info";
 import SellIcon from "@mui/icons-material/Sell";
@@ -35,9 +33,9 @@ import NoCrashIcon from "@mui/icons-material/NoCrash";
 import CommuteIcon from "@mui/icons-material/Commute";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import RateReviewIcon from "@mui/icons-material/RateReview";
@@ -65,6 +63,7 @@ import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
+import { useUser } from '../../../form/UserContext';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -210,11 +209,9 @@ const Booking = () => {
     const formData = {};
     console.log('formdata console details', formData);
 
-    // Define a list of parameter keys
     const parameterKeys = [
       'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno', 'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'reporttime', 'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'triptime', 'emaildoggle', 'hireTypes', 'travelsname', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'travelsemail'];
 
-    // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
     parameterKeys.forEach(key => {
       const value = params.get(key);
       if (value !== null && value !== "null") {
@@ -222,7 +219,6 @@ const Booking = () => {
       }
     });
 
-    // Set the status separately
     formData['status'] = statusValue;
     formData['servicestation'] = stationValue;
     formData['paymenttype'] = payValue;
@@ -232,11 +228,8 @@ const Booking = () => {
   }, [location]);
 
   useEffect(() => {
-    // Clear URL parameters
     window.history.replaceState(null, document.title, window.location.pathname);
-
-    // Reset form data to initial/default values
-    const initialFormData = {}; // You can set the initial/default values here
+    const initialFormData = {};
     setFormData(initialFormData);
   }, []);
 
@@ -519,7 +512,7 @@ const Booking = () => {
     }
   };
 
-  const handleClick = async (event, actionName, bookingno) => {
+  const handleClick = async (event, actionName) => {
     event.preventDefault();
 
     try {
@@ -544,9 +537,9 @@ const Booking = () => {
           ...selectedCustomer,
           ...selectedCustomerData,
           bookingtime: bookingtime || selectedCustomerData.bookingtime,
-          starttime: starttime || book.starttime||selectedCustomerData.starttime||formData.starttime,
-          reporttime: reporttime|| book.reporttime||selectedCustomerData.reporttime||formData.reporttime,
-          triptime: triptime|| book.triptime||selectedCustomerData.triptime||formData.triptime,
+          starttime: starttime || book.starttime || selectedCustomerData.starttime || formData.starttime,
+          reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+          triptime: triptime || book.triptime || selectedCustomerData.triptime || formData.triptime,
           username: storedUsername,
           bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
         };
@@ -650,7 +643,6 @@ const Booking = () => {
     if (event.key === 'Enter') {
       event.preventDefault();
       if (enterPressCount === 0) {
-        // First Enter key press - Display in the table
         try {
           const response = await axios.get(`http://localhost:8081/name-customers/${event.target.value}`);
           const vehicleData = response.data;
@@ -659,17 +651,14 @@ const Booking = () => {
           console.error('Error retrieving vehicle details:', error.message);
         }
       } else if (enterPressCount === 1) {
-        // Second Enter key press (double Enter) - Display in the fields
-        const selectedRow = rows[0]; // Assuming you want to use the first row
+        const selectedRow = rows[0];
         if (selectedRow) {
           setSelectedCustomerDatas(selectedRow);
           handleChange({ target: { name: "customer", value: selectedRow.customer } });
         }
       }
-      // Increment the Enter key press count
       setEnterPressCount((prevCount) => prevCount + 1);
     }
-    // Check if the input value is empty and reset enterPressCount to 0
     if (event.target.value === '') {
       setEnterPressCount(0);
     }
@@ -703,7 +692,6 @@ const Booking = () => {
         };
 
         await axios.post('http://localhost:8081/send-email', dataToSend);
-        // alert('Email sent successfully');
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully")
         console.log(dataToSend);
@@ -748,47 +736,11 @@ const Booking = () => {
       const username = user.username;
       localStorage.setItem("username", username);
       const successMessagepopup = `Login successful ${user.username}`;
-      // alert(successMessage);
-      // setSuccessMessage(successMessagepopup);
       setSuccess(successMessagepopup);
     }
   }, [user]);
   const storedUsername = localStorage.getItem("username");
-  //sms send
-  // const [guestsms, setGuestSms] = useState(false);
-  // const handleSendSMS = async () => {
-  //   if (guestsms) {
-  //     try {
-  //       const dataToSend = {
-  //         guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
-  //         guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
-  //         email: formValues.email || selectedCustomerData.email || book.email || formData.pickup,
-  //         pickup: formValues.pickup || selectedCustomerData.pickup || book.pickup || formData.pickup,
-  //         useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage,
-  //         tripid: formValues.tripid || formData.tripid || selectedCustomerData.tripid || book.tripid,
-  //         reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime,
-  //         startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null,
-  //         address1: formValues.address1 || formData.address1 || selectedCustomerData.address1 || book.address1,
-  //         streetno: formValues.streetno || formData.streetno || selectedCustomerData.streetno || book.streetno,
-  //         city: formValues.city || formData.city || selectedCustomerData.city || book.city,
-  //       };
-  //       console.log("sms variables", dataToSend.value);
-  //       const response = await fetch('http://localhost:8081/send-sms', dataToSend);
-  //       console.log('data sent to backend', response.data);
-  //       if (response.ok) {
-  //         console.log('SMS sent successfully');
-  //         setSuccess(true);
-  //         setSuccessMessage("SMS Send correctly")
-  //       } else {
-  //         console.error('Failed to send SMS');
-  //         setError(true);
-  //         setErrorMessage("faild to send")
-  //       }
-  //     } catch (error) {
-  //       console.error('Error sending SMS:', error.message);
-  //     }
-  //   }
-  // };
+
   const [guestsms, setGuestSms] = useState(false);
 
   const handleSendSMS = async () => {
@@ -834,7 +786,6 @@ const Booking = () => {
       }
     }
   };
-
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -1093,7 +1044,6 @@ const Booking = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.report || selectedCustomerData.report || book.report || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.report || selectedCustomerData.report || book.report || ''
                     return (
                       <TextField {...params} label="Report" autoComplete="password" name="report" inputRef={params.inputRef} />
                     )
@@ -1118,7 +1068,6 @@ const Booking = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.vehType || selectedCustomerData.vehType || book.vehType || ''
                     return (
                       <TextField {...params} label="Vehicle Type" name="vehType" inputRef={params.inputRef} />
                     )
@@ -1143,7 +1092,6 @@ const Booking = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''
                     return (
                       <TextField {...params} label="Payment Type" name="paymenttype" inputRef={params.inputRef} />
                     )
@@ -1213,7 +1161,6 @@ const Booking = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
                     return (
                       <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
                     )
@@ -1327,7 +1274,6 @@ const Booking = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''
                     return (
                       <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
                     )
@@ -1562,7 +1508,6 @@ const Booking = () => {
                 }))}
                 getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                 renderInput={(params) => {
-                  // params.inputProps.value = formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''
                   return (
                     <TextField {...params} label="Hire Types" name="hireTypes" inputRef={params.inputRef} />
                   )
@@ -1602,27 +1547,6 @@ const Booking = () => {
               <div className="icone">
                 <CommuteIcon color="action" />
               </div>
-              {/* <Autocomplete
-                fullWidth
-                size="small"
-                id="free-solo-demo"
-                freeSolo
-                sx={{ width: "20ch" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "vehiclemodule")}
-                value={VehicleModel.find((option) => option.carmodel)?.label || ''}
-                options={VehicleModel.map((option) => ({
-                  label: option.carmodel,
-                }))}
-                getOptionLabel={(option) => option.label || ''}
-                renderInput={(params) => {
-                  params.inputProps.value = formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || ''
-                  return (
-                    <TextField {...params} label="Vehicle Model" name="vehiclemodule" inputRef={params.inputRef} />
-                  )
-                }
-                }
-              /> */}
-
               <TextField
                 name="vehiclemodule"
                 autoComplete="new-password"

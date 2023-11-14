@@ -3,6 +3,8 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const db = require('../../../db');
 const multer = require('multer');
+const moment = require('moment'); // or import dayjs from 'dayjs';
+
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -228,67 +230,90 @@ router.post('/send-onbook-email', async (req, res) => {
 });
 //end online-booking mail
 //End booking page database 
-// router.get('/booking_for_table', async (req, res) => {
-//     const { search, fromDate, toDate } = req.query;
-//     try {
-//         const connection = await db.getConnection();
+//search function for booking page
+router.get('/table-for-booking', (req, res) => {
+    const { searchText, fromDate, toDate } = req.query;
+    console.log(searchText, fromDate, toDate);
 
-//         // Build a SQL query to fetch filtered bookings
-//         let query = 'SELECT * FROM booking WHERE 1=1'; // Initial query
-//         const params = []; // Placeholder for query parameters
-
-//         if (search) {
-//             query += ' AND bookingno LIKE ?';
-//             params.push(`%${search}%`);
-//         }
-
-//         if (fromDate && toDate) {
-//             query += ' AND bookingdate BETWEEN ? AND ?';
-//             params.push(fromDate);
-//             params.push(toDate);
-//         }
-
-//         const [results] = await connection.query(query, params);
-
-//         res.json(results);
-//         connection.release();
-//     } catch (error) {
-//         console.error('Error retrieving data:', error);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//     }
-// });
-router.get('/booking_for_table', (req, res) => {
-    const { search, fromDate, toDate } = req.query;
-    // Construct your SQL query based on the provided parameters
     let query = 'SELECT * FROM booking WHERE 1=1';
-    const params = [search, fromDate, toDate];
+    let params = [];
 
-    // if (search) {
-    //     const columns = ['bookingno', 'status', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'address2', 'city', 'vehType', 'duty', 'pickup', 'useage', 'username', /* Add other column names here */];
-    //     const columnConditions = columns.map(column => `${column} LIKE ?`).join(' OR ');
-    //     query += ` AND (${columnConditions})`;
+    if (searchText) {
+        const columnsToSearch = [
+            'bookingno',
+            'bookingdate',
+            'bookingtime',
+            'status',
+            'tripid',
+            'customer',
+            'orderedby',
+            'mobile',
+            'guestname',
+            'guestmobileno',
+            'email',
+            'employeeno',
+            'address1',
+            'streetno',
+            'city',
+            'report',
+            'vehType',
+            'paymenttype',
+            'startdate',
+            'starttime',
+            'reporttime',
+            'duty',
+            'pickup',
+            'customercode',
+            'registerno',
+            'flightno',
+            'orderbyemail',
+            'remarks',
+            'servicestation',
+            'advance',
+            'nameupdate',
+            'address3',
+            'address4',
+            'cityupdate',
+            'useage',
+            'username',
+            'emaildoggle',
+            'hireTypes',
+            'travelsname',
+            'vehRegNo',
+            'vehiclemodule',
+            'driverName',
+            'mobileNo',
+            'travelsemail',
+            'triptime',
+            'tripdate',
+        ];
 
-    //     // Push the search value for each column
-    //     columns.forEach(() => params.push(`%${search}%`));
-    // }
+        const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
-    if (search) {
-        query += ' AND bookingno LIKE ?';
-        params.push(`%${search}%`);
+        query += ` AND (${likeConditions})`;
+        params = columnsToSearch.map(() => `%${searchText}%`);
     }
-    if (fromDate && toDate) {
-        query += ' AND bookingdate BETWEEN ? AND ?';
-        params.push(fromDate);
-        params.push(toDate);
+
+    if (fromDate && moment(fromDate, 'YYYY/MM/DD', true).isValid() && toDate && moment(toDate, 'YYYY/MM/DD', true).isValid()) {
+        const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD HH:mm:ss');
+        const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD HH:mm:ss');
+
+        query += ' AND bookingdate >= ? AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+        params.push(formattedFromDate, formattedToDate);
     }
-    // Execute the query and return the results
+
     db.query(query, params, (err, result) => {
         if (err) {
-            console.error('Error retrieving booking details:', err);
-            return res.status(500).json({ error: 'Failed to retrieve booking details' });
+            console.error('Error retrieving vehicle details from MySQL:', err);
+            return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
         }
+        console.log('collected data', result);
+        console.log('Query:', query);
+        console.log('Params:', params);
         return res.status(200).json(result);
     });
 });
+
+
 
 module.exports = router;

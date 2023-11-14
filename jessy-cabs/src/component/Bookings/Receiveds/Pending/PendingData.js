@@ -1,10 +1,10 @@
 // Stations
 
 export const Stations = [
-  {
-    Option: "All Station",
-    optionvalue: "allstation",
-  },
+  // {
+  //   Option: "All Station",
+  //   optionvalue: "allstation",
+  // },
   {
     Option: "Ahmedabad",
     optionvalue: "ahmedabad",

@@ -463,18 +463,19 @@ const Booking = () => {
     }));
   };
   const handleDateChange = (date, name) => {
-    const formattedDate = dayjs(date).format('DD/MM/YYYY');
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
     setBook((prevBook) => ({
       ...prevBook,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
     setSelectedCustomerData((prevValues) => ({
       ...prevValues,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
   };
 
@@ -707,29 +708,51 @@ const Booking = () => {
 
   const reversedRows = [...row].reverse();
 
-  const handleShowAll = useCallback(async () => {
+  // const handleShowAll = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:8081/booking_for_table?search=${encodeURIComponent(searchText)}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`
+  //     );
+  //     const data = response.data;
+  //     console.log(data);
+  //     if (data.length > 0) {
+  //       setRows(data);
+  //       setSuccess(true);
+  //       setSuccessMessage("Successfully listed");
+  //     } else {
+  //       setRows([]);
+  //       setError(true);
+  //       setErrorMessage("No data found");
+  //     }
+  //   } catch (error) {
+  //     console.error('Error retrieving data:', error);
+  //     setRow([]);
+  //     setError(true);
+  //     setErrorMessage("Check your Network Connection");
+  //   }
+  // }, [searchText, fromDate, toDate]);
+  const handleShowAll = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8081/booking_for_table?search=${encodeURIComponent(searchText)}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`
-      );
-      const data = response.data;
-      console.log(data);
+      const response = await fetch(`http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+      console.log('response value ', response.value);
+      const data = await response.json();
+      console.log('fetched data', data);
+      // setRows(data);
       if (data.length > 0) {
-        setRows(data);
+        setRow(data);
+        console.log(data);
         setSuccess(true);
-        setSuccessMessage("Successfully listed");
+        setSuccessMessage("successfully listed")
       } else {
-        setRows([]);
+        setRow([]);
         setError(true);
-        setErrorMessage("No data found");
+        setErrorMessage("no data found")
       }
-    } catch (error) {
-      console.error('Error retrieving data:', error);
-      setRow([]);
+    } catch {
       setError(true);
-      setErrorMessage("Check your Network Connection");
+      setErrorMessage("sorry")
     }
-  }, [searchText, fromDate, toDate]);
+  };
 
   useEffect(() => {
     if (user && user.username) {
@@ -814,6 +837,7 @@ const Booking = () => {
                   <DemoItem label="Booking Date">
                     <DatePicker
                       value={formData.bookingdate || selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
+                      format="DD/MM/YYYY"
                       onChange={(date) => handleDateChange(date, 'bookingdate')}
                     >
                       {({ inputProps, inputRef }) => (
@@ -828,6 +852,7 @@ const Booking = () => {
                 <input
                   type="time"
                   value={formData.bookingtime || selectedCustomerData.bookingtime || book.bookingtime || getCurrentTime() || ''}
+                  format="DD/MM/YYYY"
                   onChange={(event) => {
                     setBook({ ...book, bookingtime: event.target.value });
                     setSelectedCustomerData({ ...selectedCustomerData, bookingtime: event.target.value });
@@ -1106,6 +1131,7 @@ const Booking = () => {
                   <DatePicker
                     label="Report Date"
                     value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
+                    format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, 'startdate')}
                   >
                     {({ inputProps, inputRef }) => (
@@ -1659,6 +1685,7 @@ const Booking = () => {
                     <DatePicker
                       label="From Date"
                       name='fromDate'
+                      format="DD/MM/YYYY"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
@@ -1669,6 +1696,7 @@ const Booking = () => {
                     <DatePicker
                       label="To Date"
                       name="toDate"
+                      format="DD/MM/YYYY"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />

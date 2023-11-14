@@ -361,9 +361,6 @@ const Vehicaleinfo = () => {
       console.log(response.value);
       const data = await response.json();
       console.log(data);
-      // setRows(data);
-      // setSuccess(true);
-      // setSuccessMessage("successfully listed")
       if (data.length > 0) {
         setRows(data);
         console.log(data);
@@ -374,7 +371,6 @@ const Vehicaleinfo = () => {
         setErrorMessage("no data find")
       }
     } catch {
-      // console.error('Error searching for vehicle info:', error);
       setError(true);
       setErrorMessage("sorry")
     }

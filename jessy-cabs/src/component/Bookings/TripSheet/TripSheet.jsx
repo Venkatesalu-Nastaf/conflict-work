@@ -778,24 +778,26 @@ const TripSheet = () => {
   };
 
   const handleDateChange = (date, name) => {
-    const formattedDate = dayjs(date).format('DD/MM/YYYY');
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
     setBook((prevBook) => ({
       ...prevBook,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
     setSelectedCustomerData((prevValues) => ({
       ...prevValues,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
     setTripSheetData((prevValues) => ({
       ...prevValues,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
   };
+
   const handleClick = async (event, actionName) => {
     event.preventDefault();
     try {
@@ -1923,6 +1925,7 @@ const TripSheet = () => {
                   <DatePicker
                     label="Start Date"
                     value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
+                    format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, 'startdate')}
                   >
                     {({ inputProps, inputRef }) => (
@@ -1936,6 +1939,7 @@ const TripSheet = () => {
                   <DatePicker
                     label="Close Date"
                     value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
+                    format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, 'closedate')}
                   >
                     {({ inputProps, inputRef }) => (

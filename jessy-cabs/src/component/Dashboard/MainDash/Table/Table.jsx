@@ -10,12 +10,14 @@ import Paper from "@mui/material/Paper";
 import Tripdetails from './Tripdetails';//tripsheet details page
 
 import "./Table.css";
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 //dialog box
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
+// ICON
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 const makeStyle = (status) => {
   if (status === 'Waiting' || status === 'On_Going') {
     return {
@@ -266,18 +268,18 @@ export default function BasicTable() {
                     <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>
                   </TableCell>
 
-                  <Dialog open={popupOpen} onClose={handlePopupClose}>
+                  <Dialog open={popupOpen} className="dialog-box-TripDetails" >
+                    <div className="dialog-close-btn">
+                      <DialogActions>
+                        <IconButton onClick={handlePopupClose} aria-label="delete">
+                          <HighlightOffIcon />
+                        </IconButton>
+                      </DialogActions>
+                    </div>
                     <DialogContent>
-                      {/* <Tripdetails tripSheetData={tripSheetData} selectedTripid={localStorage.getItem('selectedTripid')} /> */}
                       <Tripdetails />
                       {selectedTrip && <Tripdetails tripData={selectedTrip} />}
-                      {/* hlo */}
                     </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handlePopupClose} variant="contained" color="primary">
-                        Cancel
-                      </Button>
-                    </DialogActions>
                   </Dialog>
 
                 </TableRow>

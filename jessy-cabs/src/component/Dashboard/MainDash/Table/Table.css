@@ -53,3 +53,7 @@ th {
     width: 95%;
   }
 }
+.dialog-close-btn{
+  position: absolute;
+  right: 0;
+}

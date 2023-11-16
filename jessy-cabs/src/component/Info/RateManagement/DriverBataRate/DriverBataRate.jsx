@@ -74,9 +74,9 @@ const DriverBataRate = () => {
   const [info, setInfo] = useState(false);
   const [warning, setWarning] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
-  	 const [errorMessage, setErrorMessage] = useState({});
- 	 const [warningMessage] = useState({});
-   	 const [infoMessage] = useState({});
+  const [errorMessage, setErrorMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage] = useState({});
 
   const hidePopup = () => {
     setSuccess(false);
@@ -170,7 +170,8 @@ const DriverBataRate = () => {
 
 
   const handleDateChange = (date, name) => {
-    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    const formattedDate = dayjs(date).format('DD/MM/YYYY');
+    // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
     setBook((prevBook) => ({
       ...prevBook,
       [name]: formattedDate,
@@ -209,12 +210,12 @@ const DriverBataRate = () => {
       await axios.post('http://localhost:8081/driverbatarate', book);
       console.log(book);
       handleCancel();
-      
-  setSuccessMessage("Successfully Added");
+
+      setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
       setErrorMessage("Check your Network Connection");
-        
+
     }
   };
 
@@ -225,8 +226,17 @@ const DriverBataRate = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/driverbatarate');
         const data = response.data;
-        setSuccessMessage("Successfully listed");
-        setRows(data);
+        // setSuccessMessage("Successfully listed");
+        // setRows(data);
+        if (data.length > 0) {
+          setRows(data);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
@@ -308,13 +318,13 @@ const DriverBataRate = () => {
                     id="free-solo-demo-VehicleType"
                     freeSolo
                     onChange={(event, value) => handleAutocompleteChange(event, value, "VehicleType")}
-                    value={VehicleType.find((option) => option.optionvalue)?.label || ''}
+                    value={VehicleType.find((option) => option.optionvalue)?.label || selectedCustomerData?.VehicleType || ''}
                     options={VehicleType.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    getOptionLabel={(option) => option.label || selectedCustomerData?.VehicleType || ''}
                     renderInput={(params) => {
-                      params.inputProps.value = selectedCustomerData?.VehicleType || ''
+                      // params.inputProps.value = selectedCustomerData?.VehicleType || ''
                       return (
                         <TextField {...params} label="Vehicle Type" name="VehicleType" inputRef={params.inputRef} />
                       )
@@ -338,13 +348,13 @@ const DriverBataRate = () => {
                     freeSolo
                     // sx={{ width: "20ch" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "Duty")}
-                    value={Duty.find((option) => option.optionvalue)?.label || ''}
+                    value={Duty.find((option) => option.optionvalue)?.label || selectedCustomerData?.Duty || ''}
                     options={Duty.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    getOptionLabel={(option) => option.label || selectedCustomerData?.Duty || ''}
                     renderInput={(params) => {
-                      params.inputProps.value = selectedCustomerData?.Duty || ''
+                      // params.inputProps.value = selectedCustomerData?.Duty || ''
                       return (
                         <TextField {...params} label="Duty" name="Duty" inputRef={params.inputRef} />
                       )

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./dashboard.css";
+import "./MainDashboard.css";
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';
@@ -8,7 +8,7 @@ import { useNavigate, Outlet } from "react-router-dom";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import logoImage from "../MainDash/Sildebar/Logo-Img/logo.png";
 import { useThemes } from '../../UserSettings/Themes/ThemesContext';
-import ClearIcon from '@mui/icons-material/Clear';  
+import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { ThemesProvider } from '../../UserSettings/Themes/ThemesContext';
 import { useUser } from '../../form/UserContext';
@@ -16,12 +16,9 @@ import { useUser } from '../../form/UserContext';
 const MainDashboard = () => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
-  const { selectedTheme } = useThemes(); // Access selected theme
+  const { selectedTheme } = useThemes();
   const { user } = useUser();
-  // const [successMessage, setSuccessMessage] = useState('');
   const [success, setSuccess] = useState(false);
-  // const initialUsername = localStorage.getItem("username") || "";
-  // const [username] = useState(initialUsername);
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
     },
@@ -34,35 +31,45 @@ const MainDashboard = () => {
       navigate("/"); // Redirect to the login page
     }
   }, [navigate]);
+
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem("auth");
-    localStorage.removeItem("username"); // Clear the username from localStorage
+    localStorage.removeItem("username");
     setExpanded(true);
     navigate("/");
   };
+
   const hidePopup = () => {
     setSuccess(false);
   };
+
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      return () => clearTimeout(timer);
     }
   }, [success]);
+
   useEffect(() => {
     if (user && user.username) {
       const username = user.username;
       localStorage.setItem("username", username);
       const successMessagepopup = `Login successful ${user.username}`;
-      // alert(successMessage);
-      // setSuccessMessage(successMessagepopup);
       setSuccess(successMessagepopup);
     }
   }, [user]);
+
   const storedUsername = localStorage.getItem("username");
+
+  const navigateToUserSettings = () => {
+    if (window.location.pathname !== "/home/usersettings/usersetting") {
+      navigate("/home/usersettings/usersetting");
+    }
+  };
+
   return (
     <section className={`dash-board ${selectedTheme}`}>
       <div className="glass">
@@ -78,11 +85,9 @@ const MainDashboard = () => {
             </StyledBadge>
           </div>
           <div className="user-name-item">
-            {/* {user && user.username ? ( */}
             {storedUsername ? (
               <div>
-                {/* <p>{user.username}</p> */}
-                <p>{storedUsername}</p>
+                <p onClick={navigateToUserSettings}>{storedUsername}</p>
                 {success &&
                   <div className='alert-popup Success' >
                     <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
@@ -106,6 +111,7 @@ const MainDashboard = () => {
     </section>
   );
 };
+
 const WrappedMainDashboard = () => {
   return (
     <ThemesProvider>
@@ -113,4 +119,5 @@ const WrappedMainDashboard = () => {
     </ThemesProvider>
   );
 };
+
 export default WrappedMainDashboard;

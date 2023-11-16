@@ -2,36 +2,37 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import './TaxSetting.css';
 import dayjs from "dayjs";
+import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import { TaxType } from './TaxSettingData.js'
 import { DataGrid } from "@mui/x-data-grid";
-// import IconButton from '@mui/material/IconButton';
+import { TaxType } from './TaxSettingData.js';
+import { styled } from "@mui/material/styles";
+import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import Box from "@mui/material/Box";
-import SpeedDial from "@mui/material/SpeedDial";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import { styled } from "@mui/material/styles";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import ClearIcon from '@mui/icons-material/Clear';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-// import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+
+
 // FontAwesomeIcon Link
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { faNewspaper } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+
+// ICONS
+import ClearIcon from '@mui/icons-material/Clear';
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 
 // date
 
@@ -99,8 +100,8 @@ const TaxSetting = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [error]);
 
@@ -108,24 +109,24 @@ const TaxSetting = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [info]);
 
@@ -179,7 +180,8 @@ const TaxSetting = () => {
     };
 
     const handleDateChange = (date, name) => {
-        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+        const formattedDate = dayjs(date).format('DD/MM/YYYY');
+        // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
         setBook((prevBook) => ({
             ...prevBook,
             [name]: formattedDate,
@@ -210,6 +212,7 @@ const TaxSetting = () => {
     const handleAdd = async () => {
         const STax = book.STax;
         if (!STax) {
+            setError(true);
             setErrorMessage("Check your Network Connection");
             // setErrorMessage("fill mantatory fields");
             return;
@@ -219,9 +222,11 @@ const TaxSetting = () => {
             const response = await axios.post('http://localhost:8081/taxsettings', book);
             console.log('Customer added:', response.data);
             handleCancel(); // Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
+            setSuccess(true);
             setSuccessMessage("Successfully Added");
         } catch (error) {
             console.error('Error adding customer:', error);
+            setError(true);
             setErrorMessage("Check your Network Connection");
             // You can add error handling code here, like displaying an error message to the user
         }
@@ -234,6 +239,7 @@ const TaxSetting = () => {
                 const response = await axios.get('http://localhost:8081/taxsettings');
                 const data = response.data;
                 setRows(data);
+                setSuccess(true);
                 setSuccessMessage("Successfully listed");
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
@@ -243,6 +249,7 @@ const TaxSetting = () => {
                 await axios.delete(`http://localhost:8081/taxsettings/${id}`);
                 console.log('Customer deleted');
                 setSelectedCustomerData(null);
+                setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
@@ -251,11 +258,13 @@ const TaxSetting = () => {
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/taxsettings/${id}`, updatedCustomer);
                 console.log('Customer updated');
+                setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
             }
         } catch (err) {
             console.log(err);
+            setError(true);
             setErrorMessage("Check your Network Connection");
             // setErrorMessage("Check Network Connection")
         }

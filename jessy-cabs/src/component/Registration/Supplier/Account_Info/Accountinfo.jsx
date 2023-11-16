@@ -167,12 +167,12 @@ const Accuntinfo = () => {
     { field: "vehicleInfo", headerName: "Owner_Type", width: 130 },
     { field: "vehCommission", headerName: "Percentage", width: 130 },
     { field: "rateType", headerName: "Rate_Type", width: 130 },
-    { field: "autoRefresh", headerName: "Driver", width: 130 },
+    { field: "acType", headerName: "Driver", width: 130 },
   ];
   // TABLE END
   const [book, setBook] = useState({
     accountNo: '',
-    date: '',
+    Accdate: '',
     vehicleTravels: '',
     address1: '',
     cperson: '',
@@ -232,12 +232,15 @@ const Accuntinfo = () => {
     }));
   };
 
-
-  const handleDateChange = (date) => {
-    const startOfDay = dayjs(date).startOf('day').format();
+  const handleDateChange = (date, name) => {
+    const startOfDay = dayjs(date).format('DD/MM/YYYY');
     setBook((prevBook) => ({
       ...prevBook,
-      date: startOfDay,
+      [name]: startOfDay,
+    }));
+    setSelectedCustomerData((prevBook) => ({
+      ...prevBook,
+      [name]: startOfDay,
     }));
   };
 
@@ -245,7 +248,7 @@ const Accuntinfo = () => {
     setBook((prevBook) => ({
       ...prevBook,
       accountNo: '',
-      date: '',
+      Accdate: '',
       vehicleTravels: '',
       address1: '',
       cperson: '',
@@ -280,9 +283,11 @@ const Accuntinfo = () => {
       await axios.post('http://localhost:8081/accountinfo', book);
       console.log(book);
       handleCancel();
+      setSuccess(true);
       setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -295,31 +300,53 @@ const Accuntinfo = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/accountinfo');
         const data = response.data;
-        setRows(data);
+        if (data.length > 0) {
+          setRows(data);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/accountinfo/${accountNo}`);
+        await axios.delete(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
+        // console.log('Edit button clicked');
+        // const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+        // const updatedCustomer = {
+        //   ...selectedCustomer,
+        //   ...selectedCustomerData,
+        // };
+        // await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+        // console.log('Customer updated');
+        // handleCancel();
+        // setSuccess(true);
+        // setSuccessMessage("Successfully updated");
         console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/accountinfo/${accountNo}`, updatedCustomer);
+        await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
         console.log('Customer updated');
+        setSuccess(true);
+        setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
         handleAdd();
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       setError(true);
+      setErrorMessage("Check your connection");
     }
   };
   useEffect(() => {
@@ -327,6 +354,8 @@ const Accuntinfo = () => {
       handleClick(null, 'List');
     }
   });
+
+  const reversedRows = [...rows].reverse();
 
   return (
     <div className="account-form">
@@ -354,11 +383,11 @@ const Accuntinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
-                    value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
-                    onChange={handleDateChange}
+                    value={selectedCustomerData.Accdate ? dayjs(selectedCustomerData.Accdate) : null}
+                    onChange={(date) => handleDateChange(date, 'Accdate')}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
+                      <TextField {...inputProps} inputRef={inputRef} name='Accdate' value={selectedCustomerData.Accdate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
@@ -431,13 +460,13 @@ const Accuntinfo = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
-                  value={Undergroup.find((option) => option.Option)?.label || ''}
+                  value={Undergroup.find((option) => option.Option)?.label || selectedCustomerData?.underGroup || ''}
                   options={Undergroup.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.underGroup || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.underGroup || ''
+                    // params.inputProps.value = selectedCustomerData?.underGroup || ''
                     return (
                       <TextField {...params} label="Under Group" name="underGroup" inputRef={params.inputRef} />
                     )
@@ -533,13 +562,13 @@ const Accuntinfo = () => {
                   freeSolo
                   sx={{ m: 1, width: "25ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleInfo")}
-                  value={Vehicleinfo.find((option) => option.Option)?.label || ''}
+                  value={Vehicleinfo.find((option) => option.Option)?.label || selectedCustomerData?.vehicleInfo || ''}
                   options={Vehicleinfo.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleInfo || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.vehicleInfo || ''
+                    // params.inputProps.value = selectedCustomerData?.vehicleInfo || ''
                     return (
                       <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
                     )
@@ -671,9 +700,9 @@ const Accuntinfo = () => {
             )}
           </PopupState>
         </div>
-        <div className="table-customer-list">
+        <div className="table-customer-lists">
           <DataGrid
-            rows={rows}
+            rows={reversedRows}
             columns={columns}
             onRowClick={handleRowClick}
             initialState={{

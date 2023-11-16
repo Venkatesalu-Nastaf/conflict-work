@@ -63,6 +63,7 @@ import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
+import { useUser } from '../../../form/UserContext';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -146,7 +147,15 @@ const Booking = () => {
     guestmobileno: '',
     email: '',
     useage: '',
+    tripid: '',
+    reporttime: '',
+    startdate: '',
+    address1: '',
+    streetno: '',
+    city: '',
   });
+
+  const { user } = useUser();
 
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
     customer: '',
@@ -195,21 +204,14 @@ const Booking = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const statusValue = params.get('status') || 'pending';
+    const stationValue = params.get('servicestation') || 'Chennai';
+    const payValue = params.get('paymenttype') || 'BTC';
     const formData = {};
     console.log('formdata console details', formData);
 
-    // Define a list of parameter keys
     const parameterKeys = [
-      'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby',
-      'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno',
-      'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'reporttime',
-      'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks',
-      'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage',
-      'username', 'tripdate', 'triptime', 'emaildoggle', 'hireTypes', 'travelsname',
-      'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'travelsemail'
-    ];
+      'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno', 'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'reporttime', 'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'triptime', 'emaildoggle', 'hireTypes', 'travelsname', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'travelsemail'];
 
-    // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
     parameterKeys.forEach(key => {
       const value = params.get(key);
       if (value !== null && value !== "null") {
@@ -217,19 +219,17 @@ const Booking = () => {
       }
     });
 
-    // Set the status separately
     formData['status'] = statusValue;
+    formData['servicestation'] = stationValue;
+    formData['paymenttype'] = payValue;
 
     setBook(formData);
     setFormData(formData);
   }, [location]);
 
   useEffect(() => {
-    // Clear URL parameters
     window.history.replaceState(null, document.title, window.location.pathname);
-
-    // Reset form data to initial/default values
-    const initialFormData = {}; // You can set the initial/default values here
+    const initialFormData = {};
     setFormData(initialFormData);
   }, []);
 
@@ -344,13 +344,13 @@ const Booking = () => {
   const handleExcelDownload = () => {
     const csvData = convertToCSV(rows);
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "VehicleStatement Reports.csv");
+    saveAs(blob, "BookingStatement Reports.csv");
   };
   const handlePdfDownload = () => {
     const pdf = new jsPDF('Landscape');
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'normal');
-    pdf.text("VehicleStatement Reports", 10, 10);
+    pdf.text("Booking Statement Reports", 10, 10);
 
     // Modify tableData to exclude the index number
     const tableData = rows.map((row) => [
@@ -375,7 +375,7 @@ const Booking = () => {
     });
 
     const pdfBlob = pdf.output('blob');
-    saveAs(pdfBlob, 'VehicleStatement Reports.pdf');
+    saveAs(pdfBlob, 'BookingStatement Reports.pdf');
   };
 
   const getCurrentTime = () => {
@@ -462,18 +462,20 @@ const Booking = () => {
       [name]: selectedOption,
     }));
   };
-  const handleDateChange = (date, fieldName) => {
-    setBook((prevData) => ({
-      ...prevData,
-      [fieldName]: date,
+  const handleDateChange = (date, name) => {
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: parsedDate,
     }));
-    setSelectedCustomerData((prevData) => ({
-      ...prevData,
-      [fieldName]: date,
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: parsedDate,
     }));
-    setFormData((prevData) => ({
-      ...prevData,
-      [fieldName]: date,
+    setSelectedCustomerData((prevValues) => ({
+      ...prevValues,
+      [name]: parsedDate,
     }));
   };
 
@@ -494,6 +496,7 @@ const Booking = () => {
         starttime: starttime,
         reporttime: reporttime,
         triptime: triptime,
+        username: storedUsername,
         bookingdate: selectedBookingDate,
       };
       await axios.post('http://localhost:8081/booking', updatedBook);
@@ -502,6 +505,7 @@ const Booking = () => {
       setSuccess(true);
       setSuccessMessage("Successfully Added");
       handlecheck();
+      handleSendSMS();
     } catch (error) {
       console.error('Error updating customer:', error);
       setError(true);
@@ -509,7 +513,7 @@ const Booking = () => {
     }
   };
 
-  const handleClick = async (event, actionName, bookingno) => {
+  const handleClick = async (event, actionName) => {
     event.preventDefault();
 
     try {
@@ -533,16 +537,18 @@ const Booking = () => {
         const updatedCustomer = {
           ...selectedCustomer,
           ...selectedCustomerData,
-          bookingtime: bookingtime || getCurrentTime(),
-          starttime: starttime,
-          reporttime: reporttime,
-          triptime: triptime,
+          bookingtime: bookingtime || selectedCustomerData.bookingtime,
+          starttime: starttime || book.starttime || selectedCustomerData.starttime || formData.starttime,
+          reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+          triptime: triptime || book.triptime || selectedCustomerData.triptime || formData.triptime,
+          username: storedUsername,
           bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
         };
         await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
         handlecheck();
+        handleSendSMS();
         setSuccess(true);
         setSuccessMessage("Successfully Updated");
       } else if (actionName === 'Copy This') {
@@ -581,19 +587,6 @@ const Booking = () => {
     { icon: <BookmarkAddedIcon />, name: "Add" },
   ];
 
-  useEffect(() => {
-    const activeMenuItem = localStorage.getItem("activeMenuItem");
-    if (activeMenuItem) {
-      const menuItems = document.querySelectorAll(".menu-link");
-      menuItems.forEach((item) => {
-        if (item.textContent === activeMenuItem) {
-          item.classList.add("actives");
-        } else {
-          item.classList.remove("actives");
-        }
-      });
-    }
-  }, [location]);
 
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === 'Enter') {
@@ -651,7 +644,6 @@ const Booking = () => {
     if (event.key === 'Enter') {
       event.preventDefault();
       if (enterPressCount === 0) {
-        // First Enter key press - Display in the table
         try {
           const response = await axios.get(`http://localhost:8081/name-customers/${event.target.value}`);
           const vehicleData = response.data;
@@ -660,17 +652,14 @@ const Booking = () => {
           console.error('Error retrieving vehicle details:', error.message);
         }
       } else if (enterPressCount === 1) {
-        // Second Enter key press (double Enter) - Display in the fields
-        const selectedRow = rows[0]; // Assuming you want to use the first row
+        const selectedRow = rows[0];
         if (selectedRow) {
           setSelectedCustomerDatas(selectedRow);
           handleChange({ target: { name: "customer", value: selectedRow.customer } });
         }
       }
-      // Increment the Enter key press count
       setEnterPressCount((prevCount) => prevCount + 1);
     }
-    // Check if the input value is empty and reset enterPressCount to 0
     if (event.target.value === '') {
       setEnterPressCount(0);
     }
@@ -696,15 +685,14 @@ const Booking = () => {
     if (sendEmail) {
       try {
         const dataToSend = {
-          guestname: formValues.guestname,
-          guestmobileno: formValues.guestmobileno,
-          email: formValues.email,
-          pickup: formValues.pickup,
-          useage: formValues.useage
+          guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
+          email: formValues.email || selectedCustomerData.email || book.email,
+          pickup: formValues.pickup || selectedCustomerData.pickup || book.pickup || formData.pickup,
+          useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage
         };
 
         await axios.post('http://localhost:8081/send-email', dataToSend);
-        // alert('Email sent successfully');
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully")
         console.log(dataToSend);
@@ -718,21 +706,109 @@ const Booking = () => {
     }
   };
 
-  const handleShowAll = useCallback(async () => {
+  const reversedRows = [...row].reverse();
+
+  // const handleShowAll = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:8081/booking_for_table?search=${encodeURIComponent(searchText)}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`
+  //     );
+  //     const data = response.data;
+  //     console.log(data);
+  //     if (data.length > 0) {
+  //       setRows(data);
+  //       setSuccess(true);
+  //       setSuccessMessage("Successfully listed");
+  //     } else {
+  //       setRows([]);
+  //       setError(true);
+  //       setErrorMessage("No data found");
+  //     }
+  //   } catch (error) {
+  //     console.error('Error retrieving data:', error);
+  //     setRow([]);
+  //     setError(true);
+  //     setErrorMessage("Check your Network Connection");
+  //   }
+  // }, [searchText, fromDate, toDate]);
+  const handleShowAll = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8081/booking_for_table?search=${encodeURIComponent(searchText)}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`
-      );
-      const data = response.data;
-      console.log(data);
-      setRow(data);
-      setSuccessMessage("Successfully listed");
-    } catch (error) {
-      console.error('Error retrieving data:', error);
-      setRow([]);
-      setErrorMessage("Check your Network Connection");
+      const response = await fetch(`http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+      console.log('response value ', response.value);
+      const data = await response.json();
+      console.log('fetched data', data);
+      // setRows(data);
+      if (data.length > 0) {
+        setRow(data);
+        console.log(data);
+        setSuccess(true);
+        setSuccessMessage("successfully listed")
+      } else {
+        setRow([]);
+        setError(true);
+        setErrorMessage("no data found")
+      }
+    } catch {
+      setError(true);
+      setErrorMessage("sorry")
     }
-  }, [searchText, fromDate, toDate]);
+  };
+
+  useEffect(() => {
+    if (user && user.username) {
+      const username = user.username;
+      localStorage.setItem("username", username);
+      const successMessagepopup = `Login successful ${user.username}`;
+      setSuccess(successMessagepopup);
+    }
+  }, [user]);
+  const storedUsername = localStorage.getItem("username");
+
+  const [guestsms, setGuestSms] = useState(false);
+
+  const handleSendSMS = async () => {
+    if (guestsms) {
+      try {
+        const dataToSend = {
+          guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
+          email: formValues.email || selectedCustomerData.email || book.email || formData.pickup || '',
+          pickup: formValues.pickup || selectedCustomerData.pickup || book.pickup || formData.pickup || '',
+          useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage || '',
+          tripid: formValues.tripid || formData.tripid || selectedCustomerData.tripid || book.tripid || '',
+          reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
+          startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
+          address1: formValues.address1 || formData.address1 || selectedCustomerData.address1 || book.address1 || '',
+          streetno: formValues.streetno || formData.streetno || selectedCustomerData.streetno || book.streetno || '',
+          city: formValues.city || formData.city || selectedCustomerData.city || book.city || '',
+        };
+
+        console.log("sms variables", dataToSend);
+
+        const response = await fetch('http://localhost:8081/send-sms', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToSend),
+        });
+
+        console.log('data sent to backend', response.data);
+
+        if (response.ok) {
+          console.log('SMS sent successfully');
+          setSuccess(true);
+          setSuccessMessage("SMS sent correctly");
+        } else {
+          console.error('Failed to send SMS');
+          setError(true);
+          setErrorMessage("Failed to send SMS");
+        }
+      } catch (error) {
+        console.error('Error sending SMS:', error.message);
+      }
+    }
+  };
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -757,10 +833,11 @@ const Booking = () => {
                 />
               </div>
               <div className="input">
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">
                     <DatePicker
-                      value={book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
+                      value={formData.bookingdate || selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
+                      format="DD/MM/YYYY"
                       onChange={(date) => handleDateChange(date, 'bookingdate')}
                     >
                       {({ inputProps, inputRef }) => (
@@ -768,17 +845,6 @@ const Booking = () => {
                       )}
                     </DatePicker>
                   </DemoItem>
-                </LocalizationProvider> */}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Booking Date"
-                    value={formData.bookingdate || selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
-                    onChange={(date) => handleDateChange(date, 'bookingdate')}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
-                    )}
-                  </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input time">
@@ -786,8 +852,10 @@ const Booking = () => {
                 <input
                   type="time"
                   value={formData.bookingtime || selectedCustomerData.bookingtime || book.bookingtime || getCurrentTime() || ''}
+                  format="DD/MM/YYYY"
                   onChange={(event) => {
                     setBook({ ...book, bookingtime: event.target.value });
+                    setSelectedCustomerData({ ...selectedCustomerData, bookingtime: event.target.value });
                     setBookingTime(event.target.value);
                   }}
                   name="bookingtime"
@@ -860,7 +928,7 @@ const Booking = () => {
                 <TextField
                   name="orderedby"
                   autoComplete="new-password"
-                  value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
+                  value={formData.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.name || book.orderedby || ''}
                   onChange={handleChange}
                   label="Ordered by"
                   id="orderedby"
@@ -874,7 +942,7 @@ const Booking = () => {
                 <TextField
                   name="mobile"
                   autoComplete="new-password"
-                  value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
+                  value={formData.mobile || selectedCustomerData.mobile || selectedCustomerDatas.phoneno || book.mobile || ''}
                   onChange={handleChange}
                   label="Mobile No"
                   id="mobile"
@@ -995,13 +1063,12 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "report")}
-                  value={Report.find((option) => option.Option)?.label || ''}
+                  value={Report.find((option) => option.Option)?.label || formData.report || selectedCustomerData.report || book.report || ''}
                   options={Report.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.report || selectedCustomerData.report || book.report || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.report || selectedCustomerData.report || book.report || ''
                     return (
                       <TextField {...params} label="Report" autoComplete="password" name="report" inputRef={params.inputRef} />
                     )
@@ -1013,15 +1080,24 @@ const Booking = () => {
                 <div className="icone">
                   <TaxiAlertTwoToneIcon color="action" />
                 </div>
-                <TextField
-                  name="vehType"
-                  autoComplete="new-password"
-                  value={formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
-                  onChange={handleChange}
-                  label="Vehical Type"
-                  id="vehicaltype"
-                  variant="standard"
-                  required
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
+                  value={VehicleModel.find((option) => option.carmodel)?.label || formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
+                  options={VehicleModel.map((option) => ({
+                    label: option.carmodel,
+                  }))}
+                  getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Vehicle Type" name="vehType" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
                 />
               </div>
               <div className="input">
@@ -1035,13 +1111,12 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "paymenttype")}
-                  value={PayType.find((option) => option.Option)?.label || ''}
+                  value={PayType.find((option) => option.Option)?.label || formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''}
                   options={PayType.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''
                     return (
                       <TextField {...params} label="Payment Type" name="paymenttype" inputRef={params.inputRef} />
                     )
@@ -1055,7 +1130,8 @@ const Booking = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Report Date"
-                    value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.bookingdate ? dayjs(book.bookingdate) : null}
+                    value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
+                    format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, 'startdate')}
                   >
                     {({ inputProps, inputRef }) => (
@@ -1105,13 +1181,12 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                  value={Duty.find((option) => option.Option)?.label || ''}
+                  value={Duty.find((option) => option.Option)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                   options={Duty.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
                     return (
                       <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
                     )
@@ -1185,7 +1260,7 @@ const Booking = () => {
                 <TextField
                   name="orderbyemail"
                   autoComplete="new-password"
-                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || book.orderbyemail || ''}
+                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.email || book.orderbyemail || ''}
                   onChange={handleChange}
                   label="Order By Email"
                   id="orederbyemail"
@@ -1219,13 +1294,12 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
-                  value={Service_Station.find((option) => option.optionvalue)?.label || ''}
+                  value={Service_Station.find((option) => option.optionvalue)?.label || formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''}
                   options={Service_Station.map((option) => ({
                     label: option.optionvalue,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''
                     return (
                       <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
                     )
@@ -1262,10 +1336,11 @@ const Booking = () => {
                   <table >
                     <thead id='update-header'>
                       <tr>
-                        <th>Customer_Name</th>
+                        <th>Organization_Name</th>
+                        <th>Organizer</th>
+                        <th>Email_Id</th>
                         <th>Address</th>
                         <th>Phone_No</th>
-                        <th>Email_Id</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1277,9 +1352,10 @@ const Booking = () => {
                         rows.map((row) => (
                           <tr id='update-row' key={row.id} onClick={() => handleRowClick(row)}>
                             <td>{row.customer}</td>
+                            <td>{row.name}</td>
+                            <td>{row.email}</td>
                             <td>{row.address1}</td>
                             <td>{row.phoneno}</td>
-                            <td>{row.email}</td>
                           </tr>
                         ))
                       )}
@@ -1299,7 +1375,7 @@ const Booking = () => {
               <div className="input">
                 <FormControlLabel
                   value="guestsms"
-                  control={<Checkbox size="small" />}
+                  control={<Checkbox size="small" checked={guestsms} onChange={(event) => setGuestSms(event.target.checked)} />}
                   label="Guest SMS"
                 />
                 <FormControlLabel
@@ -1334,7 +1410,7 @@ const Booking = () => {
                   label="User Name"
                   name="username"
                   autoComplete="new-password"
-                  value={formData.username || selectedCustomerData.username || book.username || ''}
+                  value={formData.username || selectedCustomerData.username || book.username || storedUsername || ''}
                   onChange={handleChange}
                 />
               </div>
@@ -1452,13 +1528,12 @@ const Booking = () => {
                 freeSolo
                 sx={{ width: "20ch" }}
                 onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
-                value={Hire.find((option) => option.Option)?.label || ''}
+                value={Hire.find((option) => option.Option)?.label || formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                 options={Hire.map((option) => ({
                   label: option.Option,
                 }))}
-                getOptionLabel={(option) => option.label || ''}
+                getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                 renderInput={(params) => {
-                  params.inputProps.value = formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''
                   return (
                     <TextField {...params} label="Hire Types" name="hireTypes" inputRef={params.inputRef} />
                   )
@@ -1498,25 +1573,15 @@ const Booking = () => {
               <div className="icone">
                 <CommuteIcon color="action" />
               </div>
-              <Autocomplete
-                fullWidth
-                size="small"
-                id="free-solo-demo"
-                freeSolo
-                sx={{ width: "20ch" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "vehiclemodule")}
-                value={VehicleModel.find((option) => option.carmodel)?.label || ''}
-                options={VehicleModel.map((option) => ({
-                  label: option.carmodel,
-                }))}
-                getOptionLabel={(option) => option.label || ''}
-                renderInput={(params) => {
-                  params.inputProps.value = formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || ''
-                  return (
-                    <TextField {...params} label="Vehicle Model" name="vehiclemodule" inputRef={params.inputRef} />
-                  )
-                }
-                }
+              <TextField
+                name="vehiclemodule"
+                autoComplete="new-password"
+                value={formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || ''}
+                onChange={handleChange}
+                label="Vehical Type"
+                id="vehiclemodule"
+                variant="standard"
+                required
               />
             </div>
           </div>
@@ -1620,6 +1685,7 @@ const Booking = () => {
                     <DatePicker
                       label="From Date"
                       name='fromDate'
+                      format="DD/MM/YYYY"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
@@ -1630,6 +1696,7 @@ const Booking = () => {
                     <DatePicker
                       label="To Date"
                       name="toDate"
+                      format="DD/MM/YYYY"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />
@@ -1660,7 +1727,7 @@ const Booking = () => {
         <div className="table-bookingCopy-Booking">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={row}
+              rows={reversedRows}
               columns={columns}
               onRowClick={handletableClick}
               pageSize={5}

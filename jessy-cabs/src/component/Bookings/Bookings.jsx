@@ -17,7 +17,6 @@ const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
   );
 };
 
-
 const Bookings = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('');
 
@@ -32,16 +31,14 @@ const Bookings = () => {
   };
 
   return (
-    <div className='order-conatiner' id='menu'>
+    <div className="Bookings-main">
       <div className='menu-bar'>
-        <MenuItem label="Booking" to='/home/bookings/booking' menuItemKey="Booking" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+      <MenuItem label="Booking" to='/home/bookings/booking' menuItemKey="Booking" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
         <MenuItem label="Trip Sheet" to='/home/bookings/tripsheet' menuItemKey="Trip Sheet" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
         <MenuItem label="Received" to='/home/bookings/received' menuItemKey="Received" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
         <MenuItem label="Dispatched" to='/home/bookings/dispatched' menuItemKey="Dispatched" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
       </div>
-      <div className='mobile-view'>
-        <Outlet />
-      </div>
+      <Outlet />
     </div>
   );
 };

@@ -1,47 +1,49 @@
 import React, { useState, useEffect } from 'react'
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DataGrid } from "@mui/x-data-grid";
-import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
-import MenuItem from '@mui/material/MenuItem';
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import ClearIcon from '@mui/icons-material/Clear';
-import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import dayjs from "dayjs";
+import { saveAs } from 'file-saver';
 import Box from "@mui/material/Box";
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import BadgeIcon from "@mui/icons-material/Badge";
 import Button from "@mui/material/Button";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import ChecklistIcon from "@mui/icons-material/Checklist";
+import { DataGrid } from "@mui/x-data-grid";
+import MenuItem from '@mui/material/MenuItem';
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import dayjs from "dayjs";
 import { Menu, TextField } from "@mui/material";
-import { AiFillAppstore } from "react-icons/ai";
-import { MdEditDocument } from "react-icons/md";
-import { AiOutlineFileSearch } from "react-icons/ai";
-import { HiDocumentText } from "react-icons/hi";
-import { BsFillFilePostFill } from "react-icons/bs";
-import { BsGenderTrans } from "react-icons/bs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
+
+// ICONS
+import { TbEngine } from "react-icons/tb";
 import { MdContacts } from "react-icons/md";
 import { ImPriceTags } from "react-icons/im";
-import { BsFillCarFrontFill } from "react-icons/bs";
+import { BsGenderTrans } from "react-icons/bs";
+import { AiFillAppstore } from "react-icons/ai";
+import { MdEditDocument } from "react-icons/md";
+import { HiDocumentText } from "react-icons/hi";
+import ClearIcon from '@mui/icons-material/Clear';
+import BadgeIcon from "@mui/icons-material/Badge";
 import { GiArchiveRegister } from "react-icons/gi";
-import { TbEngine } from "react-icons/tb";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { BsFillFilePostFill } from "react-icons/bs";
+import { BsFillCarFrontFill } from "react-icons/bs";
+import { AiOutlineFileSearch } from "react-icons/ai";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
 // TABLE
-
 const columns = [
     { field: "id", headerName: "Sno", width: 50 },
     { field: "insuranceno", headerName: "Insurance No", width: 130 },

@@ -1,73 +1,47 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import "./PaymentDetail.css";
-import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
-import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import Button from "@mui/material/Button";
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import { styled } from "@mui/material/styles";
-import SpeedDial from "@mui/material/SpeedDial";
-import MenuItem from '@mui/material/MenuItem';
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import ClearIcon from '@mui/icons-material/Clear';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import Box from "@mui/material/Box";
-import { Autocomplete, Menu, TextField } from "@mui/material";
 import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { saveAs } from 'file-saver';
+import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import MenuItem from '@mui/material/MenuItem';
+import { Organization } from './PaymentDetailData';
+import { Autocomplete, Menu, TextField } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
+// ICONS
+import ClearIcon from '@mui/icons-material/Clear';
+import ListAltIcon from "@mui/icons-material/ListAlt";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { Organization } from './PaymentDetailData';
-// import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
-
-
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
-  position: "absolute",
-  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
-  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
-    top: theme.spacing(2),
-    left: theme.spacing(2),
-  },
-}));
-const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  // { icon: <BookmarkAddedIcon />, name: "Add" },
-];
-
-// TABLE
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "tripsheetno", headerName: "TripSheet No", width: 130 },
-  { field: "organization", headerName: "Organization", width: 130 },
-  { field: "billingdate", headerName: "Billing Date", width: 130 },
-  { field: "totalamount", headerName: "Total Amount", width: 150 },
-  { field: "paid", headerName: "Paid", width: 130 },
-  { field: "Pending", headerName: "Pending", width: 130 },
-  { field: "bankaccount", headerName: "Bank Account", width: 150 },
+  { field: "tripid", headerName: "TripSheet No", width: 130 },
+  { field: "customer", headerName: "Organization", width: 130 },
+  { field: "Billingdate", headerName: "Bill Date", width: 130 },
+  { field: "Totalamount", headerName: "Total Amount", width: 130 },
+  { field: "paidamount", headerName: "Paid", width: 130 },
+  { field: "pendingamount", headerName: "Pending", width: 130 },
+  { field: "BankAccount", headerName: "Bank Account", width: 150 },
 ];
 
 const PaymentDetail = () => {
-  const [selectedCustomerData, setSelectedCustomerData] = useState({});
-  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  // const [tableData, setTableData] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [paidAmount, setPaidAmount] = useState(0);
+  const [pendingAmount, setPendingAmount] = useState(0);
+  const [customer, setCustomer] = useState("");
+  const [billingno, setBillingNo] = useState("");
   const [rows, setRows] = useState([]);
-  const [actionName] = useState('');
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
   const [error, setError] = useState(false);
@@ -77,6 +51,7 @@ const PaymentDetail = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
+  const [bankOptions, setBankOptions] = useState([]);
   const [infoMessage] = useState({});
 
   const convertToCSV = (data) => {
@@ -94,7 +69,6 @@ const PaymentDetail = () => {
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'normal');
     pdf.text("Customer Details", 10, 10);
-    // Modify tableData to exclude the index number
     const tableData = rows.map((row) => [
       row['id'],
       row['voucherno'],
@@ -123,104 +97,124 @@ const PaymentDetail = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
 
-  const [setBook] = useState({
-    voucherno: '',
-    Billname: '',
-    date: '',
-    PaymentCategory: '',
-    amount: '',
-  });
-
-  const handleCancel = () => {
-    setBook((prevBook) => ({
-      ...prevBook,
-      voucherno: '',
-      Billname: '',
-      date: '',
-      PaymentCategory: '',
-      amount: '',
-    }));
-    setSelectedCustomerData({});
+  const handleInputChange = (event, newValue) => {
+    if (event.target.name === 'customer') {
+      setCustomer(newValue ? newValue.label : '');
+    } else if (event.target.name === 'billingno') {
+      setBillingNo(event.target.value);
+    }
   };
-  const handleRowClick = useCallback((params) => {
-    console.log(params.row);
-    const customerData = params.row;
-    setSelectedCustomerData(customerData);
-    setSelectedCustomerId(params.row.customerId);
+
+  const handleShow = useCallback(async () => {
+    try {
+      const response = await axios.get(`http://localhost:8081/payment-details?billingno=${billingno}&customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+      console.log('selected billing data', response.params);
+      const data = response.data;
+      console.log('collected billing data', data);
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed");
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found");
+      }
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      setRows([]);
+      setError(true);
+      setErrorMessage("Check your Network Connection");
+    }
+  }, [billingno, customer, fromDate, toDate]);
+
+  useEffect(() => {
+    Organization()
+      .then((data) => {
+        if (data) {
+          console.log('organization name', data);
+          setBankOptions(data);
+        } else {
+          setError(true);
+          setErrorMessage('Failed to fetch organization options.');
+        }
+      })
+      .catch(() => {
+        setError(true);
+        setErrorMessage('Failed to fetch organization options.');
+      });
   }, []);
 
-
-  const handleClick = async (event, actionName, voucherno) => {
-    event.preventDefault();
-    try {
-      if (actionName === 'List') {
-        console.log('List button clicked');
-        const response = await axios.get('http://localhost:8081/PaymentDetail');
-        const data = response.data;
-        setRows(data);
-        setSuccessMessage("Successfully listed");
-      } else if (actionName === 'Cancel') {
-        console.log('Cancel button clicked');
-        handleCancel();
-      } else if (actionName === 'Delete') {
-        console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/PaymentDetail/${voucherno}`);
-        console.log('Customer deleted');
-        setSelectedCustomerData(null);
-        setSuccessMessage("Successfully Deleted");
-        handleCancel();
-      } else if (actionName === 'Edit') {
-        console.log('Edit button clicked');
-        const selectedCustomer = rows.find((row) => row.voucherno === voucherno);
-        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/PaymentDetail/${voucherno}`, updatedCustomer);
-        console.log('Customer updated');
-        handleCancel();
-      }
-    } catch (err) {
-      console.log(err);
-      setError(true);
-      setErrorMessage("Check Network Connection")
-    }
-  };
+  //calculate total amount in column
   useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
+    const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.Totalamount || 0), 0);
+    console.log('calculatedTotalAmount', calculatedTotalAmount);
+    if (!isNaN(calculatedTotalAmount)) {
+      setTotalAmount(calculatedTotalAmount.toFixed(2));
+    } else {
+      setTotalAmount("0");
     }
-  });
+  }, [rows]);
+
+  //calculate paid amount in column
+  useEffect(() => {
+    const calculatedPaidAmount = rows.reduce((total, row) => total + parseFloat(row.paidamount || 0), 0);
+    console.log('calculatedTotalAmount', calculatedPaidAmount);
+    if (!isNaN(calculatedPaidAmount)) {
+      setPaidAmount(calculatedPaidAmount.toFixed(2));
+    } else {
+      setPaidAmount("0");
+    }
+  }, [rows]);
+
+  //calculate pending amount in column
+  useEffect(() => {
+    const calculatedPendingAmount = rows.reduce((total, row) => total + parseFloat(row.pendingamount || 0), 0);
+    console.log('calculatedTotalAmount', calculatedPendingAmount);
+    if (!isNaN(calculatedPendingAmount)) {
+      setPendingAmount(calculatedPendingAmount.toFixed(2));
+    } else {
+      setPendingAmount("0");
+    }
+  }, [rows]);
+
+  const handleButtonClickTripsheet = (selectedRow) => {
+    const billingPageUrl = `/home/billing/billing?tripid=${selectedRow.tripid || ''}&billingno=${selectedRow.billingno || ''}&Billingdate=${selectedRow.Billingdate || ''}&totalkm1=${selectedRow.totalkm1 || ''}&totaltime=${selectedRow.totaltime || ''}&customer=${selectedRow.customer || ''}&supplier=${selectedRow.supplier || ''}&startdate=${selectedRow.startdate || ''}&totaldays=${selectedRow.totaldays || ''}&guestname=${selectedRow.guestname || ''}&rateType=${selectedRow.rateType || ''}&vehRegNo=${selectedRow.vehRegNo || ''}&vehType=${selectedRow.vehType || ''}&duty=${selectedRow.duty || ''}&MinCharges=${selectedRow.MinCharges || ''}&minchargeamount=${selectedRow.minchargeamount || ''}&ChargesForExtra=${selectedRow.ChargesForExtra || ''}&ChargesForExtraamount=${selectedRow.ChargesForExtraamount || ''}&cfeamount=${selectedRow.cfeamount || ''}&ChargesForExtraHRS=${selectedRow.ChargesForExtraHRS || ''}&ChargesForExtraHRSamount=${selectedRow.ChargesForExtraHRSamount || ''}&cfehamount=${selectedRow.cfehamount || ''}&NightHalt=${selectedRow.NightHalt || ''}&NightHaltamount=${selectedRow.NightHaltamount || ''}&nhamount=${selectedRow.nhamount || ''}&driverbata=${selectedRow.driverbata || ''}&driverbataamount=${selectedRow.driverbataamount || ''}&dbamount=${selectedRow.dbamount || ''}&OtherCharges=${selectedRow.OtherCharges || ''}&OtherChargesamount=${selectedRow.OtherChargesamount || ''}&permitothertax=${selectedRow.permitothertax || ''}&parkingtollcharges=${selectedRow.parkingtollcharges || ''}&MinKilometers=${selectedRow.MinKilometers || ''}&MinHours=${selectedRow.MinHours || ''}&GrossAmount=${selectedRow.GrossAmount || ''}&AfterTaxAmount=${selectedRow.AfterTaxAmount || ''}&DiscountAmount=${selectedRow.DiscountAmount || ''}&DiscountAmount2=${selectedRow.DiscountAmount2 || ''}&AdvanceReceived=${selectedRow.AdvanceReceived || ''}&RoundedOff=${selectedRow.RoundedOff || ''}&BalanceReceivable=${selectedRow.BalanceReceivable || ''}&NetAmount=${selectedRow.NetAmount || ''}&Totalamount=${selectedRow.Totalamount || ''}&paidamount=${selectedRow.paidamount || ''}&pendingamount=${selectedRow.pendingamount || ''}&BankAccount=${selectedRow.BankAccount || ''}`;
+    window.location.href = billingPageUrl;
+  }
 
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
-      <form onSubmit={handleClick}>
+      <form >
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-PaymentDetail">
@@ -232,55 +226,50 @@ const PaymentDetail = () => {
                   <TextField
                     size="small"
                     id="id"
-                    label="Tripsheet No"
-                    name="tripsheetno"
+                    label="Billing No"
+                    name="billingno"
+                    value={billingno || ''}
+                    onChange={(event, value) => handleInputChange(event, value)}
+                    autoComplete='off'
                   />
                 </div>
                 <div className="input" style={{ width: "230px" }}>
                   <div className="icone">
-                  <HailOutlinedIcon color="action" />
+                    <HailOutlinedIcon color="action" />
                   </div>
                   <Autocomplete
                     fullWidth
-                    size="small"
-                    id="free-solo-demo-BankAccount"
+                    id="free-solo-demo"
                     freeSolo
-                    sx={{ width: "20ch" }}
-                    options={Organization.map((option) => ({
-                      label: option.Option,
-                    }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    size="small"
+                    value={customer}
+                    options={bankOptions}
+                    onChange={(event, value) => handleInputChange(event, value)}
                     renderInput={(params) => {
-                      params.inputProps.value = selectedCustomerData?.Organization || ''
                       return (
-                        <TextField   {...params} label="Organization" name="Organization" inputRef={params.inputRef} />
-                      )
-                    }
-                    }
+                        <TextField {...params} label="Organization" inputRef={params.inputRef} />
+                      );
+                    }}
                   />
                 </div>
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker", "DatePicker"]}>
                     <DatePicker
                       label="From Date"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
-                  </LocalizationProvider>
-                </div>
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="To Date"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />
-                  </LocalizationProvider>
-                </div>
+                  </DemoContainer>
+                </LocalizationProvider>
               </div>
               <div className="input-field" style={{ justifyContent: 'center' }}>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained">Search</Button>
+                  <Button variant="contained" onClick={handleShow}>Search</Button>
                 </div>
               </div>
             </div>
@@ -315,44 +304,43 @@ const PaymentDetail = () => {
             <p>{successMessage}</p>
           </div>
         }
-
-        <div className="Download-btn">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
+        <div className='total-container'>
+          <div className="Download-btn">
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                    Download
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
+          </div>
+          <div className='amount-calculator'>
+            <div className='total-inputs' >
+              <label htmlFor="">Total Amount:</label>
+              <input type="number" value={totalAmount} />
+            </div>
+            <div className='total-inputs' >
+              <label htmlFor="">Paid Amount:</label>
+              <input type="number" value={paidAmount} />
+            </div>
+            <div className='total-inputs' >
+              <label htmlFor="">Pending Amount:</label>
+              <input type="number" value={pendingAmount} />
+            </div>
+          </div>
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-          <StyledSpeedDial
-            ariaLabel="SpeedDial playground example"
-            icon={<SpeedDialIcon />}
-            direction="left"
-          >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-              />
-            ))}
-          </StyledSpeedDial>
-        </Box>
         <div className="table-bookingCopy-PaymentDetail">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}
               columns={columns}
-              onRowClick={handleRowClick}
+              onRowClick={(event) => handleButtonClickTripsheet(event.row)}
               pageSize={5}
               checkboxSelection
             />

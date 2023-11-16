@@ -110,7 +110,7 @@
 .bankaddbtn {
     width: 200px;
     position: absolute;
-    top: 20px;
+    top: 10px;
     left: 800px;
 }
 
@@ -132,14 +132,17 @@
 #bank-btn-amountOUT label {
     color: red;
 }
-.button-container-bankAccount{
+
+.button-container-bankAccount {
     display: flex;
 }
+
 .bank-btn-amount-main label {
     text-align: center;
     display: flex;
     justify-content: center;
 }
+
 .bank-amount-input {
     text-align: center;
     display: flex;
@@ -160,10 +163,12 @@
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-.BankDetails-mainContainer{
+
+.BankDetails-mainContainer {
     margin-top: 80px;
 
 }
+
 .addedbanks-Details-BankAccount {
     display: flex;
     width: auto;
@@ -184,4 +189,35 @@
     height: 3px;
     background-color: #457cdc;
     /* Adjust color as needed */
+}
+
+.total-account {
+    display: flex;
+    padding: 10px;
+}
+
+.total-account .amount-calculate {
+    border: 1px solid #ccc;
+    background-color: var(--glass);
+    display: flex;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+.total-account .total-inputs {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+}
+
+.total-account .total-inputs label {
+    padding: 0px 10px;
+    font-weight: 500;
+}
+
+.total-account .total-inputs input {
+    background-color: transparent;
+    border: 1.5px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
 }

@@ -30,7 +30,6 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
-// import ImageDisplay from './ImageDisplay'; // Import your custom ImageDisplay component here
 
 const UserSetting = ({ defaultImage, userid }) => {
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -322,7 +321,7 @@ const UserSetting = ({ defaultImage, userid }) => {
                                         </div>
                                         <TextField
                                             size="small"
-                                            id="role"
+                                            id="UserName"
                                             label="UserName"
                                             name="designation"
                                             autoComplete="new-password"

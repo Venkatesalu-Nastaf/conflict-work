@@ -241,8 +241,17 @@ const PackageRateEntery = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/ratemanagement');
         const data = response.data;
-        setSuccessMessage("Successfully listed");
-        setRows(data);
+        // setSuccessMessage("Successfully listed");
+        // setRows(data);
+        if (data.length > 0) {
+          setRows(data);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
@@ -258,7 +267,7 @@ const PackageRateEntery = () => {
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
-        console.log('Edit button clicked'); 
+        console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
@@ -296,13 +305,13 @@ const PackageRateEntery = () => {
                     id="free-solo-demo-ratetype"
                     freeSolo
                     onChange={(event, value) => handleAutocompleteChange(event, value, "ratetype")}
-                    value={RateType.find((option) => option.optionvalue)?.label || ''}
+                    value={RateType.find((option) => option.optionvalue)?.label || selectedCustomerData?.ratetype || ''}
                     options={RateType.map((option) => ({
                       label: option.Option,
                     }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    getOptionLabel={(option) => option.label || selectedCustomerData?.ratetype || ''}
                     renderInput={(params) => {
-                      params.inputProps.value = selectedCustomerData?.ratetype || ''
+                      // params.inputProps.value = selectedCustomerData?.ratetype || ''
                       return (
                         <TextField {...params} label="RateType" name="ratetype" inputRef={params.inputRef} />
                       )
@@ -321,13 +330,13 @@ const PackageRateEntery = () => {
                     freeSolo
                     sx={{ width: "20ch" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "pricetag")}
-                    value={PriceTag.find((option) => option.optionvalue)?.label || ''}
+                    value={PriceTag.find((option) => option.optionvalue)?.label || selectedCustomerData?.pricetag || ''}
                     options={PriceTag.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    getOptionLabel={(option) => option.label || selectedCustomerData?.pricetag || ''}
                     renderInput={(params) => {
-                      params.inputProps.value = selectedCustomerData?.pricetag || ''
+                      // params.inputProps.value = selectedCustomerData?.pricetag || ''
                       return (
                         <TextField {...params} label="PriceTag" name="pricetag" inputRef={params.inputRef} />
                       )
@@ -377,13 +386,13 @@ const PackageRateEntery = () => {
                     freeSolo
                     sx={{ width: "20ch" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleType")}
-                    value={VehicleType.find((option) => option.optionvalue)?.label || ''}
+                    value={VehicleType.find((option) => option.optionvalue)?.label || selectedCustomerData?.vehicleType || ''}
                     options={VehicleType.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || ''}
+                    getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleType || ''}
                     renderInput={(params) => {
-                      params.inputProps.value = selectedCustomerData?.vehicleType || ''
+                      // params.inputProps.value = selectedCustomerData?.vehicleType || ''
                       return (
                         <TextField {...params} label="VehicleType" name="vehicleType" inputRef={params.inputRef} />
                       )
@@ -411,13 +420,13 @@ const PackageRateEntery = () => {
                 freeSolo
                 sx={{ width: "20ch" }}
                 onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                value={Duty.find((option) => option.optionvalue)?.label || ''}
+                value={Duty.find((option) => option.optionvalue)?.label || selectedCustomerData?.duty || ''}
                 options={Duty.map((option) => ({
                   label: option.option,
                 }))}
-                getOptionLabel={(option) => option.label || ''}
+                getOptionLabel={(option) => option.label || selectedCustomerData?.duty || ''}
                 renderInput={(params) => {
-                  params.inputProps.value = selectedCustomerData?.duty || ''
+                  // params.inputProps.value = selectedCustomerData?.duty || ''
                   return (
                     <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
                   )

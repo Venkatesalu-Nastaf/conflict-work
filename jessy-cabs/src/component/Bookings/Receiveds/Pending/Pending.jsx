@@ -1,30 +1,33 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import "./Pending.css";
 import axios from "axios";
-import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
-import { Stations } from "./PendingData";
-import Autocomplete from "@mui/material/Autocomplete";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { TextField } from "@mui/material";
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import dayjs from "dayjs";
-import { DataGrid } from "@mui/x-data-grid";
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { saveAs } from 'file-saver';
+import Menu from '@mui/material/Menu';
+import { Stations } from "./PendingData";
+import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import ClearIcon from '@mui/icons-material/Clear';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DataGrid } from "@mui/x-data-grid";
+import MenuItem from '@mui/material/MenuItem';
 import Dialog from '@material-ui/core/Dialog';
+import Autocomplete from "@mui/material/Autocomplete";
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
+// ICONS
+import ClearIcon from '@mui/icons-material/Clear';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -68,8 +71,8 @@ const Pending = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -77,24 +80,24 @@ const Pending = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
 
@@ -144,6 +147,9 @@ const Pending = () => {
     setServiceStation(newValue ? newValue.label : ''); // Assuming the label field contains the station name
   };
 
+  const reversedRows = [...rows].reverse();
+
+
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -154,11 +160,19 @@ const Pending = () => {
         )}`
       );
       const data = response.data;
-      setRows(data);
-      setSuccessMessage("Successfully listed");
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed");
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found");
+      }
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   }, [servicestation, fromDate, toDate]);
@@ -170,11 +184,19 @@ const Pending = () => {
         `http://localhost:8081/booking`
       );
       const data = response.data;
-      setRows(data);
-      setSuccessMessage("Successfully listed");
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed");
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found");
+      }
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   }, []);
@@ -191,7 +213,6 @@ const Pending = () => {
     const bookingPageUrl = `/home/bookings/booking?bookingno=${selectedRow.bookingno || ''}&bookingdate=${selectedRow.bookingdate || ''}&bookingtime=${selectedRow.bookingtime || ''}&status=${selectedRow.status || ''}&tripid=${selectedRow.tripid || ''}&customer=${selectedRow.customer || ''}&orderedby=${selectedRow.orderedby || ''}&mobile=${selectedRow.mobile || ''}&guestname=${selectedRow.guestname || ''}&guestmobileno=${selectedRow.guestmobileno || ''}&email=${selectedRow.email || ''}&employeeno=${selectedRow.employeeno || ''}&address1=${selectedRow.address1 || ''}&streetno=${selectedRow.streetno || ''}&city=${selectedRow.city || ''}&report=${selectedRow.report || ''}&vehType=${selectedRow.vehType || ''}&paymenttype=${selectedRow.paymenttype || ''}&startdate=${selectedRow.startdate || ''}&starttime=${selectedRow.starttime || ''}&reporttime=${selectedRow.reporttime || ''}&duty=${selectedRow.duty || ''}&pickup=${selectedRow.pickup || ''}&customercode=${selectedRow.customercode || ''}&registerno=${selectedRow.registerno || ''}&flightno=${selectedRow.flightno || ''}&orderbyemail=${selectedRow.orderbyemail || ''}&remarks=${selectedRow.remarks || ''}&servicestation=${selectedRow.servicestation || ''}&advance=${selectedRow.advance || ''}&nameupdate=${selectedRow.nameupdate || ''}&address3=${selectedRow.address3 || ''}&address4=${selectedRow.address4 || ''}&cityupdate=${selectedRow.cityupdate || ''}&useage=${selectedRow.useage || ''}&username=${selectedRow.username || ''}&tripdate=${selectedRow.tripdate || ''}&triptime=${selectedRow.triptime || ''}&emaildoggle=${selectedRow.emaildoggle || ''}&hireTypes=${selectedRow.hireTypes || ''}&travelsname=${selectedRow.travelsname || ''}&vehRegNo=${selectedRow.vehRegNo || ''}&vehType=${selectedRow.vehType || ''}&driverName=${selectedRow.driverName || ''}&mobileNo=${selectedRow.mobileNo || ''}&travelsemail=${selectedRow.travelsemail || ''}`;
     window.location.href = bookingPageUrl;
   };
-
 
   const handleTripsheetClick = () => {
     const bookingPageUrl = `/home/bookings/tripsheet?tripid=${selectedRow.tripid || ''}&bookingno=${selectedRow.bookingno || ''}&status=${selectedRow.status || ''}&billingno=${selectedRow.billingno || ''}&apps=${selectedRow.apps || ''}&customer=${selectedRow.customer || ''}&orderedby=${selectedRow.orderedby || ''}&mobile=${selectedRow.mobile || ''}&guestname=${selectedRow.guestname || ''}&guestmobileno=${selectedRow.guestmobileno || ''}&email=${selectedRow.email || ''}&address1=${selectedRow.address1 || ''}&streetno=${selectedRow.streetno || ''}&city=${selectedRow.city || ''}&hireTypes=${selectedRow.hireTypes || ''}&department=${selectedRow.department || ''}&vehRegNo=${selectedRow.vehRegNo || ''}&vehType=${selectedRow.vehType || ''}&driverName=${selectedRow.driverName || ''}&mobileNo=${selectedRow.mobileNo || ''}&driversmsexbetta=${selectedRow.driversmsexbetta || ''}&gps=${selectedRow.gps || ''}&duty=${selectedRow.duty || ''}&pickup=${selectedRow.pickup || ''}&useage=${selectedRow.useage || ''}&request=${selectedRow.request || ''}&startdate=${selectedRow.startdate || ''}&closedate=${selectedRow.closedate || ''}&totaldays=${selectedRow.totaldays || ''}&employeeno=${selectedRow.employeeno || ''}&reporttime=${selectedRow.reporttime || ''}&starttime=${selectedRow.starttime || ''}&closetime=${selectedRow.closetime || ''}&additionaltime=${selectedRow.additionaltime || ''}&advancepaidtovendor=${selectedRow.advancepaidtovendor || ''}&customercode=${selectedRow.customercode || ''}&startkm=${selectedRow.startkm || ''}&closekm=${selectedRow.closekm || ''}&permit=${selectedRow.permit || ''}&parking=${selectedRow.parking || ''}&toll=${selectedRow.toll || ''}&vpermettovendor=${selectedRow.vpermettovendor || ''}&vendortoll=${selectedRow.vendortoll || ''}&customeradvance=${selectedRow.customeradvance || ''}&email1=${selectedRow.email1 || ''}&remark=${selectedRow.remark || ''}&smsguest=${selectedRow.smsguest || ''}&documentnotes=${selectedRow.documentnotes || ''}&VendorTripNo=${selectedRow.VendorTripNo || ''}&vehicles=${selectedRow.vehicles || ''}&duty1=${selectedRow.duty1 || ''}&startdate1=${selectedRow.startdate1 || ''}&closedate1=${selectedRow.closedate1 || ''}&totaldays1=${selectedRow.totaldays1 || ''}&locks=${selectedRow.locks || ''}&starttime2=${selectedRow.starttime2 || ''}&closetime2=${selectedRow.closetime2 || ''}&totaltime=${selectedRow.totaltime || ''}&startkm1=${selectedRow.startkm1 || ''}&closekm1=${selectedRow.closekm1 || ''}&totalkm1=${selectedRow.totalkm1 || ''}&remark1=${selectedRow.remark1 || ''}&caramount=${selectedRow.caramount || ''}&minkm=${selectedRow.minkm || ''}&minhrs=${selectedRow.minhrs || ''}&package=${selectedRow.package || ''}&amount=${selectedRow.amount || ''}&exkm=${selectedRow.exkm || ''}&amount1=${selectedRow.amount1 || ''}&exHrs=${selectedRow.exHrs || ''}&amount2=${selectedRow.amount2 || ''}&night=${selectedRow.night || ''}&amount3=${selectedRow.amount3 || ''}&driverconvenience=${selectedRow.driverconvenience || ''}&amount4=${selectedRow.amount4 || ''}&netamount=${selectedRow.netamount || ''}&vehcommission=${selectedRow.vehcommission || ''}&caramount1=${selectedRow.caramount1 || ''}&manualbills=${selectedRow.manualbills || ''}&pack=${selectedRow.pack || ''}&amount5=${selectedRow.amount5 || ''}&exkm1=${selectedRow.exkm1 || ''}&amount6=${selectedRow.amount6 || ''}&exHrs1=${selectedRow.exHrs1 || ''}&amount7=${selectedRow.amount7 || ''}&night1=${selectedRow.night1 || ''}&amount8=${selectedRow.amount8 || ''}&driverconvenience1=${selectedRow.driverconvenience1 || ''}&amount9=${selectedRow.amount9 || ''}&rud=${selectedRow.rud || ''}&netamount1=${selectedRow.netamount1 || ''}&discount=${selectedRow.discount || ''}&ons=${selectedRow.ons || ''}&manualbills1=${selectedRow.manualbills1 || ''}&balance=${selectedRow.balance || ''}&fcdate=${selectedRow.fcdate || ''}&taxdate=${selectedRow.taxdate || ''}&insdate=${selectedRow.insdate || ''}&stpermit=${selectedRow.stpermit || ''}&maintenancetype=${selectedRow.maintenancetype || ''}&kilometer=${selectedRow.kilometer || ''}&selects=${selectedRow.selects || ''}&documenttype=${selectedRow.documenttype || ''}&on1=${selectedRow.on1 || ''}&smsgust=${selectedRow.smsgust || ''}&booker=${selectedRow.booker || ''}&emailcheck=${selectedRow.emailcheck || ''}&valueprint=${selectedRow.valueprint || ''}&manualbillss=${selectedRow.manualbillss || ''}&reload=${selectedRow.reload || ''}`;
@@ -216,11 +237,13 @@ const Pending = () => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="From Date"
+                        format="DD/MM/YYYY"
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
                       />
                       <DatePicker
                         label="To Date"
+                        format="DD/MM/YYYY"
                         value={toDate}
                         onChange={(date) => setToDate(date)}
                       />
@@ -245,11 +268,12 @@ const Pending = () => {
                     options={Stations.map((option) => ({
                       label: option.optionvalue,
                     }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    onChange={handleInputChange}
-                    renderInput={(params) =>
-                      <TextField {...params} label="Stations" />
-                    }
+                    onChange={(event, value) => handleInputChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                      );
+                    }}
                   />
                 </div>
                 <div className="input" style={{ width: "140px" }}>
@@ -310,7 +334,8 @@ const Pending = () => {
           </div>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              // rows={rows}
+              rows={reversedRows}
               columns={columns}
               onRowClick={(event) => handleButtonClick(event.row)}
               pageSize={5}

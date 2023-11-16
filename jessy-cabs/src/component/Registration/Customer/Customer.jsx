@@ -13,12 +13,13 @@ import MenuItem from '@mui/material/MenuItem';
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { UnderGroup, states, Customertype, Select, BillingGroup } from "./Customerdata";
+import { UnderGroup, states, Customertype, Select, BillingGroup, Service_Station } from "./Customerdata";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
 
@@ -128,6 +129,7 @@ const Customer = () => {
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'Customer_Details.pdf');
   };
+
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
@@ -138,32 +140,32 @@ const Customer = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
 
@@ -172,6 +174,7 @@ const Customer = () => {
     name: '',
     customer: '',
     customerType: '',
+    servicestation: '',
     date: '',
     address1: '',
     address2: '',
@@ -196,6 +199,7 @@ const Customer = () => {
     enableDriverApp: '',
     billingGroup: '',
   });
+
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
 
@@ -236,12 +240,13 @@ const Customer = () => {
   };
 
   const handleDateChange = (date) => {
-    const startOfDay = dayjs(date).startOf('day').format();
+    const startOfDay = dayjs(date).format('DD/MM/YYYY');
     setBook((prevBook) => ({
       ...prevBook,
       date: startOfDay,
     }));
   };
+
   const handleCancel = () => {
     setBook((prevBook) => ({
       ...prevBook,
@@ -249,6 +254,7 @@ const Customer = () => {
       name: '',
       customer: '',
       customerType: '',
+      servicestation: '',
       date: '',
       address1: '',
       address2: '',
@@ -275,12 +281,14 @@ const Customer = () => {
     }));
     setSelectedCustomerData({});
   };
+
   const handleRowClick = useCallback((params) => {
     console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+
   const handleAdd = async () => {
     const name = book.name;
     if (!name) {
@@ -307,13 +315,22 @@ const Customer = () => {
         console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/customers');
         const data = response.data;
-        setRows(data);
+        // setRows(data);
+        if (data.length > 0) {
+          setRows(data);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
-        await axios.delete(`http://localhost:8081/customers/${customerId}`);
+        await axios.delete(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`);
         console.log('Customer deleted');
         setSelectedCustomerData(null);
         handleCancel();
@@ -321,7 +338,7 @@ const Customer = () => {
         console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.customerId === customerId);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/customers/${customerId}`, updatedCustomer);
+        await axios.put(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
@@ -366,25 +383,25 @@ const Customer = () => {
                 <TextField
                   margin="normal"
                   size="small"
-                  id="name"
-                  label="Name"
-                  value={selectedCustomerData?.name || book.name}
+                  id="customer"
+                  label="Organization Name"
+                  value={selectedCustomerData?.customer || book.customer}
                   autoComplete="new-password"
                   variant="standard"
                   onChange={handleChange}
-                  name="name"
+                  name="customer"
                 />
               </div>
               <div className="input">
                 <TextField
                   margin="normal"
                   size="small"
-                  id="Print Name"
-                  label="Print Name"
-                  value={selectedCustomerData?.customer || book.customer}
+                  id="name"
+                  label="Organizer Name"
+                  value={selectedCustomerData?.name || book.name}
                   autoComplete="new-password"
                   onChange={handleChange}
-                  name="customer"
+                  name="name"
                 />
               </div>
               <div className="input">
@@ -395,13 +412,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
-                  value={Customertype.find((option) => option.Option)?.label || ''}
+                  value={Customertype.find((option) => option.Option)?.label || selectedCustomerData?.customerType || ''}
                   options={Customertype.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.customerType || book.customerType || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.customerType || ''
+                    // params.inputProps.value = selectedCustomerData?.customerType || ''
                     return (
                       <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
                     )
@@ -411,15 +428,15 @@ const Customer = () => {
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
+                  <DatePicker
                     label="Date"
-                      value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
-                      onChange={handleDateChange}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
-                      )}
-                    </DatePicker>
+                    value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
+                    onChange={handleDateChange}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
+                    )}
+                  </DatePicker>
                 </LocalizationProvider>
               </div>
             </div>
@@ -562,7 +579,16 @@ const Customer = () => {
                 onChange={handleChange}
                 checked={Boolean(selectedCustomerData?.division || book.division)}
               />
-
+              <FormControlLabel
+                size="small"
+                name="hourRoundedOff"
+                value="Hourroundedoff"
+                control={<Checkbox size="small" />}
+                label="Hour Roundedoff"
+                autoComplete="new-password"
+                onChange={handleChange}
+                checked={Boolean(selectedCustomerData?.hourRoundedOff || book.hourRoundedOff)}
+              />
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "400px" }}>
@@ -580,16 +606,31 @@ const Customer = () => {
                   variant="standard"
                 />
               </div>
-              <FormControlLabel
-                size="small"
-                name="hourRoundedOff"
-                value="Hourroundedoff"
-                control={<Checkbox size="small" />}
-                label="Hour Roundedoff"
-                autoComplete="new-password"
-                onChange={handleChange}
-                checked={Boolean(selectedCustomerData?.hourRoundedOff || book.hourRoundedOff)}
-              />
+              <div className="input">
+                <div className="icone">
+                  <DomainAddIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
+                  value={Service_Station.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
+                  options={Service_Station.map((option) => ({
+                    label: option.optionvalue,
+                  }))}
+                  getOptionLabel={(option) => option.label || selectedCustomerData.servicestation || book.servicestation || ''}
+                  renderInput={(params) => {
+                    // params.inputProps.value = selectedCustomerData.servicestation || book.servicestation || ''
+                    return (
+                      <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
+                    )
+                  }
+                  }
+                />
+              </div>
               <div className="input">
                 <Autocomplete
                   fullWidth
@@ -598,13 +639,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "selectOption")}
-                  value={Select.find((option) => option.Option)?.label || ''}
+                  value={Select.find((option) => option.Option)?.label || selectedCustomerData?.selectOption || ''}
                   options={Select.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.selectOption || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.selectOption || ''
+                    // params.inputProps.value = selectedCustomerData?.selectOption || ''
                     return (
                       <TextField   {...params} label="Select" name="selectOption" inputRef={params.inputRef} />
                     )
@@ -651,13 +692,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "state")}
-                  value={states.find((option) => option.state)?.label || ''}
+                  value={states.find((option) => option.state)?.label || selectedCustomerData?.state || ''}
                   options={states.map((option) => ({
                     label: option.state,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.state || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.state || ''
+                    // params.inputProps.value = selectedCustomerData?.state || ''
                     return (
                       <TextField {...params} label="State" name="state" inputRef={params.inputRef} />
                     )
@@ -673,13 +714,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
-                  value={UnderGroup.find((option) => option.option)?.label || ''}
+                  value={UnderGroup.find((option) => option.option)?.label || selectedCustomerData?.underGroup || ''}
                   options={UnderGroup.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.underGroup || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.underGroup || ''
+                    // params.inputProps.value = selectedCustomerData?.underGroup || ''
                     return (
                       <TextField {...params} label="UnderGroup" name="underGroup" inputRef={params.inputRef} />
                     )
@@ -695,13 +736,13 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "billingGroup")}
-                  value={BillingGroup.find((option) => option.option)?.label || ''}
+                  value={BillingGroup.find((option) => option.option)?.label || selectedCustomerData?.billingGroup || ''}
                   options={BillingGroup.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || selectedCustomerData?.billingGroup || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = selectedCustomerData?.billingGroup || ''
+                    // params.inputProps.value = selectedCustomerData?.billingGroup || ''
                     return (
                       <TextField {...params} label="Billing Group" name="billingGroup" inputRef={params.inputRef} />
                     )

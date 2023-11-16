@@ -1,43 +1,44 @@
 import React, { useState, useEffect } from 'react'
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DataGrid } from "@mui/x-data-grid";
-import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
-import MenuItem from '@mui/material/MenuItem';
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import ClearIcon from '@mui/icons-material/Clear';
-import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import dayjs from "dayjs";
 import Box from "@mui/material/Box";
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import BadgeIcon from "@mui/icons-material/Badge";
+import { saveAs } from 'file-saver';
 import Button from "@mui/material/Button";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import ChecklistIcon from "@mui/icons-material/Checklist";
+import { DataGrid } from "@mui/x-data-grid";
+import MenuItem from '@mui/material/MenuItem';
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
-import { AiOutlineFileSearch } from "react-icons/ai";
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import dayjs from "dayjs";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
+
+// ICONS
+import { ImPriceTags } from "react-icons/im";
+import { ImLocation2 } from "react-icons/im";
 import { Menu, TextField } from "@mui/material";
 import { AiFillAppstore } from "react-icons/ai";
 import { MdEditDocument } from "react-icons/md";
 import { HiDocumentText } from "react-icons/hi";
-import { ImPriceTags } from "react-icons/im";
-import { ImLocation2 } from "react-icons/im";
-
+import ClearIcon from '@mui/icons-material/Clear';
+import BadgeIcon from "@mui/icons-material/Badge";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { AiOutlineFileSearch } from "react-icons/ai";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
 // TABLE
-
 const columns = [
     { field: "id", headerName: "Sno", width: 50 },
     { field: "rentdescription", headerName: "Rent Description", width: 130 },

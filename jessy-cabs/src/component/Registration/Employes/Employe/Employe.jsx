@@ -12,7 +12,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
-import { IconButton, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -162,32 +162,32 @@ const Employe = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
@@ -209,7 +209,6 @@ const Employe = () => {
         uanid: '',
         esino: '',
         licenceno: '',
-
     });
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
@@ -238,12 +237,17 @@ const Employe = () => {
     };
 
     const handleDateChange = (date, name) => {
-        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+        const formattedDate = dayjs(date).format('DD/MM/YYYY');
         setBook((prevBook) => ({
             ...prevBook,
             [name]: formattedDate,
         }));
+        setSelectedCustomerData((prevBook) => ({
+            ...prevBook,
+            [name]: formattedDate,
+        }));
     };
+
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
@@ -264,7 +268,6 @@ const Employe = () => {
             uanid: '',
             esino: '',
             licenceno: '',
-
         }));
         setSelectedCustomerData({});
     };
@@ -278,6 +281,7 @@ const Employe = () => {
     const handleAdd = async () => {
         const empname = book.empname;
         if (!empname) {
+            setError(true);
             setErrorMessage("Check your Employee ID");
             return;
         }
@@ -286,6 +290,7 @@ const Employe = () => {
             await axios.post('http://localhost:8081/employees', book);
             console.log(book);
             handleCancel();
+            setSuccess(true);
             setSuccessMessage("Successfully Added");
         } catch (error) {
             console.error('Error updating customer:', error);
@@ -300,24 +305,33 @@ const Employe = () => {
                 console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/employees');
                 const data = response.data;
-                setRows(data);
-                setSuccessMessage("Successfully listed");
+                if (data.length > 0) {
+                    setRows(data);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
                 handleCancel();
             } else if (actionName === 'Delete') {
                 console.log('Delete button clicked');
-                await axios.delete(`http://localhost:8081/employees/${empid}`);
+                await axios.delete(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`);
                 console.log('Customer deleted');
                 setSelectedCustomerData(null);
+                setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
                 console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.empid === empid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`http://localhost:8081/employees/${empid}`, updatedCustomer);
+                await axios.put(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
                 console.log('Customer updated');
+                setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
             } else if (actionName === 'Add') {
@@ -325,6 +339,7 @@ const Employe = () => {
             }
         } catch (err) {
             console.log(err);
+            setError(true);
             setErrorMessage("Check your Network Connection");
         }
     };
@@ -333,6 +348,35 @@ const Employe = () => {
             handleClick(null, 'List');
         }
     });
+
+    const handleUpload = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.pdf, .jpg, .jpeg, .png';
+        input.onchange = handleFileChange;
+        input.click();
+    };
+    //file upload
+    const handleFileChange = async (event, documentType) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const uniqueFileName = `${documentType}_${Date.now()}_${file.name}`;
+        const formDataUpload = new FormData();
+        formDataUpload.append('file', file);
+        formDataUpload.append('documenttype', book.documenttype || selectedCustomerData.documenttype);
+        formDataUpload.append('documenttype', documentType);
+        formDataUpload.append('empid', book.empid || selectedCustomerData.empid);
+        formDataUpload.append('filename', uniqueFileName);
+        console.log('uploaded file details', formDataUpload);
+        try {
+            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
+            console.log('uploaded file details 2', response.data);
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    };
+    //end file upload
 
     return (
         <div className="Employe-form Scroll-Style-hide">
@@ -380,7 +424,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empemailid || book.empemailid}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -395,7 +439,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empmobile || book.empmobile}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                         </div>
@@ -412,7 +456,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.jobroll || book.jobroll}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" >
@@ -440,7 +484,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.gender || book.gender}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -455,7 +499,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.bloodgroup || book.bloodgroup}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                         </div>
@@ -488,7 +532,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.aadharcard || book.aadharcard}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -503,7 +547,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.pancard || book.pancard}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                         </div>
@@ -535,7 +579,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.guardian || book.guardian}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -550,7 +594,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.fixedsalary || book.fixedsalary}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                         </div>
@@ -567,7 +611,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.uanid || book.uanid}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "260px" }}>
@@ -582,7 +626,7 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.esino || book.esino}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "250px" }}>
@@ -597,17 +641,21 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.licenceno || book.licenceno}
                                     onChange={handleChange}
-                                  
+
                                 />
                             </div>
                             <div className="input" style={{ width: "20px" }}>
-                                <IconButton color="primary" size="larger">
+                                {/* <IconButton color="primary" size="larger">
                                     <UploadFileIcon />
-                                    <input
+                                    <button
                                         type="file"
                                         style={{ display: "none" }}
+                                        onClick={handleUpload}
                                     />
-                                </IconButton>
+                                </IconButton> */}
+                                <Button color="primary" onClick={() => handleUpload('LicenseCopy')} size="md" >
+                                    <UploadFileIcon />
+                                </Button>
                             </div>
                         </div>
                         <div className="input-field">

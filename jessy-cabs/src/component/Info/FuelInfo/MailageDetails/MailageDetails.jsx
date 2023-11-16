@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from "axios";
 import './MailageDetails.css';
 import "jspdf-autotable";
+import axios from "axios";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
 import Menu from '@mui/material/Menu';
@@ -168,7 +168,8 @@ const MailageDetails = () => {
   };
 
   const handleDateChange = (date, name) => {
-    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    const formattedDate = dayjs(date).format('DD/MM/YYYY');
+    // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
     setBook((prevBook) => ({
       ...prevBook,
       [name]: formattedDate,

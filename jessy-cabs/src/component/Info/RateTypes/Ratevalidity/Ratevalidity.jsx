@@ -151,7 +151,8 @@ const Ratevalidity = () => {
     };
 
     const handleDateChange = (date, name) => {
-        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+        const formattedDate = dayjs(date).format('DD/MM/YYYY');
+        // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
         setBook((prevBook) => ({
             ...prevBook,
             [name]: formattedDate,
@@ -202,8 +203,17 @@ const Ratevalidity = () => {
                 console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/ratevalidity');
                 const data = response.data;
-                setSuccessMessage("Successfully listed");
-                setRows(data);
+                // setSuccessMessage("Successfully listed");
+                // setRows(data);
+                if (data.length > 0) {
+                    setRows(data);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
                 handleCancel();

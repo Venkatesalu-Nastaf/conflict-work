@@ -19,6 +19,7 @@ import Tabs from "@mui/joy/Tabs";
 import Box from "@mui/material/Box";
 import TabList from "@mui/joy/TabList";
 import TabPanel from "@mui/joy/TabPanel";
+import Invoice from '../Invoice/Invoice';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
@@ -52,6 +53,7 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
 import PaymentsIcon from "@mui/icons-material/Payments";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import DataUsageIcon from "@mui/icons-material/DataUsage";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import RateReviewIcon from "@mui/icons-material/RateReview";
@@ -63,6 +65,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
@@ -71,8 +74,6 @@ import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
 import MinorCrashSharpIcon from "@mui/icons-material/MinorCrashSharp";
 import BackupTableSharpIcon from "@mui/icons-material/BackupTableSharp";
@@ -96,7 +97,6 @@ import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
-import Invoice from '../Invoice/Invoice';
 
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
@@ -202,7 +202,11 @@ const TripSheet = () => {
     duty: '',
   });
 
-
+  const handleButtonClick = () => {
+    // with the actual URL you want to open
+    const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
+    newTab.focus();
+  };
 
   //generate link
 
@@ -257,6 +261,8 @@ const TripSheet = () => {
     vehRegNo: '',
     driverName: '',
     mobileNo: '',
+    reporttime: '',
+    startdate: '',
   });
   const [sendEmail, setSendEmail] = useState(false);
 
@@ -264,17 +270,17 @@ const TripSheet = () => {
     if (sendEmail) {
       try {
         const dataToSend = {
-          guestname: formValues.guestname || selectedCustomerData.guestname,
-          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno,
-          email: formValues.email || selectedCustomerData.email,
-          pickup: formValues.pickup || selectedCustomerData.pickup,
-          useage: formValues.useage || selectedCustomerData.useage,
-          hireTypes: formValues.hireTypes || selectedCustomerData.hireTypes,
-          department: formValues.department || selectedCustomerData.department,
-          vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo,
-          vehType: formValues.vehType || selectedCustomerData.vehType,
-          driverName: formValues.driverName || selectedCustomerData.driverName,
-          mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo
+          guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno,
+          email: formValues.email || selectedCustomerData.email || book.email || formData.email,
+          pickup: formValues.pickup || selectedCustomerData.pickup || book.pickup || formData.pickup,
+          useage: formValues.useage || selectedCustomerData.useage || book.useage || formData.useage,
+          hireTypes: formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || formData.hireTypes,
+          department: formValues.department || selectedCustomerData.department || book.department || formData.department,
+          vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
+          vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+          driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
+          mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo
         };
         await axios.post('http://localhost:8081/send-tripsheet-email', dataToSend);
         setSuccess(true);
@@ -331,6 +337,7 @@ const TripSheet = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const statusValue = params.get('status') || 'opened';
+    const appsValue = params.get('apps') || 'Waiting';
     const formData = {};
 
     const parameterKeys = [
@@ -348,6 +355,7 @@ const TripSheet = () => {
 
     // Set the status separately
     formData['status'] = statusValue;
+    formData['apps'] = appsValue;
     setTripSheetData(formData);
     setBook(formData);
     setFormData(formData);
@@ -626,6 +634,13 @@ const TripSheet = () => {
     }
   };
 
+  const vehilcedetails = {
+    vehRegNo: selectedCustomerDatas.vehRegNo || '',
+    vehType: selectedCustomerDatas.vehType || '',
+    driverName: selectedCustomerDatas.driverName || '',
+    mobileNo: selectedCustomerDatas.mobileNo || '',
+  }
+
   const handleEdit = async () => {
 
     try {
@@ -634,14 +649,16 @@ const TripSheet = () => {
       const updatedCustomer = {
         ...book,
         ...selectedCustomer,
+        // ...selectedCustomerDatas,
+        ...vehilcedetails,
         ...selectedCustomerData,
         ...formData,
-        starttime: starttime,
-        closetime: closetime,
-        reporttime: reporttime,
-        shedintime: shedintime,
-        starttime2: starttime2,
-        closetime2: closetime2,
+        starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
+        closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
+        reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+        shedintime: shedintime || book.shedintime || selectedCustomerData.shedintime || formData.shedintime,
+        starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
+        closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
         additionaltime: additionalTime.additionaltime,
         shedkm: shedKilometers.shedkm,
         totaldays: calculateTotalDays(),
@@ -673,6 +690,8 @@ const TripSheet = () => {
       await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
       console.log('Customer updated');
       handleCancel();
+      handleDriverSendSMS();
+      handleSendSMS();
       handlecheck();
       setSuccess(true);
       setSuccessMessage("Successfully updated");
@@ -694,24 +713,41 @@ const TripSheet = () => {
       console.log('Add button clicked');
       const updatedBook = {
         ...book,
-        starttime: starttime,
-        closetime: closetime,
-        starttime2: starttime2,
-        reporttime: reporttime,
-        shedintime: shedintime,
-        closetime2: closetime2,
-        additionaltime: additionalTime,
-        shedkm: shedKilometers,
-        totaldays: calculateTotalDays(), // Add the totaldays field here
-        totalkm1: calculateTotalKilometers(), // Add the totaldays field here
-        totaltime: calculateTotalTime(), // Add the totaldays field here
-        minhrs: packageDetails.Hours,
-        minkm: packageDetails.KMS,
+        starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
+        closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
+        reporttime: reporttime || book.reporttime || formData.reporttime || selectedCustomerData.reporttime,
+        shedintime: shedintime || book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
+        starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
+        closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
+        additionaltime: additionalTime.additionaltime,
+        shedkm: shedKilometers.shedkm,
+        totaldays: calculateTotalDays(),
+        totalkm1: calculateTotalKilometers(),
+        totaltime: calculateTotalTime(),
+        netamount: calculateTotalAmount(),
+        exkm: packageDetails[0]?.extraKMS,
+        exHrs: packageDetails[0]?.extraHours,
+        night: packageDetails[0]?.NHalt,
+        amount: packageDetails[0]?.Rate,
+        exkm1: packageDetails[0]?.extraKMS,
+        exHrs1: packageDetails[0]?.extraHours,
+        night1: packageDetails[0]?.NHalt,
+        amount5: packageDetails[0]?.Rate,
+        amount1: calculateExkmAmount(),
+        amount2: calculateExHrsAmount(),
+        amount3: calculateNightAmount(),
+        amount4: calculatedriverconvienceAmount(),
+        package: packageDetails[0]?.package,
+        pack: packageDetails[0]?.package,
+        minhrs: packageDetails[0]?.Hours,
+        minkm: packageDetails[0]?.KMS,
       };
       await axios.post('http://localhost:8081/tripsheet', updatedBook);
       console.log(updatedBook);
       handleCancel();
       setSuccess(true);
+      handleSendSMS();
+      handleDriverSendSMS();
       handlecheck();
       setSuccessMessage("Successfully Added");
     } catch (error) {
@@ -742,24 +778,26 @@ const TripSheet = () => {
   };
 
   const handleDateChange = (date, name) => {
-    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
     setBook((prevBook) => ({
       ...prevBook,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
     setSelectedCustomerData((prevValues) => ({
       ...prevValues,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
     setTripSheetData((prevValues) => ({
       ...prevValues,
-      [name]: formattedDate,
+      [name]: parsedDate,
     }));
   };
+
   const handleClick = async (event, actionName) => {
     event.preventDefault();
     try {
@@ -911,7 +949,7 @@ const TripSheet = () => {
       const totaldriverconvience = driverconvenience1 * dtc2;
       return totaldriverconvience;
     }
-    return 0;
+    return '';
   };
 
   const calculateTotalDays = () => {
@@ -971,7 +1009,6 @@ const TripSheet = () => {
 
     return totalAmount;
   }
-
 
   const [tripSheetData, setTripSheetData] = useState({
     customer: '',
@@ -1192,6 +1229,95 @@ const TripSheet = () => {
     totalKilometers, totalTime
   ]);
 
+
+  const [smsguest, setSmsGuest] = useState(false);
+
+  const handleSendSMS = async () => {
+    if (smsguest) {
+      try {
+        const dataToSend = {
+          guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
+          vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
+          vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+          driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
+          mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo,
+          reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
+          startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
+          ofclanno: '044-49105959',
+        };
+
+        console.log("guest sms variables", dataToSend);
+
+        const response = await fetch('http://localhost:8081/tripguest-send-sms', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToSend),
+        });
+
+        console.log('data sent to backend', response.data);
+
+        if (response.ok) {
+          console.log('SMS sent successfully');
+          setSuccess(true);
+          setSuccessMessage("SMS sent correctly");
+        } else {
+          console.error('Failed to send SMS');
+          setError(true);
+          setErrorMessage("Failed to send SMS");
+        }
+      } catch (error) {
+        console.error('Error sending SMS:', error.message);
+      }
+    }
+  };
+  //send sms from tripsheet to driver
+  const [DriverSMS, setDriverSMS] = useState(false);
+
+  const handleDriverSendSMS = async () => {
+    if (smsguest) {
+      try {
+        const dataSend = {
+          guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
+          guestmobileno: formValues.guestmobileno || selectedCustomerData.guestmobileno || book.guestmobileno || formData.guestmobileno || '',
+          vehRegNo: formValues.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || formData.vehRegNo,
+          vehType: formValues.vehType || selectedCustomerData.vehType || book.vehType || formData.vehType,
+          driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
+          mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo,
+          reporttime: formValues.reporttime || formData.reporttime || selectedCustomerData.reporttime || book.reporttime || '',
+          startdate: formValues.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate || '',
+          ofclanno: '044-49105959',
+        };
+
+        console.log("driver sms variables", dataSend);
+
+        const response = await fetch('http://localhost:8081/tripdriver-send-sms', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataSend),
+        });
+
+        console.log('data sent to backend', response.data);
+
+        if (response.ok) {
+          console.log('SMS sent successfully');
+          setSuccess(true);
+          setSuccessMessage("SMS sent correctly");
+        } else {
+          console.error('Failed to send SMS');
+          setError(true);
+          setErrorMessage("Failed to send SMS");
+        }
+      } catch (error) {
+        console.error('Error sending SMS:', error.message);
+      }
+    }
+  };
+
   return (
     <div className="form-container">
       <div className="Tripsheet-form">
@@ -1242,13 +1368,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
-                  value={Status.find((option) => option.optionvalue)?.label || ''}
+                  value={Status.find((option) => option.optionvalue)?.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                   options={Status.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.status || selectedCustomerData.status || book.status || 'Opened'
+                    // params.inputProps.value = formData.status || selectedCustomerData.status || book.status || 'Opened'
                     return (
                       <TextField {...params} label="Status" autoComplete="password" name="status" inputRef={params.inputRef} />
                     )
@@ -1285,13 +1411,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "apps")}
-                  value={Apps.find((option) => option.optionvalue)?.label || ''}
+                  value={Apps.find((option) => option.optionvalue)?.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
                   options={Apps.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'
+                    // params.inputProps.value = formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'
                     return (
                       <TextField {...params} label="Apps" autoComplete="password" name="apps" inputRef={params.inputRef} />
                     )
@@ -1329,7 +1455,7 @@ const TripSheet = () => {
                   required
                 />
               </div>
-              <FormControlLabel
+              {/* <FormControlLabel
                 name="smsguest"
                 value="smsguest"
                 control={<Checkbox size="small" />}
@@ -1337,6 +1463,11 @@ const TripSheet = () => {
                 autoComplete="new-password"
                 onChange={handleChange}
                 checked={Boolean(formData.smsguest || selectedCustomerData?.smsguest || book.smsguest)}
+              /> */}
+              <FormControlLabel
+                value="smsguest"
+                control={<Checkbox size="small" checked={smsguest} onChange={(event) => setSmsGuest(event.target.checked)} />}
+                label="SMS Guest"
               />
               <FormControlLabel
                 name="booker"
@@ -1380,7 +1511,7 @@ const TripSheet = () => {
                 <TextField
                   margin="normal"
                   id="username"
-                  label="User Name"
+                  label="Guest Name"
                   name="guestname"
                   value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
                   onChange={handleChange}
@@ -1529,13 +1660,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
-                  value={HireTypes.find((option) => option.option)?.label || ''}
+                  value={HireTypes.find((option) => option.option)?.label || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                   options={HireTypes.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''
+                    // params.inputProps.value = formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''
                     return (
                       <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
                     )
@@ -1554,13 +1685,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
-                  value={Department.find((option) => option.optionvalue)?.label || ''}
+                  value={Department.find((option) => option.optionvalue)?.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                   options={Department.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.department || formValues.department || selectedCustomerData.department || book.department || ''
+                    // params.inputProps.value = formData.department || formValues.department || selectedCustomerData.department || book.department || ''
                     return (
                       <TextField {...params} label="Department" autoComplete="password" name="department" inputRef={params.inputRef} />
                     )
@@ -1595,13 +1726,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                  value={VehicleRate.find((option) => option.optionvalue)?.label || ''}
+                  value={VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                   options={VehicleRate.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''
+                    // params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''
                     return (
                       <TextField {...params} label="Vehicle Rate" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                     )
@@ -1640,7 +1771,7 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input radio">
-                <FormControlLabel
+                {/* <FormControlLabel
                   name="driversmsexbetta"
                   value="Driver SMS"
                   control={<Checkbox size="small" />}
@@ -1648,6 +1779,11 @@ const TripSheet = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                   checked={Boolean(formData.driversmsexbetta || selectedCustomerData?.driversmsexbetta || book.driversmsexbetta)}
+                /> */}
+                <FormControlLabel
+                  value="DriverSMS"
+                  control={<Checkbox size="small" checked={DriverSMS} onChange={(event) => setDriverSMS(event.target.checked)} />}
+                  label="Driver SMS"
                 />
               </div>
               <div className="input radio">
@@ -1672,11 +1808,11 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "email1")}
-                  value={Email.find((option) => option.optionvalue)?.label || ''}
+                  value={Email.find((option) => option.optionvalue)?.label || formData.email1 || selectedCustomerData.email1 || book.email1 || ''}
                   options={Email.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.email1 || selectedCustomerData.email1 || book.email1 || ''}
                   renderInput={(params) => {
                     params.inputProps.value = formData.email1 || selectedCustomerData.email1 || book.email1 || ''
                     return (
@@ -1699,13 +1835,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                  value={Duty.find((option) => option.optionvalue)?.label || ''}
+                  value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                   options={Duty.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
+                    // params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
                     return (
                       <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
                     )
@@ -1724,13 +1860,13 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "pickup")}
-                  value={Pickup.find((option) => option.optionvalue)?.label || ''}
+                  value={Pickup.find((option) => option.optionvalue)?.label || formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
                   options={Pickup.map((option) => ({
                     label: option.option,
                   }))}
-                  getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
                   renderInput={(params) => {
-                    params.inputProps.value = formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''
+                    // params.inputProps.value = formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''
                     return (
                       <TextField {...params} label="Pickup" autoComplete="password" name="pickup" inputRef={params.inputRef} />
                     )
@@ -1788,6 +1924,7 @@ const TripSheet = () => {
                   <DatePicker
                     label="Start Date"
                     value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
+                    format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, 'startdate')}
                   >
                     {({ inputProps, inputRef }) => (
@@ -1801,6 +1938,7 @@ const TripSheet = () => {
                   <DatePicker
                     label="Close Date"
                     value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
+                    format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, 'closedate')}
                   >
                     {({ inputProps, inputRef }) => (
@@ -1855,7 +1993,64 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div>
-
+            </div>
+            <div className="input-field">
+              <div className="input time">
+                <label>shed out Time</label>
+                <input
+                  type="time"
+                  name='starttime'
+                  value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
+                  onChange={(event) => {
+                    setBook({ ...book, starttime: event.target.value });
+                    setStartTime(event.target.value);
+                    setFormData({ ...formData, starttime: event.target.value });
+                    setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
+                  }}
+                />
+              </div>
+              <div className="input time">
+                <label>Report Time</label>
+                <input
+                  type="time"
+                  name="reporttime"
+                  value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
+                  onChange={(event) => {
+                    setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
+                    setBook({ ...book, reporttime: event.target.value });
+                    setreporttime(event.target.value);
+                  }}
+                />
+              </div>
+              <div className="input time" >
+                <label>Close Time</label>
+                <input
+                  type="time"
+                  name="shedintime"
+                  value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
+                  onChange={(event) => {
+                    setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
+                    setBook({ ...book, shedintime: event.target.value });
+                    setshedintime(event.target.value);
+                  }}
+                />
+              </div>
+              <div className="input time" >
+                <label>Shed-In Time</label>
+                <input
+                  type="time"
+                  name="closetime"
+                  value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                  onChange={(event) => {
+                    setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
+                    setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
+                    setBook({ ...book, closetime: event.target.value });
+                    setCloseTime(event.target.value);
+                  }}
+                />
+              </div>
             </div>
             <div className="input-field">
               <div className="input">
@@ -1869,11 +2064,12 @@ const TripSheet = () => {
                   label="Shed Out"
                   id="shedout"
                   size='small'
+                  type="number"
                   // variant="standard"/
                   autoComplete="password"
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ width: "180px" }}>
                 <TextField
                   name="startkm"
                   value={formData.startkm || selectedCustomerData.startkm || book.startkm || ''}
@@ -1882,26 +2078,11 @@ const TripSheet = () => {
                   label="Start KM"
                   type="number"
                   id="outlined-start-adornment"
-                  sx={{ m: 1, width: "23ch" }}
+                  // sx={{ m: 1, width: "23ch" }}/
                   autoComplete="password"
                 />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <FontAwesomeIcon icon={faRoad} size="lg" />
-                </div>
-                <TextField
-                  name="shedin"
-                  value={formData.shedin || book.shedin || selectedCustomerData.shedin || ''}
-                  onChange={handleChange}
-                  label="Shed In"
-                  id="shedin"
-                  size='small'
-                  // variant="standard"/
-                  autoComplete="password"
-                />
-              </div>
-              <div className="input">
+              <div className="input" style={{ width: "180px" }}>
                 <TextField
                   name="closekm"
                   value={formData.closekm || selectedCustomerData.closekm || book.closekm || ''}
@@ -1910,7 +2091,23 @@ const TripSheet = () => {
                   size="small"
                   type="number"
                   id="outlined-start-adornment"
-                  sx={{ m: 1, width: "23ch" }}
+                  // sx={{ m: 1, width: "23ch" }}
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input" style={{ width: "180px" }}>
+                <div className="icone">
+                  <FontAwesomeIcon icon={faRoad} size="lg" />
+                </div>
+                <TextField
+                  name="shedin"
+                  value={formData.shedin || book.shedin || selectedCustomerData.shedin || ''}
+                  onChange={handleChange}
+                  label="Shed In"
+                  type="number"
+                  id="shedin"
+                  size='small'
+                  // variant="standard"/
                   autoComplete="password"
                 />
               </div>
@@ -1922,7 +2119,8 @@ const TripSheet = () => {
                   name="shedkm"
                   value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
                   onChange={handleChange}
-                  label="Shed KM"
+                  label="Add KM"
+                  type="number"
                   id="shedkm"
                   size='small'
                   autoComplete="password"
@@ -1938,68 +2136,10 @@ const TripSheet = () => {
                   onChange={handleChange}
                   label="Total KM"
                   id="totalkm1"
+                  type="number"
                   size='small'
                   // variant="standard"/
                   autoComplete="password"
-                />
-              </div>
-
-            </div>
-            <div className="input-field">
-              <div className="input time">
-                <label>shed out Time</label>
-                <input
-                  type="time"
-                  name='reporttime'
-                  value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
-                  onChange={(event) => {
-                    setBook({ ...book, reporttime: event.target.value });
-                    setreporttime(event.target.value);
-                    setFormData({ ...formData, reporttime: event.target.value });
-                    setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
-                  }}
-                />
-              </div>
-              <div className="input time">
-                <label>Report Time</label>
-                <input
-                  type="time"
-                  name="starttime"
-                  value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
-                  onChange={(event) => {
-                    setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
-                    setSelectedCustomerDatas({ ...selectedCustomerDatas, starttime: event.target.value });
-                    setBook({ ...book, starttime: event.target.value });
-                    setStartTime(event.target.value);
-                  }}
-                />
-              </div>
-              <div className="input time" >
-                <label>Close Time</label>
-                <input
-                  type="time"
-                  name="closetime"
-                  value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
-                  onChange={(event) => {
-                    setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
-                    setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
-                    setBook({ ...book, closetime: event.target.value });
-                    setCloseTime(event.target.value);
-                  }}
-                />
-              </div>
-              <div className="input time" >
-                <label>Shed-In Time</label>
-                <input
-                  type="time"
-                  name="shedintime"
-                  value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
-                  onChange={(event) => {
-                    setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
-                    setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
-                    setBook({ ...book, shedintime: event.target.value });
-                    setshedintime(event.target.value);
-                  }}
                 />
               </div>
             </div>
@@ -2138,8 +2278,10 @@ const TripSheet = () => {
                   onChange={handleChange}
                   label="Remark"
                   id="remark"
-                  sx={{ m: 1, width: "300ch" }}
-                  variant="standard"
+                  multiline
+                  rows={5}
+                  sx={{ m: 2, width: "400ch" }}
+                  // variant="standard"
                   autoComplete="password"
                 />
               </div>
@@ -2306,13 +2448,13 @@ const TripSheet = () => {
                         freeSolo
                         sx={{ width: "20ch" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
-                        value={DocumentType.find((option) => option.optionvalue)?.label || ''}
+                        value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                         options={DocumentType.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || ''}
+                        getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                         renderInput={(params) => {
-                          params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''
+                          // params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''
                           return (
                             <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
                           )
@@ -2381,13 +2523,13 @@ const TripSheet = () => {
                         freeSolo
                         sx={{ width: "20ch" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                        value={VehicleRate.find((option) => option.optionvalue)?.label || ''}
+                        value={VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                         options={VehicleRate.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || ''}
+                        getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                         renderInput={(params) => {
-                          params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''
+                          // params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''
                           return (
                             <TextField {...params} label="Vehicle type" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                           )
@@ -2406,13 +2548,13 @@ const TripSheet = () => {
                         freeSolo
                         sx={{ width: "20ch" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "duty1")}
-                        value={Duty.find((option) => option.optionvalue)?.label || ''}
+                        value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                         options={Duty.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || ''}
+                        getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                         renderInput={(params) => {
-                          params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
+                          // params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
                           return (
                             <TextField {...params} label="Duty" autoComplete="password" name="duty1" inputRef={params.inputRef} />
                           )
@@ -3352,11 +3494,11 @@ const TripSheet = () => {
                         freeSolo
                         sx={{ width: "20ch" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "selects")}
-                        value={Select.find((option) => option.optionvalue)?.label || ''}
+                        value={Select.find((option) => option.optionvalue)?.label || formData.selects || selectedCustomerData.selects || book.selects || ''}
                         options={Select.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || ''}
+                        getOptionLabel={(option) => option.label || formData.selects || selectedCustomerData.selects || book.selects || ''}
                         renderInput={(params) => {
                           params.inputProps.value = formData.selects || selectedCustomerData.selects || book.selects || ''
                           return (
@@ -3397,13 +3539,13 @@ const TripSheet = () => {
                         freeSolo
                         sx={{ width: "20ch" }}
                         onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
-                        value={DocumentType.find((option) => option.optionvalue)?.label || ''}
+                        value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                         options={DocumentType.map((option) => ({
                           label: option.option,
                         }))}
-                        getOptionLabel={(option) => option.label || ''}
+                        getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                         renderInput={(params) => {
-                          params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''
+                          // params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''
                           return (
                             <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
                           )
@@ -3448,7 +3590,7 @@ const TripSheet = () => {
                   </div>
                   <div className="input-field">
                     <div className="input">
-                      <Button>Manual Marking</Button>
+                      <Button onClick={handleButtonClick}>Manual Marking</Button>
                     </div>
                     <div className="input">
                       <Button>Delete GPS Log</Button>

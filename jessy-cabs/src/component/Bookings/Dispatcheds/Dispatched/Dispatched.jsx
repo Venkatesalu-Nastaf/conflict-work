@@ -4,27 +4,30 @@ import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import "./Dispatched.css";
+import Menu from '@mui/material/Menu';
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import Dialog from '@material-ui/core/Dialog';
+import MenuItem from '@mui/material/MenuItem';
 import { Department } from "./DispatchedData.js";
 import Autocomplete from "@mui/material/Autocomplete";
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import ClearIcon from '@mui/icons-material/Clear';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
+// ICONS
+import ClearIcon from '@mui/icons-material/Clear';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -69,8 +72,8 @@ const Dispatched = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -78,24 +81,24 @@ const Dispatched = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
 
@@ -115,7 +118,6 @@ const Dispatched = () => {
     pdf.setFont('helvetica', 'normal');
     pdf.text("Pending Reports", 10, 10);
 
-    // Modify tableData to exclude the index number
     const tableData = rows.map((row) => [
       row['id'],
       row['status'],
@@ -141,29 +143,37 @@ const Dispatched = () => {
   };
 
   const handleInputChange = (event, newValue) => {
-    setdepartment(newValue ? newValue.label : ''); // Assuming the label field contains the station name
+    setdepartment(newValue ? newValue.label : ''); 
   };
+
+  const reversedRows = [...rows].reverse();
 
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/pending-tripsheet?department=${encodeURIComponent(
+        `http://localhost:8081/pending_tripsheet?department=${encodeURIComponent(
           department
         )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
           toDate.toISOString()
         )}`
       );
       const data = response.data;
-      setRows(data);
-      console.log(data);
-      setSuccessMessage("Successfully listed");
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed");
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found");
+      }
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
-      setErrorMessage("Check your Network Connection");
+      setError(true);
+      setErrorMessage("Error retrieving data");
     }
   }, [department, fromDate, toDate]);
-
 
   const handleShowAll = useCallback(async () => {
     try {
@@ -171,10 +181,15 @@ const Dispatched = () => {
         `http://localhost:8081/tripsheet`
       );
       const data = response.data;
-      setRows(data);
-      console.log('dispatch colected data', data);
-      setSuccess(true);
-      setSuccessMessage("Successfully listed");
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed");
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found");
+      }
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
@@ -219,11 +234,13 @@ const Dispatched = () => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="From Date"
+                        format="DD/MM/YYYY"
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
                       />
                       <DatePicker
                         label="To Date"
+                        format="DD/MM/YYYY"
                         value={toDate}
                         onChange={(date) => setToDate(date)}
                       />
@@ -247,11 +264,12 @@ const Dispatched = () => {
                     options={Department.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    onChange={handleInputChange}
-                    renderInput={(params) =>
-                      <TextField {...params} label="Department" />
-                    }
+                    onChange={(event, value) => handleInputChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Department" inputRef={params.inputRef} />
+                      );
+                    }}
                   />
                 </div>
                 <div className="input" style={{ width: '170px' }}>
@@ -309,7 +327,7 @@ const Dispatched = () => {
           </div>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              rows={reversedRows}
               columns={columns}
               onRowClick={(event) => handleButtonClick(event.row)}
               pageSize={5}

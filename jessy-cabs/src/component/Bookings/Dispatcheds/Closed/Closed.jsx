@@ -12,18 +12,22 @@ import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ClearIcon from '@mui/icons-material/Clear';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
+
+// ICONS
+import ClearIcon from '@mui/icons-material/Clear';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
+  { field: "status", headerName: "Status", width: 130 },
   { field: "tripid", headerName: "Trip Sheet No", width: 130 },
   { field: "startdate", headerName: "Trip Date", width: 130 },
   { field: "guestname", headerName: "User Name", width: 130 },
@@ -36,7 +40,6 @@ const columns = [
   { field: "totaltime", headerName: "Total Time", width: 130 },
   { field: "vehRegNo", headerName: "Vehicle No", width: 130 },
   { field: "driverName", headerName: "Driver", width: 130 },
-  { field: "status", headerName: "Status", width: 130 },
   { field: "billingno", headerName: "Billing No", width: 130 },
 ];
 
@@ -66,8 +69,8 @@ const Closed = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -75,24 +78,24 @@ const Closed = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
 
@@ -151,19 +154,27 @@ const Closed = () => {
     setDepartment(newValue ? newValue.label : ''); // Assuming the label field contains the station name
   };
 
+  const reversedRows = [...rows].reverse();
+
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/tripsheet?department=${encodeURIComponent(
+        `http://localhost:8081/closed-tripsheet?department=${encodeURIComponent(
           department
         )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
           toDate.toISOString()
         )}`
       );
       const data = response.data;
-      setRows(data);
-      setSuccess(true);
-      setSuccessMessage("Successfully listed");
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed");
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found");
+      }
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
@@ -178,9 +189,15 @@ const Closed = () => {
         `http://localhost:8081/tripsheet`
       );
       const data = response.data;
-      setRows(data);
-      setSuccess(true);
-      setSuccessMessage("Successfully listed");
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed");
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("No data found");
+      }
     } catch (error) {
       console.error('Error retrieving data:', error);
       setRows([]);
@@ -209,11 +226,13 @@ const Closed = () => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="From Date"
+                        format="DD/MM/YYYY"
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
                       />
                       <DatePicker
                         label="To Date"
+                        format="DD/MM/YYYY"
                         value={toDate}
                         onChange={(date) => setToDate(date)}
                       />
@@ -238,11 +257,12 @@ const Closed = () => {
                     options={Stations.map((option) => ({
                       label: option.optionvalue,
                     }))}
-                    getOptionLabel={(option) => option.label || ""}
-                    onChange={handleInputChange}
-                    renderInput={(params) =>
-                      <TextField {...params} label="Stations" />
-                    }
+                    onChange={(event, value) => handleInputChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                      );
+                    }}
                   />
                 </div>
                 <div className="input" style={{ width: '150px' }}>
@@ -300,7 +320,7 @@ const Closed = () => {
         <div className="table-bookingCopy-Closed">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              rows={reversedRows}
               columns={columns}
               onRowClick={(event) => handleButtonClickTripsheet(event.row)}
               pageSize={5}

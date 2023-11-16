@@ -1,11 +1,8 @@
 import React from 'react';
-// import axios from "axios";
-import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 import './invoice.css';
-// import Sign from './signature-1692258849846.png'
-
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
+import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 
 const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedCustomerDatas, formData }) => {
 

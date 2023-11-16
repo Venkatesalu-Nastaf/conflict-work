@@ -208,7 +208,7 @@ const Organization = ({ defaultImage, userid }) => {
                                             src={selectedImage ? URL.createObjectURL(selectedImage) : undefined}
                                         >
                                             {selectedImage ? null : (
-                                                <div style={{ 'font-size': "55px" }}>
+                                                <div style={{ 'fontSize': "55px" }}>
                                                     <BiBuildings />
                                                 </div>
                                             )}

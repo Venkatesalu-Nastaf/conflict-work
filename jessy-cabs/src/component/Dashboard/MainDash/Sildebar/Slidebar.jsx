@@ -11,8 +11,11 @@ import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
 // ICONS
+import { useUser } from '../../../form/UserContext';
 import { BiHomeAlt } from "@react-icons/all-files/bi/BiHomeAlt";
 import { BiNotepad } from "@react-icons/all-files/bi/BiNotepad";
+import ClearIcon from '@mui/icons-material/Clear';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { AiOutlineBars } from "@react-icons/all-files/ai/AiOutlineBars";
 import { HiOutlineUsers } from "@react-icons/all-files/hi/HiOutlineUsers";
 import { FaUserAstronaut } from "@react-icons/all-files/fa/FaUserAstronaut";
@@ -35,6 +38,8 @@ const MenuItem = ({ label, to, menuItemKey, isActive, handleMenuItemClick, icon:
 
 const Sidebar = () => {
   const location = useLocation();
+  const { user } = useUser();
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
   const currentPath = location.pathname;
   const [expanded, setExpanded] = useState(true); const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -56,6 +61,9 @@ const Sidebar = () => {
     localStorage.setItem("selectedMenuItem", menuItemKey);
     navigate(menuItemKey);
   };
+  const hidePopup = () => {
+    setSuccess(false);
+  };
 
   useEffect(() => {
     const selectedMenuItem = localStorage.getItem("selectedMenuItem");
@@ -72,6 +80,32 @@ const Sidebar = () => {
     false: {
       left: "-60%",
     },
+  };
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (user && user.username) {
+      const username = user.username;
+      localStorage.setItem("username", username);
+      const successMessagepopup = `Login successful ${user.username}`;
+      setSuccess(successMessagepopup);
+    }
+  }, [user]);
+
+  const storedUsername = localStorage.getItem("username");
+
+  const navigateToUserSettings = () => {
+    if (window.location.pathname !== "/home/usersettings/usersetting") {
+      navigate("/home/usersettings/usersetting");
+    }
   };
 
   return (
@@ -126,20 +160,20 @@ const Sidebar = () => {
             icon={BiNotepad}
           />
           <MenuItem
-            label="Info"
-            to="/home/info/ratetype"
-            menuItemKey="/home/info"
-            isActive={isActive}
-            handleMenuItemClick={handleMenuItemClick}
-            icon={AiOutlineInfoCircle}
-          />
-          <MenuItem
             label="Settings"
             to="/home/settings/usercreation"
             menuItemKey="/home/settings"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineSetting}
+          />
+          <MenuItem
+            label="Info"
+            to="/home/info/ratetype"
+            menuItemKey="/home/info"
+            isActive={isActive}
+            handleMenuItemClick={handleMenuItemClick}
+            icon={AiOutlineInfoCircle}
           />
           <MenuItem
             label="User"
@@ -155,7 +189,22 @@ const Sidebar = () => {
             </div>
             <div className="user-name-item">
               <div>
-                <p>User not logged in</p>
+                {storedUsername ? (
+                  <div>
+                    <p onClick={navigateToUserSettings}>{storedUsername}</p>
+                    {success &&
+                      <div className='alert-popup Success' >
+                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{success}</p>
+                      </div>
+                    }
+                  </div>
+                ) : (
+                  <div>
+                    <p>User not logged in</p>
+                  </div>
+                )}
               </div>
             </div>
             <div className="avatar-item">

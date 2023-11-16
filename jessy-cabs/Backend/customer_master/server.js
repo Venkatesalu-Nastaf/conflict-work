@@ -40,6 +40,8 @@ const ratevalidityRouter = require('./Router/Ratetype/ratevalidity');
 const divionRouter = require('./Router/Ratetype/division');
 const driverbataRouter = require('./Router/Ratemanagement/driverbatarate');
 const billingRouter = require('./Router/Billing/billing');
+const bankaccountRouter = require('./Router/Billing/bankaccountdetails/backaccountddetails');
+const paymentRouter = require('./Router/Billing/payment/payment');
 const pettycashRouter = require('./Router/cashflow/pettycash');
 const payrollRouter = require('./Router/cashflow/payroll');
 const fueldetailsRouter = require('./Router/fueldetails/mileage');
@@ -47,6 +49,8 @@ const taxsettingRouter = require('./Router/mainsetting/taxsetting');
 const drivercreationRouter = require('./Router/Driverapplogin/driverapplogin');
 const assetsRouer = require('./Router/cashflow/assets');
 const driveractiveRouter = require('./Router/tripsheet/appuserlist');
+const sendsmsRouter = require('./Router/SMS/sms');
+const employeeRouter = require('./Router/Employee/employee');
 // const signatureRouter = require('./Router/signature/signature');
 
 
@@ -95,7 +99,10 @@ app.post('/uploads', upload.single('file'), (req, res) => {
     size: req.file.size,
     path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
     tripid: req.body.tripid,
-    tripid: req.body.documenttype,
+    empid: req.body.empid,
+    // documenttype: req.body.documenttype, 
+    vehicleId: req.body.vehicleId,
+    // vehicleId: req.body.documenttype,
   };
   const query = 'INSERT INTO tripsheetupload SET ?';
   db.query(query, fileData, (err, result) => {
@@ -107,7 +114,7 @@ app.post('/uploads', upload.single('file'), (req, res) => {
   });
 });
 //space
-const imageDirectory = path.join(__dirname, 'uploads'); // Adjust the path as needed
+const imageDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
 app.use('/images', express.static(imageDirectory));
 // Example route to serve an image by its filename
@@ -132,6 +139,10 @@ app.get('/get-image/:filename', (req, res) => {
 // -----------------------------------------------------------------------------------------------------------
 // order/Received/Pending data collect from database
 app.use('/', pendingRouter);
+// End 
+// -----------------------------------------------------------------------------------------------------------
+// order/Received/Pending data collect from database
+app.use('/', sendsmsRouter);
 // End 
 // -----------------------------------------------------------------------------------------------------------
 // order/Dispatch/closed data collect from database
@@ -202,11 +213,19 @@ app.use('/', drivercreationRouter);
 // End RateValidity database
 // -----------------------------------------------------------------------------------------------------------
 // Employees Database
-// app.use('/', employeeRouter);
+app.use('/', employeeRouter);
 // End Employees database
 // -----------------------------------------------------------------------------------------------------------
 // Billing Database
 app.use('/', billingRouter);
+// End Billing database
+// -----------------------------------------------------------------------------------------------------------
+// Billing Database
+app.use('/', bankaccountRouter);
+// End Billing database
+// -----------------------------------------------------------------------------------------------------------
+// Billing Database
+app.use('/', paymentRouter);
 // End Billing database
 // -----------------------------------------------------------------------------------------------------------
 // cashflow Database

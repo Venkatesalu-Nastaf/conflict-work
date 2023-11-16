@@ -218,8 +218,17 @@ const DriverCreation = () => {
                 console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/drivercreation');
                 const data = response.data;
-                setSuccessMessage("Successfully listed");
-                setRows(data);
+                // setSuccessMessage("Successfully listed");
+                // setRows(data);
+                if (data.length > 0) {
+                    setRows(data);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
                 handleCancel();
@@ -372,14 +381,14 @@ const DriverCreation = () => {
                                     id="free-solo-demo-stationname"
                                     freeSolo
                                     sx={{ width: "20ch" }}
-                                    value={selectedCustomerData?.stationname || ''}
+                                    value={StationName.find((option) => option.Option)?.label || selectedCustomerData?.stationname || ''}
                                     onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
                                     options={StationName.map((option) => ({
                                         label: option.Option,
                                     }))}
-                                    getOptionLabel={(option) => option.label || ''}
+                                    getOptionLabel={(option) => option.label || selectedCustomerData?.stationname || ''}
                                     renderInput={(params) => {
-                                        params.inputProps.value = selectedCustomerData?.stationname || ''
+                                        // params.inputProps.value = selectedCustomerData?.stationname || ''
                                         return (
                                             <TextField {...params} label="Station Name" name="stationname" />
                                         )
@@ -486,7 +495,7 @@ const DriverCreation = () => {
                                 <div className="icone">
                                     <QuizOutlinedIcon color="action" />
                                 </div>
-                                <Autocomplete
+                                {/* <Autocomplete
                                     fullWidth
                                     size="small"
                                     id="free-solo-demo-viewfor"
@@ -498,6 +507,26 @@ const DriverCreation = () => {
                                     getOptionLabel={(option) => option.label || ''}
                                     renderInput={(params) => {
                                         params.inputProps.value = selectedCustomerData?.viewfor || ''
+                                        return (
+                                            <TextField {...params} label="View For" name="viewfor" />
+                                        )
+                                    }
+                                    }
+                                /> */}
+                                <Autocomplete
+                                    fullWidth
+                                    size="small"
+                                    id="free-solo-demo-viewfor"
+                                    freeSolo
+                                    sx={{ width: "20ch" }}
+                                    value={ViewFor.find((option) => option.Option)?.label || selectedCustomerData?.viewfor || ''}
+                                    onChange={(event, value) => handleAutocompleteChange(event, value, "viewfor")}
+                                    options={ViewFor.map((option) => ({
+                                        label: option.Option,
+                                    }))}
+                                    getOptionLabel={(option) => option.label || selectedCustomerData?.viewfor || ''}
+                                    renderInput={(params) => {
+                                        // params.inputProps.value = selectedCustomerData?.viewfor || ''
                                         return (
                                             <TextField {...params} label="View For" name="viewfor" />
                                         )

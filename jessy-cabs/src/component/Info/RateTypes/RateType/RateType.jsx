@@ -257,8 +257,17 @@ const RateType = () => {
                 console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/ratetype');
                 const data = response.data;
-                setSuccessMessage("Successfully listed");
-                setRows(data);
+                // setSuccessMessage("Successfully listed");
+                // setRows(data);
+                if (data.length > 0) {
+                    setRows(data);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
                 handleCancel();
@@ -325,13 +334,13 @@ const RateType = () => {
                                         id="free-solo-demo-customerType"
                                         freeSolo
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
-                                        value={Stations.find((option) => option.Option)?.label || ''}
+                                        value={Stations.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
                                         options={Stations.map((option) => ({
                                             label: option.Option,
                                         }))}
-                                        getOptionLabel={(option) => option.label || ''}
+                                        getOptionLabel={(option) => option.label || selectedCustomerData?.stations || ''}
                                         renderInput={(params) => {
-                                            params.inputProps.value = selectedCustomerData?.stations || ''
+                                            // params.inputProps.value = selectedCustomerData?.stations || ''
                                             return (
                                                 <TextField   {...params} label="Stations" name="stations" inputRef={params.inputRef} />
                                             )

@@ -56,32 +56,32 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "vehicleid", headerName: "Vehicle ID", width: 130 },
-  { field: "attecheddate", headerName: "Atteched Date", width: 130 },
-  { field: "vehicleregno", headerName: "Vehicle Reg No", width: 130 },
-  { field: "costcenterlocation", headerName: "Cost Cennter Location", width: 170 },
-  { field: "vehicletype", headerName: "Vehicle Type", width: 130 },
+  { field: "vehicleId", headerName: "Vehicle ID", width: 130 },
+  { field: "doadate", headerName: "Atteched Date", width: 130 },
+  { field: "vehRegNo", headerName: "Vehicle Reg No", width: 130 },
+  { field: "costCenter", headerName: "Cost Center Location", width: 170 },
+  { field: "vehType", headerName: "Vehicle Type", width: 130 },
   { field: "owner", headerName: "Owner", width: 90 },
-  { field: "mobileno", headerName: "Mobile No", width: 130 },
+  { field: "mobileNo", headerName: "Mobile No", width: 130 },
   { field: "email", headerName: "Email", width: 130 },
-  { field: "yearmodel", headerName: "Year Model", width: 130 },
+  { field: "yearModel", headerName: "Year Model", width: 130 },
   { field: "insuranceno", headerName: "Insurance No", width: 130 },
-  { field: "insuranceduedate", headerName: "Insurance Due Date", width: 150 },
+  { field: "insduedate", headerName: "Insurance Due Date", width: 150 },
   { field: "licenseno", headerName: "License No", width: 130 },
   { field: "licensebatchno", headerName: "License Batch No", width: 140 },
-  { field: "licenseduedate", headerName: "License Due Date", width: 140 },
-  { field: "notionalpermitno", headerName: "Notional Permit No", width: 150 },
-  { field: "notionalpermitdate", headerName: "Notional Permit Date", width: 150 },
-  { field: "statepermitno", headerName: "State Permit No", width: 130 },
-  { field: "statepermitdate", headerName: "State Permit Date", width: 130 },
+  { field: "licduedate", headerName: "License Due Date", width: 140 },
+  { field: "nationalpermito", headerName: "Notional Permit No", width: 150 },
+  { field: "npdate", headerName: "Notional Permit Date", width: 150 },
+  { field: "statepermito", headerName: "State Permit No", width: 130 },
+  { field: "spdate", headerName: "State Permit Date", width: 130 },
   { field: "rcbookno", headerName: "RC Book No", width: 130 },
   { field: "fcdate", headerName: "FC Date", width: 130 },
   { field: "avgmileage", headerName: "AVG Mileage", width: 130 },
-  { field: "drivername", headerName: "Driver Name", width: 130 },
-  { field: "tankcap", headerName: "Tank Cap", width: 130 },
+  { field: "driverName", headerName: "Driver Name", width: 130 },
+  { field: "tankCap", headerName: "Tank Cap", width: 130 },
   { field: "routeno", headerName: "Route No", width: 130 },
   { field: "remarks", headerName: "Remarks", width: 130 },
-  { field: "ownertype", headerName: "Owner Type", width: 130 },
+  { field: "OwnerType", headerName: "Owner Type", width: 130 },
 ];
 
 
@@ -107,7 +107,7 @@ const actions = [
 const Vehicaleinfo = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [actionName] = useState('');
-  const [rows] = useState([]);
+  const [rows, setRows] = useState([]);
   const [info, setInfo] = useState(false);
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
@@ -120,14 +120,6 @@ const Vehicaleinfo = () => {
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
 
-
-
-  const handleUpload = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.pdf, .jpg, .jpeg, .png';
-    input.click();
-  };
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
@@ -189,25 +181,65 @@ const Vehicaleinfo = () => {
     vehRegNo: '',
     costCenter: '',
     vehType: '',
-    yearModel: '',
     owner: '',
     mobileNo: '',
-    fcdate: '',
-    taxdate: '',
+    email: '',
+    yearModel: '',
+    insuranceno: '',
+    insduedate: '',
+    licenseno: '',
+    licensebatchno: '',
+    licduedate: '',
+    nationalpermito: '',
     npdate: '',
-    insdate: '',
-    stpermit: '',
-    duedate: '',
-    financer: '',
     avgmileage: '',
-    routeno: '',
+    statepermito: '',
+    spdate: '',
+    financer: '',
+    rcbookno: '',
+    fcdate: '',
     driverName: '',
-    dueAmount: '',
     tankCap: '',
+    routeno: '',
     remarks: '',
     OwnerType: '',
     active: '',
   });
+
+  const handleCancel = () => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      vehicleId: '',
+      doadate: '',
+      vehRegNo: '',
+      costCenter: '',
+      vehType: '',
+      owner: '',
+      mobileNo: '',
+      email: '',
+      yearModel: '',
+      insuranceno: '',
+      insduedate: '',
+      licenseno: '',
+      licensebatchno: '',
+      licduedate: '',
+      nationalpermito: '',
+      npdate: '',
+      avgmileage: '',
+      statepermito: '',
+      spdate: '',
+      financer: '',
+      rcbookno: '',
+      fcdate: '',
+      driverName: '',
+      tankCap: '',
+      routeno: '',
+      remarks: '',
+      OwnerType: '',
+      active: '',
+    }));
+    setSelectedCustomerData({});
+  };
 
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
@@ -234,42 +266,15 @@ const Vehicaleinfo = () => {
   };
 
   const handleDateChange = (date, name) => {
-    const startOfDay = dayjs(date).startOf('day').format();
+    const startOfDay = dayjs(date).format('DD/MM/YYYY');
     setBook((prevBook) => ({
       ...prevBook,
       [name]: startOfDay,
     }));
-  };
-
-  const handleCancel = () => {
-    setBook((prevBook) => ({
+    setSelectedCustomerData((prevBook) => ({
       ...prevBook,
-      vehicleId: '',
-      doadate: '',
-      vehRegNo: '',
-      costCenter: '',
-      vehType: '',
-      yearModel: '',
-      owner: '',
-      mobileNo: '',
-      fcdate: '',
-      taxdate: '',
-      npdate: '',
-      insdate: '',
-      stpermit: '',
-      duedate: '',
-      financer: '',
-      avgmileage: '',
-      routeno: '',
-      driverName: '',
-      dueAmount: '',
-      tankCap: '',
-      remarks: '',
-      OwnerType: '',
-      active: '',
+      [name]: startOfDay,
     }));
-    setSelectedCustomerData({});
-
   };
 
   const handleAdd = async () => {
@@ -279,13 +284,14 @@ const Vehicaleinfo = () => {
       await axios.post('http://localhost:8081/vehicleinfo', book);
       console.log(book);
       handleCancel();
+      setSuccess(true);
       setSuccessMessage("Successfully Added");
     } catch (error) {
       console.error('Error updating customer:', error);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
-
 
   const handleClick = async (event, actionName) => {
     event.preventDefault();
@@ -296,14 +302,14 @@ const Vehicaleinfo = () => {
       } else if (actionName === 'Cancel') {
         console.log('Cancel button clicked');
         handleCancel();
+        setSuccess(true);
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Delete') {
         console.log('Delete button clicked');
+        setSuccess(true);
         setSuccessMessage("Successfully Deleted");
-        // Perform the desired action when the "Delete" button is clicked
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
-        // Perform the desired action when the "Edit" button is clicked
       } else if (actionName === 'Add') {
         handleAdd();
       }
@@ -320,6 +326,55 @@ const Vehicaleinfo = () => {
     }
   });
 
+  const handleUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf, .jpg, .jpeg, .png';
+    input.onchange = handleFileChange;
+    input.click();
+  };
+  //file upload
+  const handleFileChange = async (event, documentType) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const uniqueFileName = `${documentType}_${Date.now()}_${file.name}`;
+    const formDataUpload = new FormData();
+    formDataUpload.append('file', file);
+    formDataUpload.append('documenttype', book.documenttype || selectedCustomerData.documenttype);
+    formDataUpload.append('documenttype', documentType);
+    formDataUpload.append('vehicleId', book.vehicleId || selectedCustomerData.vehicleId);
+    formDataUpload.append('filename', uniqueFileName);
+    console.log('uploaded file details', formDataUpload);
+    try {
+      const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
+      console.log('uploaded file details 2', response.data);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+  //end file upload
+  //search funtion
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`http://localhost:8081/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+      console.log(response.value);
+      const data = await response.json();
+      console.log(data);
+      if (data.length > 0) {
+        setRows(data);
+        console.log(data);
+        setSuccess(true);
+        setSuccessMessage("successfully listed")
+      } else {
+        setError(true);
+        setErrorMessage("no data find")
+      }
+    } catch {
+      setError(true);
+      setErrorMessage("sorry")
+    }
+  };
 
   return (
     <div className="vehicale-form">
@@ -335,7 +390,6 @@ const Vehicaleinfo = () => {
                   name="vehicleId"
                   value={selectedCustomerData.vehicleId || book.vehicleId}
                   onChange={handleChange}
-                  // InputLabelProps={{ shrink: !!selectedCustomerData.customerId || !!book.customerId, }}
                   label="Vehicle ID"
                   id="standard-size-normal"
                   variant="standard"
@@ -396,7 +450,6 @@ const Vehicaleinfo = () => {
                   size='small'
                 />
               </div>
-
               <div className="input">
                 <div className="icone">
                   <EmojiTransportationIcon color="action" />
@@ -428,8 +481,9 @@ const Vehicaleinfo = () => {
                   <AttachEmailIcon color="action" />
                 </div>
                 <TextField
-                  name="Email"
+                  name="email"
                   size='small'
+                  value={selectedCustomerData.email || book.email}
                   onChange={handleChange}
                   label="Email"
                   id="email"
@@ -459,6 +513,8 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="insuranceno"
+                  value={selectedCustomerData.insuranceno || book.insuranceno}
+                  onChange={handleChange}
                   label="Insurance No"
                   id="tank_cap"
                 />
@@ -467,15 +523,17 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Insurance Due Date"
+                    value={selectedCustomerData.insduedate ? dayjs(selectedCustomerData.insduedate) : null}
+                    onChange={(date) => handleDateChange(date, 'insduedate')}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
+                      <TextField {...inputProps} inputRef={inputRef} name='insduedate' value={selectedCustomerData.insduedate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('InsuranceCopy')} size="md" variant="contained">
                   Insurance Copy
                 </Button>
               </div>
@@ -489,6 +547,8 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="licenseno"
+                  value={selectedCustomerData.licenseno || book.licenseno}
+                  onChange={handleChange}
                   label="License No"
                   id="tank_cap"
                 />
@@ -501,6 +561,8 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="licensebatchno"
+                  value={selectedCustomerData.licensebatchno || book.licensebatchno}
+                  onChange={handleChange}
                   label="License Batch No"
                   id="tank_cap"
                 />
@@ -509,15 +571,17 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="License Due Date"
+                    value={selectedCustomerData.licduedate ? dayjs(selectedCustomerData.licduedate) : null}
+                    onChange={(date) => handleDateChange(date, 'licduedate')}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
+                      <TextField {...inputProps} inputRef={inputRef} name='licduedate' value={selectedCustomerData.licduedate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('LicenseCopy')} size="md" variant="contained">
                   License Copy
                 </Button>
               </div>
@@ -531,6 +595,8 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="nationalpermito"
+                  value={selectedCustomerData.nationalpermito || book.nationalpermito}
+                  onChange={handleChange}
                   label="National Permit No"
                   id="tank_cap"
                 />
@@ -549,7 +615,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('NationalPermitCopy')} size="md" variant="contained">
                   National Permit Copy
                 </Button>
               </div>
@@ -576,6 +642,8 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="statepermito"
+                  value={selectedCustomerData.statepermito || book.statepermito}
+                  onChange={handleChange}
                   label="State Permit No"
                   id="tank_cap"
                 />
@@ -584,17 +652,17 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="State Permit Date"
-                    value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
-                    onChange={(date) => handleDateChange(date, 'npdate')}
+                    value={selectedCustomerData.spdate ? dayjs(selectedCustomerData.spdate) : null}
+                    onChange={(date) => handleDateChange(date, 'spdate')}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData.npdate} />
+                      <TextField {...inputProps} inputRef={inputRef} name='spdate' value={selectedCustomerData.spdate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('StatePermitCopy')} size="md" variant="contained">
                   State Permit Copy
                 </Button>
               </div>
@@ -621,6 +689,8 @@ const Vehicaleinfo = () => {
                   margin="normal"
                   size="small"
                   name="rcbookno"
+                  value={selectedCustomerData.rcbookno || book.rcbookno}
+                  onChange={handleChange}
                   label="RC Book No"
                   id="tank_cap"
                 />
@@ -629,20 +699,22 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="FC Date"
+                    value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
+                    onChange={(date) => handleDateChange(date, 'fcdate')}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='duedate' value={selectedCustomerData.duedate} />
+                      <TextField {...inputProps} inputRef={inputRef} name='fcdate' value={selectedCustomerData.fcdate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('RCBookCopy')} size="md" variant="contained">
                   RC-Book Copy
                 </Button>
               </div>
               <div className="input" style={{ width: "160px" }}>
-                <Button color="primary" onClick={handleUpload} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('FCCopy')} size="md" variant="contained">
                   FC Copy
                 </Button>
               </div>
@@ -785,9 +857,7 @@ const Vehicaleinfo = () => {
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
-            // hidden={hidden}
             icon={<SpeedDialIcon />}
-          // direction={direction}
           >
             {actions.map((action) => (
               <SpeedDialAction
@@ -838,7 +908,7 @@ const Vehicaleinfo = () => {
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained">Search</Button>
+                  <Button variant="contained" onClick={handleSearch}>Search</Button>
                 </div>
               </div>
             </div>

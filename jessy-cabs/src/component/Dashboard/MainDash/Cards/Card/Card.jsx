@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import "./Card.css";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -31,7 +30,7 @@ function CompactCard({ param, setExpanded }) {
       style={{
         background: param.color.backGround,
         boxShadow: param.color.boxShadow,
-        border:'2px solid #c7c7c7c0',
+        border: '2px solid #c7c7c7c0',
       }}
       layoutId="expandableCard"
       onClick={setExpanded}
@@ -92,15 +91,7 @@ function ExpandedCard({ param, setExpanded }) {
       },
       xaxis: {
         type: "datetime",
-        categories: [
-          "2018-09-19T00:00:00.000Z",
-          "2018-09-19T01:30:00.000Z",
-          "2018-09-19T02:30:00.000Z",
-          "2018-09-19T03:30:00.000Z",
-          "2018-09-19T04:30:00.000Z",
-          "2018-09-19T05:30:00.000Z",
-          "2018-09-19T06:30:00.000Z",
-        ],
+        categories: param.series[0]?.categories || [],
       },
     },
   };
@@ -117,9 +108,11 @@ function ExpandedCard({ param, setExpanded }) {
       <div style={{ alignSelf: "flex-end", cursor: "pointer", color: "white" }}>
         <MdCancel onClick={setExpanded} />
       </div>
-        <span>{param.title}</span>
+      <span>{param.title}</span>
       <div className="chartContainer">
-        <Chart options={data.options} series={param.series} type="area" />
+        {param.series.map((seriesItem, index) => (
+          <Chart key={index} options={data.options} series={[seriesItem]} type="area" />
+        ))}
       </div>
       <span>Last 24 hours</span>
     </motion.div>

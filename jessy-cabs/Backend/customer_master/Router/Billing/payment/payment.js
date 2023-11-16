@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../../../../db');
 
 const { subMonths, startOfMonth, endOfMonth, format } = require('date-fns');
+const validator = require('validator');
 
 
 router.get('/organizationoptions', (req, res) => {
@@ -173,5 +174,30 @@ router.get('/total_amounts_from_billing', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+// Endpoint to fetch sales data for a date range
+// const validator = require('validator');
+
+router.get('/monthly_data', (req, res) => {
+    const startDate = validator.toDate(req.query.startDate);
+    const endDate = validator.toDate(req.query.endDate);
+
+    if (!startDate || !endDate) {
+        return res.status(400).json({ error: 'Invalid date format' });
+    }
+
+    const query = 'SELECT * FROM billing WHERE Billingdate BETWEEN ? AND ?';
+
+    db.query(query, [startDate, endDate], (error, results) => {
+        if (error) {
+            console.error('Error executing MySQL query:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        console.log('Chart view backend', results);
+        res.json(results);
+    });
+});
+
 
 module.exports = router;

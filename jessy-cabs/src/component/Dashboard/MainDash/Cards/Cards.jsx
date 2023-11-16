@@ -13,7 +13,7 @@ const Cards = () => {
   const [error, setError] = useState(false);
   const [info, setInfo] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [successMessage, setSuccessMessage] = useState({});
+  const [successMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
@@ -63,8 +63,6 @@ const Cards = () => {
       try {
         const result = await cardsData();
         setData(result);
-        setSuccess(true);
-        setSuccessMessage("Welcome");
       } catch {
         setError(true);
         setErrorMessage("Something went wrong");

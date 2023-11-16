@@ -1010,7 +1010,6 @@ const TripSheet = () => {
     return totalAmount;
   }
 
-
   const [tripSheetData, setTripSheetData] = useState({
     customer: '',
     address1: '',

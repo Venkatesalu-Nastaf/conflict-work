@@ -1,4 +1,3 @@
-// import * as React from "react";
 import { React, useState, useEffect } from "react";
 // import axios from 'axios';
 import Table from "@mui/material/Table";
@@ -8,9 +7,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Tripdetails from './Tripdetails';//tripsheet details page
+
 import "./Table.css";
 import { Button } from "@mui/material";
-
+//dialog box
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 
 const makeStyle = (status) => {
   if (status === 'Waiting' || status === 'On_Going') {
@@ -35,6 +39,8 @@ const makeStyle = (status) => {
 
 export default function BasicTable() {
   const [filteredData, setFilteredData] = useState([]);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedTrip, setSelectedTrip] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -63,131 +69,168 @@ export default function BasicTable() {
   //   window.location.href = bookingPageUrl;
   // }
 
-  const handleButtonClickTripsheet = (selectedRow) => {
-    if (!selectedRow) {
-      console.error("Selected row is undefined");
-      return;
-    } else {
-      const bookingPageUrl = `/home/bookings/tripsheet?` +
-        `tripid=${encodeURIComponent(selectedRow.tripid || '')}` +
-        `&bookingno=${encodeURIComponent(selectedRow.bookingno || '')}` +
-        `&status=${encodeURIComponent(selectedRow.status || '')}` +
-        `&billingno=${encodeURIComponent(selectedRow.billingno || '')}` +
-        `&apps=${encodeURIComponent(selectedRow.apps || '')}` +
-        `&customer=${encodeURIComponent(selectedRow.customer || '')}` +
-        `&orderedby=${encodeURIComponent(selectedRow.orderedby || '')}` +
-        `&mobile=${encodeURIComponent(selectedRow.mobile || '')}` +
-        `&guestname=${encodeURIComponent(selectedRow.guestname || '')}` +
-        `&guestmobileno=${encodeURIComponent(selectedRow.guestmobileno || '')}` +
-        `&email=${encodeURIComponent(selectedRow.email || '')}` +
-        `&employeeno=${encodeURIComponent(selectedRow.employeeno || '')}` +
-        `&guestmobileno=${encodeURIComponent(selectedRow.guestmobileno || '')}` +
-        `&email=${encodeURIComponent(selectedRow.email || '')}` +
-        `&address1=${encodeURIComponent(selectedRow.address1 || '')}` +
-        `&streetno=${encodeURIComponent(selectedRow.streetno || '')}` +
-        `&city=${encodeURIComponent(selectedRow.city || '')}` +
-        `&hireTypes=${encodeURIComponent(selectedRow.hireTypes || '')}` +
-        `&department=${encodeURIComponent(selectedRow.department || '')}` +
-        `&vehRegNo=${encodeURIComponent(selectedRow.vehRegNo || '')}` +
-        `&vehType=${encodeURIComponent(selectedRow.vehType || '')}` +
-        `&driverName=${encodeURIComponent(selectedRow.driverName || '')}` +
-        `&mobileNo=${encodeURIComponent(selectedRow.mobileNo || '')}` +
-        `&driversmsexbetta=${encodeURIComponent(selectedRow.driversmsexbetta || '')}` +
-        `&gps=${encodeURIComponent(selectedRow.gps || '')}` +
-        `&duty=${encodeURIComponent(selectedRow.duty || '')}` +
-        `&pickup=${encodeURIComponent(selectedRow.pickup || '')}` +
-        `&useage=${encodeURIComponent(selectedRow.useage || '')}` +
-        `&request=${encodeURIComponent(selectedRow.request || '')}` +
-        `&startdate=${encodeURIComponent(selectedRow.startdate || '')}` +
-        `&closedate=${encodeURIComponent(selectedRow.closedate || '')}` +
-        `&totaldays=${encodeURIComponent(selectedRow.totaldays || '')}` +
-        `&employeeno=${encodeURIComponent(selectedRow.employeeno || '')}` +
-        `&reporttime=${encodeURIComponent(selectedRow.reporttime || '')}` +
-        `&shedkm=${encodeURIComponent(selectedRow.shedkm || '')}` +
-        `&shedin=${encodeURIComponent(selectedRow.shedin || '')}` +
-        `&shedout=${encodeURIComponent(selectedRow.shedout || '')}` +
-        `&starttime=${encodeURIComponent(selectedRow.starttime || '')}` +
-        `&closetime=${encodeURIComponent(selectedRow.closetime || '')}` +
-        `&additionaltime=${encodeURIComponent(selectedRow.additionaltime || '')}` +
-        `&advancepaidtovendor=${encodeURIComponent(selectedRow.advancepaidtovendor || '')}` +
-        `&customercode=${encodeURIComponent(selectedRow.customercode || '')}` +
-        `&startkm=${encodeURIComponent(selectedRow.startkm || '')}` +
-        `&closekm=${encodeURIComponent(selectedRow.closekm || '')}` +
-        `&permit=${encodeURIComponent(selectedRow.permit || '')}` +
-        `&parking=${encodeURIComponent(selectedRow.parking || '')}` +
-        `&toll=${encodeURIComponent(selectedRow.toll || '')}` +
-        `&vpermettovendor=${encodeURIComponent(selectedRow.vpermettovendor || '')}` +
-        `&vendortoll=${encodeURIComponent(selectedRow.vendortoll || '')}` +
-        `&customeradvance=${encodeURIComponent(selectedRow.customeradvance || '')}` +
-        `&email1=${encodeURIComponent(selectedRow.email1 || '')}` +
-        `&remark=${encodeURIComponent(selectedRow.remark || '')}` +
-        `&smsguest=${encodeURIComponent(selectedRow.smsguest || '')}` +
-        `&documentnotes=${encodeURIComponent(selectedRow.documentnotes || '')}` +
-        `&VendorTripNo=${encodeURIComponent(selectedRow.VendorTripNo || '')}` +
-        `&vehicles=${encodeURIComponent(selectedRow.vehicles || '')}` +
-        `&duty1=${encodeURIComponent(selectedRow.duty1 || '')}` +
-        `&startdate1=${encodeURIComponent(selectedRow.startdate1 || '')}` +
-        `&closedate1=${encodeURIComponent(selectedRow.closedate1 || '')}` +
-        `&totaldays1=${encodeURIComponent(selectedRow.totaldays1 || '')}` +
-        `&locks=${encodeURIComponent(selectedRow.locks || '')}` +
-        `&starttime2=${encodeURIComponent(selectedRow.starttime2 || '')}` +
-        `&closetime2=${encodeURIComponent(selectedRow.closetime2 || '')}` +
-        `&totaltime=${encodeURIComponent(selectedRow.totaltime || '')}` +
-        `&startkm1=${encodeURIComponent(selectedRow.startkm1 || '')}` +
-        `&closekm1=${encodeURIComponent(selectedRow.closekm1 || '')}` +
-        `&totalkm1=${encodeURIComponent(selectedRow.totalkm1 || '')}` +
-        `&remark1=${encodeURIComponent(selectedRow.remark1 || '')}` +
-        `&caramount=${encodeURIComponent(selectedRow.caramount || '')}` +
-        `&minkm=${encodeURIComponent(selectedRow.minkm || '')}` +
-        `&minhrs=${encodeURIComponent(selectedRow.minhrs || '')}` +
-        `&package=${encodeURIComponent(selectedRow.package || '')}` +
-        `&amount=${encodeURIComponent(selectedRow.amount || '')}` +
-        `&exkm=${encodeURIComponent(selectedRow.exkm || '')}` +
-        `&amount1=${encodeURIComponent(selectedRow.amount1 || '')}` +
-        `&exHrs=${encodeURIComponent(selectedRow.exHrs || '')}` +
-        `&amount2=${encodeURIComponent(selectedRow.amount2 || '')}` +
-        `&night=${encodeURIComponent(selectedRow.night || '')}` +
-        `&amount3=${encodeURIComponent(selectedRow.amount3 || '')}` +
-        `&driverconvenience=${encodeURIComponent(selectedRow.driverconvenience || '')}` +
-        `&amount4=${encodeURIComponent(selectedRow.amount4 || '')}` +
-        `&netamount=${encodeURIComponent(selectedRow.netamount || '')}` +
-        `&vehcommission=${encodeURIComponent(selectedRow.vehcommission || '')}` +
-        `&caramount1=${encodeURIComponent(selectedRow.caramount1 || '')}` +
-        `&manualbills=${encodeURIComponent(selectedRow.manualbills || '')}` +
-        `&pack=${encodeURIComponent(selectedRow.pack || '')}` +
-        `&amount5=${encodeURIComponent(selectedRow.amount5 || '')}` +
-        `&exkm1=${encodeURIComponent(selectedRow.exkm1 || '')}` +
-        `&amount6=${encodeURIComponent(selectedRow.amount6 || '')}` +
-        `&exHrs1=${encodeURIComponent(selectedRow.exHrs1 || '')}` +
-        `&amount7=${encodeURIComponent(selectedRow.amount7 || '')}` +
-        `&night1=${encodeURIComponent(selectedRow.night1 || '')}` +
-        `&amount8=${encodeURIComponent(selectedRow.amount8 || '')}` +
-        `&driverconvenience1=${encodeURIComponent(selectedRow.driverconvenience1 || '')}` +
-        `&amount9=${encodeURIComponent(selectedRow.amount9 || '')}` +
-        `&rud=${encodeURIComponent(selectedRow.rud || '')}` +
-        `&netamount1=${encodeURIComponent(selectedRow.netamount1 || '')}` +
-        `&discount=${encodeURIComponent(selectedRow.discount || '')}` +
-        `&ons=${encodeURIComponent(selectedRow.ons || '')}` +
-        `&manualbills1=${encodeURIComponent(selectedRow.manualbills1 || '')}` +
-        `&balance=${encodeURIComponent(selectedRow.balance || '')}` +
-        `&fcdate=${encodeURIComponent(selectedRow.fcdate || '')}` +
-        `&taxdate=${encodeURIComponent(selectedRow.taxdate || '')}` +
-        `&insdate=${encodeURIComponent(selectedRow.insdate || '')}` +
-        `&stpermit=${encodeURIComponent(selectedRow.stpermit || '')}` +
-        `&maintenancetype=${encodeURIComponent(selectedRow.maintenancetype || '')}` +
-        `&kilometer=${encodeURIComponent(selectedRow.kilometer || '')}` +
-        `&selects=${encodeURIComponent(selectedRow.selects || '')}` +
-        `&documenttype=${encodeURIComponent(selectedRow.documenttype || '')}` +
-        `&on1=${encodeURIComponent(selectedRow.on1 || '')}` +
-        `&smsgust=${encodeURIComponent(selectedRow.smsgust || '')}` +
-        `&booker=${encodeURIComponent(selectedRow.booker || '')}` +
-        `&emailcheck=${encodeURIComponent(selectedRow.emailcheck || '')}` +
-        `&valueprint=${encodeURIComponent(selectedRow.valueprint || '')}` +
-        `&manualbillss=${encodeURIComponent(selectedRow.manualbillss || '')}` +
-        `&reload=${encodeURIComponent(selectedRow.reload || '')}`;
-      window.location.href = bookingPageUrl;
-    }
-  }
+  // const handleButtonClickTripsheet = (selectedRow) => {
+  //   if (!selectedRow) {
+  //     console.error("Selected row is undefined");
+  //     return;
+  //   } else {
+  //     const bookingPageUrl = `/home/bookings/tripsheet?` +
+  //       `tripid=${encodeURIComponent(selectedRow.tripid || '')}` +
+  //       `&bookingno=${encodeURIComponent(selectedRow.bookingno || '')}` +
+  //       `&status=${encodeURIComponent(selectedRow.status || '')}` +
+  //       `&billingno=${encodeURIComponent(selectedRow.billingno || '')}` +
+  //       `&apps=${encodeURIComponent(selectedRow.apps || '')}` +
+  //       `&customer=${encodeURIComponent(selectedRow.customer || '')}` +
+  //       `&orderedby=${encodeURIComponent(selectedRow.orderedby || '')}` +
+  //       `&mobile=${encodeURIComponent(selectedRow.mobile || '')}` +
+  //       `&guestname=${encodeURIComponent(selectedRow.guestname || '')}` +
+  //       `&guestmobileno=${encodeURIComponent(selectedRow.guestmobileno || '')}` +
+  //       `&email=${encodeURIComponent(selectedRow.email || '')}` +
+  //       `&employeeno=${encodeURIComponent(selectedRow.employeeno || '')}` +
+  //       `&guestmobileno=${encodeURIComponent(selectedRow.guestmobileno || '')}` +
+  //       `&email=${encodeURIComponent(selectedRow.email || '')}` +
+  //       `&address1=${encodeURIComponent(selectedRow.address1 || '')}` +
+  //       `&streetno=${encodeURIComponent(selectedRow.streetno || '')}` +
+  //       `&city=${encodeURIComponent(selectedRow.city || '')}` +
+  //       `&hireTypes=${encodeURIComponent(selectedRow.hireTypes || '')}` +
+  //       `&department=${encodeURIComponent(selectedRow.department || '')}` +
+  //       `&vehRegNo=${encodeURIComponent(selectedRow.vehRegNo || '')}` +
+  //       `&vehType=${encodeURIComponent(selectedRow.vehType || '')}` +
+  //       `&driverName=${encodeURIComponent(selectedRow.driverName || '')}` +
+  //       `&mobileNo=${encodeURIComponent(selectedRow.mobileNo || '')}` +
+  //       `&driversmsexbetta=${encodeURIComponent(selectedRow.driversmsexbetta || '')}` +
+  //       `&gps=${encodeURIComponent(selectedRow.gps || '')}` +
+  //       `&duty=${encodeURIComponent(selectedRow.duty || '')}` +
+  //       `&pickup=${encodeURIComponent(selectedRow.pickup || '')}` +
+  //       `&useage=${encodeURIComponent(selectedRow.useage || '')}` +
+  //       `&request=${encodeURIComponent(selectedRow.request || '')}` +
+  //       `&startdate=${encodeURIComponent(selectedRow.startdate || '')}` +
+  //       `&closedate=${encodeURIComponent(selectedRow.closedate || '')}` +
+  //       `&totaldays=${encodeURIComponent(selectedRow.totaldays || '')}` +
+  //       `&employeeno=${encodeURIComponent(selectedRow.employeeno || '')}` +
+  //       `&reporttime=${encodeURIComponent(selectedRow.reporttime || '')}` +
+  //       `&shedkm=${encodeURIComponent(selectedRow.shedkm || '')}` +
+  //       `&shedin=${encodeURIComponent(selectedRow.shedin || '')}` +
+  //       `&shedout=${encodeURIComponent(selectedRow.shedout || '')}` +
+  //       `&starttime=${encodeURIComponent(selectedRow.starttime || '')}` +
+  //       `&closetime=${encodeURIComponent(selectedRow.closetime || '')}` +
+  //       `&additionaltime=${encodeURIComponent(selectedRow.additionaltime || '')}` +
+  //       `&advancepaidtovendor=${encodeURIComponent(selectedRow.advancepaidtovendor || '')}` +
+  //       `&customercode=${encodeURIComponent(selectedRow.customercode || '')}` +
+  //       `&startkm=${encodeURIComponent(selectedRow.startkm || '')}` +
+  //       `&closekm=${encodeURIComponent(selectedRow.closekm || '')}` +
+  //       `&permit=${encodeURIComponent(selectedRow.permit || '')}` +
+  //       `&parking=${encodeURIComponent(selectedRow.parking || '')}` +
+  //       `&toll=${encodeURIComponent(selectedRow.toll || '')}` +
+  //       `&vpermettovendor=${encodeURIComponent(selectedRow.vpermettovendor || '')}` +
+  //       `&vendortoll=${encodeURIComponent(selectedRow.vendortoll || '')}` +
+  //       `&customeradvance=${encodeURIComponent(selectedRow.customeradvance || '')}` +
+  //       `&email1=${encodeURIComponent(selectedRow.email1 || '')}` +
+  //       `&remark=${encodeURIComponent(selectedRow.remark || '')}` +
+  //       `&smsguest=${encodeURIComponent(selectedRow.smsguest || '')}` +
+  //       `&documentnotes=${encodeURIComponent(selectedRow.documentnotes || '')}` +
+  //       `&VendorTripNo=${encodeURIComponent(selectedRow.VendorTripNo || '')}` +
+  //       `&vehicles=${encodeURIComponent(selectedRow.vehicles || '')}` +
+  //       `&duty1=${encodeURIComponent(selectedRow.duty1 || '')}` +
+  //       `&startdate1=${encodeURIComponent(selectedRow.startdate1 || '')}` +
+  //       `&closedate1=${encodeURIComponent(selectedRow.closedate1 || '')}` +
+  //       `&totaldays1=${encodeURIComponent(selectedRow.totaldays1 || '')}` +
+  //       `&locks=${encodeURIComponent(selectedRow.locks || '')}` +
+  //       `&starttime2=${encodeURIComponent(selectedRow.starttime2 || '')}` +
+  //       `&closetime2=${encodeURIComponent(selectedRow.closetime2 || '')}` +
+  //       `&totaltime=${encodeURIComponent(selectedRow.totaltime || '')}` +
+  //       `&startkm1=${encodeURIComponent(selectedRow.startkm1 || '')}` +
+  //       `&closekm1=${encodeURIComponent(selectedRow.closekm1 || '')}` +
+  //       `&totalkm1=${encodeURIComponent(selectedRow.totalkm1 || '')}` +
+  //       `&remark1=${encodeURIComponent(selectedRow.remark1 || '')}` +
+  //       `&caramount=${encodeURIComponent(selectedRow.caramount || '')}` +
+  //       `&minkm=${encodeURIComponent(selectedRow.minkm || '')}` +
+  //       `&minhrs=${encodeURIComponent(selectedRow.minhrs || '')}` +
+  //       `&package=${encodeURIComponent(selectedRow.package || '')}` +
+  //       `&amount=${encodeURIComponent(selectedRow.amount || '')}` +
+  //       `&exkm=${encodeURIComponent(selectedRow.exkm || '')}` +
+  //       `&amount1=${encodeURIComponent(selectedRow.amount1 || '')}` +
+  //       `&exHrs=${encodeURIComponent(selectedRow.exHrs || '')}` +
+  //       `&amount2=${encodeURIComponent(selectedRow.amount2 || '')}` +
+  //       `&night=${encodeURIComponent(selectedRow.night || '')}` +
+  //       `&amount3=${encodeURIComponent(selectedRow.amount3 || '')}` +
+  //       `&driverconvenience=${encodeURIComponent(selectedRow.driverconvenience || '')}` +
+  //       `&amount4=${encodeURIComponent(selectedRow.amount4 || '')}` +
+  //       `&netamount=${encodeURIComponent(selectedRow.netamount || '')}` +
+  //       `&vehcommission=${encodeURIComponent(selectedRow.vehcommission || '')}` +
+  //       `&caramount1=${encodeURIComponent(selectedRow.caramount1 || '')}` +
+  //       `&manualbills=${encodeURIComponent(selectedRow.manualbills || '')}` +
+  //       `&pack=${encodeURIComponent(selectedRow.pack || '')}` +
+  //       `&amount5=${encodeURIComponent(selectedRow.amount5 || '')}` +
+  //       `&exkm1=${encodeURIComponent(selectedRow.exkm1 || '')}` +
+  //       `&amount6=${encodeURIComponent(selectedRow.amount6 || '')}` +
+  //       `&exHrs1=${encodeURIComponent(selectedRow.exHrs1 || '')}` +
+  //       `&amount7=${encodeURIComponent(selectedRow.amount7 || '')}` +
+  //       `&night1=${encodeURIComponent(selectedRow.night1 || '')}` +
+  //       `&amount8=${encodeURIComponent(selectedRow.amount8 || '')}` +
+  //       `&driverconvenience1=${encodeURIComponent(selectedRow.driverconvenience1 || '')}` +
+  //       `&amount9=${encodeURIComponent(selectedRow.amount9 || '')}` +
+  //       `&rud=${encodeURIComponent(selectedRow.rud || '')}` +
+  //       `&netamount1=${encodeURIComponent(selectedRow.netamount1 || '')}` +
+  //       `&discount=${encodeURIComponent(selectedRow.discount || '')}` +
+  //       `&ons=${encodeURIComponent(selectedRow.ons || '')}` +
+  //       `&manualbills1=${encodeURIComponent(selectedRow.manualbills1 || '')}` +
+  //       `&balance=${encodeURIComponent(selectedRow.balance || '')}` +
+  //       `&fcdate=${encodeURIComponent(selectedRow.fcdate || '')}` +
+  //       `&taxdate=${encodeURIComponent(selectedRow.taxdate || '')}` +
+  //       `&insdate=${encodeURIComponent(selectedRow.insdate || '')}` +
+  //       `&stpermit=${encodeURIComponent(selectedRow.stpermit || '')}` +
+  //       `&maintenancetype=${encodeURIComponent(selectedRow.maintenancetype || '')}` +
+  //       `&kilometer=${encodeURIComponent(selectedRow.kilometer || '')}` +
+  //       `&selects=${encodeURIComponent(selectedRow.selects || '')}` +
+  //       `&documenttype=${encodeURIComponent(selectedRow.documenttype || '')}` +
+  //       `&on1=${encodeURIComponent(selectedRow.on1 || '')}` +
+  //       `&smsgust=${encodeURIComponent(selectedRow.smsgust || '')}` +
+  //       `&booker=${encodeURIComponent(selectedRow.booker || '')}` +
+  //       `&emailcheck=${encodeURIComponent(selectedRow.emailcheck || '')}` +
+  //       `&valueprint=${encodeURIComponent(selectedRow.valueprint || '')}` +
+  //       `&manualbillss=${encodeURIComponent(selectedRow.manualbillss || '')}` +
+  //       `&reload=${encodeURIComponent(selectedRow.reload || '')}`;
+  //     window.location.href = bookingPageUrl;
+  //   }
+  // }
+
+  // const [tripSheetData, setTripSheetData] = useState({
+  //   customer: '',
+  //   address1: '',
+  //   orderedby: '',
+  //   employeeno: '',
+  //   customercode: '',
+  //   guestname: '',
+  //   tripid: '',
+  //   startdate: '',
+  //   duty: '',
+  //   vehType: '',
+  //   vehRegNo: '',
+  //   driverName: '',
+  //   mobileNo: '',
+  //   closedate: '',
+  //   starttime: '',
+  //   startkm: '',
+  //   closetime: '',
+  //   closekm: '',
+  //   totalkm1: '',
+  //   totaltime: '',
+  //   totalDays: '',
+  //   remark: '',
+  //   parking: '',
+  //   permit: '',
+  // });
+
+  const handlePopupClose = () => {
+    setPopupOpen(false);
+  };
+
+  const handleButtonClickTripsheet = (trip) => {
+    setSelectedTrip(trip);
+    setPopupOpen(true);
+  };
+
 
   return (
     <div className="Table">
@@ -220,8 +263,23 @@ export default function BasicTable() {
                   <TableCell align="left">{trip.startdate}</TableCell>
                   <TableCell align="left"><span className="status" style={makeStyle(trip.apps)}>{trip.apps}</span></TableCell>
                   <TableCell align="left" className="Details">
-                    <Button onClick={(event) => handleButtonClickTripsheet(trip)}>Details</Button>
+                    <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>
                   </TableCell>
+
+                  <Dialog open={popupOpen} onClose={handlePopupClose}>
+                    <DialogContent>
+                      {/* <Tripdetails tripSheetData={tripSheetData} selectedTripid={localStorage.getItem('selectedTripid')} /> */}
+                      <Tripdetails />
+                      {selectedTrip && <Tripdetails tripData={selectedTrip} />}
+                      {/* hlo */}
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handlePopupClose} variant="contained" color="primary">
+                        Cancel
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+
                 </TableRow>
               ))
             ) : (
@@ -234,4 +292,4 @@ export default function BasicTable() {
       </TableContainer>
     </div>
   );
-}
+} 

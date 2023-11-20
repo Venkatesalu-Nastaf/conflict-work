@@ -754,33 +754,14 @@ const Customer = () => {
           </div>
           <div className="detail-container-main-customer">
             <div className="input-field">
-              <div className="input radio">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    Incl. Address
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="inclAddress"
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    value={selectedCustomerData?.inclAddress || book.inclAddress}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
+              <div className="input dropdown">
+                <label htmlFor="">GST</label>
+                <select name="" id="">
+                  <option value="">5%</option>
+                  <option value="">12.5%</option>
+                </select>
               </div>
-              <div className="input radio">
+              <div className="input ">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Active

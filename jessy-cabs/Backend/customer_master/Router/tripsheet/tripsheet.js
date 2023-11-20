@@ -70,7 +70,7 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
     // Modify the query to use the LIKE operator for partial matching
     db.query('SELECT * FROM vehicleinfo WHERE vehRegNo LIKE ? LIMIT 1', `%${vehRegNo}%`, (err, result) => {
         if (err) {
-            console.error('Error retrieving vehicle details from MySQL:', err);
+            // console.error('Error retrieving vehicle details from MySQL:', err);
             return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
         }
         if (result.length === 0) {

@@ -159,6 +159,14 @@ const Sidebar = () => {
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}
           />
+          {/* <MenuItem
+            label="Accounts"
+            to="/home/accounts/expense"
+            menuItemKey="/home/accounts"
+            isActive={isActive}
+            handleMenuItemClick={handleMenuItemClick}
+            icon={AiOutlineSetting}
+          />  */}
           <MenuItem
             label="Settings"
             to="/home/settings/usercreation"

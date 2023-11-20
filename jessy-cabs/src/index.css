@@ -177,7 +177,7 @@ body {
 }
 
 .Scroll-Style::-webkit-scrollbar {
-  width: 4px;
+  width: 0px;
   height: 4px;
   cursor: pointer;
   position: absolute;

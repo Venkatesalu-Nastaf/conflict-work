@@ -1,5 +1,5 @@
 /* HEADER CONTAINER */
-.TransferReport-page-header {
+.GroupBilling-page-header {
     border-bottom: solid 1px #ccc;
     padding: 20px;
 }
@@ -16,7 +16,7 @@
 }
 
 
- .TransferReport-form {
+ .GroupBilling-form {
     height: 100vh;
     width: 100vw;
     overflow-x: hidden;
@@ -25,6 +25,14 @@
     /* padding: 20px; */
     color: #000;
     background-color: var(--glass);
+}
+
+
+.table-bookingCopy-GroupBilling {
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    background-color: var(--glass);
+    margin: 0px 20px;
 }
 
 .Download-btn {
@@ -58,41 +66,18 @@
     font-weight: 500;
     left: 5px;
 }
-.billing-tables-TransferReport{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-.TransferReport-Box{
-    border: 2px solid #ccc;
-    background-color: var(--glass);
-    border-radius: 5px;
-    width: 70%;
 
-}
-.table-bookingCopy-TransferReport {
-    border: 2px solid #ccc;
-    border-radius: 15px;
-    background-color: var(--glass);
-    margin: 0px 20px;
-    width: 70%;
-}
-.tripsheet-table-transferReport{
-    display: flex;
-    flex-direction: column;
-    width: 65%;
-}
-.copy-title-btn-TransferReport {
+
+.copy-title-btn-GroupBilling {
     width: 100%;
     margin-top: 30px;
     background-color: var(--glass);
-    padding: 10px 13px 30px;
+    padding: 10px 20px 35px;
     border: 2px solid #ccc;
     border-radius: 15px;
 }
 
-.TransferReport-form .Title-Name::after {
+.GroupBilling-form .Title-Name::after {
     content: "";
     position: absolute;
     bottom: -10px;

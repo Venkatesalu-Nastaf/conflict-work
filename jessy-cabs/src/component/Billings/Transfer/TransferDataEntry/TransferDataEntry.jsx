@@ -3,7 +3,7 @@ import "./TransferDataEntry.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
-import { Menu, TextField } from "@mui/material";
+import { Checkbox, FormControlLabel, Menu, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -11,7 +11,11 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileInvoiceDollar, faTags } from "@fortawesome/free-solid-svg-icons";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import { AiOutlineFileSearch } from 'react-icons/ai';
+
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -40,7 +44,7 @@ const columns = [
 ];
 
 const TransferDataEntry = () => {
-  const [rows, setRows] = useState([]);
+  const [rows] = useState([]);
 
   return (
     <div className="TransferDataEntry-form Scroll-Style-hide">
@@ -52,7 +56,7 @@ const TransferDataEntry = () => {
                 <div className="input-field" >
                   <div className="input" style={{ width: "230px" }}>
                     <div className="icone">
-                      <HailOutlinedIcon color="action" />
+                      <FontAwesomeIcon icon={faTags} size="lg" />
                     </div>
                     <TextField
                       size="small"
@@ -76,7 +80,7 @@ const TransferDataEntry = () => {
                 <div className="input-field" >
                   <div className="input" >
                     <div className="icone">
-                      <HailOutlinedIcon color="action" />
+                      <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                     </div>
                     <TextField
                       size="small"
@@ -118,7 +122,7 @@ const TransferDataEntry = () => {
                 <div className="input-field" >
                   <div className="input">
                     <div className="icone">
-                      <HailOutlinedIcon color="action" />
+                      <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
                     </div>
                     <TextField
                       size="small"
@@ -140,19 +144,14 @@ const TransferDataEntry = () => {
                 </div>
                 <div className="input-field">
                   <div className="input">
-                    <div className="icone">
-                      <HailOutlinedIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      id="id"
-                      label="TripSheet"
-                      name="tripsheet"
-                      autoComplete='off'
+                    <FormControlLabel
+                      value="guestsms"
+                      control={<Checkbox size="small"/>}
+                      label="Group Billing"
                     />
                   </div>
                   <div className="input">
-                    <Button variant="contained">Add Trip</Button>
+                    <Button variant="outlined">Add Trip</Button>
                   </div>
                   <div className="input">
                     <Button variant="contained">Remove</Button>
@@ -187,14 +186,14 @@ const TransferDataEntry = () => {
               </div>
               <div className="input-field">
                 <div className="input">
-                  <Button variant="contained">Bill Generate</Button>
+                  <Button variant="outlined">Bill Generate</Button>
                 </div>
               </div>
             </div>
           </div>
 
         </div>
-        <div className="total-container">
+        <div className="total-container-TransferDataEntry">
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
@@ -211,16 +210,19 @@ const TransferDataEntry = () => {
             </PopupState>
           </div>
           <div className='amount-calculator'>
+            <div className="total-inputs" style={{marginTop:'25px'}}>
+              <Button variant="outlined" >Remove Selected</Button>
+            </div>
             <div className='total-inputs' >
-              <label htmlFor="">Total Amount:</label>
+              <label htmlFor="">Total Kms:</label>
               <input type="number" />
             </div>
             <div className='total-inputs' >
-              <label htmlFor="">Paid Amount:</label>
+              <label htmlFor="">Total Hours:</label>
               <input type="number" />
             </div>
             <div className='total-inputs' >
-              <label htmlFor="">Pending Amount:</label>
+              <label htmlFor="">Amount:</label>
               <input type="number" />
             </div>
           </div>

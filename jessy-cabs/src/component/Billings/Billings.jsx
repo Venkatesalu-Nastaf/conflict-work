@@ -25,15 +25,13 @@ const Billings = () => {
         localStorage.setItem('activeMenuItem', menuItem);
         setActiveMenuItem(menuItem);
     };
-    // const handleMenuItemClickMsgInfo = () => {
-    //     setInfo(true);
-    //     setwarningMessage('Under Development');
-    // };
     return (
         <div className='billings-conatiner' id='menu'>
             <div className='menu-bar'>
                 <MenuItem label="Billing" to='/home/billing/billing' menuItemKey="Billing" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Transfer" to='/home/billing/transfer' menuItemKey="Transfer" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="QuickBill" to='/home/billing/quickbill' menuItemKey="Quick Bill" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
+                <MenuItem label="Covering Bill" to='/home/billing/coveringbill' menuItemKey="Covering Bill" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 {/* <MenuItem label="Expense" to='/home/billing/expense' menuItemKey="Cash Flow" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Income" to='/home/billing/income' menuItemKey="Driver Master" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} />
                 <MenuItem label="Profit & Loss" to='/home/billing/profitandloss' menuItemKey="Profit & Loss" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClick} /> */}

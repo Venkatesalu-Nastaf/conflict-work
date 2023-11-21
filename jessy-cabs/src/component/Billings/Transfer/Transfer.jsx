@@ -23,7 +23,7 @@ const Transfer = () => {
                 <TabList onChange={handleChange} aria-label="lab API tabs example">
                   <Tab label="Transfer List" value="transferlist" />
                   <Tab label="Data Entry" value="dataentry" />
-                  <Tab label="TransferReport" value="TransferReport" />
+                  <Tab label="Transfer Report" value="TransferReport" />
                 </TabList>
               </Box>
               <TabPanel value="transferlist"><TransferList /></TabPanel>

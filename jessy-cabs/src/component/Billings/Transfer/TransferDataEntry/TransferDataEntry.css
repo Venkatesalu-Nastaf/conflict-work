@@ -12,7 +12,6 @@
 .detail-container-main {
     display: flex;
     padding: 20px;
-    /* width: 70%; */
 }
 
 .TransferDataEntry{
@@ -87,7 +86,38 @@
     border-radius: 5px;
     /* padding: 10px; */
 }
+.total-container-TransferDataEntry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 25px;
+}
 
+.total-container-TransferDataEntry .amount-calculator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.total-container-TransferDataEntry .total-inputs {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 10px;
+}
+
+.total-container-TransferDataEntry .total-inputs label {
+    padding: 0px 10px;
+    font-weight: 500;
+}
+
+.total-container-TransferDataEntry .total-inputs input {
+    background-color: transparent;
+    border: 1.5px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+}
 .TransferDataEntry-form .Title-Name::after {
     content: "";
     position: absolute;

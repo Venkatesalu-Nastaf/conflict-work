@@ -37,7 +37,7 @@ import RateManagement from "./component/Info/RateManagement/RateManagement";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
-import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/NavigationMap";
+import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapComponent";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 
 

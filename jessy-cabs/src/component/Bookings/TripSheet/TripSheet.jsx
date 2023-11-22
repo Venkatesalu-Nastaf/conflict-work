@@ -203,7 +203,6 @@ const TripSheet = () => {
   });
 
   const handleButtonClick = () => {
-    // with the actual URL you want to open
     const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
     newTab.focus();
   };

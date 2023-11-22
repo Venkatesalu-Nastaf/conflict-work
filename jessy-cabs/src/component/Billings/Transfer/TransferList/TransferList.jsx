@@ -34,7 +34,7 @@ const columns = [
 ];
 
 const TransferList = () => {
-    const [rows, setRows] = useState([]);
+    const [rows] = useState([]);
 
     return (
         <div className="TransferList-form Scroll-Style-hide">
@@ -65,8 +65,30 @@ const TransferList = () => {
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
+                                <div className="input" style={{ width: "230px" }}>
+                                    <div className="icone">
+                                        <HailOutlinedIcon color="action" />
+                                    </div>
+                                    <select name="status" className='input-select'>
+                                        <option value="" disabled selected>Status</option>
+                                        <option value="all">All</option>
+                                        <option value="billed">Billed</option>
+                                        <option value="notbilled">Not Billed</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div className="input-field" style={{ justifyContent: 'center' }}>
+                            <div className="input-field">
+                                <div className="input" style={{ width: "230px" }}>
+                                    <div className="icone">
+                                        <HailOutlinedIcon color="action" />
+                                    </div>
+                                    <select name="branch" className="input-select">
+                                        <option value="" disabled selected>Select a city</option>
+                                        <option value="all">Chennai</option>
+                                        <option value="billed">Bangalore</option>
+                                        <option value="notbilled">Hyderabad</option>
+                                    </select>
+                                </div>
                                 <div className="input" style={{ width: "140px" }}>
                                     <Button variant="contained">Search</Button>
                                 </div>

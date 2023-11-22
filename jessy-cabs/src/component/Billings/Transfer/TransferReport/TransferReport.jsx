@@ -12,8 +12,9 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileInvoiceDollar, faNewspaper, faTags } from "@fortawesome/free-solid-svg-icons";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortawesome/free-solid-svg-icons";
+
 
 
 const columns = [
@@ -111,27 +112,46 @@ const TransferReport = () => {
                 </div>
               </div>
               <div className="input-field">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker", "DatePicker"]}>
-                    <DatePicker
-                      label="From Date"
-                    />
-                    <DatePicker
-                      label="To Date"
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+                <div className="input" >
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="From Date"
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <div className="input" >
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="To Date"
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <div className="input" >
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faBuilding} size="xl" />
+                  </div>
+                  <select name="branch" className="input-select">
+                    <option value="" disabled selected>Select a city</option>
+                    <option value="all">Chennai</option>
+                    <option value="billed">Bangalore</option>
+                    <option value="notbilled">Hyderabad</option>
+                  </select>
+                </div>
                 <div className="input" style={{ width: "100px" }}>
                   <Button variant="outlined">List</Button>
                 </div>
                 <div className="input" style={{ width: "100px" }}>
                   <Button variant="contained">Excel</Button>
                 </div>
+              </div>
+              <div className="input-field">
                 <div className="input" style={{ width: "100px" }}>
                   <Button variant="contained">PDF Bill</Button>
                 </div>
-              </div>
-              <div className="input-field">
                 <div className="input" style={{ width: "180px" }}>
                   <Button variant="outlined">Booking Mail</Button>
                 </div>

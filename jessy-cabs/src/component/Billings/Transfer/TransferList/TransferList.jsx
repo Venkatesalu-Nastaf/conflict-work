@@ -10,8 +10,11 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 // ICONS
+import { faBuilding, faNewspaper } from '@fortawesome/free-solid-svg-icons';
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -65,9 +68,9 @@ const TransferList = () => {
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
-                                <div className="input" style={{ width: "230px" }}>
+                                <div className="input">
                                     <div className="icone">
-                                        <HailOutlinedIcon color="action" />
+                                        <FontAwesomeIcon icon={faNewspaper} size="xl" />
                                     </div>
                                     <select name="status" className='input-select'>
                                         <option value="" disabled selected>Status</option>
@@ -78,9 +81,9 @@ const TransferList = () => {
                                 </div>
                             </div>
                             <div className="input-field">
-                                <div className="input" style={{ width: "230px" }}>
+                                <div className="input" >
                                     <div className="icone">
-                                        <HailOutlinedIcon color="action" />
+                                        <FontAwesomeIcon icon={faBuilding} size="xl" />
                                     </div>
                                     <select name="branch" className="input-select">
                                         <option value="" disabled selected>Select a city</option>

@@ -1,31 +1,31 @@
 import React from 'react'
-import './QuickBill.css'
+import './CoveringBill.css'
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import GroupBilling from './GroupBilling/GroupBilling';
-import GroupPrinting from './GroupPrinting/GroupPrinting';
+import CoveringSubmit from './CoveringSubmit/CoveringSubmit';
 
-const QuickBill = () => {
+const CoveringBill = () => {
     const [value, setValue] = React.useState("groupbilling");
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
     return (
-      <div className="form-container-QuickBill">
+      <div className="form-container-CoveringBill">
         <div className="container-main">
           <Box sx={{ width: "100%", typography: "body1" }}>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList onChange={handleChange} aria-label="lab API tabs example">
-                  <Tab label="Group Bill" value="groupbilling" />
-                  <Tab label="Group Printing" value="GroupPrinting" />
+                  <Tab label="Group Billing" value="groupbilling" />
+                  <Tab label="Covering Submit" value="coveringsubmit" />
                 </TabList>
               </Box>
               <TabPanel value="groupbilling"><GroupBilling /></TabPanel>
-              <TabPanel value="GroupPrinting"><GroupPrinting /></TabPanel>
+              <TabPanel value="coveringsubmit"><CoveringSubmit /></TabPanel>
             </TabContext>
           </Box>
          
@@ -34,4 +34,4 @@ const QuickBill = () => {
     )
   }
 
-export default QuickBill
+export default CoveringBill

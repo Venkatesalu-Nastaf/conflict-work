@@ -12,7 +12,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileInvoiceDollar, faTags } from "@fortawesome/free-solid-svg-icons";
+import { faBuilding, faFileInvoiceDollar, faTags } from "@fortawesome/free-solid-svg-icons";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { AiOutlineFileSearch } from 'react-icons/ai';
 
@@ -105,16 +105,24 @@ const TransferDataEntry = () => {
                   </div>
                 </div>
                 <div className="input-field">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                      <DatePicker
-                        label="From Date"
-                      />
-                      <DatePicker
-                        label="To Date"
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
+                  <div className="input" >
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker", "DatePicker"]}>
+                        <DatePicker
+                          label="From Date"
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
+                  <div className="input" >
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker", "DatePicker"]}>
+                        <DatePicker
+                          label="To Date"
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
                   <div className="input">
                     <Button variant="contained">Select</Button>
                   </div>
@@ -132,21 +140,31 @@ const TransferDataEntry = () => {
                       autoComplete='off'
                     />
                   </div>
-                  <div className="input" style={{ width: "400px" }}>
+                  <div className="input" >
                     <TextField
                       size="small"
                       id="id"
                       label=""
-                      sx={{ width: "380px" }}
                       autoComplete='off'
                     />
+                  </div>
+                  <div className="input" >
+                    <div className="icone">
+                      <FontAwesomeIcon icon={faBuilding} size="xl" />
+                    </div>
+                    <select name="branch" className="input-select">
+                      <option value="" disabled selected>Select a city</option>
+                      <option value="all">Chennai</option>
+                      <option value="billed">Bangalore</option>
+                      <option value="notbilled">Hyderabad</option>
+                    </select>
                   </div>
                 </div>
                 <div className="input-field">
                   <div className="input">
                     <FormControlLabel
                       value="guestsms"
-                      control={<Checkbox size="small"/>}
+                      control={<Checkbox size="small" />}
                       label="Group Billing"
                     />
                   </div>
@@ -210,7 +228,7 @@ const TransferDataEntry = () => {
             </PopupState>
           </div>
           <div className='amount-calculator'>
-            <div className="total-inputs" style={{marginTop:'25px'}}>
+            <div className="total-inputs" style={{ marginTop: '25px' }}>
               <Button variant="outlined" >Remove Selected</Button>
             </div>
             <div className='total-inputs' >

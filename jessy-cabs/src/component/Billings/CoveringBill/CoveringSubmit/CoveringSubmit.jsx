@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "./GroupBilling.css";
+import "./CoveringSubmit.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
@@ -10,8 +10,11 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 // ICONS
+import { faBuilding } from '@fortawesome/free-solid-svg-icons';
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -33,15 +36,15 @@ const columns = [
     { field: "Diff", headerName: "Diff", width: 130 },
 ];
 
-const GroupBilling = () => {
+const CoveringSubmit = () => {
     const [rows] = useState([]);
 
     return (
-        <div className="GroupBilling-form Scroll-Style-hide">
+        <div className="CoveringSubmit-form Scroll-Style-hide">
             <form >
                 <div className="detail-container-main">
                     <div className="container-left">
-                        <div className="copy-title-btn-GroupBilling">
+                        <div className="copy-title-btn-CoveringSubmit">
                             <div className="input-field" style={{ justifyContent: 'center' }}>
                                 <div className="input" style={{ width: "230px" }}>
                                     <div className="icone">
@@ -66,7 +69,18 @@ const GroupBilling = () => {
                                     </DemoContainer>
                                 </LocalizationProvider>
                             </div>
-                            <div className="input-field" style={{ justifyContent: 'center' }}>
+                            <div className="input-field" >
+                                <div className="input" >
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faBuilding} size="xl" />
+                                    </div>
+                                    <select name="branch" className="input-select">
+                                        <option value="" disabled selected>Select a city</option>
+                                        <option value="all">Chennai</option>
+                                        <option value="billed">Bangalore</option>
+                                        <option value="notbilled">Hyderabad</option>
+                                    </select>
+                                </div>
                                 <div className="input" style={{ width: "140px" }}>
                                     <Button variant="contained">Search</Button>
                                 </div>
@@ -89,7 +103,7 @@ const GroupBilling = () => {
                         )}
                     </PopupState>
                 </div>
-                <div className="table-bookingCopy-GroupBilling">
+                <div className="table-bookingCopy-CoveringSubmit">
                     <div style={{ height: 400, width: "100%" }}>
                         <DataGrid
                             rows={rows}
@@ -104,4 +118,4 @@ const GroupBilling = () => {
     )
 }
 
-export default GroupBilling
+export default CoveringSubmit

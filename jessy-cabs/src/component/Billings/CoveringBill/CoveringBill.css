@@ -1,24 +1,26 @@
-.form-container-Transfer .Title-Name {
+.form-container-CoveringBill .Title-Name {
     font-size: 20px;
     font-weight: 500;
 }
 
-.form-container-Transfer {
+.form-container-CoveringBill {
     display: flex;
     border-radius: 10px;
 }
 
-.form-container-Transfer .container-main::-webkit-scrollbar {
+.form-container-CoveringBill .container-main::-webkit-scrollbar {
     width: 0px;
     height: 0px;
     overflow-x: hidden;
 }
-.form-container-Transfer .container-main::-webkit-scrollbar-thumb {
+
+/* TIMER END */
+.form-container-CoveringBill .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
 } 
 
-.form-container-Transfer .container-main {
+.form-container-CoveringBill .container-main {
     border: 2px solid #ccc;
     overflow: scroll;
     height: 77vh;

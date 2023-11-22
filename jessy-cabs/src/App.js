@@ -17,7 +17,6 @@ import RateTypes from "./component/Info/RateTypes/RateTypes";
 import Transfer from "./component/Billings/Transfer/Transfer";
 import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Received from "./component/Bookings/Receiveds/Receiveds";
-import QuickBill from "./component/Billings/QuickBill/QuickBill";
 import Registration from "./component/Registration/Registration";
 import UserSettings from "./component/UserSettings/UserSettings";
 import TripSheet from "./component/Bookings/TripSheet/TripSheet";
@@ -39,6 +38,7 @@ import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/NavigationMap";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
+import CoveringBill from "./component/Billings/CoveringBill/CoveringBill";
 
 
 function App() {
@@ -83,7 +83,7 @@ function App() {
               <Route path="/home/billing" element={<Billings />}>
                 <Route path="/home/billing/billing" element={<BillingMain />} />
                 <Route path="/home/billing/transfer" element={<Transfer />} />
-                <Route path="/home/billing/quickbill" element={<QuickBill />} />
+                <Route path="/home/billing/coveringbill" element={<CoveringBill />} />
               </Route>
               <Route path="/home/accounts" element={<Accounts />}>
                 {/* <Route path="/home/accounts/expense" element={<Expense />} />

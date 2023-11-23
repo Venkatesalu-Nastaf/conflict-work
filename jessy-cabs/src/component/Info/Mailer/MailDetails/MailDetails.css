@@ -49,49 +49,7 @@
     color: #000;
 }
 
-.input-field {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
 
-.input-field .input {
-    width: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.input-field .radio {
-    font-size: 20px !important;
-}
-
-.checkbox {
-    color: rgb(69, 62, 62);
-    margin-top: 10px;
-}
-
-.css-1hbvpl3-MuiSvgIcon-root {
-    height: 18px !important;
-}
-
-.css-ahj2mt-MuiTypography-root {
-    font-size: 13px !important;
-}
-
-.input-field .input option {
-    text-transform: uppercase;
-}
-
-.input-field .input .icone {
-    padding: 15px 10px 0px;
-    color: #6c6868;
-}
-
-.select-field {
-    border: #000;
-}
 
 /* TextBox */
 .textbox-mailDetails {
@@ -114,24 +72,6 @@
     margin-top: 10px;
     overflow: scroll;
     height: 190px;
-}
-
-.textboxlist-mailDetails .mailDetails-list-update::-webkit-scrollbar {
-    width: 5px;
-    height: 0px;
-    cursor: pointer;
-    position: absolute;
-}
-
-.textboxlist-mailDetails .mailDetails-list-update::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-}
-
-.textboxlist-mailDetails .mailDetails-list-update::-webkit-scrollbar-thumb {
-    background-color: #457cdc;
-    width: 50px;
-    cursor: pointer;
-    border-radius: 20px;
 }
 
 .secend-container {

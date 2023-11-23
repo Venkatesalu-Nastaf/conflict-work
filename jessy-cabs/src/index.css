@@ -1,27 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap');
-*{
+
+* {
   font-family: 'Quicksand', sans-serif;
 }
+
 body {
   margin: 0;
-  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* ERROR POPUP */
 .Error {
-  /* background-color: rgb(253, 237, 237); */
   -webkit-backdrop-filter: blur(0.5rem);
   backdrop-filter: blur(0.5rem);
-  /* backdrop-filter: blur(0); */
   background-color: rgba(255, 255, 255, 0.5);
 }
 
 .Warning {
-  /* background-color: rgb(255, 244, 229); */
   -webkit-backdrop-filter: blur(0.5rem);
   backdrop-filter: blur(0.5rem);
   background-color: rgba(255, 255, 255, 0.5);
@@ -44,14 +40,12 @@ body {
 }
 
 .Info {
-  /* background-color: rgb(229, 246, 253); */
   -webkit-backdrop-filter: blur(0.5rem);
   backdrop-filter: blur(0.5rem);
   background-color: rgba(255, 255, 255, 0.5);
 }
 
 .Success {
-  /* background-color: rgb(237, 247, 237); */
   -webkit-backdrop-filter: blur(0.5rem);
   backdrop-filter: blur(0.5rem);
   background-color: rgba(255, 255, 255, 0.5);
@@ -151,8 +145,6 @@ body {
 
 /* Apply the zigzag animation on hover */
 .input-field .input .icone:hover {
-  /* animation: zigzag 0.5s ease infinite; */
-  /* Adjust the duration as desired */
   animation: zigzag 0.5s ease;
 }
 
@@ -217,7 +209,6 @@ body {
 }
 
 /* INPUT Fiels*/
-
 .input-select {
   width: 100%;
   margin: auto;
@@ -244,7 +235,6 @@ body {
 }
 
 /* TIMER START */
-
 .input-field .times {
   display: flex;
   position: relative;
@@ -271,6 +261,8 @@ body {
   font-weight: 500;
   left: 5px;
 }
+
+/* TIMER END */
 
 .input-field {
   display: flex;
@@ -311,28 +303,91 @@ body {
   padding: 15px 10px 0px;
   color: #6c6868;
 }
-.download-container{
+
+.download-container {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 15px;
 }
-.textboxlist-TripSheet .list-update::-webkit-scrollbar {
-  width: 5px;
-  height: 0px;
-  cursor: pointer;
-  position: absolute;
+
+.select-field {
+  border: #000;
 }
 
-.textboxlist-TripSheet .list-update::-webkit-scrollbar-track {
+/* TextBox */
+.textbox {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+.textboxlist {
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  height: 250px;
+}
+
+.list-update {
+  margin-top: 10px;
+  overflow: scroll;
+  height: 90%;
+}
+
+.textboxlist p::-webkit-scrollbar {
+  width: 5px;
+  height: 1px;
+  overflow-x: hidden;
+}
+
+.textboxupdate .textbox-container::-webkit-scrollbar {
+  width: 5px;
+  height: 1px;
+  overflow-x: hidden;
+}
+
+.textboxupdate .textbox-container::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
-.textboxlist-TripSheet .list-update::-webkit-scrollbar-thumb {
-  background-color: #457cdc;
-  width: 50px;
-  cursor: pointer;
-  border-radius: 20px;
+.textboxupdate .textbox-container::-webkit-scrollbar-thumb {
+  background-color: rgb(217, 212, 212);
+  outline: 1px solid slategrey;
+}
+
+.textboxupdate .textbox-container {
+  /* position: relative; */
+  border-radius: 5px;
+  overflow: scroll;
+  color: #3d3b3b;
+  padding: 5px;
+  font-weight: 500;
+  background-color: #fff;
+  height: 200px;
+  width: 300px;
+}
+
+.textbox-container .icon {
+  position: fixed;
+  bottom: 50px;
+  right: 80px;
+  border-radius: 50%;
+  background-color: #f8f8f8;
+  z-index: +9999;
+}
+
+.css-1c4hl6u {
+  position: relative;
+  margin-top: 0px !important;
+  height: 0px !important;
+}
+
+/* Date */
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: #456ddc !important;
 }
 
 /* dashboard.css or a separate CSS file */
@@ -342,3 +397,69 @@ body {
   align-items: center;
   height: 100vh;
 }
+
+/* MENUBAR FOR ALL PAGES */
+
+.menu-bar {
+  border-radius: 25px;
+  height: fit-content;
+  display: flex;
+  background-color: rgba(116, 112, 112, 0.4);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  gap: 1rem;
+}
+
+.menu-link {
+  text-decoration: none;
+  list-style: none;
+  color: white;
+  font-family: sans-serif;
+  font-weight: 300;
+  padding: 12px 16px;
+  margin: 0 8px;
+  position: relative;
+  cursor: pointer;
+  white-space: nowrap;
+
+}
+
+.menu-link.actives {
+  &::before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s;
+    border-radius: 25px;
+  }
+
+  & {
+    &::before {
+      background: linear-gradient(to bottom, #eaebeb89, #d2d1d36e);
+      box-shadow: 0px 3px 10px 0px rgb(109, 107, 107);
+      transform: scale(1.2);
+    }
+
+    color: black;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .menu-bar {
+    gap: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .menu-bar {
+    gap: 0;
+  }
+}
+/* MENUBAR FOR ALL PAGES ENDS*/

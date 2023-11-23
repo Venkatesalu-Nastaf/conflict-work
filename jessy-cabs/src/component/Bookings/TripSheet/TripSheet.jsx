@@ -1604,8 +1604,8 @@ const TripSheet = () => {
               </div>
             </div>
             <div className="container-right-Tripsheet">
-              <div className="textbox-TripSheet">
-                <div className="textboxlist-TripSheet">
+              <div className="textbox">
+                <div className="textboxlist">
                   <div className="textboxlist-customer list-updates">
                     <span>
                       <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>

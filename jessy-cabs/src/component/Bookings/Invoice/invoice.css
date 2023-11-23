@@ -100,12 +100,6 @@ header img {
   position: absolute;
 }
 
-/* .invoice-wrapper article address {
-  float: left;
-  font-size: 125%;
-  font-weight: bold;
-} */
-
 .invoice-wrapper article:after {
   clear: both;
   content: "";

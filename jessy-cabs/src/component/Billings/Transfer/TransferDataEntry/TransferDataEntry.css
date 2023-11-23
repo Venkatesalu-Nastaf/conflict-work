@@ -42,35 +42,6 @@
     padding: 20px;
 }
 
-/* TIMER START */
-.input-field .times {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-}
-
-.input-field .times input {
-    width: 181px;
-    margin-top: 28px;
-    margin-bottom: 25px;
-    background: transparent;
-    text-align: inherit;
-    border: 1px solid #457cdc;
-    padding: 9px 8px 9px 10px;
-    border-radius: 4px;
-    font-size: 17px;
-}
-
-.input-field .times label {
-    position: absolute;
-    color: #272626;
-    font-size: 14px;
-    top: 0px;
-    font-weight: 500;
-    left: 5px;
-}
-
-
 .copy-title-btn-TransferDataEntry {
     width: 90%;
     margin-top: 30px;

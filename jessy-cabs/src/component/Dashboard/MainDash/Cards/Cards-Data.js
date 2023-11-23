@@ -164,7 +164,7 @@ const getDefaultCardData = () => {
       barValue: 0,
       value: "0",
       png: FaRupeeSign,
-      series: [{ name: "Sales", data: [0], categories: [""] }],
+      series: [{ name: "Sales", data: [0], categories: [] }],
     },
     {
       title: "Revenue",
@@ -175,7 +175,7 @@ const getDefaultCardData = () => {
       barValue: 0,
       value: "0",
       png: FaRegMoneyBillAlt,
-      series: [{ name: "Revenue", data: [0], categories: [""] }],
+      series: [{ name: "Revenue", data: [0], categories: [] }],
     },
     {
       title: "Pending",
@@ -186,7 +186,7 @@ const getDefaultCardData = () => {
       barValue: 0,
       value: "0",
       png: BiPaste,
-      series: [{ name: "Pending", data: [0], categories: [""] }],
+      series: [{ name: "Pending", data: [0], categories: [] }],
     },
   ];
 };

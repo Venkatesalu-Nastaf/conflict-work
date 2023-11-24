@@ -283,6 +283,36 @@ app.use('/', taxsettingRouter);
 //     });
 // });
 
+const basemapImagePath = path.join(__dirname, 'path_to_save_mapimages');
+
+app.post('/api/savemapimage', (req, res) => {
+  const { mapData } = req.body;
+
+  const base64Data = mapData.replace(/^data:image\/png;base64,/, '');
+  const imageBuffer = Buffer.from(base64Data, 'base64');
+
+  const imageName = `map-${Date.now()}.png`;
+  const imagePath = path.join(basemapImagePath, imageName); // Use the base path
+
+  fs.writeFile(imagePath, imageBuffer, (error) => {
+    if (error) {
+      console.error('Error saving map image:', error);
+      res.status(500).json({ error: 'Failed to save map image' });
+    } else {
+      const relativeImagePath = path.relative(basemapImagePath, imagePath); // Calculate relative path
+      const sql = 'INSERT INTO mapimage (mapimage_path) VALUES (?)';
+      db.query(sql, [relativeImagePath], (dbError, results) => {
+        if (dbError) {
+          console.error('Error saving map image path to database:', dbError);
+          res.status(500).json({ error: 'Failed to save map image path to database' });
+        } else {
+          console.log('Map image saved successfully:', relativeImagePath);
+          res.json({ message: 'Map image saved successfully' });
+        }
+      });
+    }
+  });
+});
 
 
 const baseImagePath = path.join(__dirname, 'path_to_save_images');

@@ -178,6 +178,26 @@ router.get('/getPackageDetails', (req, res) => {
     });
 });
 //end package database
+//for map database
+router.post('/gmap-submitForm', (req, res) => {
+    const date = req.body.date;
+    const time = req.body.time;
+    const tripType = req.body.tripType;
+    const placeName = req.body.placeName;
+    const tripid = req.body.tripid;
+
+    // Insert data into MySQL
+    const query = `INSERT INTO gmapdata (date, time, trip_type, place_name, tripid ) VALUES (?, ?, ?, ?, ?)`;
+    db.query(query, [date, time, tripType, placeName, tripid], (err, results) => {
+        if (err) {
+            console.error('Error inserting data into MySQL:', err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            console.log('Data inserted into MySQL:', results);
+            res.status(200).json({ message: 'Form data submitted successfully' });
+        }
+    });
+});
 
 
 

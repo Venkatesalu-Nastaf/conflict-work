@@ -202,9 +202,40 @@ const TripSheet = () => {
     duty: '',
   });
 
+  // const handleButtonClick = () => {
+  //   const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+  //   console.log('Received tripid:', tripid);
+  //   if (!tripid) {
+  //     setError(true);
+  //     setErrorMessage("please enter the tripid");
+  //   }
+  //   else {
+  //     localStorage.setItem('selectedTripid', tripid);
+  //     const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
+  //     newTab.focus();
+  //   }
+  // };
+
   const handleButtonClick = () => {
-    const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
-    newTab.focus();
+    const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+    console.log('Received tripid:', tripid);
+
+    if (!tripid) {
+      setError(true);
+      setErrorMessage("Please enter the tripid");
+    } else {
+      localStorage.setItem('selectedTripid', tripid);
+
+      // Open a new tab for the map with the tripid
+      const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
+
+      // Check if the new tab is not null before focusing
+      if (newTab) {
+        newTab.focus();
+      } else {
+        console.error('Failed to open a new tab. Please check your popup settings.');
+      }
+    }
   };
 
   //generate link
@@ -836,8 +867,8 @@ const TripSheet = () => {
     if (!file) return;
     const formDataUpload = new FormData();
     formDataUpload.append('file', file);
-    formDataUpload.append('documenttype', book.tripid || selectedCustomerData.tripid || formData.tripid);
-    formDataUpload.append('tripid', book.documenttype || selectedCustomerData.documenttype || formData.documenttype);
+    // formDataUpload.append('documenttype', book.tripid || selectedCustomerData.tripid || formData.tripid);
+    formDataUpload.append('tripid', book.tripid || selectedCustomerData.tripid || formData.tripid);
     console.log('uploaded file details', formDataUpload);
     try {
       const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
@@ -1604,8 +1635,8 @@ const TripSheet = () => {
               </div>
             </div>
             <div className="container-right-Tripsheet">
-              <div className="textbox">
-                <div className="textboxlist">
+              <div className="textbox-TripSheet">
+                <div className="textboxlist-TripSheet">
                   <div className="textboxlist-customer list-updates">
                     <span>
                       <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>

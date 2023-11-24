@@ -148,11 +148,14 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-// const updateFormData = () => {
-//   const totalTime = calculateTotalTime();
-//   setFormData({ ...formData, totalTime });
-// };
-
+const maplogcolumns = [
+  { field: "id", headerName: "Sno", width: 70 },
+  { field: "tripid", headerName: "TripSheet No", width: 130 },
+  { field: "date", headerName: "Trip Date", width: 160 },
+  { field: "time", headerName: "Trip Time", width: 130 },
+  { field: "trip_type", headerName: "Trip Type", width: 160 },
+  { field: "place_name", headerName: "Place Name", width: 600 },
+];
 
 const TripSheet = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -164,6 +167,7 @@ const TripSheet = () => {
   });
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [rows, setRows] = useState([]);
+  const [row, setRow] = useState([]);
   const [starttime, setStartTime] = useState('');
   const [closetime, setCloseTime] = useState('');
   const [reporttime, setreporttime] = useState('');
@@ -182,6 +186,7 @@ const TripSheet = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [imgpopupOpen, setimgPopupOpen] = useState(false);
   const [mapimgpopupOpen, setMapimgPopupOpen] = useState(false);
+  const [maplogimgpopupOpen, setMaplogimgPopupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
@@ -256,20 +261,58 @@ const TripSheet = () => {
   };
 
   const [mapimageUrl, setMapImageUrl] = useState('');
-  const handleTripmapClick = () => {
-    const encodedPath = encodeURIComponent(params.row.path);
-    setMapimgPopupOpen(true);
-    setMapImageUrl(`http://localhost:8081/get-image/${encodedPath}`);
+  const handleTripmapClick = async () => {
+    try {
+      const tripid = selectedRow?.tripid || book?.tripid || selectedCustomerData?.tripid || formData?.tripid;
+      if (!tripid) {
+        setError(true);
+        setErrorMessage("Please enter the tripid");
+      }
+      const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const imageUrl = URL.createObjectURL(await response.blob());
+      console.log('map image url', imageUrl);
+      setMapImageUrl(imageUrl);
+      setMapimgPopupOpen(true);
+    } catch (error) {
+      console.error('Error fetching map image:', error.message);
+    }
+  };
+
+  const handleTripmaplogClick = async () => {
+    try {
+      const tripid = selectedRow?.tripid || book?.tripid || selectedCustomerData?.tripid || formData?.tripid;
+      if (!tripid) {
+        setError(true);
+        setErrorMessage("Please enter the tripid");
+      } else {
+        const response = await axios.get(`http://localhost:8081/get-gmapdata/${tripid}`);
+        const data = response.data;
+        console.log('logmap', data)
+        setRow(data);
+
+        setMaplogimgPopupOpen(true);
+      }
+    } catch (error) {
+      console.error('Error fetching map image:', error.message);
+    }
   };
 
   //refresh button function
   const handleRefresh = async () => {
     const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
     try {
-      console.log('Refresh button clicked');
-      const response = await axios.get(`http://localhost:8081/tripuploadcollect/${tripid}`);
-      const data = response.data;
-      setRows(data);
+      if (!tripid) {
+        setError(true);
+        setErrorMessage("Please enter the tripid");
+      } else {
+        console.log('Refresh button clicked');
+        const response = await axios.get(`http://localhost:8081/tripuploadcollect/${tripid}`);
+        const data = response.data;
+        setRows(data);
+      }
     } catch (error) {
       console.error('Error Refreshing customer:', error);
     }
@@ -286,6 +329,8 @@ const TripSheet = () => {
   };
   const handleimgPopupClose = () => {
     setimgPopupOpen(false);
+    setMapimgPopupOpen(false);
+    setMaplogimgPopupOpen(false);
   };
   const [formValues, setFormValues] = useState({
     guestname: '',
@@ -1643,11 +1688,11 @@ const TripSheet = () => {
               </div>
             </div>
             <div className="container-right-Tripsheet">
-              <div className="textbox-TripSheet">
-                <div className="textboxlist-TripSheet">
+              <div className="textbox">
+                <div className="textboxlist">
                   <div className="textboxlist-customer list-updates">
                     <span>
-                      <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
+                      <div className="Scroll-Style" style={{ overflow: 'scroll',width:'500px', height: '220px' }}>
                         <Table hoverRow borderAxis="y">
                           <thead>
                             <tr>
@@ -3561,9 +3606,7 @@ const TripSheet = () => {
 
                     <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
                       <DialogContent>
-                        {selectedRow && (
-                          <img className='dialogboximg' src={mapimageUrl} alt={selectedRow.name} />
-                        )}
+                        <img className='dialogboximg' src={mapimageUrl} aria-label='summa' />
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleimgPopupClose} variant="contained" color="primary">
@@ -3572,8 +3615,23 @@ const TripSheet = () => {
                       </DialogActions>
                     </Dialog>
                     <div className="input">
-                      <Button>View GPS Log</Button>
+                      <Button onClick={handleTripmaplogClick}>View GPS Log</Button>
                     </div>
+                    <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
+                      <DialogContent>
+                        <div className="table-customer-lists">
+                          <DataGrid
+                            rows={row}
+                            columns={maplogcolumns}
+                          />
+                        </div>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                          Cancel
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                     <div className="input">
                       <Button>View Closing</Button>
                     </div>

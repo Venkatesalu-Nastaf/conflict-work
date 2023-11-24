@@ -108,24 +108,31 @@ app.post('/mapuploads', upload.single('file'), (req, res) => {
 });
 //space
 const mapimageDirectory = path.join(__dirname, 'uploads');
-// Serve static files from the imageDirectory
-app.use('/images', express.static(mapimageDirectory));
-// Example route to serve an image by its filename
-app.get('/get-image/:filename', (req, res) => {
-  const { filename } = req.params;
-  const mapimagePath = path.join(mapimageDirectory, filename);
-  fs.access(mapimagePath, fs.constants.R_OK, (err) => {
+app.use('/mapimages', express.static(mapimageDirectory));
+
+app.get('/get-mapimage/:tripid', (req, res) => {
+  const { tripid } = req.params;
+
+  const query = 'SELECT path FROM mapimage WHERE tripid = ?';
+  db.query(query, [tripid], (err, results) => {
     if (err) {
-      console.error('Error accessing image:', err);
-      res.status(404).send('Image not found');
-    } else {
-      res.sendFile(mapimagePath, (err) => {
-        if (err) {
-          console.error('Error sending image:', err);
-          res.status(404).send('Image not found');
-        }
-      });
+      console.error('Error querying database:', err);
+      return res.status(500).send('Internal Server Error');
     }
+
+    if (results.length === 0) {
+      // No record found for the given tripid
+      return res.status(404).send('Image not found');
+    }
+
+    const imagePath = path.join(mapimageDirectory, results[0].path);
+    console.log('map image path', imagePath);
+    res.sendFile(imagePath, (err) => {
+      if (err) {
+        console.error('Error sending image:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+    });
   });
 });
 

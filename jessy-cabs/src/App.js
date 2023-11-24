@@ -31,6 +31,7 @@ import Dispatcheds from "./component/Bookings/Dispatcheds/Dispatcheds";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
 // import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import BillingMain from "./component/Billings/billingMain/billingMain";
+import CoveringBill from "./component/Billings/CoveringBill/CoveringBill";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
 import RateManagement from "./component/Info/RateManagement/RateManagement";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
@@ -38,7 +39,6 @@ import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapComponent";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
-import CoveringBill from "./component/Billings/CoveringBill/CoveringBill";
 
 
 function App() {

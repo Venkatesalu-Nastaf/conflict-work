@@ -667,7 +667,7 @@ const Billing = () => {
                             </div>
                         </div>
                         <div className="input-field" >
-                            <div className="input" style={{ width: "310px" }}>
+                            <div className="input" style={{ width: "300px" }}>
                                 <div className="icone">
                                     <HailOutlinedIcon color="action" />
                                 </div>
@@ -683,7 +683,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "310px" }}>
+                            <div className="input" style={{ width: "300px" }}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faBoxesPacking} size="lg" />
                                 </div>
@@ -727,7 +727,7 @@ const Billing = () => {
                             </div>
                         </div>
                         <div className="input-field" >
-                            <div className="input" style={{ width: "335px" }}>
+                            <div className="input" style={{ width: "300px" }}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faPersonCircleCheck} size="lg" />
                                 </div>
@@ -743,7 +743,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "335px" }}>
+                            <div className="input" style={{ width: "300px" }}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                                 </div>
@@ -759,7 +759,7 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input" style={{ width: "200px" }}>
+                            <div className="input">
                                 <div className="icone">
                                     <DirectionsCarFilledIcon color="action" />
                                 </div>

@@ -89,7 +89,7 @@ const Excelimport = () => {
 
       reader.readAsArrayBuffer(file);
     } else {
-      setSheets([]); // Reset sheets when no file is uploaded
+      setSheets([]); 
     }
   };
 
@@ -131,7 +131,7 @@ const Excelimport = () => {
                 </div>
               </div>
               <div className="input-field">
-                <div className="dropdown input">
+                <div className="input">
                   <div className="icone">
                     <DescriptionIcon color="action" />
                   </div>

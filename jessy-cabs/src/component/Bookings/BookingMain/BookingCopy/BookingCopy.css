@@ -7,10 +7,6 @@
   display: flex;
 }
 
-.form-container-booking .Title-Name {
-  font-size: 20px;
-  font-weight: 500;
-}
 
 .form-container-booking .bookingcopy-form {
   height: 100vh;
@@ -41,10 +37,6 @@
   margin-top: 30px;
 }
 
-/* .form-container-booking .container-main::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  } */
-
 .form-container-booking .container-main::-webkit-scrollbar-thumb {
   background-color: transparent;
   outline: 1px solid transparent;
@@ -63,9 +55,6 @@
   background-color: var(--glass);
 }
 
-.bookingcopy-form .Title-Name {
-  position: relative;
-}
 
 .copy-title-btn-BookingCopy {
   background: var(--glass);

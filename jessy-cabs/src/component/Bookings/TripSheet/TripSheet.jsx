@@ -1635,11 +1635,10 @@ const TripSheet = () => {
               </div>
             </div>
             <div className="container-right-Tripsheet">
-              <div className="textbox-TripSheet">
-                <div className="textboxlist-TripSheet">
-                  <div className="textboxlist-customer list-updates">
+              <div className="textbox">
+                <div className="textboxlist list-updates">
                     <span>
-                      <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
+                      <div className="Scroll-Style" style={{ overflow: 'scroll',width: '500px',height: '220px' }}>
                         <Table hoverRow borderAxis="y">
                           <thead>
                             <tr>
@@ -1672,7 +1671,6 @@ const TripSheet = () => {
                         </Table>
                       </div>
                     </span>
-                  </div>
                 </div>
               </div>
             </div>

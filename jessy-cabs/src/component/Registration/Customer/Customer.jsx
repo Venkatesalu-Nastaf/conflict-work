@@ -19,8 +19,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { UnderGroup, states, Customertype, Select, BillingGroup, Service_Station } from "./Customerdata";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+import { UnderGroup, states, Customertype, Select, BillingGroup, Service_Station } from "./Customerdata";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
 
 // ICONS
@@ -418,7 +418,6 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData?.customerType || book.customerType || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = selectedCustomerData?.customerType || ''
                     return (
                       <TextField   {...params} label="Customer Type" name="customerType" inputRef={params.inputRef} />
                     )
@@ -623,7 +622,6 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData.servicestation || book.servicestation || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = selectedCustomerData.servicestation || book.servicestation || ''
                     return (
                       <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
                     )
@@ -645,7 +643,6 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData?.selectOption || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = selectedCustomerData?.selectOption || ''
                     return (
                       <TextField   {...params} label="Select" name="selectOption" inputRef={params.inputRef} />
                     )
@@ -690,7 +687,6 @@ const Customer = () => {
                   size="small"
                   id="free-solo-demo-state"
                   freeSolo
-                  sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "state")}
                   value={states.find((option) => option.state)?.label || selectedCustomerData?.state || ''}
                   options={states.map((option) => ({
@@ -698,7 +694,6 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData?.state || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = selectedCustomerData?.state || ''
                     return (
                       <TextField {...params} label="State" name="state" inputRef={params.inputRef} />
                     )
@@ -712,7 +707,6 @@ const Customer = () => {
                   size="small"
                   id="free-solo-demo-underGroup"
                   freeSolo
-                  sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
                   value={UnderGroup.find((option) => option.option)?.label || selectedCustomerData?.underGroup || ''}
                   options={UnderGroup.map((option) => ({
@@ -720,7 +714,6 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData?.underGroup || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = selectedCustomerData?.underGroup || ''
                     return (
                       <TextField {...params} label="UnderGroup" name="underGroup" inputRef={params.inputRef} />
                     )
@@ -734,7 +727,6 @@ const Customer = () => {
                   size="small"
                   id="free-solo-demo-billingGroup"
                   freeSolo
-                  sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "billingGroup")}
                   value={BillingGroup.find((option) => option.option)?.label || selectedCustomerData?.billingGroup || ''}
                   options={BillingGroup.map((option) => ({
@@ -742,7 +734,6 @@ const Customer = () => {
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData?.billingGroup || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = selectedCustomerData?.billingGroup || ''
                     return (
                       <TextField {...params} label="Billing Group" name="billingGroup" inputRef={params.inputRef} />
                     )

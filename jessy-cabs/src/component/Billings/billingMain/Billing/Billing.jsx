@@ -7,7 +7,9 @@ import {
 import dayjs from "dayjs";
 import axios from "axios";
 import Box from "@mui/material/Box";
+import Paymentinvoice from '../Accountsinvoice/Paymentinvoice';
 import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 import { useLocation } from "react-router-dom";
 import SpeedDial from "@mui/material/SpeedDial";
 import { fetchBankOptions } from './BillingData';
@@ -15,7 +17,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { GiMoneyStack } from "@react-icons/all-files/gi/GiMoneyStack";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-
+//dialog box
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -69,7 +74,8 @@ const Billing = () => {
     const location = useLocation();
     const [info, setInfo] = useState(false);
     const [actionName] = useState('');
-    const [rows, setRows] = useState([]);
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [rows] = useState([]);
     const [error, setError] = useState(false);
     const [warning, setWarning] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -121,6 +127,14 @@ const Billing = () => {
             return () => clearTimeout(timer);
         }
     }, [info]);
+
+    const handleEInvoiceClick = (row) => {
+        setPopupOpen(true);
+    };
+
+    const handlePopupClose = () => {
+        setPopupOpen(false);
+    };
 
     const [book, setBook] = useState({
         tripid: '',
@@ -287,11 +301,9 @@ const Billing = () => {
     const handleClick = async (event, actionName, tripid) => {
         event.preventDefault();
         try {
-            if (actionName === 'List') {
-                console.log('List button clicked');
-                const response = await axios.get('http://localhost:8081/billing');
-                const data = response.data;
-                setRows(data);
+            if (actionName === 'Print') {
+                console.log('Print button clicked');
+                handleEInvoiceClick();
             } else if (actionName === 'Cancel') {
                 console.log('Cancel button clicked');
                 handleCancel();
@@ -1369,6 +1381,17 @@ const Billing = () => {
                             </div>
                         </div>
                     </div>
+                    <Dialog open={popupOpen} onClose={handlePopupClose}>
+                        <DialogContent>
+                            {/* <Invoice tripSheetData={tripSheetData} formData={calculateTotalTime} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} /> */}
+                            <Paymentinvoice />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handlePopupClose} variant="contained" color="primary">
+                                Cancel
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </form>
                 {error &&
                     <div className='alert-popup Error' >

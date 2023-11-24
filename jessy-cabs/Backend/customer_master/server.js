@@ -87,6 +87,47 @@ app.use('/', bookingchartRouter);
 // trip sheet database:
 app.use('/', tripsheetRouter);
 // End tripsheet database
+//map image upload
+app.post('/mapuploads', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded.' });
+  }
+  const fileData = {
+    path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
+    tripid: req.body.tripid,
+  };
+  const query = 'INSERT INTO mapimage SET ?';
+  db.query(query, fileData, (err, result) => {
+    if (err) {
+      console.error('Error storing file in the database:', err);
+      return res.status(500).json({ error: 'Error storing file in the database.' });
+    }
+    console.log('result of my map', result);
+    return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
+  });
+});
+//space
+const mapimageDirectory = path.join(__dirname, 'uploads');
+// Serve static files from the imageDirectory
+app.use('/images', express.static(mapimageDirectory));
+// Example route to serve an image by its filename
+app.get('/get-image/:filename', (req, res) => {
+  const { filename } = req.params;
+  const mapimagePath = path.join(mapimageDirectory, filename);
+  fs.access(mapimagePath, fs.constants.R_OK, (err) => {
+    if (err) {
+      console.error('Error accessing image:', err);
+      res.status(404).send('Image not found');
+    } else {
+      res.sendFile(mapimagePath, (err) => {
+        if (err) {
+          console.error('Error sending image:', err);
+          res.status(404).send('Image not found');
+        }
+      });
+    }
+  });
+});
 
 //file upload in tripsheet
 app.post('/uploads', upload.single('file'), (req, res) => {

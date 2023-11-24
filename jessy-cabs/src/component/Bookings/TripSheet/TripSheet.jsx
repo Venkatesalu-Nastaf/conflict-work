@@ -181,6 +181,7 @@ const TripSheet = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [imgpopupOpen, setimgPopupOpen] = useState(false);
+  const [mapimgpopupOpen, setMapimgPopupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
@@ -252,6 +253,13 @@ const TripSheet = () => {
 
   const handlePopupClose = () => {
     setPopupOpen(false);
+  };
+
+  const [mapimageUrl, setMapImageUrl] = useState('');
+  const handleTripmapClick = () => {
+    const encodedPath = encodeURIComponent(params.row.path);
+    setMapimgPopupOpen(true);
+    setMapImageUrl(`http://localhost:8081/get-image/${encodedPath}`);
   };
 
   //refresh button function
@@ -1635,10 +1643,11 @@ const TripSheet = () => {
               </div>
             </div>
             <div className="container-right-Tripsheet">
-              <div className="textbox">
-                <div className="textboxlist list-updates">
+              <div className="textbox-TripSheet">
+                <div className="textboxlist-TripSheet">
+                  <div className="textboxlist-customer list-updates">
                     <span>
-                      <div className="Scroll-Style" style={{ overflow: 'scroll',width: '500px',height: '220px' }}>
+                      <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
                         <Table hoverRow borderAxis="y">
                           <thead>
                             <tr>
@@ -1671,6 +1680,7 @@ const TripSheet = () => {
                         </Table>
                       </div>
                     </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -3546,8 +3556,21 @@ const TripSheet = () => {
                       <Button>View GPS TripSheet</Button>
                     </div>
                     <div className="input">
-                      <Button>View GPS Map</Button>
+                      <Button onClick={handleTripmapClick}>View GPS Map</Button>
                     </div>
+
+                    <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
+                      <DialogContent>
+                        {selectedRow && (
+                          <img className='dialogboximg' src={mapimageUrl} alt={selectedRow.name} />
+                        )}
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                          Cancel
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                     <div className="input">
                       <Button>View GPS Log</Button>
                     </div>

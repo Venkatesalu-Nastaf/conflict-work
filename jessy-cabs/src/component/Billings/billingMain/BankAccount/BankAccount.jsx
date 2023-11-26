@@ -155,13 +155,30 @@ const BankAccount = () => {
     }
   };
 
-  const handleDeleteBank = async (index) => {
-    const idToDelete = document.querySelector('input[name="id"]').value;
-    if (!idToDelete) {
+  // const handleDeleteBank = async (index) => {
+  //   const idToDelete = document.querySelector('input[name="id"]').value;
+  //   console.log('id of deleted account', idToDelete);
+  //   if (!idToDelete) {
+  //     return;
+  //   }
+  //   try {
+  //     await axios.delete(`http://localhost:8081/deletebankdetails/${idToDelete}`);
+  //     fetchData();
+  //     handlePopupClose();
+  //   } catch (error) {
+  //     console.error('Error deleting bank account:', error);
+  //     setError(true);
+  //     setErrorMessage('Error deleting bank account. Please check your Network Connection.');
+  //   }
+  // };
+
+  const handleDeleteBank = async (id) => {
+    console.log('id of deleted account', id);
+    if (!id) {
       return;
     }
     try {
-      await axios.delete(`http://localhost:8081/deletebankdetails/${idToDelete}`);
+      await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
       fetchData();
       handlePopupClose();
     } catch (error) {
@@ -260,11 +277,21 @@ const BankAccount = () => {
     setTotalIn(calculatedTotalIn);
   }, [bankDetails, book]);
   //calculate totalcapital amount
+  // useEffect(() => {
+  //   const calculatedTotalCapital = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalin, 10) || parseInt(book.totalin, 10) || 0), 0);
+  //   setTotalCapital(calculatedTotalCapital);
+  // }, [bankDetails, book]);
   useEffect(() => {
-    const calculatedTotalCapital = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalin, 10) || parseInt(book.totalin, 10) || 0), 0);
-    setTotalCapital(calculatedTotalCapital);
-  }, [bankDetails, book]);
-  
+    // Make API request to fetch total capital amount
+    axios.get('http://localhost:8081/totalCapital_from_billing')
+      .then(response => {
+        setTotalCapital(response.data.totalAmount);
+      })
+      .catch(error => {
+        console.error('Error fetching total capital amount:', error);
+      });
+  }, []);
+
   return (
     <div className="BankAccount-form Scroll-Style-hide">
       <form className="BankAccount-main-container">
@@ -443,7 +470,7 @@ const BankAccount = () => {
                       Are you sure you want to Delete this
                     </DialogContent>
                     <DialogActions>
-                      <Button onClick={handleDeleteBank} variant="contained" color="primary">
+                      <Button onClick={() => handleDeleteBank(bankDetail.id)} variant="contained" color="primary">
                         Yes
                       </Button>
                       <Button onClick={handlePopupClose} variant="contained" color="primary">

@@ -121,4 +121,20 @@ router.delete('/deletebankdetails/:id', (req, res) => {
     });
 });
 
+router.get('/totalCapital_from_billing', (req, res) => {
+    const query = 'SELECT SUM(netbalance) AS total FROM bankaccountdetails';
+    // console.log('query from payment', query);
+
+    db.query(query, (err, result) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            const totalAmount = result[0].total || 0;
+            console.log('total amount', totalAmount);
+            res.json({ totalAmount });
+        }
+    });
+});
+
 module.exports = router;

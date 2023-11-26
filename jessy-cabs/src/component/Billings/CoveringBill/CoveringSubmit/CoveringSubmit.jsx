@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./CoveringSubmit.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import { Menu, TextField } from "@mui/material";
+import { Autocomplete } from "@mui/material";
+import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
+import ClearIcon from '@mui/icons-material/Clear';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -38,6 +41,46 @@ const columns = [
 
 const CoveringSubmit = () => {
     const [rows] = useState([]);
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState({});
+    const [customer, setCustomer] = useState("");
+    const [bankOptions, setBankOptions] = useState([]);
+
+    const hidePopup = () => {
+        setError(false);
+    };
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [error]);
+
+    const handleInputChange = (event, newValue) => {
+        if (event.target.name === 'customer') {
+            setCustomer(newValue ? newValue.label : '');
+        }
+    };
+
+    useEffect(() => {
+        Organization()
+            .then((data) => {
+                if (data) {
+                    console.log('organization name', data);
+                    setBankOptions(data);
+                } else {
+                    setError(true);
+                    setErrorMessage('Failed to fetch organization options.');
+                }
+            })
+            .catch(() => {
+                setError(true);
+                setErrorMessage('Failed to fetch organization options.');
+            });
+    }, []);
+
 
     return (
         <div className="CoveringSubmit-form Scroll-Style-hide">
@@ -50,12 +93,19 @@ const CoveringSubmit = () => {
                                     <div className="icone">
                                         <HailOutlinedIcon color="action" />
                                     </div>
-                                    <TextField
+                                    <Autocomplete
+                                        fullWidth
+                                        id="free-solo-demo"
+                                        freeSolo
                                         size="small"
-                                        id="id"
-                                        label="Organization"
-                                        name="organization"
-                                        autoComplete='off'
+                                        value={customer}
+                                        options={bankOptions}
+                                        onChange={(event, value) => handleInputChange(event, value)}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField {...params} label="Organization" inputRef={params.inputRef} />
+                                            );
+                                        }}
                                     />
                                 </div>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -114,6 +164,13 @@ const CoveringSubmit = () => {
                     </div>
                 </div>
             </form>
+            {error &&
+                <div className='alert-popup Error' >
+                    <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                    <p>{errorMessage}</p>
+                </div>
+            }
         </div>
     )
 }

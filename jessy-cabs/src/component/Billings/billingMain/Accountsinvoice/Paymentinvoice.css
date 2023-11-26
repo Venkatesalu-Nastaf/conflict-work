@@ -3,12 +3,12 @@
     font-family: 'Roboto', sans-serif;
 }
 
-::selection {
+#invoiceholder ::selection {
     background: #f31544;
     color: #FFF;
 }
 
-::moz-selection {
+#invoiceholder ::moz-selection {
     background: #f31544;
     color: #FFF;
 }

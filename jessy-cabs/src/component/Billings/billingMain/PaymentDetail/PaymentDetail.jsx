@@ -256,11 +256,13 @@ const PaymentDetail = () => {
                   <DemoContainer components={["DatePicker", "DatePicker"]}>
                     <DatePicker
                       label="From Date"
+                      format="DD/MM/YYYY"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
                     <DatePicker
                       label="To Date"
+                      format="DD/MM/YYYY"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />

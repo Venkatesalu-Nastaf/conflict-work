@@ -3,7 +3,66 @@
     font-family: 'Roboto', sans-serif;
 }
 
-::selection {
+#invoiceholder .title-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #000;
+    text-align: left;
+
+}
+
+#invoiceholder .title-details-container {
+    display: flex;
+}
+
+#invoiceholder .company-Client-details .GuestName {
+    text-transform: uppercase;
+}
+
+#invoiceholder .title-data-coantainer .invoice-data {
+    font-size: 12px;
+    font-weight: 700;
+    color: #7e7e7e;
+}
+
+#invoiceholder .address-container {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#invoiceholder #company-address {
+    width: 40%;
+}
+#invoiceholder #company-address p{
+    font-size: 13px;
+}
+#invoiceholder .company-Client-details {
+    width: 80%;
+    padding: 20px;
+    padding-top: 40px;
+
+}
+
+/* #invoiceholder #company-address {
+    width: 30%;
+} */
+
+#invoiceholder #invoice_date {
+    font-weight: 600;
+    float: center;
+}
+
+#invoiceholder .title {
+    float: right;
+}
+
+#invoiceholder .title p {
+    text-align: left;
+}
+
+/* ::selection {
     background: #f31544;
     color: #FFF;
 }
@@ -11,7 +70,7 @@
 ::moz-selection {
     background: #f31544;
     color: #FFF;
-}
+} */
 
 #invoiceholder .clearfix::after {
     content: "";
@@ -114,13 +173,6 @@
     margin-left: 20px
 }
 
-#invoiceholder .title {
-    float: right;
-}
-
-#invoiceholder .title p {
-    text-align: right;
-}
 
 #invoiceholder #message {
     margin-bottom: 30px;

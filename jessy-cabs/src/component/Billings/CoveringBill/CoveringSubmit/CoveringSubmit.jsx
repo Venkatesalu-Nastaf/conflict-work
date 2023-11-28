@@ -81,7 +81,6 @@ const CoveringSubmit = () => {
             });
     }, []);
 
-
     return (
         <div className="CoveringSubmit-form Scroll-Style-hide">
             <form >

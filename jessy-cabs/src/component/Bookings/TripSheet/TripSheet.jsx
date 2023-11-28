@@ -1782,7 +1782,7 @@ const TripSheet = () => {
                   }
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ width: "240px" }}>
                 <div className="icone">
                   <CarCrashIcon color="action" />
                 </div>
@@ -1795,6 +1795,16 @@ const TripSheet = () => {
                   value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
                   onChange={handleChange}
                   onKeyDown={handleKeyEnter}
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input" style={{ width: "150px" }}>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="category"
+                  label="category"
+                  name="category"
                   autoComplete="password"
                 />
               </div>
@@ -1854,15 +1864,6 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input radio">
-                {/* <FormControlLabel
-                  name="driversmsexbetta"
-                  value="Driver SMS"
-                  control={<Checkbox size="small" />}
-                  label="Driver SMS"
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                  checked={Boolean(formData.driversmsexbetta || selectedCustomerData?.driversmsexbetta || book.driversmsexbetta)}
-                /> */}
                 <FormControlLabel
                   value="DriverSMS"
                   control={<Checkbox size="small" checked={DriverSMS} onChange={(event) => setDriverSMS(event.target.checked)} />}

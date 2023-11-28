@@ -20,8 +20,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import { UnderGroup, states, Customertype, Select, BillingGroup, Service_Station } from "./Customerdata";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
+import { UnderGroup, states, Customertype, Select, Service_Station } from "./Customerdata";
+import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch } from "@mui/material";
 
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
@@ -42,6 +42,7 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import CustomInput from './CustomInput';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -90,7 +91,11 @@ const Customer = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
+  const [isInputVisible, setIsInputVisible] = useState(false);
 
+  const handleButtonClick = () => {
+    setIsInputVisible(!isInputVisible);
+  };
   const convertToCSV = (data) => {
     const header = columns.map((column) => column.headerName).join(",");
     const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
@@ -721,38 +726,54 @@ const Customer = () => {
                   }
                 />
               </div>
-              <div className="input">
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo-billingGroup"
-                  freeSolo
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "billingGroup")}
-                  value={BillingGroup.find((option) => option.option)?.label || selectedCustomerData?.billingGroup || ''}
-                  options={BillingGroup.map((option) => ({
-                    label: option.option,
-                  }))}
-                  getOptionLabel={(option) => option.label || selectedCustomerData?.billingGroup || ''}
-                  renderInput={(params) => {
-                    return (
-                      <TextField {...params} label="Billing Group" name="billingGroup" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
-                />
+              <div className="input dropdown">
+                <label htmlFor="">GST</label>
+                <select name="" id="">
+                  <option value="">None</option>
+                  <option value="">5%</option>
+                  <option value="">12.5%</option>
+                </select>
               </div>
             </div>
           </div>
           <div className="detail-container-main-customer">
             <div className="input-field">
-              <div className="input dropdown">
-                <label htmlFor="">GST</label>
-                <select name="" id="">
-                  <option value="">5%</option>
-                  <option value="">12.5%</option>
-                </select>
+              <div className="input" style={{ width: "400px" }}>
+                <FormLabel>BillingGroup</FormLabel>
+                <Switch label='' onClick={handleButtonClick} />
+                {isInputVisible && (
+                  <CustomInput />
+                )}
               </div>
-              <div className="input ">
+              <div className="input">
+                <TextField
+                  name="gstin"
+                  autoComplete="new-password"
+                  label="GST-Number"
+                  id=""
+                  size='small'
+                />
+              </div>
+              <div className="input">
+                <TextField
+                  name="SalesPerson"
+                  autoComplete="new-password"
+                  label="Sales-Person"
+                  id=""
+                  size='small'
+                />
+              </div>
+              <div className="input">
+                <TextField
+                  type='number'
+                  name="SalesPerson"
+                  autoComplete="new-password"
+                  label="Percentage"
+                  id=""
+                  size='small'
+                />
+              </div>
+              {/* <div className="input ">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Active
@@ -777,8 +798,8 @@ const Customer = () => {
                     />
                   </RadioGroup>
                 </FormControl>
-              </div>
-              <div className="input radio">
+              </div> */}
+              {/* <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Enable Driver App
@@ -803,8 +824,8 @@ const Customer = () => {
                     />
                   </RadioGroup>
                 </FormControl>
-              </div>
-              <div className="input radio">
+              </div> */}
+              {/* <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     GST Tax
@@ -829,7 +850,7 @@ const Customer = () => {
                     />
                   </RadioGroup>
                 </FormControl>
-              </div>
+              </div> */}
             </div>
             <div className="input-field">
               <div className="input">

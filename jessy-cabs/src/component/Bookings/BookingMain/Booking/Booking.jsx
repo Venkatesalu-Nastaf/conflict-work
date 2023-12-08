@@ -847,7 +847,7 @@ const Booking = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-              <div className="input time">
+              <div className="input time" style={{ marginTop: '45px' }}>
                 <label>Booking Time</label>
                 <input
                   type="time"

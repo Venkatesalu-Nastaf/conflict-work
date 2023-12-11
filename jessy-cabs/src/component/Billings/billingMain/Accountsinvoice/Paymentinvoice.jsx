@@ -6,7 +6,6 @@ const Invoice = () => {
         <body>
             <div id="invoiceholder">
                 <div id="invoice" className="effect2">
-
                     <div id="invoice-top">
                         <div className="logo"><img src="https://www.almonature.com/wp-content/uploads/2018/01/logo_footer_v2.png" alt="Logo" /></div>
                         <div className="title">
@@ -16,7 +15,6 @@ const Invoice = () => {
                             </p>
                         </div>
                     </div>
-
                     <div id="invoice-mid">
                         <div id="message">
                             <h2>Hello Andrea De Asmundis,</h2>
@@ -51,9 +49,7 @@ const Invoice = () => {
                             </div>
                         </div>
                     </div>
-
                     <div id="invoice-bot">
-
                         <div id="table">
                             <table className="table-main">
                                 <thead>
@@ -101,9 +97,6 @@ const Invoice = () => {
                             </table>
                         </div>
                     </div>
-                    <footer>
-
-                    </footer>
                 </div>
             </div>
         </body>

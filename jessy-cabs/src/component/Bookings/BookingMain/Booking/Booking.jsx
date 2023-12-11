@@ -25,6 +25,7 @@ import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup,
 import InfoIcon from "@mui/icons-material/Info";
 import SellIcon from "@mui/icons-material/Sell";
 import ClearIcon from '@mui/icons-material/Clear';
+import { useUser } from '../../../form/UserContext';
 import DeleteIcon from "@mui/icons-material/Delete";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import FmdBadIcon from "@mui/icons-material/FmdBad";
@@ -63,7 +64,6 @@ import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
-import { useUser } from '../../../form/UserContext';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -847,7 +847,7 @@ const Booking = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-              <div className="input time">
+              <div className="input time" style={{ marginTop: '45px' }}>
                 <label>Booking Time</label>
                 <input
                   type="time"

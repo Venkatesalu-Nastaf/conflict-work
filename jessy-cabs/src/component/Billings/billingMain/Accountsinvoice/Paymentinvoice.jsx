@@ -1,49 +1,71 @@
 import React from 'react';
 import './Paymentinvoice.css';
+import { Button } from '@material-ui/core';
+import ReactDOMServer from 'react-dom/server';
+import Logo from "../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 
-const Invoice = () => {
+const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, BalanceValue, selectedCustomerData, selectedCustomerDatas, formData }) => {
+
     return (
         <body>
             <div id="invoiceholder">
                 <div id="invoice" className="effect2">
                     <div id="invoice-top">
-                        <div className="logo"><img src="https://www.almonature.com/wp-content/uploads/2018/01/logo_footer_v2.png" alt="Logo" /></div>
+                        <div className="logo"><img src={Logo} alt="logo" /></div>
                         <div className="title">
-                            <h1>Invoice #<span className="invoiceVal invoice_num">tst-inv-23</span></h1>
-                            <p>Invoice Date: <span id="invoice_date">01 Feb 2018</span><br />
-                                GL Date: <span id="gl_date">23 Feb 2018</span>
-                            </p>
+                            <h1>Tax Invoice</h1>
                         </div>
                     </div>
                     <div id="invoice-mid">
+                        <div className="righttitle">
+                            <p>OUR GSTIN : 33AVNPM9362R1ZK<br />
+                                State : Tamilnadu, Code : 33<br />
+                                PAN No : AVNPM9362R<br />
+                                SAC CODE : 996601
+                            </p>
+                        </div>
                         <div id="message">
-                            <h2>Hello Andrea De Asmundis,</h2>
-                            <p>An invoice with invoice number #<span id="invoice_num">tst-inv-23</span> is created for <span id="supplier_name">TESI S.P.A.</span> which is 100% matched with PO and is waiting for your approval. <p>Click here</p> to login to view the invoice.</p>
+                            <h2>Jessy Cabs,</h2>
+                            <p>No:8/, 11th street, Nandanam[Extn.],<br />
+                                Nandanam, Chennai - 600035<br />
+                                jessycabs.india@yahoo.com<br />
+                                Tel:044-24354247,Mob:9841505689</p>
                         </div>
-                        <div className="cta-group mobile-btn-group">
-                            <p className="btn-primary">Approve</p>
-                            <p className="btn-default">Reject</p>
-                        </div>
+
                         <div className="clearfix">
                             <div className="col-left">
-                                <div className="clientlogo"><img src="https://cdn3.iconfinder.com/data/icons/daily-sales/512/Sale-card-address-512.png" alt="Sup" /></div>
                                 <div className="clientinfo">
-                                    <h2 id="supplier">TESI S.P.A.</h2>
-                                    <p><span id="address">VIA SAVIGLIANO, 48</span><br /><span id="city">RORETO DI CHERASCO</span><br /><span id="country">IT</span> - <span id="zip">12062</span><br /><span id="tax_num">555-555-5555</span><br /></p>
+                                    <table className="table">
+                                        <tbody>
+                                            <tr>
+                                                <td className="tabledatas"><label id="invoice_total">Organization :</label></td>
+                                                <td className="tabledatas"><span>{tripSheetData.customer || book.customer}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td className="tabledatas"><label id="invoice_total">Address :</label></td>
+                                                <td className="tabledatas"><span>karle town-Sez Unit1, No.288,38,39,123P,124,125,126,128 and<br />129P, Ground Floor to 3rd Floor of Block-1, Bangalore</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td className="tabledatas"><label id="payment_term">GSTIN :</label></td>
+                                                <td className="tabledatas"><span>29AAACH1645p3z5, State: Karnataka, Code: 29</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td className="tabledatas"><label id="note">Guest Name :</label></td>
+                                                <td className="tabledatas"><span>{tripSheetData.guestname || book.guestname}</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <div className="col-right">
                                 <table className="table">
                                     <tbody>
-                                        <tr>
-                                            <td><span>Invoice Total</span><label id="invoice_total">61.2</label></td>
-                                            <td><span>Currency</span><label id="currency">EUR</label></td>
-                                        </tr>
-                                        <tr>
-                                            <td><span>Payment Term</span><label id="payment_term">60 gg DFFM</label></td>
-                                            <td><span>Invoice Type</span><label id="invoice_type">EXP REP INV</label></td>
-                                        </tr>
-                                        <tr><td colSpan="2"><span>Note</span>#<label id="note">None</label></td></tr>
+                                        <tr><td><span>Service City</span></td><td><label id="invoice_total">Bangalore</label></td></tr>
+                                        <tr><td><span>Trip Date</span></td><td><label id="payment_term">{tripSheetData.startdate || book.startdate}</label></td></tr>
+                                        <tr><td><span>Trip No</span></td><td><label id="note">{tripSheetData.tripid || book.tripid}</label></td></tr>
+                                        <tr><td><span>Vehicle Type</span></td><td><label id="note">{tripSheetData.vehType || book.vehType}</label></td></tr>
+                                        <tr><td><span>Vehicle No</span></td><td><label id="note">{tripSheetData.vehRegNo || book.vehRegNo}</label></td></tr>
+                                        <tr><td><span>Request ID</span></td><td><label id="note">4337267</label></td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -54,45 +76,35 @@ const Invoice = () => {
                             <table className="table-main">
                                 <thead>
                                     <tr className="tabletitle">
-                                        <th>Type</th>
                                         <th>Description</th>
-                                        <th>Quantity</th>
-                                        <th>Unit Price</th>
-                                        <th>Taxable Amount</th>
-                                        <th>Tax Code</th>
-                                        <th>%</th>
-                                        <th>Tax Amount</th>
-                                        <th>AWT</th>
+                                        <th>Trip Id</th>
+                                        <th>Date</th>
+                                        <th>Rate</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tr className="list-item">
-                                    <td data-label="Type" className="tableitem">ITEM</td>
-                                    <td data-label="Description" className="tableitem">Servizio EDI + Traffico mese di novembre 2017</td>
-                                    <td data-label="Quantity" className="tableitem">46.6</td>
-                                    <td data-label="Unit Price" className="tableitem">1</td>
-                                    <td data-label="Taxable Amount" className="tableitem">46.6</td>
-                                    <td data-label="Tax Code" className="tableitem">DP20</td>
-                                    <td data-label="%" className="tableitem">20</td>
-                                    <td data-label="Tax Amount" className="tableitem">9.32</td>
-                                    <td data-label="AWT" className="tableitem">None</td>
-                                    <td data-label="Total" className="tableitem">55.92</td>
-                                </tr>
-                                <tr className="list-item">
-                                    <td data-label="Type" className="tableitem">ITEM</td>
-                                    <td data-label="Description" className="tableitem">Traffico mese di novembre 2017 FRESSNAPF TIERNAHRUNGS GMBH riadd. Almo DE</td>
-                                    <td data-label="Quantity" className="tableitem">4.4</td>
-                                    <td data-label="Unit Price" className="tableitem">1</td>
-                                    <td data-label="Taxable Amount" className="tableitem">46.6</td>
-                                    <td data-label="Tax Code" className="tableitem">DP20</td>
-                                    <td data-label="%" className="tableitem">20</td>
-                                    <td data-label="Tax Amount" className="tableitem">9.32</td>
-                                    <td data-label="AWT" className="tableitem">None</td>
-                                    <td data-label="Total" className="tableitem">55.92</td>
+                                    <td data-label="Description" className="tabledata">{tripSheetData.MinCharges || book.MinCharges}/{tripSheetData.vehType || book.vehType}</td>
+                                    <td className="tabledata" data-label="Unit Price" >{tripSheetData.tripid || book.tripid}</td>
+                                    <td className="tabledata" data-label="Unit Price" >{tripSheetData.startdate || book.startdate}</td>
+                                    <td className="tabledata" data-label="Unit Price" >{tripSheetData.minchargeamount || book.minchargeamount}</td>
+                                    <td className="tabledata" data-label="Total" >{BalanceValue}</td>
                                 </tr>
                                 <tr className="list-item total-row">
-                                    <th colSpan="9" className="tableitem">Grand Total</th>
-                                    <td data-label="Grand Total" className="tableitem">111.84</td>
+                                    <th colSpan="4" className="tableitem">Total Amount</th>
+                                    <td data-label="Grand Total" className="tableitem">{BalanceValue}</td>
+                                </tr>
+                                <tr className="list-item total-row">
+                                    <th colSpan="4" className="tableitem">GST @ 5%</th>
+                                    <td data-label="Grand Total" className="tableitem">50</td>
+                                </tr>
+                                <tr className="list-item total-row">
+                                    <th colSpan="4" className="tableitem">Rounded Off</th>
+                                    <td data-label="Grand Total" className="tableitem">{roundOff}</td>
+                                </tr>
+                                <tr className="list-item total-row">
+                                    <th colSpan="4" className="tableitem">Net Payable</th>
+                                    <td data-label="Grand Total" className="tableitem" id="tabletotal">{TotalAmountValue}</td>
                                 </tr>
                             </table>
                         </div>
@@ -102,5 +114,412 @@ const Invoice = () => {
         </body>
     );
 };
+const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, BalanceValue, selectedCustomerDatas, book, roundOff, formData }) => {
+
+    const handlePrint = () => {
+        const invoiceContent = ReactDOMServer.renderToString(
+            <PrintableInvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOff} selectedCustomerData={selectedCustomerData} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
+        );
+        const printWindow = window.open('', '_blank');
+        printWindow.document.open();
+        printWindow.document.write(`
+        <html>
+          <head>
+          <title>TAX INVOICE</title>
+          <style>
+          #invoiceholder body {
+            background: #E0E0E0;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        #invoiceholder .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        
+        #invoiceholder .col-left {
+            float: left;
+        }
+        
+        #invoiceholder .col-right {
+            float: right;
+        }
+        
+        #invoiceholder h1 {
+            font-size: 1.5em;
+            color: #000;
+        }
+        
+        #invoiceholder h2 {
+            font-size: .9em;
+        }
+        
+        #invoiceholder h3 {
+            font-size: 1.2em;
+            font-weight: 300;
+            line-height: 2em;
+        }
+        
+        #invoiceholder p {
+            font-size: .75em;
+            color: #000;
+            line-height: 1.2em;
+        }
+        
+        #invoiceholder a {
+            text-decoration: none;
+            color: #00a63f;
+        }
+        
+        #invoiceholder {
+            width: 100%;
+            height: 100%;
+            padding: 50px 0;
+        }
+        
+        #invoiceholder #invoice {
+            position: relative;
+            margin: 0 auto;
+            width: 700px;
+            background: #FFF;
+        }
+        
+        [id*='invoice-'] {
+            padding: 20px;
+        }
+        
+        #invoiceholder #invoice-top {
+            border-bottom: 2px solid #00a63f;
+        }
+        
+        #invoice-mid #message {
+            border-bottom: 2px solid #00a63f;
+        }
+        
+        #table .table-main #tabletotal {
+            border-top: 2px solid #00a63f;
+        }
+        
+        #invoiceholder #invoice-mid {
+            min-height: 110px;
+        }
+        
+        #invoiceholder #invoice-bot {
+            min-height: 240px;
+        }
+        
+        #invoiceholder .logo {
+            display: inline-block;
+            vertical-align: middle;
+            width: 110px;
+            overflow: hidden;
+        }
+        
+        #invoiceholder .info {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 20px;
+        }
+        
+        #invoiceholder .logo img,
+        #invoiceholder .clientlogo img {
+            width: 100%;
+        }
+        
+        #invoiceholder .clientlogo {
+            display: inline-block;
+            vertical-align: middle;
+            width: 50px;
+        }
+        
+        #invoiceholder .clientinfo {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 20px
+        }
+        
+        #invoiceholder .title {
+            float: right;
+        }
+        
+        #invoice-mid .righttitle {
+            float: right;
+        }
+        
+        #invoiceholder .title p {
+            text-align: right;
+        }
+        
+        #invoiceholder #message {
+            margin-bottom: 30px;
+            display: block;
+        }
+        
+        #invoiceholder h2 {
+            margin-bottom: 5px;
+            color: #000;
+        }
+        
+        #invoiceholder .col-right td {
+            color: #000;
+            padding: 5px 8px;
+            border: 0;
+            font-size: 0.75em;
+            border-bottom: 1px solid #eeeeee;
+        }
+        
+        #invoiceholder .col-right td label {
+            margin-left: 5px;
+            font-weight: 600;
+            color: #000;
+        }
+        
+        #invoiceholder .cta-group a {
+            display: inline-block;
+            padding: 7px;
+            border-radius: 4px;
+            background: rgb(196, 57, 10);
+            margin-right: 10px;
+            min-width: 100px;
+            text-align: center;
+            color: #fff;
+            font-size: 0.75em;
+        }
+        
+        #invoiceholder .cta-group .btn-primary {
+            background: #00a63f;
+        }
+        
+        #invoiceholder .cta-group.mobile-btn-group {
+            display: none;
+        }
+        
+        #invoiceholder table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        #invoiceholder .tabledata {
+            padding: 10px;
+            border-bottom: 1px solid #cccaca;
+            font-size: 0.70em;
+            text-align: left;
+        }
+        
+        #invoiceholder .tabledatas {
+            padding: 10px;
+            border-bottom: none;
+            font-size: 0.70em;
+            text-align: left;
+        }
+        
+        
+        #invoiceholder .tabletitle th {
+            border-bottom: 2px solid #ddd;
+            text-align: right;
+        }
+        
+        #invoiceholder .tabletitle th:nth-child(2) {
+            text-align: left;
+        }
+        
+        #invoiceholder th {
+            font-size: 0.7em;
+            text-align: left;
+            padding: 5px 10px;
+        }
+        
+        #invoiceholder .item {
+            width: 50%;
+        }
+        
+        #invoiceholder .list-item td {
+            text-align: right;
+        }
+        
+        #invoiceholder .list-item td:nth-child(2) {
+            text-align: left;
+        }
+        
+        #invoiceholder .total-row th,
+        #invoiceholder .total-row td {
+            text-align: right;
+            font-weight: 700;
+            font-size: .75em;
+            border: 0 none;
+        }
+        
+        #invoiceholder footer {
+            border-top: 1px solid #eeeeee;
+            ;
+            padding: 15px 20px;
+        }
+        
+        #invoiceholder .effect2 {
+            position: relative;
+        }
+        
+        #invoiceholder .effect2:before,
+        .effect2:after {
+            z-index: -1;
+            position: absolute;
+            content: "";
+            bottom: 15px;
+            left: 10px;
+            width: 50%;
+            top: 80%;
+            max-width: 300px;
+            background: #777;
+            -webkit-transform: rotate(-3deg);
+            -moz-transform: rotate(-3deg);
+            -o-transform: rotate(-3deg);
+            -ms-transform: rotate(-3deg);
+            transform: rotate(-3deg);
+        }
+        
+        #invoiceholder .effect2:after {
+            -webkit-transform: rotate(3deg);
+            -moz-transform: rotate(3deg);
+            -o-transform: rotate(3deg);
+            -ms-transform: rotate(3deg);
+            transform: rotate(3deg);
+            right: 10px;
+            left: auto;
+        }
+        
+        @media screen and (max-width: 767px) {
+            #invoiceholder h1 {
+                font-size: .9em;
+            }
+        
+            #invoiceholder #invoice {
+                width: 100%;
+            }
+        
+            #invoiceholder #message {
+                margin-bottom: 20px;
+            }
+        
+            [id*='invoice-'] {
+                padding: 20px 10px;
+            }
+        
+            #invoiceholder .logo {
+                width: 140px;
+            }
+        
+            #invoiceholder .title {
+                float: none;
+                display: inline-block;
+                vertical-align: middle;
+                margin-left: 40px;
+            }
+        
+            #invoiceholder .title p {
+                text-align: left;
+            }
+        
+            #invoiceholder .col-left,
+            #invoiceholder .col-right {
+                width: 100%;
+            }
+        
+            #invoiceholder .table {
+                margin-top: 20px;
+            }
+        
+            #invoiceholder #table {
+                white-space: nowrap;
+                overflow: auto;
+            }
+        
+            #invoiceholder td {
+                white-space: normal;
+            }
+        
+            #invoiceholder .cta-group {
+                text-align: center;
+            }
+        
+            #invoiceholder .cta-group.mobile-btn-group {
+                display: block;
+                margin-bottom: 20px;
+            }
+        
+            #invoiceholder .table-main {
+                border: 0 none;
+            }
+        
+            #invoiceholder .table-main thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+        
+            #invoiceholder .table-main tr {
+                border-bottom: 2px solid #eee;
+                display: block;
+                margin-bottom: 20px;
+            }
+        
+            #invoiceholder .table-main td {
+                font-weight: 700;
+                display: block;
+                padding-left: 40%;
+                max-width: none;
+                position: relative;
+                border: 1px solid #cccaca;
+                text-align: left;
+            }
+        
+            #invoiceholder .table-main td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                font-weight: normal;
+                text-transform: uppercase;
+            }
+        
+            #invoiceholder .total-row th {
+                display: none;
+            }
+        
+            #invoiceholder .total-row td {
+                text-align: left;
+            }
+        
+            #invoiceholder footer {
+                text-align: center;
+            }
+        }
+        </style>
+          </head>
+          <body>
+          ${invoiceContent}
+          </body>
+        </html>
+      `);
+        printWindow.document.close();
+
+        printWindow.onload = () => {
+            printWindow.print();
+            printWindow.close();
+        };
+    };
+
+    return (
+        <div className="invoice-wrapper">
+            <PrintableInvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOff} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
+            <Button variant="contained" onClick={handlePrint}>Print</Button>
+        </div>
+    );
+};
 
 export default Invoice;
+

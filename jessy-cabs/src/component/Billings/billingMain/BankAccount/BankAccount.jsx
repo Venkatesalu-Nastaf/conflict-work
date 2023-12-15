@@ -39,7 +39,7 @@ const BankAccount = () => {
   const [info, setInfo] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [warning, setWarning] = useState(false);
-  // const [bank, setBank] = useState({ bankname2: '' });
+  const [deleteId, setDeleteId] = useState(null);
 
   const hidePopup = () => {
     setError(false);
@@ -124,11 +124,6 @@ const BankAccount = () => {
     setEditingIndex(null);
   };
 
-  // const handleEditBank = (index) => {
-  //   setEditingIndex(index);
-  // };
-
-
   const handleSaveEdit = async (index, id) => {
     try {
       if (index >= 0 && index < bankDetails.length) {
@@ -154,23 +149,6 @@ const BankAccount = () => {
       setErrorMessage('Error updating bank account. Please check your Network Connection.');
     }
   };
-
-  // const handleDeleteBank = async (index) => {
-  //   const idToDelete = document.querySelector('input[name="id"]').value;
-  //   console.log('id of deleted account', idToDelete);
-  //   if (!idToDelete) {
-  //     return;
-  //   }
-  //   try {
-  //     await axios.delete(`http://localhost:8081/deletebankdetails/${idToDelete}`);
-  //     fetchData();
-  //     handlePopupClose();
-  //   } catch (error) {
-  //     console.error('Error deleting bank account:', error);
-  //     setError(true);
-  //     setErrorMessage('Error deleting bank account. Please check your Network Connection.');
-  //   }
-  // };
 
   const handleDeleteBank = async (id) => {
     console.log('id of deleted account', id);
@@ -259,9 +237,18 @@ const BankAccount = () => {
     setPopupOpen(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = (id) => {
     setPopupOpen(true);
+    setEditingIndex(null); // Make sure to reset editing index when starting a delete operation
+    setDeleteId(id);
   };
+
+  useEffect(() => {
+    if (deleteId !== null) {
+      handleDeleteBank(deleteId);
+      setDeleteId(null); // Reset deleteId after the operation is complete
+    }
+  }, [deleteId ]);
 
   const handleEditBank = (index) => {
     setEditingIndex(index);
@@ -277,10 +264,6 @@ const BankAccount = () => {
     setTotalIn(calculatedTotalIn);
   }, [bankDetails, book]);
   //calculate totalcapital amount
-  // useEffect(() => {
-  //   const calculatedTotalCapital = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalin, 10) || parseInt(book.totalin, 10) || 0), 0);
-  //   setTotalCapital(calculatedTotalCapital);
-  // }, [bankDetails, book]);
   useEffect(() => {
     // Make API request to fetch total capital amount
     axios.get('http://localhost:8081/totalCapital_from_billing')

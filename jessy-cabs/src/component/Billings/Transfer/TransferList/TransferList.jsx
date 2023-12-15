@@ -25,25 +25,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
 
-const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "vcode", headerName: "VCode", width: 130 },
-    { field: "billno", headerName: "Bill No", width: 130 },
-    { field: "date", headerName: "Date", width: 130 },
-    { field: "customer", headerName: "Customer", width: 130 },
-    { field: "monthid", headerName: "MonthID", width: 130 },
-    { field: "fdate", headerName: "FDate", width: 130 },
-    { field: "tdate", headerName: "TDate", width: 150 },
-    { field: "username", headerName: "UserName", width: 150 },
-    { field: "Trips", headerName: "Trips", width: 150 },
-    { field: "Subtotal", headerName: "SubTotal", width: 150 },
-    { field: "grossamount", headerName: "GrossAmount", width: 150 },
-    { field: "gst", headerName: "GST%", width: 130 },
-    { field: "toll", headerName: "Toll", width: 130 },
-    { field: "Amount", headerName: "Amount", width: 130 },
-    { field: "status", headerName: "Status", width: 130 },
-    { field: "Diff", headerName: "Diff", width: 130 },
-];
+
+
+// Assuming you have unique IDs in your data, you can set the `id` field dynamically
+
 
 const TransferList = () => {
     const [rows, setRows] = useState([]);
@@ -112,12 +97,6 @@ const TransferList = () => {
         }
     }, [success]);
 
-    const handleInputChange = (event, newValue) => {
-        if (event.target.name === 'customer') {
-            setCustomer(newValue ? newValue.label : '');
-        }
-    };
-
     useEffect(() => {
         Organization()
             .then((data) => {
@@ -138,11 +117,20 @@ const TransferList = () => {
     const handleShow = useCallback(async () => {
         try {
             const response = await axios.get(`http://localhost:8081/payment-details?customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
-            console.log('selected billing data', response.params);
             const data = response.data;
-            console.log('collected billing data', data);
+
             if (data.length > 0) {
-                setRows(data);
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                    Trips: row.trip_count,
+                    toll: row.total_toll,
+                    amount: row.total_Amount,
+                    grossamount: row.total_Amount,
+                    guestname: row.customer,
+                    
+                }));
+                setRows(rowsWithUniqueId);
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
             } else {
@@ -157,6 +145,26 @@ const TransferList = () => {
             setErrorMessage("Check your Network Connection");
         }
     }, [customer, fromDate, toDate]);
+
+    const columns = [
+        { field: "id", headerName: "Sno", width: 70 },
+        { field: "vcode", headerName: "VCode", width: 130 },
+        { field: "billno", headerName: "Bill No", width: 130 },
+        { field: "date", headerName: "Date", width: 130 },
+        { field: "customer", headerName: "Customer", width: 130 },
+        { field: "monthid", headerName: "MonthID", width: 130 },
+        { field: "fdate", headerName: "From Date", width: 130 },
+        { field: "tdate", headerName: "To Date", width: 150 },
+        { field: "guestname", headerName: "UserName", width: 150 },
+        { field: "Trips", headerName: "Trips", width: 150 },
+        { field: "Subtotal", headerName: "SubTotal", width: 150 },
+        { field: "grossamount", headerName: "GrossAmount", width: 150 },
+        { field: "gst", headerName: "GST%", width: 130 },
+        { field: "toll", headerName: "Toll", width: 130 },
+        { field: "amount", headerName: "Amount", width: 130 },
+        { field: "status", headerName: "Status", width: 130 },
+        { field: "Diff", headerName: "Diff", width: 130 },
+    ];
 
     return (
         <div className="TransferList-form Scroll-Style-hide">
@@ -176,10 +184,10 @@ const TransferList = () => {
                                         size="small"
                                         value={customer}
                                         options={bankOptions}
-                                        onChange={(event, value) => handleInputChange(event, value)}
+                                        onChange={(event, value) => setCustomer(value)}
                                         renderInput={(params) => {
                                             return (
-                                                <TextField {...params} label="Organization" inputRef={params.inputRef} />
+                                                <TextField {...params} label="Organization" name="customer" inputRef={params.inputRef} />
                                             );
                                         }}
                                     />
@@ -253,6 +261,7 @@ const TransferList = () => {
                             columns={columns}
                             pageSize={5}
                             checkboxSelection
+                            getRowId={(row) => row.id}
                         />
                     </div>
                 </div>

@@ -2,36 +2,44 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
 
-
 router.get('/payment-details', (req, res) => {
-    const { customer, fromDate, toDate } = req.query;
+  const { customer, fromDate, toDate } = req.query;
 
-    // Your MySQL query
-    const sql = `
+  // Your MySQL query
+  let sql = `
       SELECT
-        customer,
-        COUNT(tripid) as trip_count,
-        MAX(from_date) as startdate,
-        MAX(to_date) as startdate
+          customer,
+          status,
+          COUNT(tripid) as trip_count,
+          SUM(toll) as total_toll,
+          SUM(netamount) as total_Amount
       FROM
-        tripsheet
-      WHERE
-        customer = ?
-        AND startdate BETWEEN ? AND ?
-      GROUP BY
-        customer;
-    `;
+          tripsheet
+  `;
+  let params = [];
 
-    const values = [customer, fromDate, toDate];
+  // If the customer parameter is provided, add it to the query
+  if (customer) {
+    sql += ' WHERE customer = ?';
+    params.push(customer);
+  }
 
-    pool.query(sql, values, (err, results) => {
-        if (err) {
-            console.error('Error executing query:', err);
-            res.status(500).json({ error: 'Internal Server Error' });
-        } else {
-            res.json(results);
-        }
-    });
+  if (fromDate && toDate) {
+    sql += (customer ? ' AND' : ' WHERE') + ' startdate >= ? AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+    params.push(fromDate);
+    params.push(toDate);
+  }
+
+  console.log('backend collected values', params);
+
+  db.query(sql, params, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json(results);
+    }
+  });
 });
 
 module.exports = router;

@@ -477,11 +477,8 @@ const Billing = () => {
         ];
 
         const gross = parsedValues.reduce((sum, value) => sum + value, 0);
-        // console.log(gross);
         return gross.toFixed(2);
     };
-
-
 
     const handleKeyDown = useCallback(async (event) => {
         if (event.key === 'Enter') {
@@ -600,6 +597,56 @@ const Billing = () => {
         const initialFormData = {};
         setFormData(initialFormData);
     }, []);
+
+
+    const [tripSheetData] = useState({
+        tripid: '',
+        billingno: '',
+        Billingdate: '',
+        totalkm1: '',
+        totaltime: '',
+        customer: '',
+        supplier: '',
+        startdate: '',
+        totaldays: '',
+        guestname: '',
+        rateType: '',
+        vehRegNo: '',
+        vehType: '',
+        duty: '',
+        MinCharges: '',
+        minchargeamount: '',
+        ChargesForExtra: '',
+        ChargesForExtraamount: '',
+        ChargesForExtraHRS: '',
+        ChargesForExtraHRSamount: '',
+        cfehamount: '',
+        NightHalt: '',
+        NightHaltamount: '',
+        nhamount: '',
+        driverbata: '',
+        driverbataamount: '',
+        dbamount: '',
+        OtherCharges: '',
+        OtherChargesamount: '',
+        permitothertax: '',
+        parkingtollcharges: '',
+        MinKilometers: '',
+        MinHours: '',
+        GrossAmount: '',
+        AfterTaxAmount: '',
+        DiscountAmount: '',
+        DiscountAmount2: '',
+        AdvanceReceived: '',
+        paidamount: '',
+        BankAccount: '',
+        RoundedOff: calculateRoundOff(),
+    });
+
+    const roundOffValue = calculateRoundOff();
+    const BalanceValue = calculatePayableAmount();
+    const TotalAmountValue = calculateroundedPayableAmount();
+
 
     return (
         <div className="form-container">
@@ -1383,8 +1430,8 @@ const Billing = () => {
                     </div>
                     <Dialog open={popupOpen} onClose={handlePopupClose}>
                         <DialogContent>
-                            {/* <Invoice tripSheetData={tripSheetData} formData={calculateTotalTime} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} /> */}
-                            <Paymentinvoice />
+                            <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue}  roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData}  />
+                            {/* <Paymentinvoice /> */}
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handlePopupClose} variant="contained" color="primary">

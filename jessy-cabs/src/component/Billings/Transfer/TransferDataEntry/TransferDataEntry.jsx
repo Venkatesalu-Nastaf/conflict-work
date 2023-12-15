@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import "./TransferDataEntry.css";
+import axios from "axios";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import ClearIcon from '@mui/icons-material/Clear';
+import dayjs from "dayjs";
 import MenuItem from '@mui/material/MenuItem';
 import { Checkbox, FormControlLabel, Menu, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
+import { Autocomplete } from "@mui/material";
 
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { faBuilding, faFileInvoiceDollar, faTags } from "@fortawesome/free-solid-svg-icons";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { AiOutlineFileSearch } from 'react-icons/ai';
@@ -19,32 +25,114 @@ import { AiOutlineFileSearch } from 'react-icons/ai';
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "tripdate", headerName: "TripDate", width: 130 },
-  { field: "tripno", headerName: "Trip No", width: 130 },
+  { field: "startdate", headerName: "TripDate", width: 130 },
+  { field: "tripid", headerName: "Trip No", width: 130 },
   { field: "customer", headerName: "Customer", width: 130 },
-  { field: "vehicleregno", headerName: "VehicleReg.No", width: 130 },
-  { field: "vehicletype", headerName: "VehicleType", width: 130 },
-  { field: "username", headerName: "UserName", width: 150 },
+  { field: "vehRegNo", headerName: "VehicleReg.No", width: 130 },
+  { field: "vehType", headerName: "VehicleType", width: 130 },
+  { field: "guestname", headerName: "UserName", width: 150 },
   { field: "groupname", headerName: "GroupName", width: 130 },
-  { field: "hrs", headerName: "Hours", width: 150 },
-  { field: "days", headerName: "Days", width: 150 },
+  { field: "totaltime", headerName: "Hours", width: 150 },
+  { field: "totaldays", headerName: "Days", width: 150 },
   { field: "duty", headerName: "Duty", width: 150 },
   { field: "permit", headerName: "Permit", width: 150 },
   { field: "parking", headerName: "Parking", width: 150 },
   { field: "billno", headerName: "BillNo", width: 130 },
-  { field: "extraHrsamount", headerName: "ExtraHrsAmount", width: 130 },
-  { field: "extraKmsamount", headerName: "ExtrakmsAmount", width: 130 },
-  { field: "amount", headerName: "Amount", width: 130 },
+  { field: "exHrs", headerName: "ExtraHrsAmount", width: 130 },
+  { field: "exkm", headerName: "ExtrakmsAmount", width: 130 },
+  { field: "netamount", headerName: "Amount", width: 130 },
   { field: "grouptripno", headerName: "GroupTripNo", width: 130 },
   { field: "billtype", headerName: "BillType", width: 130 },
-  { field: "advance", headerName: "Advance", width: 130 },
+  { field: "advancepaidtovendor", headerName: "Advance", width: 130 },
   { field: "taxStatus", headerName: "TaxStatus", width: 130 },
-  { field: "Status", headerName: "Status", width: 130 },
-  { field: "locked", headerName: "Locked", width: 130 },
+  { field: "status", headerName: "Status", width: 130 },
+  // { field: "locked", headerName: "Locked", width: 130 },
 ];
 
 const TransferDataEntry = () => {
-  const [rows] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [customer, setCustomer] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({});
+  const [fromDate, setFromDate] = useState(dayjs());
+  const [toDate, setToDate] = useState(dayjs());
+  const [bankOptions, setBankOptions] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  const hidePopup = () => {
+    setError(false);
+    setSuccess(false);
+  };
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    Organization()
+      .then((data) => {
+        if (data) {
+          console.log('organization name', data);
+          setBankOptions(data);
+        } else {
+          setError(true);
+          setErrorMessage('Failed to fetch organization options.');
+        }
+      })
+      .catch(() => {
+        setError(true);
+        setErrorMessage('Failed to fetch organization options.');
+      });
+  }, []);
+
+  const handleKeyDown = useCallback(async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      try {
+        console.log('List button clicked');
+        const response = await axios.get('http://localhost:8081/tripsheet');
+        const data = response.data;
+        if (data.length > 0) {
+          setRows(data);
+          setSuccess(true);
+          setSuccessMessage("Successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
+        }
+      } catch (error) {
+        console.error('Error retrieving booking details:', error);
+      }
+    }
+  }, []);
+
+   //calculate total amount in column
+   useEffect(() => {
+    const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.netamount || 0), 0);
+    console.log('calculatedTotalAmount', calculatedTotalAmount);
+    if (!isNaN(calculatedTotalAmount)) {
+      setTotalAmount(calculatedTotalAmount.toFixed(2));
+    } else {
+      setTotalAmount("0");
+    }
+  }, [rows]);
 
   return (
     <div className="TransferDataEntry-form Scroll-Style-hide">
@@ -70,9 +158,11 @@ const TransferDataEntry = () => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="Date"
+                        format="DD/MM/YYYY"
                       />
                       <DatePicker
                         label="Bill Date"
+                        format="DD/MM/YYYY"
                       />
                     </DemoContainer>
                   </LocalizationProvider>
@@ -94,13 +184,20 @@ const TransferDataEntry = () => {
                     <div className="icone">
                       <HailOutlinedIcon color="action" />
                     </div>
-                    <TextField
+                    <Autocomplete
+                      fullWidth
+                      id="free-solo-demo"
+                      freeSolo
                       size="small"
-                      id="id"
-                      sx={{ width: "380px" }}
-                      label="Customer"
-                      name="customer"
-                      autoComplete='off'
+                      value={customer}
+                      options={bankOptions}
+                      onChange={(event, value) => setCustomer(value)}
+                      onKeyDown={handleKeyDown}
+                      renderInput={(params) => {
+                        return (
+                          <TextField {...params} label="Organization" name="customer" inputRef={params.inputRef} />
+                        );
+                      }}
                     />
                   </div>
                 </div>
@@ -110,6 +207,9 @@ const TransferDataEntry = () => {
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
                           label="From Date"
+                          format="DD/MM/YYYY"
+                          value={fromDate}
+                          onChange={(date) => setFromDate(date)}
                         />
                       </DemoContainer>
                     </LocalizationProvider>
@@ -119,6 +219,9 @@ const TransferDataEntry = () => {
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
                           label="To Date"
+                          format="DD/MM/YYYY"
+                          value={toDate}
+                          onChange={(date) => setToDate(date)}
                         />
                       </DemoContainer>
                     </LocalizationProvider>
@@ -233,7 +336,7 @@ const TransferDataEntry = () => {
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Total Kms:</label>
-              <input type="number" />
+              <input type="number"  />
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Total Hours:</label>
@@ -241,7 +344,7 @@ const TransferDataEntry = () => {
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Amount:</label>
-              <input type="number" />
+              <input type="number" value={totalAmount} />
             </div>
           </div>
         </div>
@@ -255,6 +358,20 @@ const TransferDataEntry = () => {
               checkboxSelection
             />
           </div>
+          {error &&
+            <div className='alert-popup Error'>
+              <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success'>
+              <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
         </div>
       </form>
     </div>

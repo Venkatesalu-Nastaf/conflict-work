@@ -48,12 +48,6 @@ const BankAccount = () => {
     setSuccess(false);
   };
 
-  
-  const handlePopupClose = () => {
-    setPopupOpen(false);
-  };
-
-
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -156,21 +150,21 @@ const BankAccount = () => {
     }
   };
 
-  const handleDeleteBank = useCallback(async (id) => {
-    console.log('id of deleted account', id);
-    if (!id) {
-      return;
-    }
-    try {
-      await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
-      fetchData();
-      handlePopupClose();
-    } catch (error) {
-      console.error('Error deleting bank account:', error);
-      setError(true);
-      setErrorMessage('Error deleting bank account. Please check your Network Connection.');
-    }
-  }, [handlePopupClose]);
+  // const handleDeleteBank = async (id) => {
+  //   console.log('id of deleted account', id);
+  //   if (!id) {
+  //     return;
+  //   }
+  //   try {
+  //     await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
+  //     fetchData();
+  //     handlePopupClose();
+  //   } catch (error) {
+  //     console.error('Error deleting bank account:', error);
+  //     setError(true);
+  //     setErrorMessage('Error deleting bank account. Please check your Network Connection.');
+  //   }
+  // };
 
   const handleChange = (event, index) => {
     const { name, value } = event.target;
@@ -215,7 +209,7 @@ const BankAccount = () => {
     }
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:8081/getbankdetails');
       if (response.ok) {
@@ -233,10 +227,14 @@ const BankAccount = () => {
     } catch (error) {
       console.error('Error fetching bank details:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
+  }, [fetchData]);
+
+  const handlePopupClose = useCallback(() => {
+    setPopupOpen(false);
   }, []);
 
   const handleDelete = (id) => {
@@ -245,13 +243,28 @@ const BankAccount = () => {
     setDeleteId(id);
   };
 
+  const handleDeleteBank = useCallback(async (id) => {
+    console.log('id of deleted account', id);
+    if (!id) {
+      return;
+    }
+    try {
+      await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
+      fetchData();
+      handlePopupClose();
+    } catch (error) {
+      console.error('Error deleting bank account:', error);
+      setError(true);
+      setErrorMessage('Error deleting bank account. Please check your Network Connection.');
+    }
+  }, [fetchData, handlePopupClose]); // Add dependencies as needed
+  
   useEffect(() => {
     if (deleteId !== null) {
       handleDeleteBank(deleteId);
       setDeleteId(null); // Reset deleteId after the operation is complete
     }
-  }, [deleteId]);
-
+  }, [deleteId, handleDeleteBank]);
   const handleEditBank = (index) => {
     setEditingIndex(index);
   };

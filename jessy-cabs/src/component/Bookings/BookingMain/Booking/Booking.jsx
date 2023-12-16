@@ -708,29 +708,7 @@ const Booking = () => {
 
   const reversedRows = [...row].reverse();
 
-  // const handleShowAll = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:8081/booking_for_table?search=${encodeURIComponent(searchText)}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`
-  //     );
-  //     const data = response.data;
-  //     console.log(data);
-  //     if (data.length > 0) {
-  //       setRows(data);
-  //       setSuccess(true);
-  //       setSuccessMessage("Successfully listed");
-  //     } else {
-  //       setRows([]);
-  //       setError(true);
-  //       setErrorMessage("No data found");
-  //     }
-  //   } catch (error) {
-  //     console.error('Error retrieving data:', error);
-  //     setRow([]);
-  //     setError(true);
-  //     setErrorMessage("Check your Network Connection");
-  //   }
-  // }, [searchText, fromDate, toDate]);
+ 
   const handleShowAll = async () => {
     try {
       const response = await fetch(`http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);

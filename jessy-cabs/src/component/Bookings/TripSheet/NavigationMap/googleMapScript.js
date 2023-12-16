@@ -120,16 +120,16 @@ function handleMapClick(latLng) {
     const popupContent = document.createElement('div');
     popupContent.innerHTML = `
             <label for="date">Date:</label>
-            <input type="date" id="date" name="date" value='' required><br>
+            <input type="date" id="date" name="date" value='' required /><br/>
             <label for="time">Time:</label>
-            <input type="time" id="time" name="time" value='' required><br>
+            <input type="time" id="time" name="time" value='' required /><br/>
             <label for="tripType">Trip Type:</label>
             <select id="tripType" name="tripType" value=''>
                 <option value="start">Start</option>
                 <option value="end">End</option>
                 <option value="waypoint">Waypoint</option>
-            </select><br>
-            <input type="hidden" id="placeName" name="placeName" value="" disabled>
+            </select><br/>
+            <input type="hidden" id="placeName" name="placeName" value="" disabled />
             <button id="submitButton">Submit</button>
         `;
     popup = new google.maps.InfoWindow({

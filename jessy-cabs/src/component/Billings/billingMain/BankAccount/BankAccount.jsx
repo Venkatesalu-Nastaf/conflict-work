@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import "./BankAccount.css";
 import Button from "@mui/material/Button";
@@ -47,6 +47,12 @@ const BankAccount = () => {
     setInfo(false);
     setSuccess(false);
   };
+
+  
+  const handlePopupClose = () => {
+    setPopupOpen(false);
+  };
+
 
   useEffect(() => {
     if (error) {
@@ -150,7 +156,7 @@ const BankAccount = () => {
     }
   };
 
-  const handleDeleteBank = async (id) => {
+  const handleDeleteBank = useCallback(async (id) => {
     console.log('id of deleted account', id);
     if (!id) {
       return;
@@ -164,7 +170,7 @@ const BankAccount = () => {
       setError(true);
       setErrorMessage('Error deleting bank account. Please check your Network Connection.');
     }
-  };
+  }, [handlePopupClose]);
 
   const handleChange = (event, index) => {
     const { name, value } = event.target;
@@ -233,10 +239,6 @@ const BankAccount = () => {
     fetchData();
   }, []);
 
-  const handlePopupClose = () => {
-    setPopupOpen(false);
-  };
-
   const handleDelete = (id) => {
     setPopupOpen(true);
     setEditingIndex(null); // Make sure to reset editing index when starting a delete operation
@@ -248,7 +250,7 @@ const BankAccount = () => {
       handleDeleteBank(deleteId);
       setDeleteId(null); // Reset deleteId after the operation is complete
     }
-  }, [deleteId ]);
+  }, [deleteId]);
 
   const handleEditBank = (index) => {
     setEditingIndex(index);

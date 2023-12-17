@@ -708,7 +708,29 @@ const Booking = () => {
 
   const reversedRows = [...row].reverse();
 
- 
+  // const handleShowAll = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:8081/booking_for_table?search=${encodeURIComponent(searchText)}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`
+  //     );
+  //     const data = response.data;
+  //     console.log(data);
+  //     if (data.length > 0) {
+  //       setRows(data);
+  //       setSuccess(true);
+  //       setSuccessMessage("Successfully listed");
+  //     } else {
+  //       setRows([]);
+  //       setError(true);
+  //       setErrorMessage("No data found");
+  //     }
+  //   } catch (error) {
+  //     console.error('Error retrieving data:', error);
+  //     setRow([]);
+  //     setError(true);
+  //     setErrorMessage("Check your Network Connection");
+  //   }
+  // }, [searchText, fromDate, toDate]);
   const handleShowAll = async () => {
     try {
       const response = await fetch(`http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
@@ -1614,29 +1636,32 @@ const Booking = () => {
             <div className='alert-popup Error' >
               <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errorMessage}</p>
+              {/* <p>{String(errorMessage)}</p> */}
+              <p>{errorMessage && typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage}</p>
             </div>
           }
           {warning &&
             <div className='alert-popup Warning' >
               <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{warningMessage}</p>
-
+              {/* <p>{String(warningMessage)}</p> */}
+              <p>{warningMessage && typeof warningMessage === 'object' ? JSON.stringify(warningMessage) : warningMessage}</p>
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
               <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{infoMessage}</p>
+              {/* <p>{String(infoMessage)}</p> */}
+              <p>{infoMessage && typeof infoMessage === 'object' ? JSON.stringify(infoMessage) : infoMessage}</p>
             </div>
           }
           {success &&
             <div className='alert-popup Success' >
               <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{successMessage}</p>
+              {/* <p>{String(successMessage)}</p> */}
+              <p>{successMessage && typeof successMessage === 'object' ? JSON.stringify(successMessage) : successMessage }</p>
             </div>
           }
         </div>

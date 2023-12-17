@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./TransferReport.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -8,14 +8,19 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import Reportinvoice from './Reportinvoice/Reportinvoice';
+import Mapinvoice from './Mapinvoice/Mapinvoice';
+import Luxuryinvoice from './Luxuryinvoice/Luxuryinvoice';
+//dialog box
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortawesome/free-solid-svg-icons";
-
-
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -25,6 +30,67 @@ const columns = [
 
 const TransferReport = () => {
   const [rows] = useState([]);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [warning, setWarning] = useState(false);
+
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [warning]);
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [info]);
+
+  const handleEInvoiceClick = (row) => {
+    setPopupOpen(true);
+  };
+  const handleMapInvoiceClick = (row) => {
+    setPopupOpen(true);
+  };
+
+  const handleLuxuryInvoiceClick = (row) => {
+    setPopupOpen(true);
+  };
+
+  const handlePopupClose = () => {
+    setPopupOpen(false);
+  };
+
+  const hidePopup = () => {
+    setSuccess(false);
+    setError(false);
+    setInfo(false);
+    setWarning(false);
+  };
 
   return (
     <div className="TransferReport-form Scroll-Style-hide">
@@ -150,19 +216,54 @@ const TransferReport = () => {
               </div>
               <div className="input-field">
                 <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained">PDF Bill</Button>
+                  <Button variant="contained" onClick={() => handleEInvoiceClick()}>PDF Bill</Button>
                 </div>
                 <div className="input" style={{ width: "180px" }}>
-                  <Button variant="outlined">Booking Mail</Button>
+                  <Button variant="outlined" >Booking Mail</Button>
                 </div>
                 <div className="input" style={{ width: "180px" }}>
-                  <Button variant="contained">Image With Invoice Normal</Button>
+                  <Button variant="contained" onClick={() => handleMapInvoiceClick()}>Image With Invoice Normal</Button>
                 </div>
                 <div className="input" style={{ width: "180px" }}>
-                  <Button variant="contained">Image With Invoice Luxury</Button>
+                  <Button variant="contained" onClick={() => handleLuxuryInvoiceClick()}>Image With Invoice Luxury</Button>
                 </div>
               </div>
             </div>
+            <Dialog open={popupOpen} onClose={handlePopupClose}>
+              <DialogContent>
+                {/* <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} /> */}
+                <Reportinvoice />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handlePopupClose} variant="contained" color="primary">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+            {/* //mapinnvoice */}
+            <Dialog open={popupOpen} onClose={handlePopupClose}>
+              <DialogContent>
+                {/* <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} /> */}
+                <Mapinvoice />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handlePopupClose} variant="contained" color="primary">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+            {/* luxuryinvoice */}
+            <Dialog open={popupOpen} onClose={handlePopupClose}>
+              <DialogContent>
+                {/* <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} /> */}
+                <Luxuryinvoice />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handlePopupClose} variant="contained" color="primary">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </div>
         <div className="Download-btn">

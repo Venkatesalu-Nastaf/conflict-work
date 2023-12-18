@@ -695,7 +695,7 @@ const Billing = () => {
                                         onChange={(date) => handleDateChange(date, 'Billingdate')}
                                     >
                                         {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.Billingdate} />
+                                            <TextField {...inputProps} inputRef={inputRef} />
                                         )}
                                     </DatePicker>
                                 </LocalizationProvider>
@@ -766,7 +766,7 @@ const Billing = () => {
                                         onChange={(date) => handleDateChange(date, 'startdate')}
                                     >
                                         {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData.startdate || selectedCustomerDatas.startdate} />
+                                            <TextField {...inputProps} inputRef={inputRef} />
                                         )}
                                     </DatePicker>
                                 </LocalizationProvider>
@@ -1430,7 +1430,7 @@ const Billing = () => {
                     </div>
                     <Dialog open={popupOpen} onClose={handlePopupClose}>
                         <DialogContent>
-                            <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue}  roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData}  />
+                            <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} />
                             {/* <Paymentinvoice /> */}
                         </DialogContent>
                         <DialogActions>

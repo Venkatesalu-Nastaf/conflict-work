@@ -13,7 +13,12 @@ const PrintableInvoice = () => {
             <div className='Individual-invoice' >
                 <div className="Individual-table-container">
                     <div className="page-title">
-                        <h1>Tax Invoice</h1>
+                        <div className="sheet-logo">
+                            <img src={Logo} alt="logo" />
+                        </div>
+                        <div className="sheet-type">
+                            <h1>Tax Invoice</h1>
+                        </div>
                     </div>
                     <div className="header-title">
                         <div className="left-title">
@@ -25,7 +30,7 @@ const PrintableInvoice = () => {
                             </p>
                         </div>
                         <div className="right-title">
-                            <dl class="dl-horizontal">
+                            <dl className="dl-horizontal">
                                 <dt>OUR GSTIN</dt>
                                 <dd><strong>: 33AVNPM9362R1ZK</strong></dd>
                                 <dt>State</dt>
@@ -39,7 +44,7 @@ const PrintableInvoice = () => {
                     </div>
                     <div className="header-title">
                         <div className="left-title">
-                            <dl class="dl-horizontal">
+                            <dl className="dl-horizontal">
                                 <dt>Organisation</dt>
                                 <dd><strong>:HCL CAPITAL PRIVATE LIMITED</strong><br />06, Siddhartha, Plot 96, Nehru Place,
                                     South East Delhi,</dd>
@@ -54,7 +59,7 @@ const PrintableInvoice = () => {
                             </dl>
                         </div>
                         <div className="right-title">
-                            <dl class="dl-horizontal">
+                            <dl className="dl-horizontal">
                                 <dt>Service City</dt>
                                 <dd><strong>: Chennai</strong></dd>
                                 <dt>Trip Date</dt>
@@ -105,7 +110,7 @@ const PrintableInvoice = () => {
                         </div>
                         <div className="Individual-amount-data">
                             <div className="Individual-lebel">
-                                <dl class="dl-horizontal">
+                                <dl className="dl-horizontal">
                                     <dt>Total Amount</dt>
                                     <dd>30075.00</dd>
                                     <dd>0.00</dd>
@@ -160,20 +165,23 @@ const PrintableInvoice = () => {
                                 </tr>
                             </tbody>
                         </table>
-                        <div className="Individual-signature">
-                            <img src={GuestSignature} alt="Guest Signature" />
-                            <span className="Individual-signature-title">Guest Signature</span>
-                        </div>
+
                     </div>
                 </div>
                 <div className="Individual-RouteSummary">
-                    <h2>Route Summary</h2>
-                    <p><strong>Start</strong>.487, Anna Salai, Lotus Colony, CIT Nagar, Chennai, Tamil Nadu 600035, India</p>
-                    <ol type="1">
-                        <li>X5M7+2HV, Airport Departures Terminal Link, Meenambakkam, Chennai, Tamil Nadu 600016, India</li>
-                        <li>No.63, ITC Grand Chola, Near Alexander Square, Anna Salai, Little Mount, Guindy, Chennai, Tamil Nadu 600032, India</li>
-                        <li>E-1, Pasumpon Muthuramalinga Thevar Rd, Lotus Colony, Nandanam, Chennai, Tamil Nadu 600035, India</li>
-                    </ol>
+                    <div className='Individual-RouteSummary-container'>
+                        <h2>Route Summary</h2>
+                        <p><strong>Start</strong>.487, Anna Salai, Lotus Colony, CIT Nagar, Chennai, Tamil Nadu 600035, India</p>
+                        <ol type="1">
+                            <li>X5M7+2HV, Airport Departures Terminal Link, Meenambakkam, Chennai, Tamil Nadu 600016, India</li>
+                            <li>No.63, ITC Grand Chola, Near Alexander Square, Anna Salai, Little Mount, Guindy, Chennai, Tamil Nadu 600032, India</li>
+                            <li>E-1, Pasumpon Muthuramalinga Thevar Rd, Lotus Colony, Nandanam, Chennai, Tamil Nadu 600035, India</li>
+                        </ol>
+                    </div>
+                    <div className="Individual-signature">
+                        <img src={GuestSignature} alt="Guest Signature" />
+                        <span className="Individual-signature-title">Guest Signature</span>
+                    </div>
                 </div>
             </div>
         </>
@@ -306,6 +314,24 @@ const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, Balanc
         
         }
         
+.page-title {
+    width: 40%;
+    padding: 10px 0px;
+    display: flex;
+    align-items: center;
+    /* justify-content: start; */
+
+}
+
+.page-title .sheet-logo img {
+    width: 80px;
+
+}
+.page-title .sheet-type {
+    width: 53%;
+    display: flex;
+    justify-content: flex-end;
+}
         .Individual-description-table-header {
             width: 60%;
         }
@@ -404,7 +430,8 @@ const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, Balanc
         }
         
         .Individual-location-details .location-img img {
-            width: 100%;
+            width: 300px;
+            height: 150px;
         }
         
         .Individual-location-details .Individual-total-details table {
@@ -420,35 +447,46 @@ const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, Balanc
         td {
             padding: 10px 5px;
             font-size: 13px;
-            border-bottom: 1px solid #000 !important;
+            // border-bottom: 1px solid #000 !important;
         }
         
-        .Individual-location-details .Individual-signature {
-            position: relative;
-        }
         
-        .Individual-location-details .Individual-signature img {
-            width: 120px;
-            display: flex;
-            margin: 0px auto;
-        }
+ 
+.Individual-RouteSummary .Individual-signature .Individual-signature-title {
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.Individual-RouteSummary .Individual-signature {
+    position: relative;
+    width: 30%;
+}
+
+.Individual-RouteSummary .Individual-signature img {
+    width: 100px;
+    display: flex;
+    margin: 0px auto;
+}
+.Individual-RouteSummary {
+    display: flex;
+    align-items: flex-end;
+}
+
+.Individual-RouteSummary .Individual-RouteSummary-container {
+    width: 70%;
+    font-size: 13px;
+}
+
+.Individual-RouteSummary .Individual-RouteSummary-container p {
+    font-weight: 600;
+}
+
+.Individual-RouteSummary .Individual-RouteSummary-container ol {
+    font-size: 12px;
+    font-weight: 500;
+}
         
-        .Individual-location-details .Individual-signature .Individual-signature-title {
-            display: flex;
-            justify-content: center;
-            font-weight: 600;
-        }
-        .Individual-RouteSummary{
-            width: 80%;
-            font-size: 13px;
-        }
-        .Individual-RouteSummary p{
-            font-weight: 600;
-        }
-        .Individual-RouteSummary ol{
-            font-size: 12px;
-            font-weight: 500;
-        }
         </style>
           </head>
           ${invoiceContent}

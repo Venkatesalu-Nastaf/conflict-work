@@ -8,6 +8,26 @@
 
 }
 
+.page-title {
+    width: 40%;
+    padding: 10px 0px;
+    display: flex;
+    align-items: center;
+    /* justify-content: start; */
+
+}
+
+.page-title .sheet-logo img {
+    width: 80px;
+
+}
+
+.page-title .sheet-type {
+    width: 53%;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .Individual-description-table-header {
     width: 60%;
 }
@@ -104,11 +124,12 @@
 }
 
 .Individual-location-details .location-img {
-    width: 90%;
+    width: 80%;
 }
 
 .Individual-location-details .location-img img {
-    width: 100%;
+    width: 300px;
+    height: 150px;
 }
 
 .Individual-location-details .Individual-total-details table {
@@ -124,32 +145,41 @@
 td {
     padding: 10px 5px;
     font-size: 13px;
-    border-bottom: 1px solid #000 !important;
+    /* border-bottom: 1px solid #000 !important; */
 }
 
-.Individual-location-details .Individual-signature {
-    position: relative;
-}
 
-.Individual-location-details .Individual-signature img {
-    width: 100px;
-    display: flex;
-    margin: 0px auto;
-}
-
-.Individual-location-details .Individual-signature .Individual-signature-title {
+.Individual-RouteSummary .Individual-signature .Individual-signature-title {
     display: flex;
     justify-content: center;
     font-weight: 600;
 }
-.Individual-RouteSummary{
-    width: 80%;
+
+.Individual-RouteSummary .Individual-signature {
+    position: relative;
+    width: 30%;
+}
+
+.Individual-RouteSummary .Individual-signature img {
+    width: 100px;
+    display: flex;
+    margin: 0px auto;
+}
+.Individual-RouteSummary {
+    display: flex;
+    align-items: flex-end;
+}
+
+.Individual-RouteSummary .Individual-RouteSummary-container {
+    width: 70%;
     font-size: 13px;
 }
-.Individual-RouteSummary p{
+
+.Individual-RouteSummary .Individual-RouteSummary-container p {
     font-weight: 600;
 }
-.Individual-RouteSummary ol{
+
+.Individual-RouteSummary .Individual-RouteSummary-container ol {
     font-size: 12px;
     font-weight: 500;
 }

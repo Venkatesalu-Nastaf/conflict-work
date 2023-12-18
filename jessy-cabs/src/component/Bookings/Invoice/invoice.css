@@ -283,7 +283,7 @@ header img {
 .tripsheet-location-img {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .tripsheet-location-img img {

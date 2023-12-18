@@ -279,3 +279,36 @@ header img {
   text-align: center;
   text-transform: uppercase;
 }
+
+.tripsheet-location-img {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.tripsheet-location-img img {
+  width: 320px;
+}
+
+.tripsheet-RouteSummary {
+  width: 80%;
+  font-size: 13px;
+}
+
+.tripsheet-RouteSummary p {
+  font-weight: 600;
+}
+
+.tripsheet-RouteSummary ol {
+  font-size: 12px;
+  font-weight: 500;
+}
+.attached-toll{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+}
+.attached-toll img {
+  width: 500px;
+}

@@ -1,4 +1,4 @@
-.guest-sign #guestsign{
+.guest-sign #guestsign {
   margin-top: 25px;
   width: 95px;
 
@@ -69,9 +69,10 @@
   /* margin: 0 1em 1em 0; */
 }
 
-/* .invoice-wrapper header address p {
-  margin: 0 0 0.25em;
-} */
+.dialogboximg {
+  height: 100px;
+  width: 100px;
+}
 
 .invoice-wrapper header span,
 header img {

@@ -1,10 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './invoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 
 const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedCustomerDatas, formData }) => {
+  const [mapimageUrl, setMapImageUrl] = useState('');
+  const [GmapimageUrl, setGMapImageUrl] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tripid = localStorage.getItem('selectedTripid');
+
+      try {
+        const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const imageUrl = URL.createObjectURL(await response.blob());
+        setMapImageUrl(imageUrl);
+      } catch {
+
+      }
+    };
+
+    fetchData();
+    return () => {
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tripid = localStorage.getItem('selectedTripid');
+
+      try {
+        const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const gimageUrl = URL.createObjectURL(await response.blob());
+        setGMapImageUrl(gimageUrl);
+      } catch {
+
+      }
+    };
+
+    fetchData();
+    return () => {
+    };
+  }, []);
 
   return (
     <div className="invoice-wrapper">
@@ -129,11 +173,7 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                 <p id='line'>------------------</p>
               </div>
               <div className="guest-sign">
-
-                <img id='guestsign'
-                  alt="Signature_image"
-                  src={`../../../../Backend/customer_master/path_to_save_images`} // Make sure the path is correct
-                ></img>
+                <img className='dialogboximg' src={mapimageUrl} alt='mapimage' />
                 <p>Guest Signature</p>
               </div>
             </div>
@@ -143,6 +183,9 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
           <div id='Totals'><span id='title'>Total Parking  </span><span>{tripSheetData.parking || selectedCustomerData.parking || selectedCustomerDatas.parking || book.parking}</span></div>
           <div id='Totals'><span id='title'>Total Toll  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
           <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
+        </div>
+        <div>
+          <img className='dialogboximg' src={GmapimageUrl} alt='mapimage' />
         </div>
       </article>
     </div>
@@ -221,23 +264,19 @@ const Invoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas, b
           
           .invoice-wrapper header address {
             float: left;
-            /* font-size: 75%; */
-            /* font-style: normal; */
-            /* line-height: 1.25; */
-            /* margin: 0 1em 1em 0; */
           }
           
-          /* .invoice-wrapper header address p {
-            margin: 0 0 0.25em;
-          } */
-          
+          .dialogboximg {
+            height: 100px;
+            width: 100px;
+          }
+                   
           .invoice-wrapper header span,
           header img {
             display: block;
             float: right;
           }
-          
-          
+                    
           .invoice-wrapper header img {
             max-height: 50%;
             max-width: 50%;

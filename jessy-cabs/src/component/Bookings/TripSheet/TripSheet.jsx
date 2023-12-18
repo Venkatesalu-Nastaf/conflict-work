@@ -1538,15 +1538,6 @@ const TripSheet = () => {
                   required
                 />
               </div>
-              {/* <FormControlLabel
-                name="smsguest"
-                value="smsguest"
-                control={<Checkbox size="small" />}
-                label="SMS Guest"
-                autoComplete="new-password"
-                onChange={handleChange}
-                checked={Boolean(formData.smsguest || selectedCustomerData?.smsguest || book.smsguest)}
-              /> */}
               <FormControlLabel
                 value="smsguest"
                 control={<Checkbox size="small" checked={smsguest} onChange={(event) => setSmsGuest(event.target.checked)} />}
@@ -1692,7 +1683,7 @@ const TripSheet = () => {
                 <div className="textboxlist">
                   <div className="textboxlist-customer list-updates">
                     <span>
-                      <div className="Scroll-Style" style={{ overflow: 'scroll',width:'500px', height: '220px' }}>
+                      <div className="Scroll-Style" style={{ overflow: 'scroll', width: '500px', height: '220px' }}>
                         <Table hoverRow borderAxis="y">
                           <thead>
                             <tr>

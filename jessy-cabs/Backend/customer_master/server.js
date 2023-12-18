@@ -277,6 +277,32 @@ app.post('/api/saveSignature', (req, res) => {
   });
 });
 //End signature database
+//get signature 
+const signatureDirectory = path.join(__dirname, 'path_to_save_images');
+app.use('/signimages', express.static(signatureDirectory));
+app.get('/get-signimage/:tripid', (req, res) => {
+  const { tripid } = req.params;
+  // const query = 'SELECT signature_path FROM signatures WHERE tripid = ?';
+  const query = 'SELECT signature_path AS path FROM signatures WHERE tripid = ?';
+  db.query(query, [tripid], (err, results) => {
+    if (err) {
+      console.error('Error querying database:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+    if (results.length === 0) {
+      // No record found for the given tripid
+      return res.status(404).send('Image not found');
+    }
+    const imagePath = path.join(signatureDirectory, results[0].path);
+    console.log('map image path', imagePath);
+    res.sendFile(imagePath, (err) => {
+      if (err) {
+        console.error('Error sending image:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+    });
+  });
+});
 // -----------------------------------------------------------------------------------------------------------
 // Endpoint to generate a new link based on tripid
 app.post('/generate-link/:tripid', (req, res) => {

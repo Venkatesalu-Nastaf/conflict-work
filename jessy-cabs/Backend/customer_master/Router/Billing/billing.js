@@ -75,4 +75,38 @@ router.get('/billing/:billingno', (req, res) => {
   });
 });
 
+router.get('/customers/:customer', (req, res) => {
+  const customer = req.params.customer;
+  db.query('SELECT * FROM customers WHERE customer = ?', customer, (err, result) => {
+    if (err) {
+      console.error('Error retrieving booking details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    const bookingDetails = result[0]; // Assuming there is only one matching booking
+    return res.status(200).json(bookingDetails);
+  });
+});
+router.get('/routedata/:tripid', (req, res) => {
+  const tripid = req.params.tripid;
+
+  db.query('SELECT * FROM gmapdata WHERE tripid = ?', tripid, (err, result) => {
+    if (err) {
+      console.error('Error retrieving route data from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Route data not found' });
+    }
+
+    // Instead of returning a single object, return an array of all results
+    const routeData = result;
+    return res.status(200).json(routeData);
+  });
+});
+
+
 module.exports = router;

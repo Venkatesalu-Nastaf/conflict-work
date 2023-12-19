@@ -14,7 +14,7 @@ const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, Bal
                     <div id="invoice-top">
                         <div className="logo"><img src={Logo} alt="logo" /></div>
                         <div className="title">
-                            <h1>Tax Invoice</h1>
+                            {/* <h1>Tax Invoice</h1> */}
                         </div>
                     </div>
                     <div id="invoice-mid">

@@ -4,13 +4,14 @@ import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import { Menu, TextField } from "@mui/material";
+import Mapinvoice from './Mapinvoice/Mapinvoice';
+import Luxuryinvoice from './Luxuryinvoice/Luxuryinvoice';
+import Reportinvoice from './Reportinvoice/Reportinvoice';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import Reportinvoice from './Reportinvoice/Reportinvoice';
-import Mapinvoice from './Mapinvoice/Mapinvoice';
-import Luxuryinvoice from './Luxuryinvoice/Luxuryinvoice';
+
 //dialog box
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -30,7 +31,9 @@ const columns = [
 
 const TransferReport = () => {
   const [rows] = useState([]);
-  const [popupOpen, setPopupOpen] = useState(false);
+  const [pbpopupOpen, setpbPopupOpen] = useState(false);
+  const [npopupOpen, setnPopupOpen] = useState(false);
+  const [lxpopupOpen, setlxPopupOpen] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
@@ -71,18 +74,20 @@ const TransferReport = () => {
   }, [info]);
 
   const handleEInvoiceClick = (row) => {
-    setPopupOpen(true);
+    setpbPopupOpen(true);
   };
   const handleMapInvoiceClick = (row) => {
-    setPopupOpen(true);
+    setnPopupOpen(true);
   };
 
   const handleLuxuryInvoiceClick = (row) => {
-    setPopupOpen(true);
+    setlxPopupOpen(true);
   };
 
   const handlePopupClose = () => {
-    setPopupOpen(false);
+    setpbPopupOpen(false);
+    setnPopupOpen(false);
+    setlxPopupOpen(false);
   };
 
   const hidePopup = () => {
@@ -229,7 +234,7 @@ const TransferReport = () => {
                 </div>
               </div>
             </div>
-            <Dialog open={popupOpen} onClose={handlePopupClose}>
+            <Dialog open={pbpopupOpen} onClose={handlePopupClose}>
               <DialogContent>
                 {/* <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} /> */}
                 <Reportinvoice />
@@ -241,7 +246,7 @@ const TransferReport = () => {
               </DialogActions>
             </Dialog>
             {/* //mapinnvoice */}
-            <Dialog open={popupOpen} onClose={handlePopupClose}>
+            <Dialog open={npopupOpen} onClose={handlePopupClose}>
               <DialogContent>
                 {/* <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} /> */}
                 <Mapinvoice />
@@ -253,7 +258,7 @@ const TransferReport = () => {
               </DialogActions>
             </Dialog>
             {/* luxuryinvoice */}
-            <Dialog open={popupOpen} onClose={handlePopupClose}>
+            <Dialog open={lxpopupOpen} onClose={handlePopupClose}>
               <DialogContent>
                 {/* <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} /> */}
                 <Luxuryinvoice />

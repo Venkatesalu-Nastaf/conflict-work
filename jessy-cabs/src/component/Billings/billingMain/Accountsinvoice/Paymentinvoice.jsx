@@ -1,13 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Paymentinvoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 import Logo from "../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-import Locationimg from "./location.png";
-import GuestSignature from "./signature-1692258849846.png"
-const PrintableInvoice = () => {
-    // const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, BalanceValue, selectedCustomerData, selectedCustomerDatas, formData }) => {
+const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedCustomerDatas, formData }) => {
+    const [mapimageUrl, setMapImageUrl] = useState('');
+    const [GmapimageUrl, setGMapImageUrl] = useState('');
+    useEffect(() => {
+        const fetchData = async () => {
+            const tripid = localStorage.getItem('selectedTripid');
+            try {
+                const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const imageUrl = URL.createObjectURL(await response.blob());
+                setMapImageUrl(imageUrl);
+            } catch (error) {
+                console.error('Error fetching map image:', error);
+            }
+        };
 
+        fetchData();
+        return () => { };
+    }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            const tripid = localStorage.getItem('selectedTripid');
+            try {
+                const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const gimageUrl = URL.createObjectURL(await response.blob());
+                setGMapImageUrl(gimageUrl);
+            } catch {
+            }
+        };
+        fetchData();
+        return () => {
+        };
+    }, []);
     return (
         <>
             <div className='Individual-invoice' >
@@ -46,7 +79,7 @@ const PrintableInvoice = () => {
                         <div className="left-title">
                             <dl className="dl-horizontal">
                                 <dt>Organisation</dt>
-                                <dd><strong>:HCL CAPITAL PRIVATE LIMITED</strong><br />06, Siddhartha, Plot 96, Nehru Place,
+                                <dd><strong>: {tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</strong><br />06, Siddhartha, Plot 96, Nehru Place,
                                     South East Delhi,</dd>
                                 <dt>GSTIN</dt>
                                 <dd>: 07AAACM9201G1ZR,</dd>
@@ -55,7 +88,7 @@ const PrintableInvoice = () => {
                                 <dt>State</dt>
                                 <dd>: Delhi</dd>
                                 <dt>Guest Name</dt>
-                                <dd>: MRS.ROSHNI NADAR</dd>
+                                <dd>: {tripSheetData.guestname || book.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname || formData.guestname}</dd>
                             </dl>
                         </div>
                         <div className="right-title">
@@ -63,15 +96,15 @@ const PrintableInvoice = () => {
                                 <dt>Service City</dt>
                                 <dd><strong>: Chennai</strong></dd>
                                 <dt>Trip Date</dt>
-                                <dd>: 31/07/2023</dd>
+                                <dd>: {tripSheetData.startdate || book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate}</dd>
                                 <dt>Trip No</dt>
-                                <dd>: 73701</dd>
+                                <dd>: {tripSheetData.tripid || book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}</dd>
                                 <dt>Vehicle Type</dt>
-                                <dd>: BENZ S CLASS</dd>
+                                <dd>: {tripSheetData.vehType || book.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || formData.vehType}</dd>
                                 <dt>Vehicle No</dt>
-                                <dd>: PY-05-D-7755</dd>
+                                <dd>: {tripSheetData.vehRegNo || book.vehRegNo || selectedCustomerData.vehRegNo || selectedCustomerDatas.vehRegNo || formData.vehRegNo}</dd>
                                 <dt>Request ID</dt>
-                                <dd>: </dd>
+                                <dd>: {tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</dd>
                             </dl>
                         </div>
                     </div>
@@ -87,11 +120,12 @@ const PrintableInvoice = () => {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td className='Individual-description-table-header'>38 Kms + FGR 0 Kms = Total 38 Kms : 03:00 Hrs +
-                                        FGR 00:00 Hrs = Total 03:00 Hrs (8 HRS & 80 KMS)</td>
+                                    {/* <td className='Individual-description-table-header'>38 Kms + FGR 0 Kms = Total 38 Kms : 03:00 Hrs +
+                                        FGR 00:00 Hrs = Total 03:00 Hrs (8 HRS & 80 KMS)</td> */}
+                                    <td className='Individual-description-table-header'>{tripSheetData.MinCharges || book.MinCharges || selectedCustomerData.MinCharges || selectedCustomerDatas.MinCharges || formData.MinCharges}</td>
                                     <td>2</td>
-                                    <td>30</td>
-                                    <td>30000.00</td>
+                                    <td>{tripSheetData.supplier || book.supplier || selectedCustomerData.supplier || selectedCustomerDatas.supplier || formData.supplier}</td>
+                                    <td>{tripSheetData.supplier || book.supplier || selectedCustomerData.supplier || selectedCustomerDatas.supplier || formData.supplier}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -112,15 +146,15 @@ const PrintableInvoice = () => {
                             <div className="Individual-lebel">
                                 <dl className="dl-horizontal">
                                     <dt>Total Amount</dt>
-                                    <dd>30075.00</dd>
-                                    <dd>0.00</dd>
+                                    <dd>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</dd>
+                                    <dd>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</dd>
                                     <dt>Rounded Off</dt>
-                                    <dd>00.00</dd>
+                                    <dd>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</dd>
                                     <dd>
                                         <hr />
                                     </dd>
                                     <dt>Net payble</dt>
-                                    <dd>3075.00</dd>
+                                    <dd>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -129,12 +163,12 @@ const PrintableInvoice = () => {
                 </div>
                 <div className="Individual-location-details">
                     <div className="location-img">
-                        <img src={Locationimg} alt="location-img" />
+                        {/* <img src={Locationimg} alt="location-img" /> */}
+                        <img src={GmapimageUrl} alt="location-img" />
                     </div>
                     <div className="Individual-total-details">
                         <table>
                             <thead>
-
                                 <tr>
                                     <th>Starting</th>
                                     <th>Closing</th>
@@ -143,24 +177,24 @@ const PrintableInvoice = () => {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>15:00</td>
-                                    <td>18:00</td>
+                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
+                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
                                     <td><strong>
-                                        18:00hrs
+                                        {tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}
                                     </strong></td>
                                 </tr>
                                 <tr>
-                                    <td>31/07/2023</td>
-                                    <td>31/07/2023</td>
+                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
+                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
                                     <td><strong>
-                                        0
+                                    {tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}
                                     </strong></td>
                                 </tr>
                                 <tr>
-                                    <td>67802</td>
-                                    <td>67840</td>
+                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
+                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
                                     <td><strong>
-                                        38:00Kms
+                                    {tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}
                                     </strong></td>
                                 </tr>
                             </tbody>
@@ -179,328 +213,217 @@ const PrintableInvoice = () => {
                         </ol>
                     </div>
                     <div className="Individual-signature">
-                        <img src={GuestSignature} alt="Guest Signature" />
+                        <img src={mapimageUrl} alt="Guest Signature" />
                         <span className="Individual-signature-title">Guest Signature</span>
                     </div>
                 </div>
             </div>
         </>
-        // <div id="invoiceholder">
-        //     <div id="invoice" className="effect2">
-        //         <div id="invoice-top">
-        //             <div className="logo"><img src={Logo} alt="logo" /></div>
-        //             <div className="title">
-        //                 <h1>Tax Invoice</h1>
-        //             </div>
-        //         </div>
-        //         <div id="invoice-mid">
-        //             <div className="righttitle">
-        //                 <p>OUR GSTIN : 33AVNPM9362R1ZK<br />
-        //                     State : Tamilnadu, Code : 33<br />
-        //                     PAN No : AVNPM9362R<br />
-        //                     SAC CODE : 996601
-        //                 </p>
-        //             </div>
-        //             <div id="message">
-        //                 <h2>Jessy Cabs,</h2>
-        //                 <p>No:8/, 11th street, Nandanam,<br />
-        //                     Nandanam, Chennai - 600035<br />
-        //                     jessycabs.india@yahoo.com<br />
-        //                     <span className='title-contact'> Tel:044-24354247,Mob:9841505689 </span>
-        //                 </p>
-        //             </div>
-
-        //             <div className="clearfix">
-        //                 <div className="col-left">
-        //                     <div className="clientinfo">
-        //                         <table className="table">
-        //                             <tbody>
-        //                                 <tr>
-        //                                     <td className="tabledatas"><label id="invoice_total">Organization :</label></td>
-        //                                     <td className="tabledatas"><span>{tripSheetData.customer || book.customer}</span></td>
-        //                                 </tr>
-        //                                 <tr>
-        //                                     <td className="tabledatas"><label id="invoice_total">Address :</label></td>
-        //                                     <td className="tabledatas"><span>karle town-Sez Unit1, No.288,38,39,123P,124,125,126,128 and<br />129P, Ground Floor to 3rd Floor of Block-1, Bangalore</span></td>
-        //                                 </tr>
-        //                                 <tr>
-        //                                     <td className="tabledatas"><label id="payment_term">GSTIN :</label></td>
-        //                                     <td className="tabledatas"><span>29AAACH1645p3z5, State: Karnataka, Code: 29</span></td>
-        //                                 </tr>
-        //                                 <tr>
-        //                                     <td className="tabledatas"><label id="note">Guest Name :</label></td>
-        //                                     <td className="tabledatas"><span>{tripSheetData.guestname || book.guestname}</span></td>
-        //                                 </tr>
-        //                             </tbody>
-        //                         </table>
-        //                     </div>
-        //                 </div>
-        //                 <div className="col-right">
-        //                     <table className="table">
-        //                         <tbody>
-        //                             <tr><td><span>Service City</span></td><td><label id="invoice_total">Bangalore</label></td></tr>
-        //                             <tr><td><span>Trip Date</span></td><td><label id="payment_term">{tripSheetData.startdate || book.startdate}</label></td></tr>
-        //                             <tr><td><span>Trip No</span></td><td><label id="note">{tripSheetData.tripid || book.tripid}</label></td></tr>
-        //                             <tr><td><span>Vehicle Type</span></td><td><label id="note">{tripSheetData.vehType || book.vehType}</label></td></tr>
-        //                             <tr><td><span>Vehicle No</span></td><td><label id="note">{tripSheetData.vehRegNo || book.vehRegNo}</label></td></tr>
-        //                             <tr><td><span>Request ID</span></td><td><label id="note">4337267</label></td></tr>
-        //                         </tbody>
-        //                     </table>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //         <div id="invoice-bot">
-        //             <div id="table">
-        //                 <table className="table-main">
-        //                     <thead>
-        //                         <tr className="tabletitle">
-        //                             <th>Description</th>
-        //                             <th>Trip Id</th>
-        //                             <th>Date</th>
-        //                             <th>Rate</th>
-        //                             <th>Total</th>
-        //                         </tr>
-        //                     </thead>
-        //                     <tr className="list-item">
-        //                         <td data-label="Description" className="tabledata">{tripSheetData.MinCharges || book.MinCharges}/{tripSheetData.vehType || book.vehType}</td>
-        //                         <td className="tabledata" data-label="Unit Price" >{tripSheetData.tripid || book.tripid}</td>
-        //                         <td className="tabledata" data-label="Unit Price" >{tripSheetData.startdate || book.startdate}</td>
-        //                         <td className="tabledata" data-label="Unit Price" >{tripSheetData.minchargeamount || book.minchargeamount}</td>
-        //                         <td className="tabledata" data-label="Total" >{BalanceValue}</td>
-        //                     </tr>
-        //                     <tr className="list-item total-row">
-        //                         <th colSpan="4" className="tableitem">Total Amount</th>
-        //                         <td data-label="Grand Total" className="tableitem">{BalanceValue}</td>
-        //                     </tr>
-        //                     <tr className="list-item total-row">
-        //                         <th colSpan="4" className="tableitem">GST @ 5%</th>
-        //                         <td data-label="Grand Total" className="tableitem">50</td>
-        //                     </tr>
-        //                     <tr className="list-item total-row">
-        //                         <th colSpan="4" className="tableitem">Rounded Off</th>
-        //                         <td data-label="Grand Total" className="tableitem">{roundOff}</td>
-        //                     </tr>
-        //                     <tr className="list-item total-row">
-        //                         <th colSpan="4" className="tableitem">Net Payable</th>
-        //                         <td data-label="Grand Total" className="tableitem" id="tabletotal">{TotalAmountValue}</td>
-        //                     </tr>
-        //                 </table>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
     );
 };
-const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, BalanceValue, selectedCustomerDatas, book, roundOff, formData }) => {
-
+const Invoice = ({ tripSheetData, selectedCustomerData, mapimageUrl, GmapimageUrl, TotalAmountValue, BalanceValue, selectedCustomerDatas, book, roundOff, formData }) => {
     const handlePrint = () => {
-        const invoiceContent = ReactDOMServer.renderToString(
-            <PrintableInvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOff} selectedCustomerData={selectedCustomerData} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
-        );
-        const printWindow = window.open('', '_blank');
-        printWindow.document.open();
-        printWindow.document.write(`
+        const mapImage = new Image();
+        const gMapImage = new Image();
+
+        const waitForImages = () => {
+            if (mapImage.complete && gMapImage.complete) {
+                const invoiceContent = ReactDOMServer.renderToString(
+                    <PrintableInvoice
+                        tripSheetData={tripSheetData}
+                        selectedCustomerData={selectedCustomerData}
+                        formData={formData}
+                        book={book}
+                        selectedCustomerDatas={selectedCustomerDatas}
+                    />
+                );
+
+                const printWindow = window.open('', '_blank');
+                printWindow.document.open();
+                printWindow.document.write(`
         <html>
           <head>
-          <title>TAX INVOICE</title>
-          <style>
-          .Individual-table-container {
-            font-size: 13px;
-            border: 1.5px solid #000;
-        }
-        
-        .Individual-description-table {
-            border-bottom: 1.5px solid #000;
-        
-        }
-        
-.page-title {
-    width: 40%;
-    padding: 10px 0px;
-    display: flex;
-    align-items: center;
-    /* justify-content: start; */
-
-}
-
-.page-title .sheet-logo img {
-    width: 80px;
-
-}
-.page-title .sheet-type {
-    width: 53%;
-    display: flex;
-    justify-content: flex-end;
-}
-        .Individual-description-table-header {
-            width: 60%;
-        }
-        .Individual-description-table table{
-            border-collapse: collapse;
-        }
-        .Individual-description-table thead{
-            background: #b4b3b3 ;
-            padding: 10px;
-            border-collapse: collapse;
-            margin:0px;
-            border-bottom: 1.5px solid #000;
-
-        }
-        .Individual-description-table  .Individual-description-table-header {
-            text-align: left !important;
-            padding: 0px 10px;
-        }
-        .Individual-description-table  td {
-            text-align: center;
-            font-size: 12px;
-            padding: 20px 10px;
-        }
-        .page-title {
-            text-align: center;
-            width: 100%;
-            border-bottom: 1.5px solid #000;
-        
-        }
-        
-        .header-title {
-            padding: 0px 10px;
-            display: flex;
-            /* align-items: center; */
-            justify-content: space-between;
-            border-bottom: 1.5px solid #000;
-        }
-        
-        .left-title {
-            width: 55%;
-        }
-        
-        .left-title p {
-            width: 80%;
-        }
-        
-        .left-title p span {
-            font-weight: 800;
-            display: block;
-        }
-        
-        .right-title {
-            float: right;
-            width: 35%;
-        }
-        
-        .dl-horizontal dt {
-            float: left;
-            overflow: hidden;
-            clear: left;
-            font-weight: 900;
-            text-align: right;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        .dl-horizontal dd {
-        
-            margin-left: 90px;
-        }
-        
-        .Individual-amountanddetails {
-            display: flex;
-            /* align-items: center; */
-            justify-content: space-around;
-            padding: 0px 10px;
-        }
-        
-        .Individual-details-data p {
-            width: 80%;
-            font-size: 12px;
-            text-align: left;
-        }
-        
-        .Individual-amount-data {
-            border-left: 1.5px solid #000;
-        }
-        .Individual-location-details {
-            display: flex;
-            padding: 10px 0px;
-            justify-content: space-between;
-        }
-        
-        .Individual-location-details .location-img {
-            width: 90%;
-        }
-        
-        .Individual-location-details .location-img img {
-            width: 300px;
-            height: 150px;
-        }
-        
-        .Individual-location-details .Individual-total-details table {
-            border-collapse: collapse;
-            width: 30%;
-        }
-        
-        .Individual-location-details .Individual-total-details table tr {
-            border: 1px solid #000;
-        }
-        
-        .Individual-location-details .Individual-total-details table th,
-        td {
-            padding: 10px 5px;
-            font-size: 13px;
-            // border-bottom: 1px solid #000 !important;
-        }
-        
-        
- 
-.Individual-RouteSummary .Individual-signature .Individual-signature-title {
-    display: flex;
-    justify-content: center;
-    font-weight: 600;
-}
-
-.Individual-RouteSummary .Individual-signature {
-    position: relative;
-    width: 30%;
-}
-
-.Individual-RouteSummary .Individual-signature img {
-    width: 100px;
-    display: flex;
-    margin: 0px auto;
-}
-.Individual-RouteSummary {
-    display: flex;
-    align-items: flex-end;
-}
-
-.Individual-RouteSummary .Individual-RouteSummary-container {
-    width: 70%;
-    font-size: 13px;
-}
-
-.Individual-RouteSummary .Individual-RouteSummary-container p {
-    font-weight: 600;
-}
-
-.Individual-RouteSummary .Individual-RouteSummary-container ol {
-    font-size: 12px;
-    font-weight: 500;
-}
-        
-        </style>
+             <title>TAX INVOICE</title>
+                <style>
+                    .Individual-table-container {
+                        font-size: 13px;
+                        border: 1.5px solid #000;
+                    }
+                    .Individual-description-table {
+                        border-bottom: 1.5px solid #000;
+                    }
+                    .page-title {
+                        width: 40%;
+                        padding: 10px 0px;
+                        display: flex;
+                        align-items: center;
+                        /* justify-content: start; */
+                    }
+                    .page-title .sheet-logo img {
+                        width: 80px;
+                    }
+                    .page-title .sheet-type {
+                        width: 53%;
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+                    .Individual-description-table-header {
+                        width: 60%;
+                    }
+                    .Individual-description-table table{
+                        border-collapse: collapse;
+                    }
+                    .Individual-description-table thead{
+                        background: #b4b3b3 ;
+                        padding: 10px;
+                        border-collapse: collapse;
+                        margin:0px;
+                        border-bottom: 1.5px solid #000;
+                    }
+                    .Individual-description-table  .Individual-description-table-header {
+                        text-align: left !important;
+                        padding: 0px 10px;
+                    }
+                    .Individual-description-table  td {
+                        text-align: center;
+                        font-size: 12px;
+                        padding: 20px 10px;
+                    }
+                    .page-title {
+                        text-align: center;
+                        width: 100%;
+                        border-bottom: 1.5px solid #000;
+                    
+                    }
+                    .header-title {
+                        padding: 0px 10px;
+                        display: flex;
+                        /* align-items: center; */
+                        justify-content: space-between;
+                        border-bottom: 1.5px solid #000;
+                    }
+                    .left-title {
+                        width: 55%;
+                    }
+                    .left-title p {
+                        width: 80%;
+                    }
+                    .left-title p span {
+                        font-weight: 800;
+                        display: block;
+                    }        
+                    .right-title {
+                        float: right;
+                        width: 35%;
+                    }
+                    .dl-horizontal dt {
+                        float: left;
+                        overflow: hidden;
+                        clear: left;
+                        font-weight: 900;
+                        text-align: right;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                    .dl-horizontal dd {
+                        margin-left: 90px;
+                    }
+                    .Individual-amountanddetails {
+                        display: flex;
+                        justify-content: space-around;
+                        padding: 0px 10px;
+                    }
+                    .Individual-details-data p {
+                        width: 80%;
+                        font-size: 12px;
+                        text-align: left;
+                    }
+                    .Individual-amount-data {
+                        border-left: 1.5px solid #000;
+                    }
+                    .Individual-location-details {
+                        display: flex;
+                        padding: 10px 0px;
+                        justify-content: space-between;
+                    }
+                    .Individual-location-details .location-img {
+                        width: 90%;
+                    }
+                    .Individual-location-details .location-img img {
+                        width: 300px;
+                        height: 150px;
+                    }
+                    .Individual-location-details .Individual-total-details table {
+                        border-collapse: collapse;
+                        width: 30%;
+                    }
+                    .Individual-location-details .Individual-total-details table tr {
+                        border: 1px solid #000;
+                    }
+                    .Individual-location-details .Individual-total-details table th,
+                    td {
+                        padding: 10px 5px;
+                        font-size: 13px;
+                    }
+                    .Individual-RouteSummary .Individual-signature .Individual-signature-title {
+                        display: flex;
+                        justify-content: center;
+                        font-weight: 600;
+                    }
+                    .Individual-RouteSummary .Individual-signature {
+                        position: relative;
+                        width: 30%;
+                    }
+                    .Individual-RouteSummary .Individual-signature img {
+                        width: 100px;
+                        display: flex;
+                        margin: 0px auto;
+                    }
+                    .Individual-RouteSummary {
+                        display: flex;
+                        align-items: flex-end;
+                    }
+                    .Individual-RouteSummary .Individual-RouteSummary-container {
+                        width: 70%;
+                        font-size: 13px;
+                    }
+                    .Individual-RouteSummary .Individual-RouteSummary-container p {
+                        font-weight: 600;
+                    }
+                    .Individual-RouteSummary .Individual-RouteSummary-container ol {
+                        font-size: 12px;
+                        font-weight: 500;
+                    }
+                </style>
           </head>
           ${invoiceContent}
           </body>
         </html>
       `);
-        printWindow.document.close();
+                printWindow.document.close();
 
-        printWindow.onload = () => {
-            printWindow.print();
-            printWindow.close();
+                setTimeout(() => {
+                    printWindow.print();
+                    printWindow.close();
+                }, 1000);
+            } else {
+                setTimeout(waitForImages, 100);
+            }
         };
-    };
 
+        mapImage.onerror = () => {
+            console.error('Error loading map image');
+        };
+
+        gMapImage.onerror = () => {
+            console.error('Error loading GMap image');
+        };
+
+        mapImage.src = mapimageUrl;
+        gMapImage.src = GmapimageUrl;
+
+        waitForImages();
+    };
     return (
         <div className="invoice-wrapper">
             <PrintableInvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOff} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
@@ -508,6 +431,5 @@ const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, Balanc
         </div>
     );
 };
-
 export default Invoice;
 

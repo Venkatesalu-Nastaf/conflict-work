@@ -129,7 +129,16 @@ const Billing = () => {
     }, [info]);
 
     const handleEInvoiceClick = (row) => {
-        setPopupOpen(true);
+        const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+        console.log('Received tripid:', tripid);
+
+        if (!tripid) {
+            setError(true);
+            setErrorMessage("Please enter the tripid");
+        } else {
+            localStorage.setItem('selectedTripid', tripid);
+            setPopupOpen(true);
+        }
     };
 
     const handlePopupClose = () => {
@@ -605,7 +614,7 @@ const Billing = () => {
         Billingdate: '',
         totalkm1: '',
         totaltime: '',
-        customer: '',
+        customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
         supplier: '',
         startdate: '',
         totaldays: '',
@@ -646,7 +655,6 @@ const Billing = () => {
     const roundOffValue = calculateRoundOff();
     const BalanceValue = calculatePayableAmount();
     const TotalAmountValue = calculateroundedPayableAmount();
-
 
     return (
         <div className="form-container">

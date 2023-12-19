@@ -3,7 +3,7 @@ import './Reportinvoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 import Logo from "../../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-
+import Signature from "../../../billingMain/Accountsinvoice/signature-1692258849846.png";
 const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, BalanceValue, selectedCustomerData, selectedCustomerDatas, formData }) => {
 
     return (
@@ -75,7 +75,7 @@ const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, Bal
                                     <td>18/10/23</td>
                                     <td>25/10/23</td>
                                     <td className='Reportinvoice-description-table-header'><span>Vijay Sir</span><br />Tn-09-DD-7071\Local\TKms:61\Hrs:8\CRYSTA A/C
-                                    Vehicle Hire Charges For (8HRS & 80 KMS) Night Bata: 1Night @ Rs.150 <br />Tambaram
+                                        Vehicle Hire Charges For (8HRS & 80 KMS) Night Bata: 1Night @ Rs.150 <br />Tambaram
                                     </td>
                                     <td>365.00</td>
                                     <td>4000.00 <br /> 150.00</td>
@@ -85,7 +85,7 @@ const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, Bal
                                     <td>18/10/23</td>
                                     <td>25/10/23</td>
                                     <td className='Reportinvoice-description-table-header'><span>Vijay Sir</span><br />Tn-09-DD-7071\Local\TKms:61\Hrs:8\CRYSTA A/C
-                                    Vehicle Hire Charges For (8HRS & 80 KMS) Night Bata: 1Night @ Rs.150 <br />Tambaram
+                                        Vehicle Hire Charges For (8HRS & 80 KMS) Night Bata: 1Night @ Rs.150 <br />Tambaram
                                     </td>
                                     <td>365.00</td>
                                     <td>4000.00 <br /> 150.00</td>
@@ -93,7 +93,33 @@ const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, Bal
                             </tbody>
                         </table>
                     </div>
+                    <div className="Reportinvoice-total-details">
+                        <div className="Reportinvoice-amount">
+                            <p>sixteen thousand, eight hundred sixty-five</p>
+                        </div>
+                        <div className="Reportinvoice-Total-details">
+                            <dl >
+                                <dt>SUB Total</dt>
+                                <dd>16500.00</dd>
+                                <dd>0.00</dd>
+                                <dt>Parking & Permit</dt>
+                                <dd>365.00</dd>
+                                <dt>Total Amount</dt>
+                                <dd>16865.00</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div className="Reportinvoice-details-report">
+                        <div className="Reportinvoice-gst-details">
+                            <p>GST is to be paid by Service Recepient Under RCM as per Notification 22/19 - Centraltax (Rate) dated 30-09-2019 <br /><span>E.& O.E In Words-Rupees</span></p>
+                        </div>
+                        <div className="Reportinvoice-signature">
+                            <img src={Signature} alt="Guest Signature" />
+                            <span className="Reportinvoice-signature-title">Guest Signature</span>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </>
         // <body>
@@ -268,8 +294,8 @@ const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, Balanc
         }
         
         .Reportinvoice-description-table td {
-            /* text-align: center; */
-            /* border-bottom: 1px solid #ddd; */
+            text-align: left !important;
+            border: 1px solid #000;
             padding: 20px 10px;
         }
         
@@ -317,9 +343,73 @@ const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, Balanc
         }
         
         .dl-horizontal dd {
-            margin-left: 90px;
+            margin-left: 95px;
         }
         
+        .Reportinvoice-total-details {
+            padding: 0px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            border-bottom: 1.5px solid #000;
+        }
+
+        .Reportinvoice-total-details .Reportinvoice-amount {
+            width: 80%;
+
+        }
+
+        .Reportinvoice-total-details .Reportinvoice-Total-details {
+            width: 40%;
+        }
+
+        .Reportinvoice-total-details .Reportinvoice-Total-details dl dt {
+            float: left;
+            overflow: hidden;
+            clear: left;
+            font-weight: 900;
+            text-align: right;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .Reportinvoice-total-details .Reportinvoice-Total-details dl dd {
+            margin-left: 190px;
+        }
+
+        .Reportinvoice-details-report {
+            padding: 0px 10px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            justify-content: space-between;
+        }
+
+        .Reportinvoice-details-report .Reportinvoice-gst-details p {
+            width: 50%;
+        }
+
+        .Reportinvoice-details-report .Reportinvoice-gst-details p span {
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+        }
+        .Reportinvoice-details-report .Reportinvoice-signature .Reportinvoice-signature-title {
+            display: flex;
+            justify-content: center;
+            font-weight: 600;
+        }
+        .Reportinvoice-details-report .Reportinvoice-signature {
+            position: relative;
+            width: 30%;
+        }
+
+        .Reportinvoice-details-report .Reportinvoice-signature img {
+            width: 100px;
+            display: flex;
+            margin: 0px auto;
+        }
         </style>
           </head>
           <body>

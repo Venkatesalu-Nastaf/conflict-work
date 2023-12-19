@@ -1,382 +1,185 @@
-/* #invoiceholder body {
-    background: #E0E0E0;
-    font-family: 'Roboto', sans-serif;
+.Luxuryinvoice-table-container {
+    font-size: 13px;
+    border: 1.5px solid #000;
 }
 
-#invoiceholder .clearfix::after {
-    content: "";
-    clear: both;
-    display: table;
+.Luxuryinvoice-description-table {
+    border-bottom: 1.5px solid #000;
+
 }
 
-#invoiceholder .col-left {
-    float: left;
+.page-title {
+    width: 40%;
+    padding: 10px 0px;
+    display: flex;
+    align-items: center;
+    /* justify-content: start; */
+
 }
 
-#invoiceholder .col-right {
-    float: right;
+.page-title .sheet-logo img {
+    width: 80px;
+
 }
 
-#invoiceholder h1 {
-    font-size: 1.5em;
-    color: #000;
+.page-title .sheet-type {
+    width: 53%;
+    display: flex;
+    justify-content: flex-end;
 }
 
-#invoiceholder h2 {
-    font-size: .9em;
+.Luxuryinvoice-description-table-header {
+    width: 60%;
 }
 
-#invoiceholder h3 {
-    font-size: 1.2em;
-    font-weight: 300;
-    line-height: 2em;
+.Luxuryinvoice-description-table th {
+    padding: 10px;
+
 }
 
-#invoiceholder p {
-    font-size: .75em;
-    color: #000;
-    line-height: 1.2em;
+.Luxuryinvoice-description-table thead {
+    background: #b4b3b3 !important;
+    border-bottom: 1.5px solid #000;
 }
 
-#invoiceholder a {
-    text-decoration: none;
-    color: #00a63f;
+.Luxuryinvoice-description-table .Luxuryinvoice-description-table-header {
+    /* text-align: left !important; */
+    padding: 10px;
 }
 
-#invoiceholder {
-    width: 100%;
-    height: 100%;
-    padding: 50px 0;
+.Luxuryinvoice-description-table td {
+    /* text-align: center; */
+    /* border-bottom: 1px solid #ddd; */
+    padding: 20px 10px;
 }
 
-#invoiceholder #invoice {
-    position: relative;
-    margin: 0 auto;
-    width: 700px;
-    background: #FFF;
-}
-
-[id*='invoice-'] {
-    padding: 20px;
-}
-
-#invoiceholder #invoice-top {
-    border-bottom: 2px solid #00a63f;
-}
-
-#invoice-mid #message {
-    border-bottom: 2px solid #00a63f;
-}
-
-#table .table-main #tabletotal {
-    border-top: 2px solid #00a63f;
-}
-
-#invoiceholder #invoice-mid {
-    min-height: 110px;
-}
-
-#invoiceholder #invoice-bot {
-    min-height: 240px;
-}
-
-#invoiceholder .logo {
-    display: inline-block;
-    vertical-align: middle;
-    width: 110px;
-    overflow: hidden;
-}
-
-#invoiceholder .info {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 20px;
-}
-
-#invoiceholder .logo img,
-#invoiceholder .clientlogo img {
-    width: 100%;
-}
-
-#invoiceholder .clientlogo {
-    display: inline-block;
-    vertical-align: middle;
-    width: 50px;
-}
-
-#invoiceholder .clientinfo {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 20px
-}
-
-#invoiceholder .title {
-    float: right;
-}
-
-#invoice-mid .righttitle {
-    float: right;
-}
-
-#invoiceholder .title p {
-    text-align: right;
-}
-
-.invoice-wrapper h1 {
-    font: bold 100% sans-serif;
-    letter-spacing: 5.05px;
+.page-title {
     text-align: center;
-    text-transform: uppercase;
+    width: 100%;
+    border-bottom: 1.5px solid #000;
+
 }
 
-#invoiceholder #message {
-    margin-bottom: 30px;
+.header-title {
+    padding: 0px 10px;
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-between;
+    border-bottom: 1.5px solid #000;
+}
+
+.left-title {
+    width: 55%;
+}
+
+.left-title p {
+    width: 80%;
+}
+
+.left-title p span {
+    font-weight: 800;
     display: block;
 }
 
-#invoiceholder h2 {
-    margin-bottom: 5px;
-    color: #000;
+.right-title {
+    float: right;
+    width: 45%;
 }
 
-#invoiceholder .col-right td {
-    color: #000;
-    padding: 5px 8px;
-    border: 0;
-    font-size: 0.75em;
-    border-bottom: 1px solid #eeeeee;
+.dl-horizontal dt {
+    float: left;
+    overflow: hidden;
+    clear: left;
+    font-weight: 900;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-#invoiceholder .col-right td label {
-    margin-left: 5px;
-    font-weight: 600;
-    color: #000;
+.dl-horizontal dd {
+    margin-left: 90px;
 }
 
-#invoiceholder td {
-    margin-left: 5px;
-    font-weight: 600;
-    color: #000;
+.Luxuryinvoice-amountanddetails {
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-around;
+    padding: 0px 10px;
 }
 
-#invoiceholder .cta-group a {
-    display: inline-block;
-    padding: 7px;
-    border-radius: 4px;
-    background: rgb(196, 57, 10);
-    margin-right: 10px;
-    min-width: 100px;
-    text-align: center;
-    color: #fff;
-    font-size: 0.75em;
+.Luxuryinvoice-details-data p {
+    width: 80%;
+    font-size: 12px;
+    text-align: left;
 }
 
-#invoiceholder .cta-group .btn-primary {
-    background: #00a63f;
+.Luxuryinvoice-amount-data {
+    border-left: 1.5px solid #000;
 }
 
-#invoiceholder .cta-group.mobile-btn-group {
-    display: none;
+.Luxuryinvoice-location-details {
+    display: flex;
+    padding: 10px 0px;
+    justify-content: space-between;
 }
 
-#invoiceholder table {
-    width: 100%;
+.Luxuryinvoice-location-details .location-img {
+    width: 80%;
+}
+
+.Luxuryinvoice-location-details .location-img img {
+    width: 300px;
+    height: 150px;
+}
+
+.Luxuryinvoice-location-details .Luxuryinvoice-total-details table {
     border-collapse: collapse;
+    width: 30%;
 }
 
-#invoiceholder .tabledata {
-    padding: 10px;
-    border-bottom: 1px solid #cccaca;
-    font-size: 0.70em;
-    text-align: left;
+.Luxuryinvoice-location-details .Luxuryinvoice-total-details table tr {
+    border: 1px solid #000;
 }
 
-#invoiceholder .tabledatas {
-    padding: 10px;
-    border-bottom: none;
-    font-size: 0.70em;
-    text-align: left;
+.Luxuryinvoice-location-details .Luxuryinvoice-total-details table th,
+td {
+    padding: 10px 5px;
+    font-size: 13px;
+    /* border-bottom: 1px solid #000 !important; */
 }
 
-#invoiceholder .tabletitle th {
-    border-bottom: 2px solid #ddd;
-    text-align: right !important;
+
+.Luxuryinvoice-RouteSummary .Luxuryinvoice-signature .Luxuryinvoice-signature-title {
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
 }
 
-#invoiceholder .tabletitle th:nth-child(2) {
-    text-align: left;
-}
-
-#invoiceholder th {
-    font-size: 0.7em;
-    text-align: right;
-    padding: 5px 10px;
-}
-
-#invoiceholder .item {
-    width: 50%;
-}
-
-#invoiceholder .list-item td {
-    text-align: right;
-}
-
-#invoiceholder .list-item td:nth-child(2) {
-    text-align: right;
-}
-
-#invoiceholder .total-row th,
-#invoiceholder .total-row td {
-    text-align: right;
-    font-weight: 700;
-    font-size: .75em;
-    border: 0 none;
-}
-
-#invoiceholder footer {
-    border-top: 1px solid #eeeeee;
-    padding: 15px 20px;
-}
-
-#invoiceholder .effect2 {
+.Luxuryinvoice-RouteSummary .Luxuryinvoice-signature {
     position: relative;
+    width: 30%;
 }
 
-#invoiceholder .effect2:before,
-.effect2:after {
-    z-index: -1;
-    position: absolute;
-    content: "";
-    bottom: 15px;
-    left: 10px;
-    width: 50%;
-    top: 80%;
-    max-width: 300px;
-    background: #777;
-    -webkit-transform: rotate(-3deg);
-    -moz-transform: rotate(-3deg);
-    -o-transform: rotate(-3deg);
-    -ms-transform: rotate(-3deg);
-    transform: rotate(-3deg);
+.Luxuryinvoice-RouteSummary .Luxuryinvoice-signature img {
+    width: 100px;
+    display: flex;
+    margin: 0px auto;
+}
+.Luxuryinvoice-RouteSummary {
+    display: flex;
+    align-items: flex-end;
 }
 
-#invoiceholder .effect2:after {
-    -webkit-transform: rotate(3deg);
-    -moz-transform: rotate(3deg);
-    -o-transform: rotate(3deg);
-    -ms-transform: rotate(3deg);
-    transform: rotate(3deg);
-    right: 10px;
-    left: auto;
+.Luxuryinvoice-RouteSummary .Luxuryinvoice-RouteSummary-container {
+    width: 70%;
+    font-size: 13px;
 }
 
-@media screen and (max-width: 767px) {
-    #invoiceholder h1 {
-        font-size: .9em;
-    }
+.Luxuryinvoice-RouteSummary .Luxuryinvoice-RouteSummary-container p {
+    font-weight: 600;
+}
 
-    #invoiceholder #invoice {
-        width: 100%;
-    }
-
-    #invoiceholder #message {
-        margin-bottom: 20px;
-    }
-
-    [id*='invoice-'] {
-        padding: 20px 10px;
-    }
-
-    #invoiceholder .logo {
-        width: 140px;
-    }
-
-    #invoiceholder .title {
-        float: none;
-        display: inline-block;
-        vertical-align: middle;
-        margin-left: 40px;
-    }
-
-    #invoiceholder .title p {
-        text-align: left;
-    }
-
-    #invoiceholder .col-left,
-    #invoiceholder .col-right {
-        width: 100%;
-    }
-
-    #invoiceholder .table {
-        margin-top: 20px;
-    }
-
-    #invoiceholder #table {
-        white-space: nowrap;
-        overflow: auto;
-    }
-
-    #invoiceholder td {
-        white-space: normal;
-    }
-
-    #invoiceholder .cta-group {
-        text-align: center;
-    }
-
-    #invoiceholder .cta-group.mobile-btn-group {
-        display: block;
-        margin-bottom: 20px;
-    }
-
-    #invoiceholder .table-main {
-        border: 0 none;
-    }
-
-    #invoiceholder .table-main thead {
-        border: none;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        margin: -1px;
-        overflow: hidden;
-        padding: 0;
-        position: absolute;
-        width: 1px;
-    }
-
-    #invoiceholder .table-main tr {
-        border-bottom: 2px solid #eee;
-        display: block;
-        margin-bottom: 20px;
-    }
-
-    #invoiceholder .table-main td {
-        font-weight: 700;
-        display: block;
-        padding-left: 40%;
-        max-width: none;
-        position: relative;
-        border: 1px solid #cccaca;
-        text-align: left;
-    }
-
-    #invoiceholder .table-main td:before {
-        content: attr(data-label);
-        position: absolute;
-        left: 10px;
-        font-weight: normal;
-        text-transform: uppercase;
-    }
-
-    #invoiceholder .total-row th {
-        display: none;
-    }
-
-    #invoiceholder .total-row td {
-        text-align: left;
-    }
-
-    #invoiceholder footer {
-        text-align: center;
-    }
-} */
+.Luxuryinvoice-RouteSummary .Luxuryinvoice-RouteSummary-container ol {
+    font-size: 12px;
+    font-weight: 500;
+}

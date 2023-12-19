@@ -77,9 +77,9 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                     </div>
                     <div className="header-title">
                         <div className="left-title">
-                            <dl className="dl-horizontal">
+                            <dl class="dl-horizontal">
                                 <dt>Organisation</dt>
-                                <dd><strong>: {tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</strong><br />06, Siddhartha, Plot 96, Nehru Place,
+                                <dd><strong>:HCL CAPITAL PRIVATE LIMITED</strong><br />06, Siddhartha, Plot 96, Nehru Place,
                                     South East Delhi,</dd>
                                 <dt>GSTIN</dt>
                                 <dd>: 07AAACM9201G1ZR,</dd>
@@ -88,23 +88,23 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                                 <dt>State</dt>
                                 <dd>: Delhi</dd>
                                 <dt>Guest Name</dt>
-                                <dd>: {tripSheetData.guestname || book.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname || formData.guestname}</dd>
+                                <dd>: MRS.ROSHNI NADAR</dd>
                             </dl>
                         </div>
                         <div className="right-title">
-                            <dl className="dl-horizontal">
+                            <dl class="dl-horizontal">
                                 <dt>Service City</dt>
                                 <dd><strong>: Chennai</strong></dd>
                                 <dt>Trip Date</dt>
-                                <dd>: {tripSheetData.startdate || book.startdate || selectedCustomerData.startdate || selectedCustomerDatas.startdate || formData.startdate}</dd>
+                                <dd>: 31/07/2023</dd>
                                 <dt>Trip No</dt>
-                                <dd>: {tripSheetData.tripid || book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}</dd>
+                                <dd>: 73701</dd>
                                 <dt>Vehicle Type</dt>
-                                <dd>: {tripSheetData.vehType || book.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || formData.vehType}</dd>
+                                <dd>: BENZ S CLASS</dd>
                                 <dt>Vehicle No</dt>
-                                <dd>: {tripSheetData.vehRegNo || book.vehRegNo || selectedCustomerData.vehRegNo || selectedCustomerDatas.vehRegNo || formData.vehRegNo}</dd>
+                                <dd>: PY-05-D-7755</dd>
                                 <dt>Request ID</dt>
-                                <dd>: {tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</dd>
+                                <dd>: </dd>
                             </dl>
                         </div>
                     </div>
@@ -119,13 +119,12 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    {/* <td className='Individual-description-table-header'>38 Kms + FGR 0 Kms = Total 38 Kms : 03:00 Hrs +
-                                        FGR 00:00 Hrs = Total 03:00 Hrs (8 HRS & 80 KMS)</td> */}
-                                    <td className='Individual-description-table-header'>{tripSheetData.MinCharges || book.MinCharges || selectedCustomerData.MinCharges || selectedCustomerDatas.MinCharges || formData.MinCharges}</td>
+                            <tr>
+                                    <td className='Individual-description-table-header'>38 Kms + FGR 0 Kms = Total 38 Kms : 03:00 Hrs +
+                                        FGR 00:00 Hrs = Total 03:00 Hrs (8 HRS & 80 KMS)</td>
                                     <td>2</td>
-                                    <td>{tripSheetData.supplier || book.supplier || selectedCustomerData.supplier || selectedCustomerDatas.supplier || formData.supplier}</td>
-                                    <td>{tripSheetData.supplier || book.supplier || selectedCustomerData.supplier || selectedCustomerDatas.supplier || formData.supplier}</td>
+                                    <td>30</td>
+                                    <td>30000.00</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -144,17 +143,17 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                         </div>
                         <div className="Individual-amount-data">
                             <div className="Individual-lebel">
-                                <dl className="dl-horizontal">
+                                <dl class="dl-horizontal">
                                     <dt>Total Amount</dt>
-                                    <dd>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</dd>
-                                    <dd>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</dd>
+                                    <dd>30075.00</dd>
+                                    <dd>0.00</dd>
                                     <dt>Rounded Off</dt>
-                                    <dd>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</dd>
+                                    <dd>00.00</dd>
                                     <dd>
                                         <hr />
                                     </dd>
                                     <dt>Net payble</dt>
-                                    <dd>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</dd>
+                                    <dd>3075.00</dd>
                                 </dl>
                             </div>
                         </div>
@@ -169,6 +168,7 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                     <div className="Individual-total-details">
                         <table>
                             <thead>
+
                                 <tr>
                                     <th>Starting</th>
                                     <th>Closing</th>
@@ -177,24 +177,24 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
-                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
+                                    <td>15:00</td>
+                                    <td>18:00</td>
                                     <td><strong>
-                                        {tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}
+                                        18:00hrs
                                     </strong></td>
                                 </tr>
                                 <tr>
-                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
-                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
+                                    <td>31/07/2023</td>
+                                    <td>31/07/2023</td>
                                     <td><strong>
-                                    {tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}
+                                        0
                                     </strong></td>
                                 </tr>
                                 <tr>
-                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
-                                    <td>{tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}</td>
+                                    <td>67802</td>
+                                    <td>67840</td>
                                     <td><strong>
-                                    {tripSheetData.customer || book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer}
+                                        38:00Kms
                                     </strong></td>
                                 </tr>
                             </tbody>

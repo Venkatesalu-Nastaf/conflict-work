@@ -65,14 +65,12 @@ const actions = [
 
 // TABLE START
 const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
   { field: "customerId", headerName: "Customer ID", width: 130 },
   { field: "customer", headerName: "Name", width: 160 },
   { field: "address1", headerName: "Address", width: 130 },
   { field: "phoneno", headerName: "Phone", width: 160 },
-  { field: "active", headerName: "Active", width: 80 },
   { field: "rateType", headerName: "Rate_Type", width: 130 },
-  { field: "gstTax", headerName: "GST_NO", width: 130 },
+  { field: "gstnumber", headerName: "GST_NO", width: 160 },
   { field: "state", headerName: "State", width: 160 },
   { field: "enableDriverApp", headerName: "Driver_App", width: 130 },
 ];
@@ -191,6 +189,7 @@ const Customer = () => {
     underGroup: '',
     gstTax: '',
     acType: '',
+    entity: '',
     printBill: '',
     userName: '',
     bookName: '',
@@ -200,8 +199,9 @@ const Customer = () => {
     inclAddress: '',
     active: '',
     state: '',
-    entity: '',
-    enableDriverApp: '',
+    gstnumber: '',
+    SalesPerson: '',
+    salesPercentage: '',
     billingGroup: '',
   });
 
@@ -250,6 +250,10 @@ const Customer = () => {
       ...prevBook,
       date: startOfDay,
     }));
+    setSelectedCustomerData((prevBook) => ({
+      ...prevBook,
+      date: startOfDay,
+    }));
   };
 
   const handleCancel = () => {
@@ -279,9 +283,11 @@ const Customer = () => {
       selectOption: '',
       inclAddress: '',
       active: '',
-      state: '',
       entity: '',
-      enableDriverApp: '',
+      state: '',
+      gstnumber: '',
+      SalesPerson: '',
+      salesPercentage: '',
       billingGroup: '',
     }));
     setSelectedCustomerData({});
@@ -342,7 +348,12 @@ const Customer = () => {
       } else if (actionName === 'Edit') {
         console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.customerId === customerId);
-        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        const updatedCustomer = {
+          ...selectedCustomer,
+          ...selectedCustomerData,
+          date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
+        };
+        console.log('customer page updated data', updatedCustomer);
         await axios.put(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
         console.log('Customer updated');
         handleCancel();
@@ -360,6 +371,8 @@ const Customer = () => {
       handleClick(null, 'List');
     }
   });
+
+  const reversedRows = [...rows].reverse();
   return (
     <div className="form-container">
       <div className="customer-form">
@@ -438,7 +451,7 @@ const Customer = () => {
                     onChange={handleDateChange}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
+                      <TextField {...inputProps} name='date' inputRef={inputRef} value={selectedCustomerData?.date} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
@@ -747,110 +760,38 @@ const Customer = () => {
               </div>
               <div className="input">
                 <TextField
-                  name="gstin"
-                  autoComplete="new-password"
+                  name="gstnumber"
                   label="GST-Number"
-                  id=""
+                  value={selectedCustomerData?.gstnumber || book.gstnumber}
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  id="gstin"
                   size='small'
                 />
               </div>
               <div className="input">
                 <TextField
                   name="SalesPerson"
+                  value={selectedCustomerData?.SalesPerson || book.SalesPerson}
                   autoComplete="new-password"
+                  onChange={handleChange}
                   label="Sales-Person"
-                  id=""
+                  id="SalesPerson"
                   size='small'
                 />
               </div>
               <div className="input">
                 <TextField
                   type='number'
-                  name="SalesPerson"
+                  name="salesPercentage"
+                  value={selectedCustomerData?.salesPercentage || book.salesPercentage}
                   autoComplete="new-password"
+                  onChange={handleChange}
                   label="Percentage"
-                  id=""
+                  id="salesPercentage"
                   size='small'
                 />
               </div>
-              {/* <div className="input ">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    Active
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="active"
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    value={selectedCustomerData?.active || book.active}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div> */}
-              {/* <div className="input radio">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    Enable Driver App
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="enableDriverApp"
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    value={selectedCustomerData?.enableDriverApp || book.enableDriverApp}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div> */}
-              {/* <div className="input radio">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    GST Tax
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="gstTax"
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    value={selectedCustomerData?.gstTax || book.gstTax}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div> */}
             </div>
             <div className="input-field">
               <div className="input">
@@ -921,7 +862,7 @@ const Customer = () => {
             </div>
             <div className="table-customer-lists">
               <DataGrid
-                rows={rows}
+                rows={reversedRows}
                 columns={columns}
                 onRowClick={handleRowClick}
                 initialState={{

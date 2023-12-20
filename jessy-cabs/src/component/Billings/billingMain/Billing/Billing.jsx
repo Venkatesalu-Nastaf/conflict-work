@@ -130,6 +130,7 @@ const Billing = () => {
 
     const handleEInvoiceClick = (row) => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+        const customer = book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer;
         console.log('Received tripid:', tripid);
 
         if (!tripid) {
@@ -137,6 +138,7 @@ const Billing = () => {
             setErrorMessage("Please enter the tripid");
         } else {
             localStorage.setItem('selectedTripid', tripid);
+            localStorage.setItem('selectedcustomerid', customer);
             setPopupOpen(true);
         }
     };
@@ -206,6 +208,15 @@ const Billing = () => {
                 ...prevData,
                 [name]: checked,
             }));
+            setSelectedCustomerDatas((prevData) => ({
+                ...prevData,
+                [name]: checked,
+            }));
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: checked,
+            }));
+
         } else {
             setBook((prevBook) => ({
                 ...prevBook,
@@ -216,6 +227,10 @@ const Billing = () => {
                 [name]: value,
             }));
             setSelectedCustomerDatas((prevValues) => ({
+                ...prevValues,
+                [name]: value,
+            }));
+            setFormData((prevValues) => ({
                 ...prevValues,
                 [name]: value,
             }));
@@ -237,6 +252,10 @@ const Billing = () => {
             ...prevData,
             [name]: selectedOption,
         }));
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: selectedOption,
+        }));
     };
 
     const handleDateChange = (date, name) => {
@@ -247,6 +266,14 @@ const Billing = () => {
             [name]: formattedDate,
         }));
         setSelectedCustomerData((prevBook) => ({
+            ...prevBook,
+            [name]: formattedDate,
+        }));
+        setSelectedCustomerDatas((prevBook) => ({
+            ...prevBook,
+            [name]: formattedDate,
+        }));
+        setFormData((prevBook) => ({
             ...prevBook,
             [name]: formattedDate,
         }));
@@ -614,7 +641,7 @@ const Billing = () => {
         Billingdate: '',
         totalkm1: '',
         totaltime: '',
-        customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
+        customer: '',
         supplier: '',
         startdate: '',
         totaldays: '',
@@ -1438,7 +1465,7 @@ const Billing = () => {
                     </div>
                     <Dialog open={popupOpen} onClose={handlePopupClose}>
                         <DialogContent>
-                            <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} />
+                            <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData}selectedCustomerDatas={selectedCustomerDatas} />
                             {/* <Paymentinvoice /> */}
                         </DialogContent>
                         <DialogActions>

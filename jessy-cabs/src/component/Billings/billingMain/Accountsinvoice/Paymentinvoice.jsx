@@ -3,9 +3,77 @@ import './Paymentinvoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 import Logo from "../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedCustomerDatas, formData }) => {
+const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, BalanceValue, TotalAmountValue, roundOff, selectedCustomerDatas, formData }) => {
     const [mapimageUrl, setMapImageUrl] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
+    const [tripData, setTripData] = useState('');
+    const [customerData, setCustomerData] = useState('');
+    const [routeData, setRouteData] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const tripid = localStorage.getItem('selectedTripid');
+            console.log(tripid);
+            try {
+                const response = await fetch(`http://localhost:8081/tripsheet/${tripid}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const tripData = await response.json(); // Parse JSON data
+                console.log('tripsheet data for invoice', tripData);
+
+                setTripData(tripData);
+            } catch (error) {
+                console.error('Error fetching tripsheet data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const customer = localStorage.getItem('selectedcustomerid');
+            console.log(customer);
+            try {
+                const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const customerData = await response.json(); // Parse JSON data
+                console.log('customers data for invoice', customerData);
+
+                setCustomerData(customerData);
+            } catch (error) {
+                console.error('Error fetching tripsheet data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            const tripid = localStorage.getItem('selectedTripid');
+            console.log(tripid);
+            try {
+                const response = await fetch(`http://localhost:8081/routedata/${encodeURIComponent(tripid)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const routeData = await response.json(); // Parse JSON data
+                console.log('route data for invoice', routeData);
+
+                setRouteData(routeData);
+            } catch (error) {
+                console.error('Error fetching tripsheet data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
@@ -41,6 +109,8 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
         return () => {
         };
     }, []);
+
+
     return (
         <>
             <div className='Individual-invoice' >
@@ -77,34 +147,33 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                     </div>
                     <div className="header-title">
                         <div className="left-title">
-                            <dl class="dl-horizontal">
+                            <dl className="dl-horizontal">
                                 <dt>Organisation</dt>
-                                <dd><strong>:HCL CAPITAL PRIVATE LIMITED</strong><br />06, Siddhartha, Plot 96, Nehru Place,
-                                    South East Delhi,</dd>
+                                <dd><strong>: {tripSheetData?.customer || book?.customer || selectedCustomerData?.customer || selectedCustomerDatas?.customer || formData?.customer || ''}</strong><br />
+                                    {customerData?.address1}{customerData?.address2}{customerData?.city}
+                                </dd>
                                 <dt>GSTIN</dt>
-                                <dd>: 07AAACM9201G1ZR,</dd>
+                                <dd>: {customerData?.gstnumber},</dd>
                                 <dt>Code</dt>
-                                <dd>: 07</dd>
-                                <dt>State</dt>
-                                <dd>: Delhi</dd>
+                                <dd>: {tripData.customercode || ''}</dd>
                                 <dt>Guest Name</dt>
-                                <dd>: MRS.ROSHNI NADAR</dd>
+                                <dd>: {tripSheetData?.guestname || book?.guestname || selectedCustomerData?.guestname || selectedCustomerDatas?.guestname || formData?.guestname || ''}</dd>
                             </dl>
                         </div>
                         <div className="right-title">
-                            <dl class="dl-horizontal">
+                            <dl className="dl-horizontal">
                                 <dt>Service City</dt>
-                                <dd><strong>: Chennai</strong></dd>
+                                <dd><strong>: {tripData?.department || ''}</strong></dd>
                                 <dt>Trip Date</dt>
-                                <dd>: 31/07/2023</dd>
+                                <dd>: {tripSheetData?.startdate || book?.startdate || selectedCustomerData?.startdate || selectedCustomerDatas?.startdate || formData?.startdate || ''}</dd>
                                 <dt>Trip No</dt>
-                                <dd>: 73701</dd>
+                                <dd>: {tripSheetData?.tripid || book?.tripid || selectedCustomerData?.tripid || selectedCustomerDatas?.tripid || formData?.tripid || ''}</dd>
                                 <dt>Vehicle Type</dt>
-                                <dd>: BENZ S CLASS</dd>
+                                <dd>: {tripSheetData?.vehType || book?.vehType || selectedCustomerData?.vehType || selectedCustomerDatas?.vehType || formData?.vehType || ''}</dd>
                                 <dt>Vehicle No</dt>
-                                <dd>: PY-05-D-7755</dd>
+                                <dd>: {tripSheetData?.vehRegNo || book?.vehRegNo || selectedCustomerData?.vehRegNo || selectedCustomerDatas?.vehRegNo || formData?.vehRegNo || ''}</dd>
                                 <dt>Request ID</dt>
-                                <dd>: </dd>
+                                <dd>: {tripData?.request || ''}</dd>
                             </dl>
                         </div>
                     </div>
@@ -119,12 +188,12 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                                 </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                    <td className='Individual-description-table-header'>38 Kms + FGR 0 Kms = Total 38 Kms : 03:00 Hrs +
-                                        FGR 00:00 Hrs = Total 03:00 Hrs (8 HRS & 80 KMS)</td>
-                                    <td>2</td>
-                                    <td>30</td>
-                                    <td>30000.00</td>
+                                <tr>
+                                    <td className='Individual-description-table-header'>
+                                        {tripSheetData?.totalkm1 || book?.totalkm1 || selectedCustomerData?.totalkm1 || selectedCustomerDatas?.totalkm1 || formData?.totalkm1 || ''} KMs + FGR {tripData?.shedkm || ''} KMs = Total {tripSheetData?.totalkm1 || book?.totalkm1 || selectedCustomerData?.totalkm1 || selectedCustomerDatas?.totalkm1 || formData?.totalkm1 || ''} KMs : {tripSheetData?.totaltime || book?.totaltime || selectedCustomerData?.totaltime || selectedCustomerDatas?.totaltime || formData?.totaltime || ''} + FGR {tripData?.additionaltime || ''} Hrs = Total {tripSheetData?.totaltime || book?.totaltime || selectedCustomerData?.totaltime || selectedCustomerDatas?.totaltime || formData?.totaltime || ''} ({tripSheetData?.MinCharges || book?.MinCharges || selectedCustomerData?.package || selectedCustomerDatas?.MinCharges || formData?.MinCharges || ''})</td>
+                                    <td>1</td>
+                                    <td>{tripSheetData?.minchargeamount || book?.minchargeamount || selectedCustomerData?.netamount || selectedCustomerDatas?.minchargeamount || formData?.minchargeamount || ''}</td>
+                                    <td>{BalanceValue || ''}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -143,17 +212,17 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                         </div>
                         <div className="Individual-amount-data">
                             <div className="Individual-lebel">
-                                <dl class="dl-horizontal">
+                                <dl className="dl-horizontal">
                                     <dt>Total Amount</dt>
-                                    <dd>30075.00</dd>
+                                    <dd>{BalanceValue || ''}</dd>
                                     <dd>0.00</dd>
                                     <dt>Rounded Off</dt>
-                                    <dd>00.00</dd>
+                                    <dd>{roundOff || ''}</dd>
                                     <dd>
                                         <hr />
                                     </dd>
                                     <dt>Net payble</dt>
-                                    <dd>3075.00</dd>
+                                    <dd>{TotalAmountValue || ''}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -162,13 +231,11 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                 </div>
                 <div className="Individual-location-details">
                     <div className="location-img">
-                        {/* <img src={Locationimg} alt="location-img" /> */}
                         <img src={GmapimageUrl} alt="location-img" />
                     </div>
                     <div className="Individual-total-details">
                         <table>
                             <thead>
-
                                 <tr>
                                     <th>Starting</th>
                                     <th>Closing</th>
@@ -177,24 +244,24 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>15:00</td>
-                                    <td>18:00</td>
+                                    <td>{tripData?.startdate || ''}</td>
+                                    <td>{tripData?.closedate || ''}</td>
                                     <td><strong>
-                                        18:00hrs
+                                        {tripSheetData?.totaldays || book?.totaldays || selectedCustomerData?.totaldays || selectedCustomerDatas?.totaldays || formData?.totaldays || ''}
                                     </strong></td>
                                 </tr>
                                 <tr>
-                                    <td>31/07/2023</td>
-                                    <td>31/07/2023</td>
+                                    <td>{tripData?.starttime || ''}</td>
+                                    <td>{tripData?.closetime || ''}</td>
                                     <td><strong>
-                                        0
+                                        {tripSheetData?.totaltime || book?.totaltime || selectedCustomerData?.totaltime || selectedCustomerDatas?.totaltime || formData?.totaltime || ''}
                                     </strong></td>
                                 </tr>
                                 <tr>
-                                    <td>67802</td>
-                                    <td>67840</td>
+                                    <td>{tripData.startkm || ''}</td>
+                                    <td>{tripData.closekm || ''}</td>
                                     <td><strong>
-                                        38:00Kms
+                                        {tripSheetData?.totalkm1 || book?.totalkm1 || selectedCustomerData?.totalkm1 || selectedCustomerDatas?.totalkm1 || formData?.totalkm1 || ''}
                                     </strong></td>
                                 </tr>
                             </tbody>
@@ -205,11 +272,10 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                 <div className="Individual-RouteSummary">
                     <div className='Individual-RouteSummary-container'>
                         <h2>Route Summary</h2>
-                        <p><strong>Start</strong>.487, Anna Salai, Lotus Colony, CIT Nagar, Chennai, Tamil Nadu 600035, India</p>
                         <ol type="1">
-                            <li>X5M7+2HV, Airport Departures Terminal Link, Meenambakkam, Chennai, Tamil Nadu 600016, India</li>
-                            <li>No.63, ITC Grand Chola, Near Alexander Square, Anna Salai, Little Mount, Guindy, Chennai, Tamil Nadu 600032, India</li>
-                            <li>E-1, Pasumpon Muthuramalinga Thevar Rd, Lotus Colony, Nandanam, Chennai, Tamil Nadu 600035, India</li>
+                            {routeData.length > 0 && routeData.map((data, index) => (
+                                <li><p key={index}><strong>{data.trip_type}</strong>: {data.place_name}</p></li>
+                            ))}
                         </ol>
                     </div>
                     <div className="Individual-signature">
@@ -221,26 +287,59 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
         </>
     );
 };
-const Invoice = ({ tripSheetData, selectedCustomerData, mapimageUrl, GmapimageUrl, TotalAmountValue, BalanceValue, selectedCustomerDatas, book, roundOff, formData }) => {
-    const handlePrint = () => {
-        const mapImage = new Image();
-        const gMapImage = new Image();
+const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, BalanceValue, tripData, selectedCustomerDatas, customerData, routeData, book, roundOff, formData }) => {
+    const [mapimageUrl, setMapImageUrl] = useState('');
+    const [GmapimageUrl, setGMapImageUrl] = useState('');
+    const fetchData = async () => {
+        try {
+            // Fetch all necessary data using Promise.all
+            const [mapImageResponse, GMapImageResponse] = await Promise.all([
+                fetchMapImage(),
+                fetchGMapImage(),
+            ]);
 
-        const waitForImages = () => {
-            if (mapImage.complete && gMapImage.complete) {
-                const invoiceContent = ReactDOMServer.renderToString(
-                    <PrintableInvoice
-                        tripSheetData={tripSheetData}
-                        selectedCustomerData={selectedCustomerData}
-                        formData={formData}
-                        book={book}
-                        selectedCustomerDatas={selectedCustomerDatas}
-                    />
-                );
+            // Extract data from responses and set state
+            setMapImageUrl(URL.createObjectURL(await mapImageResponse.blob()));
+            setGMapImageUrl(URL.createObjectURL(await GMapImageResponse.blob()));
+            // Set other state variables...
 
-                const printWindow = window.open('', '_blank');
-                printWindow.document.open();
-                printWindow.document.write(`
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    const fetchMapImage = () => {
+        const tripid = localStorage.getItem('selectedTripid');
+        return fetch(`http://localhost:8081/get-signimage/${tripid}`);
+    };
+
+    const fetchGMapImage = () => {
+        const tripid = localStorage.getItem('selectedTripid');
+        return fetch(`http://localhost:8081/get-mapimage/${tripid}`);
+    };
+
+    const handlePrint = async () => {
+        await fetchData();
+        const invoiceContent = ReactDOMServer.renderToString(
+            <PrintableInvoice
+                tripSheetData={tripSheetData}
+                BalanceValue={BalanceValue}
+                TotalAmountValue={TotalAmountValue}
+                roundOff={roundOff}
+                book={book}
+                selectedCustomerData={selectedCustomerData}
+                selectedCustomerDatas={selectedCustomerDatas}
+                formData={formData}
+                mapimageUrl={mapimageUrl}
+                GmapimageUrl={GmapimageUrl}
+                tripData={tripData}
+                customerData={customerData}
+                routeData={routeData}
+            />
+        );
+        const printWindow = window.open();
+        printWindow.document.open();
+        printWindow.document.write(`
         <html>
           <head>
              <title>TAX INVOICE</title>
@@ -400,36 +499,32 @@ const Invoice = ({ tripSheetData, selectedCustomerData, mapimageUrl, GmapimageUr
           </body>
         </html>
       `);
-                printWindow.document.close();
+        printWindow.document.close();
 
-                setTimeout(() => {
-                    printWindow.print();
-                    printWindow.close();
-                }, 1000);
-            } else {
-                setTimeout(waitForImages, 100);
-            }
+        printWindow.onload = () => {
+            printWindow.print();
+            printWindow.close();
         };
-
-        mapImage.onerror = () => {
-            console.error('Error loading map image');
-        };
-
-        gMapImage.onerror = () => {
-            console.error('Error loading GMap image');
-        };
-
-        mapImage.src = mapimageUrl;
-        gMapImage.src = GmapimageUrl;
-
-        waitForImages();
     };
+
     return (
         <div className="invoice-wrapper">
-            <PrintableInvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOff} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
+            <PrintableInvoice
+                tripSheetData={tripSheetData}
+                BalanceValue={BalanceValue}
+                TotalAmountValue={TotalAmountValue}
+                roundOff={roundOff}
+                book={book}
+                selectedCustomerData={selectedCustomerData}
+                selectedCustomerDatas={selectedCustomerDatas}
+                formData={formData}
+                mapimageUrl={mapimageUrl}
+                GmapimageUrl={GmapimageUrl}
+                tripData={tripData}
+                customerData={customerData}
+                routeData={routeData} />
             <Button variant="contained" onClick={handlePrint}>Print</Button>
         </div>
     );
 };
 export default Invoice;
-

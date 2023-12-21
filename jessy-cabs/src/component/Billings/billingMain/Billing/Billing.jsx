@@ -679,6 +679,136 @@ const Billing = () => {
         RoundedOff: calculateRoundOff(),
     });
 
+    //for invoice page
+
+    const [routeData, setRouteData] = useState('');
+    const [tripData, setTripData] = useState('');
+    const [customerData, setCustomerData] = useState('');
+    const [mapimageUrl, setMapImageUrl] = useState('');
+    const [GmapimageUrl, setGMapImageUrl] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const tripid = localStorage.getItem('selectedTripid');
+            console.log(tripid);
+            try {
+                const response = await fetch(`http://localhost:8081/routedata/${encodeURIComponent(tripid)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const routeData = await response.json(); // Parse JSON data
+                console.log('route data for invoice', routeData);
+
+                setRouteData(routeData);
+            } catch (error) {
+                console.error('Error fetching tripsheet data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const tripid = localStorage.getItem('selectedTripid');
+            console.log(tripid);
+            try {
+                const response = await fetch(`http://localhost:8081/tripsheet/${tripid}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const tripData = await response.json(); // Parse JSON data
+                console.log('tripsheet data for invoice', tripData);
+
+                setTripData(tripData);
+            } catch (error) {
+                console.error('Error fetching tripsheet data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const customer = localStorage.getItem('selectedcustomerid');
+            console.log(customer);
+            try {
+                const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const customerData = await response.json(); // Parse JSON data
+                console.log('customers data for invoice', customerData);
+
+                setCustomerData(customerData);
+            } catch (error) {
+                console.error('Error fetching tripsheet data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const tripid = localStorage.getItem('selectedTripid');
+            try {
+                const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const imageUrl = URL.createObjectURL(await response.blob());
+                setMapImageUrl(imageUrl);
+            } catch (error) {
+                console.error('Error fetching map image:', error);
+            }
+        };
+
+        fetchData();
+        return () => { };
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const tripid = localStorage.getItem('selectedTripid');
+            try {
+                const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const gimageUrl = URL.createObjectURL(await response.blob());
+                console.log('google map', gimageUrl);
+                setGMapImageUrl(gimageUrl);
+            } catch {
+            }
+        };
+        fetchData();
+        return () => {
+        };
+    }, []);
+
+
+    const organizationaddress1 = customerData.address1;
+    const organizationaddress2 = customerData.address2;
+    const organizationcity = customerData.city;
+    const organizationgstnumber = customerData.gstnumber;
+    const tripdepartment = tripData.department;
+    const tripcode = tripData.customercode;
+    const triprequest = tripData.request;
+    const tripShedkm = tripData.shedkm;
+    const tripadditionaltime = tripData.additionaltime;
+    const tripstartkm = tripData.startkm;
+    const tripclosekm = tripData.closekm;
+    const tripstarttime = tripData.starttime;
+    const tripclosetime = tripData.closetime;
+    const tripstartdate = tripData.startdate;
+    const tripclosedate = tripData.closedate;
+
+
     const roundOffValue = calculateRoundOff();
     const BalanceValue = calculatePayableAmount();
     const TotalAmountValue = calculateroundedPayableAmount();
@@ -1465,7 +1595,32 @@ const Billing = () => {
                     </div>
                     <Dialog open={popupOpen} onClose={handlePopupClose}>
                         <DialogContent>
-                            <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData}selectedCustomerDatas={selectedCustomerDatas} />
+                            <Paymentinvoice tripSheetData={tripSheetData}
+                                triprequest={triprequest}
+                                tripcode={tripcode}
+                                tripdepartment={tripdepartment}
+                                routeData={routeData}
+                                BalanceValue={BalanceValue}
+                                TotalAmountValue={TotalAmountValue}
+                                roundOff={roundOffValue}
+                                book={book}
+                                selectedCustomerData={selectedCustomerData}
+                                tripShedkm={tripShedkm}
+                                tripadditionaltime={tripadditionaltime}
+                                tripstartkm={tripstartkm}
+                                tripclosekm={tripclosekm}
+                                tripstarttime={tripstarttime}
+                                tripclosetime={tripclosetime}
+                                tripstartdate={tripstartdate}
+                                tripclosedate={tripclosedate}
+                                selectedCustomerDatas={selectedCustomerDatas}
+                                organizationaddress1={organizationaddress1}
+                                organizationaddress2={organizationaddress2}
+                                organizationcity={organizationcity}
+                                organizationgstnumber={organizationgstnumber}
+                                GmapimageUrl={GmapimageUrl}
+                                mapimageUrl={mapimageUrl}
+                            />
                             {/* <Paymentinvoice /> */}
                         </DialogContent>
                         <DialogActions>

@@ -1,54 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './invoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 import location from "./location.png"
-const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedCustomerDatas, formData }) => {
-  const [mapimageUrl, setMapImageUrl] = useState('');
-  const [GmapimageUrl, setGMapImageUrl] = useState('');
+const PrintableInvoice = ({ tripSheetData, book, GmapimageUrl, signimageUrl, selectedCustomerData, selectedCustomerDatas, formData }) => {
+  // const [mapimageUrl, setMapImageUrl] = useState('');
+  // const [GmapimageUrl, setGMapImageUrl] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const tripid = localStorage.getItem('selectedTripid');
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const tripid = localStorage.getItem('selectedTripid');
 
-      try {
-        const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const imageUrl = URL.createObjectURL(await response.blob());
-        setMapImageUrl(imageUrl);
-      } catch {
+  //     try {
+  //       const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+  //       const imageUrl = URL.createObjectURL(await response.blob());
+  //       setMapImageUrl(imageUrl);
+  //     } catch {
 
-      }
-    };
+  //     }
+  //   };
 
-    fetchData();
-    return () => {
-    };
-  }, []);
+  //   fetchData();
+  //   return () => {
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const tripid = localStorage.getItem('selectedTripid');
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const tripid = localStorage.getItem('selectedTripid');
 
-      try {
-        const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const gimageUrl = URL.createObjectURL(await response.blob());
-        setGMapImageUrl(gimageUrl);
-      } catch {
+  //     try {
+  //       const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+  //       const gimageUrl = URL.createObjectURL(await response.blob());
+  //       setGMapImageUrl(gimageUrl);
+  //     } catch {
 
-      }
-    };
+  //     }
+  //   };
 
-    fetchData();
-    return () => {
-    };
-  }, []);
+  //   fetchData();
+  //   return () => {
+  //   };
+  // }, []);
 
   return (
     <div className="invoice-wrapper">
@@ -173,7 +173,7 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                 <p id='line'>------------------</p>
               </div>
               <div className="guest-sign">
-                <img className='dialogboximg' src={mapimageUrl} alt='mapimage' />
+                <img className='dialogboximg' src={signimageUrl} alt='mapimage' />
                 <p>Guest Signature</p>
               </div>
             </div>
@@ -208,12 +208,12 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
     </div>
   );
 };
-const Invoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas, book, formData }) => {
+const Invoice = ({ tripSheetData, selectedCustomerData, signimageUrl, GmapimageUrl, selectedCustomerDatas, book, formData }) => {
 
   const handlePrint = () => {
     // const invoiceContent = ReactDOMServer.renderToString(<PrintableInvoice />);
     const invoiceContent = ReactDOMServer.renderToString(
-      <PrintableInvoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
+      <PrintableInvoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
     );
     const printWindow = window.open('', '_blank');
     printWindow.document.open();
@@ -543,7 +543,7 @@ const Invoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas, b
   return (
     <div className="invoice-wrapper">
       {/* <PrintableInvoice /> */}
-      <PrintableInvoice tripSheetData={tripSheetData} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
+      <PrintableInvoice tripSheetData={tripSheetData} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
       <Button variant="contained" onClick={handlePrint}>Print</Button>
     </div>
   );

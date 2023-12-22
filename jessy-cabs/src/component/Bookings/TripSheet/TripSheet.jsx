@@ -1400,6 +1400,51 @@ const TripSheet = () => {
       }
     }
   };
+  // for invoice page
+  const [signimageUrl, setSignImageUrl] = useState('');
+  const [GmapimageUrl, setGMapImageUrl] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tripid = localStorage.getItem('selectedTripid');
+
+      try {
+        const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const imageUrl = URL.createObjectURL(await response.blob());
+        setSignImageUrl(imageUrl);
+      } catch {
+
+      }
+    };
+
+    fetchData();
+    return () => {
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tripid = localStorage.getItem('selectedTripid');
+
+      try {
+        const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const gimageUrl = URL.createObjectURL(await response.blob());
+        setGMapImageUrl(gimageUrl);
+      } catch {
+
+      }
+    };
+
+    fetchData();
+    return () => {
+    };
+  }, []);
 
   return (
     <div className="form-container">
@@ -2363,7 +2408,7 @@ const TripSheet = () => {
 
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  <Invoice tripSheetData={tripSheetData} formData={calculateTotalTime} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
+                  <Invoice tripSheetData={tripSheetData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">

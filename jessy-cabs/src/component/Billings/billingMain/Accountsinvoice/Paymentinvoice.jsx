@@ -199,6 +199,8 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, Gmapimage
                                 <tr>
                                     <th>Starting</th>
                                     <th>Closing</th>
+                                    <th>Shed In</th>
+                                    <th>Shed Out</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>

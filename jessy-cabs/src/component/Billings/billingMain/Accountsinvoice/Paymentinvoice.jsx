@@ -3,69 +3,7 @@ import './Paymentinvoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 import Logo from "../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, GmapimageUrl, mapimageUrl, organizationaddress1, organizationaddress2, organizationcity, organizationgstnumber, tripShedkm, tripadditionaltime, tripstartkm, tripclosekm, tripstarttime, tripclosetime, tripstartdate, tripclosedate, triprequest, routeData, tripcode, tripdepartment, BalanceValue, TotalAmountValue, roundOff, selectedCustomerDatas, formData }) => {
-    // const [mapimageUrl, setMapImageUrl] = useState('');
-    // const [GmapimageUrl, setGMapImageUrl] = useState('');
-    // const [customerData, setCustomerData] = useState('');
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const customer = localStorage.getItem('selectedcustomerid');
-    //         console.log(customer);
-    //         try {
-    //             const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
-    //             if (!response.ok) {
-    //                 throw new Error(`HTTP error! Status: ${response.status}`);
-    //             }
-
-    //             const customerData = await response.json(); // Parse JSON data
-    //             console.log('customers data for invoice', customerData);
-
-    //             setCustomerData(customerData);
-    //         } catch (error) {
-    //             console.error('Error fetching tripsheet data:', error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []);
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const tripid = localStorage.getItem('selectedTripid');
-    //         try {
-    //             const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
-    //             if (!response.ok) {
-    //                 throw new Error(`HTTP error! Status: ${response.status}`);
-    //             }
-    //             const imageUrl = URL.createObjectURL(await response.blob());
-    //             setMapImageUrl(imageUrl);
-    //         } catch (error) {
-    //             console.error('Error fetching map image:', error);
-    //         }
-    //     };
-
-    //     fetchData();
-    //     return () => { };
-    // }, []);
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const tripid = localStorage.getItem('selectedTripid');
-    //         try {
-    //             const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
-    //             if (!response.ok) {
-    //                 throw new Error(`HTTP error! Status: ${response.status}`);
-    //             }
-    //             const gimageUrl = URL.createObjectURL(await response.blob());
-    //             setGMapImageUrl(gimageUrl);
-    //         } catch {
-    //         }
-    //     };
-    //     fetchData();
-    //     return () => {
-    //     };
-    // }, []);
-    console.log('Received department data in Paymentinvoice:', mapimageUrl);
+const PrintableInvoice = ({ tripSheetData, book, tripshedin, tripshedout, tripreporttime, tripshedintime, selectedCustomerData, GmapimageUrl, mapimageUrl, organizationaddress1, organizationaddress2, organizationcity, organizationgstnumber, tripShedkm, tripadditionaltime, tripstartkm, tripclosekm, tripstarttime, tripclosetime, tripstartdate, tripclosedate, triprequest, routeData, tripcode, tripdepartment, BalanceValue, TotalAmountValue, roundOff, selectedCustomerDatas, formData }) => {
 
     return (
         <>
@@ -208,6 +146,8 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, Gmapimage
                                 <tr>
                                     <td>{tripstartdate}</td>
                                     <td>{tripclosedate}</td>
+                                    <td></td>
+                                    <td></td>
                                     <td><strong>
                                         {tripSheetData?.totaldays || book?.totaldays || selectedCustomerData?.totaldays || selectedCustomerDatas?.totaldays || formData?.totaldays || ''}
                                     </strong></td>
@@ -215,6 +155,8 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, Gmapimage
                                 <tr>
                                     <td>{tripstarttime}</td>
                                     <td>{tripclosetime}</td>
+                                    <td>{tripreporttime}</td>
+                                    <td>{tripshedintime}</td>
                                     <td><strong>
                                         {tripSheetData?.totaltime || book?.totaltime || selectedCustomerData?.totaltime || selectedCustomerDatas?.totaltime || formData?.totaltime || ''}
                                     </strong></td>
@@ -222,9 +164,12 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, Gmapimage
                                 <tr>
                                     <td>{tripstartkm}</td>
                                     <td>{tripclosekm}</td>
+                                    <td>{tripshedout}</td>
+                                    <td>{tripshedin}</td>
                                     <td><strong>
                                         {tripSheetData?.totalkm1 || book?.totalkm1 || selectedCustomerData?.totalkm1 || selectedCustomerDatas?.totalkm1 || formData?.totalkm1 || ''}
                                     </strong></td>
+
                                 </tr>
                             </tbody>
                         </table>
@@ -249,7 +194,7 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, Gmapimage
         </>
     );
 };
-const Invoice = ({ tripSheetData, tripcode, organizationaddress1, GmapimageUrl, mapimageUrl, organizationaddress2, organizationcity, organizationgstnumber, selectedCustomerData, tripShedkm, tripadditionaltime, tripstartkm, tripclosekm, tripstarttime, tripclosetime, tripstartdate, tripclosedate, triprequest, tripdepartment, TotalAmountValue, BalanceValue, tripData, selectedCustomerDatas, customerData, routeData, book, roundOff, formData }) => {
+const Invoice = ({ tripSheetData, tripcode, tripshedin, tripshedout, tripreporttime, tripshedintime, organizationaddress1, GmapimageUrl, mapimageUrl, organizationaddress2, organizationcity, organizationgstnumber, selectedCustomerData, tripShedkm, tripadditionaltime, tripstartkm, tripclosekm, tripstarttime, tripclosetime, tripstartdate, tripclosedate, triprequest, tripdepartment, TotalAmountValue, BalanceValue, tripData, selectedCustomerDatas, customerData, routeData, book, roundOff, formData }) => {
 
     const handlePrint = async () => {
         const invoiceContent = ReactDOMServer.renderToString(
@@ -271,6 +216,10 @@ const Invoice = ({ tripSheetData, tripcode, organizationaddress1, GmapimageUrl, 
                 routeData={routeData}
                 tripcode={tripcode}
                 tripShedkm={tripShedkm}
+                tripshedin={tripshedin}
+                tripshedout={tripshedout}
+                tripreporttime={tripreporttime}
+                tripshedintime={tripshedintime}
                 tripadditionaltime={tripadditionaltime}
                 tripstartkm={tripstartkm}
                 tripclosekm={tripclosekm}
@@ -485,7 +434,7 @@ const Invoice = ({ tripSheetData, tripcode, organizationaddress1, GmapimageUrl, 
                 organizationcity={organizationcity}
                 organizationgstnumber={organizationgstnumber}
                 routeData={routeData} />
-            <Button variant="contained" onClick={handlePrint}>Print</Button>    
+            <Button variant="contained" onClick={handlePrint}>Print</Button>
         </div>
     );
 };

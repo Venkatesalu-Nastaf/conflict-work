@@ -800,6 +800,10 @@ const Billing = () => {
     const tripcode = tripData.customercode;
     const triprequest = tripData.request;
     const tripShedkm = tripData.shedkm;
+    const tripshedin = tripData.shedin;
+    const tripshedout = tripData.shedout;
+    const tripreporttime = tripData.reporttime;
+    const tripshedintime = tripData.shedintime;
     const tripadditionaltime = tripData.additionaltime;
     const tripstartkm = tripData.startkm;
     const tripclosekm = tripData.closekm;
@@ -807,7 +811,6 @@ const Billing = () => {
     const tripclosetime = tripData.closetime;
     const tripstartdate = tripData.startdate;
     const tripclosedate = tripData.closedate;
-
 
     const roundOffValue = calculateRoundOff();
     const BalanceValue = calculatePayableAmount();
@@ -1606,6 +1609,10 @@ const Billing = () => {
                                 book={book}
                                 selectedCustomerData={selectedCustomerData}
                                 tripShedkm={tripShedkm}
+                                tripshedin ={tripshedin }
+                                tripshedout ={tripshedout }
+                                tripreporttime ={tripreporttime }
+                                tripshedintime ={tripshedintime }
                                 tripadditionaltime={tripadditionaltime}
                                 tripstartkm={tripstartkm}
                                 tripclosekm={tripclosekm}

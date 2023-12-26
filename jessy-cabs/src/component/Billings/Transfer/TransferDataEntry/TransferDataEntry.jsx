@@ -46,7 +46,6 @@ const columns = [
   { field: "advancepaidtovendor", headerName: "Advance", width: 130 },
   { field: "taxStatus", headerName: "TaxStatus", width: 130 },
   { field: "status", headerName: "Status", width: 130 },
-  // { field: "locked", headerName: "Locked", width: 130 },
 ];
 
 const TransferDataEntry = () => {
@@ -56,10 +55,13 @@ const TransferDataEntry = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
+  const [tripData, setTripData] = useState('');
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [bankOptions, setBankOptions] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
 
   const hidePopup = () => {
     setError(false);
@@ -101,12 +103,40 @@ const TransferDataEntry = () => {
       });
   }, []);
 
+  const transformRow = (originalRow) => {
+    return {
+      id: originalRow.id,
+      startdate: originalRow.startdate,
+      tripid: originalRow.tripid,
+      customer: originalRow.customer,
+      vehRegNo: originalRow.vehRegNo,
+      vehType: originalRow.vehType,
+      guestname: originalRow.guestname,
+      groupname: originalRow.groupname,
+      totaltime: originalRow.totaltime,
+      totaldays: originalRow.totaldays,
+      duty: originalRow.duty,
+      permit: originalRow.permit,
+      parking: originalRow.parking,
+      billno: originalRow.billno,
+      exHrs: originalRow.exHrs,
+      exkm: originalRow.exkm,
+      netamount: originalRow.netamount,
+      grouptripno: originalRow.grouptripno,
+      billtype: originalRow.billtype,
+      advancepaidtovendor: originalRow.advancepaidtovendor,
+      taxStatus: originalRow.taxStatus,
+      status: originalRow.status,
+    };
+  };
+
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       try {
+        const customerValue = customer || tripData.customer || '';
         console.log('List button clicked');
-        const response = await axios.get('http://localhost:8081/tripsheet');
+        const response = await axios.get(`http://localhost:8081/tripsheetcustomer/${customerValue}`);
         const data = response.data;
         if (data.length > 0) {
           setRows(data);
@@ -121,10 +151,38 @@ const TransferDataEntry = () => {
         console.error('Error retrieving booking details:', error);
       }
     }
+  }, [customer, tripData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const customer = localStorage.getItem('selectedcustomer');
+        console.log('localstorage customer name', customer);
+        const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const tripData = await response.json(); // Parse JSON data
+        console.log('tripsheet data ', tripData);
+        if (Array.isArray(tripData)) {
+          const transformedRows = tripData.map(transformRow);
+          setTripData(transformedRows);
+          setRows(transformedRows);
+        } else if (typeof tripData === 'object') {
+          setRows([transformRow(tripData)]);
+        } else {
+          console.error('Fetched data has unexpected format:', tripData);
+        }
+      } catch (error) {
+        console.error('Error fetching tripsheet data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-   //calculate total amount in column
-   useEffect(() => {
+  //calculate total amount in column
+  useEffect(() => {
     const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.netamount || 0), 0);
     console.log('calculatedTotalAmount', calculatedTotalAmount);
     if (!isNaN(calculatedTotalAmount)) {
@@ -133,6 +191,106 @@ const TransferDataEntry = () => {
       setTotalAmount("0");
     }
   }, [rows]);
+
+  // useEffect(() => {
+  //   localStorage.removeItem('selectedcustomer');
+  // }, []);
+
+  useEffect(() => {
+    window.history.replaceState(null, document.title, window.location.pathname);
+  }, []);
+
+  const handleRowSelection = (newSelectionModel) => {
+    // Filter out null values and map to an array of tripids
+    const selectedTripIds = newSelectionModel
+      .filter((selectedId) => selectedId !== null)
+      .map((selectedId) => {
+        console.log('Selected ID:', selectedId);
+        const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+        console.log('Selected Row:', selectedRow);
+        return selectedRow ? selectedRow.tripid : null;
+      })
+      .filter((tripid) => tripid !== null);
+
+    console.log('Extracted tripids:', selectedTripIds);
+    setRowSelectionModel(selectedTripIds); // Update the rowSelectionModel with tripids
+
+    // Additional logic for handling row selection if needed
+  };
+
+  const handleClickGenerateBill = () => {
+    console.log('Before generating bill. Selected Rows:', rowSelectionModel);
+    handleButtonClickTripsheet();
+    handleBillGenerate();
+  };
+
+  const handleButtonClickTripsheet = (row) => {
+    const customername = tripData.customer || localStorage.getItem('selectedcustomer');
+    console.log('customner name', customername)
+    localStorage.setItem('selectedcustomer', customername);
+    const billingPageUrl = `/home/billing/transfer?tab=TransferReport`;
+    window.location.href = billingPageUrl;
+  }
+
+  const handleBillGenerate = async () => {
+    if (rowSelectionModel.length === 0) {
+      alert('Please select rows before generating the bill.');
+      return;
+    }
+    try {
+      const tripids = rowSelectionModel;
+      if (tripids.some((tripid) => tripid == null)) {
+        setError(true);
+        setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
+        return;
+      }
+      const response = await axios.post('http://localhost:8081/updateStatus', {
+        tripids: tripids,
+        status: 'CBilled',
+      });
+      if (response.status === 200) {
+        setSuccess(true);
+        setSuccessMessage('Bill generated successfully!');
+      } else {
+        setError(true);
+        setErrorMessage('Failed to generate bill. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError(true);
+      setErrorMessage('An error occurred. Please try again later.');
+    }
+  };
+
+  const handleBillRemove = async () => {
+    if (rowSelectionModel.length === 0) {
+      alert('Please select rows before generating the bill.');
+      return;
+    }
+    try {
+      const tripids = rowSelectionModel;
+      if (tripids.some((tripid) => tripid == null)) {
+        setError(true);
+        setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
+        return;
+      }
+      const response = await axios.post('http://localhost:8081/updateStatusremove', {
+        tripids: tripids,
+        status: 'Closed',
+      });
+      if (response.status === 200) {
+        setSuccess(true);
+        setSuccessMessage('Removed successfully!');
+      } else {
+        setError(true);
+        setErrorMessage('Failed to Remove bill. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError(true);
+      setErrorMessage('An error occurred. Please try again later.');
+    }
+  };
 
   return (
     <div className="TransferDataEntry-form Scroll-Style-hide">
@@ -189,7 +347,7 @@ const TransferDataEntry = () => {
                       id="free-solo-demo"
                       freeSolo
                       size="small"
-                      value={customer}
+                      value={customer || (tripData.length > 0 ? tripData[0].customer : '')}
                       options={bankOptions}
                       onChange={(event, value) => setCustomer(value)}
                       onKeyDown={handleKeyDown}
@@ -307,7 +465,7 @@ const TransferDataEntry = () => {
               </div>
               <div className="input-field">
                 <div className="input">
-                  <Button variant="outlined">Bill Generate</Button>
+                  <Button variant="outlined" onClick={handleClickGenerateBill}>Bill Generate</Button>
                 </div>
               </div>
             </div>
@@ -332,11 +490,11 @@ const TransferDataEntry = () => {
           </div>
           <div className='amount-calculator'>
             <div className="total-inputs" style={{ marginTop: '25px' }}>
-              <Button variant="outlined" >Remove Selected</Button>
+              <Button variant="outlined" onClick={handleBillRemove} >Remove Selected</Button>
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Total Kms:</label>
-              <input type="number"  />
+              <input type="number" />
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Total Hours:</label>
@@ -348,14 +506,17 @@ const TransferDataEntry = () => {
             </div>
           </div>
         </div>
-
         <div className="table-bookingCopy-TransferDataEntry">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={rows}
               columns={columns}
-              pageSize={5}
+              onRowSelectionModelChange={(newRowSelectionModel) => {
+                setRowSelectionModel(newRowSelectionModel);
+                handleRowSelection(newRowSelectionModel);
+              }}
               checkboxSelection
+              disableRowSelectionOnClick
             />
           </div>
           {error &&

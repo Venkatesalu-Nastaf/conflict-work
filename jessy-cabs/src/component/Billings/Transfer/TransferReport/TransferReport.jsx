@@ -30,7 +30,6 @@ const columns = [
 ];
 
 const TransferReport = () => {
-  const [rows] = useState([]);
   const [pbpopupOpen, setpbPopupOpen] = useState(false);
   const [npopupOpen, setnPopupOpen] = useState(false);
   const [lxpopupOpen, setlxPopupOpen] = useState(false);
@@ -38,7 +37,8 @@ const TransferReport = () => {
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
   const [warning, setWarning] = useState(false);
-
+  const [tripData, setTripData] = useState('');
+  const [rows, setRows] = useState([]);
 
   useEffect(() => {
     if (error) {
@@ -96,6 +96,40 @@ const TransferReport = () => {
     setInfo(false);
     setWarning(false);
   };
+
+  // const transformRow = (originalRow) => {
+  //   return {
+  //     id: originalRow.id,
+  //     vcode: originalRow.vcode,
+  //   };
+  // };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const customer = localStorage.getItem('selectedcustomer');
+        console.log('localstorage customer name', customer);
+        const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const tripData = await response.json(); // Parse JSON data
+        console.log('tripsheet data ', tripData);
+        if (Array.isArray(tripData)) {
+          setTripData(tripData);
+          setRows(tripData);
+        } else if (typeof tripData === 'object') {
+          setRows(tripData);
+        } else {
+          console.error('Fetched data has unexpected format:', tripData);
+        }
+      } catch (error) {
+        console.error('Error fetching tripsheet data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="TransferReport-form Scroll-Style-hide">
@@ -159,6 +193,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="Customer Name"
+                    value={tripData.customer || (tripData.length > 0 ? tripData[0].customer : '')}
                     sx={{ width: "400px" }}
                     autoComplete='off'
                   />

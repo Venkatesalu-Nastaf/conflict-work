@@ -5,6 +5,8 @@ import ReactDOMServer from 'react-dom/server';
 import Logo from "../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 const PrintableInvoice = ({ tripSheetData, book, tripshedin, tripshedout, tripreporttime, tripshedintime, selectedCustomerData, GmapimageUrl, mapimageUrl, organizationaddress1, organizationaddress2, organizationcity, organizationgstnumber, tripShedkm, tripadditionaltime, tripstartkm, tripclosekm, tripstarttime, tripclosetime, tripstartdate, tripclosedate, triprequest, routeData, tripcode, tripdepartment, BalanceValue, TotalAmountValue, roundOff, selectedCustomerDatas, formData }) => {
 
+    console.log('shed km', tripshedin, tripshedout, tripreporttime, tripshedintime);
+
     return (
         <>
             <div className='Individual-invoice' >
@@ -146,8 +148,8 @@ const PrintableInvoice = ({ tripSheetData, book, tripshedin, tripshedout, tripre
                                 <tr>
                                     <td>{tripstartdate}</td>
                                     <td>{tripclosedate}</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>-</td>
+                                    <td>-</td>
                                     <td><strong>
                                         {tripSheetData?.totaldays || book?.totaldays || selectedCustomerData?.totaldays || selectedCustomerDatas?.totaldays || formData?.totaldays || ''}
                                     </strong></td>
@@ -419,6 +421,10 @@ const Invoice = ({ tripSheetData, tripcode, tripshedin, tripshedout, tripreportt
                 GmapimageUrl={GmapimageUrl}
                 tripData={tripData}
                 tripcode={tripcode}
+                tripshedin={tripshedin}
+                tripshedout={tripshedout}
+                tripreporttime={tripreporttime}
+                tripshedintime={tripshedintime}
                 triprequest={triprequest}
                 customerData={customerData}
                 tripShedkm={tripShedkm}

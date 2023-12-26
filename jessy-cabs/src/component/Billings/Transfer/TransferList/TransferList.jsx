@@ -128,7 +128,7 @@ const TransferList = () => {
                     amount: row.total_Amount,
                     grossamount: row.total_Amount,
                     guestname: row.customer,
-                    
+
                 }));
                 setRows(rowsWithUniqueId);
                 setSuccess(true);
@@ -165,6 +165,13 @@ const TransferList = () => {
         { field: "status", headerName: "Status", width: 130 },
         { field: "Diff", headerName: "Diff", width: 130 },
     ];
+
+    const handleButtonClickTripsheet = (row) => {
+        const encodedCustomer = encodeURIComponent(row.customer);
+        localStorage.setItem('selectedcustomer', encodedCustomer);
+        const billingPageUrl = `/home/billing/transfer?tab=dataentry`;
+        window.location.href = billingPageUrl;
+    }
 
     return (
         <div className="TransferList-form Scroll-Style-hide">
@@ -259,6 +266,7 @@ const TransferList = () => {
                         <DataGrid
                             rows={rows}
                             columns={columns}
+                            onRowClick={(event) => handleButtonClickTripsheet(event.row)}
                             pageSize={5}
                             checkboxSelection
                             getRowId={(row) => row.id}

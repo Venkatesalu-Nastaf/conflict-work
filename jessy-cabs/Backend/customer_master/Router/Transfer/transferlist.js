@@ -9,7 +9,6 @@ router.get('/payment-details', (req, res) => {
   let sql = `
       SELECT
           customer,
-          status,
           COUNT(tripid) as trip_count,
           SUM(toll) as total_toll,
           SUM(netamount) as total_Amount
@@ -30,6 +29,8 @@ router.get('/payment-details', (req, res) => {
     params.push(toDate);
   }
 
+  sql += ' GROUP BY customer'; // Group by customer to get unique customer names
+
   console.log('backend collected values', params);
 
   db.query(sql, params, (err, results) => {
@@ -39,6 +40,62 @@ router.get('/payment-details', (req, res) => {
     } else {
       res.json(results);
     }
+  });
+});
+
+//dataentry database
+router.get('/tripsheetcustomer/:customer', (req, res) => {
+  const customer = req.params.customer;
+  db.query('SELECT * FROM tripsheet WHERE customer = ?', customer, (err, result) => {
+    if (err) {
+      console.error('Error retrieving tripsheet details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Tripsheet not found' });
+    }
+    return res.status(200).json(result); // Return all rows for the specified customer
+  });
+});
+
+//for status update
+router.post('/updateStatus', (req, res) => {
+  console.log('Received request:', req.body);
+
+  const { tripids, status } = req.body;
+  console.log(tripids, status);
+
+  // Update the database with the new status for multiple tripids
+  const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
+
+  db.query(query, [status, tripids], (err, results) => {
+    if (err) {
+      console.error('Error updating status:', err);
+      res.status(500).json({ message: 'Internal server error' });
+      console.log('updated tripsheet', results);
+      return;
+    }
+    res.status(200).json({ message: 'Status updated successfully' });
+  });
+});
+
+router.post('/updateStatusremove', (req, res) => {
+  console.log('Received request:', req.body);
+
+  const { tripids, status } = req.body;
+  console.log(tripids, status);
+
+  // Update the database with the new status for multiple tripids
+  const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
+
+  db.query(query, [status, tripids], (err, results) => {
+    if (err) {
+      console.error('Error updating status:', err);
+      res.status(500).json({ message: 'Internal server error' });
+      console.log('updated tripsheet', results);
+      return;
+    }
+    res.status(200).json({ message: 'Status updated successfully' });
   });
 });
 

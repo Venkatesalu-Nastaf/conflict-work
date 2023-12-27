@@ -696,10 +696,8 @@ const Billing = () => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-
                 const routeData = await response.json(); // Parse JSON data
                 console.log('route data for invoice', routeData);
-
                 setRouteData(routeData);
             } catch (error) {
                 console.error('Error fetching tripsheet data:', error);
@@ -791,7 +789,6 @@ const Billing = () => {
         };
     }, []);
 
-
     const organizationaddress1 = customerData.address1;
     const organizationaddress2 = customerData.address2;
     const organizationcity = customerData.city;
@@ -811,7 +808,6 @@ const Billing = () => {
     const tripclosetime = tripData.closetime;
     const tripstartdate = tripData.startdate;
     const tripclosedate = tripData.closedate;
-
     const roundOffValue = calculateRoundOff();
     const BalanceValue = calculatePayableAmount();
     const TotalAmountValue = calculateroundedPayableAmount();
@@ -1609,10 +1605,10 @@ const Billing = () => {
                                 book={book}
                                 selectedCustomerData={selectedCustomerData}
                                 tripShedkm={tripShedkm}
-                                tripshedin ={tripshedin }
-                                tripshedout ={tripshedout }
-                                tripreporttime ={tripreporttime }
-                                tripshedintime ={tripshedintime }
+                                tripshedin={tripshedin}
+                                tripshedout={tripshedout}
+                                tripreporttime={tripreporttime}
+                                tripshedintime={tripshedintime}
                                 tripadditionaltime={tripadditionaltime}
                                 tripstartkm={tripstartkm}
                                 tripclosekm={tripclosekm}

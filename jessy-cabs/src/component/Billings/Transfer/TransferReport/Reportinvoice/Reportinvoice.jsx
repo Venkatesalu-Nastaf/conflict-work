@@ -4,8 +4,8 @@ import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 import Logo from "../../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 import Signature from "../../../billingMain/Accountsinvoice/signature-1692258849846.png";
-const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, BalanceValue, selectedCustomerData, selectedCustomerDatas, formData }) => {
-
+const PrintableInvoice = ({ routeData, selectedTripData }) => {
+    console.log('customer name in reportinvoice', selectedTripData.customer);
     return (
         <>
             <div className='Reportinvoice-invoice' >
@@ -15,7 +15,8 @@ const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, Bal
                             <img src={Logo} alt="logo" />
                         </div>
                         <div className="sheet-type">
-                            <h1>Tax Invoice</h1>
+                            {/* <h1>Tax Invoice</h1> */}
+                            <h1>{routeData?.customer} </h1>
                         </div>
                     </div>
                     <div className="header-title">
@@ -122,118 +123,13 @@ const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, Bal
 
             </div>
         </>
-        // <body>
-        //     <div id="invoiceholder">
-        //         <div id="invoice" className="effect2">
-        //             <div id="invoice-top">
-        //                 <div className="logo"><img src={Logo} alt="logo" /></div>
-        //                 <div className="title">
-        //                     {/* <h1>Tax Invoie</h1> */}
-        //                 </div>
-        //             </div>
-        //             <div id="invoice-mid">
-        //                 <div className="righttitle">
-        //                     <p>OUR GSTIN : 33AVNPM9362R1ZK<br />
-        //                         State : Tamilnadu, Code : 33<br />
-        //                         PAN No : AVNPM9362R<br />
-        //                         {/* SAC CODE : 996601 */}
-        //                     </p>
-        //                 </div>
-        //                 <div id="message">
-        //                     <h2>Jessy Cabs,</h2>
-        //                     <p>No:8/, 11th street, Nandanam[Extn.],<br />
-        //                         Nandanam, Chennai - 600035<br />
-        //                         jessycabs.india@yahoo.com<br />
-        //                         Tel:044-24354247,Mob:9841505689</p>
-        //                 </div>
-
-        //                 <div className="clearfix">
-        //                     <div className="col-left">
-        //                         <div className="clientinfo">
-        //                             <table className="table">
-        //                                 <tbody>
-        //                                     <tr>
-        //                                         <td className="tabledatas"><label id="invoice_total">Organization :</label></td>
-        //                                         <td className="tabledatas"><span>hcl</span></td>
-        //                                     </tr>
-        //                                     <tr>
-        //                                         <td className="tabledatas"><label id="invoice_total">Address :</label></td>
-        //                                         <td className="tabledatas"><span>karle town-Sez Unit1, No.288,38,39,123P,124,125,126,128 and<br />129P, Ground Floor to 3rd Floor of Block-1, Bangalore</span></td>
-        //                                     </tr>
-        //                                     <tr>
-        //                                         <td className="tabledatas"><label id="payment_term">GSTIN :</label></td>
-        //                                         <td className="tabledatas"><span>29AAACH1645p3z5, State: Karnataka, Code: 29</span></td>
-        //                                     </tr>
-        //                                     <tr>
-        //                                         <td className="tabledatas"><label id="note">Guest Name :</label></td>
-        //                                         <td className="tabledatas"><span>Akash</span></td>
-        //                                     </tr>
-        //                                 </tbody>
-        //                             </table>
-        //                         </div>
-        //                     </div>
-        //                     <div className="col-right">
-        //                         <table className="table">
-        //                             <tbody>
-        //                                 <tr><td><span>Service City</span></td><td><label id="invoice_total">Bangalore</label></td></tr>
-        //                                 <tr><td><span>Trip Date</span></td><td><label id="payment_term">10/11/2023</label></td></tr>
-        //                                 <tr><td><span>Trip No</span></td><td><label id="note">TS1001</label></td></tr>
-        //                                 <tr><td><span>Vehicle Type</span></td><td><label id="note">SADAN A/C</label></td></tr>
-        //                                 <tr><td><span>Vehicle No</span></td><td><label id="note">TN 14 B 1942</label></td></tr>
-        //                                 <tr><td><span>Request ID</span></td><td><label id="note">4337267</label></td></tr>
-        //                             </tbody>
-        //                         </table>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //             <div id="invoice-bot">
-        //                 <div id="table">
-        //                     <table className="table-main">
-        //                         <thead>
-        //                             <tr className="tabletitle">
-        //                                 <th>Description</th>
-        //                                 <th>Trip Id</th>
-        //                                 <th>Date</th>
-        //                                 <th>Rate</th>
-        //                                 <th>Total</th>
-        //                             </tr>
-        //                         </thead>
-        //                         <tr className="list-item">
-        //                             <td data-label="Description" className="tabledata">1000/SADAN A/C</td>
-        //                             <td className="tabledata" data-label="Unit Price" >TS1001</td>
-        //                             <td className="tabledata" data-label="Unit Price" >10/11/2023</td>
-        //                             <td className="tabledata" data-label="Unit Price" >2000</td>
-        //                             <td className="tabledata" data-label="Total" >1000</td>
-        //                         </tr>
-        //                         <tr className="list-item total-row">
-        //                             <th colSpan="4" className="tableitem">Total Amount</th>
-        //                             <td data-label="Grand Total" className="tableitem">1000</td>
-        //                         </tr>
-        //                         <tr className="list-item total-row">
-        //                             <th colSpan="4" className="tableitem">GST @ 5%</th>
-        //                             <td data-label="Grand Total" className="tableitem">50</td>
-        //                         </tr>
-        //                         <tr className="list-item total-row">
-        //                             <th colSpan="4" className="tableitem">Rounded Off</th>
-        //                             <td data-label="Grand Total" className="tableitem">0.15</td>
-        //                         </tr>
-        //                         <tr className="list-item total-row">
-        //                             <th colSpan="4" className="tableitem">Net Payable</th>
-        //                             <td data-label="Grand Total" className="tableitem" id="tabletotal">4000</td>
-        //                         </tr>
-        //                     </table>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </body>
     );
 };
-const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, BalanceValue, selectedCustomerDatas, book, roundOff, formData }) => {
+const Invoice = ({ routeData, selectedTripData }) => {
 
     const handlePrint = () => {
         const invoiceContent = ReactDOMServer.renderToString(
-            <PrintableInvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOff} selectedCustomerData={selectedCustomerData} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
+            <PrintableInvoice routeData={routeData} selectedTripData={selectedTripData} />
         );
         const printWindow = window.open('', '_blank');
         printWindow.document.open();
@@ -427,7 +323,7 @@ const Invoice = ({ tripSheetData, selectedCustomerData, TotalAmountValue, Balanc
 
     return (
         <div className="invoice-wrapper">
-            <PrintableInvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOff} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
+            <PrintableInvoice routeData={routeData} selectedTripData={selectedTripData} />
             <Button variant="contained" onClick={handlePrint}>Print</Button>
         </div>
     );

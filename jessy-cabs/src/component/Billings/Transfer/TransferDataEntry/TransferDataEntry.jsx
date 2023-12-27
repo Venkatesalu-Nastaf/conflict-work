@@ -14,6 +14,10 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 import { Autocomplete } from "@mui/material";
 
+//for pdf
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -62,6 +66,38 @@ const TransferDataEntry = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
+  const convertToCSV = (data) => {
+    const header = columns.map((column) => column.headerName).join(",");
+    const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+    return [header, ...rows].join("\n");
+  };
+  const handleExcelDownload = () => {
+    const csvData = convertToCSV(rows);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "customer_details.csv");
+  };
+  const handlePdfDownload = () => {
+    const pdf = new jsPDF();
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text("Customer Details", 10, 10);
+    const tableData = rows.map((row) => [
+      row['id'],
+      row['voucherno'],
+      row['printName'],
+      row['Billname'],
+      row['date'],
+      row['PaymentCategory'],
+      row['amount']
+    ]);
+    pdf.autoTable({
+      head: [['Sno', 'VoucherNo', 'Payment Date', 'Bill Name', 'Payment Category', 'Amount']],
+      body: tableData,
+      startY: 20,
+    });
+    const pdfBlob = pdf.output('blob');
+    saveAs(pdfBlob, 'Customer_Details.pdf');
+  };
 
   const hidePopup = () => {
     setError(false);
@@ -201,7 +237,6 @@ const TransferDataEntry = () => {
   }, []);
 
   const handleRowSelection = (newSelectionModel) => {
-    // Filter out null values and map to an array of tripids
     const selectedTripIds = newSelectionModel
       .filter((selectedId) => selectedId !== null)
       .map((selectedId) => {
@@ -211,11 +246,8 @@ const TransferDataEntry = () => {
         return selectedRow ? selectedRow.tripid : null;
       })
       .filter((tripid) => tripid !== null);
-
     console.log('Extracted tripids:', selectedTripIds);
-    setRowSelectionModel(selectedTripIds); // Update the rowSelectionModel with tripids
-
-    // Additional logic for handling row selection if needed
+    setRowSelectionModel(selectedTripIds);
   };
 
   const handleClickGenerateBill = () => {
@@ -291,6 +323,8 @@ const TransferDataEntry = () => {
       setErrorMessage('An error occurred. Please try again later.');
     }
   };
+
+  const reversedRows = [...rows].reverse();
 
   return (
     <div className="TransferDataEntry-form Scroll-Style-hide">
@@ -481,8 +515,8 @@ const TransferDataEntry = () => {
                     Download
                   </Button>
                   <Menu {...bindMenu(popupState)}>
-                    <MenuItem >Excel</MenuItem>
-                    <MenuItem >PDF</MenuItem>
+                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
                   </Menu>
                 </React.Fragment>
               )}
@@ -509,7 +543,7 @@ const TransferDataEntry = () => {
         <div className="table-bookingCopy-TransferDataEntry">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              rows={reversedRows}
               columns={columns}
               onRowSelectionModelChange={(newRowSelectionModel) => {
                 setRowSelectionModel(newRowSelectionModel);

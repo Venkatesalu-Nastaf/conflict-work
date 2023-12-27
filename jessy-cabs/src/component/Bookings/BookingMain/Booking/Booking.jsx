@@ -758,8 +758,6 @@ const Booking = () => {
     if (user && user.username) {
       const username = user.username;
       localStorage.setItem("username", username);
-      const successMessagepopup = `Login successful ${user.username}`;
-      setSuccess(successMessagepopup);
     }
   }, [user]);
   const storedUsername = localStorage.getItem("username");
@@ -1660,9 +1658,7 @@ const Booking = () => {
             <div className='alert-popup Success' >
               <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              {/* <p>{string(successMessage)}</p> */}
-              <p>{typeof successMessage === 'object' ? 'Default Message for Objects' : successMessage}</p>
-              {/* <p>{successMessage && typeof successMessage === 'object' ? JSON.stringify(successMessage) : successMessage }</p> */}
+              <p>{successMessage}</p>
             </div>
           }
         </div>

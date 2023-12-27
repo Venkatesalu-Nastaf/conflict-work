@@ -24,11 +24,7 @@ import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
-
-
-
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
-
 
 const TransferList = () => {
     const [rows, setRows] = useState([]);
@@ -116,7 +112,7 @@ const TransferList = () => {
 
     const handleShow = useCallback(async () => {
         try {
-            const response = await axios.get(`http://localhost:8081/payment-details?customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+            const response = await axios.get(`http://localhost:8081/payment-detail?customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
             const data = response.data;
 
             if (data.length > 0) {
@@ -172,6 +168,8 @@ const TransferList = () => {
         const billingPageUrl = `/home/billing/transfer?tab=dataentry`;
         window.location.href = billingPageUrl;
     }
+
+    const reversedRows = [...rows].reverse();
 
     return (
         <div className="TransferList-form Scroll-Style-hide">
@@ -264,7 +262,7 @@ const TransferList = () => {
                 <div className="table-bookingCopy-TransferList">
                     <div style={{ height: 400, width: "100%" }}>
                         <DataGrid
-                            rows={rows}
+                            rows={reversedRows}
                             columns={columns}
                             onRowClick={(event) => handleButtonClickTripsheet(event.row)}
                             pageSize={5}

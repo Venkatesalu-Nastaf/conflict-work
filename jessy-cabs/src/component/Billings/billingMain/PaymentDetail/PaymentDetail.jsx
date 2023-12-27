@@ -212,6 +212,8 @@ const PaymentDetail = () => {
     window.location.href = billingPageUrl;
   }
 
+  const reversedRows = [...rows].reverse();
+
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
       <form >
@@ -340,11 +342,12 @@ const PaymentDetail = () => {
         <div className="table-bookingCopy-PaymentDetail">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              rows={reversedRows}
               columns={columns}
               onRowClick={(event) => handleButtonClickTripsheet(event.row)}
               pageSize={5}
               checkboxSelection
+              disableRowSelectionOnClick
             />
           </div>
         </div>

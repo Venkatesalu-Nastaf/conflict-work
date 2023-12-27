@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
 
-router.get('/payment-details', (req, res) => {
+router.get('/payment-detail', (req, res) => {
   const { customer, fromDate, toDate } = req.query;
 
   // Your MySQL query
@@ -98,5 +98,22 @@ router.post('/updateStatusremove', (req, res) => {
     res.status(200).json({ message: 'Status updated successfully' });
   });
 });
+
+router.get('/normaltransferdata_trip/:customer', (req, res) => {
+  console.log('Received from invoice request:', req.body);
+  const customer = req.params.customer;
+  db.query('SELECT * FROM tripsheet WHERE customer = ?', customer, (err, result) => {
+    if (err) {
+      console.error('Error retrieving route data from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Route data not found' });
+    }
+    const routeData = result;
+    return res.status(200).json(routeData);
+  });
+});
+
 
 module.exports = router;

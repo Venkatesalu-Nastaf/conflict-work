@@ -12,6 +12,14 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
+//for popup
+import ClearIcon from '@mui/icons-material/Clear';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+
+//for pdf
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+
 //dialog box
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -26,19 +34,51 @@ import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortaweso
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "vcode", headerName: "VCode", width: 130 },
-
+  { field: "guestname", headerName: "User Name", width: 130 },
 ];
 
 const TransferReport = () => {
   const [pbpopupOpen, setpbPopupOpen] = useState(false);
   const [npopupOpen, setnPopupOpen] = useState(false);
   const [lxpopupOpen, setlxPopupOpen] = useState(false);
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
   const [warning, setWarning] = useState(false);
   const [tripData, setTripData] = useState('');
   const [rows, setRows] = useState([]);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({});
+  const [success, setSuccess] = useState(false);
+  const [successMessage,] = useState({});
+
+  useEffect(() => {
+    window.history.replaceState(null, document.title, window.location.pathname);
+  }, []);
+
+  const tableData = rows.map((row) => [
+    row['id'],
+    row['tripid'],
+    row['vcode'],
+    row['guestname'],
+  ]);
+  const handleExcelDownload = () => {
+    const header = ['Sno', 'Tripsheet No', 'VCode', 'Guest Name'];
+    const csvData = [header, ...tableData.map(row => row.map(value => `"${value}"`))].map(row => row.join(",")).join("\n");
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "customer_details.csv");
+  };
+  const handlePdfDownload = () => {
+    const pdf = new jsPDF();
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text("Customer Details", 10, 10);
+    pdf.autoTable({
+      head: [['Sno', 'Tripsheet No', 'VCode', 'Guest Name']],
+      body: tableData,
+      startY: 20,
+    });
+    const pdfBlob = pdf.output('blob');
+    saveAs(pdfBlob, 'Transfer Report.pdf');
+  };
 
   useEffect(() => {
     if (error) {
@@ -97,37 +137,68 @@ const TransferReport = () => {
     setWarning(false);
   };
 
-  // const transformRow = (originalRow) => {
-  //   return {
-  //     id: originalRow.id,
-  //     vcode: originalRow.vcode,
-  //   };
-  // };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const customer = localStorage.getItem('selectedcustomer');
-        console.log('localstorage customer name', customer);
         const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const tripData = await response.json(); // Parse JSON data
-        console.log('tripsheet data ', tripData);
+        const tripData = await response.json();
         if (Array.isArray(tripData)) {
           setTripData(tripData);
-          setRows(tripData);
+          const tripsheetNumbers = tripData.map((row, index) => ({
+            id: index + 1,
+            guestname: row.guestname,
+            tripid: row.tripid
+          }));
+          setRows(tripsheetNumbers);
         } else if (typeof tripData === 'object') {
-          setRows(tripData);
+          const tripsheetNumbers = [{ id: 1, guestname: tripData.guestname, tripid: tripData.tripid }];
+          setRows(tripsheetNumbers);
         } else {
-          console.error('Fetched data has unexpected format:', tripData);
+          setError(true);
+          setErrorMessage('Fetched data has unexpected format');
         }
       } catch (error) {
-        console.error('Error fetching tripsheet data:', error);
+        setError(true);
+        setErrorMessage('Error fetching tripsheet data');
       }
     };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    localStorage.removeItem('selectedcustomer');
+  }, []);
 
+  const encodedCustomer = encodeURIComponent(localStorage.getItem('selectedcustomer'));
+  localStorage.setItem('selectedcustomer', encodedCustomer);
+
+  //tripsheet data get for normal invoice
+  const [routeData, setRouteData] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const customer = localStorage.getItem('selectedcustomer');
+
+      // Ensure customer is not null before making the API call
+      if (customer) {
+        console.log('customer name for normal pdf invoice', customer);
+        try {
+          const response = await fetch(`http://localhost:8081/normaltransferdata_trip/${encodeURIComponent(customer)}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const responseData = await response.json();
+          const routeDataArray = responseData.data || [];
+          console.log('route data for invoice', routeDataArray);
+          setRouteData(routeDataArray);
+        } catch (error) {
+          console.error('Error fetching tripsheet data:', error);
+        }
+      }
+    };
     fetchData();
   }, []);
 
@@ -271,8 +342,7 @@ const TransferReport = () => {
             </div>
             <Dialog open={pbpopupOpen} onClose={handlePopupClose}>
               <DialogContent>
-                {/* <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} /> */}
-                <Reportinvoice />
+                <Reportinvoice routeData={routeData} />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -283,7 +353,6 @@ const TransferReport = () => {
             {/* //mapinnvoice */}
             <Dialog open={npopupOpen} onClose={handlePopupClose}>
               <DialogContent>
-                {/* <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} /> */}
                 <Mapinvoice />
               </DialogContent>
               <DialogActions>
@@ -295,7 +364,6 @@ const TransferReport = () => {
             {/* luxuryinvoice */}
             <Dialog open={lxpopupOpen} onClose={handlePopupClose}>
               <DialogContent>
-                {/* <Paymentinvoice tripSheetData={tripSheetData} BalanceValue={BalanceValue} TotalAmountValue={TotalAmountValue} roundOff={roundOffValue} book={book} selectedCustomerData={selectedCustomerData} /> */}
                 <Luxuryinvoice />
               </DialogContent>
               <DialogActions>
@@ -314,8 +382,8 @@ const TransferReport = () => {
                   Download
                 </Button>
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem >Excel</MenuItem>
-                  <MenuItem >PDF</MenuItem>
+                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
                 </Menu>
               </React.Fragment>
             )}
@@ -329,6 +397,7 @@ const TransferReport = () => {
                 columns={columns}
                 pageSize={5}
                 checkboxSelection
+                disableRowSelectionOnClick
               />
             </div>
           </div>
@@ -343,9 +412,17 @@ const TransferReport = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td colspan="6">No data available.</td>
-                      </tr>
+                      {rows.length === 0 ? (
+                        <tr>
+                          <td colSpan={6}>No data available.</td>
+                        </tr>
+                      ) : (
+                        rows.map((rows) => (
+                          <tr id='update-row' key={rows.tripid} >
+                            <td>TS {rows.tripid}</td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -360,6 +437,20 @@ const TransferReport = () => {
               </div>
             </div>
           </div>
+          {error &&
+            <div className='alert-popup Error'>
+              <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success'>
+              <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
         </div>
       </form>
     </div>

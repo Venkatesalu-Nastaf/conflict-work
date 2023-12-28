@@ -2,10 +2,10 @@ import React from 'react';
 import './Reportinvoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
+import numberToWords from 'number-to-words';
 import Logo from "../../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 import Signature from "../../../billingMain/Accountsinvoice/signature-1692258849846.png";
-const PrintableInvoice = ({ routeData, selectedTripData }) => {
-    console.log('customer name in reportinvoice', selectedTripData.customer);
+const PrintableInvoice = ({ routeData, organizationaddress1, sumTotalAndRounded, roundedAmount, totalValue, organizationaddress2, organizationcity, organizationgstnumber }) => {
     return (
         <>
             <div className='Reportinvoice-invoice' >
@@ -15,8 +15,8 @@ const PrintableInvoice = ({ routeData, selectedTripData }) => {
                             <img src={Logo} alt="logo" />
                         </div>
                         <div className="sheet-type">
-                            {/* <h1>Tax Invoice</h1> */}
-                            <h1>{routeData?.customer} </h1>
+                            <h1>Tax Invoice</h1>
+                            {/* <h1>{routeData?.customer} </h1> */}
                         </div>
                     </div>
                     <div className="header-title">
@@ -41,10 +41,9 @@ const PrintableInvoice = ({ routeData, selectedTripData }) => {
                         <div className="left-title">
                             <dl className="dl-horizontal">
                                 <dt>Organisation</dt>
-                                <dd><strong>:HCL CAPITAL PRIVATE LIMITED</strong><br />06, Siddhartha, Plot 96, Nehru Place,
-                                    South East Delhi,</dd>
+                                <dd><strong>:{routeData[0]?.customer}</strong><br />{organizationaddress1}{organizationaddress2}{organizationcity}</dd>
                                 <dt>GSTIN</dt>
-                                <dd>: 07AAACM9201G1ZR</dd>
+                                <dd>: {organizationgstnumber}</dd>
                             </dl>
                         </div>
                         <div className="right-title">
@@ -63,50 +62,41 @@ const PrintableInvoice = ({ routeData, selectedTripData }) => {
                             <thead>
                                 <tr>
                                     <th>S.No</th>
-                                    <th>Trip Date</th>
-                                    <th>Trip No</th>
+                                    <th>Trip_Date</th>
+                                    <th>Trip_No</th>
                                     <th>Particulars</th>
                                     <th>Parking Permit</th>
                                     <th>Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>18/10/23</td>
-                                    <td>25/10/23</td>
-                                    <td className='Reportinvoice-description-table-header'><span>Vijay Sir</span><br />Tn-09-DD-7071\Local\TKms:61\Hrs:8\CRYSTA A/C
-                                        Vehicle Hire Charges For (8HRS & 80 KMS) Night Bata: 1Night @ Rs.150 <br />Tambaram
-                                    </td>
-                                    <td>365.00</td>
-                                    <td>4000.00 <br /> 150.00</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>18/10/23</td>
-                                    <td>25/10/23</td>
-                                    <td className='Reportinvoice-description-table-header'><span>Vijay Sir</span><br />Tn-09-DD-7071\Local\TKms:61\Hrs:8\CRYSTA A/C
-                                        Vehicle Hire Charges For (8HRS & 80 KMS) Night Bata: 1Night @ Rs.150 <br />Tambaram
-                                    </td>
-                                    <td>365.00</td>
-                                    <td>4000.00 <br /> 150.00</td>
-                                </tr>
+                                {routeData.map((trip, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>{trip.startdate}</td>
+                                        <td>{trip.tripid}</td>
+                                        <td className='Reportinvoice-description-table-header'>
+                                            <span>{trip.guestname}</span><br />
+                                            {trip.vehRegNo}\{trip.duty}\TKms:{trip.totalkm1}\Hrs:{trip.totaltime}\{trip.vehType} Vehicle Hire Charges For ({trip.package})
+                                            Night Bata: 1Night @ Rs.{trip.night} <br />{trip.pickup} </td>
+                                        <td>{trip.parking}<br />{trip.permit}</td>
+                                        <td>{trip.netamount}</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
                     <div className="Reportinvoice-total-details">
                         <div className="Reportinvoice-amount">
-                            <p>sixteen thousand, eight hundred sixty-five</p>
+                            <p>{numberToWords.toWords(sumTotalAndRounded)}</p>
                         </div>
                         <div className="Reportinvoice-Total-details">
                             <dl >
                                 <dt>SUB Total</dt>
-                                <dd>16500.00</dd>
-                                <dd>0.00</dd>
-                                <dt>Parking & Permit</dt>
-                                <dd>365.00</dd>
+                                <dd>{totalValue}</dd>
+                                <dd>{roundedAmount}</dd>
                                 <dt>Total Amount</dt>
-                                <dd>16865.00</dd>
+                                <dd>{sumTotalAndRounded}</dd>
                             </dl>
                         </div>
                     </div>
@@ -120,16 +110,24 @@ const PrintableInvoice = ({ routeData, selectedTripData }) => {
                         </div>
                     </div>
                 </div>
-
-            </div>
+            </div >
         </>
     );
 };
-const Invoice = ({ routeData, selectedTripData }) => {
+const Invoice = ({ routeData, totalValue, roundedAmount, sumTotalAndRounded, organizationaddress1, organizationaddress2, organizationcity, organizationgstnumber }) => {
 
     const handlePrint = () => {
         const invoiceContent = ReactDOMServer.renderToString(
-            <PrintableInvoice routeData={routeData} selectedTripData={selectedTripData} />
+            <PrintableInvoice
+                routeData={routeData}
+                roundedAmount={roundedAmount}
+                sumTotalAndRounded={sumTotalAndRounded}
+                totalValue={totalValue}
+                organizationaddress1={organizationaddress1}
+                organizationaddress2={organizationaddress2}
+                organizationcity={organizationcity}
+                organizationgstnumber={organizationgstnumber}
+            />
         );
         const printWindow = window.open('', '_blank');
         printWindow.document.open();
@@ -323,7 +321,16 @@ const Invoice = ({ routeData, selectedTripData }) => {
 
     return (
         <div className="invoice-wrapper">
-            <PrintableInvoice routeData={routeData} selectedTripData={selectedTripData} />
+            <PrintableInvoice
+                routeData={routeData}
+                roundedAmount={roundedAmount}
+                sumTotalAndRounded={sumTotalAndRounded}
+                totalValue={totalValue}
+                organizationaddress1={organizationaddress1}
+                organizationaddress2={organizationaddress2}
+                organizationcity={organizationcity}
+                organizationgstnumber={organizationgstnumber}
+            />
             <Button variant="contained" onClick={handlePrint}>Print</Button>
         </div>
     );

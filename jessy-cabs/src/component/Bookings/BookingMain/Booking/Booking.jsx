@@ -625,7 +625,7 @@ const Booking = () => {
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-    const bookingno = book.bookingno;
+    const bookingno = book.bookingno || selectedCustomerData.bookingno;
     const formData = new FormData();
     formData.append('file', file);
     formData.append('bookingno', bookingno);

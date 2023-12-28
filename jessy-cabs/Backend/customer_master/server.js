@@ -171,6 +171,7 @@ app.post('/uploads', upload.single('file'), (req, res) => {
     size: req.file.size,
     path: req.file.path.replace(/\\/g, '/').replace(/^uploads\//, ''),
     tripid: req.body.tripid,
+    bookingno: req.body.bookingno,
     empid: req.body.empid,
     // documenttype: req.body.documenttype, 
     vehicleId: req.body.vehicleId,

@@ -168,39 +168,109 @@ const TransferReport = () => {
     };
     fetchData();
   }, []);
-  useEffect(() => {
-    localStorage.removeItem('selectedcustomer');
-  }, []);
 
   const encodedCustomer = encodeURIComponent(localStorage.getItem('selectedcustomer'));
   localStorage.setItem('selectedcustomer', encodedCustomer);
 
   //tripsheet data get for normal invoice
   const [routeData, setRouteData] = useState('');
+  const [customerData, setCustomerData] = useState('');
+  const [totalValue, setTotalValue] = useState('');
+  const [roundedAmount, setRoundedAmount] = useState('');
+  const [sumTotalAndRounded, setSumTotalAndRounded] = useState('');
+
+  const calculateNetAmountSum = (data) => {
+    return data.reduce((sum, item) => {
+      const netAmountValue = parseFloat(item.netamount, 10);
+      return sum + netAmountValue;
+    }, 0);
+  };
+
+  const calculateRoundOff = () => {
+    const balanceAmount = parseFloat(totalValue);
+    console.log('balance amount value checking', balanceAmount);
+    const roundedGrossAmount = Math.ceil(balanceAmount); // Round to two decimal places
+    console.log('rounded amount value checking', roundedGrossAmount);
+    const roundOff = roundedGrossAmount - balanceAmount;
+    return roundOff.toFixed(2);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       const customer = localStorage.getItem('selectedcustomer');
-
-      // Ensure customer is not null before making the API call
       if (customer) {
-        console.log('customer name for normal pdf invoice', customer);
         try {
           const response = await fetch(`http://localhost:8081/normaltransferdata_trip/${encodeURIComponent(customer)}`);
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           const responseData = await response.json();
-          const routeDataArray = responseData.data || [];
-          console.log('route data for invoice', routeDataArray);
-          setRouteData(routeDataArray);
+
+          console.log('Response Data from Server:', responseData); // Debugging statement
+
+          // Check if responseData is an array and set the routeData accordingly
+          if (Array.isArray(responseData)) {
+            setRouteData(responseData);
+
+            // Calculate the sum of netamount column using the separate function
+            const netAmountSum = calculateNetAmountSum(responseData);
+            console.log('Net Amount Sum:', netAmountSum); // Debugging statement
+
+            // Set the sum in a variable (replace 'yourVariableName' with a meaningful name)
+            setTotalValue(netAmountSum);
+
+            const roundOffValue = calculateRoundOff(responseData);
+            console.log('Raw Rounded Value:', roundOffValue); // Debugging statement
+
+            setRoundedAmount(roundOffValue);
+            // Calculate the sum of totalValue and roundedAmount
+            const sumTotalAndRounded = parseFloat(totalValue) + parseFloat(roundedAmount);
+            console.log('sumTotalAndRounded  Value:', roundOffValue);
+            // Set the sum in a separate variable
+            setSumTotalAndRounded(sumTotalAndRounded);
+          } else {
+            console.error('Invalid data format:', responseData);
+          }
         } catch (error) {
           console.error('Error fetching tripsheet data:', error);
         }
       }
     };
+
     fetchData();
   }, []);
+  console.log('Rounded value of calculated total amount', roundedAmount);
+  console.log('Total value of calculated total amount', totalValue);
+  console.log('Sum of totalValue and roundedAmount', sumTotalAndRounded);
+
+  useEffect(() => {              //this is for getting organization details
+    const fetchData = async () => {
+      const customer = localStorage.getItem('selectedcustomerid');
+      console.log(customer);
+      try {
+        const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const customerData = await response.json(); // Parse JSON data
+        console.log('customers data for invoice', customerData);
+
+        setCustomerData(customerData);
+      } catch (error) {
+        console.error('Error fetching tripsheet data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
+  const organizationaddress1 = customerData.address1;
+  const organizationaddress2 = customerData.address2;
+  const organizationcity = customerData.city;
+  const organizationgstnumber = customerData.gstnumber;
 
   return (
     <div className="TransferReport-form Scroll-Style-hide">
@@ -342,7 +412,16 @@ const TransferReport = () => {
             </div>
             <Dialog open={pbpopupOpen} onClose={handlePopupClose}>
               <DialogContent>
-                <Reportinvoice routeData={routeData} />
+                <Reportinvoice
+                  routeData={routeData}
+                  roundedAmount={roundedAmount}
+                  sumTotalAndRounded={sumTotalAndRounded}
+                  totalValue={totalValue}
+                  organizationaddress1={organizationaddress1}
+                  organizationaddress2={organizationaddress2}
+                  organizationcity={organizationcity}
+                  organizationgstnumber={organizationgstnumber}
+                />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handlePopupClose} variant="contained" color="primary">

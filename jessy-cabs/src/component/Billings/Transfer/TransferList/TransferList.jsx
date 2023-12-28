@@ -169,8 +169,6 @@ const TransferList = () => {
         window.location.href = billingPageUrl;
     }
 
-    const reversedRows = [...rows].reverse();
-
     return (
         <div className="TransferList-form Scroll-Style-hide">
             <form >
@@ -262,7 +260,7 @@ const TransferList = () => {
                 <div className="table-bookingCopy-TransferList">
                     <div style={{ height: 400, width: "100%" }}>
                         <DataGrid
-                            rows={reversedRows}
+                            rows={rows}
                             columns={columns}
                             onRowClick={(event) => handleButtonClickTripsheet(event.row)}
                             pageSize={5}

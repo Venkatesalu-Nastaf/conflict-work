@@ -81,13 +81,9 @@ router.post('/updateStatus', (req, res) => {
 
 router.post('/updateStatusremove', (req, res) => {
   console.log('Received request:', req.body);
-
   const { tripids, status } = req.body;
   console.log(tripids, status);
-
-  // Update the database with the new status for multiple tripids
   const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
-
   db.query(query, [status, tripids], (err, results) => {
     if (err) {
       console.error('Error updating status:', err);
@@ -100,13 +96,14 @@ router.post('/updateStatusremove', (req, res) => {
 });
 
 router.get('/normaltransferdata_trip/:customer', (req, res) => {
-  console.log('Received from invoice request:', req.body);
+  console.log('Received from invoice request:', req.params.customer);
   const customer = req.params.customer;
   db.query('SELECT * FROM tripsheet WHERE customer = ?', customer, (err, result) => {
     if (err) {
       console.error('Error retrieving route data from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
     }
+    console.log('Result from the database:', result);
     if (result.length === 0) {
       return res.status(404).json({ error: 'Route data not found' });
     }

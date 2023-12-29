@@ -126,7 +126,6 @@ const TransferDataEntry = () => {
     Organization()
       .then((data) => {
         if (data) {
-          console.log('organization name', data);
           setBankOptions(data);
         } else {
           setError(true);
@@ -171,7 +170,6 @@ const TransferDataEntry = () => {
       event.preventDefault();
       try {
         const customerValue = customer || tripData.customer || '';
-        console.log('List button clicked');
         const response = await axios.get(`http://localhost:8081/tripsheetcustomer/${customerValue}`);
         const data = response.data;
         if (data.length > 0) {
@@ -184,7 +182,8 @@ const TransferDataEntry = () => {
           setErrorMessage("No data found");
         }
       } catch (error) {
-        console.error('Error retrieving booking details:', error);
+        setError(true);
+        setErrorMessage('Error retrieving booking details.');
       }
     }
   }, [customer, tripData]);
@@ -193,13 +192,11 @@ const TransferDataEntry = () => {
     const fetchData = async () => {
       try {
         const customer = localStorage.getItem('selectedcustomer');
-        console.log('localstorage customer name', customer);
         const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const tripData = await response.json(); // Parse JSON data
-        console.log('tripsheet data ', tripData);
         if (Array.isArray(tripData)) {
           const transformedRows = tripData.map(transformRow);
           setTripData(transformedRows);
@@ -207,10 +204,12 @@ const TransferDataEntry = () => {
         } else if (typeof tripData === 'object') {
           setRows([transformRow(tripData)]);
         } else {
-          console.error('Fetched data has unexpected format:', tripData);
+          setError(true);
+          setErrorMessage('Fetched data has unexpected format.');
         }
-      } catch (error) {
-        console.error('Error fetching tripsheet data:', error);
+      } catch {
+        setError(true);
+        setErrorMessage('Error fetching tripsheet data.');
       }
     };
 
@@ -220,17 +219,12 @@ const TransferDataEntry = () => {
   //calculate total amount in column
   useEffect(() => {
     const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.netamount || 0), 0);
-    console.log('calculatedTotalAmount', calculatedTotalAmount);
     if (!isNaN(calculatedTotalAmount)) {
       setTotalAmount(calculatedTotalAmount.toFixed(2));
     } else {
       setTotalAmount("0");
     }
   }, [rows]);
-
-  // useEffect(() => {
-  //   localStorage.removeItem('selectedcustomer');
-  // }, []);
 
   useEffect(() => {
     window.history.replaceState(null, document.title, window.location.pathname);
@@ -240,25 +234,23 @@ const TransferDataEntry = () => {
     const selectedTripIds = newSelectionModel
       .filter((selectedId) => selectedId !== null)
       .map((selectedId) => {
-        console.log('Selected ID:', selectedId);
         const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
-        console.log('Selected Row:', selectedRow);
         return selectedRow ? selectedRow.tripid : null;
       })
       .filter((tripid) => tripid !== null);
-    console.log('Extracted tripids:', selectedTripIds);
     setRowSelectionModel(selectedTripIds);
+    // const tripids = selectedRows.map(row => row.tripid).join(',');
+    const tripsheetid = selectedTripIds;
+    localStorage.setItem('selectedtripsheetid', tripsheetid);
   };
 
   const handleClickGenerateBill = () => {
-    console.log('Before generating bill. Selected Rows:', rowSelectionModel);
     handleButtonClickTripsheet();
     handleBillGenerate();
   };
 
   const handleButtonClickTripsheet = (row) => {
     const customername = tripData.customer || localStorage.getItem('selectedcustomer');
-    console.log('customner name', customername)
     localStorage.setItem('selectedcustomer', customername);
     const billingPageUrl = `/home/billing/transfer?tab=TransferReport`;
     window.location.href = billingPageUrl;
@@ -266,7 +258,8 @@ const TransferDataEntry = () => {
 
   const handleBillGenerate = async () => {
     if (rowSelectionModel.length === 0) {
-      alert('Please select rows before generating the bill.');
+      setError(true);
+      setErrorMessage('Please select rows before generating the bill.');
       return;
     }
     try {
@@ -280,6 +273,7 @@ const TransferDataEntry = () => {
         tripids: tripids,
         status: 'CBilled',
       });
+
       if (response.status === 200) {
         setSuccess(true);
         setSuccessMessage('Bill generated successfully!');
@@ -287,8 +281,7 @@ const TransferDataEntry = () => {
         setError(true);
         setErrorMessage('Failed to generate bill. Please try again.');
       }
-    } catch (error) {
-      console.error('Error:', error);
+    } catch {
       setError(true);
       setErrorMessage('An error occurred. Please try again later.');
     }
@@ -296,7 +289,8 @@ const TransferDataEntry = () => {
 
   const handleBillRemove = async () => {
     if (rowSelectionModel.length === 0) {
-      alert('Please select rows before generating the bill.');
+      setError(true);
+      setErrorMessage('Please select rows before generating the bill.');
       return;
     }
     try {
@@ -317,8 +311,8 @@ const TransferDataEntry = () => {
         setError(true);
         setErrorMessage('Failed to Remove bill. Please try again.');
       }
-    } catch (error) {
-      console.error('Error:', error);
+    } catch {
+
       setError(true);
       setErrorMessage('An error occurred. Please try again later.');
     }

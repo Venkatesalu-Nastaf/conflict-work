@@ -140,8 +140,9 @@ const TransferReport = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const tripid = localStorage.getItem('selectedtripsheetid');
         const customer = localStorage.getItem('selectedcustomer');
-        const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
+        const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${customer}/${tripid}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -161,9 +162,9 @@ const TransferReport = () => {
           setError(true);
           setErrorMessage('Fetched data has unexpected format');
         }
-      } catch (error) {
+      } catch {
         setError(true);
-        setErrorMessage('Error fetching tripsheet data');
+
       }
     };
     fetchData();
@@ -186,91 +187,67 @@ const TransferReport = () => {
     }, 0);
   };
 
-  const calculateRoundOff = () => {
-    const balanceAmount = parseFloat(totalValue);
-    console.log('balance amount value checking', balanceAmount);
-    const roundedGrossAmount = Math.ceil(balanceAmount); // Round to two decimal places
-    console.log('rounded amount value checking', roundedGrossAmount);
-    const roundOff = roundedGrossAmount - balanceAmount;
-    return roundOff.toFixed(2);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
+      const tripid = localStorage.getItem('selectedtripsheetid');
       const customer = localStorage.getItem('selectedcustomer');
       if (customer) {
         try {
-          const response = await fetch(`http://localhost:8081/normaltransferdata_trip/${encodeURIComponent(customer)}`);
+          const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${customer}/${tripid}`);
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           const responseData = await response.json();
-
-          console.log('Response Data from Server:', responseData); // Debugging statement
-
-          // Check if responseData is an array and set the routeData accordingly
           if (Array.isArray(responseData)) {
             setRouteData(responseData);
-
-            // Calculate the sum of netamount column using the separate function
             const netAmountSum = calculateNetAmountSum(responseData);
-            console.log('Net Amount Sum:', netAmountSum); // Debugging statement
-
-            // Set the sum in a variable (replace 'yourVariableName' with a meaningful name)
             setTotalValue(netAmountSum);
-
-            const roundOffValue = calculateRoundOff(responseData);
-            console.log('Raw Rounded Value:', roundOffValue); // Debugging statement
-
+            const calculateRoundOff = () => {
+              const balanceAmount = parseFloat(totalValue);
+              const roundedGrossAmount = Math.ceil(balanceAmount);
+              const roundOff = roundedGrossAmount - balanceAmount;
+              return roundOff.toFixed(2);
+            };
+            const roundOffValue = calculateRoundOff();
             setRoundedAmount(roundOffValue);
-            // Calculate the sum of totalValue and roundedAmount
             const sumTotalAndRounded = parseFloat(totalValue) + parseFloat(roundedAmount);
-            console.log('sumTotalAndRounded  Value:', roundOffValue);
-            // Set the sum in a separate variable
             setSumTotalAndRounded(sumTotalAndRounded);
           } else {
-            console.error('Invalid data format:', responseData);
+            setError(true);
+            setErrorMessage('Invalid data format');
           }
-        } catch (error) {
-          console.error('Error fetching tripsheet data:', error);
+        } catch {
+          setError(true);
+
         }
       }
     };
-
     fetchData();
-  }, []);
-  console.log('Rounded value of calculated total amount', roundedAmount);
-  console.log('Total value of calculated total amount', totalValue);
-  console.log('Sum of totalValue and roundedAmount', sumTotalAndRounded);
+  }, [totalValue, roundedAmount]);
 
   useEffect(() => {              //this is for getting organization details
     const fetchData = async () => {
       const customer = localStorage.getItem('selectedcustomerid');
-      console.log(customer);
       try {
         const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
         const customerData = await response.json(); // Parse JSON data
-        console.log('customers data for invoice', customerData);
-
         setCustomerData(customerData);
-      } catch (error) {
-        console.error('Error fetching tripsheet data:', error);
+      } catch {
+        setError(true);
+
       }
     };
 
     fetchData();
   }, []);
 
-
-
-  const organizationaddress1 = customerData.address1;
-  const organizationaddress2 = customerData.address2;
-  const organizationcity = customerData.city;
-  const organizationgstnumber = customerData.gstnumber;
+  const organizationaddress1 = customerData.address1 || '';
+  const organizationaddress2 = customerData.address2 || '';
+  const organizationcity = customerData.city || '';
+  const organizationgstnumber = customerData.gstnumber || '';
 
   return (
     <div className="TransferReport-form Scroll-Style-hide">

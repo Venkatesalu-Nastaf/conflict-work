@@ -131,7 +131,6 @@ const Billing = () => {
     const handleEInvoiceClick = (row) => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
         const customer = book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer;
-        console.log('Received tripid:', tripid);
 
         if (!tripid) {
             setError(true);
@@ -338,21 +337,16 @@ const Billing = () => {
         event.preventDefault();
         try {
             if (actionName === 'Print') {
-                console.log('Print button clicked');
                 handleEInvoiceClick();
             } else if (actionName === 'Cancel') {
-                console.log('Cancel button clicked');
                 handleCancel();
             } else if (actionName === 'Delete') {
-                console.log('Delete button clicked');
                 await axios.delete(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
-                console.log('Customer deleted');
                 setFormData(null);
                 setSelectedCustomerData(null);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
-                console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.tripid === tripid);
                 const updatedCustomer = {
                     ...selectedCustomerDatas,
@@ -369,7 +363,6 @@ const Billing = () => {
                     dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
                 };
                 await axios.put(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
-                console.log('Customer updated');
                 handleCancel();
             } else if (actionName === 'Add') {
                 const updatedBook = {
@@ -382,13 +375,11 @@ const Billing = () => {
                     dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
                 };
                 await axios.post('http://localhost:8081/billing', updatedBook);
-                console.log(updatedBook);
                 handleCancel();
                 setSuccess(true);
                 setSuccessMessage("Successfully Added");
             }
         } catch (err) {
-            console.log(err);
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
@@ -524,7 +515,8 @@ const Billing = () => {
                 const bookingDetails = response.data;
                 setSelectedCustomerData(bookingDetails);
             } catch (error) {
-                console.error('Error retrieving booking details:', error);
+                setError(true);
+                setErrorMessage('Error retrieving booking details.');
             }
         }
     }, []);
@@ -537,7 +529,8 @@ const Billing = () => {
                 const billingDetails = response.data;
                 setSelectedCustomerDatas(billingDetails);
             } catch (error) {
-                console.error('Error retrieving billings details:', error);
+                setError(true);
+                setErrorMessage('Error retrieving billings details.');
             }
         }
     }, []);
@@ -594,10 +587,10 @@ const Billing = () => {
         fetchBankOptions()
             .then((data) => {
                 if (data) {
-                    console.log('banknames', data);
                     setBankOptions(data);
                 } else {
-                    alert('Failed to fetch bank options.');
+                    setError(true);
+                    setErrorMessage('Failed to fetch bank options.');
                 }
             })
             .catch(() => {
@@ -608,15 +601,11 @@ const Billing = () => {
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        console.log(params);
         const formData = {};
-        console.log('formdata console details', formData);
 
         const parameterKeys = [
             'tripid', 'billingno', 'Billingdate', 'totalkm1', 'totaltime', 'customer', 'supplier', 'startdate', 'totaldays', 'guestname', 'rateType', 'vehRegNo', 'vehType', 'duty', 'MinCharges', 'minchargeamount', 'ChargesForExtra', 'ChargesForExtraamount', 'cfeamount', 'ChargesForExtraHRS', 'ChargesForExtraHRSamount', 'cfehamount', 'NightHalt', 'NightHaltamount', 'nhamount', 'driverbata', 'driverbataamount', 'dbamount', 'OtherCharges', 'OtherChargesamount', 'permitothertax', 'parkingtollcharges', 'MinKilometers', 'MinHours', 'GrossAmount', 'AfterTaxAmount', 'DiscountAmount', 'DiscountAmount2', 'AdvanceReceived', 'RoundedOff', 'BalanceReceivable', 'NetAmount', 'Totalamount', 'paidamount', 'pendingamount', 'BankAccount'
         ];
-        console.log('tripsheet colected data from dispatch', parameterKeys.value);
-
         // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -690,17 +679,16 @@ const Billing = () => {
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
-            console.log(tripid);
             try {
                 const response = await fetch(`http://localhost:8081/routedata/${encodeURIComponent(tripid)}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const routeData = await response.json(); // Parse JSON data
-                console.log('route data for invoice', routeData);
                 setRouteData(routeData);
             } catch (error) {
-                console.error('Error fetching tripsheet data:', error);
+                setError(true);
+                setErrorMessage('Error fetching tripsheet data.');
             }
         };
 
@@ -710,7 +698,6 @@ const Billing = () => {
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
-            console.log(tripid);
             try {
                 const response = await fetch(`http://localhost:8081/tripsheet/${tripid}`);
                 if (!response.ok) {
@@ -718,11 +705,10 @@ const Billing = () => {
                 }
 
                 const tripData = await response.json(); // Parse JSON data
-                console.log('tripsheet data for invoice', tripData);
-
                 setTripData(tripData);
             } catch (error) {
-                console.error('Error fetching tripsheet data:', error);
+                setError(true);
+                setErrorMessage('Error fetching tripsheet data.');
             }
         };
 
@@ -732,22 +718,18 @@ const Billing = () => {
     useEffect(() => {
         const fetchData = async () => {
             const customer = localStorage.getItem('selectedcustomerid');
-            console.log(customer);
             try {
                 const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-
                 const customerData = await response.json(); // Parse JSON data
-                console.log('customers data for invoice', customerData);
-
                 setCustomerData(customerData);
             } catch (error) {
-                console.error('Error fetching tripsheet data:', error);
+                setError(true);
+                setErrorMessage('Error fetching tripsheet data.');
             }
         };
-
         fetchData();
     }, []);
 
@@ -762,7 +744,8 @@ const Billing = () => {
                 const imageUrl = URL.createObjectURL(await response.blob());
                 setMapImageUrl(imageUrl);
             } catch (error) {
-                console.error('Error fetching map image:', error);
+                setError(true);
+                setErrorMessage('Error fetching map image.');
             }
         };
 
@@ -779,7 +762,6 @@ const Billing = () => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const gimageUrl = URL.createObjectURL(await response.blob());
-                console.log('google map', gimageUrl);
                 setGMapImageUrl(gimageUrl);
             } catch {
             }

@@ -44,6 +44,39 @@ router.get('/payment-detail', (req, res) => {
 });
 
 //dataentry database
+// router.get('/tripsheetcustomertripid/:customer/:tripid', (req, res) => {
+//   const customer = req.params.customer;
+//   const tripid = req.params.tripid;
+
+//   // Use placeholders in the query to prevent SQL injection
+//   db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid = ?', [customer, tripid], (err, result) => {
+//     if (err) {
+//       console.error('Error retrieving tripsheet details from MySQL:', err);
+//       return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
+//     }
+//     if (result.length === 0) {
+//       return res.status(404).json({ error: 'Tripsheet not found' });
+//     }
+//     return res.status(200).json(result);
+//   });
+// });
+router.get('/tripsheetcustomertripid/:customer/:tripid', (req, res) => {
+  const customer = req.params.customer;
+  const tripid = req.params.tripid.split(',');
+
+  // Use placeholders in the query to prevent SQL injection
+  db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?)', [customer, tripid], (err, result) => {
+    if (err) {
+      console.error('Error retrieving tripsheet details from MySQL:', err);
+      return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Tripsheet not found' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
 router.get('/tripsheetcustomer/:customer', (req, res) => {
   const customer = req.params.customer;
   db.query('SELECT * FROM tripsheet WHERE customer = ?', customer, (err, result) => {

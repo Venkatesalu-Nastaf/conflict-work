@@ -70,19 +70,25 @@ const PrintableInvoice = ({ routeData, organizationaddress1, sumTotalAndRounded,
                                 </tr>
                             </thead>
                             <tbody>
-                                {routeData.map((trip, index) => (
-                                    <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td>{trip.startdate}</td>
-                                        <td>{trip.tripid}</td>
-                                        <td className='Reportinvoice-description-table-header'>
-                                            <span>{trip.guestname}</span><br />
-                                            {trip.vehRegNo}\{trip.duty}\TKms:{trip.totalkm1}\Hrs:{trip.totaltime}\{trip.vehType} Vehicle Hire Charges For ({trip.package})
-                                            Night Bata: 1Night @ Rs.{trip.night} <br />{trip.pickup} </td>
-                                        <td>{trip.parking}<br />{trip.permit}</td>
-                                        <td>{trip.netamount}</td>
+                                {Array.isArray(routeData) ? (
+                                    routeData.map((trip, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>{trip.startdate}</td>
+                                            <td>{trip.tripid}</td>
+                                            <td className='Reportinvoice-description-table-header'>
+                                                <span>{trip.guestname}</span><br />
+                                                {trip.vehRegNo}\{trip.duty}\TKms:{trip.totalkm1}\Hrs:{trip.totaltime}\{trip.vehType} Vehicle Hire Charges For ({trip.package})
+                                                Night Bata: 1Night @ Rs.{trip.night} <br />{trip.pickup} </td>
+                                            <td>{trip.parking}<br />{trip.permit}</td>
+                                            <td>{trip.netamount}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="6">Invalid data type for routeData</td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </div>

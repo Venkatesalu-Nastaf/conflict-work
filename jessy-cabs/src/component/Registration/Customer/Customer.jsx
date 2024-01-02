@@ -67,6 +67,7 @@ const actions = [
 const columns = [
   { field: "customerId", headerName: "Customer ID", width: 130 },
   { field: "customer", headerName: "Name", width: 160 },
+  { field: "customeremail", headerName: "E-mail", width: 160 },
   { field: "address1", headerName: "Address", width: 130 },
   { field: "phoneno", headerName: "Phone", width: 160 },
   { field: "rateType", headerName: "Rate_Type", width: 130 },
@@ -182,7 +183,7 @@ const Customer = () => {
     address1: '',
     address2: '',
     city: '',
-    email: '',
+    customeremail: '',
     rateType: '',
     opBalance: '',
     phoneno: '',
@@ -268,7 +269,7 @@ const Customer = () => {
       address1: '',
       address2: '',
       city: '',
-      email: '',
+      customeremail: '',
       rateType: '',
       opBalance: '',
       phoneno: '',
@@ -463,10 +464,10 @@ const Customer = () => {
                   <AttachEmailIcon color="action" />
                 </div>
                 <TextField
-                  name="email"
+                  name="customeremail"
                   label="Email"
                   autoComplete="new-password"
-                  value={selectedCustomerData?.email || book.email}
+                  value={selectedCustomerData?.customeremail || book.customeremail}
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"

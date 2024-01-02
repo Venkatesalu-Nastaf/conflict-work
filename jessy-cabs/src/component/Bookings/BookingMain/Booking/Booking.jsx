@@ -490,12 +490,16 @@ const Booking = () => {
 
       const updatedBook = {
         ...book,
+        ...formData,
         bookingtime: bookingtime || getCurrentTime(),
         starttime: starttime,
         reporttime: reporttime,
         triptime: triptime,
         username: storedUsername,
         bookingdate: selectedBookingDate,
+        orderbyemail: selectedCustomerDatas.customeremail,
+        orderedby: selectedCustomerDatas.name,
+        mobile: selectedCustomerDatas.phoneno,
       };
       await axios.post('http://localhost:8081/booking', updatedBook);
       handleCancel();
@@ -526,6 +530,7 @@ const Booking = () => {
       } else if (actionName === 'Modify') {
         const selectedCustomer = rows.find((row) => row.bookingno === selectedCustomerData.bookingno || formData.bookingno);
         const updatedCustomer = {
+          ...formData,
           ...selectedCustomer,
           ...selectedCustomerData,
           bookingtime: bookingtime || selectedCustomerData.bookingtime,
@@ -534,6 +539,10 @@ const Booking = () => {
           triptime: triptime || book.triptime || selectedCustomerData.triptime || formData.triptime,
           username: storedUsername,
           bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
+          orderbyemail: selectedCustomerDatas.customeremail,
+          orderedby: selectedCustomerDatas.name,
+          mobile: selectedCustomerDatas.phoneno,
+
         };
         await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
         handleCancel();
@@ -696,7 +705,6 @@ const Booking = () => {
     try {
       const response = await fetch(`http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
       const data = await response.json();
-      // setRows(data);
       if (data.length > 0) {
         setRow(data);
         setSuccess(true);
@@ -1211,7 +1219,7 @@ const Booking = () => {
                 <TextField
                   name="orderbyemail"
                   autoComplete="new-password"
-                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.email || book.orderbyemail || ''}
+                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail || ''}
                   onChange={handleChange}
                   label="Order By Email"
                   id="orederbyemail"

@@ -162,9 +162,9 @@ const TransferReport = () => {
           setError(true);
           setErrorMessage('Fetched data has unexpected format');
         }
-      } catch {
+      } catch (error) {
         setError(true);
-
+        setErrorMessage('Error fetching tripsheet data');
       }
     };
     fetchData();
@@ -216,9 +216,9 @@ const TransferReport = () => {
             setError(true);
             setErrorMessage('Invalid data format');
           }
-        } catch {
+        } catch (error) {
           setError(true);
-
+          setErrorMessage('Error fetching tripsheet data');
         }
       }
     };
@@ -235,19 +235,18 @@ const TransferReport = () => {
         }
         const customerData = await response.json(); // Parse JSON data
         setCustomerData(customerData);
-      } catch {
+      } catch (error) {
         setError(true);
-
+        setErrorMessage('Error fetching tripsheet data');
       }
     };
-
     fetchData();
   }, []);
 
-  const organizationaddress1 = customerData.address1 || '';
-  const organizationaddress2 = customerData.address2 || '';
-  const organizationcity = customerData.city || '';
-  const organizationgstnumber = customerData.gstnumber || '';
+  const organizationaddress1 = customerData.address1;
+  const organizationaddress2 = customerData.address2;
+  const organizationcity = customerData.city;
+  const organizationgstnumber = customerData.gstnumber;
 
   return (
     <div className="TransferReport-form Scroll-Style-hide">

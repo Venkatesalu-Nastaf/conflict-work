@@ -23,7 +23,6 @@ router.get('/booking', (req, res) => {
     }
     db.query(query, params, (err, result) => {
       if (err) {
-        console.error('Error retrieving booking details from MySQL:', err);
         return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
       }
       return res.status(200).json(result);

@@ -7,27 +7,21 @@ router.post('/billing', (req, res) => {
   const bookData = req.body;
   db.query('INSERT INTO billing SET ?', bookData, (err, result) => {
     if (err) {
-      console.error('Error inserting data into MySQL:', err);
       return res.status(500).json({ error: "Failed to insert data into MySQL" });
     }
-    console.log('Data inserted into MySQL');
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
 // delete Billing data
 router.delete('/billing/:tripid', (req, res) => {
   const tripid = req.params.tripid;
-  console.log('tripid:', tripid); // Log the Billing
-  console.log('DELETE query:', 'DELETE FROM billing WHERE tripid = ?', tripid);
   db.query('DELETE FROM billing WHERE tripid = ?', tripid, (err, result) => {
     if (err) {
-      console.error('Error deleting data from MySQL:', err);
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
     }
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Customer not found" });
     }
-    console.log('Data deleted from MySQL');
     return res.status(200).json({ message: "Data deleted successfully" });
   });
 });
@@ -35,17 +29,13 @@ router.delete('/billing/:tripid', (req, res) => {
 router.put('/billing/:tripid', (req, res) => {
   const tripid = req.params.tripid;
   const updatedCustomerData = req.body;
-  console.log('tripid:', tripid); // Log the Billing
-  console.log('Updated billing data:', updatedCustomerData);
   db.query('UPDATE billing SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
     if (err) {
-      console.error('Error updating data in MySQL:', err);
       return res.status(500).json({ error: "Failed to update data in MySQL" });
     }
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Customer not found" });
     }
-    console.log('Data updated in MySQL');
     return res.status(200).json({ message: "Data updated successfully" });
   });
 });
@@ -53,7 +43,6 @@ router.put('/billing/:tripid', (req, res) => {
 router.get('/billing', (req, res) => {
   db.query('SELECT * FROM billing', (err, results) => {
     if (err) {
-      console.error('Error fetching data from MySQL:', err);
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
     return res.status(200).json(results);
@@ -64,7 +53,6 @@ router.get('/billing/:billingno', (req, res) => {
   const billingno = req.params.billingno;
   db.query('SELECT * FROM billing WHERE billingno = ?', billingno, (err, result) => {
     if (err) {
-      console.error('Error retrieving booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
     if (result.length === 0) {
@@ -79,7 +67,6 @@ router.get('/customers/:customer', (req, res) => {
   const customer = req.params.customer;
   db.query('SELECT * FROM customers WHERE customer = ?', customer, (err, result) => {
     if (err) {
-      console.error('Error retrieving booking details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
     if (result.length === 0) {
@@ -94,7 +81,6 @@ router.get('/routedata/:tripid', (req, res) => {
 
   db.query('SELECT * FROM gmapdata WHERE tripid = ?', tripid, (err, result) => {
     if (err) {
-      console.error('Error retrieving route data from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
     }
 
@@ -107,6 +93,5 @@ router.get('/routedata/:tripid', (req, res) => {
     return res.status(200).json(routeData);
   });
 });
-
 
 module.exports = router;

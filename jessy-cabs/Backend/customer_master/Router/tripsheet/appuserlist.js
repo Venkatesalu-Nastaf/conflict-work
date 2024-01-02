@@ -22,7 +22,6 @@ router.get('/tripsheet_driver_details', (req, res) => {
 
     db.query(sqlQuery, (err, result) => {
         if (err) {
-            console.error('Error retrieving driver details from MySQL:', err);
             return res.status(500).json({ error: 'Failed to retrieve driver details from MySQL' });
         }
         return res.status(200).json(result);

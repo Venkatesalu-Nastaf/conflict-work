@@ -7,10 +7,8 @@ router.post('/pettycash', (req, res) => {
     const bookData = req.body;
     db.query('INSERT INTO pettycash SET ?', bookData, (err, result) => {
       if (err) {
-        console.error('Error inserting data into MySQL:', err);
         return res.status(500).json({ error: "Failed to insert data into MySQL" });
       }
-      console.log('Data inserted into MySQL');
       return res.status(200).json({ message: "Data inserted successfully" });
     });
   });
@@ -19,13 +17,11 @@ router.post('/pettycash', (req, res) => {
     const voucherno = req.params.voucherno;
     db.query('DELETE FROM pettycash WHERE voucherno = ?', voucherno, (err, result) => {
       if (err) {
-        console.error('Error deleting data from MySQL:', err);
         return res.status(500).json({ error: "Failed to delete data from MySQL" });
       }
       if (result.affectedRows === 0) {
         return res.status(404).json({ error: "Customer not found" });
       }
-      console.log('Data deleted from MySQL');
       return res.status(200).json({ message: "Data deleted successfully" });
     });
   });
@@ -33,17 +29,13 @@ router.post('/pettycash', (req, res) => {
   router.put('/pettycash/:voucherno', (req, res) => {
     const voucherno = req.params.voucherno;
     const updatedCustomerData = req.body;
-    console.log('voucherno:', voucherno); // Log the pettycash
-    console.log('Updated pettycash data:', updatedCustomerData);
     db.query('UPDATE pettycash SET ? WHERE voucherno = ?', [updatedCustomerData, voucherno], (err, result) => {
       if (err) {
-        console.error('Error updating data in MySQL:', err);
         return res.status(500).json({ error: "Failed to update data in MySQL" });
       }
       if (result.affectedRows === 0) {
         return res.status(404).json({ error: "Customer not found" });
       }
-      console.log('Data updated in MySQL');
       return res.status(200).json({ message: "Data updated successfully" });
     });
   });
@@ -61,7 +53,6 @@ router.post('/pettycash', (req, res) => {
     }
     db.query(query, params, (err, result) => {
       if (err) {
-        console.error('Error retrieving booking details from MySQL:', err);
         return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
       }
       return res.status(200).json(result);

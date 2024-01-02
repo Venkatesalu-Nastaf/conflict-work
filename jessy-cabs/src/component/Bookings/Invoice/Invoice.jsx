@@ -3,52 +3,7 @@ import './invoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-import location from "./location.png"
-const PrintableInvoice = ({ tripSheetData, book, GmapimageUrl, signimageUrl, selectedCustomerData, selectedCustomerDatas, formData }) => {
-  // const [mapimageUrl, setMapImageUrl] = useState('');
-  // const [GmapimageUrl, setGMapImageUrl] = useState('');
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const tripid = localStorage.getItem('selectedTripid');
-
-  //     try {
-  //       const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! Status: ${response.status}`);
-  //       }
-  //       const imageUrl = URL.createObjectURL(await response.blob());
-  //       setMapImageUrl(imageUrl);
-  //     } catch {
-
-  //     }
-  //   };
-
-  //   fetchData();
-  //   return () => {
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const tripid = localStorage.getItem('selectedTripid');
-
-  //     try {
-  //       const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! Status: ${response.status}`);
-  //       }
-  //       const gimageUrl = URL.createObjectURL(await response.blob());
-  //       setGMapImageUrl(gimageUrl);
-  //     } catch {
-
-  //     }
-  //   };
-
-  //   fetchData();
-  //   return () => {
-  //   };
-  // }, []);
+const PrintableInvoice = ({ tripSheetData, book, GmapimageUrl, attachedImage, signimageUrl, routeData, selectedCustomerData, selectedCustomerDatas, formData }) => {
 
   return (
     <div className="invoice-wrapper">
@@ -75,7 +30,7 @@ const PrintableInvoice = ({ tripSheetData, book, GmapimageUrl, signimageUrl, sel
               </tr>
               <tr>
                 <th id='table-header'><span>Address:</span></th>
-                <td id='table-data'><span >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1}</span></td>
+                <td id='table-data'><span >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span>Ordered By:</span></th>
@@ -189,31 +144,29 @@ const PrintableInvoice = ({ tripSheetData, book, GmapimageUrl, signimageUrl, sel
         </div>
         <div className="tripsheet-RouteSummary">
           <h2>Route Summary</h2>
-          <p><strong>Start</strong>.487, Anna Salai, Lotus Colony, CIT Nagar, Chennai, Tamil Nadu 600035, India</p>
           <ol type="1">
-            <li>X5M7+2HV, Airport Departures Terminal Link, Meenambakkam, Chennai, Tamil Nadu 600016, India</li>
-            <li>No.63, ITC Grand Chola, Near Alexander Square, Anna Salai, Little Mount, Guindy, Chennai, Tamil Nadu 600032, India</li>
-            <li>E-1, Pasumpon Muthuramalinga Thevar Rd, Lotus Colony, Nandanam, Chennai, Tamil Nadu 600035, India</li>
+            {routeData.length > 0 && routeData.map((data, index) => (
+              <li><p key={index}><strong>{data.trip_type}</strong>: {data.place_name}</p></li>
+            ))}
           </ol>
         </div>
+        {/* <div className='attached-toll'>
+          <img src={attachedImage} alt='summa' />
+        </div> */}
         <div className='attached-toll'>
-          <img src={location} alt='attached-img' />
-
-        </div>
-        <div className='attached-toll'>
-          <img src={location} alt='attached-img' />
-
+          {Array.isArray(attachedImage) && attachedImage.map((image, index) => (
+            <img key={index} src={image} alt={`image_${index}`} />
+          ))}
         </div>
       </article>
     </div>
   );
 };
-const Invoice = ({ tripSheetData, selectedCustomerData, signimageUrl, GmapimageUrl, selectedCustomerDatas, book, formData }) => {
+const Invoice = ({ tripSheetData, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData }) => {
 
   const handlePrint = () => {
-    // const invoiceContent = ReactDOMServer.renderToString(<PrintableInvoice />);
     const invoiceContent = ReactDOMServer.renderToString(
-      <PrintableInvoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
+      <PrintableInvoice tripSheetData={tripSheetData} attachedImage={attachedImage} routeData={routeData} selectedCustomerData={selectedCustomerData} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
     );
     const printWindow = window.open('', '_blank');
     printWindow.document.open();
@@ -542,8 +495,7 @@ const Invoice = ({ tripSheetData, selectedCustomerData, signimageUrl, GmapimageU
 
   return (
     <div className="invoice-wrapper">
-      {/* <PrintableInvoice /> */}
-      <PrintableInvoice tripSheetData={tripSheetData} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
+      <PrintableInvoice tripSheetData={tripSheetData} attachedImage={attachedImage} routeData={routeData} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
       <Button variant="contained" onClick={handlePrint}>Print</Button>
     </div>
   );

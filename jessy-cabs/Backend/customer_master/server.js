@@ -128,10 +128,8 @@ app.post('/mapuploads', upload.single('file'), (req, res) => {
   const query = 'INSERT INTO mapimage SET ?';
   db.query(query, fileData, (err, result) => {
     if (err) {
-      console.error('Error storing file in the database:', err);
       return res.status(500).json({ error: 'Error storing file in the database.' });
     }
-    console.log('result of my map', result);
     return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
   });
 });
@@ -143,7 +141,6 @@ app.get('/get-mapimage/:tripid', (req, res) => {
   const query = 'SELECT path FROM mapimage WHERE tripid = ?';
   db.query(query, [tripid], (err, results) => {
     if (err) {
-      console.error('Error querying database:', err);
       return res.status(500).send('Internal Server Error');
     }
     if (results.length === 0) {
@@ -151,10 +148,8 @@ app.get('/get-mapimage/:tripid', (req, res) => {
       return res.status(404).send('Image not found');
     }
     const imagePath = path.join(mapimageDirectory, results[0].path);
-    console.log('map image path', imagePath);
     res.sendFile(imagePath, (err) => {
       if (err) {
-        console.error('Error sending image:', err);
         return res.status(500).send('Internal Server Error');
       }
     });
@@ -180,7 +175,6 @@ app.post('/uploads', upload.single('file'), (req, res) => {
   const query = 'INSERT INTO tripsheetupload SET ?';
   db.query(query, fileData, (err, result) => {
     if (err) {
-      console.error('Error storing file in the database:', err);
       return res.status(500).json({ error: 'Error storing file in the database.' });
     }
     return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
@@ -196,12 +190,10 @@ app.get('/get-image/:filename', (req, res) => {
   const imagePath = path.join(imageDirectory, filename);
   fs.access(imagePath, fs.constants.R_OK, (err) => {
     if (err) {
-      console.error('Error accessing image:', err);
       res.status(404).send('Image not found');
     } else {
       res.sendFile(imagePath, (err) => {
         if (err) {
-          console.error('Error sending image:', err);
           res.status(404).send('Image not found');
         }
       });
@@ -217,7 +209,6 @@ app.post('/login', (req, res) => {
   }
   db.query('SELECT * FROM usercreation WHERE username = ? AND userpassword = ?', [username, userpassword], (err, result) => {
     if (err) {
-      console.error('Error retrieving user details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve user details from MySQL' });
     }
     if (result.length === 0) {
@@ -236,17 +227,14 @@ app.post('/api/savemapimage', (req, res) => {
   const imagePath = path.join(basemapImagePath, imageName); // Use the base path
   fs.writeFile(imagePath, imageBuffer, (error) => {
     if (error) {
-      console.error('Error saving map image:', error);
       res.status(500).json({ error: 'Failed to save map image' });
     } else {
       const relativeImagePath = path.relative(basemapImagePath, imagePath); // Calculate relative path
       const sql = 'INSERT INTO mapimage (mapimage_path) VALUES (?)';
       db.query(sql, [relativeImagePath], (dbError, results) => {
         if (dbError) {
-          console.error('Error saving map image path to database:', dbError);
           res.status(500).json({ error: 'Failed to save map image path to database' });
         } else {
-          console.log('Map image saved successfully:', relativeImagePath);
           res.json({ message: 'Map image saved successfully' });
         }
       });
@@ -287,7 +275,6 @@ app.get('/get-signimage/:tripid', (req, res) => {
   const query = 'SELECT signature_path AS path FROM signatures WHERE tripid = ?';
   db.query(query, [tripid], (err, results) => {
     if (err) {
-      console.error('Error querying database:', err);
       return res.status(500).send('Internal Server Error');
     }
     if (results.length === 0) {
@@ -295,10 +282,33 @@ app.get('/get-signimage/:tripid', (req, res) => {
       return res.status(404).send('Image not found');
     }
     const imagePath = path.join(signatureDirectory, results[0].path);
-    console.log('map image path', imagePath);
     res.sendFile(imagePath, (err) => {
       if (err) {
-        console.error('Error sending image:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+    });
+  });
+});
+//get images from attacheed
+
+const attachedDirectory = path.join(__dirname, 'uploads');
+// Serve static files from the imageDirectory
+app.use('/images', express.static(attachedDirectory));
+// Example route to serve an image by its filename
+app.get('/get-attachedimage/:tripid', (req, res) => {
+  const { tripid } = req.params;
+  const query = 'SELECT path FROM tripsheetupload WHERE tripid = ?';
+  db.query(query, [tripid], (err, results) => {
+    if (err) {
+      return res.status(500).send('Internal Server Error');
+    }
+    if (results.length === 0) {
+      // No record found for the given tripid
+      return res.status(404).send('Image not found');
+    }
+    const imagePath = path.join(attachedDirectory, results[0].path);
+    res.sendFile(imagePath, (err) => {
+      if (err) {
         return res.status(500).send('Internal Server Error');
       }
     });

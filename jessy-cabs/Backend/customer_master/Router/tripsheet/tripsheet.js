@@ -9,10 +9,8 @@ router.post('/tripsheet', (req, res) => {
     const bookData = req.body;
     db.query('INSERT INTO tripsheet SET ?', bookData, (err, result) => {
         if (err) {
-            console.error('Error inserting data into MySQL:', err);
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
-        console.log('Data inserted into MySQL');
         return res.status(200).json({ message: "Data inserted successfully" });
     });
 });
@@ -21,13 +19,11 @@ router.delete('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     db.query('DELETE FROM tripsheet WHERE tripid = ?', tripid, (err, result) => {
         if (err) {
-            console.error('Error deleting data from MySQL:', err);
             return res.status(500).json({ error: "Failed to delete data from MySQL" });
         }
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Customer not found" });
         }
-        console.log('Data deleted from MySQL');
         return res.status(200).json({ message: "Data deleted successfully" });
     });
 });
@@ -35,17 +31,13 @@ router.delete('/tripsheet/:tripid', (req, res) => {
 router.put('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     const updatedCustomerData = req.body;
-    console.log('Customer ID:', tripid); // Log the customer ID
-    console.log('Updated customer data:', updatedCustomerData);
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
-            console.error('Error updating data in MySQL:', err);
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Customer not found" });
         }
-        console.log('Data updated in MySQL');
         return res.status(200).json({ message: "Data updated successfully" });
     });
 });
@@ -54,7 +46,6 @@ router.get('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     db.query('SELECT * FROM tripsheet WHERE tripid = ?', tripid, (err, result) => {
         if (err) {
-            console.error('Error retrieving booking details from MySQL:', err);
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }
         if (result.length === 0) {
@@ -70,7 +61,6 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
     // Modify the query to use the LIKE operator for partial matching
     db.query('SELECT * FROM vehicleinfo WHERE vehRegNo LIKE ? LIMIT 1', `%${vehRegNo}%`, (err, result) => {
         if (err) {
-            // console.error('Error retrieving vehicle details from MySQL:', err);
             return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
         }
         if (result.length === 0) {
@@ -132,7 +122,6 @@ router.post('/send-tripsheet-email', async (req, res) => {
 
         res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
@@ -142,7 +131,6 @@ router.get('/tripuploadcollect/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     db.query("SELECT * FROM tripsheetupload where tripid=?", [tripid], (err, results) => {
         if (err) {
-            console.error('Error fetching data from MySQL:', err);
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
         }
         return res.status(200).json(results);
@@ -153,20 +141,13 @@ router.get('/tripuploadcollect/:tripid', (req, res) => {
 //get data from ratemanagement for package database
 router.get('/getPackageDetails', (req, res) => {
     const { vehType, customer, duty, totaltime, totalkm1 } = req.query;
-    console.log('backend console result', req.query);
     const query = `SELECT * FROM ratemanagement WHERE vehicleType = ? AND pricetag = ? AND duty = ? ORDER BY ABS(Hours - ?), ABS(KMS - ?) LIMIT 1;`;
-
     const params = [vehType, customer, duty, totaltime, totalkm1];
-    console.log('collected query data from package', query);
-    console.log('collected data from package', params);
 
     db.query(query, params, (err, result) => {
-        console.log('collected result data', result);
         if (err) {
-            console.error('Error retrieving package details from MySQL:', err);
             return res.status(500).json({ error: 'Failed to retrieve package details from MySQL' });
         }
-
         // Check if there are matching records
         if (result.length > 0) {
             // Send the matching records as a response
@@ -190,10 +171,8 @@ router.post('/gmap-submitForm', (req, res) => {
     const query = `INSERT INTO gmapdata (date, time, trip_type, place_name, tripid ) VALUES (?, ?, ?, ?, ?)`;
     db.query(query, [date, time, tripType, placeName, tripid], (err, results) => {
         if (err) {
-            console.error('Error inserting data into MySQL:', err);
             res.status(500).json({ error: 'Internal Server Error' });
         } else {
-            console.log('Data inserted into MySQL:', results);
             res.status(200).json({ message: 'Form data submitted successfully' });
         }
     });
@@ -204,7 +183,6 @@ router.get('/get-gmapdata/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     db.query('SELECT * FROM gmapdata WHERE tripid = ?', [tripid], (err, results) => {
         if (err) {
-            console.error('Error fetching data from MySQL:', err);
             return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
         }
         return res.status(200).json(results);

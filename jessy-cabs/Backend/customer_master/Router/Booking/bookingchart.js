@@ -15,7 +15,6 @@ router.get('/bookingchart', (req, res) => {
 
     db.query(query, values, (err, results) => {
         if (err) {
-            console.error('Error executing SQL query:', err);
             res.status(500).json({ error: 'Failed to retrieve booking data' });
             return;
         }

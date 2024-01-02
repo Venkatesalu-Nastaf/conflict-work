@@ -1402,7 +1402,28 @@ const TripSheet = () => {
   };
   // for invoice page
   const [signimageUrl, setSignImageUrl] = useState('');
+  const [attachedImage, setAttachedImage] = useState('');
   const [GmapimageUrl, setGMapImageUrl] = useState('');
+  const [routeData, setRouteData] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tripid = localStorage.getItem('selectedTripid');
+      try {
+        const response = await fetch(`http://localhost:8081/routedata/${encodeURIComponent(tripid)}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const routeData = await response.json(); // Parse JSON data
+        setRouteData(routeData);
+      } catch (error) {
+        setError(true);
+        setErrorMessage('Error fetching tripsheet data.');
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -1436,6 +1457,27 @@ const TripSheet = () => {
         }
         const gimageUrl = URL.createObjectURL(await response.blob());
         setGMapImageUrl(gimageUrl);
+      } catch {
+
+      }
+    };
+
+    fetchData();
+    return () => {
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tripid = localStorage.getItem('selectedTripid');
+
+      try {
+        const response = await fetch(`http://localhost:8081/get-attachedimage/${tripid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const attachedimageUrl = URL.createObjectURL(await response.blob());
+        setAttachedImage(attachedimageUrl);
       } catch {
 
       }
@@ -2408,7 +2450,7 @@ const TripSheet = () => {
 
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  <Invoice tripSheetData={tripSheetData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
+                  <Invoice tripSheetData={tripSheetData} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">

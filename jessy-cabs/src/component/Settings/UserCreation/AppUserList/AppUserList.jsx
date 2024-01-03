@@ -76,12 +76,9 @@ const AppUserList = () => {
   }, [info]);
 
   const handleListButtonClick = () => {
-    // Make an API request to fetch data based on the selected status
     fetch(`http://localhost:8081/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
       .then((response) => response.json())
       .then((data) => {
-        // Handle the data as needed (e.g., update state to display it)
-        console.log('driver details', data);
         if (data.length > 0) {
           setRows(data);
           setSuccess(true);

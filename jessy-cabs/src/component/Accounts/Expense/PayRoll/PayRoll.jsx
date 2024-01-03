@@ -236,52 +236,37 @@ const PayRoll = () => {
       return;
     }
     try {
-      console.log('Add button clicked');
       await axios.post('http://localhost:8081/payroll', book);
-      console.log(book);
       handleCancel();// Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
       setSuccessMessage("Successfully Added");
-
-    } catch (error) {
-      console.error('Error adding customer:', error);
+    } catch {
       setErrorMessage("Check your Network Connection");
-      // You can add error handling code here, like displaying an error message to the user
     }
   };
   const handleClick = async (event, actionName, empid) => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-        console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/payroll');
         const data = response.data;
         setRows(data);
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
-        console.log('Cancel button clicked');
         handleCancel();
       } else if (actionName === 'Delete') {
-        console.log('Delete button clicked');
         await axios.delete(`http://localhost:8081/payroll/${empid}`);
-        console.log('Customer deleted');
         setSelectedCustomerData(null);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
-        console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.empid === empid);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/payroll/${empid}`, updatedCustomer);
-        console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
-        // await axios.post('http://localhost:8081/payroll', book);
-        // console.log(book);
-        // handleCancel();
         handleAdd();
       }
-    } catch (err) {
-      console.log(err);
+    } catch {
       setError(true);
       setErrorMessage("Check Network Connection")
     }

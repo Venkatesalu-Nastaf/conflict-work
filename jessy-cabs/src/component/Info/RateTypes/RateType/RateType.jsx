@@ -222,7 +222,6 @@ const RateType = () => {
         setSelectedCustomerData({});
     };
     const handleRowClick = useCallback((params) => {
-        console.log(params.row);
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
@@ -230,8 +229,8 @@ const RateType = () => {
     const handleAdd = async () => {
         const ratename = book.ratename;
         if (!ratename) {
+            setError(true);
             setErrorMessage("Check your Network Connection");
-            // setErrorMessage("fill mantatory fields");
             return;
         }
         try {
@@ -241,11 +240,11 @@ const RateType = () => {
                 closetime: closetime,
             };
             await axios.post('http://localhost:8081/ratetype', updatedBook);
-            console.log(updatedBook);
             handleCancel();
+            setSuccess(true);
             setSuccessMessage("Successfully Added");
-        } catch (error) {
-            console.error('Error updating customer:', error);
+        } catch {
+            setError(true);
             setErrorMessage("Check your Network Connection");
         }
     };
@@ -254,11 +253,8 @@ const RateType = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/ratetype');
                 const data = response.data;
-                // setSuccessMessage("Successfully listed");
-                // setRows(data);
                 if (data.length > 0) {
                     setRows(data);
                     setSuccess(true);
@@ -269,21 +265,18 @@ const RateType = () => {
                     setErrorMessage("No data found");
                 }
             } else if (actionName === 'Cancel') {
-                console.log('Cancel button clicked');
                 handleCancel();
             } else if (actionName === 'Delete') {
-                console.log('Delete button clicked');
                 await axios.delete(`http://localhost:8081/ratetype/${driverid}`);
-                console.log('Customer deleted');
                 setSelectedCustomerData(null);
+                setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
-                console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.driverid === driverid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/ratetype/${driverid}`, updatedCustomer);
-                console.log('Customer updated');
+                setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
             }
@@ -291,7 +284,7 @@ const RateType = () => {
                 handleAdd();
             }
         } catch (err) {
-            console.log(err);
+            setError(true);
             setErrorMessage("Check your Network Connection");
         }
     };
@@ -300,7 +293,6 @@ const RateType = () => {
             handleClick(null, 'List');
         }
     });
-
 
     return (
         <div className="ratetype-form Scroll-Style-hide">

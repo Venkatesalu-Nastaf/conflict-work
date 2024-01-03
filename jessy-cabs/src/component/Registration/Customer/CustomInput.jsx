@@ -17,7 +17,6 @@ const CustomInput = () => {
         Organization()
             .then((data) => {
                 if (data) {
-                    console.log('organization name', data);
                     setBillingGroup(data);
                 }
             })

@@ -273,7 +273,6 @@ const Employe = () => {
     };
 
     const handleRowClick = useCallback((params) => {
-        console.log(params.row);
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
@@ -286,14 +285,12 @@ const Employe = () => {
             return;
         }
         try {
-            console.log('Add button clicked');
             await axios.post('http://localhost:8081/employees', book);
-            console.log(book);
             handleCancel();
             setSuccess(true);
             setSuccessMessage("Successfully Added");
-        } catch (error) {
-            console.error('Error updating customer:', error);
+        } catch {
+
         }
     };
 
@@ -302,7 +299,6 @@ const Employe = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/employees');
                 const data = response.data;
                 if (data.length > 0) {
@@ -315,30 +311,24 @@ const Employe = () => {
                     setErrorMessage("No data found");
                 }
             } else if (actionName === 'Cancel') {
-                console.log('Cancel button clicked');
                 handleCancel();
             } else if (actionName === 'Delete') {
-                console.log('Delete button clicked');
                 await axios.delete(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`);
-                console.log('Customer deleted');
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
-                console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.empid === empid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
-                console.log('Customer updated');
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
             } else if (actionName === 'Add') {
                 handleAdd();
             }
-        } catch (err) {
-            console.log(err);
+        } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
@@ -368,12 +358,10 @@ const Employe = () => {
         formDataUpload.append('documenttype', documentType);
         formDataUpload.append('empid', book.empid || selectedCustomerData.empid);
         formDataUpload.append('filename', uniqueFileName);
-        console.log('uploaded file details', formDataUpload);
         try {
             const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            console.log('uploaded file details 2', response.data);
-        } catch (error) {
-            console.error('Error uploading file:', error);
+            console.log(response);
+        } catch {
         }
     };
     //end file upload

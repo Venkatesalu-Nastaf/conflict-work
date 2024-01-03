@@ -202,7 +202,6 @@ const PettyCash = () => {
         setSelectedCustomerData({});
     };
     const handleRowClick = useCallback((params) => {
-        console.log(params.row);
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
@@ -217,46 +216,35 @@ const PettyCash = () => {
             return;
         }
         try {
-            console.log('Add button clicked');
             const response = await axios.post('http://localhost:8081/pettycash', book);
-            console.log('Customer added:', response.data);
             handleCancel(); // Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
             setSuccessMessage("Successfully Added");
         } catch (error) {
-            console.error('Error adding customer:', error);
             setErrorMessage("Check your Network Connection");
-            // You can add error handling code here, like displaying an error message to the user
         }
     };
     const handleClick = async (event, actionName, voucherno) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/pettycash');
                 const data = response.data;
                 setRows(data);
                 setSuccessMessage("Successfully listed");
             } else if (actionName === 'Cancel') {
-                console.log('Cancel button clicked');
                 handleCancel();
             } else if (actionName === 'Delete') {
-                console.log('Delete button clicked');
                 await axios.delete(`http://localhost:8081/pettycash/${voucherno}`);
-                console.log('Customer deleted');
                 setSelectedCustomerData(null);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
-                console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.voucherno === voucherno);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/pettycash/${voucherno}`, updatedCustomer);
-                console.log('Customer updated');
                 handleCancel();
             }
-        } catch (err) {
-            console.log(err);
+        } catch {
             setError(true);
             setErrorMessage("Check Network Connection")
         }

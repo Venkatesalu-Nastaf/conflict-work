@@ -193,17 +193,18 @@ const DriverCreation = () => {
         if (password === confirmPassword) {
             setPasswordsMatch(false);
             if (!stationname) {
+                setError(true);
                 setErrorMessage("Check your Network Connection");
                 return;
             }
             try {
                 await axios.post('http://localhost:8081/drivercreation', book);
-                console.log(book);
                 handleCancel();
                 validatePasswordMatch();
+                setSuccess(true);
                 setSuccessMessage("Successfully Added");
             } catch (error) {
-                console.error('Error adding user:', error);
+                setError(true)
                 setErrorMessage("Check your Network Connection");
             }
         } else {
@@ -215,11 +216,8 @@ const DriverCreation = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/drivercreation');
                 const data = response.data;
-                // setSuccessMessage("Successfully listed");
-                // setRows(data);
                 if (data.length > 0) {
                     setRows(data);
                     setSuccess(true);
@@ -230,28 +228,24 @@ const DriverCreation = () => {
                     setErrorMessage("No data found");
                 }
             } else if (actionName === 'Cancel') {
-                console.log('Cancel button clicked');
                 handleCancel();
             } else if (actionName === 'Delete') {
-                console.log('Delete button clicked');
                 await axios.delete(`http://localhost:8081/drivercreation/${userid}`);
-                console.log('Customer deleted');
                 setSelectedCustomerData(null);
+                setError(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
-                console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.userid === userid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/drivercreation/${userid}`, updatedCustomer);
-                console.log('Driver updated');
+                setError(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
             } else if (actionName === 'Add') {
                 handleAdd();
             }
-        } catch (err) {
-            console.log(err);
+        } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
@@ -309,7 +303,6 @@ const DriverCreation = () => {
         }
     });
     const handleRowClick = useCallback((params) => {
-        console.log(params.row);
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);

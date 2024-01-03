@@ -175,8 +175,7 @@ const Closed = () => {
         setError(true);
         setErrorMessage("No data found");
       }
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+    } catch {
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");
@@ -198,8 +197,7 @@ const Closed = () => {
         setError(true);
         setErrorMessage("No data found");
       }
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+    } catch {
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");

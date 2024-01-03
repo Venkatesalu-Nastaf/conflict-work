@@ -98,8 +98,7 @@ const BookingCopy = () => {
       const data = response.data;
       setRows(data);
       setSuccessMessage("Successfully listed");
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+    } catch {
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");

@@ -100,8 +100,8 @@ const MailageDetails = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -109,24 +109,24 @@ const MailageDetails = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
 
@@ -145,7 +145,6 @@ const MailageDetails = () => {
     const { name, value, checked, type } = event.target;
 
     if (type === 'checkbox') {
-      // For checkboxes, update the state based on the checked value
       setBook((prevBook) => ({
         ...prevBook,
         [name]: checked,
@@ -155,7 +154,6 @@ const MailageDetails = () => {
         [name]: checked,
       }));
     } else {
-      // For other input fields, update the state based on the value
       setBook((prevBook) => ({
         ...prevBook,
         [name]: value,
@@ -169,7 +167,6 @@ const MailageDetails = () => {
 
   const handleDateChange = (date, name) => {
     const formattedDate = dayjs(date).format('DD/MM/YYYY');
-    // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
     setBook((prevBook) => ({
       ...prevBook,
       [name]: formattedDate,
@@ -194,7 +191,6 @@ const MailageDetails = () => {
     setInitialOdometer(0);
   };
   const handleRowClick = useCallback((params) => {
-    console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
@@ -202,18 +198,17 @@ const MailageDetails = () => {
   const handleAdd = async () => {
     const VehicleName = book.VehicleName;
     if (!VehicleName) {
+      setError(true);
       setErrorMessage("Check your vehicleName");
-      // setErrorMessage("fill mantatory fields");
       return;
     }
     try {
-      console.log('Add button clicked');
       await axios.post('http://localhost:8081/MailageDetails', book);
-      console.log(book);
       handleCancel();
+      setSuccess(true);
       setSuccessMessage("Successfully Added");
-    } catch (error) {
-      console.error('Error updating customer:', error);
+    } catch {
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -222,34 +217,31 @@ const MailageDetails = () => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-        console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/MailageDetails');
         const data = response.data;
         setRows(data);
+        setSuccess(true);
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
-        console.log('Cancel button clicked');
         handleCancel();
       } else if (actionName === 'Delete') {
-        console.log('Delete button clicked');
         await axios.delete(`http://localhost:8081/MailageDetails/${VehicleNo}`);
-        console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
-        console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.VehicleNo === VehicleNo);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/MailageDetails/${VehicleNo}`, updatedCustomer);
-        console.log('Customer updated');
+        setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
         handleAdd();
       }
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -263,22 +255,15 @@ const MailageDetails = () => {
     const distance =
       (selectedCustomerData?.FinalOdometerReading || finalOdometer) -
       (selectedCustomerData?.InitialOdometerReading || initialOdometer);
-
     const fuelConsumptionValue = selectedCustomerData?.FuelConsumptioninliters || fuelConsumption;
-
     const mileageValue = distance / fuelConsumptionValue;
     setMileage(mileageValue);
-    console.log(mileageValue);
   };
-
-  // TABLE START
-
 
   return (
     <div className="form-container-FuelInfo">
       <div className="MailageDetails-Main">
         <form >
-          {/* <span className="Title-Name" >Mailage Details</span> */}
           <div className="MailageDetails-page-header">
             <div className="detailsFuel">
               <div className="input-field">

@@ -5,16 +5,12 @@ import { BiPaste } from "@react-icons/all-files/bi/BiPaste";
 const fetchDataFromBackend = async (date) => {
   try {
     const response = await fetch(`http://localhost:8081/total_amounts_from_billing?date=${date}`);
-
     if (!response.ok) {
       return { totalAmount: 0, totalPaid: 0, totalPending: 0 };
     }
-
     const data = await response.json();
-    console.log('Sales amount:', data);
     return data;
   } catch {
-    // console.error('Error fetching data from backend:', error);
     return { totalAmount: 0, totalPaid: 0, totalPending: 0 };
   }
 };
@@ -22,52 +18,36 @@ const fetchDataFromBackend = async (date) => {
 const fetchMonthlyDataFromBackend = async (startDate, endDate) => {
   try {
     const response = await fetch(`http://localhost:8081/monthly_data?startDate=${startDate}&endDate=${endDate}`);
-
     if (!response.ok) {
       return [];
     }
     const data = await response.json();
-    console.log('Monthly data:', data);
     return data;
-  } catch (error) {
-    console.error('Error fetching monthly data from backend:', error);
+  } catch {
     return [];
   }
 };
-
 
 const calculatePercentageChange = (previousValue, currentValue) => {
   if (previousValue === 0) {
     return currentValue > 0 ? 100 : 0;
   }
-
   const percentageChange = ((currentValue - previousValue) / Math.abs(previousValue)) * 100;
-  console.log(`Previous: ${previousValue}, Current: ${currentValue}, Percentage Change: ${percentageChange}%`);
   return percentageChange.toFixed(1);
 };
 
 export const cardsData = async () => {
   try {
-    // Fetch data for the current date
     const currentDate = new Date().toISOString();
     const backendDataCurrent = await fetchDataFromBackend(currentDate);
-
-    // Fetch data for the last month
     const lastMonth = new Date();
     lastMonth.setMonth(lastMonth.getMonth() - 1);
     const lastMonthStart = new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1);
     const lastMonthEnd = new Date(lastMonth.getFullYear(), lastMonth.getMonth() + 1, 0);
-
     const lastMonthStartStr = lastMonthStart.toISOString().split('T')[0];
     const lastMonthEndStr = lastMonthEnd.toISOString().split('T')[0];
-
     const backendDataLastMonth = await fetchDataFromBackend(`${lastMonthStartStr}/${lastMonthEndStr}`);
-
     const backendMonthlyData = await fetchMonthlyDataFromBackend(lastMonthStartStr, currentDate);
-
-    // Extract series data from backendMonthlyData and use it in cardData
-    // const seriesData = backendMonthlyData.map(item => ({ name: item.name, data: item.data }));
-
     const totalAmountPercentageChange = calculatePercentageChange(
       backendDataLastMonth.lastMonth.totalAmount,
       backendDataCurrent.current.totalAmount
@@ -96,14 +76,6 @@ export const cardsData = async () => {
       date: item.Billingdate,
       value: parseFloat(item.pendingamount),
     }));
-
-    console.log("Total Amount Percentage Change:", totalAmountPercentageChange);
-    console.log("Total Paid Percentage Change:", totalPaidPercentageChange);
-    console.log("Total Pending Percentage Change:", totalPendingPercentageChange);
-
-    console.log("Total Amount Percentage Change in chart:", salesData);
-    console.log("Total Paid Percentage Change in chart:", revenueData);
-    console.log("Total Pending Percentage Change in chart:", pendingData);
 
     // Adjust bar values based on the percentage change
     const cardData = [
@@ -140,15 +112,11 @@ export const cardsData = async () => {
         barValue: totalPendingPercentageChange,
         value: backendDataCurrent.current.totalPending.toLocaleString(),
         png: BiPaste,
-        // series: [{ name: "Pending", data: pendingData }],
         series: [{ name: "Pending", data: pendingData.map(data => data.value), categories: pendingData.map(data => data.date) }],
       },
     ];
-
     return cardData;
   } catch {
-    // console.error('Error fetching data from backend:', error);
-    // If there's an error fetching data, return default values
     return getDefaultCardData();
   }
 };

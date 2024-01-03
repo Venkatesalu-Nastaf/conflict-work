@@ -168,18 +168,18 @@ const EmployeeCreation = () => {
 
     if (password === confirmPassword) {
       if (!stationname) {
+        setError(true);
         setErrorMessage("Fill mandatory fields");
         return;
       }
-
       try {
         await axios.post('http://localhost:8081/usercreation', book);
-        console.log(book);
         handleCancel();
         validatePasswordMatch();
+        setSuccess(true);
         setSuccessMessage("Successfully Added");
       } catch (error) {
-        console.error('Error adding user:', error);
+        setError(true);
         setErrorMessage("Check your Network Connection");
       }
     } else {
@@ -187,16 +187,12 @@ const EmployeeCreation = () => {
     }
   };
 
-
   const handleClick = async (event, actionName, userid) => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-        console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/usercreation');
         const data = response.data;
-        // setSuccessMessage("Successfully listed");
-        // setRows(data);
         if (data.length > 0) {
           setRows(data);
           setSuccess(true);
@@ -207,31 +203,26 @@ const EmployeeCreation = () => {
           setErrorMessage("No data found");
         }
       } else if (actionName === 'Cancel') {
-        console.log('Cancel button clicked');
         handleCancel();
       } else if (actionName === 'Delete') {
-        console.log('Delete button clicked');
         await axios.delete(`http://localhost:8081/usercreation/${userid}`);
-        console.log('Customer deleted');
         setSelectedCustomerData(null);
+        setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
-        console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.userid === userid);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/usercreation/${userid}`, updatedCustomer);
-        console.log('Customer updated');
+        setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
         handleAdd();
       }
-    } catch (err) {
-      console.log(err);
+    } catch {
       setError(true);
       setErrorMessage("Check your Network Connection");
-      // setErrorMessage("Check Network Connection");
     }
   };
   const hidePopup = () => {
@@ -245,8 +236,8 @@ const EmployeeCreation = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -254,32 +245,32 @@ const EmployeeCreation = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
   useEffect(() => {
     if (passwordsMatch) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [passwordsMatch]);
 
@@ -289,7 +280,6 @@ const EmployeeCreation = () => {
     }
   });
   const handleRowClick = useCallback((params) => {
-    console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);

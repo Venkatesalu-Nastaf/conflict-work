@@ -150,13 +150,12 @@ const PrintableInvoice = ({ tripSheetData, book, GmapimageUrl, attachedImage, si
             ))}
           </ol>
         </div>
-        {/* <div className='attached-toll'>
-          <img src={attachedImage} alt='summa' />
-        </div> */}
         <div className='attached-toll'>
-          {Array.isArray(attachedImage) && attachedImage.map((image, index) => (
-            <img key={index} src={image} alt={`image_${index}`} />
-          ))}
+          <ol type="1">
+            {Array.isArray(attachedImage) && attachedImage.map((image, index) => (
+              <img key={index} src={image} alt={`image_${index}`} />
+            ))}
+          </ol>
         </div>
       </article>
     </div>

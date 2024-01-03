@@ -196,7 +196,7 @@ const TransferDataEntry = () => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const tripData = await response.json(); // Parse JSON data
+        const tripData = await response.json();
         if (Array.isArray(tripData)) {
           const transformedRows = tripData.map(transformRow);
           setTripData(transformedRows);
@@ -208,11 +208,8 @@ const TransferDataEntry = () => {
           setErrorMessage('Fetched data has unexpected format.');
         }
       } catch {
-        setError(true);
-        setErrorMessage('Error fetching tripsheet data.');
       }
     };
-
     fetchData();
   }, []);
 
@@ -312,7 +309,6 @@ const TransferDataEntry = () => {
         setErrorMessage('Failed to Remove bill. Please try again.');
       }
     } catch {
-
       setError(true);
       setErrorMessage('An error occurred. Please try again later.');
     }

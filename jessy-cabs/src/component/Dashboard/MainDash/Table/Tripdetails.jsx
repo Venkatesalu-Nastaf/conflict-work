@@ -17,7 +17,6 @@ const makeStyle = (status) => {
             background: '#ffadad8f',
             color: 'red',
             border: '2px solid #ffadad8f',
-
         }
     }
     else {
@@ -29,13 +28,9 @@ const makeStyle = (status) => {
     }
 }
 
-
 const TripDetails = ({ tripData }) => {
-    // const navigate = useNavigate();
-
     const handleButtonClickTripsheet = (selectedRow) => {
         if (!selectedRow) {
-            console.error("Selected row is undefined");
             return;
         } else {
             const bookingPageUrl = `/home/bookings/tripsheet?` +

@@ -135,36 +135,17 @@ const BankAccount = () => {
           totalin: book.netbalance || updatedBank.totalin,
           totalout: book.totalout || updatedBank.totalout,
         };
-        console.log('updated bankdetails', updateData);
         await axios.put(`http://localhost:8081/updatebankdetails/${updatedBank.id}`, updateData);
         setSuccess(true);
         setSuccessMessage('Successfully Updated');
         setEditingIndex(null);
       } else {
-        console.error('Invalid index:', index);
       }
-    } catch (error) {
-      console.error('Error updating bank account:', error);
+    } catch {
       setError(true);
       setErrorMessage('Error updating bank account. Please check your Network Connection.');
     }
   };
-
-  // const handleDeleteBank = async (id) => {
-  //   console.log('id of deleted account', id);
-  //   if (!id) {
-  //     return;
-  //   }
-  //   try {
-  //     await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
-  //     fetchData();
-  //     handlePopupClose();
-  //   } catch (error) {
-  //     console.error('Error deleting bank account:', error);
-  //     setError(true);
-  //     setErrorMessage('Error deleting bank account. Please check your Network Connection.');
-  //   }
-  // };
 
   const handleChange = (event, index) => {
     const { name, value } = event.target;
@@ -222,10 +203,8 @@ const BankAccount = () => {
           setErrorMessage("No data found");
         }
       } else {
-        console.error('Error fetching bank details');
       }
-    } catch (error) {
-      console.error('Error fetching bank details:', error);
+    } catch {
     }
   }, []);
 
@@ -239,12 +218,11 @@ const BankAccount = () => {
 
   const handleDelete = (id) => {
     setPopupOpen(true);
-    setEditingIndex(null); // Make sure to reset editing index when starting a delete operation
+    setEditingIndex(null);
     setDeleteId(id);
   };
 
   const handleDeleteBank = useCallback(async (id) => {
-    console.log('id of deleted account', id);
     if (!id) {
       return;
     }
@@ -253,12 +231,11 @@ const BankAccount = () => {
       fetchData();
       handlePopupClose();
     } catch (error) {
-      console.error('Error deleting bank account:', error);
       setError(true);
       setErrorMessage('Error deleting bank account. Please check your Network Connection.');
     }
   }, [fetchData, handlePopupClose]); // Add dependencies as needed
-  
+
   useEffect(() => {
     if (deleteId !== null) {
       handleDeleteBank(deleteId);
@@ -286,7 +263,6 @@ const BankAccount = () => {
         setTotalCapital(response.data.totalAmount);
       })
       .catch(error => {
-        console.error('Error fetching total capital amount:', error);
       });
   }, []);
 

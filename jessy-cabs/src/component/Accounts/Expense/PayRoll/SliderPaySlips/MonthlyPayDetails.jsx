@@ -128,8 +128,7 @@ const MonthlyPayDetails = () => {
             setRows(data);
             setSuccessMessage("Successfully listed");
 
-        } catch (error) {
-            console.error('Error retrieving data:', error);
+        } catch {
             setRows([]);
             setErrorMessage("Check your Network Connection");
 

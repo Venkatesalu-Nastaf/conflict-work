@@ -282,6 +282,7 @@ app.get('/get-signimage/:tripid', (req, res) => {
       return res.status(404).send('Image not found');
     }
     const imagePath = path.join(signatureDirectory, results[0].path);
+
     res.sendFile(imagePath, (err) => {
       if (err) {
         return res.status(500).send('Internal Server Error');
@@ -298,20 +299,19 @@ app.use('/images', express.static(attachedDirectory));
 app.get('/get-attachedimage/:tripid', (req, res) => {
   const { tripid } = req.params;
   const query = 'SELECT path FROM tripsheetupload WHERE tripid = ?';
+
   db.query(query, [tripid], (err, results) => {
     if (err) {
       return res.status(500).send('Internal Server Error');
     }
+
     if (results.length === 0) {
       // No record found for the given tripid
-      return res.status(404).send('Image not found');
+      return res.status(404).send('Images not found');
     }
-    const imagePath = path.join(attachedDirectory, results[0].path);
-    res.sendFile(imagePath, (err) => {
-      if (err) {
-        return res.status(500).send('Internal Server Error');
-      }
-    });
+
+    const imagePaths = results.map(result => result.path);
+    res.json({ imagePaths });
   });
 });
 // -----------------------------------------------------------------------------------------------------------

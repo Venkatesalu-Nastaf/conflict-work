@@ -68,7 +68,6 @@ const CoveringSubmit = () => {
         Organization()
             .then((data) => {
                 if (data) {
-                    console.log('organization name', data);
                     setBankOptions(data);
                 } else {
                     setError(true);

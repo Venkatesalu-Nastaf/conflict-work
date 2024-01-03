@@ -110,8 +110,7 @@ const BookingChart = () => {
         }));
         return updatedVehicles;
       });
-    } catch (error) {
-      console.error('Error fetching booking data:', error);
+    } catch {
       setErrorMessage("Check your Network Connection");
     }
   }, []);

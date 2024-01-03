@@ -128,6 +128,7 @@ const TransferReport = () => {
     setpbPopupOpen(false);
     setnPopupOpen(false);
     setlxPopupOpen(false);
+    localStorage.removeItem('selectedcustomer');
   };
 
   const hidePopup = () => {
@@ -159,12 +160,8 @@ const TransferReport = () => {
           const tripsheetNumbers = [{ id: 1, guestname: tripData.guestname, tripid: tripData.tripid }];
           setRows(tripsheetNumbers);
         } else {
-          setError(true);
-          setErrorMessage('Fetched data has unexpected format');
         }
-      } catch (error) {
-        setError(true);
-        setErrorMessage('Error fetching tripsheet data');
+      } catch {
       }
     };
     fetchData();
@@ -213,12 +210,8 @@ const TransferReport = () => {
             const sumTotalAndRounded = parseFloat(totalValue) + parseFloat(roundedAmount);
             setSumTotalAndRounded(sumTotalAndRounded);
           } else {
-            setError(true);
-            setErrorMessage('Invalid data format');
           }
-        } catch (error) {
-          setError(true);
-          setErrorMessage('Error fetching tripsheet data');
+        } catch {
         }
       }
     };
@@ -235,9 +228,7 @@ const TransferReport = () => {
         }
         const customerData = await response.json(); // Parse JSON data
         setCustomerData(customerData);
-      } catch (error) {
-        setError(true);
-        setErrorMessage('Error fetching tripsheet data');
+      } catch {
       }
     };
     fetchData();

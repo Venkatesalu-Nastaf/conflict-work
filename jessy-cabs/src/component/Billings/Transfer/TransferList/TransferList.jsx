@@ -97,7 +97,6 @@ const TransferList = () => {
         Organization()
             .then((data) => {
                 if (data) {
-                    console.log('organization name', data);
                     setBankOptions(data);
                 } else {
                     setError(true);
@@ -134,8 +133,7 @@ const TransferList = () => {
                 setError(true);
                 setErrorMessage("No data found");
             }
-        } catch (error) {
-            console.error('Error retrieving data:', error);
+        } catch {
             setRows([]);
             setError(true);
             setErrorMessage("Check your Network Connection");

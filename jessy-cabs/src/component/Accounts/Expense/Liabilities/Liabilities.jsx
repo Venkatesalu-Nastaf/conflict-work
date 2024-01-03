@@ -246,7 +246,6 @@ const Liabilities = () => {
     setSelectedCustomerData({});
   };
   const handleRowClick = useCallback((params) => {
-    console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
@@ -260,13 +259,10 @@ const Liabilities = () => {
       return;
     }
     try {
-      console.log('Add button clicked');
       const response = await axios.post('http://localhost:8081/Liabilities', book);
-      console.log('Customer added:', response.data);
       handleCancel();
       setSuccessMessage("Successfully Added");
     } catch (error) {
-      console.error('Error adding customer:', error);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -274,31 +270,24 @@ const Liabilities = () => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-        console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/Liabilities');
         const data = response.data;
         setRows(data);
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
-        console.log('Cancel button clicked');
         handleCancel();
       } else if (actionName === 'Delete') {
-        console.log('Delete button clicked');
         await axios.delete(`http://localhost:8081/Liabilities/${descriptionoftheliability}`);
-        console.log('Customer deleted');
         setSelectedCustomerData(null);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
-        console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.descriptionoftheliability === descriptionoftheliability);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/Liabilities/${descriptionoftheliability}`, updatedCustomer);
-        console.log('Customer updated');
         handleCancel();
       }
     } catch (err) {
-      console.log(err);
       setError(true);
       setErrorMessage("Check Network Connection")
     }
@@ -308,7 +297,6 @@ const Liabilities = () => {
       handleClick(null, 'List');
     }
   });
-
 
   return (
     <div className="Liabilities-form Scroll-Style-hide">

@@ -121,13 +121,13 @@ const OnlineBooking = () => {
   const handleAdd = async (event) => {
     event.preventDefault();
     try {
-      console.log('Add button clicked');
       await axios.post('http://localhost:8081/booking', book);
       handleCancel();
       handlecheck();
+      setSuccess(true);
       setSuccessMessage("Successfully Added");
-    } catch (error) {
-      console.error('Error updating customer:', error);
+    } catch {
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -149,11 +149,10 @@ const OnlineBooking = () => {
       };
 
       await axios.post('http://localhost:8081/send-onbook-email', dataToSend);
-      // alert('Email sent successfully');
+      setSuccess(true);
       setSuccessMessage("Mail sented Successfully");
-      console.log(dataToSend);
     } catch (error) {
-      console.error('Error sending email:', error);
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };

@@ -8,8 +8,6 @@ import TabContext from "@mui/lab/TabContext";
 import PayRoll from '../Expense/PayRoll/PayRoll';
 import AssetIncome from './AssetIncome/AssetIncome';
 
-
-
 const Income = () => {
   const [value, setValue] = React.useState("AssetIncome");
 

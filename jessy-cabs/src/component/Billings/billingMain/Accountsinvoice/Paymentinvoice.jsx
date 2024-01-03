@@ -5,8 +5,6 @@ import ReactDOMServer from 'react-dom/server';
 import Logo from "../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 const PrintableInvoice = ({ tripSheetData, book, tripshedin, tripshedout, tripreporttime, tripshedintime, selectedCustomerData, GmapimageUrl, mapimageUrl, organizationaddress1, organizationaddress2, organizationcity, organizationgstnumber, tripShedkm, tripadditionaltime, tripstartkm, tripclosekm, tripstarttime, tripclosetime, tripstartdate, tripclosedate, triprequest, routeData, tripcode, tripdepartment, BalanceValue, TotalAmountValue, roundOff, selectedCustomerDatas, formData }) => {
 
-    console.log('shed km', tripshedin, tripshedout, tripreporttime, tripshedintime);
-
     return (
         <>
             <div className='Individual-invoice' >

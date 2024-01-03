@@ -278,16 +278,12 @@ const Vehicaleinfo = () => {
   };
 
   const handleAdd = async () => {
-
     try {
-      console.log('Add button clicked');
       await axios.post('http://localhost:8081/vehicleinfo', book);
-      console.log(book);
       handleCancel();
       setSuccess(true);
       setSuccessMessage("Successfully Added");
-    } catch (error) {
-      console.error('Error updating customer:', error);
+    } catch {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
@@ -298,23 +294,18 @@ const Vehicaleinfo = () => {
 
     try {
       if (actionName === 'List') {
-        console.log('List button clicked');
       } else if (actionName === 'Cancel') {
-        console.log('Cancel button clicked');
         handleCancel();
         setSuccess(true);
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Delete') {
-        console.log('Delete button clicked');
         setSuccess(true);
         setSuccessMessage("Successfully Deleted");
       } else if (actionName === 'Edit') {
-        console.log('Edit button clicked');
       } else if (actionName === 'Add') {
         handleAdd();
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
@@ -345,12 +336,10 @@ const Vehicaleinfo = () => {
     formDataUpload.append('documenttype', documentType);
     formDataUpload.append('vehicleId', book.vehicleId || selectedCustomerData.vehicleId);
     formDataUpload.append('filename', uniqueFileName);
-    console.log('uploaded file details', formDataUpload);
     try {
       const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-      console.log('uploaded file details 2', response.data);
+      console.log(response);
     } catch (error) {
-      console.error('Error uploading file:', error);
     }
   };
   //end file upload
@@ -358,12 +347,9 @@ const Vehicaleinfo = () => {
   const handleSearch = async () => {
     try {
       const response = await fetch(`http://localhost:8081/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
-      console.log(response.value);
       const data = await response.json();
-      console.log(data);
       if (data.length > 0) {
         setRows(data);
-        console.log(data);
         setSuccess(true);
         setSuccessMessage("successfully listed")
       } else {

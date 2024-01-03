@@ -172,7 +172,6 @@ const Ratevalidity = () => {
         setSelectedCustomerData({});
     };
     const handleRowClick = useCallback((params) => {
-        console.log(params.row);
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
@@ -185,13 +184,12 @@ const Ratevalidity = () => {
             return;
         }
         try {
-            console.log('Add button clicked');
             await axios.post('http://localhost:8081/ratevalidity', book);
-            console.log(book);
             handleCancel();
+            setSuccess(true);
             setSuccessMessage("Successfully Added");
-        } catch (error) {
-            console.error('Error updating customer:', error);
+        } catch {
+            setError(true);
             setErrorMessage("Check your Network Connection");
         }
     };
@@ -200,11 +198,8 @@ const Ratevalidity = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/ratevalidity');
                 const data = response.data;
-                // setSuccessMessage("Successfully listed");
-                // setRows(data);
                 if (data.length > 0) {
                     setRows(data);
                     setSuccess(true);
@@ -215,30 +210,25 @@ const Ratevalidity = () => {
                     setErrorMessage("No data found");
                 }
             } else if (actionName === 'Cancel') {
-                console.log('Cancel button clicked');
                 handleCancel();
             } else if (actionName === 'Delete') {
-                console.log('Delete button clicked');
                 await axios.delete(`http://localhost:8081/ratevalidity/${driverid}`);
-                console.log('Customer deleted');
                 setSelectedCustomerData(null);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
-                console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.driverid === driverid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/ratevalidity/${driverid}`, updatedCustomer);
-                console.log('Customer updated');
+                setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
             } else if (actionName === 'Add') {
                 handleAdd();
             }
         } catch (err) {
-            console.log(err);
+            setError(true);
             setErrorMessage("Check your Network Connection");
-            // setErrorMessage("Check Network Connection")
         }
     };
     useEffect(() => {

@@ -31,8 +31,7 @@ const MapComponent = () => {
                 window.map.setZoom(14);
                 window.map.submitPopup();
             }
-        } catch (error) {
-            console.error('Error geocoding address:', error);
+        } catch {
         }
     };
 
@@ -42,7 +41,7 @@ const MapComponent = () => {
 
     const generateStaticMap = () => {
         window.generateStaticMap();
-    };    
+    };
 
     return (
         <div>

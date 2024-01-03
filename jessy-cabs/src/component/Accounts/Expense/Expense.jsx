@@ -11,7 +11,6 @@ import TabContext from "@mui/lab/TabContext";
 import PettyCash from './PettyCash/PettyCash';
 import Liabilities from './Liabilities/Liabilities';
 
-
 const Expense = () => {
   const [value, setValue] = React.useState("pettycash");
 

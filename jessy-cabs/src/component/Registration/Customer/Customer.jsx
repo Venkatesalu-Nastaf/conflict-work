@@ -295,7 +295,6 @@ const Customer = () => {
   };
 
   const handleRowClick = useCallback((params) => {
-    console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
@@ -310,12 +309,11 @@ const Customer = () => {
     }
     try {
       await axios.post('http://localhost:8081/customers', book);
-      console.log(book);
       handleCancel();
       setSuccess(true);
       setSuccessMessage("Successfully Added");
-    } catch (error) {
-      console.error('Error updating customer:', error);
+    } catch {
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -324,10 +322,8 @@ const Customer = () => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-        console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/customers');
         const data = response.data;
-        // setRows(data);
         if (data.length > 0) {
           setRows(data);
           setSuccess(true);
@@ -338,31 +334,24 @@ const Customer = () => {
           setErrorMessage("No data found");
         }
       } else if (actionName === 'Cancel') {
-        console.log('Cancel button clicked');
         handleCancel();
       } else if (actionName === 'Delete') {
-        console.log('Delete button clicked');
         await axios.delete(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`);
-        console.log('Customer deleted');
         setSelectedCustomerData(null);
         handleCancel();
       } else if (actionName === 'Edit') {
-        console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.customerId === customerId);
         const updatedCustomer = {
           ...selectedCustomer,
           ...selectedCustomerData,
           date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
         };
-        console.log('customer page updated data', updatedCustomer);
         await axios.put(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
-        console.log('Customer updated');
         handleCancel();
       } else if (actionName === 'Add') {
         handleAdd();
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       setError(true);
       setErrorMessage("Check Network connection");
     }

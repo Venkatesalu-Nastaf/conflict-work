@@ -319,15 +319,15 @@ const PaymentDetail = () => {
           <div className='amount-calculator'>
             <div className='total-inputs' >
               <label htmlFor="">Total Amount:</label>
-              <input type="number" value={totalAmount} />
+              <input type="number" value={totalAmount} readOnly />
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Paid Amount:</label>
-              <input type="number" value={paidAmount} />
+              <input type="number" value={paidAmount} readOnly />
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Pending Amount:</label>
-              <input type="number" value={pendingAmount} />
+              <input type="number" value={pendingAmount} readOnly />
             </div>
           </div>
         </div>

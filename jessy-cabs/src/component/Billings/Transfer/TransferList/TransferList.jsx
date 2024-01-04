@@ -27,6 +27,8 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
 const TransferList = () => {
+    const [selectedStatus, setSelectedStatus] = useState('');
+    const [selectedBranch, setSelectedBranch] = useState('');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState({});
@@ -213,8 +215,8 @@ const TransferList = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faNewspaper} size="xl" />
                                     </div>
-                                    <select name="status" className='input-select'>
-                                        <option value="" disabled selected>Status</option>
+                                    <select name="status" className='input-select' value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
+                                        <option value="" disabled>Select Status</option>
                                         <option value="all">All</option>
                                         <option value="billed">Billed</option>
                                         <option value="notbilled">Not Billed</option>
@@ -226,8 +228,8 @@ const TransferList = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />
                                     </div>
-                                    <select name="branch" className="input-select">
-                                        <option value="" disabled selected>Select a city</option>
+                                    <select name="branch" className="input-select" value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)}>
+                                        <option value="" disabled>Select a city</option>
                                         <option value="Chennai">Chennai</option>
                                         <option value="Bangalore">Bangalore</option>
                                         <option value="Hyderabad">Hyderabad</option>

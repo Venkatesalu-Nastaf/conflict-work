@@ -45,6 +45,7 @@ const CoveringSubmit = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [customer, setCustomer] = useState("");
     const [bankOptions, setBankOptions] = useState([]);
+    const [selectedBranch, setSelectedBranch] = useState('');
 
     const hidePopup = () => {
         setError(false);
@@ -122,11 +123,11 @@ const CoveringSubmit = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />
                                     </div>
-                                    <select name="branch" className="input-select">
-                                        <option value="" disabled selected>Select a city</option>
-                                        <option value="all">Chennai</option>
-                                        <option value="billed">Bangalore</option>
-                                        <option value="notbilled">Hyderabad</option>
+                                    <select name="branch" className="input-select" value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)}>
+                                        <option value="" disabled>Select a city</option>
+                                        <option value="Chennai">Chennai</option>
+                                        <option value="Bangalore">Bangalore</option>
+                                        <option value="Hyderabad">Hyderabad</option>
                                     </select>
                                 </div>
                                 <div className="input" style={{ width: "140px" }}>

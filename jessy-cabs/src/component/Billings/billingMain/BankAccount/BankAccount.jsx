@@ -273,15 +273,15 @@ const BankAccount = () => {
           <div className='amount-calculate'>
             <div className='total-inputs' >
               <label htmlFor="">Total Capital:</label>
-              <input type="number" value={totalcapital} />
+              <input type="number" value={totalcapital} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountIN`} >
               <label htmlFor="">Total-In:</label>
-              <input type="number" value={totalIn} />
+              <input type="number" value={totalIn} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountOUT`} >
               <label htmlFor="">Total-Out:</label>
-              <input type="number" value={totalOut} />
+              <input type="number" value={totalOut} readOnly />
             </div>
           </div>
         </div>

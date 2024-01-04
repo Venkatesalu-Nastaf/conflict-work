@@ -1,7 +1,7 @@
 /* global google */
 
 import React, { useEffect, useState } from 'react';
-import './googleMapScript'; // Import your JavaScript file
+import './googleMapScript';
 import PlacesAutocomplete from 'react-places-autocomplete';
 
 const MapComponent = () => {

@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./GroupBilling.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import ClearIcon from '@mui/icons-material/Clear';
 import MenuItem from '@mui/material/MenuItem';
+import { Autocomplete } from "@mui/material";
 import { Menu, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
@@ -38,6 +41,45 @@ const columns = [
 
 const GroupBilling = () => {
     const [rows] = useState([]);
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState({});
+    const [customer, setCustomer] = useState("");
+    const [bankOptions, setBankOptions] = useState([]);
+    const [selectedBranch, setSelectedBranch] = useState('');
+
+    const hidePopup = () => {
+        setError(false);
+    };
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [error]);
+
+    const handleInputChange = (event, newValue) => {
+        if (event.target.name === 'customer') {
+            setCustomer(newValue ? newValue.label : '');
+        }
+    };
+
+    useEffect(() => {
+        Organization()
+            .then((data) => {
+                if (data) {
+                    setBankOptions(data);
+                } else {
+                    setError(true);
+                    setErrorMessage('Failed to fetch organization options.');
+                }
+            })
+            .catch(() => {
+                setError(true);
+                setErrorMessage('Failed to fetch organization options.');
+            });
+    }, []);
 
     return (
         <div className="GroupBilling-form Scroll-Style-hide">
@@ -62,12 +104,19 @@ const GroupBilling = () => {
                                     <div className="icone">
                                         <HailOutlinedIcon color="action" />
                                     </div>
-                                    <TextField
+                                    <Autocomplete
+                                        fullWidth
+                                        id="free-solo-demo"
+                                        freeSolo
                                         size="small"
-                                        id="id"
-                                        label="Organization"
-                                        name="organization"
-                                        autoComplete='off'
+                                        value={customer}
+                                        options={bankOptions}
+                                        onChange={(event, value) => handleInputChange(event, value)}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField {...params} label="Organization" inputRef={params.inputRef} />
+                                            );
+                                        }}
                                     />
                                 </div>
                                 <div className="input">
@@ -95,11 +144,11 @@ const GroupBilling = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />
                                     </div>
-                                    <select name="branch" className="input-select">
-                                        <option value="" disabled selected>Select a city</option>
-                                        <option value="all">Chennai</option>
-                                        <option value="billed">Bangalore</option>
-                                        <option value="notbilled">Hyderabad</option>
+                                    <select name="branch" className="input-select" value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)}>
+                                        <option value="" disabled>Select a city</option>
+                                        <option value="Chennai">Chennai</option>
+                                        <option value="Bangalore">Bangalore</option>
+                                        <option value="Hyderabad">Hyderabad</option>
                                     </select>
                                 </div>
                             </div>
@@ -146,6 +195,13 @@ const GroupBilling = () => {
                             checkboxSelection
                         />
                     </div>
+                    {error &&
+                        <div className='alert-popup Error' >
+                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{errorMessage}</p>
+                        </div>
+                    }
                 </div>
             </form>
         </div>

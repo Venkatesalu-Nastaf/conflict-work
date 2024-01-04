@@ -41,6 +41,7 @@ const TransferReport = () => {
   const [pbpopupOpen, setpbPopupOpen] = useState(false);
   const [npopupOpen, setnPopupOpen] = useState(false);
   const [lxpopupOpen, setlxPopupOpen] = useState(false);
+  const [selectedBranch, setSelectedBranch] = useState('');
   const [info, setInfo] = useState(false);
   const [warning, setWarning] = useState(false);
   const [tripData, setTripData] = useState('');
@@ -162,6 +163,8 @@ const TransferReport = () => {
         } else {
         }
       } catch {
+        setError(true);
+        setErrorMessage("something went wrong.");
       }
     };
     fetchData();
@@ -348,11 +351,11 @@ const TransferReport = () => {
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuilding} size="xl" />
                   </div>
-                  <select name="branch" className="input-select">
-                    <option value="" disabled selected>Select a city</option>
-                    <option value="all">Chennai</option>
-                    <option value="billed">Bangalore</option>
-                    <option value="notbilled">Hyderabad</option>
+                  <select name="branch" className="input-select" value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)}>
+                    <option value="" disabled>Select a city</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Bangalore">Bangalore</option>
+                    <option value="Hyderabad">Hyderabad</option>
                   </select>
                 </div>
                 <div className="input" style={{ width: "100px" }}>
@@ -449,8 +452,8 @@ const TransferReport = () => {
           </div>
           <div className="tripsheet-table-transferReport">
             <div className="TransferReport-Box">
-              <div class="booking-update">
-                <div class="Scroll-Style" style={{ overflow: 'scroll', height: 300, width: "100%" }}>
+              <div className="booking-update">
+                <div className="Scroll-Style" style={{ overflow: 'scroll', height: 300, width: "100%" }}>
                   <table>
                     <thead id="update-header">
                       <tr>

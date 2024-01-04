@@ -65,6 +65,7 @@ const TransferDataEntry = () => {
   const [bankOptions, setBankOptions] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  const [selectedBranch, setSelectedBranch] = useState('');
 
   const convertToCSV = (data) => {
     const header = columns.map((column) => column.headerName).join(",");
@@ -227,6 +228,23 @@ const TransferDataEntry = () => {
     window.history.replaceState(null, document.title, window.location.pathname);
   }, []);
 
+  const [book, setBook] = useState({
+    tripid: '',
+    invoiceno: '',
+    Search: '',
+    emptyfield: '',
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: value,
+    }));
+  };
+
+
+
   const handleRowSelection = (newSelectionModel) => {
     const selectedTripIds = newSelectionModel
       .filter((selectedId) => selectedId !== null)
@@ -333,6 +351,8 @@ const TransferDataEntry = () => {
                       id="id"
                       label="Group Trip ID"
                       name="tripid"
+                      value={book.tripid || ''}
+                      onChange={handleChange}
                       autoComplete='off'
                     />
                   </div>
@@ -359,6 +379,8 @@ const TransferDataEntry = () => {
                       id="id"
                       label="Invoice No"
                       name="invoiceno"
+                      value={book.invoiceno || ''}
+                      onChange={handleChange}
                       autoComplete='off'
                     />
                   </div>
@@ -421,7 +443,9 @@ const TransferDataEntry = () => {
                       size="small"
                       id="id"
                       label="Search"
-                      name="invoiceno"
+                      name="Search"
+                      value={book.Search || ''}
+                      onChange={handleChange}
                       autoComplete='off'
                     />
                   </div>
@@ -429,6 +453,9 @@ const TransferDataEntry = () => {
                     <TextField
                       size="small"
                       id="id"
+                      name='emptyfield'
+                      value={book.emptyfield || ''}
+                      onChange={handleChange}
                       label=""
                       autoComplete='off'
                     />
@@ -437,11 +464,11 @@ const TransferDataEntry = () => {
                     <div className="icone">
                       <FontAwesomeIcon icon={faBuilding} size="xl" />
                     </div>
-                    <select name="branch" className="input-select">
-                      <option value="" disabled selected>Select a city</option>
-                      <option value="all">Chennai</option>
-                      <option value="billed">Bangalore</option>
-                      <option value="notbilled">Hyderabad</option>
+                    <select name="branch" className="input-select" value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)}>
+                      <option value="" disabled>Select a city</option>
+                      <option value="Chennai">Chennai</option>
+                      <option value="Bangalore">Bangalore</option>
+                      <option value="Hyderabad">Hyderabad</option>
                     </select>
                   </div>
                 </div>
@@ -464,8 +491,8 @@ const TransferDataEntry = () => {
             </div>
             <div className='container-right-box'>
               <div className="TransferDataEntry-Box">
-                <div class="booking-update">
-                  <div class="Scroll-Style" style={{ overflow: 'scroll', height: '220px', width: '260px' }}>
+                <div className="booking-update">
+                  <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px', width: '260px' }}>
                     <table>
                       <thead id="update-header">
                         <tr>
@@ -475,7 +502,7 @@ const TransferDataEntry = () => {
                       </thead>
                       <tbody>
                         <tr>
-                          <td colspan="6">No data available.</td>
+                          <td colSpan="6">No data available.</td>
                         </tr>
                       </tbody>
                     </table>
@@ -518,15 +545,15 @@ const TransferDataEntry = () => {
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Total Kms:</label>
-              <input type="number" />
+              <input type="number" readOnly />
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Total Hours:</label>
-              <input type="number" />
+              <input type="number" readOnly />
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Amount:</label>
-              <input type="number" value={totalAmount} />
+              <input type="number" value={totalAmount} readOnly />
             </div>
           </div>
         </div>

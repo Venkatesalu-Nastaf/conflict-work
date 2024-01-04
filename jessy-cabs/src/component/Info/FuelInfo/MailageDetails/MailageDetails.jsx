@@ -299,6 +299,7 @@ const MailageDetails = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Fill Date"
+                      format="DD/MM/YYYY"
                       defaultValue={dayjs()}
                       value={formData.filldate || selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null}
                       onChange={(date) => handleDateChange(date, 'filldate')}
@@ -313,6 +314,7 @@ const MailageDetails = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Empty Date"
+                      format="DD/MM/YYYY"
                       defaultValue={dayjs()}
                       value={formData.emptydate || selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null}
                       onChange={(date) => handleDateChange(date, 'emptydate')}

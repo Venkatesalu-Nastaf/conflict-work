@@ -437,6 +437,7 @@ const Customer = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
+                    format="DD/MM/YYYY"
                     value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
                     onChange={handleDateChange}
                   >

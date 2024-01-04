@@ -127,6 +127,7 @@ const BackUp = () => {
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Start Date">
                                     <DatePicker
+                                        format="DD/MM/YYYY"
                                         defaultValue={today}
                                         minDate={tomorrow}
                                         views={["year", "month", "day"]}
@@ -138,6 +139,7 @@ const BackUp = () => {
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="END Date">
                                     <DatePicker
+                                        format="DD/MM/YYYY"
                                         defaultValue={today}
                                         minDate={tomorrow}
                                         views={["year", "month", "day"]}

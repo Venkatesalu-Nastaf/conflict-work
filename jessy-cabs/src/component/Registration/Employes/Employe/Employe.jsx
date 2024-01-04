@@ -412,7 +412,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empemailid || book.empemailid}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -427,7 +426,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empmobile || book.empmobile}
                                     onChange={handleChange}
-
                                 />
                             </div>
                         </div>
@@ -444,13 +442,13 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.jobroll || book.jobroll}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" >
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Joining Date"
+                                        format="DD/MM/YYYY"
                                         value={formData.joiningdate || selectedCustomerData.joiningdate ? dayjs(selectedCustomerData.joiningdate) : null}
                                         onChange={(date) => handleDateChange(date, 'joiningdate')}
                                     >
@@ -472,7 +470,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.gender || book.gender}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -487,7 +484,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.bloodgroup || book.bloodgroup}
                                     onChange={handleChange}
-
                                 />
                             </div>
                         </div>
@@ -520,7 +516,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.aadharcard || book.aadharcard}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -535,7 +530,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.pancard || book.pancard}
                                     onChange={handleChange}
-
                                 />
                             </div>
                         </div>
@@ -567,7 +561,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.guardian || book.guardian}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -582,7 +575,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.fixedsalary || book.fixedsalary}
                                     onChange={handleChange}
-
                                 />
                             </div>
                         </div>
@@ -599,7 +591,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.uanid || book.uanid}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "260px" }}>
@@ -614,7 +605,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.esino || book.esino}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "250px" }}>
@@ -629,18 +619,9 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.licenceno || book.licenceno}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "20px" }}>
-                                {/* <IconButton color="primary" size="larger">
-                                    <UploadFileIcon />
-                                    <button
-                                        type="file"
-                                        style={{ display: "none" }}
-                                        onClick={handleUpload}
-                                    />
-                                </IconButton> */}
                                 <Button color="primary" onClick={() => handleUpload('LicenseCopy')} size="md" >
                                     <UploadFileIcon />
                                 </Button>

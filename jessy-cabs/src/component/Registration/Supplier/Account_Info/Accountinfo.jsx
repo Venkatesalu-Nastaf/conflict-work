@@ -270,7 +270,7 @@ const Accuntinfo = () => {
   };
 
   const handleRowClick = useCallback((params) => {
-       const customerData = params.row;
+    const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.accountNo);
   }, []);
@@ -278,12 +278,12 @@ const Accuntinfo = () => {
   const handleAdd = async () => {
 
     try {
-          await axios.post('http://localhost:8081/accountinfo', book);
-         handleCancel();
+      await axios.post('http://localhost:8081/accountinfo', book);
+      handleCancel();
       setSuccess(true);
       setSuccessMessage("Successfully Added");
-    } catch{
-        setError(true);
+    } catch {
+      setError(true);
       setErrorMessage("Check your Network Connection");
     }
   };
@@ -293,7 +293,7 @@ const Accuntinfo = () => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-              const response = await axios.get('http://localhost:8081/accountinfo');
+        const response = await axios.get('http://localhost:8081/accountinfo');
         const data = response.data;
         if (data.length > 0) {
           setRows(data);
@@ -306,18 +306,18 @@ const Accuntinfo = () => {
         }
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
-             handleCancel();
+        handleCancel();
       } else if (actionName === 'Delete') {
-            await axios.delete(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
-             setSelectedCustomerData(null);
+        await axios.delete(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
+        setSelectedCustomerData(null);
         setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
       } else if (actionName === 'Edit') {
-                   const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+        const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
-              setSuccess(true);
+        setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
       } else if (actionName === 'Add') {
@@ -362,6 +362,7 @@ const Accuntinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
+                    format="DD/MM/YYYY"
                     value={selectedCustomerData.Accdate ? dayjs(selectedCustomerData.Accdate) : null}
                     onChange={(date) => handleDateChange(date, 'Accdate')}
                   >

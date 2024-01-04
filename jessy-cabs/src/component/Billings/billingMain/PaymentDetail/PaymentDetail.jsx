@@ -126,20 +126,17 @@ const PaymentDetail = () => {
     }
   }, [success]);
 
-  const handleInputChange = (event, newValue) => {
+  const handleInputChange = (event) => {
     if (event.target.name === 'customer') {
-      setCustomer(newValue ? newValue.label : '');
+      setCustomer(event.target.value);
     } else if (event.target.name === 'billingno') {
       setBillingNo(event.target.value);
     }
   };
-
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:8081/payment-details?billingno=${billingno}&customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
-      console.log('selected billing data', response.params);
       const data = response.data;
-      console.log('collected billing data', data);
       if (data.length > 0) {
         setRows(data);
         setSuccess(true);
@@ -149,8 +146,7 @@ const PaymentDetail = () => {
         setError(true);
         setErrorMessage("No data found");
       }
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+    } catch {
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");
@@ -161,7 +157,6 @@ const PaymentDetail = () => {
     Organization()
       .then((data) => {
         if (data) {
-          console.log('organization name', data);
           setBankOptions(data);
         } else {
           setError(true);
@@ -177,7 +172,6 @@ const PaymentDetail = () => {
   //calculate total amount in column
   useEffect(() => {
     const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.Totalamount || 0), 0);
-    console.log('calculatedTotalAmount', calculatedTotalAmount);
     if (!isNaN(calculatedTotalAmount)) {
       setTotalAmount(calculatedTotalAmount.toFixed(2));
     } else {
@@ -188,7 +182,6 @@ const PaymentDetail = () => {
   //calculate paid amount in column
   useEffect(() => {
     const calculatedPaidAmount = rows.reduce((total, row) => total + parseFloat(row.paidamount || 0), 0);
-    console.log('calculatedTotalAmount', calculatedPaidAmount);
     if (!isNaN(calculatedPaidAmount)) {
       setPaidAmount(calculatedPaidAmount.toFixed(2));
     } else {
@@ -199,7 +192,6 @@ const PaymentDetail = () => {
   //calculate pending amount in column
   useEffect(() => {
     const calculatedPendingAmount = rows.reduce((total, row) => total + parseFloat(row.pendingamount || 0), 0);
-    console.log('calculatedTotalAmount', calculatedPendingAmount);
     if (!isNaN(calculatedPendingAmount)) {
       setPendingAmount(calculatedPendingAmount.toFixed(2));
     } else {
@@ -231,7 +223,7 @@ const PaymentDetail = () => {
                     label="Billing No"
                     name="billingno"
                     value={billingno || ''}
-                    onChange={(event, value) => handleInputChange(event, value)}
+                    onChange={handleInputChange}
                     autoComplete='off'
                   />
                 </div>
@@ -246,7 +238,7 @@ const PaymentDetail = () => {
                     size="small"
                     value={customer}
                     options={bankOptions}
-                    onChange={(event, value) => handleInputChange(event, value)}
+                    onChange={handleInputChange}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Organization" inputRef={params.inputRef} />

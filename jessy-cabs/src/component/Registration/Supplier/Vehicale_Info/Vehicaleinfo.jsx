@@ -385,6 +385,7 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Attached Date"
+                    format="DD/MM/YYYY"
                     value={selectedCustomerData.doadate ? dayjs(selectedCustomerData.doadate) : null}
                     onChange={(date) => handleDateChange(date, 'doadate')}
                   >
@@ -509,6 +510,7 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Insurance Due Date"
+                    format="DD/MM/YYYY"
                     value={selectedCustomerData.insduedate ? dayjs(selectedCustomerData.insduedate) : null}
                     onChange={(date) => handleDateChange(date, 'insduedate')}
                   >
@@ -557,6 +559,7 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="License Due Date"
+                    format="DD/MM/YYYY"
                     value={selectedCustomerData.licduedate ? dayjs(selectedCustomerData.licduedate) : null}
                     onChange={(date) => handleDateChange(date, 'licduedate')}
                   >
@@ -591,6 +594,7 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="National Permit Date"
+                    format="DD/MM/YYYY"
                     value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
                     onChange={(date) => handleDateChange(date, 'npdate')}
                   >
@@ -638,6 +642,7 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="State Permit Date"
+                    format="DD/MM/YYYY"
                     value={selectedCustomerData.spdate ? dayjs(selectedCustomerData.spdate) : null}
                     onChange={(date) => handleDateChange(date, 'spdate')}
                   >
@@ -685,6 +690,7 @@ const Vehicaleinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="FC Date"
+                    format="DD/MM/YYYY"
                     value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
                     onChange={(date) => handleDateChange(date, 'fcdate')}
                   >
@@ -877,6 +883,7 @@ const Vehicaleinfo = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="From Date"
+                      format="DD/MM/YYYY"
                       name='fromDate'
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
@@ -887,6 +894,7 @@ const Vehicaleinfo = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="To Date"
+                      format="DD/MM/YYYY"
                       name="toDate"
                       value={toDate}
                       onChange={(date) => setToDate(date)}

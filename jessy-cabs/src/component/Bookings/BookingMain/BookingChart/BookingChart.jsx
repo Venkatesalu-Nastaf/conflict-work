@@ -149,6 +149,7 @@ const BookingChart = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="From Date"
+                      format="DD/MM/YYYY"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
@@ -158,6 +159,7 @@ const BookingChart = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="To Date"
+                      format="DD/MM/YYYY"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />

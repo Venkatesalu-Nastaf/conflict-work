@@ -271,6 +271,7 @@ const TaxSetting = () => {
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Date Tax From">
                                     <DatePicker
+                                        format="DD/MM/YYYY"
                                         value={formData.DateTaxFrom || selectedCustomerData.DateTaxFrom ? dayjs(selectedCustomerData.DateTaxFrom) : null}
                                         onChange={(date) => handleDateChange(date, 'DateTaxFrom')}
                                     >
@@ -285,6 +286,7 @@ const TaxSetting = () => {
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Date Tax To">
                                     <DatePicker
+                                        format="DD/MM/YYYY"
                                         value={formData.DateTaxTo || selectedCustomerData.DateTaxTo ? dayjs(selectedCustomerData.DateTaxTo) : null}
                                         onChange={(date) => handleDateChange(date, 'DateTaxTo')}
                                     >

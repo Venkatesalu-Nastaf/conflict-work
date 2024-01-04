@@ -277,6 +277,7 @@ const Ratevalidity = () => {
                                         {/* <DemoItem label="From Date"> */}
                                         <DatePicker
                                             label='From Date'
+                                            format="DD/MM/YYYY"
                                             defaultValue={dayjs()}
                                             value={formData.fromdate || selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
                                             onChange={(date) => handleDateChange(date, 'fromdate')}
@@ -292,6 +293,7 @@ const Ratevalidity = () => {
                                         {/* <DemoItem label="To Date"> */}
                                         <DatePicker
                                             label='To Date'
+                                            format="DD/MM/YYYY"
                                             defaultValue={dayjs()}
                                             value={formData.todate || selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
                                             onChange={(date) => handleDateChange(date, 'todate')}

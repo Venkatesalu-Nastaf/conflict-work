@@ -16,7 +16,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
-
+import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 
 // ICONS
 import { faBuilding, faNewspaper } from '@fortawesome/free-solid-svg-icons';
@@ -28,7 +28,6 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 
 const TransferList = () => {
     const [selectedStatus, setSelectedStatus] = useState('');
-    const [selectedBranch, setSelectedBranch] = useState('');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState({});
@@ -38,6 +37,7 @@ const TransferList = () => {
     const [toDate, setToDate] = useState(dayjs());
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
+    const [servicestation, setServiceStation] = useState("");
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -95,6 +95,10 @@ const TransferList = () => {
         }
     }, [success]);
 
+    const handleserviceInputChange = (event, newValue) => {
+        setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
+    };
+
     useEffect(() => {
         Organization()
             .then((data) => {
@@ -113,7 +117,15 @@ const TransferList = () => {
 
     const handleShow = useCallback(async () => {
         try {
-            const response = await axios.get(`http://localhost:8081/payment-detail?customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+            const response = await axios.get(`http://localhost:8081/payment-detail`, {
+                params: {
+                    customer: encodeURIComponent(customer),
+                    fromDate: fromDate.format('YYYY-MM-DD'),
+                    toDate: toDate.format('YYYY-MM-DD'),
+                    servicestation: encodeURIComponent(servicestation),
+                },
+            });
+
             const data = response.data;
 
             if (data.length > 0) {
@@ -125,7 +137,6 @@ const TransferList = () => {
                     amount: row.total_Amount,
                     grossamount: row.total_Amount,
                     guestname: row.customer,
-
                 }));
                 setRows(rowsWithUniqueId);
                 setSuccess(true);
@@ -140,7 +151,7 @@ const TransferList = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-    }, [customer, fromDate, toDate]);
+    }, [customer, fromDate, toDate, servicestation]);
 
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -163,8 +174,14 @@ const TransferList = () => {
     ];
 
     const handleButtonClickTripsheet = (row) => {
-        const encodedCustomer = encodeURIComponent(row.customer);
+        const customername = encodeURIComponent(row.customer);
+        const encodedCustomer = customername;
+        console.log(encodedCustomer);
         localStorage.setItem('selectedcustomer', encodedCustomer);
+        const storedCustomer = localStorage.getItem('selectedcustomer');
+        const decodedCustomer = decodeURIComponent(storedCustomer);
+        localStorage.setItem('selectedcustomer', decodedCustomer);
+        console.log(decodedCustomer);
         const billingPageUrl = `/home/billing/transfer?tab=dataentry`;
         window.location.href = billingPageUrl;
     }
@@ -190,7 +207,7 @@ const TransferList = () => {
                                         onChange={(event, value) => setCustomer(value)}
                                         renderInput={(params) => {
                                             return (
-                                                <TextField {...params} label="Organization" name="customer" inputRef={params.inputRef} />
+                                                <TextField {...params} label="Organization" inputRef={params.inputRef} />
                                             );
                                         }}
                                     />
@@ -228,12 +245,22 @@ const TransferList = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />
                                     </div>
-                                    <select name="branch" className="input-select" value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)}>
-                                        <option value="" disabled>Select a city</option>
-                                        <option value="Chennai">Chennai</option>
-                                        <option value="Bangalore">Bangalore</option>
-                                        <option value="Hyderabad">Hyderabad</option>
-                                    </select>
+                                    <Autocomplete
+                                        fullWidth
+                                        id="free-solo-demo"
+                                        freeSolo
+                                        size="small"
+                                        value={servicestation}
+                                        options={Stations.map((option) => ({
+                                            label: option.optionvalue,
+                                        }))}
+                                        onChange={(event, value) => handleserviceInputChange(event, value)}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                                            );
+                                        }}
+                                    />
                                 </div>
                                 <div className="input" style={{ width: "140px" }}>
                                     <Button variant="contained" onClick={handleShow}>Search</Button>
@@ -266,6 +293,7 @@ const TransferList = () => {
                             pageSize={5}
                             checkboxSelection
                             getRowId={(row) => row.id}
+                            disableRowSelectionOnClick
                         />
                     </div>
                 </div>

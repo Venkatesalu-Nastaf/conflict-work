@@ -94,4 +94,46 @@ router.get('/routedata/:tripid', (req, res) => {
   });
 });
 
+//cover billing
+router.get('/Group-Billing', (req, res) => {
+  const { invoiceno, customer, fromDate, toDate, servicestation } = req.query;
+
+  console.log('Received parameters:', invoiceno, customer, fromDate, toDate, servicestation);
+
+  let query = 'SELECT * FROM tripsheet WHERE status = "Closed"';
+  let params = [];
+
+  if (invoiceno) {
+    query += ' AND invoiceno = ?';
+    params.push(invoiceno);
+  }
+
+  if (customer) {
+    const decodedCustomer = decodeURIComponent(customer);
+    query += ' AND customer = ?';
+    params.push(decodedCustomer);
+  }
+
+  if (fromDate && toDate) {
+    query += ' AND startdate BETWEEN ? AND ?';
+    params.push(fromDate);
+    params.push(toDate);
+  }
+
+  if (servicestation) {
+    query += ' AND department = ?';
+    params.push(servicestation);
+  }
+
+  console.log('Generated SQL query:', query);
+  console.log('SQL query parameters:', params);
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.error('Error executing database query', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
+  });
+});
 module.exports = router;

@@ -3,48 +3,48 @@ const router = express.Router();
 const db = require('../../../db');
 
 router.get('/payment-detail', (req, res) => {
-  const { customer, fromDate, toDate } = req.query;
+  const { customer, fromDate, toDate, servicestation } = req.query;
 
-  // Your MySQL query
-  let sql = `
-      SELECT
-          customer,
-          COUNT(tripid) as trip_count,
-          SUM(toll) as total_toll,
-          SUM(netamount) as total_Amount
-      FROM
-          tripsheet
-  `;
+  console.log('Received parameters:', customer, fromDate, toDate, servicestation);
+
+  let query = 'SELECT customer, COUNT(tripid) as trip_count, SUM(toll) as total_toll, SUM(netamount) as total_Amount, department FROM tripsheet WHERE 1=1';
   let params = [];
 
-  // If the customer parameter is provided, add it to the query
   if (customer) {
-    sql += ' WHERE customer = ?';
-    params.push(customer);
+    const decodedCustomer = decodeURIComponent(customer);
+    query += ' AND customer = ?';
+    params.push(decodedCustomer);
   }
 
   if (fromDate && toDate) {
-    sql += (customer ? ' AND' : ' WHERE') + ' startdate >= ? AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+    query += ' AND startdate BETWEEN ? AND ?';
     params.push(fromDate);
     params.push(toDate);
   }
 
-  sql += ' GROUP BY customer'; // Group by customer to get unique customer names
+  if (servicestation) {
+    query += ' AND department = ?';
+    params.push(servicestation);
+  }
 
-  db.query(sql, params, (err, results) => {
+  console.log('Generated SQL query:', query);
+  console.log('SQL query parameters:', params);
+
+  db.query(query, params, (err, result) => {
     if (err) {
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      res.json(results);
+      console.error('Error executing database query', err);
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
+    return res.status(200).json(result);
   });
 });
 
 router.get('/tripsheetcustomertripid/:customer/:tripid', (req, res) => {
   const customer = req.params.customer;
   const tripid = req.params.tripid.split(',');
+  const decodedCustomer = decodeURIComponent(customer);
   // Use placeholders in the query to prevent SQL injection
-  db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?)', [customer, tripid], (err, result) => {
+  db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?)', [decodedCustomer, tripid], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
     }
@@ -64,7 +64,7 @@ router.get('/tripsheetcustomer/:customer', (req, res) => {
     if (result.length === 0) {
       return res.status(404).json({ error: 'Tripsheet not found' });
     }
-    return res.status(200).json(result); // Return all rows for the specified customer
+    return res.status(200).json(result);
   });
 });
 

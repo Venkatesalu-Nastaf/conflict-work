@@ -7,6 +7,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import dayjs from "dayjs";
 import MenuItem from '@mui/material/MenuItem';
 import { Checkbox, FormControlLabel, Menu, TextField } from "@mui/material";
+import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -65,7 +66,8 @@ const TransferDataEntry = () => {
   const [bankOptions, setBankOptions] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [selectedBranch, setSelectedBranch] = useState('');
+  const [invoiceno, setInvoiceNo] = useState("");
+  const [servicestation, setServiceStation] = useState("");
 
   const convertToCSV = (data) => {
     const header = columns.map((column) => column.headerName).join(",");
@@ -166,28 +168,36 @@ const TransferDataEntry = () => {
     };
   };
 
-  const handleKeyDown = useCallback(async (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      try {
-        const customerValue = customer || tripData.customer || '';
-        const response = await axios.get(`http://localhost:8081/tripsheetcustomer/${customerValue}`);
-        const data = response.data;
-        if (data.length > 0) {
-          setRows(data);
-          setSuccess(true);
-          setSuccessMessage("Successfully listed");
-        } else {
-          setRows([]);
-          setError(true);
-          setErrorMessage("No data found");
-        }
-      } catch (error) {
+  const handleShow = useCallback(async () => {
+    try {
+      console.log('Selected values:', { invoiceno, customer, fromDate: fromDate.format('DD/MM/YYYY'), toDate: toDate.format('DD/MM/YYYY'), servicestation, });
+      const response = await axios.get(`http://localhost:8081/Group-Billing`, {
+        params: {
+          invoiceno,
+          customer: encodeURIComponent(customer),
+          fromDate: fromDate.format('YYYY-MM-DD'),
+          toDate: toDate.format('YYYY-MM-DD'),
+          servicestation: encodeURIComponent(servicestation),
+        },
+      });
+
+      const data = response.data;
+
+      if (data.length > 0) {
+        setRows(data);
+        setSuccess(true);
+        setSuccessMessage("Successfully listed")
+      } else {
+        setRows([]);
         setError(true);
-        setErrorMessage('Error retrieving booking details.');
+        setErrorMessage("No data found");
       }
+    } catch (error) {
+      setRows([]);
+      setError(true);
+      setErrorMessage("Check your Network Connection");
     }
-  }, [customer, tripData]);
+  }, [invoiceno, customer, fromDate, toDate, servicestation]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -243,7 +253,28 @@ const TransferDataEntry = () => {
     }));
   };
 
+  const handleInputChange = (event, newValue) => {
+    if (event.target.name === 'customer') {
+      setInvoiceNo(newValue ? newValue.label : '');
+    }
+  };
 
+  const handleserviceInputChange = (event, newValue) => {
+    setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
+  };
+
+  // const handleRowSelection = (newSelectionModel) => {
+  //   const selectedTripIds = newSelectionModel
+  //     .filter((selectedId) => selectedId !== null)
+  //     .map((selectedId) => {
+  //       const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+  //       return selectedRow ? selectedRow.tripid : null;
+  //     })
+  //     .filter((tripid) => tripid !== null);
+  //   setRowSelectionModel(selectedTripIds);
+  //   const tripsheetid = selectedTripIds;
+  //   localStorage.setItem('selectedtripsheetid', tripsheetid);
+  // };
 
   const handleRowSelection = (newSelectionModel) => {
     const selectedTripIds = newSelectionModel
@@ -253,10 +284,12 @@ const TransferDataEntry = () => {
         return selectedRow ? selectedRow.tripid : null;
       })
       .filter((tripid) => tripid !== null);
+
     setRowSelectionModel(selectedTripIds);
-    // const tripids = selectedRows.map(row => row.tripid).join(',');
     const tripsheetid = selectedTripIds;
     localStorage.setItem('selectedtripsheetid', tripsheetid);
+
+    console.log('Selected Trip IDs:', selectedTripIds);
   };
 
   const handleClickGenerateBill = () => {
@@ -265,8 +298,14 @@ const TransferDataEntry = () => {
   };
 
   const handleButtonClickTripsheet = (row) => {
-    const customername = tripData.customer || localStorage.getItem('selectedcustomer');
+    const customerdata = encodeURIComponent(customer || tripData.customer || localStorage.getItem('selectedcustomer'));
+    const customername = customerdata;
+    console.log('customer name', customername);
     localStorage.setItem('selectedcustomer', customername);
+    const storedCustomer = localStorage.getItem('selectedcustomer');
+    const decodedCustomer = decodeURIComponent(storedCustomer);
+    localStorage.setItem('selectedcustomerdata', decodedCustomer);
+    console.log(decodedCustomer);
     const billingPageUrl = `/home/billing/transfer?tab=TransferReport`;
     window.location.href = billingPageUrl;
   }
@@ -277,15 +316,19 @@ const TransferDataEntry = () => {
       setErrorMessage('Please select rows before generating the bill.');
       return;
     }
+
     try {
       const tripids = rowSelectionModel;
-      if (tripids.some((tripid) => tripid == null)) {
+
+      if (tripids.some((tripid) => tripid === null || tripid === undefined)) {
         setError(true);
         setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
         return;
       }
+
       const response = await axios.post('http://localhost:8081/updateStatus', {
-        tripids: tripids,
+
+        tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),
         status: 'CBilled',
       });
 
@@ -359,12 +402,16 @@ const TransferDataEntry = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
-                        label="Date"
+                        label="From Date"
                         format="DD/MM/YYYY"
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
                       />
                       <DatePicker
-                        label="Bill Date"
+                        label="To Date"
                         format="DD/MM/YYYY"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
                       />
                     </DemoContainer>
                   </LocalizationProvider>
@@ -379,8 +426,8 @@ const TransferDataEntry = () => {
                       id="id"
                       label="Invoice No"
                       name="invoiceno"
-                      value={book.invoiceno || ''}
-                      onChange={handleChange}
+                      value={invoiceno || ''}
+                      onChange={handleInputChange}
                       autoComplete='off'
                     />
                   </div>
@@ -396,10 +443,9 @@ const TransferDataEntry = () => {
                       value={customer || (tripData.length > 0 ? tripData[0].customer : '')}
                       options={bankOptions}
                       onChange={(event, value) => setCustomer(value)}
-                      onKeyDown={handleKeyDown}
                       renderInput={(params) => {
                         return (
-                          <TextField {...params} label="Organization" name="customer" inputRef={params.inputRef} />
+                          <TextField {...params} label="Organization" inputRef={params.inputRef} />
                         );
                       }}
                     />
@@ -431,7 +477,7 @@ const TransferDataEntry = () => {
                     </LocalizationProvider>
                   </div>
                   <div className="input">
-                    <Button variant="contained">Select</Button>
+                    <Button variant="contained" onClick={handleShow}>List</Button>
                   </div>
                 </div>
                 <div className="input-field" >
@@ -464,12 +510,22 @@ const TransferDataEntry = () => {
                     <div className="icone">
                       <FontAwesomeIcon icon={faBuilding} size="xl" />
                     </div>
-                    <select name="branch" className="input-select" value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)}>
-                      <option value="" disabled>Select a city</option>
-                      <option value="Chennai">Chennai</option>
-                      <option value="Bangalore">Bangalore</option>
-                      <option value="Hyderabad">Hyderabad</option>
-                    </select>
+                    <Autocomplete
+                      fullWidth
+                      id="free-solo-demo"
+                      freeSolo
+                      size="small"
+                      value={servicestation}
+                      options={Stations.map((option) => ({
+                        label: option.optionvalue,
+                      }))}
+                      onChange={(event, value) => handleserviceInputChange(event, value)}
+                      renderInput={(params) => {
+                        return (
+                          <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                        );
+                      }}
+                    />
                   </div>
                 </div>
                 <div className="input-field">

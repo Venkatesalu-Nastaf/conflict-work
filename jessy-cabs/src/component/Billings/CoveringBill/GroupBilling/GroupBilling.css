@@ -60,4 +60,27 @@
     /* Adjust color as needed */
 }
 
-
+.download-container .download-btn {
+    /* Your existing button styles */
+    position: relative;
+  }
+  
+  .download-container .loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid #3498db;
+    border-top: 3px solid transparent;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }

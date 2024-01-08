@@ -129,6 +129,7 @@ const TransferReport = () => {
     setpbPopupOpen(false);
     setnPopupOpen(false);
     setlxPopupOpen(false);
+    localStorage.removeItem('selectedcustomerdata');
     localStorage.removeItem('selectedcustomer');
   };
 
@@ -143,8 +144,13 @@ const TransferReport = () => {
     const fetchData = async () => {
       try {
         const tripid = localStorage.getItem('selectedtripsheetid');
-        const customer = localStorage.getItem('selectedcustomer');
-        const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${customer}/${tripid}`);
+        const encoded = localStorage.getItem('selectedcustomerdata');
+        localStorage.setItem('selectedcustomer', encoded);
+        const storedCustomer = localStorage.getItem('selectedcustomer');
+        const customer = decodeURIComponent(storedCustomer);
+        console.log('final customer data', customer);
+        console.log('collected data from dataentry', tripid, customer);
+        const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -170,8 +176,8 @@ const TransferReport = () => {
     fetchData();
   }, []);
 
-  const encodedCustomer = encodeURIComponent(localStorage.getItem('selectedcustomer'));
-  localStorage.setItem('selectedcustomer', encodedCustomer);
+  const customerName = localStorage.getItem('selectedcustomerdata');
+  localStorage.setItem('selectedcustomer', customerName);
 
   //tripsheet data get for normal invoice
   const [routeData, setRouteData] = useState('');
@@ -229,7 +235,7 @@ const TransferReport = () => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const customerData = await response.json(); // Parse JSON data
+        const customerData = await response.json();
         setCustomerData(customerData);
       } catch {
       }

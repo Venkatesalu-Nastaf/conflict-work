@@ -134,7 +134,8 @@ router.get('/Group-Billing', (req, res) => {
   }
 
   if (fromDate && toDate) {
-    query += ' AND startdate BETWEEN ? AND ?';
+    // query += ' AND startdate BETWEEN ? AND ?';
+    query += ' AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
     params.push(fromDate);
     params.push(toDate);
   }

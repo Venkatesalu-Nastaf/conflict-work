@@ -50,7 +50,7 @@ router.get('/payroll', (req, res) => {
     }
 
     if (fromDate && toDate) {
-        query += ' AND salarydate BETWEEN ? AND ?';
+        query += ' AND salarydate >= DATE_ADD(?, INTERVAL 0 DAY) AND salarydate <= DATE_ADD(?, INTERVAL 1 DAY)';
         params.push(fromDate);
         params.push(toDate);
     }

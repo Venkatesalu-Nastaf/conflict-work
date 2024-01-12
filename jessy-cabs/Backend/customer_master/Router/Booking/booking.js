@@ -281,7 +281,7 @@ router.get('/table-for-booking', (req, res) => {
         const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD HH:mm:ss');
         const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD HH:mm:ss');
 
-        query += ' AND bookingdate >= ? AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+        query += ' AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
         params.push(formattedFromDate, formattedToDate);
     }
 

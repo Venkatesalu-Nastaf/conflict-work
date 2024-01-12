@@ -80,7 +80,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "bookingno", headerName: "Booking No", width: 130 },
-  { field: "bookingdate", headerName: "Booking Date", width: 130 },
+  { field: "bookingdate", headerName: "Booking Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "bookingtime", headerName: "Booking Time", width: 130 },
   { field: "status", headerName: "Status", width: 120 },
   { field: "tripid", headerName: "Trip ID", width: 130 },

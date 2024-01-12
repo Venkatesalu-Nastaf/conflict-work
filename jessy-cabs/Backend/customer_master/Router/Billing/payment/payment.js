@@ -28,7 +28,8 @@ router.get('/payment-details', (req, res) => {
         params.push(customer);
     }
     if (fromDate && toDate) {
-        query += ' AND Billingdate BETWEEN ? AND ?';
+        // query += ' AND Billingdate BETWEEN ? AND ?';
+        query += ' AND Billingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND Billingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
         params.push(fromDate);
         params.push(toDate);
     }

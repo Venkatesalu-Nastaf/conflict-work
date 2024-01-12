@@ -28,7 +28,7 @@ const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "status", headerName: "Status", width: 130 },
   { field: "tripid", headerName: "Trip Sheet No", width: 130 },
-  { field: "startdate", headerName: "Trip Date", width: 130 },
+  { field: "startdate", headerName: "Trip Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "guestname", headerName: "User Name", width: 130 },
   { field: "customer", headerName: "Customer Name", width: 130 },
   { field: "startkm", headerName: "Start Km", width: 130 },

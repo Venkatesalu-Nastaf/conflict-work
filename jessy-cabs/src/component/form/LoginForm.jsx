@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Form.css";
-import axios from "axios"; 
-import { useUser } from './UserContext'; 
+import axios from "axios";
+import { useUser } from './UserContext';
 import { useNavigate } from "react-router-dom";
 
 // ICONS
@@ -107,7 +107,7 @@ const Login = () => {
     <div className="portal-container">
       <div className="glasses">
         <div className="right-col">
-          <form className="portal" onSubmit={formSubmitter}  >
+          <form className="portal"  >
             <div className="title">login</div>
             {error &&
               <div className='alert-popup Error' >
@@ -171,7 +171,7 @@ const Login = () => {
               <a href="/">forget password !</a>
             </div>
             <div className="group button-group">
-              <button type="submit" className="signup-btn">
+              <button type="submit" className="signup-btn" onClick={formSubmitter}>
                 <span>Login</span>
               </button>
             </div>

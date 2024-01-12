@@ -355,6 +355,7 @@ const Vehicaleinfo = () => {
         setSuccess(true);
         setSuccessMessage("successfully listed")
       } else {
+        setRows([]);
         setError(true);
         setErrorMessage("no data find")
       }

@@ -15,7 +15,7 @@ router.get('/pending_tripsheet', (req, res) => {
   }
 
   if (fromDate && toDate) {
-    query += ' AND startdate >= ? AND startdate <= ?';
+    query += ' AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)';
     params.push(fromDate);
     params.push(toDate);
   }

@@ -54,8 +54,8 @@ const columns = [
     { field: "ratename", headerName: "Rate Validity", width: 130 },
     { field: "ReMarks", headerName: "Remarks", width: 130 },
     { field: "active", headerName: "Active", width: 130 },
-    { field: "fromdate", headerName: "From Date", width: 130 },
-    { field: "todate", headerName: "To Date", width: 130 },
+    { field: "fromdate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "todate", headerName: "To Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
 ];
 
 const Ratevalidity = () => {
@@ -84,8 +84,8 @@ const Ratevalidity = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
 
@@ -93,24 +93,24 @@ const Ratevalidity = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
@@ -152,7 +152,6 @@ const Ratevalidity = () => {
 
     const handleDateChange = (date, name) => {
         const formattedDate = dayjs(date).format('DD/MM/YYYY');
-        // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
         setBook((prevBook) => ({
             ...prevBook,
             [name]: formattedDate,
@@ -274,7 +273,6 @@ const Ratevalidity = () => {
                                 </div>
                                 <div className="input" style={{ width: "30%" }}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        {/* <DemoItem label="From Date"> */}
                                         <DatePicker
                                             label='From Date'
                                             format="DD/MM/YYYY"
@@ -290,7 +288,6 @@ const Ratevalidity = () => {
                                 </div>
                                 <div className="input" style={{ width: "30%" }}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        {/* <DemoItem label="To Date"> */}
                                         <DatePicker
                                             label='To Date'
                                             format="DD/MM/YYYY"

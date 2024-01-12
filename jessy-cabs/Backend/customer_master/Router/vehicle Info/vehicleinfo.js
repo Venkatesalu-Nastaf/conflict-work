@@ -55,7 +55,7 @@ router.get('/searchvehicleinfo', (req, res) => {
 
     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
-    query += ` AND (${likeConditions})`; 
+    query += ` AND (${likeConditions})`;
     params = columnsToSearch.map(() => `%${searchText}%`);
   }
 
@@ -63,7 +63,7 @@ router.get('/searchvehicleinfo', (req, res) => {
     const formattedFromDate = moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss');
     const formattedToDate = moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss');
 
-    query += ' AND doadate >= ? AND doadate <= DATE_ADD(?, INTERVAL 1 DAY)';
+    query += ' AND doadate >= DATE_ADD(?, INTERVAL 0 DAY) AND doadate <= DATE_ADD(?, INTERVAL 1 DAY)';
     params.push(formattedFromDate, formattedToDate);
   }
 
@@ -74,6 +74,5 @@ router.get('/searchvehicleinfo', (req, res) => {
     return res.status(200).json(result);
   });
 });
-// end vehicle_info database
 
 module.exports = router;

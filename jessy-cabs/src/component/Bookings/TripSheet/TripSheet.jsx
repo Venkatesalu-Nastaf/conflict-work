@@ -397,12 +397,12 @@ const TripSheet = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const statusValue = params.get('status') || 'opened';
+    const statusValue = params.get('status') || 'Opened';
     const appsValue = params.get('apps') || 'Waiting';
     const formData = {};
 
     const parameterKeys = [
-      'tripid', 'bookingno', 'status', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'chireTypesity', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'caramount', 'minkm', 'minhrs', 'package', 'amount', 'exkm', 'amount1', 'exHrs', 'amount2', 'night', 'amount3', 'driverconvenience', 'amount4', 'exkmTkm', 'exHrsTHrs', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
+      'tripid', 'bookingno', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'caramount', 'minkm', 'minhrs', 'package', 'amount', 'exkm', 'amount1', 'exHrs', 'amount2', 'night', 'amount3', 'driverconvenience', 'amount4', 'exkmTkm', 'exHrsTHrs', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
     ];
     parameterKeys.forEach(key => {
       const value = params.get(key);
@@ -427,6 +427,7 @@ const TripSheet = () => {
     tripid: '',
     bookingno: '',
     status: '',
+    tripsheetdate: '',
     billingno: '',
     apps: '',
     customer: '',
@@ -538,6 +539,7 @@ const TripSheet = () => {
       ...prevBook,
       tripid: '',
       bookingno: '',
+      tripsheetdate: '',
       status: '',
       billingno: '',
       apps: '',
@@ -693,6 +695,7 @@ const TripSheet = () => {
 
     try {
       const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
+      const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
       const updatedCustomer = {
         ...book,
         ...selectedCustomer,
@@ -706,6 +709,11 @@ const TripSheet = () => {
         starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
         closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
         additionaltime: additionalTime.additionaltime,
+        tripsheetdate: selectedBookingDate,
+        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
+        vehType: VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '',
+        driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
+        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
         shedkm: shedKilometers.shedkm,
         totaldays: calculateTotalDays(),
         totalkm1: calculateTotalKilometers(),
@@ -756,6 +764,8 @@ const TripSheet = () => {
       return;
     }
     try {
+      const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+
       const updatedBook = {
         ...book,
         starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
@@ -765,6 +775,7 @@ const TripSheet = () => {
         starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
         closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
         additionaltime: additionalTime.additionaltime,
+        tripsheetdate: selectedBookingDate,
         shedkm: shedKilometers.shedkm,
         totaldays: calculateTotalDays(),
         totalkm1: calculateTotalKilometers(),
@@ -914,7 +925,7 @@ const TripSheet = () => {
       const totalexKm = exkm * exkmTkm;
       return totalexKm;
     }
-    return 0;
+    return '';
   };
 
   const calculateExHrsAmount = () => {
@@ -924,7 +935,7 @@ const TripSheet = () => {
       const totalexhrs = exHrs * exHrsTHrs;
       return totalexhrs;
     }
-    return 0;
+    return '';
   };
 
   const calculateNightAmount = () => {
@@ -934,7 +945,7 @@ const TripSheet = () => {
       const totalnight = night * nightThrs;
       return totalnight;
     }
-    return 0;
+    return '';
   };
 
   const calculatedriverconvienceAmount = () => {
@@ -944,7 +955,7 @@ const TripSheet = () => {
       const totaldriverconvience = driverconvenience * dtc;
       return totaldriverconvience;
     }
-    return 0;
+    return '';
   };
 
 
@@ -955,7 +966,7 @@ const TripSheet = () => {
       const totalexKm = exkm1 * exkmTkm2;
       return totalexKm;
     }
-    return 0;
+    return '';
   };
 
   const calculateExHrsAmount2 = () => {
@@ -965,7 +976,7 @@ const TripSheet = () => {
       const totalexhrs = exHrs1 * exHrsTHrs2;
       return totalexhrs;
     }
-    return 0;
+    return '';
   };
 
   const calculateNightAmount2 = () => {
@@ -975,7 +986,7 @@ const TripSheet = () => {
       const totalnight = night1 * nightThrs2;
       return totalnight;
     }
-    return 0;
+    return '';
   };
 
   const calculatedriverconvienceAmount2 = () => {
@@ -999,12 +1010,14 @@ const TripSheet = () => {
       return totalDays;
     }
 
-    return 0;
+    return '';
   };
 
   const calculateTotalKilometers = () => {
-    const startKm = formData.startkm || selectedCustomerData.startkm || book.startkm;
-    const closeKm = formData.closekm || selectedCustomerData.closekm || book.closekm;
+    // const startKm = formData.startkm || selectedCustomerData.startkm || book.startkm;
+    const startKm = formData.shedout || book.shedout || selectedCustomerData.shedout || '';
+    // const closeKm = formData.closekm || selectedCustomerData.closekm || book.closekm;
+    const closeKm = formData.shedin || book.shedin || selectedCustomerData.shedin || '';
 
     if (startKm !== undefined && closeKm !== undefined) {
       let totalKm = closeKm - startKm;
@@ -1014,7 +1027,7 @@ const TripSheet = () => {
       }
       return totalKm;
     }
-    return 0;
+    return '';
   };
 
   function calculateTotalAmount() {
@@ -1440,6 +1453,22 @@ const TripSheet = () => {
                   onChange={handleChange}
                   autoComplete="password"
                 />
+              </div>
+              <div className="input">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                  <DatePicker
+                    value={formData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
+                    format="DD/MM/YYYY"
+                    label='Tripsheet Date'
+                    onChange={(date) => handleDateChange(date, 'tripsheetdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripsheetdate} />
+                    )}
+                  </DatePicker>
+
+                </LocalizationProvider>
               </div>
               <div className="input">
                 <div className="icone">

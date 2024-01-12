@@ -442,8 +442,11 @@ const Billing = () => {
     const calculatePayableAmount = () => {
         const DiscountAmount = selectedCustomerData.DiscountAmount || selectedCustomerDatas.DiscountAmount || book.DiscountAmount;
         const AdvanceReceived = selectedCustomerData.AdvanceReceived || selectedCustomerDatas.AdvanceReceived || book.AdvanceReceived;
-        const netAmount = calculateGrossAmount() - DiscountAmount - AdvanceReceived;
-        return netAmount.toFixed(2);
+        if (DiscountAmount !== undefined && AdvanceReceived !== undefined) {
+            const netAmount = calculateGrossAmount() - DiscountAmount - AdvanceReceived;
+            return netAmount.toFixed(2);
+        }
+        return '';
     };
 
     const calculatePendingAmount = () => {

@@ -475,10 +475,10 @@ const TransferDataEntry = () => {
     }
   }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData]);
 
-  const handleButtonClickBilling = (selectedRow) => {
-    const billingPageUrl = `/home/billing/billing?Billingdate=${selectedRow.Billingdate || ''}&customer=${selectedRow.customer || ''}`;
-    window.location.href = billingPageUrl;
-  }
+  // const handleButtonClickBilling = (selectedRow) => {
+  //   const billingPageUrl = `/home/billing/billing?Billingdate=${selectedRow.Billingdate || ''}&customer=${selectedRow.customer || ''}`;
+  //   window.location.href = billingPageUrl;
+  // }
 
   return (
     <div className="TransferDataEntry-form Scroll-Style-hide">

@@ -503,6 +503,8 @@ const Booking = () => {
       };
       await axios.post('http://localhost:8081/booking', updatedBook);
       handleCancel();
+      setRow([]);
+      setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
       handlecheck();
@@ -520,6 +522,8 @@ const Booking = () => {
       if (actionName === 'Email') {
       } else if (actionName === 'Clear') {
         handleCancel();
+        setRows([]);
+        setRow([]);
       } else if (actionName === 'Delete') {
         await axios.delete(`http://localhost:8081/booking/${book.bookingno}`);
         setSelectedCustomerData(null);
@@ -527,6 +531,8 @@ const Booking = () => {
         setSuccessMessage("Successfully Deleted");
         setFormData(null);
         handleCancel();
+        setRow([]);
+        setRows([]);
       } else if (actionName === 'Modify') {
         const selectedCustomer = rows.find((row) => row.bookingno === selectedCustomerData.bookingno || formData.bookingno);
         const updatedCustomer = {
@@ -546,6 +552,8 @@ const Booking = () => {
         };
         await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
         handleCancel();
+        setRow([]);
+        setRows([]);
         handlecheck();
         handleSendSMS();
         setSuccess(true);
@@ -706,7 +714,11 @@ const Booking = () => {
       const response = await fetch(`http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
       const data = await response.json();
       if (data.length > 0) {
-        setRow(data);
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRow(rowsWithUniqueId);
         setSuccess(true);
         setSuccessMessage("successfully listed")
       } else {

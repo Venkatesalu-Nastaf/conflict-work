@@ -138,13 +138,17 @@ const PaymentDetail = () => {
       const response = await axios.get(`http://localhost:8081/payment-details?billingno=${billingno}&customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
       const data = response.data;
       if (data.length > 0) {
-        setRows(data);
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
         setSuccess(true);
-        setSuccessMessage("Successfully listed");
+        setSuccessMessage("successfully listed")
       } else {
         setRows([]);
         setError(true);
-        setErrorMessage("No data found");
+        setErrorMessage("no data found")
       }
     } catch {
       setRows([]);

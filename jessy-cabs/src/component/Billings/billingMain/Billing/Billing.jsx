@@ -606,7 +606,6 @@ const Billing = () => {
         const parameterKeys = [
             'tripid', 'billingno', 'Billingdate', 'totalkm1', 'totaltime', 'customer', 'supplier', 'startdate', 'totaldays', 'guestname', 'rateType', 'vehRegNo', 'vehType', 'duty', 'MinCharges', 'minchargeamount', 'ChargesForExtra', 'ChargesForExtraamount', 'cfeamount', 'ChargesForExtraHRS', 'ChargesForExtraHRSamount', 'cfehamount', 'NightHalt', 'NightHaltamount', 'nhamount', 'driverbata', 'driverbataamount', 'dbamount', 'OtherCharges', 'OtherChargesamount', 'permitothertax', 'parkingtollcharges', 'MinKilometers', 'MinHours', 'GrossAmount', 'AfterTaxAmount', 'DiscountAmount', 'DiscountAmount2', 'AdvanceReceived', 'RoundedOff', 'BalanceReceivable', 'NetAmount', 'Totalamount', 'paidamount', 'pendingamount', 'BankAccount'
         ];
-        // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
         parameterKeys.forEach(key => {
             const value = params.get(key);
             if (value !== null && value !== "null") {
@@ -622,7 +621,6 @@ const Billing = () => {
         const initialFormData = {};
         setFormData(initialFormData);
     }, []);
-
 
     const [tripSheetData] = useState({
         tripid: '',
@@ -684,7 +682,7 @@ const Billing = () => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                const routeData = await response.json(); // Parse JSON data
+                const routeData = await response.json();
                 setRouteData(routeData);
             } catch (error) {
                 setError(true);
@@ -704,7 +702,7 @@ const Billing = () => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
 
-                const tripData = await response.json(); // Parse JSON data
+                const tripData = await response.json();
                 setTripData(tripData);
             } catch (error) {
                 setError(true);
@@ -723,7 +721,7 @@ const Billing = () => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                const customerData = await response.json(); // Parse JSON data
+                const customerData = await response.json();
                 setCustomerData(customerData);
             } catch (error) {
                 setError(true);
@@ -829,6 +827,22 @@ const Billing = () => {
                                     name="billingno"
                                     autoComplete="new-password"
                                     value={formData.billingno || selectedCustomerData.billingno || selectedCustomerDatas.billingno || book.billingno || ''}
+                                    onChange={handleChange}
+                                    onKeyDown={handleKeyenter}
+                                />
+                            </div>
+                            <div className="input">
+                                <div className="icone">
+                                    <BadgeIcon color="action" />
+                                </div>
+                                <TextField
+                                    margin="normal"
+                                    size="small"
+                                    id="invoiceno"
+                                    label="Invoice No"
+                                    name="invoiceno"
+                                    autoComplete="new-password"
+                                    value={formData.invoiceno || selectedCustomerData.invoiceno || selectedCustomerDatas.invoiceno || book.invoiceno || ''}
                                     onChange={handleChange}
                                     onKeyDown={handleKeyenter}
                                 />
@@ -1096,7 +1110,6 @@ const Billing = () => {
                                     <TextField
                                         name="cfeamount"
                                         autoComplete="new-password"
-                                        // value={selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || calculateTotalAmount() || book.cfeamount}
                                         value={calculateTotalAmount() || ''}
                                         onChange={handleChange}
                                         size="small"
@@ -1112,7 +1125,6 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faStopwatch} />
                                     </div>
                                     <TextField
-                                        // type='number'
                                         name="ChargesForExtraHRS"
                                         autoComplete="new-password"
                                         value={formData.ChargesForExtraHRS || selectedCustomerData.totaltime || selectedCustomerDatas.ChargesForExtraHRS || book.ChargesForExtraHRS || ''}
@@ -1154,7 +1166,6 @@ const Billing = () => {
                                     <TextField
                                         name="cfehamount"
                                         autoComplete="new-password"
-                                        // value={selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || calculateTotalAmount2() || book.cfehamount}
                                         value={calculateTotalAmount2() || book.cfehamount || ''}
                                         onChange={handleChange}
                                         size="small"
@@ -1206,7 +1217,6 @@ const Billing = () => {
                                         type='number'
                                         name="nhamount"
                                         autoComplete="new-password"
-                                        // value={selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount || calculateTotalAmount3()}
                                         value={book.nhamount || calculateTotalAmount3() || ''}
                                         onChange={handleChange}
                                         size="small"
@@ -1258,7 +1268,6 @@ const Billing = () => {
                                         type='number'
                                         name="dbamount"
                                         autoComplete="new-password"
-                                        // value={selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount || calculateTotalAmount4()}
                                         value={book.dbamount || calculateTotalAmount4() || ''}
                                         onChange={handleChange}
                                         size="small"
@@ -1274,7 +1283,6 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
                                     <TextField
-                                        // type='number'
                                         name="OtherCharges"
                                         autoComplete="new-password"
                                         value={formData.OtherCharges || selectedCustomerData.OtherCharges || selectedCustomerDatas.OtherCharges || book.OtherCharges || ''}
@@ -1381,7 +1389,6 @@ const Billing = () => {
                                         label="Gross Amount"
                                         name="GrossAmount"
                                         autoComplete="new-password"
-                                        // value={selectedCustomerData.GrossAmount || selectedCustomerDatas.GrossAmount || calculateGrossAmount() || book.GrossAmount}
                                         value={calculateGrossAmount() || book.GrossAmount || ''}
                                         onChange={handleChange}
                                     />
@@ -1459,7 +1466,6 @@ const Billing = () => {
                                         label="Balance Receivable"
                                         name="BalanceReceivable"
                                         autoComplete="new-password"
-                                        // value={selectedCustomerData.BalanceReceivable || selectedCustomerDatas.BalanceReceivable || calculatePayableAmount() || book.BalanceReceivable}
                                         value={calculatePayableAmount() || ''}
                                         onChange={handleChange}
                                     />
@@ -1478,7 +1484,6 @@ const Billing = () => {
                                         label="Rounded Off"
                                         name="RoundedOff"
                                         autoComplete="new-password"
-                                        // value={selectedCustomerData.RoundedOff || selectedCustomerDatas.RoundedOff || calculateRoundOff() || book.RoundedOff}
                                         value={calculateRoundOff() || ''}
                                         onChange={handleChange}
                                     />
@@ -1494,7 +1499,6 @@ const Billing = () => {
                                         label="Net Amount"
                                         name="NetAmount"
                                         autoComplete="new-password"
-                                        // value={selectedCustomerData.NetAmount || selectedCustomerDatas.NetAmount || calculateroundedPayableAmount() || book.NetAmount}
                                         value={calculateroundedPayableAmount() || ''}
                                         onChange={handleChange}
                                     />
@@ -1512,7 +1516,6 @@ const Billing = () => {
                                         label="Total Amount"
                                         name="Totalamount"
                                         autoComplete="new-password"
-                                        // value={selectedCustomerData.Totalamount || selectedCustomerDatas.Totalamount || calculateroundedPayableAmount() || book.Totalamount}
                                         value={calculateroundedPayableAmount() || ''}
                                         onChange={handleChange}
                                     />
@@ -1545,7 +1548,6 @@ const Billing = () => {
                                         label="Pending Amount"
                                         name="pendingamount"
                                         autoComplete="new-password"
-                                        // value={selectedCustomerData.pendingamount || selectedCustomerDatas.pendingamount || calculatePendingAmount() || book.pendingamount}
                                         value={calculatePendingAmount() || ''}
                                         onChange={handleChange}
                                     />
@@ -1608,7 +1610,6 @@ const Billing = () => {
                                 GmapimageUrl={GmapimageUrl}
                                 mapimageUrl={mapimageUrl}
                             />
-                            {/* <Paymentinvoice /> */}
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handlePopupClose} variant="contained" color="primary">

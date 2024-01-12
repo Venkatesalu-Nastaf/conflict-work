@@ -287,6 +287,7 @@ const Employe = () => {
         try {
             await axios.post('http://localhost:8081/employees', book);
             handleCancel();
+            setRows([]);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
         } catch {
@@ -312,12 +313,14 @@ const Employe = () => {
                 }
             } else if (actionName === 'Cancel') {
                 handleCancel();
+                setRows([]);
             } else if (actionName === 'Delete') {
                 await axios.delete(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`);
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
+                setRows([]);
             } else if (actionName === 'Edit') {
                 const selectedCustomer = rows.find((row) => row.empid === empid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
@@ -325,6 +328,7 @@ const Employe = () => {
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
+                setRows([]);
             } else if (actionName === 'Add') {
                 handleAdd();
             }

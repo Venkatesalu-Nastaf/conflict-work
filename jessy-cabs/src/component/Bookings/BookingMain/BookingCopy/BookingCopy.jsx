@@ -96,8 +96,19 @@ const BookingCopy = () => {
     try {
       const response = await axios.get(`http://localhost:8081/booking?bookingno=${bookingno}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
       const data = response.data;
-      setRows(data);
-      setSuccessMessage("Successfully listed");
+      if (data.length > 0) {
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
+        setSuccess(true);
+        setSuccessMessage("successfully listed")
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("no data found")
+      }
     } catch {
       setRows([]);
       setError(true);

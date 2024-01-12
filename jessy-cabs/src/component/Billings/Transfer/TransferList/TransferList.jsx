@@ -156,7 +156,7 @@ const TransferList = () => {
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
         { field: "vcode", headerName: "VCode", width: 130 },
-        { field: "billno", headerName: "Bill No", width: 130 },
+        { field: "invoiceno", headerName: "Invoice No", width: 130 },
         { field: "date", headerName: "Date", width: 130 },
         { field: "customer", headerName: "Customer", width: 130 },
         { field: "monthid", headerName: "MonthID", width: 130 },

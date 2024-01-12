@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import "./TransferReport.css";
+import dayjs from "dayjs";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import { Autocomplete } from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
 import { Menu, TextField } from "@mui/material";
 import Mapinvoice from './Mapinvoice/Mapinvoice';
 import Luxuryinvoice from './Luxuryinvoice/Luxuryinvoice';
 import Reportinvoice from './Reportinvoice/Reportinvoice';
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+// import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
+import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 
 //for popup
 import ClearIcon from '@mui/icons-material/Clear';
@@ -40,16 +46,20 @@ const columns = [
 const TransferReport = () => {
   const [pbpopupOpen, setpbPopupOpen] = useState(false);
   const [npopupOpen, setnPopupOpen] = useState(false);
+  const [fromDate, setFromDate] = useState(dayjs());
+  const [toDate, setToDate] = useState(dayjs());
   const [lxpopupOpen, setlxPopupOpen] = useState(false);
-  const [selectedBranch, setSelectedBranch] = useState('');
+  const [servicestation, setServiceStation] = useState("");
+  const [customer, setCustomer] = useState("");
   const [info, setInfo] = useState(false);
+  const [bankOptions, setBankOptions] = useState([]);
   const [warning, setWarning] = useState(false);
   const [tripData, setTripData] = useState('');
   const [rows, setRows] = useState([]);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
   const [success, setSuccess] = useState(false);
-  const [successMessage,] = useState({});
+  const [successMessage, setSuccessMessage] = useState({});
 
   useEffect(() => {
     window.history.replaceState(null, document.title, window.location.pathname);
@@ -115,13 +125,28 @@ const TransferReport = () => {
   }, [info]);
 
   const handleEInvoiceClick = (row) => {
+    if (rows.length === 0) {
+      setError(true);
+      setErrorMessage('No data available. Please fetch data');
+      return;
+    }
     setpbPopupOpen(true);
   };
   const handleMapInvoiceClick = (row) => {
+    if (rows.length === 0) {
+      setError(true);
+      setErrorMessage('No data available. Please fetch data');
+      return;
+    }
     setnPopupOpen(true);
   };
 
   const handleLuxuryInvoiceClick = (row) => {
+    if (rows.length === 0) {
+      setError(true);
+      setErrorMessage('No data available. Please fetch data');
+      return;
+    }
     setlxPopupOpen(true);
   };
 
@@ -162,7 +187,20 @@ const TransferReport = () => {
             guestname: row.guestname,
             tripid: row.tripid
           }));
-          setRows(tripsheetNumbers);
+          // setRows(tripsheetNumbers);
+          if (tripsheetNumbers.length > 0) {
+            const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
+              ...row,
+              id: index + 1,
+            }));
+            setRows(rowsWithUniqueId);
+            setSuccess(true);
+            setSuccessMessage("successfully listed")
+          } else {
+            setRows([]);
+            setError(true);
+            setErrorMessage("no data found")
+          }
         } else if (typeof tripData === 'object') {
           const tripsheetNumbers = [{ id: 1, guestname: tripData.guestname, tripid: tripData.tripid }];
           setRows(tripsheetNumbers);
@@ -178,6 +216,10 @@ const TransferReport = () => {
 
   const customerName = localStorage.getItem('selectedcustomerdata');
   localStorage.setItem('selectedcustomer', customerName);
+
+  const handleserviceInputChange = (event, newValue) => {
+    setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
+  };
 
   //tripsheet data get for normal invoice
   const [routeData, setRouteData] = useState('');
@@ -219,8 +261,12 @@ const TransferReport = () => {
             const sumTotalAndRounded = parseFloat(totalValue) + parseFloat(roundedAmount);
             setSumTotalAndRounded(sumTotalAndRounded);
           } else {
+            setError(true);
+            setErrorMessage('Something went wrong.');
           }
         } catch {
+          setError(true);
+          setErrorMessage('Something went wrong.');
         }
       }
     };
@@ -247,6 +293,23 @@ const TransferReport = () => {
   const organizationaddress2 = customerData.address2;
   const organizationcity = customerData.city;
   const organizationgstnumber = customerData.gstnumber;
+
+
+  useEffect(() => {
+    Organization()
+      .then((data) => {
+        if (data) {
+          setBankOptions(data);
+        } else {
+          setError(true);
+          setErrorMessage('Failed to fetch organization options.');
+        }
+      })
+      .catch(() => {
+        setError(true);
+        setErrorMessage('Failed to fetch organization options.');
+      });
+  }, []);
 
   return (
     <div className="TransferReport-form Scroll-Style-hide">
@@ -296,6 +359,7 @@ const TransferReport = () => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="Date"
+                        format="DD/MM/YYYY"
                       />
                     </DemoContainer>
                   </LocalizationProvider>
@@ -306,13 +370,19 @@ const TransferReport = () => {
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
-                  <TextField
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
                     size="small"
-                    id="id"
-                    label="Customer Name"
-                    value={tripData.customer || (tripData.length > 0 ? tripData[0].customer : '')}
-                    sx={{ width: "400px" }}
-                    autoComplete='off'
+                    value={customer || (tripData.length > 0 ? tripData[0].customer : '')}
+                    options={bankOptions}
+                    onChange={(event, value) => setCustomer(value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Organization" inputRef={params.inputRef} />
+                      );
+                    }}
                   />
                 </div>
                 <div className="input">
@@ -329,6 +399,7 @@ const TransferReport = () => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="Invoice Date"
+                        format="DD/MM/YYYY"
                       />
                     </DemoContainer>
                   </LocalizationProvider>
@@ -340,6 +411,9 @@ const TransferReport = () => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="From Date"
+                        format="DD/MM/YYYY"
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
                       />
                     </DemoContainer>
                   </LocalizationProvider>
@@ -349,6 +423,9 @@ const TransferReport = () => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="To Date"
+                        format="DD/MM/YYYY"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
                       />
                     </DemoContainer>
                   </LocalizationProvider>
@@ -357,18 +434,25 @@ const TransferReport = () => {
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuilding} size="xl" />
                   </div>
-                  <select name="branch" className="input-select" value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)}>
-                    <option value="" disabled>Select a city</option>
-                    <option value="Chennai">Chennai</option>
-                    <option value="Bangalore">Bangalore</option>
-                    <option value="Hyderabad">Hyderabad</option>
-                  </select>
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={servicestation}
+                    options={Stations.map((option) => ({
+                      label: option.optionvalue,
+                    }))}
+                    onChange={(event, value) => handleserviceInputChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
                 </div>
                 <div className="input" style={{ width: "100px" }}>
                   <Button variant="outlined">List</Button>
-                </div>
-                <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained">Excel</Button>
                 </div>
               </div>
               <div className="input-field">

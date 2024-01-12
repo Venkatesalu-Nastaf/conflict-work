@@ -16,7 +16,6 @@ const PrintableInvoice = ({ routeData, organizationaddress1, sumTotalAndRounded,
                         </div>
                         <div className="sheet-type">
                             <h1>Tax Invoice</h1>
-                            {/* <h1>{routeData?.customer} </h1> */}
                         </div>
                     </div>
                     <div className="header-title">
@@ -41,9 +40,9 @@ const PrintableInvoice = ({ routeData, organizationaddress1, sumTotalAndRounded,
                         <div className="left-title">
                             <dl className="dl-horizontal">
                                 <dt>Organisation</dt>
-                                <dd><strong>:{routeData[0]?.customer}</strong><br />{organizationaddress1}{organizationaddress2}{organizationcity}</dd>
+                                <dd><strong>:{routeData[0]?.customer || ''}</strong><br />{organizationaddress1 || ''}{organizationaddress2 || ''}{organizationcity || ''}</dd>
                                 <dt>GSTIN</dt>
-                                <dd>: {organizationgstnumber}</dd>
+                                <dd>: {organizationgstnumber || ''}</dd>
                             </dl>
                         </div>
                         <div className="right-title">
@@ -74,14 +73,14 @@ const PrintableInvoice = ({ routeData, organizationaddress1, sumTotalAndRounded,
                                     routeData.map((trip, index) => (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{trip.startdate}</td>
-                                            <td>{trip.tripid}</td>
+                                            <td>{trip.startdate || ''}</td>
+                                            <td>{trip.tripid || ''}</td>
                                             <td className='Reportinvoice-description-table-header'>
-                                                <span>{trip.guestname}</span><br />
-                                                {trip.vehRegNo}\{trip.duty}\TKms:{trip.totalkm1}\Hrs:{trip.totaltime}\{trip.vehType} Vehicle Hire Charges For ({trip.package})
-                                                Night Bata: 1Night @ Rs.{trip.night} <br />{trip.pickup} </td>
-                                            <td>{trip.parking}<br />{trip.permit}</td>
-                                            <td>{trip.netamount}</td>
+                                                <span>{trip.guestname || ''}</span><br />
+                                                {trip.vehRegNo || ''}\{trip.duty || ''}\TKms:{trip.totalkm1 || ''}\Hrs:{trip.totaltime || ''}\{trip.vehType || ''} Vehicle Hire Charges For ({trip.package || ''})
+                                                Night Bata: 1Night @ Rs.{trip.night || ''} <br />{trip.pickup || ''} </td>
+                                            <td>{trip.parking || ''}<br />{trip.permit || ''}</td>
+                                            <td>{trip.netamount || ''}</td>
                                         </tr>
                                     ))
                                 ) : (
@@ -94,15 +93,15 @@ const PrintableInvoice = ({ routeData, organizationaddress1, sumTotalAndRounded,
                     </div>
                     <div className="Reportinvoice-total-details">
                         <div className="Reportinvoice-amount">
-                            <p>{numberToWords.toWords(sumTotalAndRounded)}</p>
+                            <p>{numberToWords.toWords(sumTotalAndRounded || '')}</p>
                         </div>
                         <div className="Reportinvoice-Total-details">
                             <dl >
                                 <dt>SUB Total</dt>
-                                <dd>{totalValue}</dd>
-                                <dd>{roundedAmount}</dd>
+                                <dd>{totalValue || ''}</dd>
+                                <dd>{roundedAmount || ''}</dd>
                                 <dt>Total Amount</dt>
-                                <dd>{sumTotalAndRounded}</dd>
+                                <dd>{sumTotalAndRounded || ''}</dd>
                             </dl>
                         </div>
                     </div>

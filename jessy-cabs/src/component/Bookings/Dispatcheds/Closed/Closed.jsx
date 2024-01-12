@@ -17,7 +17,6 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -167,13 +166,17 @@ const Closed = () => {
       );
       const data = response.data;
       if (data.length > 0) {
-        setRows(data);
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
         setSuccess(true);
-        setSuccessMessage("Successfully listed");
+        setSuccessMessage("successfully listed")
       } else {
         setRows([]);
         setError(true);
-        setErrorMessage("No data found");
+        setErrorMessage("no data found")
       }
     } catch {
       setRows([]);
@@ -189,13 +192,17 @@ const Closed = () => {
       );
       const data = response.data;
       if (data.length > 0) {
-        setRows(data);
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
         setSuccess(true);
-        setSuccessMessage("Successfully listed");
+        setSuccessMessage("successfully listed")
       } else {
         setRows([]);
         setError(true);
-        setErrorMessage("No data found");
+        setErrorMessage("no data found")
       }
     } catch {
       setRows([]);

@@ -284,7 +284,19 @@ const TripSheet = () => {
       } else {
         const response = await axios.get(`http://localhost:8081/tripuploadcollect/${tripid}`);
         const data = response.data;
-        setRows(data);
+        if (data.length > 0) {
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
+          setSuccess(true);
+          setSuccessMessage("successfully listed")
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("no data found")
+        }
       }
     } catch {
     }
@@ -723,6 +735,8 @@ const TripSheet = () => {
       }
       await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
       handleCancel();
+      setRow([]);
+      setRows([]);
       handleDriverSendSMS();
       handleSendSMS();
       handlecheck();
@@ -775,6 +789,8 @@ const TripSheet = () => {
       };
       await axios.post('http://localhost:8081/tripsheet', updatedBook);
       handleCancel();
+      setRow([]);
+      setRows([]);
       setSuccess(true);
       handleSendSMS();
       handleDriverSendSMS();
@@ -833,9 +849,13 @@ const TripSheet = () => {
       if (actionName === 'List') {
       } else if (actionName === 'Cancel') {
         handleCancel();
+        setRow([]);
+        setRows([]);
       } else if (actionName === 'Delete') {
         handleDelete();
         handleCancel();
+        setRow([]);
+        setRows([]);
       } else if (actionName === 'Edit') {
         handleEdit();
       } else if (actionName === 'Add') {

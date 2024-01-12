@@ -12,6 +12,7 @@ router.post('/billing', (req, res) => {
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
+
 // delete Billing data
 router.delete('/billing/:tripid', (req, res) => {
   const tripid = req.params.tripid;
@@ -25,6 +26,7 @@ router.delete('/billing/:tripid', (req, res) => {
     return res.status(200).json({ message: "Data deleted successfully" });
   });
 });
+
 // update Billing details
 router.put('/billing/:tripid', (req, res) => {
   const tripid = req.params.tripid;
@@ -39,6 +41,7 @@ router.put('/billing/:tripid', (req, res) => {
     return res.status(200).json({ message: "Data updated successfully" });
   });
 });
+
 // collect data for Billing table
 router.get('/billing', (req, res) => {
   db.query('SELECT * FROM billing', (err, results) => {
@@ -48,6 +51,7 @@ router.get('/billing', (req, res) => {
     return res.status(200).json(results);
   });
 });
+
 // collect data from billing database
 router.get('/billing/:billingno', (req, res) => {
   const billingno = req.params.billingno;
@@ -63,6 +67,23 @@ router.get('/billing/:billingno', (req, res) => {
   });
 });
 
+router.get('/billingdata/:invoiceno', (req, res) => {
+  const invoiceno = req.params.invoiceno;
+
+  db.query('SELECT * FROM billing WHERE invoiceno = ?', invoiceno, (err, result) => {
+    if (err) {
+      console.error('Error querying database:', err);
+      return res.status(500).json({ error: 'Failed to retrieve billing details from MySQL' });
+    }
+    if (result.length === 0) {
+      console.error('Billing not found for invoiceno:', invoiceno);
+      return res.status(404).json({ error: 'Billing not found' });
+    }
+    const billingDetails = result[0];
+    return res.status(200).json(billingDetails);
+  });
+});
+
 router.get('/customers/:customer', (req, res) => {
   const customer = req.params.customer;
   db.query('SELECT * FROM customers WHERE customer = ?', customer, (err, result) => {
@@ -72,10 +93,11 @@ router.get('/customers/:customer', (req, res) => {
     if (result.length === 0) {
       return res.status(404).json({ error: 'Booking not found' });
     }
-    const bookingDetails = result[0]; // Assuming there is only one matching booking
+    const bookingDetails = result[0];
     return res.status(200).json(bookingDetails);
   });
 });
+
 router.get('/routedata/:tripid', (req, res) => {
   const tripid = req.params.tripid;
 
@@ -88,7 +110,6 @@ router.get('/routedata/:tripid', (req, res) => {
       return res.status(404).json({ error: 'Route data not found' });
     }
 
-    // Instead of returning a single object, return an array of all results
     const routeData = result;
     return res.status(200).json(routeData);
   });
@@ -98,9 +119,7 @@ router.get('/routedata/:tripid', (req, res) => {
 router.get('/Group-Billing', (req, res) => {
   const { invoiceno, customer, fromDate, toDate, servicestation } = req.query;
 
-  console.log('Received parameters:', invoiceno, customer, fromDate, toDate, servicestation);
-
-  let query = 'SELECT * FROM tripsheet WHERE status = "Closed"';
+  let query = 'SELECT * FROM tripsheet WHERE  status IN ("Closed", "CBilled")';
   let params = [];
 
   if (invoiceno) {
@@ -125,15 +144,12 @@ router.get('/Group-Billing', (req, res) => {
     params.push(servicestation);
   }
 
-  console.log('Generated SQL query:', query);
-  console.log('SQL query parameters:', params);
-
   db.query(query, params, (err, result) => {
     if (err) {
-      console.error('Error executing database query', err);
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }
     return res.status(200).json(result);
   });
 });
+
 module.exports = router;

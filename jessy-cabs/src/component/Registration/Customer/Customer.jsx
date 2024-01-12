@@ -65,6 +65,7 @@ const actions = [
 
 // TABLE START
 const columns = [
+  { field: "id", headerName: "S.No", width: 130 },
   { field: "customerId", headerName: "Customer ID", width: 130 },
   { field: "customer", headerName: "Name", width: 160 },
   { field: "customeremail", headerName: "E-mail", width: 160 },
@@ -310,6 +311,7 @@ const Customer = () => {
     try {
       await axios.post('http://localhost:8081/customers', book);
       handleCancel();
+      setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
     } catch {
@@ -325,7 +327,11 @@ const Customer = () => {
         const response = await axios.get('http://localhost:8081/customers');
         const data = response.data;
         if (data.length > 0) {
-          setRows(data);
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
           setSuccess(true);
           setSuccessMessage("Successfully listed");
         } else {
@@ -335,10 +341,12 @@ const Customer = () => {
         }
       } else if (actionName === 'Cancel') {
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Delete') {
         await axios.delete(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`);
         setSelectedCustomerData(null);
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Edit') {
         const selectedCustomer = rows.find((row) => row.customerId === customerId);
         const updatedCustomer = {
@@ -348,6 +356,7 @@ const Customer = () => {
         };
         await axios.put(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Add') {
         handleAdd();
       }

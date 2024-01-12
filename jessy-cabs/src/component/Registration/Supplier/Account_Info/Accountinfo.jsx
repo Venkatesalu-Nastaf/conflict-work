@@ -280,6 +280,7 @@ const Accuntinfo = () => {
     try {
       await axios.post('http://localhost:8081/accountinfo', book);
       handleCancel();
+      setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
     } catch {
@@ -296,7 +297,11 @@ const Accuntinfo = () => {
         const response = await axios.get('http://localhost:8081/accountinfo');
         const data = response.data;
         if (data.length > 0) {
-          setRows(data);
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
           setSuccess(true);
           setSuccessMessage("Successfully listed");
         } else {
@@ -307,12 +312,14 @@ const Accuntinfo = () => {
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Delete') {
         await axios.delete(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
         setSelectedCustomerData(null);
         setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Edit') {
         const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
@@ -320,6 +327,7 @@ const Accuntinfo = () => {
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Add') {
         handleAdd();
       }

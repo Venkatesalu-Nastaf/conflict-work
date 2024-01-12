@@ -281,6 +281,7 @@ const Vehicaleinfo = () => {
     try {
       await axios.post('http://localhost:8081/vehicleinfo', book);
       handleCancel();
+      setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
     } catch {
@@ -296,6 +297,7 @@ const Vehicaleinfo = () => {
       if (actionName === 'List') {
       } else if (actionName === 'Cancel') {
         handleCancel();
+        setRows([]);
         setSuccess(true);
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Delete') {

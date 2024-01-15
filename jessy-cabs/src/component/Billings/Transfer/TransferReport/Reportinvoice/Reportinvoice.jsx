@@ -4,8 +4,8 @@ import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 import numberToWords from 'number-to-words';
 import Logo from "../../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-import Signature from "../../../billingMain/Accountsinvoice/signature-1692258849846.png";
-const PrintableInvoice = ({ routeData, organizationaddress1, sumTotalAndRounded, roundedAmount, totalValue, organizationaddress2, organizationcity, organizationgstnumber }) => {
+// import Signature from "../../../billingMain/Accountsinvoice/signature-1692258849846.png";
+const PrintableInvoice = ({ routeData, routedData, organizationaddress1, sumTotalAndRounded, roundedAmount, totalValue, organizationaddress2, organizationcity, organizationgstnumber }) => {
     return (
         <>
             <div className='Reportinvoice-invoice' >
@@ -48,11 +48,11 @@ const PrintableInvoice = ({ routeData, organizationaddress1, sumTotalAndRounded,
                         <div className="right-title">
                             <dl className="dl-horizontal">
                                 <dt>Invoice No</dt>
-                                <dd><strong>: 27188</strong></dd>
+                                <dd><strong>:{routedData?.[0]?.invoiceno}</strong></dd>
                                 <dt>Invoice Date</dt>
-                                <dd>: 31/07/2023</dd>
+                                <dd>:{routedData?.[0]?.Billingdate}</dd>
                                 <dt>Group Ref No</dt>
-                                <dd>: 83837</dd>
+                                <dd>:</dd>
                             </dl>
                         </div>
                     </div>
@@ -110,7 +110,7 @@ const PrintableInvoice = ({ routeData, organizationaddress1, sumTotalAndRounded,
                             <p>GST is to be paid by Service Recepient Under RCM as per Notification 22/19 - Centraltax (Rate) dated 30-09-2019 <br /><span>E.& O.E In Words-Rupees</span></p>
                         </div>
                         <div className="Reportinvoice-signature">
-                            <img src={Signature} alt="Guest Signature" />
+                            {/* <img src={Signature} alt="Guest Signature" /> */}
                             <span className="Reportinvoice-signature-title">Guest Signature</span>
                         </div>
                     </div>
@@ -119,11 +119,12 @@ const PrintableInvoice = ({ routeData, organizationaddress1, sumTotalAndRounded,
         </>
     );
 };
-const Invoice = ({ routeData, totalValue, roundedAmount, sumTotalAndRounded, organizationaddress1, organizationaddress2, organizationcity, organizationgstnumber }) => {
+const Invoice = ({ routeData, routedData, totalValue, roundedAmount, sumTotalAndRounded, organizationaddress1, organizationaddress2, organizationcity, organizationgstnumber }) => {
 
     const handlePrint = () => {
         const invoiceContent = ReactDOMServer.renderToString(
             <PrintableInvoice
+                routedData={routedData}
                 routeData={routeData}
                 roundedAmount={roundedAmount}
                 sumTotalAndRounded={sumTotalAndRounded}
@@ -327,6 +328,7 @@ const Invoice = ({ routeData, totalValue, roundedAmount, sumTotalAndRounded, org
     return (
         <div className="invoice-wrapper">
             <PrintableInvoice
+                routedData={routedData}
                 routeData={routeData}
                 roundedAmount={roundedAmount}
                 sumTotalAndRounded={sumTotalAndRounded}

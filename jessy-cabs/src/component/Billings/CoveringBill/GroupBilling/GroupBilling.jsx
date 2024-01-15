@@ -53,8 +53,9 @@ const GroupBilling = () => {
     const [tripData, setTripData] = useState("");
     const [customer, setCustomer] = useState("");
     const [toDate, setToDate] = useState(dayjs());
+    const [Billingdate] = useState(dayjs());
     const [success, setSuccess] = useState(false);
-    const [invoiceno, setInvoiceNo] = useState("");
+    const [invoiceno] = useState("");
     const [totalValue, setTotalValue] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
     const [bankOptions, setBankOptions] = useState([]);
@@ -63,6 +64,7 @@ const GroupBilling = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [servicestation, setServiceStation] = useState("");
     const [sumTotalAndRounded, setSumTotalAndRounded] = useState('');
+    const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
 
     const hidePopup = () => {
         setError(false);
@@ -87,14 +89,45 @@ const GroupBilling = () => {
         }
     }, [success]);
 
-    const handleInputChange = (event, newValue) => {
-        if (event.target.name === 'customer') {
-            setInvoiceNo(newValue ? newValue.label : '');
-        }
-    };
+    // const handleInputChange = (event, newValue) => {
+    //     if (event.target.name === 'customer') {
+    //         setInvoiceNo(newValue ? newValue.label : '');
+    //     }
+    // };
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
     };
+
+    const handleDateChange = (date, name) => {
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: parsedDate,
+        }));
+        setSelectedCustomerDatas((prevValues) => ({
+            ...prevValues,
+            [name]: parsedDate,
+        }));
+    };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: value,
+        }));
+    };
+
+
+    const [book, setBook] = useState({
+        Billingdate: '',
+        invoiceno: '',
+        customer: '',
+        fromdate: '',
+        todate: '',
+        station: '',
+    });
 
     useEffect(() => {
         Organization()
@@ -122,21 +155,69 @@ const GroupBilling = () => {
             return sum + netAmountValue;
         }, 0);
     };
+
+    // const handleShow = useCallback(async () => {
+    //     try {
+    //         console.log('Selected values:', { invoiceno, customer, fromDate: fromDate.format('DD/MM/YYYY'), toDate: toDate.format('DD/MM/YYYY'), servicestation, });
+    //         const response = await axios.get(`http://localhost:8081/Group-Billing`, {
+    //             params: {
+    //                 invoiceno,
+    //                 customer: encodeURIComponent(customer),
+    //                 fromDate: fromDate.format('YYYY-MM-DD'),
+    //                 toDate: toDate.format('YYYY-MM-DD'),
+    //                 servicestation: encodeURIComponent(servicestation),
+    //             },
+    //         });
+
+    //         const data = response.data;
+
+    //         if (Array.isArray(data)) {
+    //             setRows(data);
+    //             const netAmountSum = calculateNetAmountSum(data);
+    //             setTotalValue(netAmountSum);
+    //             const calculateRoundOff = () => {
+    //                 const balanceAmount = parseFloat(totalValue);
+    //                 const roundedGrossAmount = Math.ceil(balanceAmount);
+    //                 const roundOff = roundedGrossAmount - balanceAmount;
+    //                 return roundOff.toFixed(2);
+    //             };
+    //             const roundOffValue = calculateRoundOff();
+    //             setRoundedAmount(roundOffValue);
+    //             const sumTotalAndRounded = parseFloat(totalValue) + parseFloat(roundedAmount);
+    //             setSumTotalAndRounded(sumTotalAndRounded);
+    //             setTripData(data);
+    //             setSuccess(true);
+    //             setSuccessMessage("Successfully listed")
+    //         } else {
+    //             setRows([]);
+    //             setError(true);
+    //             setErrorMessage("No data found");
+    //         }
+    //     } catch (error) {
+    //         setRows([]);
+    //         setError(true);
+    //         setErrorMessage("Check your Network Connection");
+    //     }
+    // }, [invoiceno, customer, fromDate, toDate, servicestation, roundedAmount, totalValue]);
+
     const handleShow = useCallback(async () => {
         try {
-            console.log('Selected values:', { invoiceno, customer, fromDate: fromDate.format('DD/MM/YYYY'), toDate: toDate.format('DD/MM/YYYY'), servicestation, });
+            const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+            const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
+            const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
+            const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+
+            console.log('Selected values:', { customer: customerValue, fromDate: fromDateValue, toDate: toDateValue, servicestation: servicestationValue });
+
             const response = await axios.get(`http://localhost:8081/Group-Billing`, {
                 params: {
-                    invoiceno,
-                    customer: encodeURIComponent(customer),
-                    fromDate: fromDate.format('YYYY-MM-DD'),
-                    toDate: toDate.format('YYYY-MM-DD'),
-                    servicestation: encodeURIComponent(servicestation),
+                    customer: customerValue,
+                    fromDate: fromDateValue,
+                    toDate: toDateValue,
+                    servicestation: servicestationValue
                 },
             });
-
             const data = response.data;
-
             if (Array.isArray(data)) {
                 setRows(data);
                 const netAmountSum = calculateNetAmountSum(data);
@@ -159,12 +240,12 @@ const GroupBilling = () => {
                 setError(true);
                 setErrorMessage("No data found");
             }
-        } catch (error) {
+        } catch {
             setRows([]);
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-    }, [invoiceno, customer, fromDate, toDate, servicestation, roundedAmount, totalValue]);
+    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, roundedAmount, totalValue]);
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -188,6 +269,34 @@ const GroupBilling = () => {
         return coverpdfHtml;
     };
 
+    const handleKeyenter = useCallback(async (event) => {
+        if (event.key === 'Enter') {
+            try {
+                const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
+                console.log('Sending request for invoiceno:', invoiceNumber);
+                const response = await axios.get(`http://localhost:8081/billingdata/${invoiceNumber}`);
+                if (response.status === 200) {
+                    const billingDetails = response.data;
+                    if (billingDetails) {
+                        setSelectedCustomerDatas(billingDetails);
+                        setSuccess(true);
+                        setSuccessMessage("Successfully listed");
+                    } else {
+                        setRows([]);
+                        setError(true);
+                        setErrorMessage("No data found");
+                    }
+                } else {
+                    setError(true);
+                    setErrorMessage(`Failed to retrieve billing details. Status: ${response.status}`);
+                }
+            } catch (error) {
+                setError(true);
+                setErrorMessage('Error retrieving billings details.', error);
+            }
+        }
+    }, [invoiceno, book, selectedCustomerDatas]);
+
     return (
         <div className="GroupBilling-form Scroll-Style-hide">
             <form >
@@ -199,7 +308,7 @@ const GroupBilling = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
-                                    <TextField
+                                    {/* <TextField
                                         size="small"
                                         id="id"
                                         label="Invoice No"
@@ -207,6 +316,16 @@ const GroupBilling = () => {
                                         value={invoiceno || ''}
                                         onChange={handleInputChange}
                                         autoComplete='off'
+                                    /> */}
+                                    <TextField
+                                        size="small"
+                                        id="id"
+                                        label="Invoice No"
+                                        name="invoiceno"
+                                        value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
+                                        onChange={handleChange}
+                                        autoComplete='off'
+                                        onKeyDown={handleKeyenter}
                                     />
                                 </div>
                                 <div className="input" style={{ width: "230px" }}>
@@ -218,12 +337,12 @@ const GroupBilling = () => {
                                         id="free-solo-demo"
                                         freeSolo
                                         size="small"
-                                        value={customer}
+                                        value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || ''}
                                         options={bankOptions}
                                         onChange={(event, value) => setCustomer(value)}
                                         renderInput={(params) => {
                                             return (
-                                                <TextField {...params} label="Organization" inputRef={params.inputRef} />
+                                                <TextField {...params} label="Organization" name='customer' inputRef={params.inputRef} />
                                             );
                                         }}
                                     />
@@ -233,28 +352,55 @@ const GroupBilling = () => {
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
                                                 label="Bill Date"
+                                                name="Billingdate"
+                                                value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
+                                                format="DD/MM/YYYY"
                                             />
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </div>
                             </div>
                             <div className="input-field">
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                                        <DatePicker
-                                            label="From Date"
-                                            format="DD/MM/YYYY"
-                                            value={fromDate}
-                                            onChange={(date) => setFromDate(date)}
-                                        />
-                                        <DatePicker
-                                            label="To Date"
-                                            format="DD/MM/YYYY"
-                                            value={toDate}
-                                            onChange={(date) => setToDate(date)}
-                                        />
-                                    </DemoContainer>
-                                </LocalizationProvider>
+                                <div className="input" >
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                            <DatePicker
+                                                value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || ''}
+                                                format="DD/MM/YYYY"
+                                                onChange={(date) => {
+                                                    handleDateChange(date, 'fromdate');
+                                                    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+                                                    const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
+                                                    setFromDate(parsedDate);
+                                                }}
+                                            >
+                                                {({ inputProps, inputRef }) => (
+                                                    <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.fromdate} />
+                                                )}
+                                            </DatePicker>
+                                        </DemoContainer>
+                                    </LocalizationProvider>
+                                </div>
+                                <div className="input" >
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                            <DatePicker
+                                                value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || ''}
+                                                format="DD/MM/YYYY"
+                                                onChange={(date) => {
+                                                    handleDateChange(date, 'todate');
+                                                    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+                                                    const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
+                                                    setToDate(parsedDate);
+                                                }}
+                                            >
+                                                {({ inputProps, inputRef }) => (
+                                                    <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerDatas?.todate} />
+                                                )}
+                                            </DatePicker>
+                                        </DemoContainer>
+                                    </LocalizationProvider>
+                                </div>
                                 <div className="input" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />
@@ -264,14 +410,14 @@ const GroupBilling = () => {
                                         id="free-solo-demo"
                                         freeSolo
                                         size="small"
-                                        value={servicestation}
+                                        value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
                                         options={Stations.map((option) => ({
                                             label: option.optionvalue,
                                         }))}
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {
                                             return (
-                                                <TextField {...params} label="Stations" inputRef={params.inputRef} />
+                                                <TextField {...params} label="Stations" name='station' inputRef={params.inputRef} />
                                             );
                                         }}
                                     />

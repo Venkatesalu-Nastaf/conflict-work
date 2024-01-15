@@ -111,4 +111,41 @@ router.get('/normaltransferdata_trip/:customer', (req, res) => {
   });
 });
 
+router.get('/Get-Billing', (req, res) => {
+  const { customer, fromDate, toDate, servicestation } = req.query;
+  console.log(customer, fromDate, toDate, servicestation);
+
+  let query = 'SELECT * FROM billing WHERE 1';
+  let params = [];
+
+  if (customer) {
+    const decodedCustomer = decodeURIComponent(customer);
+    query += ' AND customer = ?';
+    params.push(decodedCustomer);
+  }
+
+  if (fromDate) {
+    query += ' AND fromdate = ?';
+    params.push(fromDate);
+  }
+
+  if (toDate) {
+    query += ' AND todate = ?';
+    params.push(toDate);
+  }
+
+  if (servicestation) {
+    query += ' AND station = ?';
+    params.push(servicestation);
+  }
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
+
 module.exports = router;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./TransferReport.css";
 import dayjs from "dayjs";
+import axios from "axios";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -51,6 +52,7 @@ const TransferReport = () => {
   const [lxpopupOpen, setlxPopupOpen] = useState(false);
   const [servicestation, setServiceStation] = useState("");
   const [customer, setCustomer] = useState("");
+  const [date] = useState(dayjs());
   const [info, setInfo] = useState(false);
   const [bankOptions, setBankOptions] = useState([]);
   const [warning, setWarning] = useState(false);
@@ -233,12 +235,14 @@ const TransferReport = () => {
       const netAmountValue = parseFloat(item.netamount, 10);
       return sum + netAmountValue;
     }, 0);
+
   };
 
   useEffect(() => {
     const fetchData = async () => {
       const tripid = localStorage.getItem('selectedtripsheetid');
       const customer = localStorage.getItem('selectedcustomer');
+      console.log('local storage customer name', customer);
       if (customer) {
         try {
           const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${customer}/${tripid}`);
@@ -311,6 +315,67 @@ const TransferReport = () => {
       });
   }, []);
 
+  const [routedData, setRoutedData] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fromdate = localStorage.getItem('fromDate');
+        const todate = localStorage.getItem('toDate');
+        const customerValue = encodeURIComponent(customer) || (tripData.length > 0 ? tripData[0].customer : '');
+        const fromDateValue = fromdate;
+        const toDateValue = todate;
+        const servicestationValue = servicestation || (tripData.length > 0 ? tripData[0].department : '');
+
+        console.log('customer:', customerValue, 'fromDate:', fromDateValue, 'toDate:', toDateValue, 'servicestation:', servicestationValue);
+
+        const response = await axios.get(`http://localhost:8081/Get-Billing`, {
+          params: {
+            customer: customerValue,
+            fromDate: fromDateValue,
+            toDate: toDateValue,
+            servicestation: servicestationValue
+          },
+        });
+
+        const routedData = response.data;
+        setRoutedData(routedData);
+        console.log(routedData);
+      } catch (error) {
+        setError(true);
+        setErrorMessage('Error fetching tripsheet data.');
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [customer, servicestation, tripData]);
+
+  const [rateType, setRateType] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const customer = localStorage.getItem('selectedcustomerid');
+      try {
+        const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const rateType = await response.json();
+        setRateType(rateType);
+        console.log('rate type', rateType);
+      } catch {
+        setError(true);
+        setErrorMessage('Error fetching tripsheet data.');
+      }
+    };
+    fetchData();
+  }, []);
+
+  const ratename = (rateType?.rateType) || '';
+  console.log('ratetype name', ratename);
+
+
   return (
     <div className="TransferReport-form Scroll-Style-hide">
       <form >
@@ -338,6 +403,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="Invoice No"
+                    value={routedData?.[0]?.invoiceno || ''}
                     name="invoiceno"
                     autoComplete='off'
                   />
@@ -359,6 +425,8 @@ const TransferReport = () => {
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="Date"
+                        name="date"
+                        value={date}
                         format="DD/MM/YYYY"
                       />
                     </DemoContainer>
@@ -390,45 +458,42 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="Rate Type"
+                    value={(rateType?.rateType) || ''}
                     name="ratetype"
                     autoComplete='off'
                   />
                 </div>
                 <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                      <DatePicker
-                        label="Invoice Date"
-                        format="DD/MM/YYYY"
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
+                  <TextField
+                    size="small"
+                    id="id"
+                    label="Invoice Date"
+                    value={(routedData?.[0]?.Billingdate) || ''}
+                    name="ratetype"
+                    autoComplete='off'
+                  />
                 </div>
               </div>
               <div className="input-field">
                 <div className="input" >
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                      <DatePicker
-                        label="From Date"
-                        format="DD/MM/YYYY"
-                        value={fromDate}
-                        onChange={(date) => setFromDate(date)}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
+                  <TextField
+                    size="small"
+                    id="id"
+                    label="From Date"
+                    value={(routedData?.[0]?.fromdate) || ''}
+                    name="ratetype"
+                    autoComplete='off'
+                  />
                 </div>
                 <div className="input" >
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                      <DatePicker
-                        label="To Date"
-                        format="DD/MM/YYYY"
-                        value={toDate}
-                        onChange={(date) => setToDate(date)}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
+                  <TextField
+                    size="small"
+                    id="id"
+                    label="To Date"
+                    value={(routedData?.[0]?.todate) || ''}
+                    name="ratetype"
+                    autoComplete='off'
+                  />
                 </div>
                 <div className="input" >
                   <div className="icone">
@@ -439,7 +504,7 @@ const TransferReport = () => {
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={servicestation}
+                    value={servicestation || (tripData.length > 0 ? tripData[0].department : '') || ''}
                     options={Stations.map((option) => ({
                       label: option.optionvalue,
                     }))}
@@ -450,9 +515,6 @@ const TransferReport = () => {
                       );
                     }}
                   />
-                </div>
-                <div className="input" style={{ width: "100px" }}>
-                  <Button variant="outlined">List</Button>
                 </div>
               </div>
               <div className="input-field">
@@ -473,6 +535,7 @@ const TransferReport = () => {
             <Dialog open={pbpopupOpen} onClose={handlePopupClose}>
               <DialogContent>
                 <Reportinvoice
+                  routedData={routedData}
                   routeData={routeData}
                   roundedAmount={roundedAmount}
                   sumTotalAndRounded={sumTotalAndRounded}

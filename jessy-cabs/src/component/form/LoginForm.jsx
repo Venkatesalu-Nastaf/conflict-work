@@ -21,7 +21,7 @@ const Login = () => {
   const toggle = () => {
     setOpen(!open);
   };
-  const [input, setInput] = React.useState({ username: "", userpassword: "" });
+  const [input, setInput] = useState({ username: "", userpassword: "" });
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
@@ -83,18 +83,15 @@ const Login = () => {
 
   const formSubmitter = async (e) => {
     e.preventDefault();
-    setSuccess("");
     try {
-      const response = await axios.post("http://localhost:8081/login", input); // Make a POST request to your backend
-
+      const response = await axios.post("http://localhost:8081/login", input);
       if (response.status === 200) {
-        // Successful login
         loginUser(input.username);
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");
         localStorage.setItem("auth", true);
       } else {
-        // Failed login
+        setError(true);
         setErrorMessage("Check your Network Connection");
       }
     } catch {
@@ -172,7 +169,8 @@ const Login = () => {
             </div>
             <div className="group button-group">
               <button type="submit" className="signup-btn" onClick={formSubmitter}>
-                <span>Login</span>
+                Login
+                {/* <span>Login</span> */}
               </button>
             </div>
             <div className="social_media_container">

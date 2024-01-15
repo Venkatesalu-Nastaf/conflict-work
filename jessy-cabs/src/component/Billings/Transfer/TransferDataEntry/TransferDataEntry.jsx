@@ -29,7 +29,7 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "status", headerName: "Status", width: 130 },
-  { field: "startdate", headerName: "TripDate", width: 130 },
+  { field: "startdate", headerName: "TripDate", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "tripid", headerName: "Trip No", width: 130 },
   { field: "customer", headerName: "Customer", width: 130 },
   { field: "vehRegNo", headerName: "VehicleReg.No", width: 130 },
@@ -205,8 +205,16 @@ const TransferDataEntry = () => {
           setTripData(rowsWithUniqueId);
           setRows(rowsWithUniqueId);
           if (transformedRows.length > 0) {
-            setFromDate(dayjs(transformedRows[0].startdate));
-            setToDate(dayjs(transformedRows[transformedRows.length - 1].startdate));
+            const fromDate = dayjs(transformedRows[0].startdate);
+            const toDate = dayjs(transformedRows[transformedRows.length - 1].startdate);
+
+            // Set values in local storage
+            localStorage.setItem('fromDate', fromDate.format('YYYY-MM-DD'));
+            localStorage.setItem('toDate', toDate.format('YYYY-MM-DD'));
+
+            // Now, you can also set your state if needed
+            setFromDate(fromDate);
+            setToDate(toDate);
           }
         } else if (typeof tripData === 'object') {
           setRows([transformRow(tripData)]);
@@ -307,7 +315,7 @@ const TransferDataEntry = () => {
   };
 
   const handleButtonClickTripsheet = (row) => {
-    const customerdata = encodeURIComponent(customer || tripData.customer || localStorage.getItem('selectedcustomer'));
+    const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
     const customername = customerdata;
     console.log('customer name', customername);
     localStorage.setItem('selectedcustomer', customername);
@@ -403,6 +411,7 @@ const TransferDataEntry = () => {
       fromdate: (fromDate || book.fromdate).format('YYYY-MM-DD'),
       todate: (toDate || book.todate).format('YYYY-MM-DD'),
       station: servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '',
+      Totalamount: totalAmount
     };
     await axios.post('http://localhost:8081/billing', updatedBook);
     setSuccess(true);
@@ -474,11 +483,6 @@ const TransferDataEntry = () => {
       setErrorMessage("Check your Network Connection");
     }
   }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData]);
-
-  // const handleButtonClickBilling = (selectedRow) => {
-  //   const billingPageUrl = `/home/billing/billing?Billingdate=${selectedRow.Billingdate || ''}&customer=${selectedRow.customer || ''}`;
-  //   window.location.href = billingPageUrl;
-  // }
 
   return (
     <div className="TransferDataEntry-form Scroll-Style-hide">
@@ -586,7 +590,7 @@ const TransferDataEntry = () => {
                             handleDateChange(date, 'todate');
                             const formattedDate = dayjs(date).format('YYYY-MM-DD');
                             const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
-                            setFromDate(parsedDate);
+                            setToDate(parsedDate);
                           }}
                         >
                           {({ inputProps, inputRef }) => (

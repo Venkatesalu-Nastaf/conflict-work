@@ -70,6 +70,8 @@ const actions = [
 ];
 
 const DriverCreation = () => {
+    const user_id = localStorage.getItem('useridno');
+
     const [showPasswords, setShowPasswords] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -85,8 +87,60 @@ const DriverCreation = () => {
     const [warning, setWarning] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage, setWarningMessage] = useState({});
     const [infoMessage] = useState({});
+
+    const [userPermissions, setUserPermissions] = useState({});
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'Driver Master';
+                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                setUserPermissions(response.data);
+                console.log('permission data', response.data);
+            } catch (error) {
+                console.error('Error fetching user permissions:', error);
+            }
+        };
+
+        fetchPermissions();
+    }, [user_id]);
+
+    const checkPagePermission = () => {
+        const currentPageName = 'Driver Master';
+        const permissions = userPermissions || {};
+
+        if (permissions.page_name === currentPageName) {
+            return {
+                read: permissions.read_permission === 1,
+                new: permissions.new_permission === 1,
+                modify: permissions.modify_permission === 1,
+                delete: permissions.delete_permission === 1,
+            };
+        }
+
+        return {
+            read: false,
+            new: false,
+            modify: false,
+            delete: false,
+        };
+    };
+
+    const permissions = checkPagePermission();
+
+    // Function to determine if a field should be read-only based on permissions
+    const isFieldReadOnly = (fieldName) => {
+        if (permissions.read) {
+            // If user has read permission, check for    other specific permissions
+            if (fieldName === "delete" && !permissions.delete) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    };
 
     // TABLE START
     const columns = [
@@ -197,15 +251,24 @@ const DriverCreation = () => {
                 setErrorMessage("Check your Network Connection");
                 return;
             }
-            try {
-                await axios.post('http://localhost:8081/drivercreation', book);
-                handleCancel();
-                validatePasswordMatch();
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
-            } catch (error) {
-                setError(true)
-                setErrorMessage("Check your Network Connection");
+            const permissions = checkPagePermission();
+
+            if (permissions.read && permissions.new) {
+                try {
+                    await axios.post('http://localhost:8081/drivercreation', book);
+                    handleCancel();
+                    setRows([]);
+                    validatePasswordMatch();
+                    setSuccess(true);
+                    setSuccessMessage("Successfully Added");
+                } catch (error) {
+                    setError(true)
+                    setErrorMessage("Check your Network Connection");
+                }
+            } else {
+                // Display a warning or prevent the action
+                setWarning(true);
+                setWarningMessage("You do not have permission.");
             }
         } else {
             setPasswordsMatch(true);
@@ -216,32 +279,56 @@ const DriverCreation = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                const response = await axios.get('http://localhost:8081/drivercreation');
-                const data = response.data;
-                if (data.length > 0) {
-                    setRows(data);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully listed");
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.read) {
+                    const response = await axios.get('http://localhost:8081/drivercreation');
+                    const data = response.data;
+                    if (data.length > 0) {
+                        setRows(data);
+                        setSuccess(true);
+                        setSuccessMessage("Successfully listed");
+                    } else {
+                        setRows([]);
+                        setError(true);
+                        setErrorMessage("No data found");
+                    }
                 } else {
-                    setRows([]);
-                    setError(true);
-                    setErrorMessage("No data found");
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
                 }
             } else if (actionName === 'Cancel') {
                 handleCancel();
+                setRows([]);
             } else if (actionName === 'Delete') {
-                await axios.delete(`http://localhost:8081/drivercreation/${userid}`);
-                setSelectedCustomerData(null);
-                setError(true);
-                setSuccessMessage("Successfully Deleted");
-                handleCancel();
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.delete) {
+                    await axios.delete(`http://localhost:8081/drivercreation/${selectedCustomerData?.userid || book.userid}`);
+                    setSelectedCustomerData(null);
+                    setError(true);
+                    setSuccessMessage("Successfully Deleted");
+                    handleCancel();
+                    setRows([]);
+                } else {
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
+                }
             } else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.userid === userid);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`http://localhost:8081/drivercreation/${userid}`, updatedCustomer);
-                setError(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.modify) {
+                    const selectedCustomer = rows.find((row) => row.userid === userid);
+                    const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                    await axios.put(`http://localhost:8081/drivercreation/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
+                    setError(true);
+                    setSuccessMessage("Successfully updated");
+                    handleCancel();
+                    setRows([]);
+                } else {
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
+                }
             } else if (actionName === 'Add') {
                 handleAdd();
             }
@@ -488,24 +575,6 @@ const DriverCreation = () => {
                                 <div className="icone">
                                     <QuizOutlinedIcon color="action" />
                                 </div>
-                                {/* <Autocomplete
-                                    fullWidth
-                                    size="small"
-                                    id="free-solo-demo-viewfor"
-                                    freeSolo
-                                    sx={{ width: "20ch" }}
-                                    options={ViewFor.map((option) => ({
-                                        label: option.Option,
-                                    }))}
-                                    getOptionLabel={(option) => option.label || ''}
-                                    renderInput={(params) => {
-                                        params.inputProps.value = selectedCustomerData?.viewfor || ''
-                                        return (
-                                            <TextField {...params} label="View For" name="viewfor" />
-                                        )
-                                    }
-                                    }
-                                /> */}
                                 <Autocomplete
                                     fullWidth
                                     size="small"
@@ -658,7 +727,7 @@ const DriverCreation = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-                                <Button color="primary" variant="contained" component="label">
+                                <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
                                     License
                                     <input
                                         type="file"
@@ -698,16 +767,17 @@ const DriverCreation = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-                                <Button color="primary" variant="contained" component="label">
+                                <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
                                     aadhar card
                                     <input
                                         type="file"
                                         style={{ display: "none" }}
+
                                     />
                                 </Button>
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-                                <Button variant="contained" onClick={handleAdd}>Add</Button>
+                                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
                             </div>
                         </div>
                     </div>

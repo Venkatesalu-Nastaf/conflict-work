@@ -1,42 +1,122 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import axios from 'axios';
 import "./Permission.css";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
+import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const Permission = () => {
-  const [routeData, setRouteData] = useState('');
+  // const [routeData, setRouteData] = useState('');
   // const [selectedCustomerData, setSelectedCustomerData] = useState([]);
 
-  const storedUsername = localStorage.getItem("username");
+  // const storedUsername = localStorage.getItem("username");
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const username = storedUsername;
+  //     try {
+  //       const response = await fetch(`http://localhost:8081/userdata/${encodeURIComponent(username)}`);
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+  //       const routeData = await response.json();
+  //       setRouteData(routeData);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [storedUsername]);
+
+  // const useridno = routeData[0]?.userid;
+
+  // localStorage.setItem('useridno', useridno);
+  // const storedUserId = localStorage.getItem('useridno');
+
+  // // Display the value in the console
+  // console.log('Stored UserId:', storedUserId);
+
+  // console.log('user id display', useridno);
+  const [warning, setWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState({});
+
+  const hidePopup = () => {
+    setWarning(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const username = storedUsername;
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000); // 3 seconds
+      return () => clearTimeout(timer); // Clean up the timer on unmount
+    }
+  }, [warning]);
+
+  const user_id = localStorage.getItem('useridno');
+
+// for page permission
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/userdata/${encodeURIComponent(username)}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const routeData = await response.json();
-        setRouteData(routeData);
+        const currentPageName = 'Permission';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+        console.log('permission data', response.data);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching user permissions:', error);
       }
     };
-    fetchData();
-  }, [storedUsername]);
 
-  console.log(routeData[0]?.userid);
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = useCallback(() => {
+    const currentPageName = 'Permission';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  }, [userPermissions]);
+
+  const permissions = checkPagePermission();
+
+  // Function to determine if a field should be read-only based on permissions
+  const isFieldReadOnly = (fieldName) => {
+    if (permissions.read) {
+      // If user has read permission, check for    other specific permissions
+      if (fieldName === "delete" && !permissions.delete) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
 
   const [userId, setUserId] = useState({
     userid: '',
   });
 
-  const [permissionsData, setPermissionsData] = useState([
+  const initialPermissionsData = [
     { id: 1, name: 'Account Master', read: false, new: false, modify: false, delete: false },
     { id: 2, name: 'Billing', read: false, new: false, modify: false, delete: false },
     { id: 3, name: 'Booking Master', read: false, new: false, modify: false, delete: false },
@@ -64,9 +144,14 @@ const Permission = () => {
     { id: 25, name: 'Trip Sheet', read: false, new: false, modify: false, delete: false },
     { id: 26, name: 'User Creation', read: false, new: false, modify: false, delete: false },
     { id: 27, name: 'Vehicle Type', read: false, new: false, modify: false, delete: false },
-    { id: 28, name: 'Vendor Report', read: false, new: false, modify: false, delete: false },
-  ]);
-  // TABLE END
+    { id: 29, name: 'Vendor Report', read: false, new: false, modify: false, delete: false },
+    { id: 30, name: 'Permission', read: false, new: false, modify: false, delete: false },
+    { id: 31, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
+    { id: 32, name: 'Employee PayRoll', read: false, new: false, modify: false, delete: false },
+    { id: 33, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
+  ];
+
+  const [permissionsData, setPermissionsData] = useState(initialPermissionsData);
 
   const handlePermissionChange = (permissionId, permissionType) => {
     setPermissionsData(prevData =>
@@ -88,58 +173,80 @@ const Permission = () => {
   };
 
   const handleSavePermissions = async () => {
-    try {
-      await axios.post('http://localhost:8081/save-permissions', {
-        userId: userId.userid,
-        permissions: permissionsData,
-        page_name: permissionsData.name
-      });
+    const permissions = checkPagePermission();
 
-    } catch (error) {
-      console.error('Error saving permissions:', error);
+    if (permissions.read && permissions.new && permissions.modify) {
+      try {
+        await axios.post('http://localhost:8081/save-permissions', {
+          userId: userId.userid,
+          permissions: permissionsData,
+          page_name: permissionsData.name
+        });
+        handleCancel();
+      } catch (error) {
+        console.error('Error saving permissions:', error);
+      }
+    } else {
+      // Display a warning or prevent the action
+      setWarning(true);
+      setWarningMessage("You do not have permission to add users on this page.");
     }
   };
 
   const handleKeyDown = useCallback(async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      try {
-        const response = await axios.get(`http://localhost:8081/userdataid/${event.target.value}`);
-        console.log('Response from server:', response.data);
+      const permissions = checkPagePermission();
 
-        if (Array.isArray(response.data)) {
-          const receivedPermissions = response.data;
+      if (permissions.read && permissions.read) {
+        try {
+          const response = await axios.get(`http://localhost:8081/userdataid/${event.target.value}`);
+          console.log('Response from server:', response.data);
 
-          // Create a map from page_name to permission object
-          const permissionMap = receivedPermissions.reduce((map, permission) => {
-            map[permission.page_name] = permission;
-            return map;
-          }, {});
+          if (Array.isArray(response.data)) {
+            const receivedPermissions = response.data;
 
-          // Update the state with the received permissions
-          setPermissionsData(prevPermissions => {
-            return prevPermissions.map(permission => {
-              const receivedPermission = permissionMap[permission.name] || {};
+            // Create a map from page_name to permission object
+            const permissionMap = receivedPermissions.reduce((map, permission) => {
+              map[permission.page_name] = permission;
+              return map;
+            }, {});
 
-              // Keep the original "ID" and "Form Name" columns fixed
-              return {
-                id: permission.id,
-                name: permission.name,
-                read: Boolean(receivedPermission.read),
-                new: Boolean(receivedPermission.new),
-                modify: Boolean(receivedPermission.modify),
-                delete: Boolean(receivedPermission.delete),
-              };
+            // Update the state with the received permissions
+            setPermissionsData(prevPermissions => {
+              return prevPermissions.map(permission => {
+                const receivedPermission = permissionMap[permission.name] || {};
+                console.log('recieved permission', receivedPermission.read_permission);
+
+                // Keep the original "ID" and "Form Name" columns fixed
+                return {
+                  id: permission.id,
+                  name: permission.name,
+                  read: Boolean(receivedPermission.read_permission),
+                  new: Boolean(receivedPermission.new_permission),
+                  modify: Boolean(receivedPermission.modify_permission),
+                  delete: Boolean(receivedPermission.delete_permission),
+                };
+              });
             });
-          });
-        } else {
-          console.error('Invalid response format: Expected an array.');
+          } else {
+            console.error('Invalid response format: Expected an array.');
+          }
+
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
+      } else {
+        setWarning(true);
+        setWarningMessage("You do not have permission.");
       }
     }
-  }, []);
+  }, [checkPagePermission]);
+
+  const handleCancel = () => {
+    setUserId({ userid: '' });
+    setPermissionsData(initialPermissionsData);
+  };
 
   return (
     <div className="permission-main">
@@ -170,8 +277,18 @@ const Permission = () => {
                   startIcon={<FontAwesomeIcon icon={faSave} size="lg" />}
                   variant="outlined"
                   onClick={handleSavePermissions}
+                  disabled={isFieldReadOnly("new")}
                 >
                   Save
+                </Button>
+              </div>
+              <div className="input" style={{ width: "100px" }}>
+                <Button
+                  startIcon={<FontAwesomeIcon icon={faSave} size="lg" />}
+                  variant="outlined"
+                  onClick={handleCancel}
+                >
+                  Cancel
                 </Button>
               </div>
             </div>
@@ -229,6 +346,13 @@ const Permission = () => {
                   </table>
                 </div>
               </div>
+              {warning &&
+                <div className='alert-popup Warning' >
+                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{warningMessage}</p>
+                </div>
+              }
             </div>
           </div>
         </form>

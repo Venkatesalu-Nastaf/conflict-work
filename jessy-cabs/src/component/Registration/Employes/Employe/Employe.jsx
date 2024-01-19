@@ -90,6 +90,8 @@ const columns = [
 
 
 const Employe = () => {
+    const user_id = localStorage.getItem('useridno');
+
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -101,8 +103,62 @@ const Employe = () => {
     const [warning, setWarning] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage, setWarningMessage] = useState({});
     const [infoMessage] = useState({});
+
+    // for page permission
+
+    const [userPermissions, setUserPermissions] = useState({});
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'Employee PayRoll';
+                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                setUserPermissions(response.data);
+                console.log('permission data', response.data);
+            } catch (error) {
+                console.error('Error fetching user permissions:', error);
+            }
+        };
+
+        fetchPermissions();
+    }, [user_id]);
+
+    const checkPagePermission = () => {
+        const currentPageName = 'Employee PayRoll';
+        const permissions = userPermissions || {};
+
+        if (permissions.page_name === currentPageName) {
+            return {
+                read: permissions.read_permission === 1,
+                new: permissions.new_permission === 1,
+                modify: permissions.modify_permission === 1,
+                delete: permissions.delete_permission === 1,
+            };
+        }
+
+        return {
+            read: false,
+            new: false,
+            modify: false,
+            delete: false,
+        };
+    };
+
+    const permissions = checkPagePermission();
+
+    // Function to determine if a field should be read-only based on permissions
+    const isFieldReadOnly = (fieldName) => {
+        if (permissions.read) {
+            // If user has read permission, check for other specific permissions
+            if (fieldName === "delete" && !permissions.delete) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    };
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -278,20 +334,28 @@ const Employe = () => {
         setSelectedCustomerId(params.row.customerId);
     }, []);
     const handleAdd = async () => {
-        const empname = book.empname;
-        if (!empname) {
-            setError(true);
-            setErrorMessage("Check your Employee ID");
-            return;
-        }
-        try {
-            await axios.post('http://localhost:8081/employees', book);
-            handleCancel();
-            setRows([]);
-            setSuccess(true);
-            setSuccessMessage("Successfully Added");
-        } catch {
+        const permissions = checkPagePermission();
 
+        if (permissions.read && permissions.new) {
+            const empname = book.empname;
+            if (!empname) {
+                setError(true);
+                setErrorMessage("Check your Employee ID");
+                return;
+            }
+            try {
+                await axios.post('http://localhost:8081/employees', book);
+                handleCancel();
+                setRows([]);
+                setSuccess(true);
+                setSuccessMessage("Successfully Added");
+            } catch {
+
+            }
+        } else {
+            // Display a warning or prevent the action
+            setWarning(true);
+            setWarningMessage("You do not have permission.");
         }
     };
 
@@ -300,35 +364,56 @@ const Employe = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                const response = await axios.get('http://localhost:8081/employees');
-                const data = response.data;
-                if (data.length > 0) {
-                    setRows(data);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully listed");
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.read) {
+                    const response = await axios.get('http://localhost:8081/employees');
+                    const data = response.data;
+                    if (data.length > 0) {
+                        setRows(data);
+                        setSuccess(true);
+                        setSuccessMessage("Successfully listed");
+                    } else {
+                        setRows([]);
+                        setError(true);
+                        setErrorMessage("No data found");
+                    }
                 } else {
-                    setRows([]);
-                    setError(true);
-                    setErrorMessage("No data found");
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
                 }
             } else if (actionName === 'Cancel') {
                 handleCancel();
                 setRows([]);
             } else if (actionName === 'Delete') {
-                await axios.delete(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`);
-                setSelectedCustomerData(null);
-                setSuccess(true);
-                setSuccessMessage("Successfully Deleted");
-                handleCancel();
-                setRows([]);
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.delete) {
+                    await axios.delete(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`);
+                    setSelectedCustomerData(null);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully Deleted");
+                    handleCancel();
+                    setRows([]);
+                } else {
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
+                }
             } else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.empid === empid);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
-                setRows([]);
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.modify) {
+                    const selectedCustomer = rows.find((row) => row.empid === empid);
+                    const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                    await axios.put(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully updated");
+                    handleCancel();
+                    setRows([]);
+                } else {
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
+                }
             } else if (actionName === 'Add') {
                 handleAdd();
             }
@@ -633,7 +718,7 @@ const Employe = () => {
                         </div>
                         <div className="input-field">
                             <div className="input" style={{ width: "100px" }}>
-                                <Button variant="contained" onClick={handleAdd}>Add</Button>
+                                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
                             </div>
                         </div>
                     </div>

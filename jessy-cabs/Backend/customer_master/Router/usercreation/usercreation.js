@@ -40,7 +40,7 @@ router.put('/usercreation/:userid', (req, res) => {
     return res.status(200).json({ message: "Data updated successfully" });
   });
 });
-
+ 
 router.get('/usercreation', (req, res) => {
   const filterValue = req.query.filter; // Assuming you want to filter based on a query parameter 'filter'
   let query = 'SELECT * FROM usercreation';

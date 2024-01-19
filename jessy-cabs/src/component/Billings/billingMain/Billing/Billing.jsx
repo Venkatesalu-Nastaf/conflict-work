@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useCallback } from 'react';
 import "./Billing.css";
 import {
     Autocomplete,
@@ -7,13 +8,12 @@ import {
 import dayjs from "dayjs";
 import axios from "axios";
 import Box from "@mui/material/Box";
-import Paymentinvoice from '../Accountsinvoice/Paymentinvoice';
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import { useLocation } from "react-router-dom";
 import SpeedDial from "@mui/material/SpeedDial";
 import { fetchBankOptions } from './BillingData';
-import React, { useState, useEffect, useCallback } from 'react';
+import Paymentinvoice from '../Accountsinvoice/Paymentinvoice';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { GiMoneyStack } from "@react-icons/all-files/gi/GiMoneyStack";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -68,6 +68,7 @@ const actions = [
 ];
 
 const Billing = () => {
+    const user_id = localStorage.getItem('useridno');
 
     const [bankOptions, setBankOptions] = useState([]);
     const [formData, setFormData] = useState({});
@@ -81,13 +82,69 @@ const Billing = () => {
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
+    const [warningMessage, setWarningMessage] = useState({});
     const [infoMessage] = useState({});
     const [selectedBankAccount, setSelectedBankAccount] = useState('');
     const [selectedCustomerData, setSelectedCustomerData] = useState({
         totalkm1: ''
     });
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
+
+    // for page permission
+
+    const [userPermissions, setUserPermissions] = useState({});
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'CB Billing';
+                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                setUserPermissions(response.data);
+                console.log('permission data', response.data);
+            } catch (error) {
+                console.error('Error fetching user permissions:', error);
+            }
+        };
+
+        fetchPermissions();
+    }, [user_id]);
+
+    const checkPagePermission = () => {
+        const currentPageName = 'CB Billing';
+        const permissions = userPermissions || {};
+
+        if (permissions.page_name === currentPageName) {
+            return {
+                read: permissions.read_permission === 1,
+                new: permissions.new_permission === 1,
+                modify: permissions.modify_permission === 1,
+                delete: permissions.delete_permission === 1,
+            };
+        }
+
+        return {
+            read: false,
+            new: false,
+            modify: false,
+            delete: false,
+        };
+    };
+
+    const permissions = checkPagePermission();
+
+    // Function to determine if a field should be read-only based on permissions
+    const isFieldReadOnly = (fieldName) => {
+        if (permissions.read) {
+            // If user has read permission, check for other specific permissions
+            if (fieldName === "delete" && !permissions.delete) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    };
+
+
     //for popup
     const hidePopup = () => {
         setSuccess(false);
@@ -129,16 +186,23 @@ const Billing = () => {
     }, [info]);
 
     const handleEInvoiceClick = (row) => {
-        const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-        const customer = book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer;
+        const permissions = checkPagePermission();
 
-        if (!tripid) {
-            setError(true);
-            setErrorMessage("Please enter the tripid");
+        if (permissions.read && permissions.modify) {
+            const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+            const customer = book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer;
+
+            if (!tripid) {
+                setError(true);
+                setErrorMessage("Please enter the tripid");
+            } else {
+                localStorage.setItem('selectedTripid', tripid);
+                localStorage.setItem('selectedcustomerid', customer);
+                setPopupOpen(true);
+            }
         } else {
-            localStorage.setItem('selectedTripid', tripid);
-            localStorage.setItem('selectedcustomerid', customer);
-            setPopupOpen(true);
+            setWarning(true);
+            setWarningMessage("You do not have permission.");
         }
     };
 
@@ -149,6 +213,7 @@ const Billing = () => {
     const [book, setBook] = useState({
         tripid: '',
         billingno: '',
+        invoiceno: '',
         Billingdate: '',
         totalkm1: '',
         totaltime: '',
@@ -284,6 +349,7 @@ const Billing = () => {
             tripid: '',
             billingno: '',
             Billingdate: '',
+            invoiceno: '',
             totalkm1: '',
             totaltime: '',
             customer: '',
@@ -333,7 +399,7 @@ const Billing = () => {
         setSelectedBankAccount('');
     };
 
-    const handleClick = async (event, actionName, tripid) => {
+    const handleClick = async (event, actionName, customer, tripid) => {
         event.preventDefault();
         try {
             if (actionName === 'Print') {
@@ -341,44 +407,73 @@ const Billing = () => {
             } else if (actionName === 'Cancel') {
                 handleCancel();
             } else if (actionName === 'Delete') {
-                await axios.delete(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
-                setFormData(null);
-                setSelectedCustomerData(null);
-                setSuccessMessage("Successfully Deleted");
-                handleCancel();
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.delete) {
+                    await axios.delete(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
+                    setFormData(null);
+                    setSelectedCustomerData(null);
+                    setSuccessMessage("Successfully Deleted");
+                    handleCancel();
+                } else {
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
+                }
             } else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.tripid === tripid);
-                const updatedCustomer = {
-                    ...selectedCustomerDatas,
-                    ...selectedCustomer,
-                    ...selecting,
-                    ...formData,
-                    MinKilometers: selectedCustomerDatas.minkm || selectedCustomerData.minkm || '',
-                    MinHours: selectedCustomerDatas.minhrs || selectedCustomerData.minhrs || '',
-                    minchargeamount: selectedCustomerData.netamount || selectedCustomerDatas.minchargeamount || book.minchargeamount,
-                    MinCharges: selectedCustomerData.package || selectedCustomerDatas.MinCharges || book.MinCharges,
-                    cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
-                    cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
-                    nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
-                    dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
-                };
-                await axios.put(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
-                handleCancel();
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.modify) {
+                    const selectedCustomer = rows.find((row) => row.tripid === tripid);
+                    const updatedCustomer = {
+                        ...selectedCustomerDatas,
+                        ...selectedCustomer,
+                        ...selecting,
+                        ...formData,
+                        MinKilometers: selectedCustomerDatas.minkm || selectedCustomerData.minkm || '',
+                        MinHours: selectedCustomerDatas.minhrs || selectedCustomerData.minhrs || '',
+                        minchargeamount: selectedCustomerData.netamount || selectedCustomerDatas.minchargeamount || book.minchargeamount,
+                        MinCharges: selectedCustomerData.package || selectedCustomerDatas.MinCharges || book.MinCharges,
+                        cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
+                        cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
+                        nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
+                        dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
+                    };
+                    await axios.put(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
+                    handleCancel();
+                } else {
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
+                }
             } else if (actionName === 'Add') {
-                const updatedBook = {
-                    ...book,
-                    ...selecting,
-                    Billingdate: selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
-                    cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
-                    cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
-                    nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
-                    dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
-                };
-                await axios.post('http://localhost:8081/billing', updatedBook);
-                handleCancel();
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.new) {
+                    if (!customer) {
+                        setError(true);
+                        setErrorMessage("Fill mandatory fields");
+                        return;
+                    }
+
+                    const updatedBook = {
+                        ...book,
+                        ...selecting,
+                        Billingdate: selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
+                        cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
+                        cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
+                        nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
+                        dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
+                    };
+                    await axios.post('http://localhost:8081/billing', updatedBook);
+                    handleCancel();
+                    setSuccess(true);
+                    setSuccessMessage("Successfully Added");
+                } else {
+                    // Display a warning or prevent the action
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
+                }
             }
+
         } catch (err) {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -816,6 +911,7 @@ const Billing = () => {
                                     value={formData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid || ''}
                                     onChange={handleChange}
                                     onKeyDown={handleKeyDown}
+                                    disabled={isFieldReadOnly("read")}
                                 />
                             </div>
                             <div className="input">

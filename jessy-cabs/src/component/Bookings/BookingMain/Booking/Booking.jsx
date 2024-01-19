@@ -771,7 +771,7 @@ const Booking = () => {
           setSuccess(true);
           setSuccessMessage("SMS sent correctly");
         } else {
-          setError(true);
+          setError(true); 
           setErrorMessage("Failed to send SMS");
         }
       } catch {

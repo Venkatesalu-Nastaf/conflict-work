@@ -35,6 +35,8 @@ const columns = [
 ];
 
 const PaymentDetail = () => {
+  const user_id = localStorage.getItem('useridno');
+
   // const [tableData, setTableData] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
@@ -50,9 +52,61 @@ const PaymentDetail = () => {
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage] = useState({});
+  const [warningMessage, setWarningMessage] = useState({});
   const [bankOptions, setBankOptions] = useState([]);
   const [infoMessage] = useState({});
+
+  // for page permission
+
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'Payments';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+        console.log('permission data', response.data);
+      } catch (error) {
+        console.error('Error fetching user permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = useCallback(async () => {
+    const currentPageName = 'Payments';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  }, [userPermissions]);
+
+  const permissions = checkPagePermission();
+
+  const isFieldReadOnly = (fieldName) => {
+    if (permissions.read) {
+      if (fieldName === "delete" && !permissions.delete) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
 
   const convertToCSV = (data) => {
     const header = columns.map((column) => column.headerName).join(",");
@@ -134,28 +188,35 @@ const PaymentDetail = () => {
     }
   };
   const handleShow = useCallback(async () => {
-    try {
-      const response = await axios.get(`http://localhost:8081/payment-details?billingno=${billingno}&customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
-      const data = response.data;
-      if (data.length > 0) {
-        const rowsWithUniqueId = data.map((row, index) => ({
-          ...row,
-          id: index + 1,
-        }));
-        setRows(rowsWithUniqueId);
-        setSuccess(true);
-        setSuccessMessage("successfully listed")
-      } else {
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.read) {
+      try {
+        const response = await axios.get(`http://localhost:8081/payment-details?billingno=${billingno}&customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+        const data = response.data;
+        if (data.length > 0) {
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
+          setSuccess(true);
+          setSuccessMessage("successfully listed")
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("no data found")
+        }
+      } catch {
         setRows([]);
         setError(true);
-        setErrorMessage("no data found")
+        setErrorMessage("Check your Network Connection");
       }
-    } catch {
-      setRows([]);
-      setError(true);
-      setErrorMessage("Check your Network Connection");
+    } else {
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
-  }, [billingno, customer, fromDate, toDate]);
+  }, [billingno, customer, fromDate, toDate, checkPagePermission]);
 
   useEffect(() => {
     Organization()
@@ -269,7 +330,7 @@ const PaymentDetail = () => {
               </div>
               <div className="input-field" style={{ justifyContent: 'center' }}>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained" onClick={handleShow}>Search</Button>
+                  <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("new")}>Search</Button>
                 </div>
               </div>
             </div>

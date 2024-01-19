@@ -105,6 +105,8 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 const Vehicaleinfo = () => {
+  const user_id = localStorage.getItem('useridno');
+
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [actionName] = useState('');
   const [rows, setRows] = useState([]);
@@ -117,8 +119,64 @@ const Vehicaleinfo = () => {
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage] = useState({});
+  const [warningMessage, setWarningMessage] = useState({});
   const [infoMessage] = useState({});
+
+
+  // for page permission
+
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'Supplier Master';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+        console.log('permission data', response.data);
+      } catch (error) {
+        console.error('Error fetching user permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = () => {
+    const currentPageName = 'Supplier Master';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  };
+
+  const permissions = checkPagePermission();
+
+  // Function to determine if a field should be read-only based on permissions
+  const isFieldReadOnly = (fieldName) => {
+    if (permissions.read) {
+      // If user has read permission, check for other specific permissions
+      if (fieldName === "delete" && !permissions.delete) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+
 
   const hidePopup = () => {
     setSuccess(false);
@@ -278,15 +336,23 @@ const Vehicaleinfo = () => {
   };
 
   const handleAdd = async () => {
-    try {
-      await axios.post('http://localhost:8081/vehicleinfo', book);
-      handleCancel();
-      setRows([]);
-      setSuccess(true);
-      setSuccessMessage("Successfully Added");
-    } catch {
-      setError(true);
-      setErrorMessage("Check your Network Connection");
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.new) {
+      try {
+        await axios.post('http://localhost:8081/vehicleinfo', book);
+        handleCancel();
+        setRows([]);
+        setSuccess(true);
+        setSuccessMessage("Successfully Added");
+      } catch {
+        setError(true);
+        setErrorMessage("Check your Network Connection");
+      }
+    } else {
+      // Display a warning or prevent the action
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
   };
 
@@ -347,21 +413,28 @@ const Vehicaleinfo = () => {
   //end file upload
   //search funtion
   const handleSearch = async () => {
-    try {
-      const response = await fetch(`http://localhost:8081/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
-      const data = await response.json();
-      if (data.length > 0) {
-        setRows(data);
-        setSuccess(true);
-        setSuccessMessage("successfully listed")
-      } else {
-        setRows([]);
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.read) {
+      try {
+        const response = await fetch(`http://localhost:8081/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+        const data = await response.json();
+        if (data.length > 0) {
+          setRows(data);
+          setSuccess(true);
+          setSuccessMessage("successfully listed")
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("no data find")
+        }
+      } catch {
         setError(true);
-        setErrorMessage("no data find")
+        setErrorMessage("sorry")
       }
-    } catch {
-      setError(true);
-      setErrorMessage("sorry")
+    } else {
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
   };
 
@@ -524,7 +597,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={() => handleUpload('InsuranceCopy')} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('InsuranceCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
                   Insurance Copy
                 </Button>
               </div>
@@ -573,7 +646,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={() => handleUpload('LicenseCopy')} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('LicenseCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
                   License Copy
                 </Button>
               </div>
@@ -608,7 +681,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" onClick={() => handleUpload('NationalPermitCopy')} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('NationalPermitCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
                   National Permit Copy
                 </Button>
               </div>
@@ -656,7 +729,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" onClick={() => handleUpload('StatePermitCopy')} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('StatePermitCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
                   State Permit Copy
                 </Button>
               </div>
@@ -704,12 +777,12 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={() => handleUpload('RCBookCopy')} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('RCBookCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
                   RC-Book Copy
                 </Button>
               </div>
               <div className="input" style={{ width: "160px" }}>
-                <Button color="primary" onClick={() => handleUpload('FCCopy')} size="md" variant="contained">
+                <Button color="primary" onClick={() => handleUpload('FCCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
                   FC Copy
                 </Button>
               </div>
@@ -817,7 +890,7 @@ const Vehicaleinfo = () => {
                 </Button>
               </div>
               <div className="input" style={{ width: "80px" }}>
-                <Button variant="contained" onClick={handleAdd}>Add</Button>
+                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
               </div>
             </div>
 

@@ -36,6 +36,7 @@ const MainDashboard = () => {
     e.preventDefault();
     localStorage.removeItem("auth");
     localStorage.removeItem("username");
+    localStorage.removeItem("useridno");
     setExpanded(true);
     navigate("/");
   };
@@ -69,6 +70,37 @@ const MainDashboard = () => {
       navigate("/home/usersettings/usersetting");
     }
   };
+
+  const [routeData, setRouteData] = useState('');
+
+  const storeUsername = localStorage.getItem("username");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const username = storeUsername;
+      try {
+        const response = await fetch(`http://localhost:8081/userdata/${encodeURIComponent(username)}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const routeData = await response.json();
+        setRouteData(routeData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [storeUsername]);
+
+  const useridno = routeData[0]?.userid;
+
+  localStorage.setItem('useridno', useridno);
+  const storeUserId = localStorage.getItem('useridno');
+
+  // Display the value in the console
+  console.log('Stored UserId:', storeUserId);
+
+  console.log('user id display', useridno);
 
   return (
     <section className={`dash-board ${selectedTheme}`}>

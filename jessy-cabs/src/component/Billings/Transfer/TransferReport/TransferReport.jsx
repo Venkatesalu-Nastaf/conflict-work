@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import "./TransferReport.css";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -34,6 +34,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortawesome/free-solid-svg-icons";
@@ -45,23 +46,77 @@ const columns = [
 ];
 
 const TransferReport = () => {
+  const user_id = localStorage.getItem('useridno');
+
   const [pbpopupOpen, setpbPopupOpen] = useState(false);
   const [npopupOpen, setnPopupOpen] = useState(false);
-  const [fromDate, setFromDate] = useState(dayjs());
-  const [toDate, setToDate] = useState(dayjs());
   const [lxpopupOpen, setlxPopupOpen] = useState(false);
   const [servicestation, setServiceStation] = useState("");
   const [customer, setCustomer] = useState("");
   const [date] = useState(dayjs());
   const [info, setInfo] = useState(false);
   const [bankOptions, setBankOptions] = useState([]);
-  const [warning, setWarning] = useState(false);
   const [tripData, setTripData] = useState('');
   const [rows, setRows] = useState([]);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
+  const [warning, setWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState({});
+
+  // for page permission
+
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'CB Billing';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+        console.log('permission data', response.data);
+      } catch (error) {
+        console.error('Error fetching user permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = useCallback(async () => {
+    const currentPageName = 'CB Billing';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  }, [userPermissions]);
+
+  const permissions = checkPagePermission();
+
+  const isFieldReadOnly = (fieldName) => {
+    if (permissions.read) {
+      if (fieldName === "delete" && !permissions.delete) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+
 
   useEffect(() => {
     window.history.replaceState(null, document.title, window.location.pathname);
@@ -92,6 +147,8 @@ const TransferReport = () => {
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'Transfer Report.pdf');
   };
+
+
 
   useEffect(() => {
     if (error) {
@@ -158,6 +215,7 @@ const TransferReport = () => {
     setlxPopupOpen(false);
     localStorage.removeItem('selectedcustomerdata');
     localStorage.removeItem('selectedcustomer');
+    localStorage.removeItem('selectedcustomerid');
   };
 
   const hidePopup = () => {
@@ -169,52 +227,58 @@ const TransferReport = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const tripid = localStorage.getItem('selectedtripsheetid');
-        const encoded = localStorage.getItem('selectedcustomerdata');
-        localStorage.setItem('selectedcustomer', encoded);
-        const storedCustomer = localStorage.getItem('selectedcustomer');
-        const customer = decodeURIComponent(storedCustomer);
-        console.log('final customer data', customer);
-        console.log('collected data from dataentry', tripid, customer);
-        const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const tripData = await response.json();
-        if (Array.isArray(tripData)) {
-          setTripData(tripData);
-          const tripsheetNumbers = tripData.map((row, index) => ({
-            id: index + 1,
-            guestname: row.guestname,
-            tripid: row.tripid
-          }));
-          // setRows(tripsheetNumbers);
-          if (tripsheetNumbers.length > 0) {
-            const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
-              ...row,
-              id: index + 1,
-            }));
-            setRows(rowsWithUniqueId);
-            setSuccess(true);
-            setSuccessMessage("successfully listed")
-          } else {
-            setRows([]);
-            setError(true);
-            setErrorMessage("no data found")
+      const permissions = checkPagePermission();
+
+      if (permissions.read && permissions.read) {
+        try {
+          const tripid = localStorage.getItem('selectedtripsheetid');
+          const encoded = localStorage.getItem('selectedcustomerdata');
+          localStorage.setItem('selectedcustomer', encoded);
+          const storedCustomer = localStorage.getItem('selectedcustomer');
+          const customer = decodeURIComponent(storedCustomer);
+          console.log('final customer data', customer);
+          console.log('collected data from dataentry', tripid, customer);
+          const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
           }
-        } else if (typeof tripData === 'object') {
-          const tripsheetNumbers = [{ id: 1, guestname: tripData.guestname, tripid: tripData.tripid }];
-          setRows(tripsheetNumbers);
-        } else {
+          const tripData = await response.json();
+          if (Array.isArray(tripData)) {
+            setTripData(tripData);
+            const tripsheetNumbers = tripData.map((row, index) => ({
+              id: index + 1,
+              guestname: row.guestname,
+              tripid: row.tripid
+            }));
+            if (tripsheetNumbers.length > 0) {
+              const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
+                ...row,
+                id: index + 1,
+              }));
+              setRows(rowsWithUniqueId);
+              setSuccess(true);
+              setSuccessMessage("successfully listed")
+            } else {
+              setRows([]);
+              setError(true);
+              setErrorMessage("no data found")
+            }
+          } else if (typeof tripData === 'object') {
+            const tripsheetNumbers = [{ id: 1, guestname: tripData.guestname, tripid: tripData.tripid }];
+            setRows(tripsheetNumbers);
+          } else {
+          }
+        } catch {
+          setError(true);
+          setErrorMessage("something went wrong.");
         }
-      } catch {
-        setError(true);
-        setErrorMessage("something went wrong.");
+      } else {
+        setWarning(true);
+        setWarningMessage("You do not have permission.");
       }
     };
     fetchData();
-  }, []);
+  }, [checkPagePermission]);
 
   const customerName = localStorage.getItem('selectedcustomerdata');
   localStorage.setItem('selectedcustomer', customerName);
@@ -393,6 +457,7 @@ const TransferReport = () => {
                     label="Reference No"
                     name="referenceno"
                     autoComplete='off'
+                    disabled={isFieldReadOnly("read")}
                   />
                 </div>
                 <div className="input" style={{ width: "230px" }}>
@@ -651,6 +716,13 @@ const TransferReport = () => {
               <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>{successMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
             </div>
           }
         </div>

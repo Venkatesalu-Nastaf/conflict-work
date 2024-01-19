@@ -21,12 +21,15 @@ import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 // ICONS
 import { faBuilding, faNewspaper } from '@fortawesome/free-solid-svg-icons';
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
 const TransferList = () => {
+    const user_id = localStorage.getItem('useridno');
+
     const [selectedStatus, setSelectedStatus] = useState('');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
@@ -37,7 +40,64 @@ const TransferList = () => {
     const [toDate, setToDate] = useState(dayjs());
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
+    const [warning, setWarning] = useState(false);
+    const [warningMessage, setWarningMessage] = useState({});
     const [servicestation, setServiceStation] = useState("");
+
+    // for page permission
+
+    const [userPermissions, setUserPermissions] = useState({});
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'CB Billing';
+                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                setUserPermissions(response.data);
+                console.log('permission data', response.data);
+            } catch (error) {
+                console.error('Error fetching user permissions:', error);
+            }
+        };
+
+        fetchPermissions();
+    }, [user_id]);
+
+    const checkPagePermission = useCallback(async () => {
+        const currentPageName = 'CB Billing';
+        const permissions = userPermissions || {};
+
+        if (permissions.page_name === currentPageName) {
+            return {
+                read: permissions.read_permission === 1,
+                new: permissions.new_permission === 1,
+                modify: permissions.modify_permission === 1,
+                delete: permissions.delete_permission === 1,
+            };
+        }
+
+        return {
+            read: false,
+            new: false,
+            modify: false,
+            delete: false,
+        };
+    }, [userPermissions]);
+
+
+    const permissions = checkPagePermission();
+
+    // Function to determine if a field should be read-only based on permissions
+    const isFieldReadOnly = (fieldName) => {
+        if (permissions.read) {
+            // If user has read permission, check for other specific permissions
+            if (fieldName === "delete" && !permissions.delete) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    };
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -75,7 +135,16 @@ const TransferList = () => {
     const hidePopup = () => {
         setError(false);
         setSuccess(false);
+        setWarning(false);
     };
+    useEffect(() => {
+        if (warning) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [warning]);
 
     useEffect(() => {
         if (error) {
@@ -116,42 +185,49 @@ const TransferList = () => {
     }, []);
 
     const handleShow = useCallback(async () => {
-        try {
-            const response = await axios.get(`http://localhost:8081/payment-detail`, {
-                params: {
-                    customer: encodeURIComponent(customer),
-                    fromDate: fromDate.format('YYYY-MM-DD'),
-                    toDate: toDate.format('YYYY-MM-DD'),
-                    servicestation: encodeURIComponent(servicestation),
-                },
-            });
+        const permissions = checkPagePermission();
 
-            const data = response.data;
+        if (permissions.read && permissions.read) {
+            try {
+                const response = await axios.get(`http://localhost:8081/payment-detail`, {
+                    params: {
+                        customer: encodeURIComponent(customer),
+                        fromDate: fromDate.format('YYYY-MM-DD'),
+                        toDate: toDate.format('YYYY-MM-DD'),
+                        servicestation: encodeURIComponent(servicestation),
+                    },
+                });
 
-            if (data.length > 0) {
-                const rowsWithUniqueId = data.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                    Trips: row.trip_count,
-                    toll: row.total_toll,
-                    amount: row.total_Amount,
-                    grossamount: row.total_Amount,
-                    guestname: row.customer,
-                }));
-                setRows(rowsWithUniqueId);
-                setSuccess(true);
-                setSuccessMessage("Successfully listed");
-            } else {
+                const data = response.data;
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                        Trips: row.trip_count,
+                        toll: row.total_toll,
+                        amount: row.total_Amount,
+                        grossamount: row.total_Amount,
+                        guestname: row.customer,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
+            } catch {
                 setRows([]);
                 setError(true);
-                setErrorMessage("No data found");
+                setErrorMessage("Check your Network Connection");
             }
-        } catch {
-            setRows([]);
-            setError(true);
-            setErrorMessage("Check your Network Connection");
+        } else {
+            setWarning(true);
+            setWarningMessage("You do not have permission.");
         }
-    }, [customer, fromDate, toDate, servicestation]);
+    }, [customer, fromDate, toDate, servicestation, checkPagePermission]);
 
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -263,7 +339,7 @@ const TransferList = () => {
                                     />
                                 </div>
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow}>Search</Button>
+                                    <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("new")}>Search</Button>
                                 </div>
                             </div>
                         </div>
@@ -310,6 +386,13 @@ const TransferList = () => {
                     <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                     <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                     <p>{successMessage}</p>
+                </div>
+            }
+            {warning &&
+                <div className='alert-popup Warning' >
+                    <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                    <p>{warningMessage}</p>
                 </div>
             }
         </div>

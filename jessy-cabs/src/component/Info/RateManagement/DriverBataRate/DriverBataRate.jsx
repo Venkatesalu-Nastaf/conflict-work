@@ -63,6 +63,7 @@ const columns = [
 // TABLE END
 
 const DriverBataRate = () => {
+  const user_id = localStorage.getItem('useridno');
 
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -75,8 +76,63 @@ const DriverBataRate = () => {
   const [warning, setWarning] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage] = useState({});
+  const [warningMessage, setWarningMessage] = useState({});
   const [infoMessage] = useState({});
+
+  // for page permission
+
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'Rate Type';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+        console.log('permission data', response.data);
+      } catch (error) {
+        console.error('Error fetching user permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = () => {
+    const currentPageName = 'Rate Type';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  };
+
+  const permissions = checkPagePermission();
+
+  // Function to determine if a field should be read-only based on permissions
+  const isFieldReadOnly = (fieldName) => {
+    if (permissions.read) {
+      // If user has read permission, check for other specific permissions
+      if (fieldName === "delete" && !permissions.delete) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+
 
   const hidePopup = () => {
     setSuccess(false);
@@ -197,21 +253,31 @@ const DriverBataRate = () => {
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
   }, []);
+
   const handleAdd = async () => {
-    const VehicleType = book.VehicleType;
-    if (!VehicleType) {
-      setError(true);
-      setErrorMessage("Check your Network Connection");
-      return;
-    }
-    try {
-      await axios.post('http://localhost:8081/driverbatarate', book);
-      handleCancel();
-      setSuccess(true);
-      setSuccessMessage("Successfully Added");
-    } catch {
-      setError(true);
-      setErrorMessage("Check your Network Connection");
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.new) {
+      const VehicleType = book.VehicleType;
+      if (!VehicleType) {
+        setError(true);
+        setErrorMessage("Check your Network Connection");
+        return;
+      }
+      try {
+        await axios.post('http://localhost:8081/driverbatarate', book);
+        handleCancel();
+        setRows([]);
+        setSuccess(true);
+        setSuccessMessage("Successfully Added");
+      } catch {
+        setError(true);
+        setErrorMessage("Check your Network Connection");
+      }
+    } else {
+      // Display a warning or prevent the action
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
   };
 
@@ -219,32 +285,56 @@ const DriverBataRate = () => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-        const response = await axios.get('http://localhost:8081/driverbatarate');
-        const data = response.data;
-        if (data.length > 0) {
-          setRows(data);
-          setSuccess(true);
-          setSuccessMessage("Successfully listed");
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.read) {
+          const response = await axios.get('http://localhost:8081/driverbatarate');
+          const data = response.data;
+          if (data.length > 0) {
+            setRows(data);
+            setSuccess(true);
+            setSuccessMessage("Successfully listed");
+          } else {
+            setRows([]);
+            setError(true);
+            setErrorMessage("No data found");
+          }
         } else {
-          setRows([]);
-          setError(true);
-          setErrorMessage("No data found");
+          setWarning(true);
+          setWarningMessage("You do not have permission.");
         }
       } else if (actionName === 'Cancel') {
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Delete') {
-        await axios.delete(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`);
-        setSelectedCustomerData(null);
-        setSuccess(true);
-        setSuccessMessage("Successfully Deleted");
-        handleCancel();
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.delete) {
+          await axios.delete(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`);
+          setSelectedCustomerData(null);
+          setSuccess(true);
+          setSuccessMessage("Successfully Deleted");
+          handleCancel();
+          setRows([]);
+        } else {
+          setWarning(true);
+          setWarningMessage("You do not have permission.");
+        }
       } else if (actionName === 'Edit') {
-        const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
-        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`, updatedCustomer);
-        setSuccess(true);
-        setSuccessMessage("Successfully updated");
-        handleCancel();
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+          const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
+          const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+          await axios.put(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`, updatedCustomer);
+          setSuccess(true);
+          setSuccessMessage("Successfully updated");
+          handleCancel();
+          setRows([]);
+        } else {
+          setWarning(true);
+          setWarningMessage("You do not have permission.");
+        }
       } else if (actionName === 'Add') {
         handleAdd();
       }
@@ -269,7 +359,6 @@ const DriverBataRate = () => {
               <div className="input-field">
                 <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    {/* <DemoItem label="From Date"> */}
                     <DatePicker
                       label='From Date'
                       format="DD/MM/YYYY"
@@ -285,7 +374,6 @@ const DriverBataRate = () => {
                 </div>
                 <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    {/* <DemoItem label="To Date"> */}
                     <DatePicker
                       label='To Date'
                       format="DD/MM/YYYY"
@@ -315,7 +403,6 @@ const DriverBataRate = () => {
                     }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.VehicleType || ''}
                     renderInput={(params) => {
-                      // params.inputProps.value = selectedCustomerData?.VehicleType || ''
                       return (
                         <TextField {...params} label="Vehicle Type" name="VehicleType" inputRef={params.inputRef} />
                       )
@@ -337,7 +424,6 @@ const DriverBataRate = () => {
                     size="small"
                     id="free-solo-demo-VehicleType"
                     freeSolo
-                    // sx={{ width: "20ch" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "Duty")}
                     value={Duty.find((option) => option.optionvalue)?.label || selectedCustomerData?.Duty || ''}
                     options={Duty.map((option) => ({
@@ -345,7 +431,6 @@ const DriverBataRate = () => {
                     }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.Duty || ''}
                     renderInput={(params) => {
-                      // params.inputProps.value = selectedCustomerData?.Duty || ''
                       return (
                         <TextField {...params} label="Duty" name="Duty" inputRef={params.inputRef} />
                       )
@@ -377,7 +462,6 @@ const DriverBataRate = () => {
                     onChange={handleChange}
                   />
                 </div>
-
               </div>
               <div className="input-field">
                 <div className="input">
@@ -429,7 +513,7 @@ const DriverBataRate = () => {
                   />
                 </div>
                 <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained" >Add</Button>
+                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")} >Add</Button>
                 </div>
               </div>
             </div>

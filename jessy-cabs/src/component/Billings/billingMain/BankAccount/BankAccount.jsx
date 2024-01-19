@@ -24,6 +24,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 
 const BankAccount = () => {
+  const user_id = localStorage.getItem('useridno');
+
   const [showAddBankForm, setShowAddBankForm] = useState(false);
   const [totalcapital, setTotalCapital] = useState(0);
   const [totalIn, setTotalIn] = useState(0);
@@ -35,11 +37,66 @@ const BankAccount = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
   const [infoMessage] = useState('');
-  const [warningMessage] = useState('');
+  const [warningMessage, setWarningMessage] = useState('');
   const [info, setInfo] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [warning, setWarning] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+
+  // for page permission
+
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'Payments';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+        console.log('permission data', response.data);
+      } catch (error) {
+        console.error('Error fetching user permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = useCallback(async () => {
+    const currentPageName = 'Payments';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  }, [userPermissions]);
+
+  const permissions = checkPagePermission();
+
+  // Function to determine if a field should be read-only based on permissions
+  const isFieldReadOnly = (fieldName) => {
+    if (permissions.read) {
+      // If user has read permission, check for other specific permissions
+      if (fieldName === "delete" && !permissions.delete) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+
 
   const hidePopup = () => {
     setError(false);
@@ -104,46 +161,61 @@ const BankAccount = () => {
   };
 
   const handleAddBank = () => {
-    const bankname = book.bankname;
-    const capital = book.capital;
-    if (!bankname || !capital) {
-      setError(true);
-      setErrorMessage('Please fill in all required fields.');
-      return;
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.new) {
+      const bankname = book.bankname;
+      const capital = book.capital;
+      if (!bankname || !capital) {
+        setError(true);
+        setErrorMessage('Please fill in all required fields.');
+        return;
+      }
+      const newBank = {
+        bankname,
+        bankname2: book.bankname,
+        capital,
+        netbalance: book.capital,
+        totalin: book.capital,
+        totalout: 0,
+      };
+      setBankDetails((prevBankDetails) => [...prevBankDetails, newBank]);
+      fetchData();
+      setEditingIndex(null);
+    } else {
+      // Display a warning or prevent the action
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
-    const newBank = {
-      bankname,
-      bankname2: book.bankname,
-      capital,
-      netbalance: book.capital,
-      totalin: book.capital,
-      totalout: 0,
-    };
-    setBankDetails((prevBankDetails) => [...prevBankDetails, newBank]);
-    fetchData();
-    setEditingIndex(null);
   };
 
   const handleSaveEdit = async (index, id) => {
-    try {
-      if (index >= 0 && index < bankDetails.length) {
-        const updatedBank = bankDetails[index];
-        const updateData = {
-          id: updatedBank.id,
-          bankname2: book.bankname2 || updatedBank.bankname2,
-          netbalance: book.netbalance || updatedBank.netbalance,
-          totalin: book.netbalance || updatedBank.totalin,
-          totalout: book.totalout || updatedBank.totalout,
-        };
-        await axios.put(`http://localhost:8081/updatebankdetails/${updatedBank.id}`, updateData);
-        setSuccess(true);
-        setSuccessMessage('Successfully Updated');
-        setEditingIndex(null);
-      } else {
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.read) {
+      try {
+        if (index >= 0 && index < bankDetails.length) {
+          const updatedBank = bankDetails[index];
+          const updateData = {
+            id: updatedBank.id,
+            bankname2: book.bankname2 || updatedBank.bankname2,
+            netbalance: book.netbalance || updatedBank.netbalance,
+            totalin: book.netbalance || updatedBank.totalin,
+            totalout: book.totalout || updatedBank.totalout,
+          };
+          await axios.put(`http://localhost:8081/updatebankdetails/${updatedBank.id}`, updateData);
+          setSuccess(true);
+          setSuccessMessage('Successfully Updated');
+          setEditingIndex(null);
+        } else {
+        }
+      } catch {
+        setError(true);
+        setErrorMessage('Error updating bank account. Please check your Network Connection.');
       }
-    } catch {
-      setError(true);
-      setErrorMessage('Error updating bank account. Please check your Network Connection.');
+    } else {
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
   };
 
@@ -171,42 +243,57 @@ const BankAccount = () => {
   };
 
   const handleAdd = async () => {
-    try {
-      const newBank = {
-        bankname: book.bankname,
-        capital: book.capital,
-        AccountType: book.AccountType,
-        bankname2: book.bankname,
-        netbalance: book.capital,
-        totalin: book.capital,
-        totalout: 0,
-      };
-      await axios.post('http://localhost:8081/bankdetails', newBank);
-      handleAddBank();
-      handleCancel();
-    } catch {
-      setError(true);
-      setErrorMessage('Error adding bank account. Please check your Network Connection.');
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.new) {
+      try {
+        const newBank = {
+          bankname: book.bankname,
+          capital: book.capital,
+          AccountType: book.AccountType,
+          bankname2: book.bankname,
+          netbalance: book.capital,
+          totalin: book.capital,
+          totalout: 0,
+        };
+        await axios.post('http://localhost:8081/bankdetails', newBank);
+        handleAddBank();
+        handleCancel();
+      } catch {
+        setError(true);
+        setErrorMessage('Error adding bank account. Please check your Network Connection.');
+      }
+    } else {
+      // Display a warning or prevent the action
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
   };
 
   const fetchData = useCallback(async () => {
-    try {
-      const response = await fetch('http://localhost:8081/getbankdetails');
-      if (response.ok) {
-        const data = await response.json();
-        if (data.length > 0) {
-          setBankDetails(data);
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.read) {
+      try {
+        const response = await fetch('http://localhost:8081/getbankdetails');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.length > 0) {
+            setBankDetails(data);
+          } else {
+            setBankDetails([]);
+            setError(true);
+            setErrorMessage("No data found");
+          }
         } else {
-          setBankDetails([]);
-          setError(true);
-          setErrorMessage("No data found");
         }
-      } else {
+      } catch {
       }
-    } catch {
+    } else {
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
-  }, []);
+  }, [checkPagePermission]);
 
   useEffect(() => {
     fetchData();
@@ -223,18 +310,25 @@ const BankAccount = () => {
   };
 
   const handleDeleteBank = useCallback(async (id) => {
-    if (!id) {
-      return;
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.delete) {
+      if (!id) {
+        return;
+      }
+      try {
+        await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
+        fetchData();
+        handlePopupClose();
+      } catch (error) {
+        setError(true);
+        setErrorMessage('Error deleting bank account. Please check your Network Connection.');
+      }
+    } else {
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
-    try {
-      await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
-      fetchData();
-      handlePopupClose();
-    } catch (error) {
-      setError(true);
-      setErrorMessage('Error deleting bank account. Please check your Network Connection.');
-    }
-  }, [fetchData, handlePopupClose]); // Add dependencies as needed
+  }, [fetchData, handlePopupClose, checkPagePermission]); // Add dependencies as needed
 
   useEffect(() => {
     if (deleteId !== null) {
@@ -288,7 +382,7 @@ const BankAccount = () => {
         <div className="BankAccount-detail-container-main">
           <div className="BankAccount-first-container">
             <div className="input bankaddbtn">
-              <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick}>
+              <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick} disabled={isFieldReadOnly("new")}>
                 Add bank
               </Button>
             </div>

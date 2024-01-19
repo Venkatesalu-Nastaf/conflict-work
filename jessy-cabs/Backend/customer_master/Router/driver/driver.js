@@ -106,5 +106,22 @@ router.get('/userdataid/:user_id', (req, res) => {
     return res.status(200).json(userdetails);
   });
 });
+//collect permission database
+
+router.get('/user-permissions/:user_id/:page_name', (req, res) => {
+  const { user_id, page_name } = req.params;
+
+  const query = `SELECT * FROM user_permissions WHERE user_id = ? AND page_name = ?`;
+
+  db.query(query, [user_id, page_name], (error, results) => {
+    if (error) {
+      console.error('Error fetching user permissions:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      console.log('User Permissions:', results); // Log the entire results array
+      res.json(results[0]);
+    }
+  });
+});
 
 module.exports = router;

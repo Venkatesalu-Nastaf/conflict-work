@@ -63,6 +63,8 @@ const actions = [
 ];
 
 const EmployeeCreation = () => {
+  const user_id = localStorage.getItem('useridno');
+
   const [showPasswords, setShowPasswords] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -78,8 +80,62 @@ const EmployeeCreation = () => {
   const [warning, setWarning] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage] = useState({});
+  const [warningMessage, setWarningMessage] = useState({});
   const [infoMessage] = useState({});
+
+  // for page permission
+
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'User Creation';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+        console.log('permission data', response.data);
+      } catch (error) {
+        console.error('Error fetching user permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = () => {
+    const currentPageName = 'User Creation';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  };
+
+  const permissions = checkPagePermission();
+
+  // Function to determine if a field should be read-only based on permissions
+  const isFieldReadOnly = (fieldName) => {
+    if (permissions.read) {
+      // If user has read permission, check for other specific permissions
+      if (fieldName === "delete" && !permissions.delete) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
 
 
   // TABLE START
@@ -164,26 +220,37 @@ const EmployeeCreation = () => {
   };
 
   const handleAdd = async () => {
-    const stationname = book.stationname;
+    const permissions = checkPagePermission();
 
-    if (password === confirmPassword) {
-      if (!stationname) {
-        setError(true);
-        setErrorMessage("Fill mandatory fields");
-        return;
-      }
-      try {
-        await axios.post('http://localhost:8081/usercreation', book);
-        handleCancel();
-        validatePasswordMatch();
-        setSuccess(true);
-        setSuccessMessage("Successfully Added");
-      } catch (error) {
-        setError(true);
-        setErrorMessage("Check your Network Connection");
+    if (permissions.read && permissions.new) {
+      const stationname = book.stationname;
+
+      if (password === confirmPassword) {
+        if (!stationname) {
+          setError(true);
+          setErrorMessage("Fill mandatory fields");
+          return;
+        }
+
+        try {
+          await axios.post('http://localhost:8081/usercreation', book);
+          handleCancel();
+          setRows([]);
+          validatePasswordMatch();
+          setSuccess(true);
+          setSuccessMessage("Successfully Added");
+        } catch (error) {
+          setError(true);
+          setErrorMessage("Check your Network Connection");
+        }
+
+      } else {
+        setPasswordsMatch(true);
       }
     } else {
-      setPasswordsMatch(true);
+      // Display a warning or prevent the action
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
   };
 
@@ -191,32 +258,58 @@ const EmployeeCreation = () => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-        const response = await axios.get('http://localhost:8081/usercreation');
-        const data = response.data;
-        if (data.length > 0) {
-          setRows(data);
-          setSuccess(true);
-          setSuccessMessage("Successfully listed");
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.read) {
+          const response = await axios.get('http://localhost:8081/usercreation');
+          const data = response.data;
+          if (data.length > 0) {
+            setRows(data);
+            setSuccess(true);
+            setSuccessMessage("Successfully listed");
+          } else {
+            setRows([]);
+            setError(true);
+            setErrorMessage("No data found");
+          }
         } else {
-          setRows([]);
-          setError(true);
-          setErrorMessage("No data found");
+          setWarning(true);
+          setWarningMessage("You do not have permission.");
         }
       } else if (actionName === 'Cancel') {
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Delete') {
-        await axios.delete(`http://localhost:8081/usercreation/${userid}`);
-        setSelectedCustomerData(null);
-        setSuccess(true);
-        setSuccessMessage("Successfully Deleted");
-        handleCancel();
+        // if (checkPagePermission() && userPermissions?.delete) {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.delete) {
+          await axios.delete(`http://localhost:8081/usercreation/${book.userid || selectedCustomerData?.userid}`);
+          setSelectedCustomerData(null);
+          setSuccess(true);
+          setSuccessMessage("Successfully Deleted");
+          handleCancel();
+          setRows([]);
+        } else {
+          setWarning(true);
+          setWarningMessage("You do not have permission.");
+        }
       } else if (actionName === 'Edit') {
-        const selectedCustomer = rows.find((row) => row.userid === userid);
-        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/usercreation/${userid}`, updatedCustomer);
-        setSuccess(true);
-        setSuccessMessage("Successfully updated");
-        handleCancel();
+        // if (checkPagePermission() && userPermissions?.modify) {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+          const selectedCustomer = rows.find((row) => row.userid === userid);
+          const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+          await axios.put(`http://localhost:8081/usercreation/${book.userid || selectedCustomerData?.userid}`, updatedCustomer);
+          setSuccess(true);
+          setSuccessMessage("Successfully updated");
+          handleCancel();
+          setRows([]);
+        } else {
+          setWarning(true);
+          setWarningMessage("You do not have permission.");
+        }
       } else if (actionName === 'Add') {
         handleAdd();
       }
@@ -359,7 +452,6 @@ const EmployeeCreation = () => {
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData?.stationname || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = selectedCustomerData?.stationname || ''
                     return (
                       <TextField {...params} label="Station Name" name="stationname" />
                     )
@@ -472,7 +564,6 @@ const EmployeeCreation = () => {
                   id="free-solo-demo-viewfor"
                   freeSolo
                   sx={{ width: "20ch" }}
-                  // value={selectedCustomerData?.viewfor || ''}
                   value={ViewFor.find((option) => option.Option)?.label || selectedCustomerData?.viewfor || ''}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "viewfor")}
                   options={ViewFor.map((option) => ({
@@ -480,7 +571,6 @@ const EmployeeCreation = () => {
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData?.viewfor || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = selectedCustomerData?.viewfor || ''
                     return (
                       <TextField {...params} label="View For" name="viewfor" />
                     )
@@ -491,7 +581,7 @@ const EmployeeCreation = () => {
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "160px" }}>
-                <Button variant="contained" onClick={handleAdd}>Add</Button>
+                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
               </div>
             </div>
           </div>

@@ -22,6 +22,7 @@ import jsPDF from 'jspdf';
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { faBuilding, faFileInvoiceDollar, faTags } from "@fortawesome/free-solid-svg-icons";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
@@ -53,6 +54,8 @@ const columns = [
 ];
 
 const TransferDataEntry = () => {
+  const user_id = localStorage.getItem('useridno');
+
   const [rows, setRows] = useState([]);
   const [totalKm, setTotalKM] = useState(0);
   const [error, setError] = useState(false);
@@ -67,11 +70,69 @@ const TransferDataEntry = () => {
   const [date] = useState(dayjs());
   const [totalAmount, setTotalAmount] = useState(0);
   const [bankOptions, setBankOptions] = useState([]);
+  const [warning, setWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [successMessage, setSuccessMessage] = useState({});
   const [servicestation, setServiceStation] = useState("");
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
+
+  // for page permission
+
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'CB Billing';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+        console.log('permission data', response.data);
+      } catch (error) {
+        console.error('Error fetching user permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = useCallback(async () => {
+    const currentPageName = 'CB Billing';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  }, [userPermissions]);
+
+  const permissions = checkPagePermission();
+
+  // Function to determine if a field should be read-only based on permissions
+  const isFieldReadOnly = (fieldName) => {
+    if (permissions.read) {
+      // If user has read permission, check for other specific permissions
+      if (fieldName === "delete" && !permissions.delete) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+
+
 
   const convertToCSV = (data) => {
     const header = columns.map((column) => column.headerName).join(",");
@@ -117,13 +178,25 @@ const TransferDataEntry = () => {
     setSelectedCustomerDatas('');
     localStorage.removeItem('selectedcustomerdata');
     localStorage.removeItem('selectedcustomer');
+    localStorage.removeItem('selectedcustomerid');
+    localStorage.removeItem('fromDate');
+    localStorage.removeItem('toDate');
   };
 
   const hidePopup = () => {
     setError(false);
     setSuccess(false);
+    setWarning(false);
   };
 
+  useEffect(() => {
+    if (warning) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [warning]);
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -189,44 +262,51 @@ const TransferDataEntry = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const customer = localStorage.getItem('selectedcustomer');
-        const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const tripData = await response.json();
-        if (Array.isArray(tripData)) {
-          const transformedRows = tripData.map(transformRow);
-          const rowsWithUniqueId = transformedRows.map((row, index) => ({
-            ...row,
-            id: index + 1,
-          }));
-          setTripData(rowsWithUniqueId);
-          setRows(rowsWithUniqueId);
-          if (transformedRows.length > 0) {
-            const fromDate = dayjs(transformedRows[0].startdate);
-            const toDate = dayjs(transformedRows[transformedRows.length - 1].startdate);
+      const permissions = checkPagePermission();
 
-            // Set values in local storage
-            localStorage.setItem('fromDate', fromDate.format('YYYY-MM-DD'));
-            localStorage.setItem('toDate', toDate.format('YYYY-MM-DD'));
-
-            // Now, you can also set your state if needed
-            setFromDate(fromDate);
-            setToDate(toDate);
+      if (permissions.read && permissions.read) {
+        try {
+          const customer = localStorage.getItem('selectedcustomer');
+          const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
           }
-        } else if (typeof tripData === 'object') {
-          setRows([transformRow(tripData)]);
-        } else {
-          setError(true);
-          setErrorMessage('Fetched data has unexpected format.');
+          const tripData = await response.json();
+          if (Array.isArray(tripData)) {
+            const transformedRows = tripData.map(transformRow);
+            const rowsWithUniqueId = transformedRows.map((row, index) => ({
+              ...row,
+              id: index + 1,
+            }));
+            setTripData(rowsWithUniqueId);
+            setRows(rowsWithUniqueId);
+            if (transformedRows.length > 0) {
+              const fromDate = dayjs(transformedRows[0].startdate);
+              const toDate = dayjs(transformedRows[transformedRows.length - 1].startdate);
+
+              // Set values in local storage
+              localStorage.setItem('fromDate', fromDate.format('YYYY-MM-DD'));
+              localStorage.setItem('toDate', toDate.format('YYYY-MM-DD'));
+
+              // Now, you can also set your state if needed
+              setFromDate(fromDate);
+              setToDate(toDate);
+            }
+          } else if (typeof tripData === 'object') {
+            setRows([transformRow(tripData)]);
+          } else {
+            setError(true);
+            setErrorMessage('Fetched data has unexpected format.');
+          }
+        } catch {
         }
-      } catch {
+      } else {
+        setWarning(true);
+        setWarningMessage("You do not have permission.");
       }
     };
     fetchData();
-  }, []);
+  }, [checkPagePermission]);
 
   //calculate total amount in column
   useEffect(() => {
@@ -419,70 +499,84 @@ const TransferDataEntry = () => {
   };
 
   const handleKeyenter = useCallback(async (event) => {
-    if (event.key === 'Enter') {
-      try {
-        const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
-        console.log('Sending request for invoiceno:', invoiceNumber);
-        const response = await axios.get(`http://localhost:8081/billingdata/${invoiceNumber}`);
-        if (response.status === 200) {
-          const billingDetails = response.data;
-          if (billingDetails) {
-            setSelectedCustomerDatas(billingDetails);
-            setSuccess(true);
-            setSuccessMessage("Successfully listed");
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.read) {
+      if (event.key === 'Enter') {
+        try {
+          const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
+          console.log('Sending request for invoiceno:', invoiceNumber);
+          const response = await axios.get(`http://localhost:8081/billingdata/${invoiceNumber}`);
+          if (response.status === 200) {
+            const billingDetails = response.data;
+            if (billingDetails) {
+              setSelectedCustomerDatas(billingDetails);
+              setSuccess(true);
+              setSuccessMessage("Successfully listed");
+            } else {
+              setRows([]);
+              setError(true);
+              setErrorMessage("No data found");
+            }
           } else {
-            setRows([]);
             setError(true);
-            setErrorMessage("No data found");
+            setErrorMessage(`Failed to retrieve billing details. Status: ${response.status}`);
           }
-        } else {
+        } catch (error) {
           setError(true);
-          setErrorMessage(`Failed to retrieve billing details. Status: ${response.status}`);
+          setErrorMessage('Error retrieving billings details.', error);
         }
-      } catch (error) {
-        setError(true);
-        setErrorMessage('Error retrieving billings details.', error);
       }
+    } else {
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
-  }, [invoiceno, book, selectedCustomerDatas]);
+  }, [invoiceno, book, selectedCustomerDatas, checkPagePermission]);
 
   const handleShow = useCallback(async () => {
-    try {
-      const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
-      const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
-      const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
-      const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+    const permissions = checkPagePermission();
 
-      console.log('Selected values:', { customer: customerValue, fromDate: fromDateValue, toDate: toDateValue, servicestation: servicestationValue });
+    if (permissions.read && permissions.read) {
+      try {
+        const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+        const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
+        const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
+        const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
 
-      const response = await axios.get(`http://localhost:8081/Group-Billing`, {
-        params: {
-          customer: customerValue,
-          fromDate: fromDateValue,
-          toDate: toDateValue,
-          servicestation: servicestationValue
-        },
-      });
-      const data = response.data;
-      if (data.length > 0) {
-        const rowsWithUniqueId = data.map((row, index) => ({
-          ...row,
-          id: index + 1,
-        }));
-        setRows(rowsWithUniqueId);
-        setSuccess(true);
-        setSuccessMessage("successfully listed")
-      } else {
+        console.log('Selected values:', { customer: customerValue, fromDate: fromDateValue, toDate: toDateValue, servicestation: servicestationValue });
+
+        const response = await axios.get(`http://localhost:8081/Group-Billing`, {
+          params: {
+            customer: customerValue,
+            fromDate: fromDateValue,
+            toDate: toDateValue,
+            servicestation: servicestationValue
+          },
+        });
+        const data = response.data;
+        if (data.length > 0) {
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
+          setSuccess(true);
+          setSuccessMessage("successfully listed")
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("no data found")
+        }
+      } catch {
         setRows([]);
         setError(true);
-        setErrorMessage("no data found")
+        setErrorMessage("Check your Network Connection");
       }
-    } catch {
-      setRows([]);
-      setError(true);
-      setErrorMessage("Check your Network Connection");
+    } else {
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
-  }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData]);
+  }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, checkPagePermission, tripData]);
 
   return (
     <div className="TransferDataEntry-form Scroll-Style-hide">
@@ -624,7 +718,7 @@ const TransferDataEntry = () => {
                 </div>
                 <div className="input-field" >
                   <div className="input">
-                    <Button variant="contained" onClick={handleShow}>List</Button>
+                    <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("new")}>List</Button>
                   </div>
                   <div className="input">
                     <Button variant="contained" onClick={handleCancel}>Cancel</Button>
@@ -699,6 +793,13 @@ const TransferDataEntry = () => {
               <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>{successMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
             </div>
           }
         </div>

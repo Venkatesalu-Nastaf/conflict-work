@@ -100,8 +100,8 @@ const TaxSetting = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
 
@@ -109,24 +109,24 @@ const TaxSetting = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); 
-            return () => clearTimeout(timer); 
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
@@ -203,7 +203,6 @@ const TaxSetting = () => {
         setSelectedCustomerData({});
     };
     const handleRowClick = useCallback((params) => {
-        console.log(params.row);
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
@@ -214,59 +213,48 @@ const TaxSetting = () => {
         if (!STax) {
             setError(true);
             setErrorMessage("Check your Network Connection");
-            // setErrorMessage("fill mantatory fields");
             return;
         }
         try {
-            console.log('Add button clicked');
             const response = await axios.post('http://localhost:8081/taxsettings', book);
-            console.log('Customer added:', response.data);
-            handleCancel(); // Assuming you have defined the handleCancel function to perform the necessary actions after the POST request is successful
+            console.log(response);
+            handleCancel();
             setSuccess(true);
             setSuccessMessage("Successfully Added");
-        } catch (error) {
-            console.error('Error adding customer:', error);
+        } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
-            // You can add error handling code here, like displaying an error message to the user
+
         }
     };
     const handleClick = async (event, actionName, id) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/taxsettings');
                 const data = response.data;
                 setRows(data);
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
             } else if (actionName === 'Cancel') {
-                console.log('Cancel button clicked');
                 handleCancel();
             } else if (actionName === 'Delete') {
-                console.log('Delete button clicked');
                 await axios.delete(`http://localhost:8081/taxsettings/${id}`);
-                console.log('Customer deleted');
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
-                console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.id === id);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/taxsettings/${id}`, updatedCustomer);
-                console.log('Customer updated');
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
             }
-        } catch (err) {
-            console.log(err);
+        } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
-            // setErrorMessage("Check Network Connection")
         }
     };
     useEffect(() => {
@@ -283,6 +271,7 @@ const TaxSetting = () => {
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Date Tax From">
                                     <DatePicker
+                                        format="DD/MM/YYYY"
                                         value={formData.DateTaxFrom || selectedCustomerData.DateTaxFrom ? dayjs(selectedCustomerData.DateTaxFrom) : null}
                                         onChange={(date) => handleDateChange(date, 'DateTaxFrom')}
                                     >
@@ -297,6 +286,7 @@ const TaxSetting = () => {
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Date Tax To">
                                     <DatePicker
+                                        format="DD/MM/YYYY"
                                         value={formData.DateTaxTo || selectedCustomerData.DateTaxTo ? dayjs(selectedCustomerData.DateTaxTo) : null}
                                         onChange={(date) => handleDateChange(date, 'DateTaxTo')}
                                     >

@@ -15,14 +15,13 @@ router.get('/pending_tripsheet', (req, res) => {
   }
 
   if (fromDate && toDate) {
-    query += ' AND startdate >= ? AND startdate <= ?';
+    query += ' AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)';
     params.push(fromDate);
     params.push(toDate);
   }
 
   db.query(query, params, (err, result) => {
     if (err) {
-      console.error('Error retrieving tripsheet details from MySQL:', err);
       return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
     }
     return res.status(200).json(result);
@@ -32,7 +31,6 @@ router.get('/pending_tripsheet', (req, res) => {
 router.get('/tripsheet', (req, res) => {
   db.query("SELECT * FROM tripsheet", (err, results) => {
     if (err) {
-      console.error('Error fetching data from MySQL:', err);
       return res.status(500).json({ error: "Failed to fetch data from MySQL" });
     }
     return res.status(200).json(results);

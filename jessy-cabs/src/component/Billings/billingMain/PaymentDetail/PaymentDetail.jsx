@@ -126,31 +126,31 @@ const PaymentDetail = () => {
     }
   }, [success]);
 
-  const handleInputChange = (event, newValue) => {
+  const handleInputChange = (event) => {
     if (event.target.name === 'customer') {
-      setCustomer(newValue ? newValue.label : '');
+      setCustomer(event.target.value);
     } else if (event.target.name === 'billingno') {
       setBillingNo(event.target.value);
     }
   };
-
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:8081/payment-details?billingno=${billingno}&customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
-      console.log('selected billing data', response.params);
       const data = response.data;
-      console.log('collected billing data', data);
       if (data.length > 0) {
-        setRows(data);
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
         setSuccess(true);
-        setSuccessMessage("Successfully listed");
+        setSuccessMessage("successfully listed")
       } else {
         setRows([]);
         setError(true);
-        setErrorMessage("No data found");
+        setErrorMessage("no data found")
       }
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+    } catch {
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");
@@ -161,7 +161,6 @@ const PaymentDetail = () => {
     Organization()
       .then((data) => {
         if (data) {
-          console.log('organization name', data);
           setBankOptions(data);
         } else {
           setError(true);
@@ -177,7 +176,6 @@ const PaymentDetail = () => {
   //calculate total amount in column
   useEffect(() => {
     const calculatedTotalAmount = rows.reduce((total, row) => total + parseFloat(row.Totalamount || 0), 0);
-    console.log('calculatedTotalAmount', calculatedTotalAmount);
     if (!isNaN(calculatedTotalAmount)) {
       setTotalAmount(calculatedTotalAmount.toFixed(2));
     } else {
@@ -188,7 +186,6 @@ const PaymentDetail = () => {
   //calculate paid amount in column
   useEffect(() => {
     const calculatedPaidAmount = rows.reduce((total, row) => total + parseFloat(row.paidamount || 0), 0);
-    console.log('calculatedTotalAmount', calculatedPaidAmount);
     if (!isNaN(calculatedPaidAmount)) {
       setPaidAmount(calculatedPaidAmount.toFixed(2));
     } else {
@@ -199,7 +196,6 @@ const PaymentDetail = () => {
   //calculate pending amount in column
   useEffect(() => {
     const calculatedPendingAmount = rows.reduce((total, row) => total + parseFloat(row.pendingamount || 0), 0);
-    console.log('calculatedTotalAmount', calculatedPendingAmount);
     if (!isNaN(calculatedPendingAmount)) {
       setPendingAmount(calculatedPendingAmount.toFixed(2));
     } else {
@@ -211,6 +207,8 @@ const PaymentDetail = () => {
     const billingPageUrl = `/home/billing/billing?tripid=${selectedRow.tripid || ''}&billingno=${selectedRow.billingno || ''}&Billingdate=${selectedRow.Billingdate || ''}&totalkm1=${selectedRow.totalkm1 || ''}&totaltime=${selectedRow.totaltime || ''}&customer=${selectedRow.customer || ''}&supplier=${selectedRow.supplier || ''}&startdate=${selectedRow.startdate || ''}&totaldays=${selectedRow.totaldays || ''}&guestname=${selectedRow.guestname || ''}&rateType=${selectedRow.rateType || ''}&vehRegNo=${selectedRow.vehRegNo || ''}&vehType=${selectedRow.vehType || ''}&duty=${selectedRow.duty || ''}&MinCharges=${selectedRow.MinCharges || ''}&minchargeamount=${selectedRow.minchargeamount || ''}&ChargesForExtra=${selectedRow.ChargesForExtra || ''}&ChargesForExtraamount=${selectedRow.ChargesForExtraamount || ''}&cfeamount=${selectedRow.cfeamount || ''}&ChargesForExtraHRS=${selectedRow.ChargesForExtraHRS || ''}&ChargesForExtraHRSamount=${selectedRow.ChargesForExtraHRSamount || ''}&cfehamount=${selectedRow.cfehamount || ''}&NightHalt=${selectedRow.NightHalt || ''}&NightHaltamount=${selectedRow.NightHaltamount || ''}&nhamount=${selectedRow.nhamount || ''}&driverbata=${selectedRow.driverbata || ''}&driverbataamount=${selectedRow.driverbataamount || ''}&dbamount=${selectedRow.dbamount || ''}&OtherCharges=${selectedRow.OtherCharges || ''}&OtherChargesamount=${selectedRow.OtherChargesamount || ''}&permitothertax=${selectedRow.permitothertax || ''}&parkingtollcharges=${selectedRow.parkingtollcharges || ''}&MinKilometers=${selectedRow.MinKilometers || ''}&MinHours=${selectedRow.MinHours || ''}&GrossAmount=${selectedRow.GrossAmount || ''}&AfterTaxAmount=${selectedRow.AfterTaxAmount || ''}&DiscountAmount=${selectedRow.DiscountAmount || ''}&DiscountAmount2=${selectedRow.DiscountAmount2 || ''}&AdvanceReceived=${selectedRow.AdvanceReceived || ''}&RoundedOff=${selectedRow.RoundedOff || ''}&BalanceReceivable=${selectedRow.BalanceReceivable || ''}&NetAmount=${selectedRow.NetAmount || ''}&Totalamount=${selectedRow.Totalamount || ''}&paidamount=${selectedRow.paidamount || ''}&pendingamount=${selectedRow.pendingamount || ''}&BankAccount=${selectedRow.BankAccount || ''}`;
     window.location.href = billingPageUrl;
   }
+
+  const reversedRows = [...rows].reverse();
 
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
@@ -229,7 +227,7 @@ const PaymentDetail = () => {
                     label="Billing No"
                     name="billingno"
                     value={billingno || ''}
-                    onChange={(event, value) => handleInputChange(event, value)}
+                    onChange={handleInputChange}
                     autoComplete='off'
                   />
                 </div>
@@ -244,7 +242,7 @@ const PaymentDetail = () => {
                     size="small"
                     value={customer}
                     options={bankOptions}
-                    onChange={(event, value) => handleInputChange(event, value)}
+                    onChange={handleInputChange}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Organization" inputRef={params.inputRef} />
@@ -256,11 +254,13 @@ const PaymentDetail = () => {
                   <DemoContainer components={["DatePicker", "DatePicker"]}>
                     <DatePicker
                       label="From Date"
+                      format="DD/MM/YYYY"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
                     <DatePicker
                       label="To Date"
+                      format="DD/MM/YYYY"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />
@@ -323,26 +323,27 @@ const PaymentDetail = () => {
           <div className='amount-calculator'>
             <div className='total-inputs' >
               <label htmlFor="">Total Amount:</label>
-              <input type="number" value={totalAmount} />
+              <input type="number" value={totalAmount} readOnly />
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Paid Amount:</label>
-              <input type="number" value={paidAmount} />
+              <input type="number" value={paidAmount} readOnly />
             </div>
             <div className='total-inputs' >
               <label htmlFor="">Pending Amount:</label>
-              <input type="number" value={pendingAmount} />
+              <input type="number" value={pendingAmount} readOnly />
             </div>
           </div>
         </div>
         <div className="table-bookingCopy-PaymentDetail">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              rows={reversedRows}
               columns={columns}
               onRowClick={(event) => handleButtonClickTripsheet(event.row)}
               pageSize={5}
               checkboxSelection
+              disableRowSelectionOnClick
             />
           </div>
         </div>

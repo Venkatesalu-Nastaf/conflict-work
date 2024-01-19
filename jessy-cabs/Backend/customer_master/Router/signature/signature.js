@@ -15,13 +15,11 @@ router.post('/api/saveSignature', (req, res) => {
 
     fs.writeFile(imagePath, imageBuffer, (error) => {
         if (error) {
-            console.error('Error saving signature image:', error);
             res.status(500).json({ error: 'Failed to save signature' });
         } else {
             const sql = 'INSERT INTO signatures (signature_path) VALUES (?)';
             db.query(sql, [imagePath], (dbError, results) => {
                 if (dbError) {
-                    console.error('Error saving signature data:', dbError);
                     res.status(500).json({ error: 'Failed to save signature' });
                 } else {
                     res.json({ message: 'Signature saved successfully' });

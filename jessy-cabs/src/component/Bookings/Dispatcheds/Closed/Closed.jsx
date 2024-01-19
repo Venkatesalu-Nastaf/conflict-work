@@ -17,7 +17,6 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -29,7 +28,7 @@ const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "status", headerName: "Status", width: 130 },
   { field: "tripid", headerName: "Trip Sheet No", width: 130 },
-  { field: "startdate", headerName: "Trip Date", width: 130 },
+  { field: "startdate", headerName: "Trip Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "guestname", headerName: "User Name", width: 130 },
   { field: "customer", headerName: "Customer Name", width: 130 },
   { field: "startkm", headerName: "Start Km", width: 130 },
@@ -167,16 +166,19 @@ const Closed = () => {
       );
       const data = response.data;
       if (data.length > 0) {
-        setRows(data);
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
         setSuccess(true);
-        setSuccessMessage("Successfully listed");
+        setSuccessMessage("successfully listed")
       } else {
         setRows([]);
         setError(true);
-        setErrorMessage("No data found");
+        setErrorMessage("no data found")
       }
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+    } catch {
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");
@@ -190,16 +192,19 @@ const Closed = () => {
       );
       const data = response.data;
       if (data.length > 0) {
-        setRows(data);
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
         setSuccess(true);
-        setSuccessMessage("Successfully listed");
+        setSuccessMessage("successfully listed")
       } else {
         setRows([]);
         setError(true);
-        setErrorMessage("No data found");
+        setErrorMessage("no data found")
       }
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+    } catch {
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");

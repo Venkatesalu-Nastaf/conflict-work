@@ -5,7 +5,6 @@ const db = require('../../../db');
 const multer = require('multer');
 const moment = require('moment'); // or import dayjs from 'dayjs';
 
-
 const upload = multer({ dest: 'uploads/' });
 
 // Booking database:
@@ -15,10 +14,8 @@ router.post('/booking', (req, res) => {
     const bookData = req.body;
     db.query('INSERT INTO booking SET ?', bookData, (err, result) => {
         if (err) {
-            console.error('Error inserting data into MySQL:', err);
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
-        console.log('Data inserted into MySQL');
         return res.status(200).json({ message: "Data inserted successfully" });
     });
 });
@@ -27,7 +24,6 @@ router.get('/booking/:bookingno', (req, res) => {
     const bookingno = req.params.bookingno;
     db.query('SELECT * FROM booking WHERE bookingno = ?', bookingno, (err, result) => {
         if (err) {
-            console.error('Error retrieving booking details from MySQL:', err);
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }
         if (result.length === 0) {
@@ -40,16 +36,13 @@ router.get('/booking/:bookingno', (req, res) => {
 // delete booking details
 router.delete('/booking/:bookingno', (req, res) => {
     const bookingno = req.params.bookingno;
-    console.log('DELETE query:', 'DELETE FROM booking WHERE bookingno = ?', bookingno);
     db.query('DELETE FROM booking WHERE bookingno = ?', bookingno, (err, result) => {
         if (err) {
-            console.error('Error deleting data from MySQL:', err);
             return res.status(500).json({ error: "Failed to delete data from MySQL" });
         }
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Customer not found" });
         }
-        console.log('Data deleted from MySQL');
         return res.status(200).json({ message: "Data deleted successfully" });
     });
 });
@@ -59,13 +52,11 @@ router.put('/booking/:bookingno', (req, res) => {
     const updatedCustomerData = req.body;
     db.query('UPDATE booking SET ? WHERE bookingno = ?', [updatedCustomerData, bookingno], (err, result) => {
         if (err) {
-            console.error('Error updating data in MySQL:', err);
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Customer not found" });
         }
-        console.log('Data updated in MySQL');
         return res.status(200).json({ message: "Data updated successfully" });
     });
 });
@@ -74,7 +65,6 @@ router.get('booking', async (req, res) => {
     try {
         // Find the highest booking number in the database
         const highestBooking = await Booking.findOne().sort({ bookingno: -1 }).exec();
-
         // Calculate the next booking number
         const nextBookingNo = highestBooking ? highestBooking.bookingno + 1 : 1000;
         res.json({ bookingno: nextBookingNo });
@@ -99,7 +89,6 @@ router.post('/upload', upload.single('file'), (req, res) => {
     const query = 'INSERT INTO upload SET ?';
     db.query(query, fileData, (err, result) => {
         if (err) {
-            console.error('Error storing file in the database:', err);
             return res.status(500).json({ error: 'Error storing file in the database.' });
         }
         return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
@@ -111,7 +100,6 @@ router.get('/name-customers/:customer', (req, res) => {
     // Modify the query to use the LIKE operator for partial matching
     db.query('SELECT * FROM customers WHERE customer LIKE ?', [`%${customer}%`], (err, result) => {
         if (err) {
-            console.error('Error retrieving customer details from MySQL:', err);
             return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
         }
         if (result.length === 0) {
@@ -125,7 +113,6 @@ router.get('/name-customers/:customer', (req, res) => {
 router.post('/send-email', async (req, res) => {
     try {
         const { guestname, guestmobileno, email, useage, pickup } = req.body;
-
         // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -162,7 +149,6 @@ router.post('/send-email', async (req, res) => {
 
         res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
@@ -224,7 +210,6 @@ router.post('/send-onbook-email', async (req, res) => {
 
         res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
@@ -233,8 +218,6 @@ router.post('/send-onbook-email', async (req, res) => {
 //search function for booking page
 router.get('/table-for-booking', (req, res) => {
     const { searchText, fromDate, toDate } = req.query;
-    console.log(searchText, fromDate, toDate);
-
     let query = 'SELECT * FROM booking WHERE 1=1';
     let params = [];
 
@@ -298,22 +281,16 @@ router.get('/table-for-booking', (req, res) => {
         const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD HH:mm:ss');
         const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD HH:mm:ss');
 
-        query += ' AND bookingdate >= ? AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+        query += ' AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
         params.push(formattedFromDate, formattedToDate);
     }
 
     db.query(query, params, (err, result) => {
         if (err) {
-            console.error('Error retrieving vehicle details from MySQL:', err);
             return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
         }
-        console.log('collected data', result);
-        console.log('Query:', query);
-        console.log('Params:', params);
         return res.status(200).json(result);
     });
 });
-
-
 
 module.exports = router;

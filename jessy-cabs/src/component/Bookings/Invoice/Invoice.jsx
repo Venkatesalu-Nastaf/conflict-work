@@ -3,8 +3,7 @@ import './invoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
 import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-
-const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedCustomerDatas, formData }) => {
+const PrintableInvoice = ({ tripSheetData, book, GmapimageUrl, attachedImage, signimageUrl, routeData, selectedCustomerData, selectedCustomerDatas, formData }) => {
 
   return (
     <div className="invoice-wrapper">
@@ -31,7 +30,7 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
               </tr>
               <tr>
                 <th id='table-header'><span>Address:</span></th>
-                <td id='table-data'><span >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1}</span></td>
+                <td id='table-data'><span >{tripSheetData.address1 || selectedCustomerData.address1 || selectedCustomerDatas.address1 || book.address1} {tripSheetData.streetno || selectedCustomerData.streetno || selectedCustomerDatas.streetno || book.streetno} {tripSheetData.city || selectedCustomerData.city || selectedCustomerDatas.city || book.city}</span></td>
               </tr>
               <tr>
                 <th id='table-header'><span>Ordered By:</span></th>
@@ -129,11 +128,7 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
                 <p id='line'>------------------</p>
               </div>
               <div className="guest-sign">
-
-                <img id='guestsign'
-                  alt="Signature_image"
-                  src={`../../../../Backend/customer_master/path_to_save_images`} // Make sure the path is correct
-                ></img>
+                <img className='dialogboximg' src={signimageUrl} alt='mapimage' />
                 <p>Guest Signature</p>
               </div>
             </div>
@@ -144,16 +139,33 @@ const PrintableInvoice = ({ tripSheetData, book, selectedCustomerData, selectedC
           <div id='Totals'><span id='title'>Total Toll  </span><span>{tripSheetData.toll || selectedCustomerData.toll || selectedCustomerDatas.toll || book.toll}</span></div>
           <div id='Totals'><span id='title'>Total Permit  </span><span>{tripSheetData.permit || selectedCustomerData.permit || selectedCustomerDatas.permit || book.permit}</span></div>
         </div>
+        <div className='tripsheet-location-img'>
+          <img src={GmapimageUrl} alt='mapimage' />
+        </div>
+        <div className="tripsheet-RouteSummary">
+          <h2>Route Summary</h2>
+          <ol type="1">
+            {routeData.length > 0 && routeData.map((data, index) => (
+              <li><p key={index}><strong>{data.trip_type}</strong>: {data.place_name}</p></li>
+            ))}
+          </ol>
+        </div>
+        <div className='attached-toll'>
+          <ol type="1">
+            {Array.isArray(attachedImage) && attachedImage.map((image, index) => (
+              <img key={index} src={image} alt={`image_${index}`} />
+            ))}
+          </ol>
+        </div>
       </article>
     </div>
   );
 };
-const Invoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas, book, formData }) => {
+const Invoice = ({ tripSheetData, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData }) => {
 
   const handlePrint = () => {
-    // const invoiceContent = ReactDOMServer.renderToString(<PrintableInvoice />);
     const invoiceContent = ReactDOMServer.renderToString(
-      <PrintableInvoice tripSheetData={tripSheetData} selectedCustomerData={selectedCustomerData} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
+      <PrintableInvoice tripSheetData={tripSheetData} attachedImage={attachedImage} routeData={routeData} selectedCustomerData={selectedCustomerData} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
     );
     const printWindow = window.open('', '_blank');
     printWindow.document.open();
@@ -221,23 +233,19 @@ const Invoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas, b
           
           .invoice-wrapper header address {
             float: left;
-            /* font-size: 75%; */
-            /* font-style: normal; */
-            /* line-height: 1.25; */
-            /* margin: 0 1em 1em 0; */
           }
           
-          /* .invoice-wrapper header address p {
-            margin: 0 0 0.25em;
-          } */
-          
+          .dialogboximg {
+            height: 100px;
+            width: 100px;
+          }
+                   
           .invoice-wrapper header span,
           header img {
             display: block;
             float: right;
           }
-          
-          
+                    
           .invoice-wrapper header img {
             max-height: 50%;
             max-width: 50%;
@@ -441,6 +449,34 @@ const Invoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas, b
             text-align: center;
             text-transform: uppercase;
           }
+          .tripsheet-location-img{
+            display: flex;
+            align-items: center;
+            justify-content: start;
+          }
+          .tripsheet-location-img img {
+            width: 320px;
+          }
+          .tripsheet-RouteSummary{
+            width: 80%;
+            font-size: 13px;
+          }
+          .tripsheet-RouteSummary p{
+            font-weight: 600;
+          }
+          .tripsheet-RouteSummary ol{
+            font-size: 12px;
+            font-weight: 500;
+          }
+          .attached-toll{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+          }
+          .attached-toll img {
+            width: 500px;
+          }
         </style>
           </head>
           <body>
@@ -458,8 +494,7 @@ const Invoice = ({ tripSheetData, selectedCustomerData, selectedCustomerDatas, b
 
   return (
     <div className="invoice-wrapper">
-      {/* <PrintableInvoice /> */}
-      <PrintableInvoice tripSheetData={tripSheetData} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
+      <PrintableInvoice tripSheetData={tripSheetData} attachedImage={attachedImage} routeData={routeData} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
       <Button variant="contained" onClick={handlePrint}>Print</Button>
     </div>
   );

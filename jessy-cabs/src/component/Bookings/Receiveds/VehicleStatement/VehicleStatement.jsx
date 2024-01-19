@@ -163,10 +163,20 @@ const VehicleStatement = () => {
         )}`
       );
       const data = response.data;
-      setRows(data);
-      setSuccessMessage("Successfully listed");
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+      if (data.length > 0) {
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
+        setSuccess(true);
+        setSuccessMessage("successfully listed")
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("no data found")
+      }
+    } catch {
       setRows([]);
       setErrorMessage("Check your Network Connection");
     }
@@ -179,10 +189,20 @@ const VehicleStatement = () => {
         `http://localhost:8081/booking`
       );
       const data = response.data;
-      setRows(data);
-      setSuccessMessage("Successfully listed");
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+      if (data.length > 0) {
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
+        setSuccess(true);
+        setSuccessMessage("successfully listed")
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("no data found")
+      }
+    } catch {
       setRows([]);
       setErrorMessage("Check your Network Connection");
     }

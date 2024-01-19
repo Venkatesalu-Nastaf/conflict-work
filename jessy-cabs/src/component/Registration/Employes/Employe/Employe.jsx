@@ -273,7 +273,6 @@ const Employe = () => {
     };
 
     const handleRowClick = useCallback((params) => {
-        console.log(params.row);
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
@@ -286,14 +285,13 @@ const Employe = () => {
             return;
         }
         try {
-            console.log('Add button clicked');
             await axios.post('http://localhost:8081/employees', book);
-            console.log(book);
             handleCancel();
+            setRows([]);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
-        } catch (error) {
-            console.error('Error updating customer:', error);
+        } catch {
+
         }
     };
 
@@ -302,7 +300,6 @@ const Employe = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/employees');
                 const data = response.data;
                 if (data.length > 0) {
@@ -315,30 +312,27 @@ const Employe = () => {
                     setErrorMessage("No data found");
                 }
             } else if (actionName === 'Cancel') {
-                console.log('Cancel button clicked');
                 handleCancel();
+                setRows([]);
             } else if (actionName === 'Delete') {
-                console.log('Delete button clicked');
                 await axios.delete(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`);
-                console.log('Customer deleted');
                 setSelectedCustomerData(null);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
+                setRows([]);
             } else if (actionName === 'Edit') {
-                console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.empid === empid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
-                console.log('Customer updated');
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
+                setRows([]);
             } else if (actionName === 'Add') {
                 handleAdd();
             }
-        } catch (err) {
-            console.log(err);
+        } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
@@ -368,12 +362,10 @@ const Employe = () => {
         formDataUpload.append('documenttype', documentType);
         formDataUpload.append('empid', book.empid || selectedCustomerData.empid);
         formDataUpload.append('filename', uniqueFileName);
-        console.log('uploaded file details', formDataUpload);
         try {
             const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            console.log('uploaded file details 2', response.data);
-        } catch (error) {
-            console.error('Error uploading file:', error);
+            console.log(response);
+        } catch {
         }
     };
     //end file upload
@@ -424,7 +416,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empemailid || book.empemailid}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -439,7 +430,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.empmobile || book.empmobile}
                                     onChange={handleChange}
-
                                 />
                             </div>
                         </div>
@@ -456,13 +446,13 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.jobroll || book.jobroll}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" >
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Joining Date"
+                                        format="DD/MM/YYYY"
                                         value={formData.joiningdate || selectedCustomerData.joiningdate ? dayjs(selectedCustomerData.joiningdate) : null}
                                         onChange={(date) => handleDateChange(date, 'joiningdate')}
                                     >
@@ -484,7 +474,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.gender || book.gender}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -499,7 +488,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.bloodgroup || book.bloodgroup}
                                     onChange={handleChange}
-
                                 />
                             </div>
                         </div>
@@ -532,7 +520,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.aadharcard || book.aadharcard}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -547,7 +534,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.pancard || book.pancard}
                                     onChange={handleChange}
-
                                 />
                             </div>
                         </div>
@@ -579,7 +565,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.guardian || book.guardian}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "215px" }}>
@@ -594,7 +579,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.fixedsalary || book.fixedsalary}
                                     onChange={handleChange}
-
                                 />
                             </div>
                         </div>
@@ -611,7 +595,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.uanid || book.uanid}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "260px" }}>
@@ -626,7 +609,6 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.esino || book.esino}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "250px" }}>
@@ -641,18 +623,9 @@ const Employe = () => {
                                     autoComplete="new-password"
                                     value={selectedCustomerData?.licenceno || book.licenceno}
                                     onChange={handleChange}
-
                                 />
                             </div>
                             <div className="input" style={{ width: "20px" }}>
-                                {/* <IconButton color="primary" size="larger">
-                                    <UploadFileIcon />
-                                    <button
-                                        type="file"
-                                        style={{ display: "none" }}
-                                        onClick={handleUpload}
-                                    />
-                                </IconButton> */}
                                 <Button color="primary" onClick={() => handleUpload('LicenseCopy')} size="md" >
                                     <UploadFileIcon />
                                 </Button>

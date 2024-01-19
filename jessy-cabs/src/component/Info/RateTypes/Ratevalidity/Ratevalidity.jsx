@@ -54,8 +54,8 @@ const columns = [
     { field: "ratename", headerName: "Rate Validity", width: 130 },
     { field: "ReMarks", headerName: "Remarks", width: 130 },
     { field: "active", headerName: "Active", width: 130 },
-    { field: "fromdate", headerName: "From Date", width: 130 },
-    { field: "todate", headerName: "To Date", width: 130 },
+    { field: "fromdate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "todate", headerName: "To Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
 ];
 
 const Ratevalidity = () => {
@@ -84,8 +84,8 @@ const Ratevalidity = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
 
@@ -93,24 +93,24 @@ const Ratevalidity = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
@@ -152,7 +152,6 @@ const Ratevalidity = () => {
 
     const handleDateChange = (date, name) => {
         const formattedDate = dayjs(date).format('DD/MM/YYYY');
-        // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
         setBook((prevBook) => ({
             ...prevBook,
             [name]: formattedDate,
@@ -172,7 +171,6 @@ const Ratevalidity = () => {
         setSelectedCustomerData({});
     };
     const handleRowClick = useCallback((params) => {
-        console.log(params.row);
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
@@ -185,13 +183,12 @@ const Ratevalidity = () => {
             return;
         }
         try {
-            console.log('Add button clicked');
             await axios.post('http://localhost:8081/ratevalidity', book);
-            console.log(book);
             handleCancel();
+            setSuccess(true);
             setSuccessMessage("Successfully Added");
-        } catch (error) {
-            console.error('Error updating customer:', error);
+        } catch {
+            setError(true);
             setErrorMessage("Check your Network Connection");
         }
     };
@@ -200,11 +197,8 @@ const Ratevalidity = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                console.log('List button clicked');
                 const response = await axios.get('http://localhost:8081/ratevalidity');
                 const data = response.data;
-                // setSuccessMessage("Successfully listed");
-                // setRows(data);
                 if (data.length > 0) {
                     setRows(data);
                     setSuccess(true);
@@ -215,30 +209,25 @@ const Ratevalidity = () => {
                     setErrorMessage("No data found");
                 }
             } else if (actionName === 'Cancel') {
-                console.log('Cancel button clicked');
                 handleCancel();
             } else if (actionName === 'Delete') {
-                console.log('Delete button clicked');
                 await axios.delete(`http://localhost:8081/ratevalidity/${driverid}`);
-                console.log('Customer deleted');
                 setSelectedCustomerData(null);
                 setSuccessMessage("Successfully Deleted");
                 handleCancel();
             } else if (actionName === 'Edit') {
-                console.log('Edit button clicked');
                 const selectedCustomer = rows.find((row) => row.driverid === driverid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 await axios.put(`http://localhost:8081/ratevalidity/${driverid}`, updatedCustomer);
-                console.log('Customer updated');
+                setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
             } else if (actionName === 'Add') {
                 handleAdd();
             }
         } catch (err) {
-            console.log(err);
+            setError(true);
             setErrorMessage("Check your Network Connection");
-            // setErrorMessage("Check Network Connection")
         }
     };
     useEffect(() => {
@@ -284,9 +273,9 @@ const Ratevalidity = () => {
                                 </div>
                                 <div className="input" style={{ width: "30%" }}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        {/* <DemoItem label="From Date"> */}
                                         <DatePicker
                                             label='From Date'
+                                            format="DD/MM/YYYY"
                                             defaultValue={dayjs()}
                                             value={formData.fromdate || selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
                                             onChange={(date) => handleDateChange(date, 'fromdate')}
@@ -299,9 +288,9 @@ const Ratevalidity = () => {
                                 </div>
                                 <div className="input" style={{ width: "30%" }}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        {/* <DemoItem label="To Date"> */}
                                         <DatePicker
                                             label='To Date'
+                                            format="DD/MM/YYYY"
                                             defaultValue={dayjs()}
                                             value={formData.todate || selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
                                             onChange={(date) => handleDateChange(date, 'todate')}

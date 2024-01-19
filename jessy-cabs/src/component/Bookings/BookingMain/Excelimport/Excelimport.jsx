@@ -89,7 +89,7 @@ const Excelimport = () => {
 
       reader.readAsArrayBuffer(file);
     } else {
-      setSheets([]); // Reset sheets when no file is uploaded
+      setSheets([]);
     }
   };
 
@@ -120,7 +120,7 @@ const Excelimport = () => {
                 </div>
                 <div className="input" style={{ width: "50%" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="Booking Date" defaultValue={dayjs()} />
+                    <DatePicker label="Booking Date" format="DD/MM/YYYY" defaultValue={dayjs()} />
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: "70px" }}>
@@ -131,7 +131,7 @@ const Excelimport = () => {
                 </div>
               </div>
               <div className="input-field">
-                <div className="dropdown input">
+                <div className="input">
                   <div className="icone">
                     <DescriptionIcon color="action" />
                   </div>

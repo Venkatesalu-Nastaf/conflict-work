@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from 'axios';
 import "./Permission.css";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -7,7 +8,34 @@ import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Permission = () => {
-  // TABLE START
+  const [routeData, setRouteData] = useState('');
+  // const [selectedCustomerData, setSelectedCustomerData] = useState([]);
+
+  const storedUsername = localStorage.getItem("username");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const username = storedUsername;
+      try {
+        const response = await fetch(`http://localhost:8081/userdata/${encodeURIComponent(username)}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const routeData = await response.json();
+        setRouteData(routeData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [storedUsername]);
+
+  console.log(routeData[0]?.userid);
+
+  const [userId, setUserId] = useState({
+    userid: '',
+  });
+
   const [permissionsData, setPermissionsData] = useState([
     { id: 1, name: 'Account Master', read: false, new: false, modify: false, delete: false },
     { id: 2, name: 'Billing', read: false, new: false, modify: false, delete: false },
@@ -39,6 +67,7 @@ const Permission = () => {
     { id: 28, name: 'Vendor Report', read: false, new: false, modify: false, delete: false },
   ]);
   // TABLE END
+
   const handlePermissionChange = (permissionId, permissionType) => {
     setPermissionsData(prevData =>
       prevData.map(permission => {
@@ -49,6 +78,68 @@ const Permission = () => {
       })
     );
   };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setUserId((prevBook) => ({
+      ...prevBook,
+      [name]: value,
+    }));
+  };
+
+  const handleSavePermissions = async () => {
+    try {
+      await axios.post('http://localhost:8081/save-permissions', {
+        userId: userId.userid,
+        permissions: permissionsData,
+        page_name: permissionsData.name
+      });
+
+    } catch (error) {
+      console.error('Error saving permissions:', error);
+    }
+  };
+
+  const handleKeyDown = useCallback(async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      try {
+        const response = await axios.get(`http://localhost:8081/userdataid/${event.target.value}`);
+        console.log('Response from server:', response.data);
+
+        if (Array.isArray(response.data)) {
+          const receivedPermissions = response.data;
+
+          // Create a map from page_name to permission object
+          const permissionMap = receivedPermissions.reduce((map, permission) => {
+            map[permission.page_name] = permission;
+            return map;
+          }, {});
+
+          // Update the state with the received permissions
+          setPermissionsData(prevPermissions => {
+            return prevPermissions.map(permission => {
+              const receivedPermission = permissionMap[permission.name] || {};
+
+              // Keep the original "ID" and "Form Name" columns fixed
+              return {
+                id: permission.id,
+                name: permission.name,
+                read: Boolean(receivedPermission.read),
+                new: Boolean(receivedPermission.new),
+                modify: Boolean(receivedPermission.modify),
+                delete: Boolean(receivedPermission.delete),
+              };
+            });
+          });
+        } else {
+          console.error('Invalid response format: Expected an array.');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, []);
 
   return (
     <div className="permission-main">
@@ -66,7 +157,10 @@ const Permission = () => {
                   size="small"
                   id="id"
                   label="ID"
-                  name="id"
+                  name="userid"
+                  value={userId.userid || ''}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
                 />
@@ -75,6 +169,7 @@ const Permission = () => {
                 <Button
                   startIcon={<FontAwesomeIcon icon={faSave} size="lg" />}
                   variant="outlined"
+                  onClick={handleSavePermissions}
                 >
                   Save
                 </Button>
@@ -103,28 +198,28 @@ const Permission = () => {
                           <td>
                             <input
                               type="checkbox"
-                              checked={permission.read}
+                              checked={Boolean(permission.read)}
                               onChange={() => handlePermissionChange(permission.id, 'read')}
                             />
                           </td>
                           <td>
                             <input
                               type="checkbox"
-                              checked={permission.new}
+                              checked={Boolean(permission.new)}
                               onChange={() => handlePermissionChange(permission.id, 'new')}
                             />
                           </td>
                           <td>
                             <input
                               type="checkbox"
-                              checked={permission.modify}
+                              checked={Boolean(permission.modify)}
                               onChange={() => handlePermissionChange(permission.id, 'modify')}
                             />
                           </td>
                           <td>
                             <input
                               type="checkbox"
-                              checked={permission.delete}
+                              checked={Boolean(permission.delete)}
                               onChange={() => handlePermissionChange(permission.id, 'delete')}
                             />
                           </td>

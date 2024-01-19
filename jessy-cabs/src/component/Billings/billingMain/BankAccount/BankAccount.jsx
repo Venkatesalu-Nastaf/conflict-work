@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import "./BankAccount.css";
 import Button from "@mui/material/Button";
@@ -39,7 +39,7 @@ const BankAccount = () => {
   const [info, setInfo] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [warning, setWarning] = useState(false);
-  // const [bank, setBank] = useState({ bankname2: '' });
+  const [deleteId, setDeleteId] = useState(null);
 
   const hidePopup = () => {
     setError(false);
@@ -124,11 +124,6 @@ const BankAccount = () => {
     setEditingIndex(null);
   };
 
-  // const handleEditBank = (index) => {
-  //   setEditingIndex(index);
-  // };
-
-
   const handleSaveEdit = async (index, id) => {
     try {
       if (index >= 0 && index < bankDetails.length) {
@@ -140,34 +135,15 @@ const BankAccount = () => {
           totalin: book.netbalance || updatedBank.totalin,
           totalout: book.totalout || updatedBank.totalout,
         };
-        console.log('updated bankdetails', updateData);
         await axios.put(`http://localhost:8081/updatebankdetails/${updatedBank.id}`, updateData);
         setSuccess(true);
         setSuccessMessage('Successfully Updated');
         setEditingIndex(null);
       } else {
-        console.error('Invalid index:', index);
       }
-    } catch (error) {
-      console.error('Error updating bank account:', error);
+    } catch {
       setError(true);
       setErrorMessage('Error updating bank account. Please check your Network Connection.');
-    }
-  };
-
-  const handleDeleteBank = async (index) => {
-    const idToDelete = document.querySelector('input[name="id"]').value;
-    if (!idToDelete) {
-      return;
-    }
-    try {
-      await axios.delete(`http://localhost:8081/deletebankdetails/${idToDelete}`);
-      fetchData();
-      handlePopupClose();
-    } catch (error) {
-      console.error('Error deleting bank account:', error);
-      setError(true);
-      setErrorMessage('Error deleting bank account. Please check your Network Connection.');
     }
   };
 
@@ -214,7 +190,7 @@ const BankAccount = () => {
     }
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:8081/getbankdetails');
       if (response.ok) {
@@ -227,25 +203,45 @@ const BankAccount = () => {
           setErrorMessage("No data found");
         }
       } else {
-        console.error('Error fetching bank details');
       }
-    } catch (error) {
-      console.error('Error fetching bank details:', error);
+    } catch {
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
+  }, [fetchData]);
+
+  const handlePopupClose = useCallback(() => {
+    setPopupOpen(false);
   }, []);
 
-  const handlePopupClose = () => {
-    setPopupOpen(false);
-  };
-
-  const handleDelete = () => {
+  const handleDelete = (id) => {
     setPopupOpen(true);
+    setEditingIndex(null);
+    setDeleteId(id);
   };
 
+  const handleDeleteBank = useCallback(async (id) => {
+    if (!id) {
+      return;
+    }
+    try {
+      await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
+      fetchData();
+      handlePopupClose();
+    } catch (error) {
+      setError(true);
+      setErrorMessage('Error deleting bank account. Please check your Network Connection.');
+    }
+  }, [fetchData, handlePopupClose]); // Add dependencies as needed
+
+  useEffect(() => {
+    if (deleteId !== null) {
+      handleDeleteBank(deleteId);
+      setDeleteId(null); // Reset deleteId after the operation is complete
+    }
+  }, [deleteId, handleDeleteBank]);
   const handleEditBank = (index) => {
     setEditingIndex(index);
   };
@@ -261,10 +257,15 @@ const BankAccount = () => {
   }, [bankDetails, book]);
   //calculate totalcapital amount
   useEffect(() => {
-    const calculatedTotalCapital = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalin, 10) || parseInt(book.totalin, 10) || 0), 0);
-    setTotalCapital(calculatedTotalCapital);
-  }, [bankDetails, book]);
-  
+    // Make API request to fetch total capital amount
+    axios.get('http://localhost:8081/totalCapital_from_billing')
+      .then(response => {
+        setTotalCapital(response.data.totalAmount);
+      })
+      .catch(error => {
+      });
+  }, []);
+
   return (
     <div className="BankAccount-form Scroll-Style-hide">
       <form className="BankAccount-main-container">
@@ -272,15 +273,15 @@ const BankAccount = () => {
           <div className='amount-calculate'>
             <div className='total-inputs' >
               <label htmlFor="">Total Capital:</label>
-              <input type="number" value={totalcapital} />
+              <input type="number" value={totalcapital} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountIN`} >
               <label htmlFor="">Total-In:</label>
-              <input type="number" value={totalIn} />
+              <input type="number" value={totalIn} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountOUT`} >
               <label htmlFor="">Total-Out:</label>
-              <input type="number" value={totalOut} />
+              <input type="number" value={totalOut} readOnly />
             </div>
           </div>
         </div>
@@ -443,7 +444,7 @@ const BankAccount = () => {
                       Are you sure you want to Delete this
                     </DialogContent>
                     <DialogActions>
-                      <Button onClick={handleDeleteBank} variant="contained" color="primary">
+                      <Button onClick={() => handleDeleteBank(bankDetail.id)} variant="contained" color="primary">
                         Yes
                       </Button>
                       <Button onClick={handlePopupClose} variant="contained" color="primary">

@@ -148,11 +148,14 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-// const updateFormData = () => {
-//   const totalTime = calculateTotalTime();
-//   setFormData({ ...formData, totalTime });
-// };
-
+const maplogcolumns = [
+  { field: "id", headerName: "Sno", width: 70 },
+  { field: "tripid", headerName: "TripSheet No", width: 130 },
+  { field: "date", headerName: "Trip Date", width: 160 },
+  { field: "time", headerName: "Trip Time", width: 130 },
+  { field: "trip_type", headerName: "Trip Type", width: 160 },
+  { field: "place_name", headerName: "Place Name", width: 600 },
+];
 
 const TripSheet = () => {
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -164,6 +167,7 @@ const TripSheet = () => {
   });
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [rows, setRows] = useState([]);
+  const [row, setRow] = useState([]);
   const [starttime, setStartTime] = useState('');
   const [closetime, setCloseTime] = useState('');
   const [reporttime, setreporttime] = useState('');
@@ -181,6 +185,8 @@ const TripSheet = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [imgpopupOpen, setimgPopupOpen] = useState(false);
+  const [mapimgpopupOpen, setMapimgPopupOpen] = useState(false);
+  const [maplogimgpopupOpen, setMaplogimgPopupOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
@@ -203,9 +209,19 @@ const TripSheet = () => {
   });
 
   const handleButtonClick = () => {
-    // with the actual URL you want to open
-    const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
-    newTab.focus();
+    const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+
+    if (!tripid) {
+      setError(true);
+      setErrorMessage("Please enter the tripid");
+    } else {
+      localStorage.setItem('selectedTripid', tripid);
+      const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
+      if (newTab) {
+        newTab.focus();
+      } else {
+      }
+    }
   };
 
   //generate link
@@ -215,8 +231,7 @@ const TripSheet = () => {
       const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
       const response = await axios.post(`http://localhost:8081/generate-link/${tripid}`)
       setLink(response.data.link);
-    } catch (error) {
-      console.error(error);
+    } catch {
     }
   };
 
@@ -224,30 +239,80 @@ const TripSheet = () => {
     setPopupOpen(false);
   };
 
+  const [mapimageUrl, setMapImageUrl] = useState('');
+  const handleTripmapClick = async () => {
+    try {
+      const tripid = selectedRow?.tripid || book?.tripid || selectedCustomerData?.tripid || formData?.tripid;
+      if (!tripid) {
+        setError(true);
+        setErrorMessage("Please enter the tripid");
+      }
+      const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const imageUrl = URL.createObjectURL(await response.blob());
+      setMapImageUrl(imageUrl);
+      setMapimgPopupOpen(true);
+    } catch {
+    }
+  };
+
+  const handleTripmaplogClick = async () => {
+    try {
+      const tripid = selectedRow?.tripid || book?.tripid || selectedCustomerData?.tripid || formData?.tripid;
+      if (!tripid) {
+        setError(true);
+        setErrorMessage("Please enter the tripid");
+      } else {
+        const response = await axios.get(`http://localhost:8081/get-gmapdata/${tripid}`);
+        const data = response.data;
+        setRow(data);
+        setMaplogimgPopupOpen(true);
+      }
+    } catch {
+    }
+  };
+
   //refresh button function
   const handleRefresh = async () => {
     const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
     try {
-      console.log('Refresh button clicked');
-      const response = await axios.get(`http://localhost:8081/tripuploadcollect/${tripid}`);
-      const data = response.data;
-      setRows(data);
-    } catch (error) {
-      console.error('Error Refreshing customer:', error);
+      if (!tripid) {
+        setError(true);
+        setErrorMessage("Please enter the tripid");
+      } else {
+        const response = await axios.get(`http://localhost:8081/tripuploadcollect/${tripid}`);
+        const data = response.data;
+        if (data.length > 0) {
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
+          setSuccess(true);
+          setSuccessMessage("successfully listed")
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("no data found")
+        }
+      }
+    } catch {
     }
   };
   //list data in row
   const [imageUrl, setImageUrl] = useState('');
   const handleTripRowClick = (params) => {
     setSelectedRow(params.row);
-    console.log('Selected Image Path:', params.row.path);
-    // Encode the path segment to handle special characters
     const encodedPath = encodeURIComponent(params.row.path);
     setimgPopupOpen(true);
     setImageUrl(`http://localhost:8081/get-image/${encodedPath}`);
   };
   const handleimgPopupClose = () => {
     setimgPopupOpen(false);
+    setMapimgPopupOpen(false);
+    setMaplogimgPopupOpen(false);
   };
   const [formValues, setFormValues] = useState({
     guestname: '',
@@ -284,13 +349,10 @@ const TripSheet = () => {
         };
         await axios.post('http://localhost:8081/send-tripsheet-email', dataToSend);
         setSuccess(true);
-        console.log(dataToSend);
-      } catch (error) {
-        console.error('Error sending email:', error);
+      } catch {
         alert('An error occurred while sending the email');
       }
     } else {
-      console.log('Send mail checkbox is not checked. Email not sent.');
     }
   };
 
@@ -308,7 +370,6 @@ const TripSheet = () => {
       return () => clearTimeout(timer);
     }
   }, [error]);
-
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -336,24 +397,19 @@ const TripSheet = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const statusValue = params.get('status') || 'opened';
+    const statusValue = params.get('status') || 'Opened';
     const appsValue = params.get('apps') || 'Waiting';
     const formData = {};
 
     const parameterKeys = [
-      'tripid', 'bookingno', 'status', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'chireTypesity', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'caramount', 'minkm', 'minhrs', 'package', 'amount', 'exkm', 'amount1', 'exHrs', 'amount2', 'night', 'amount3', 'driverconvenience', 'amount4', 'exkmTkm', 'exHrsTHrs', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
+      'tripid', 'bookingno', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'caramount', 'minkm', 'minhrs', 'package', 'amount', 'exkm', 'amount1', 'exHrs', 'amount2', 'night', 'amount3', 'driverconvenience', 'amount4', 'exkmTkm', 'exHrsTHrs', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
     ];
-    console.log('tripsheet colected data from dispatch', parameterKeys.value);
-
-    // Loop through the parameter keys and set the formData if the parameter exists and is not null or "null"
     parameterKeys.forEach(key => {
       const value = params.get(key);
       if (value !== null && value !== "null") {
         formData[key] = value;
       }
     });
-
-    // Set the status separately
     formData['status'] = statusValue;
     formData['apps'] = appsValue;
     setTripSheetData(formData);
@@ -362,11 +418,8 @@ const TripSheet = () => {
   }, [location]);
 
   useEffect(() => {
-    // Clear URL parameters
     window.history.replaceState(null, document.title, window.location.pathname);
-
-    // Reset form data to initial/default values
-    const initialFormData = {}; // You can set the initial/default values here
+    const initialFormData = {};
     setFormData(initialFormData);
   }, []);
 
@@ -374,6 +427,7 @@ const TripSheet = () => {
     tripid: '',
     bookingno: '',
     status: '',
+    tripsheetdate: '',
     billingno: '',
     apps: '',
     customer: '',
@@ -485,6 +539,7 @@ const TripSheet = () => {
       ...prevBook,
       tripid: '',
       bookingno: '',
+      tripsheetdate: '',
       status: '',
       billingno: '',
       apps: '',
@@ -602,7 +657,6 @@ const TripSheet = () => {
 
   const handleETripsheetClick = (row) => {
     const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-    console.log('Received tripid:', tripid);
     if (!tripid) {
       setError(true);
       setErrorMessage("please enter the tripid");
@@ -615,20 +669,16 @@ const TripSheet = () => {
 
   const handleDelete = async () => {
     if (!selectedCustomerData.tripid) {
-      console.log('No tripsheet number provided for deletion.');
       return;
     }
     try {
-      console.log('Delete button clicked');
       await axios.delete(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid}`);
-      console.log('Customer deleted');
       setFormData({});
       setSelectedCustomerData({});
       handleCancel();
       setSuccess(true);
       setSuccessMessage("Successfully Deleted");
-    } catch (error) {
-      console.error('Error deleting customer:', error);
+    } catch {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
@@ -644,12 +694,11 @@ const TripSheet = () => {
   const handleEdit = async () => {
 
     try {
-      console.log('Edit button clicked');
       const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
+      const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
       const updatedCustomer = {
         ...book,
         ...selectedCustomer,
-        // ...selectedCustomerDatas,
         ...vehilcedetails,
         ...selectedCustomerData,
         ...formData,
@@ -660,6 +709,11 @@ const TripSheet = () => {
         starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
         closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
         additionaltime: additionalTime.additionaltime,
+        tripsheetdate: selectedBookingDate,
+        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
+        vehType: VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '',
+        driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
+        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
         shedkm: shedKilometers.shedkm,
         totaldays: calculateTotalDays(),
         totalkm1: calculateTotalKilometers(),
@@ -688,15 +742,15 @@ const TripSheet = () => {
         }
       }
       await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
-      console.log('Customer updated');
       handleCancel();
+      setRow([]);
+      setRows([]);
       handleDriverSendSMS();
       handleSendSMS();
       handlecheck();
       setSuccess(true);
       setSuccessMessage("Successfully updated");
-    } catch (error) {
-      console.error('Error updating customer:', error);
+    } catch {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
@@ -710,7 +764,8 @@ const TripSheet = () => {
       return;
     }
     try {
-      console.log('Add button clicked');
+      const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+
       const updatedBook = {
         ...book,
         starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
@@ -720,6 +775,7 @@ const TripSheet = () => {
         starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
         closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
         additionaltime: additionalTime.additionaltime,
+        tripsheetdate: selectedBookingDate,
         shedkm: shedKilometers.shedkm,
         totaldays: calculateTotalDays(),
         totalkm1: calculateTotalKilometers(),
@@ -743,15 +799,15 @@ const TripSheet = () => {
         minkm: packageDetails[0]?.KMS,
       };
       await axios.post('http://localhost:8081/tripsheet', updatedBook);
-      console.log(updatedBook);
       handleCancel();
+      setRow([]);
+      setRows([]);
       setSuccess(true);
       handleSendSMS();
       handleDriverSendSMS();
       handlecheck();
       setSuccessMessage("Successfully Added");
-    } catch (error) {
-      console.error('Error updating customer:', error);
+    } catch {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
@@ -802,23 +858,21 @@ const TripSheet = () => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-        console.log('List button clicked');
-
       } else if (actionName === 'Cancel') {
-        console.log('Cancel button clicked');
         handleCancel();
+        setRow([]);
+        setRows([]);
       } else if (actionName === 'Delete') {
-        console.log('Delete button clicked');
         handleDelete();
         handleCancel();
+        setRow([]);
+        setRows([]);
       } else if (actionName === 'Edit') {
-        console.log('Edit button clicked');
         handleEdit();
       } else if (actionName === 'Add') {
         handleAdd();
       }
-    } catch (err) {
-      console.log(err);
+    } catch {
       setError(true);
       setErrorMessage("Check Network Connection")
     }
@@ -837,14 +891,11 @@ const TripSheet = () => {
     if (!file) return;
     const formDataUpload = new FormData();
     formDataUpload.append('file', file);
-    formDataUpload.append('documenttype', book.tripid || selectedCustomerData.tripid || formData.tripid);
-    formDataUpload.append('tripid', book.documenttype || selectedCustomerData.documenttype || formData.documenttype);
-    console.log('uploaded file details', formDataUpload);
+    formDataUpload.append('tripid', book.tripid || selectedCustomerData.tripid || formData.tripid);
     try {
       const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-      console.log('uploaded file details 2', response.data);
-    } catch (error) {
-      console.error('Error uploading file:', error);
+      console.log(response);
+    } catch {
     }
   };
   //end file upload
@@ -852,18 +903,14 @@ const TripSheet = () => {
   const calculateTotalTime = useCallback(() => {
     const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
     const closeTime = formData.closetime || selectedCustomerData.closetime || book.closetime;
-
     if (startTime && closeTime) {
       const startTimeObj = dayjs(startTime, 'HH:mm');
       const closeTimeObj = dayjs(closeTime, 'HH:mm');
       let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
-
-      // Add additional time if it is a valid number
       const additionalTimeValue = parseInt(additionalTime.additionaltime) || parseInt(formData.additionaltime) || parseInt(selectedCustomerData.additionaltime) || parseInt(book.additionaltime);
       if (!isNaN(additionalTimeValue)) {
         totalTimeMinutes += additionalTimeValue * 60;
       }
-
       const hours = Math.floor(totalTimeMinutes / 60);
       const minutes = totalTimeMinutes % 60;
       return `${hours}h ${minutes}m`;
@@ -878,7 +925,7 @@ const TripSheet = () => {
       const totalexKm = exkm * exkmTkm;
       return totalexKm;
     }
-    return 0;
+    return '';
   };
 
   const calculateExHrsAmount = () => {
@@ -888,7 +935,7 @@ const TripSheet = () => {
       const totalexhrs = exHrs * exHrsTHrs;
       return totalexhrs;
     }
-    return 0;
+    return '';
   };
 
   const calculateNightAmount = () => {
@@ -898,7 +945,7 @@ const TripSheet = () => {
       const totalnight = night * nightThrs;
       return totalnight;
     }
-    return 0;
+    return '';
   };
 
   const calculatedriverconvienceAmount = () => {
@@ -908,7 +955,7 @@ const TripSheet = () => {
       const totaldriverconvience = driverconvenience * dtc;
       return totaldriverconvience;
     }
-    return 0;
+    return '';
   };
 
 
@@ -919,7 +966,7 @@ const TripSheet = () => {
       const totalexKm = exkm1 * exkmTkm2;
       return totalexKm;
     }
-    return 0;
+    return '';
   };
 
   const calculateExHrsAmount2 = () => {
@@ -929,7 +976,7 @@ const TripSheet = () => {
       const totalexhrs = exHrs1 * exHrsTHrs2;
       return totalexhrs;
     }
-    return 0;
+    return '';
   };
 
   const calculateNightAmount2 = () => {
@@ -939,7 +986,7 @@ const TripSheet = () => {
       const totalnight = night1 * nightThrs2;
       return totalnight;
     }
-    return 0;
+    return '';
   };
 
   const calculatedriverconvienceAmount2 = () => {
@@ -963,25 +1010,25 @@ const TripSheet = () => {
       return totalDays;
     }
 
-    return 0;
+    return '';
   };
 
   const calculateTotalKilometers = () => {
-    const startKm = formData.startkm || selectedCustomerData.startkm || book.startkm;
-    const closeKm = formData.closekm || selectedCustomerData.closekm || book.closekm;
+    // const startKm = formData.startkm || selectedCustomerData.startkm || book.startkm;
+    const startKm = formData.shedout || book.shedout || selectedCustomerData.shedout || '';
+    // const closeKm = formData.closekm || selectedCustomerData.closekm || book.closekm;
+    const closeKm = formData.shedin || book.shedin || selectedCustomerData.shedin || '';
 
     if (startKm !== undefined && closeKm !== undefined) {
       let totalKm = closeKm - startKm;
-      // Add shed kilometers if it is a valid number
       const shedKmValue = parseInt(shedKilometers.shedkm) || parseInt(formData.shedkm) || parseInt(selectedCustomerData.shedkm) || parseInt(book.shedkm);
       if (!isNaN(shedKmValue)) {
         totalKm += shedKmValue;
       }
       return totalKm;
     }
-    return 0;
+    return '';
   };
-
 
   function calculateTotalAmount() {
     const amount = parseFloat(formData.amount || selectedCustomerData.amount || book.amount || packageDetails[0]?.Rate) || 0;
@@ -989,13 +1036,10 @@ const TripSheet = () => {
     const amount2 = parseFloat(formData.amount2 || selectedCustomerData.amount2 || book.amount2) || calculateExHrsAmount() || 0;
     const amount3 = parseFloat(formData.amount3 || selectedCustomerData.amount3 || book.amount3) || calculateNightAmount() || 0;
     const amount4 = parseFloat(formData.amount4 || selectedCustomerData.amount4 || book.amount4) || calculatedriverconvienceAmount() || 0;
-
     // Calculate the total amount
     const totalAmount = amount + amount1 + amount2 + amount3 + amount4;
-
     return totalAmount;
   }
-
 
   function calculateTotalAmount2() {
     const amount5 = parseFloat(formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate);
@@ -1003,10 +1047,8 @@ const TripSheet = () => {
     const amount7 = parseFloat(formData.amount7 || selectedCustomerData.amount7 || book.amount7) || calculateExHrsAmount2();
     const amount8 = parseFloat(formData.amount8 || selectedCustomerData.amount8 || book.amount8) || calculateNightAmount2();
     const amount9 = parseFloat(formData.amount9 || selectedCustomerData.amount9 || book.amount9) || calculatedriverconvienceAmount2();
-
     // Calculate the total amount
     const totalAmount = amount5 + amount6 + amount7 + amount8 + amount9;
-
     return totalAmount;
   }
 
@@ -1145,12 +1187,9 @@ const TripSheet = () => {
       try {
         const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
         const bookingDetails = response.data;
-        console.log(bookingDetails);
-
         setSelectedCustomerData(bookingDetails);
         setSelectedCustomerId(bookingDetails.tripid);
-      } catch (error) {
-        console.error('Error retrieving booking details:', error);
+      } catch {
       }
     }
   }, []);
@@ -1161,17 +1200,14 @@ const TripSheet = () => {
     if (event.key === 'Enter') {
       event.preventDefault();
       if (enterPressCount === 0) {
-        // First Enter key press - Display in the table
         try {
           const response = await axios.get(`http://localhost:8081/vehicleinfo/${event.target.value}`);
           const vehicleData = response.data;
           setRows([vehicleData]);
-        } catch (error) {
-          console.error('Error retrieving vehicle details:', error.message);
+        } catch {
         }
       } else if (enterPressCount === 1) {
-        // Second Enter key press (double Enter) - Display in the fields
-        const selectedRow = rows[0]; // Assuming you want to use the first row
+        const selectedRow = rows[0];
         if (selectedRow) {
           setSelectedCustomerDatas(selectedRow);
           handleChange({ target: { name: "vehRegNo", value: selectedRow.vehRegNo } });
@@ -1180,18 +1216,14 @@ const TripSheet = () => {
           handleChange({ target: { name: "mobileNo", value: selectedRow.mobileNo } });
         }
       }
-      // Increment the Enter key press count
       setEnterPressCount((prevCount) => prevCount + 1);
     }
-
-    // Check if the input value is empty and reset enterPressCount to 0
     if (event.target.value === '') {
       setEnterPressCount(0);
     }
   }, [handleChange, rows, enterPressCount]);
 
   const handleRowClick = useCallback((params) => {
-    console.log(params);
     setSelectedCustomerDatas(params);
     handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
   }, [handleChange]);
@@ -1212,11 +1244,8 @@ const TripSheet = () => {
           },
         });
         const packagedet = response.data;
-        console.log('API Response:', response.data);
         setPackageDetails(packagedet);
-        console.log('package Hours details', packagedet[0].KMS);
-      } catch (error) {
-        console.error('Error:', error);
+      } catch {
       }
     }
     fetchData();
@@ -1228,7 +1257,6 @@ const TripSheet = () => {
     selectedCustomerDatas.customer, selectedCustomerDatas.duty, selectedCustomerDatas.vehType,
     totalKilometers, totalTime
   ]);
-
 
   const [smsguest, setSmsGuest] = useState(false);
 
@@ -1247,8 +1275,6 @@ const TripSheet = () => {
           ofclanno: '044-49105959',
         };
 
-        console.log("guest sms variables", dataToSend);
-
         const response = await fetch('http://localhost:8081/tripguest-send-sms', {
           method: 'POST',
           headers: {
@@ -1257,19 +1283,15 @@ const TripSheet = () => {
           body: JSON.stringify(dataToSend),
         });
 
-        console.log('data sent to backend', response.data);
 
         if (response.ok) {
-          console.log('SMS sent successfully');
           setSuccess(true);
           setSuccessMessage("SMS sent correctly");
         } else {
-          console.error('Failed to send SMS');
           setError(true);
           setErrorMessage("Failed to send SMS");
         }
-      } catch (error) {
-        console.error('Error sending SMS:', error.message);
+      } catch {
       }
     }
   };
@@ -1291,8 +1313,6 @@ const TripSheet = () => {
           ofclanno: '044-49105959',
         };
 
-        console.log("driver sms variables", dataSend);
-
         const response = await fetch('http://localhost:8081/tripdriver-send-sms', {
           method: 'POST',
           headers: {
@@ -1301,22 +1321,99 @@ const TripSheet = () => {
           body: JSON.stringify(dataSend),
         });
 
-        console.log('data sent to backend', response.data);
-
         if (response.ok) {
-          console.log('SMS sent successfully');
           setSuccess(true);
           setSuccessMessage("SMS sent correctly");
         } else {
-          console.error('Failed to send SMS');
           setError(true);
           setErrorMessage("Failed to send SMS");
         }
-      } catch (error) {
-        console.error('Error sending SMS:', error.message);
+      } catch {
       }
     }
   };
+  // for invoice page
+  const [signimageUrl, setSignImageUrl] = useState('');
+  const [attachedImage, setAttachedImage] = useState('');
+  const [GmapimageUrl, setGMapImageUrl] = useState('');
+  const [routeData, setRouteData] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tripid = localStorage.getItem('selectedTripid');
+      try {
+        const response = await fetch(`http://localhost:8081/routedata/${encodeURIComponent(tripid)}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const routeData = await response.json(); // Parse JSON data
+        setRouteData(routeData);
+      } catch {
+        setError(true);
+        setErrorMessage('Error fetching tripsheet data.');
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tripid = localStorage.getItem('selectedTripid');
+
+      try {
+        const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const imageUrl = URL.createObjectURL(await response.blob());
+        setSignImageUrl(imageUrl);
+      } catch {
+      }
+    };
+    fetchData();
+    return () => {
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tripid = localStorage.getItem('selectedTripid');
+
+      try {
+        const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const gimageUrl = URL.createObjectURL(await response.blob());
+        setGMapImageUrl(gimageUrl);
+      } catch {
+      }
+    };
+    fetchData();
+    return () => {
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tripid = localStorage.getItem('selectedTripid');
+        if (!tripid) {
+          return;
+        }
+        const response = await fetch(`http://localhost:8081/get-attachedimage/${tripid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+        setAttachedImage(attachedImageUrls);
+      } catch {
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="form-container">
@@ -1358,6 +1455,22 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                  <DatePicker
+                    value={formData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
+                    format="DD/MM/YYYY"
+                    label='Tripsheet Date'
+                    onChange={(date) => handleDateChange(date, 'tripsheetdate')}
+                  >
+                    {({ inputProps, inputRef }) => (
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripsheetdate} />
+                    )}
+                  </DatePicker>
+
+                </LocalizationProvider>
+              </div>
+              <div className="input">
                 <div className="icone">
                   <QuizOutlinedIcon color="action" />
                 </div>
@@ -1374,7 +1487,6 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.status || selectedCustomerData.status || book.status || 'Opened'
                     return (
                       <TextField {...params} label="Status" autoComplete="password" name="status" inputRef={params.inputRef} />
                     )
@@ -1417,7 +1529,6 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'
                     return (
                       <TextField {...params} label="Apps" autoComplete="password" name="apps" inputRef={params.inputRef} />
                     )
@@ -1455,15 +1566,6 @@ const TripSheet = () => {
                   required
                 />
               </div>
-              {/* <FormControlLabel
-                name="smsguest"
-                value="smsguest"
-                control={<Checkbox size="small" />}
-                label="SMS Guest"
-                autoComplete="new-password"
-                onChange={handleChange}
-                checked={Boolean(formData.smsguest || selectedCustomerData?.smsguest || book.smsguest)}
-              /> */}
               <FormControlLabel
                 value="smsguest"
                 control={<Checkbox size="small" checked={smsguest} onChange={(event) => setSmsGuest(event.target.checked)} />}
@@ -1605,11 +1707,11 @@ const TripSheet = () => {
               </div>
             </div>
             <div className="container-right-Tripsheet">
-              <div className="textbox-TripSheet">
-                <div className="textboxlist-TripSheet">
+              <div className="textbox">
+                <div className="textboxlist">
                   <div className="textboxlist-customer list-updates">
                     <span>
-                      <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
+                      <div className="Scroll-Style" style={{ overflow: 'scroll', width: '500px', height: '220px' }}>
                         <Table hoverRow borderAxis="y">
                           <thead>
                             <tr>
@@ -1666,7 +1768,6 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''
                     return (
                       <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
                     )
@@ -1691,7 +1792,6 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.department || formValues.department || selectedCustomerData.department || book.department || ''
                     return (
                       <TextField {...params} label="Department" autoComplete="password" name="department" inputRef={params.inputRef} />
                     )
@@ -1699,7 +1799,7 @@ const TripSheet = () => {
                   }
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ width: "240px" }}>
                 <div className="icone">
                   <CarCrashIcon color="action" />
                 </div>
@@ -1712,6 +1812,16 @@ const TripSheet = () => {
                   value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
                   onChange={handleChange}
                   onKeyDown={handleKeyEnter}
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input" style={{ width: "150px" }}>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="category"
+                  label="category"
+                  name="category"
                   autoComplete="password"
                 />
               </div>
@@ -1732,7 +1842,6 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''
                     return (
                       <TextField {...params} label="Vehicle Rate" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                     )
@@ -1771,15 +1880,6 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input radio">
-                {/* <FormControlLabel
-                  name="driversmsexbetta"
-                  value="Driver SMS"
-                  control={<Checkbox size="small" />}
-                  label="Driver SMS"
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                  checked={Boolean(formData.driversmsexbetta || selectedCustomerData?.driversmsexbetta || book.driversmsexbetta)}
-                /> */}
                 <FormControlLabel
                   value="DriverSMS"
                   control={<Checkbox size="small" checked={DriverSMS} onChange={(event) => setDriverSMS(event.target.checked)} />}
@@ -1841,7 +1941,6 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
                     return (
                       <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
                     )
@@ -1866,7 +1965,6 @@ const TripSheet = () => {
                   }))}
                   getOptionLabel={(option) => option.label || formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''
                     return (
                       <TextField {...params} label="Pickup" autoComplete="password" name="pickup" inputRef={params.inputRef} />
                     )
@@ -2065,7 +2163,6 @@ const TripSheet = () => {
                   id="shedout"
                   size='small'
                   type="number"
-                  // variant="standard"/
                   autoComplete="password"
                 />
               </div>
@@ -2078,7 +2175,6 @@ const TripSheet = () => {
                   label="Start KM"
                   type="number"
                   id="outlined-start-adornment"
-                  // sx={{ m: 1, width: "23ch" }}/
                   autoComplete="password"
                 />
               </div>
@@ -2091,7 +2187,6 @@ const TripSheet = () => {
                   size="small"
                   type="number"
                   id="outlined-start-adornment"
-                  // sx={{ m: 1, width: "23ch" }}
                   autoComplete="password"
                 />
               </div>
@@ -2107,7 +2202,6 @@ const TripSheet = () => {
                   type="number"
                   id="shedin"
                   size='small'
-                  // variant="standard"/
                   autoComplete="password"
                 />
               </div>
@@ -2138,7 +2232,6 @@ const TripSheet = () => {
                   id="totalkm1"
                   type="number"
                   size='small'
-                  // variant="standard"/
                   autoComplete="password"
                 />
               </div>
@@ -2281,14 +2374,12 @@ const TripSheet = () => {
                   multiline
                   rows={5}
                   sx={{ m: 2, width: "400ch" }}
-                  // variant="standard"
                   autoComplete="password"
                 />
               </div>
-
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  <Invoice tripSheetData={tripSheetData} formData={calculateTotalTime} book={book} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
+                  <Invoice tripSheetData={tripSheetData} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -2454,7 +2545,6 @@ const TripSheet = () => {
                         }))}
                         getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                         renderInput={(params) => {
-                          // params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''
                           return (
                             <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
                           )
@@ -2529,7 +2619,6 @@ const TripSheet = () => {
                         }))}
                         getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                         renderInput={(params) => {
-                          // params.inputProps.value = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''
                           return (
                             <TextField {...params} label="Vehicle type" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                           )
@@ -2554,7 +2643,6 @@ const TripSheet = () => {
                         }))}
                         getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                         renderInput={(params) => {
-                          // params.inputProps.value = formData.duty || selectedCustomerData.duty || book.duty || ''
                           return (
                             <TextField {...params} label="Duty" autoComplete="password" name="duty1" inputRef={params.inputRef} />
                           )
@@ -2729,7 +2817,6 @@ const TripSheet = () => {
               <TabPanel value={2} sx={{ p: 2 }}>
                 <div className="Customer-Vendor-Bill-Slider">
                   <div className="input-field">
-                    {/* <Button onClick={fetchPackageDetails}>Fetch Package Details</Button> */}
                     <div className="input">
                       <div
                         className="icone"
@@ -2759,7 +2846,6 @@ const TripSheet = () => {
                         value={formData.minkm || packageDetails[0]?.KMS || book.minkm || selectedCustomerData.minkm || ''}
                         label="Min.Km"
                         id="minkm"
-                        // variant="standard"
                         size="small"
                         autoComplete="password"
                       />
@@ -3518,11 +3604,36 @@ const TripSheet = () => {
                       <Button>View GPS TripSheet</Button>
                     </div>
                     <div className="input">
-                      <Button>View GPS Map</Button>
+                      <Button onClick={handleTripmapClick}>View GPS Map</Button>
                     </div>
+                    <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
+                      <DialogContent>
+                        <img className='dialogboximg' src={mapimageUrl} aria-label='summa' />
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                          Cancel
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                     <div className="input">
-                      <Button>View GPS Log</Button>
+                      <Button onClick={handleTripmaplogClick}>View GPS Log</Button>
                     </div>
+                    <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
+                      <DialogContent>
+                        <div className="table-customer-lists">
+                          <DataGrid
+                            rows={row}
+                            columns={maplogcolumns}
+                          />
+                        </div>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                          Cancel
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                     <div className="input">
                       <Button>View Closing</Button>
                     </div>
@@ -3545,7 +3656,6 @@ const TripSheet = () => {
                         }))}
                         getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                         renderInput={(params) => {
-                          // params.inputProps.value = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''
                           return (
                             <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
                           )

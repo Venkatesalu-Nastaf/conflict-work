@@ -111,8 +111,8 @@ const MailDetails = () => {
               </div>
             </div>
             <div className="container-right-mailDetails">
-              <div className="textbox-mailDetails">
-                <div className="textboxlist-mailDetails">
+              <div className="textbox">
+                <div className="textboxlist">
                   <div className="textboxlist-customer ">
                     <div className="input-field">
                       <div className="input" style={{ width: "300px" }}>

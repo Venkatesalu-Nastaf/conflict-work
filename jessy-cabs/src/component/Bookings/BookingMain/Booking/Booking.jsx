@@ -25,6 +25,7 @@ import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup,
 import InfoIcon from "@mui/icons-material/Info";
 import SellIcon from "@mui/icons-material/Sell";
 import ClearIcon from '@mui/icons-material/Clear';
+import { useUser } from '../../../form/UserContext';
 import DeleteIcon from "@mui/icons-material/Delete";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import FmdBadIcon from "@mui/icons-material/FmdBad";
@@ -63,7 +64,6 @@ import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
-import { useUser } from '../../../form/UserContext';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -80,7 +80,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "bookingno", headerName: "Booking No", width: 130 },
-  { field: "bookingdate", headerName: "Booking Date", width: 130 },
+  { field: "bookingdate", headerName: "Booking Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "bookingtime", headerName: "Booking Time", width: 130 },
   { field: "status", headerName: "Status", width: 120 },
   { field: "tripid", headerName: "Trip ID", width: 130 },
@@ -207,7 +207,6 @@ const Booking = () => {
     const stationValue = params.get('servicestation') || 'Chennai';
     const payValue = params.get('paymenttype') || 'BTC';
     const formData = {};
-    console.log('formdata console details', formData);
 
     const parameterKeys = [
       'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno', 'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'reporttime', 'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'triptime', 'emaildoggle', 'hireTypes', 'travelsname', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'travelsemail'];
@@ -487,27 +486,30 @@ const Booking = () => {
       return;
     }
     try {
-      console.log('Add button clicked');
       const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
 
       const updatedBook = {
         ...book,
+        ...formData,
         bookingtime: bookingtime || getCurrentTime(),
         starttime: starttime,
         reporttime: reporttime,
         triptime: triptime,
         username: storedUsername,
         bookingdate: selectedBookingDate,
+        orderbyemail: selectedCustomerDatas.customeremail,
+        orderedby: selectedCustomerDatas.name,
+        mobile: selectedCustomerDatas.phoneno,
       };
       await axios.post('http://localhost:8081/booking', updatedBook);
-      console.log(updatedBook);
       handleCancel();
+      setRow([]);
+      setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
       handlecheck();
       handleSendSMS();
-    } catch (error) {
-      console.error('Error updating customer:', error);
+    } catch {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
@@ -518,23 +520,23 @@ const Booking = () => {
 
     try {
       if (actionName === 'Email') {
-        console.log('List button clicked');
       } else if (actionName === 'Clear') {
-        console.log('Cancel button clicked');
         handleCancel();
+        setRows([]);
+        setRow([]);
       } else if (actionName === 'Delete') {
-        console.log('Delete button clicked');
         await axios.delete(`http://localhost:8081/booking/${book.bookingno}`);
-        console.log('Customer deleted');
         setSelectedCustomerData(null);
         setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         setFormData(null);
         handleCancel();
+        setRow([]);
+        setRows([]);
       } else if (actionName === 'Modify') {
-        console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.bookingno === selectedCustomerData.bookingno || formData.bookingno);
         const updatedCustomer = {
+          ...formData,
           ...selectedCustomer,
           ...selectedCustomerData,
           bookingtime: bookingtime || selectedCustomerData.bookingtime,
@@ -543,22 +545,25 @@ const Booking = () => {
           triptime: triptime || book.triptime || selectedCustomerData.triptime || formData.triptime,
           username: storedUsername,
           bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
+          orderbyemail: selectedCustomerDatas.customeremail,
+          orderedby: selectedCustomerDatas.name,
+          mobile: selectedCustomerDatas.phoneno,
+
         };
         await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
-        console.log('Customer updated');
         handleCancel();
+        setRow([]);
+        setRows([]);
         handlecheck();
         handleSendSMS();
         setSuccess(true);
         setSuccessMessage("Successfully Updated");
       } else if (actionName === 'Copy This') {
-        console.log('Copy This button clicked');
         handleClickShow();
       } else if (actionName === 'Add') {
         handleAdd();
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       setError(true);
       setErrorMessage("Check Network Connection")
     }
@@ -594,11 +599,9 @@ const Booking = () => {
       try {
         const response = await axios.get(`http://localhost:8081/booking/${event.target.value}`);
         const bookingDetails = response.data;
-        console.log(bookingDetails);
         setSelectedCustomerData(bookingDetails);
         setSelectedCustomerId(bookingDetails.tripid);
-      } catch (error) {
-        console.error('Error retrieving booking details:', error);
+      } catch {
         setError(true);
         setErrorMessage("Error retrieving booking details");
       }
@@ -625,16 +628,16 @@ const Booking = () => {
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-    const bookingno = book.bookingno;
+    const bookingno = book.bookingno || selectedCustomerData.bookingno;
     const formData = new FormData();
     formData.append('file', file);
     formData.append('bookingno', bookingno);
-    console.log(formData);
     try {
       const response = await axios.post('http://localhost:8081/uploads', formData);
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error uploading file:', error);
+      console.log('uploaded file details 2', response.data);
+    } catch {
+      setError(true);
+      setErrorMessage('Error uploading file.');
     }
   };
 
@@ -649,7 +652,8 @@ const Booking = () => {
           const vehicleData = response.data;
           setRows([vehicleData]);
         } catch (error) {
-          console.error('Error retrieving vehicle details:', error.message);
+          setError(true);
+          setErrorMessage('Error retrieving vehicle details.');
         }
       } else if (enterPressCount === 1) {
         const selectedRow = rows[0];
@@ -667,13 +671,11 @@ const Booking = () => {
 
 
   const handleRowClick = useCallback((params) => {
-    console.log(params);
     setSelectedCustomerDatas(params);
     handleChange({ target: { name: "customer", value: params.customer } });
   }, [handleChange]);
 
   const handletableClick = useCallback((params) => {
-    console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
@@ -695,52 +697,28 @@ const Booking = () => {
         await axios.post('http://localhost:8081/send-email', dataToSend);
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully")
-        console.log(dataToSend);
-      } catch (error) {
-        console.error('Error sending email:', error);
+      } catch {
         setError(true);
         setErrorMessage("An error occured while sending mail")
       }
     } else {
-      console.log('Send mail checkbox is not checked. Email not sent.');
+      setError(true);
+      setErrorMessage('Send mail checkbox is not checked. Email not sent.');
     }
   };
 
   const reversedRows = [...row].reverse();
 
-  // const handleShowAll = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:8081/booking_for_table?search=${encodeURIComponent(searchText)}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`
-  //     );
-  //     const data = response.data;
-  //     console.log(data);
-  //     if (data.length > 0) {
-  //       setRows(data);
-  //       setSuccess(true);
-  //       setSuccessMessage("Successfully listed");
-  //     } else {
-  //       setRows([]);
-  //       setError(true);
-  //       setErrorMessage("No data found");
-  //     }
-  //   } catch (error) {
-  //     console.error('Error retrieving data:', error);
-  //     setRow([]);
-  //     setError(true);
-  //     setErrorMessage("Check your Network Connection");
-  //   }
-  // }, [searchText, fromDate, toDate]);
   const handleShowAll = async () => {
     try {
       const response = await fetch(`http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
-      console.log('response value ', response.value);
       const data = await response.json();
-      console.log('fetched data', data);
-      // setRows(data);
       if (data.length > 0) {
-        setRow(data);
-        console.log(data);
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRow(rowsWithUniqueId);
         setSuccess(true);
         setSuccessMessage("successfully listed")
       } else {
@@ -758,8 +736,6 @@ const Booking = () => {
     if (user && user.username) {
       const username = user.username;
       localStorage.setItem("username", username);
-      const successMessagepopup = `Login successful ${user.username}`;
-      setSuccess(successMessagepopup);
     }
   }, [user]);
   const storedUsername = localStorage.getItem("username");
@@ -783,8 +759,6 @@ const Booking = () => {
           city: formValues.city || formData.city || selectedCustomerData.city || book.city || '',
         };
 
-        console.log("sms variables", dataToSend);
-
         const response = await fetch('http://localhost:8081/send-sms', {
           method: 'POST',
           headers: {
@@ -793,19 +767,16 @@ const Booking = () => {
           body: JSON.stringify(dataToSend),
         });
 
-        console.log('data sent to backend', response.data);
-
         if (response.ok) {
-          console.log('SMS sent successfully');
           setSuccess(true);
           setSuccessMessage("SMS sent correctly");
         } else {
-          console.error('Failed to send SMS');
           setError(true);
           setErrorMessage("Failed to send SMS");
         }
-      } catch (error) {
-        console.error('Error sending SMS:', error.message);
+      } catch {
+        setError(true);
+        setErrorMessage("Error sending SMS");
       }
     }
   };
@@ -847,7 +818,7 @@ const Booking = () => {
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-              <div className="input time">
+              <div className="input time" style={{ marginTop: '45px' }}>
                 <label>Booking Time</label>
                 <input
                   type="time"
@@ -1260,7 +1231,7 @@ const Booking = () => {
                 <TextField
                   name="orderbyemail"
                   autoComplete="new-password"
-                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.email || book.orderbyemail || ''}
+                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail || ''}
                   onChange={handleChange}
                   label="Order By Email"
                   id="orederbyemail"
@@ -1636,22 +1607,24 @@ const Booking = () => {
             <div className='alert-popup Error' >
               <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errorMessage}</p>
+              {/* <p>{String(errorMessage)}</p> */}
+              <p>{errorMessage && typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage}</p>
             </div>
           }
           {warning &&
             <div className='alert-popup Warning' >
               <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{warningMessage}</p>
-
+              {/* <p>{String(warningMessage)}</p> */}
+              <p>{warningMessage && typeof warningMessage === 'object' ? JSON.stringify(warningMessage) : warningMessage}</p>
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
               <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{infoMessage}</p>
+              {/* <p>{String(infoMessage)}</p> */}
+              <p>{infoMessage && typeof infoMessage === 'object' ? JSON.stringify(infoMessage) : infoMessage}</p>
             </div>
           }
           {success &&

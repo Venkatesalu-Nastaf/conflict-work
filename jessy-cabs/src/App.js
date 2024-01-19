@@ -9,10 +9,12 @@ import Mailer from "./component/Info/Mailer/Mailer";
 import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
 import Bookings from "./component/Bookings/Bookings";
-import Income from "./component/Billings/Income/Income";
+import Accounts from "./component/Accounts/Accounts";
+// import Income from "./component/Billings/Income/Income";
 import FuelInfo from "./component/Info/FuelInfo/FuelInfo";
-import Expense from "./component/Billings/Expense/Expense";
+// import Expense from "./component/Billings/Expense/Expense";
 import RateTypes from "./component/Info/RateTypes/RateTypes";
+import Transfer from "./component/Billings/Transfer/Transfer";
 import MainDash from "./component/Dashboard/MainDash/MainDash";
 import Received from "./component/Bookings/Receiveds/Receiveds";
 import Registration from "./component/Registration/Registration";
@@ -27,15 +29,17 @@ import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
 import BookingMain from "./component/Bookings/BookingMain/BookingMain";
 import Dispatcheds from "./component/Bookings/Dispatcheds/Dispatcheds";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
-import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
+// import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import BillingMain from "./component/Billings/billingMain/billingMain";
+import CoveringBill from "./component/Billings/CoveringBill/CoveringBill";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
 import RateManagement from "./component/Info/RateManagement/RateManagement";
 import DigitalSignature from "./component/DigitalSignature/DigitalSignature";
 import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
-import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/NavigationMap";
+import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapComponent";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
+
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -78,9 +82,13 @@ function App() {
               </Route>
               <Route path="/home/billing" element={<Billings />}>
                 <Route path="/home/billing/billing" element={<BillingMain />} />
-                <Route path="/home/billing/expense" element={<Expense />} />
-                <Route path="/home/billing/income" element={<Income />} />
-                <Route path="/home/billing/profitandloss" element={<ProfiteLoss />} />
+                <Route path="/home/billing/transfer" element={<Transfer />} />
+                <Route path="/home/billing/coveringbill" element={<CoveringBill />} />
+              </Route>
+              <Route path="/home/accounts" element={<Accounts />}>
+                {/* <Route path="/home/accounts/expense" element={<Expense />} />
+                <Route path="/home/accounts/income" element={<Income />} />
+                <Route path="/home/accounts/profitandloss" element={<ProfiteLoss />} /> */}
               </Route>
               <Route path="/home/settings" element={<Settings />}>
                 <Route path="/home/settings/usercreation" element={<UserCreation />} />

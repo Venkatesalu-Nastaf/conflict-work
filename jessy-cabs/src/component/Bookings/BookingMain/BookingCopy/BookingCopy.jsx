@@ -96,10 +96,20 @@ const BookingCopy = () => {
     try {
       const response = await axios.get(`http://localhost:8081/booking?bookingno=${bookingno}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
       const data = response.data;
-      setRows(data);
-      setSuccessMessage("Successfully listed");
-    } catch (error) {
-      console.error('Error retrieving data:', error);
+      if (data.length > 0) {
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
+        setSuccess(true);
+        setSuccessMessage("successfully listed")
+      } else {
+        setRows([]);
+        setError(true);
+        setErrorMessage("no data found")
+      }
+    } catch {
       setRows([]);
       setError(true);
       setErrorMessage("Check your Network Connection");
@@ -131,11 +141,13 @@ const BookingCopy = () => {
                   <DemoContainer components={["DatePicker", "DatePicker"]}>
                     <DatePicker
                       label="From Date"
+                      format="DD/MM/YYYY"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
                     <DatePicker
                       label="To Date"
+                      format="DD/MM/YYYY"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />

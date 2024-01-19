@@ -1,4 +1,4 @@
-.guest-sign #guestsign{
+.guest-sign #guestsign {
   margin-top: 25px;
   width: 95px;
 
@@ -69,9 +69,10 @@
   /* margin: 0 1em 1em 0; */
 }
 
-/* .invoice-wrapper header address p {
-  margin: 0 0 0.25em;
-} */
+.dialogboximg {
+  height: 100px;
+  width: 100px;
+}
 
 .invoice-wrapper header span,
 header img {
@@ -99,12 +100,6 @@ header img {
   clip: rect(0 0 0 0);
   position: absolute;
 }
-
-/* .invoice-wrapper article address {
-  float: left;
-  font-size: 125%;
-  font-weight: bold;
-} */
 
 .invoice-wrapper article:after {
   clear: both;
@@ -283,4 +278,37 @@ header img {
   letter-spacing: 0.5em;
   text-align: center;
   text-transform: uppercase;
+}
+
+.tripsheet-location-img {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.tripsheet-location-img img {
+  width: 320px;
+}
+
+.tripsheet-RouteSummary {
+  width: 80%;
+  font-size: 13px;
+}
+
+.tripsheet-RouteSummary p {
+  font-weight: 600;
+}
+
+.tripsheet-RouteSummary ol {
+  font-size: 12px;
+  font-weight: 500;
+}
+.attached-toll{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+}
+.attached-toll img {
+  width: 500px;
 }

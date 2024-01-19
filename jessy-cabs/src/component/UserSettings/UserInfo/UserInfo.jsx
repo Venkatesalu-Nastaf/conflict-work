@@ -102,19 +102,12 @@ const UserSetting = ({ defaultImage, userid }) => {
                 const filterValue = event.target.value; // Get the input value
                 const response = await axios.get(`http://localhost:8081/usercreation?filter=${filterValue}`);
                 const bookingDetails = response.data;
-
-                // Check if bookingDetails is an array and has at least one object
                 if (Array.isArray(bookingDetails) && bookingDetails.length > 0) {
-                    console.log('user details:', bookingDetails[0]); // Log the first object in the array
-
-                    // Set the state variables with data from the first object in the array
                     setBook(bookingDetails[0]);
                     setSelectedCustomerData(bookingDetails[0]);
                 } else {
-                    console.log('No user details found.');
                 }
-            } catch (error) {
-                console.error('Error retrieving user details:', error);
+            } catch {
             }
         }
     }, []);
@@ -126,26 +119,23 @@ const UserSetting = ({ defaultImage, userid }) => {
             validatePasswordMatch();
         }
         try {
-            console.log('Edit button clicked');
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
             await axios.put(`http://localhost:8081/usercreation/${book.userid}`, updatedCustomer);
-            console.log('Customer updated');
             handleCancel();
             validatePasswordMatch();
+            setSuccess(true);
             setSuccessMessage("Successfully updated");
-        } catch (error) {
-            console.error('Error updating customer:', error);
+        } catch {
+            setError(true);
             setErrorMessage("Check your Network Connection");
         }
     };
-
 
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -155,7 +145,6 @@ const UserSetting = ({ defaultImage, userid }) => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -199,7 +188,7 @@ const UserSetting = ({ defaultImage, userid }) => {
 
     const handleUpload = () => {
         if (!file) {
-            // setErrorMessage('Please select an image to upload.');
+            setError(true);
             setErrorMessage("Check your Network Connection");
             return;
         }

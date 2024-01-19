@@ -110,8 +110,7 @@ const BookingChart = () => {
         }));
         return updatedVehicles;
       });
-    } catch (error) {
-      console.error('Error fetching booking data:', error);
+    } catch {
       setErrorMessage("Check your Network Connection");
     }
   }, []);
@@ -150,6 +149,7 @@ const BookingChart = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="From Date"
+                      format="DD/MM/YYYY"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
@@ -159,6 +159,7 @@ const BookingChart = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="To Date"
+                      format="DD/MM/YYYY"
                       value={toDate}
                       onChange={(date) => setToDate(date)}
                     />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Form.css";
-import axios from "axios"; 
-import { useUser } from './UserContext'; 
+import axios from "axios";
+import { useUser } from './UserContext';
 import { useNavigate } from "react-router-dom";
 
 // ICONS
@@ -21,7 +21,7 @@ const Login = () => {
   const toggle = () => {
     setOpen(!open);
   };
-  const [input, setInput] = React.useState({ username: "", userpassword: "" });
+  const [input, setInput] = useState({ username: "", userpassword: "" });
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
@@ -83,18 +83,15 @@ const Login = () => {
 
   const formSubmitter = async (e) => {
     e.preventDefault();
-    setSuccess("");
     try {
-      const response = await axios.post("http://localhost:8081/login", input); // Make a POST request to your backend
-
+      const response = await axios.post("http://localhost:8081/login", input);
       if (response.status === 200) {
-        // Successful login
         loginUser(input.username);
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");
         localStorage.setItem("auth", true);
       } else {
-        // Failed login
+        setError(true);
         setErrorMessage("Check your Network Connection");
       }
     } catch {
@@ -107,7 +104,7 @@ const Login = () => {
     <div className="portal-container">
       <div className="glasses">
         <div className="right-col">
-          <form className="portal" onSubmit={formSubmitter}  >
+          <form className="portal"  >
             <div className="title">login</div>
             {error &&
               <div className='alert-popup Error' >
@@ -171,8 +168,9 @@ const Login = () => {
               <a href="/">forget password !</a>
             </div>
             <div className="group button-group">
-              <button type="submit" className="signup-btn">
-                <span>Login</span>
+              <button type="submit" className="signup-btn" onClick={formSubmitter}>
+                Login
+                {/* <span>Login</span> */}
               </button>
             </div>
             <div className="social_media_container">

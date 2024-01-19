@@ -270,7 +270,6 @@ const Accuntinfo = () => {
   };
 
   const handleRowClick = useCallback((params) => {
-    console.log(params.row);
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.accountNo);
@@ -279,14 +278,12 @@ const Accuntinfo = () => {
   const handleAdd = async () => {
 
     try {
-      console.log('Add button clicked');
       await axios.post('http://localhost:8081/accountinfo', book);
-      console.log(book);
       handleCancel();
+      setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
-    } catch (error) {
-      console.error('Error updating customer:', error);
+    } catch {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
@@ -297,11 +294,14 @@ const Accuntinfo = () => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-        console.log('List button clicked');
         const response = await axios.get('http://localhost:8081/accountinfo');
         const data = response.data;
         if (data.length > 0) {
-          setRows(data);
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
           setSuccess(true);
           setSuccessMessage("Successfully listed");
         } else {
@@ -311,36 +311,23 @@ const Accuntinfo = () => {
         }
         setSuccessMessage("Successfully listed");
       } else if (actionName === 'Cancel') {
-        console.log('Cancel button clicked');
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Delete') {
-        console.log('Delete button clicked');
         await axios.delete(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
-        console.log('Customer deleted');
         setSelectedCustomerData(null);
         setSuccess(true);
         setSuccessMessage("Successfully Deleted");
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Edit') {
-        // console.log('Edit button clicked');
-        // const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
-        // const updatedCustomer = {
-        //   ...selectedCustomer,
-        //   ...selectedCustomerData,
-        // };
-        // await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
-        // console.log('Customer updated');
-        // handleCancel();
-        // setSuccess(true);
-        // setSuccessMessage("Successfully updated");
-        console.log('Edit button clicked');
         const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
         await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
-        console.log('Customer updated');
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
+        setRows([]);
       } else if (actionName === 'Add') {
         handleAdd();
       }
@@ -383,6 +370,7 @@ const Accuntinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
+                    format="DD/MM/YYYY"
                     value={selectedCustomerData.Accdate ? dayjs(selectedCustomerData.Accdate) : null}
                     onChange={(date) => handleDateChange(date, 'Accdate')}
                   >

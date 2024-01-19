@@ -15,7 +15,7 @@ const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "TirpNo", headerName: "Trip No", width: 130 },
   { field: "BillNo", headerName: "Bill No", width: 130 },
-  { field: "Tripdate", headerName: "Trip Date", width: 130 },
+  { field: "Tripdate", headerName: "Trip Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
   { field: "CustomerName", headerName: "Customer Name", width: 130 },
   { field: "UserName", headerName: "User Name", width: 130 },
   { field: "ServiceTax", headerName: "Service Tax", width: 130 },

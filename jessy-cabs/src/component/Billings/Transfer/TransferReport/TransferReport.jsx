@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./TransferReport.css";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -63,7 +63,7 @@ const TransferReport = () => {
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [warning, setWarning] = useState(false);
-  const [warningMessage, setWarningMessage] = useState({});
+  const [warningMessage] = useState({});
 
   // for page permission
 
@@ -84,7 +84,7 @@ const TransferReport = () => {
     fetchPermissions();
   }, [user_id]);
 
-  const checkPagePermission = useCallback(async () => {
+  const checkPagePermission = () => {
     const currentPageName = 'CB Billing';
     const permissions = userPermissions || {};
 
@@ -103,12 +103,14 @@ const TransferReport = () => {
       modify: false,
       delete: false,
     };
-  }, [userPermissions]);
+  };
 
   const permissions = checkPagePermission();
 
+  // Function to determine if a field should be read-only based on permissions
   const isFieldReadOnly = (fieldName) => {
     if (permissions.read) {
+      // If user has read permission, check for other specific permissions
       if (fieldName === "delete" && !permissions.delete) {
         return true;
       }
@@ -227,58 +229,53 @@ const TransferReport = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const permissions = checkPagePermission();
 
-      if (permissions.read && permissions.read) {
-        try {
-          const tripid = localStorage.getItem('selectedtripsheetid');
-          const encoded = localStorage.getItem('selectedcustomerdata');
-          localStorage.setItem('selectedcustomer', encoded);
-          const storedCustomer = localStorage.getItem('selectedcustomer');
-          const customer = decodeURIComponent(storedCustomer);
-          console.log('final customer data', customer);
-          console.log('collected data from dataentry', tripid, customer);
-          const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const tripData = await response.json();
-          if (Array.isArray(tripData)) {
-            setTripData(tripData);
-            const tripsheetNumbers = tripData.map((row, index) => ({
-              id: index + 1,
-              guestname: row.guestname,
-              tripid: row.tripid
-            }));
-            if (tripsheetNumbers.length > 0) {
-              const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
-                ...row,
-                id: index + 1,
-              }));
-              setRows(rowsWithUniqueId);
-              setSuccess(true);
-              setSuccessMessage("successfully listed")
-            } else {
-              setRows([]);
-              setError(true);
-              setErrorMessage("no data found")
-            }
-          } else if (typeof tripData === 'object') {
-            const tripsheetNumbers = [{ id: 1, guestname: tripData.guestname, tripid: tripData.tripid }];
-            setRows(tripsheetNumbers);
-          } else {
-          }
-        } catch {
-          setError(true);
-          setErrorMessage("something went wrong.");
+      try {
+        const tripid = localStorage.getItem('selectedtripsheetid');
+        const encoded = localStorage.getItem('selectedcustomerdata');
+        localStorage.setItem('selectedcustomer', encoded);
+        const storedCustomer = localStorage.getItem('selectedcustomer');
+        const customer = decodeURIComponent(storedCustomer);
+        console.log('final customer data', customer);
+        console.log('collected data from dataentry', tripid, customer);
+        const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-      } else {
-        setWarning(true);
-        setWarningMessage("You do not have permission.");
+        const tripData = await response.json();
+        if (Array.isArray(tripData)) {
+          setTripData(tripData);
+          const tripsheetNumbers = tripData.map((row, index) => ({
+            id: index + 1,
+            guestname: row.guestname,
+            tripid: row.tripid
+          }));
+          if (tripsheetNumbers.length > 0) {
+            const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
+              ...row,
+              id: index + 1,
+            }));
+            setRows(rowsWithUniqueId);
+            setSuccess(true);
+            setSuccessMessage("successfully listed")
+          } else {
+            setRows([]);
+            setError(true);
+            setErrorMessage("no data found")
+          }
+        } else if (typeof tripData === 'object') {
+          const tripsheetNumbers = [{ id: 1, guestname: tripData.guestname, tripid: tripData.tripid }];
+          setRows(tripsheetNumbers);
+        } else {
+        }
+      } catch {
+        setError(true);
+        setErrorMessage("something went wrong.");
       }
+
     };
     fetchData();
-  }, [checkPagePermission]);
+  }, []);
 
   const customerName = localStorage.getItem('selectedcustomerdata');
   localStorage.setItem('selectedcustomer', customerName);
@@ -584,16 +581,16 @@ const TransferReport = () => {
               </div>
               <div className="input-field">
                 <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained" onClick={() => handleEInvoiceClick()}>PDF Bill</Button>
+                  <Button variant="contained" onClick={() => handleEInvoiceClick()} disabled={isFieldReadOnly("new")}>PDF Bill</Button>
                 </div>
                 <div className="input" style={{ width: "180px" }}>
-                  <Button variant="outlined" >Booking Mail</Button>
+                  <Button variant="outlined" disabled={isFieldReadOnly("new")} >Booking Mail</Button>
                 </div>
                 <div className="input" style={{ width: "180px" }}>
-                  <Button variant="contained" onClick={() => handleMapInvoiceClick()}>Image With Invoice Normal</Button>
+                  <Button variant="contained" onClick={() => handleMapInvoiceClick()} disabled={isFieldReadOnly("new")}>Image With Invoice Normal</Button>
                 </div>
                 <div className="input" style={{ width: "180px" }}>
-                  <Button variant="contained" onClick={() => handleLuxuryInvoiceClick()}>Image With Invoice Luxury</Button>
+                  <Button variant="contained" onClick={() => handleLuxuryInvoiceClick()} disabled={isFieldReadOnly("new")}>Image With Invoice Luxury</Button>
                 </div>
               </div>
             </div>

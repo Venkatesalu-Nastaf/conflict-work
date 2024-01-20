@@ -41,7 +41,7 @@ const TransferList = () => {
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [warning, setWarning] = useState(false);
-    const [warningMessage, setWarningMessage] = useState({});
+    const [warningMessage] = useState({});
     const [servicestation, setServiceStation] = useState("");
 
     // for page permission
@@ -63,7 +63,7 @@ const TransferList = () => {
         fetchPermissions();
     }, [user_id]);
 
-    const checkPagePermission = useCallback(async () => {
+    const checkPagePermission = () => {
         const currentPageName = 'CB Billing';
         const permissions = userPermissions || {};
 
@@ -82,8 +82,7 @@ const TransferList = () => {
             modify: false,
             delete: false,
         };
-    }, [userPermissions]);
-
+    };
 
     const permissions = checkPagePermission();
 
@@ -185,49 +184,44 @@ const TransferList = () => {
     }, []);
 
     const handleShow = useCallback(async () => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.read) {
-            try {
-                const response = await axios.get(`http://localhost:8081/payment-detail`, {
-                    params: {
-                        customer: encodeURIComponent(customer),
-                        fromDate: fromDate.format('YYYY-MM-DD'),
-                        toDate: toDate.format('YYYY-MM-DD'),
-                        servicestation: encodeURIComponent(servicestation),
-                    },
-                });
+        try {
+            const response = await axios.get(`http://localhost:8081/payment-detail`, {
+                params: {
+                    customer: encodeURIComponent(customer),
+                    fromDate: fromDate.format('YYYY-MM-DD'),
+                    toDate: toDate.format('YYYY-MM-DD'),
+                    servicestation: encodeURIComponent(servicestation),
+                },
+            });
 
-                const data = response.data;
+            const data = response.data;
 
-                if (data.length > 0) {
-                    const rowsWithUniqueId = data.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                        Trips: row.trip_count,
-                        toll: row.total_toll,
-                        amount: row.total_Amount,
-                        grossamount: row.total_Amount,
-                        guestname: row.customer,
-                    }));
-                    setRows(rowsWithUniqueId);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully listed");
-                } else {
-                    setRows([]);
-                    setError(true);
-                    setErrorMessage("No data found");
-                }
-            } catch {
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                    Trips: row.trip_count,
+                    toll: row.total_toll,
+                    amount: row.total_Amount,
+                    grossamount: row.total_Amount,
+                    guestname: row.customer,
+                }));
+                setRows(rowsWithUniqueId);
+                setSuccess(true);
+                setSuccessMessage("Successfully listed");
+            } else {
                 setRows([]);
                 setError(true);
-                setErrorMessage("Check your Network Connection");
+                setErrorMessage("No data found");
             }
-        } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+        } catch {
+            setRows([]);
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
-    }, [customer, fromDate, toDate, servicestation, checkPagePermission]);
+
+    }, [customer, fromDate, toDate, servicestation]);
 
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -339,7 +333,7 @@ const TransferList = () => {
                                     />
                                 </div>
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("new")}>Search</Button>
+                                    <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("read")}>Search</Button>
                                 </div>
                             </div>
                         </div>

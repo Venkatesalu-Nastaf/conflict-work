@@ -52,7 +52,7 @@ const PaymentDetail = () => {
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage, setWarningMessage] = useState({});
+  const [warningMessage] = useState({});
   const [bankOptions, setBankOptions] = useState([]);
   const [infoMessage] = useState({});
 
@@ -75,7 +75,7 @@ const PaymentDetail = () => {
     fetchPermissions();
   }, [user_id]);
 
-  const checkPagePermission = useCallback(async () => {
+  const checkPagePermission = () => {
     const currentPageName = 'Payments';
     const permissions = userPermissions || {};
 
@@ -94,12 +94,14 @@ const PaymentDetail = () => {
       modify: false,
       delete: false,
     };
-  }, [userPermissions]);
+  };
 
   const permissions = checkPagePermission();
 
+  // Function to determine if a field should be read-only based on permissions
   const isFieldReadOnly = (fieldName) => {
     if (permissions.read) {
+      // If user has read permission, check for other specific permissions
       if (fieldName === "delete" && !permissions.delete) {
         return true;
       }
@@ -188,35 +190,30 @@ const PaymentDetail = () => {
     }
   };
   const handleShow = useCallback(async () => {
-    const permissions = checkPagePermission();
 
-    if (permissions.read && permissions.read) {
-      try {
-        const response = await axios.get(`http://localhost:8081/payment-details?billingno=${billingno}&customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
-        const data = response.data;
-        if (data.length > 0) {
-          const rowsWithUniqueId = data.map((row, index) => ({
-            ...row,
-            id: index + 1,
-          }));
-          setRows(rowsWithUniqueId);
-          setSuccess(true);
-          setSuccessMessage("successfully listed")
-        } else {
-          setRows([]);
-          setError(true);
-          setErrorMessage("no data found")
-        }
-      } catch {
+    try {
+      const response = await axios.get(`http://localhost:8081/payment-details?billingno=${billingno}&customer=${encodeURIComponent(customer)}&fromDate=${fromDate.format('YYYY-MM-DD')}&toDate=${toDate.format('YYYY-MM-DD')}`);
+      const data = response.data;
+      if (data.length > 0) {
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
+        setSuccess(true);
+        setSuccessMessage("successfully listed")
+      } else {
         setRows([]);
         setError(true);
-        setErrorMessage("Check your Network Connection");
+        setErrorMessage("no data found")
       }
-    } else {
-      setWarning(true);
-      setWarningMessage("You do not have permission.");
+    } catch {
+      setRows([]);
+      setError(true);
+      setErrorMessage("Check your Network Connection");
     }
-  }, [billingno, customer, fromDate, toDate, checkPagePermission]);
+
+  }, [billingno, customer, fromDate, toDate]);
 
   useEffect(() => {
     Organization()
@@ -330,7 +327,7 @@ const PaymentDetail = () => {
               </div>
               <div className="input-field" style={{ justifyContent: 'center' }}>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("new")}>Search</Button>
+                  <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("read")}>Search</Button>
                 </div>
               </div>
             </div>

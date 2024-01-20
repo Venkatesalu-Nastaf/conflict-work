@@ -77,9 +77,10 @@ const EmployeeCreation = () => {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
-  const [warning, setWarning] = useState(false);
+
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
+  const [warning, setWarning] = useState(false);
   const [warningMessage, setWarningMessage] = useState({});
   const [infoMessage] = useState({});
 
@@ -248,7 +249,6 @@ const EmployeeCreation = () => {
         setPasswordsMatch(true);
       }
     } else {
-      // Display a warning or prevent the action
       setWarning(true);
       setWarningMessage("You do not have permission.");
     }
@@ -280,7 +280,6 @@ const EmployeeCreation = () => {
         handleCancel();
         setRows([]);
       } else if (actionName === 'Delete') {
-        // if (checkPagePermission() && userPermissions?.delete) {
         const permissions = checkPagePermission();
 
         if (permissions.read && permissions.delete) {
@@ -295,7 +294,6 @@ const EmployeeCreation = () => {
           setWarningMessage("You do not have permission.");
         }
       } else if (actionName === 'Edit') {
-        // if (checkPagePermission() && userPermissions?.modify) {
         const permissions = checkPagePermission();
 
         if (permissions.read && permissions.modify) {

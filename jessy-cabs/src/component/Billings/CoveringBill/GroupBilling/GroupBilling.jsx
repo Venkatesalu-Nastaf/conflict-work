@@ -22,6 +22,7 @@ import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData'
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { faBuilding, faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
@@ -48,6 +49,8 @@ const columns = [
 ];
 
 const GroupBilling = () => {
+    const user_id = localStorage.getItem('useridno');
+
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
     const [tripData, setTripData] = useState("");
@@ -65,11 +68,77 @@ const GroupBilling = () => {
     const [servicestation, setServiceStation] = useState("");
     const [sumTotalAndRounded, setSumTotalAndRounded] = useState('');
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
+    const [warning, setWarning] = useState(false);
+    const [warningMessage] = useState({});
+
+    // for page permission
+
+    const [userPermissions, setUserPermissions] = useState({});
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'CB Billing';
+                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                setUserPermissions(response.data);
+                console.log('permission data', response.data);
+            } catch (error) {
+                console.error('Error fetching user permissions:', error);
+            }
+        };
+
+        fetchPermissions();
+    }, [user_id]);
+
+    const checkPagePermission = () => {
+        const currentPageName = 'CB Billing';
+        const permissions = userPermissions || {};
+
+        if (permissions.page_name === currentPageName) {
+            return {
+                read: permissions.read_permission === 1,
+                new: permissions.new_permission === 1,
+                modify: permissions.modify_permission === 1,
+                delete: permissions.delete_permission === 1,
+            };
+        }
+
+        return {
+            read: false,
+            new: false,
+            modify: false,
+            delete: false,
+        };
+    };
+
+    const permissions = checkPagePermission();
+
+    // Function to determine if a field should be read-only based on permissions
+    const isFieldReadOnly = (fieldName) => {
+        if (permissions.read) {
+            // If user has read permission, check for other specific permissions
+            if (fieldName === "delete" && !permissions.delete) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    };
 
     const hidePopup = () => {
         setError(false);
         setSuccess(false);
+        setWarning(false);
     };
+
+    useEffect(() => {
+        if (warning) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [warning]);
 
     useEffect(() => {
         if (error) {
@@ -156,51 +225,8 @@ const GroupBilling = () => {
         }, 0);
     };
 
-    // const handleShow = useCallback(async () => {
-    //     try {
-    //         console.log('Selected values:', { invoiceno, customer, fromDate: fromDate.format('DD/MM/YYYY'), toDate: toDate.format('DD/MM/YYYY'), servicestation, });
-    //         const response = await axios.get(`http://localhost:8081/Group-Billing`, {
-    //             params: {
-    //                 invoiceno,
-    //                 customer: encodeURIComponent(customer),
-    //                 fromDate: fromDate.format('YYYY-MM-DD'),
-    //                 toDate: toDate.format('YYYY-MM-DD'),
-    //                 servicestation: encodeURIComponent(servicestation),
-    //             },
-    //         });
-
-    //         const data = response.data;
-
-    //         if (Array.isArray(data)) {
-    //             setRows(data);
-    //             const netAmountSum = calculateNetAmountSum(data);
-    //             setTotalValue(netAmountSum);
-    //             const calculateRoundOff = () => {
-    //                 const balanceAmount = parseFloat(totalValue);
-    //                 const roundedGrossAmount = Math.ceil(balanceAmount);
-    //                 const roundOff = roundedGrossAmount - balanceAmount;
-    //                 return roundOff.toFixed(2);
-    //             };
-    //             const roundOffValue = calculateRoundOff();
-    //             setRoundedAmount(roundOffValue);
-    //             const sumTotalAndRounded = parseFloat(totalValue) + parseFloat(roundedAmount);
-    //             setSumTotalAndRounded(sumTotalAndRounded);
-    //             setTripData(data);
-    //             setSuccess(true);
-    //             setSuccessMessage("Successfully listed")
-    //         } else {
-    //             setRows([]);
-    //             setError(true);
-    //             setErrorMessage("No data found");
-    //         }
-    //     } catch (error) {
-    //         setRows([]);
-    //         setError(true);
-    //         setErrorMessage("Check your Network Connection");
-    //     }
-    // }, [invoiceno, customer, fromDate, toDate, servicestation, roundedAmount, totalValue]);
-
     const handleShow = useCallback(async () => {
+
         try {
             const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
             const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
@@ -245,6 +271,7 @@ const GroupBilling = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
+
     }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, roundedAmount, totalValue]);
 
     const convertToCSV = (data) => {
@@ -270,6 +297,7 @@ const GroupBilling = () => {
     };
 
     const handleKeyenter = useCallback(async (event) => {
+
         if (event.key === 'Enter') {
             try {
                 const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
@@ -295,6 +323,7 @@ const GroupBilling = () => {
                 setErrorMessage('Error retrieving billings details.', error);
             }
         }
+
     }, [invoiceno, book, selectedCustomerDatas]);
 
     return (
@@ -308,15 +337,6 @@ const GroupBilling = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
-                                    {/* <TextField
-                                        size="small"
-                                        id="id"
-                                        label="Invoice No"
-                                        name="invoiceno"
-                                        value={invoiceno || ''}
-                                        onChange={handleInputChange}
-                                        autoComplete='off'
-                                    /> */}
                                     <TextField
                                         size="small"
                                         id="id"
@@ -425,7 +445,7 @@ const GroupBilling = () => {
                             </div>
                             <div className="input-field">
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow}>View Bill</Button>
+                                    <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("read")}>View Bill</Button>
                                 </div>
                             </div>
                         </div>
@@ -479,6 +499,13 @@ const GroupBilling = () => {
                             <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                             <p>{successMessage}</p>
+                        </div>
+                    }
+                    {warning &&
+                        <div className='alert-popup Warning' >
+                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{warningMessage}</p>
                         </div>
                     }
                 </div>

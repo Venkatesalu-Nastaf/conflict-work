@@ -97,7 +97,7 @@ const TransferDataEntry = () => {
     fetchPermissions();
   }, [user_id]);
 
-  const checkPagePermission = useCallback(async () => {
+  const checkPagePermission = () => {
     const currentPageName = 'CB Billing';
     const permissions = userPermissions || {};
 
@@ -116,7 +116,7 @@ const TransferDataEntry = () => {
       modify: false,
       delete: false,
     };
-  }, [userPermissions]);
+  };
 
   const permissions = checkPagePermission();
 
@@ -131,7 +131,6 @@ const TransferDataEntry = () => {
     }
     return true;
   };
-
 
 
   const convertToCSV = (data) => {
@@ -262,51 +261,46 @@ const TransferDataEntry = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const permissions = checkPagePermission();
 
-      if (permissions.read && permissions.read) {
-        try {
-          const customer = localStorage.getItem('selectedcustomer');
-          const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const tripData = await response.json();
-          if (Array.isArray(tripData)) {
-            const transformedRows = tripData.map(transformRow);
-            const rowsWithUniqueId = transformedRows.map((row, index) => ({
-              ...row,
-              id: index + 1,
-            }));
-            setTripData(rowsWithUniqueId);
-            setRows(rowsWithUniqueId);
-            if (transformedRows.length > 0) {
-              const fromDate = dayjs(transformedRows[0].startdate);
-              const toDate = dayjs(transformedRows[transformedRows.length - 1].startdate);
-
-              // Set values in local storage
-              localStorage.setItem('fromDate', fromDate.format('YYYY-MM-DD'));
-              localStorage.setItem('toDate', toDate.format('YYYY-MM-DD'));
-
-              // Now, you can also set your state if needed
-              setFromDate(fromDate);
-              setToDate(toDate);
-            }
-          } else if (typeof tripData === 'object') {
-            setRows([transformRow(tripData)]);
-          } else {
-            setError(true);
-            setErrorMessage('Fetched data has unexpected format.');
-          }
-        } catch {
+      try {
+        const customer = localStorage.getItem('selectedcustomer');
+        const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-      } else {
-        setWarning(true);
-        setWarningMessage("You do not have permission.");
+        const tripData = await response.json();
+        if (Array.isArray(tripData)) {
+          const transformedRows = tripData.map(transformRow);
+          const rowsWithUniqueId = transformedRows.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setTripData(rowsWithUniqueId);
+          setRows(rowsWithUniqueId);
+          if (transformedRows.length > 0) {
+            const fromDate = dayjs(transformedRows[0].startdate);
+            const toDate = dayjs(transformedRows[transformedRows.length - 1].startdate);
+
+            // Set values in local storage
+            localStorage.setItem('fromDate', fromDate.format('YYYY-MM-DD'));
+            localStorage.setItem('toDate', toDate.format('YYYY-MM-DD'));
+
+            // Now, you can also set your state if needed
+            setFromDate(fromDate);
+            setToDate(toDate);
+          }
+        } else if (typeof tripData === 'object') {
+          setRows([transformRow(tripData)]);
+        } else {
+          setError(true);
+          setErrorMessage('Fetched data has unexpected format.');
+        }
+      } catch {
       }
+
     };
     fetchData();
-  }, [checkPagePermission]);
+  }, []);
 
   //calculate total amount in column
   useEffect(() => {
@@ -483,60 +477,60 @@ const TransferDataEntry = () => {
   // const reversedRows = [...rows].reverse();
 
   const handleAdd = async () => {
-    const updatedBook = {
-      ...book,
-      Billingdate: Billingdate || book.Billingdate,
-      invoiceno: invoiceno || book.invoiceno,
-      customer: customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || '',
-      fromdate: (fromDate || book.fromdate).format('YYYY-MM-DD'),
-      todate: (toDate || book.todate).format('YYYY-MM-DD'),
-      station: servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '',
-      Totalamount: totalAmount
-    };
-    await axios.post('http://localhost:8081/billing', updatedBook);
-    setSuccess(true);
-    setSuccessMessage("Successfully Added");
-  };
-
-  const handleKeyenter = useCallback(async (event) => {
     const permissions = checkPagePermission();
 
-    if (permissions.read && permissions.read) {
-      if (event.key === 'Enter') {
-        try {
-          const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
-          console.log('Sending request for invoiceno:', invoiceNumber);
-          const response = await axios.get(`http://localhost:8081/billingdata/${invoiceNumber}`);
-          if (response.status === 200) {
-            const billingDetails = response.data;
-            if (billingDetails) {
-              setSelectedCustomerDatas(billingDetails);
-              setSuccess(true);
-              setSuccessMessage("Successfully listed");
-            } else {
-              setRows([]);
-              setError(true);
-              setErrorMessage("No data found");
-            }
-          } else {
-            setError(true);
-            setErrorMessage(`Failed to retrieve billing details. Status: ${response.status}`);
-          }
-        } catch (error) {
-          setError(true);
-          setErrorMessage('Error retrieving billings details.', error);
-        }
-      }
+    if (permissions.read && permissions.new) {
+      const updatedBook = {
+        ...book,
+        Billingdate: Billingdate || book.Billingdate,
+        invoiceno: invoiceno || book.invoiceno,
+        customer: customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || '',
+        fromdate: (fromDate || book.fromdate).format('YYYY-MM-DD'),
+        todate: (toDate || book.todate).format('YYYY-MM-DD'),
+        station: servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '',
+        Totalamount: totalAmount
+      };
+      await axios.post('http://localhost:8081/billing', updatedBook);
+      setSuccess(true);
+      setSuccessMessage("Successfully Added");
     } else {
       setWarning(true);
       setWarningMessage("You do not have permission.");
     }
-  }, [invoiceno, book, selectedCustomerDatas, checkPagePermission]);
+  };
+
+  const handleKeyenter = useCallback(async (event) => {
+
+    if (event.key === 'Enter') {
+      try {
+        const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
+        console.log('Sending request for invoiceno:', invoiceNumber);
+        const response = await axios.get(`http://localhost:8081/billingdata/${invoiceNumber}`);
+        if (response.status === 200) {
+          const billingDetails = response.data;
+          if (billingDetails) {
+            setSelectedCustomerDatas(billingDetails);
+            setSuccess(true);
+            setSuccessMessage("Successfully listed");
+          } else {
+            setRows([]);
+            setError(true);
+            setErrorMessage("No data found");
+          }
+        } else {
+          setError(true);
+          setErrorMessage(`Failed to retrieve billing details. Status: ${response.status}`);
+        }
+      } catch (error) {
+        setError(true);
+        setErrorMessage('Error retrieving billings details.', error);
+      }
+    }
+
+  }, [invoiceno, book, selectedCustomerDatas]);
 
   const handleShow = useCallback(async () => {
-    const permissions = checkPagePermission();
-
-    if (permissions.read && permissions.read) {
+    
       try {
         const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
         const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
@@ -572,11 +566,8 @@ const TransferDataEntry = () => {
         setError(true);
         setErrorMessage("Check your Network Connection");
       }
-    } else {
-      setWarning(true);
-      setWarningMessage("You do not have permission.");
-    }
-  }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, checkPagePermission, tripData]);
+    
+  }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas,  tripData]);
 
   return (
     <div className="TransferDataEntry-form Scroll-Style-hide">
@@ -724,7 +715,7 @@ const TransferDataEntry = () => {
                     <Button variant="contained" onClick={handleCancel}>Cancel</Button>
                   </div>
                   <div className="input">
-                    <Button variant="outlined" onClick={handleClickGenerateBill}>Bill Generate</Button>
+                    <Button variant="outlined" onClick={handleClickGenerateBill} >Bill Generate</Button>
                   </div>
                 </div>
                 <div className="input-field">

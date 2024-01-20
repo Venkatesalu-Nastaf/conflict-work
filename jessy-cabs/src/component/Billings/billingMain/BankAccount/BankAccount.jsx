@@ -62,7 +62,7 @@ const BankAccount = () => {
     fetchPermissions();
   }, [user_id]);
 
-  const checkPagePermission = useCallback(async () => {
+  const checkPagePermission = () => {
     const currentPageName = 'Payments';
     const permissions = userPermissions || {};
 
@@ -81,7 +81,7 @@ const BankAccount = () => {
       modify: false,
       delete: false,
     };
-  }, [userPermissions]);
+  };
 
   const permissions = checkPagePermission();
 
@@ -96,7 +96,6 @@ const BankAccount = () => {
     }
     return true;
   };
-
 
   const hidePopup = () => {
     setError(false);
@@ -271,29 +270,24 @@ const BankAccount = () => {
   };
 
   const fetchData = useCallback(async () => {
-    const permissions = checkPagePermission();
 
-    if (permissions.read && permissions.read) {
-      try {
-        const response = await fetch('http://localhost:8081/getbankdetails');
-        if (response.ok) {
-          const data = await response.json();
-          if (data.length > 0) {
-            setBankDetails(data);
-          } else {
-            setBankDetails([]);
-            setError(true);
-            setErrorMessage("No data found");
-          }
+    try {
+      const response = await fetch('http://localhost:8081/getbankdetails');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.length > 0) {
+          setBankDetails(data);
         } else {
+          setBankDetails([]);
+          setError(true);
+          setErrorMessage("No data found");
         }
-      } catch {
+      } else {
       }
-    } else {
-      setWarning(true);
-      setWarningMessage("You do not have permission.");
+    } catch {
     }
-  }, [checkPagePermission]);
+
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -310,25 +304,20 @@ const BankAccount = () => {
   };
 
   const handleDeleteBank = useCallback(async (id) => {
-    const permissions = checkPagePermission();
 
-    if (permissions.read && permissions.delete) {
-      if (!id) {
-        return;
-      }
-      try {
-        await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
-        fetchData();
-        handlePopupClose();
-      } catch (error) {
-        setError(true);
-        setErrorMessage('Error deleting bank account. Please check your Network Connection.');
-      }
-    } else {
-      setWarning(true);
-      setWarningMessage("You do not have permission.");
+    if (!id) {
+      return;
     }
-  }, [fetchData, handlePopupClose, checkPagePermission]); // Add dependencies as needed
+    try {
+      await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
+      fetchData();
+      handlePopupClose();
+    } catch (error) {
+      setError(true);
+      setErrorMessage('Error deleting bank account. Please check your Network Connection.');
+    }
+
+  }, [fetchData, handlePopupClose]); // Add dependencies as needed
 
   useEffect(() => {
     if (deleteId !== null) {

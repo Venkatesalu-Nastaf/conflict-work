@@ -19,6 +19,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 // ICONS
 import { faBuilding } from '@fortawesome/free-solid-svg-icons';
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
@@ -44,6 +45,8 @@ const columns = [
 ];
 
 const CoveringSubmit = () => {
+    const user_id = localStorage.getItem('useridno');
+
     const [tripData] = useState('');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
@@ -56,11 +59,77 @@ const CoveringSubmit = () => {
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
     const [servicestation, setServiceStation] = useState("");
     const [successMessage, setSuccessMessage] = useState({});
+    const [warning, setWarning] = useState(false);
+    const [warningMessage] = useState({});
+
+    // for page permission
+
+    const [userPermissions, setUserPermissions] = useState({});
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'CB Billing';
+                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                setUserPermissions(response.data);
+                console.log('permission data', response.data);
+            } catch (error) {
+                console.error('Error fetching user permissions:', error);
+            }
+        };
+
+        fetchPermissions();
+    }, [user_id]);
+
+    const checkPagePermission = () => {
+        const currentPageName = 'CB Billing';
+        const permissions = userPermissions || {};
+
+        if (permissions.page_name === currentPageName) {
+            return {
+                read: permissions.read_permission === 1,
+                new: permissions.new_permission === 1,
+                modify: permissions.modify_permission === 1,
+                delete: permissions.delete_permission === 1,
+            };
+        }
+
+        return {
+            read: false,
+            new: false,
+            modify: false,
+            delete: false,
+        };
+    };
+
+    const permissions = checkPagePermission();
+
+    // Function to determine if a field should be read-only based on permissions
+    const isFieldReadOnly = (fieldName) => {
+        if (permissions.read) {
+            // If user has read permission, check for other specific permissions
+            if (fieldName === "delete" && !permissions.delete) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    };
+
 
     const hidePopup = () => {
         setError(false);
         setSuccess(false);
+        setWarning(false);
     };
+    useEffect(() => {
+        if (warning) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [warning]);
     useEffect(() => {
         if (error) {
             const timer = setTimeout(() => {
@@ -116,6 +185,7 @@ const CoveringSubmit = () => {
     }, []);
 
     const handleShow = useCallback(async () => {
+
         try {
             const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
             const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
@@ -151,6 +221,7 @@ const CoveringSubmit = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
+
     }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData]);
 
     return (
@@ -243,7 +314,7 @@ const CoveringSubmit = () => {
                                     />
                                 </div>
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow}>Search</Button>
+                                    <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("read")}>Search</Button>
                                 </div>
                             </div>
                         </div>
@@ -287,6 +358,13 @@ const CoveringSubmit = () => {
                     <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                     <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                     <p>{successMessage}</p>
+                </div>
+            }
+            {warning &&
+                <div className='alert-popup Warning' >
+                    <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                    <p>{warningMessage}</p>
                 </div>
             }
         </div>

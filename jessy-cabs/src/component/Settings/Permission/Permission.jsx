@@ -59,7 +59,7 @@ const Permission = () => {
 
   const user_id = localStorage.getItem('useridno');
 
-// for page permission
+  // for page permission
   const [userPermissions, setUserPermissions] = useState({});
 
   useEffect(() => {
@@ -187,7 +187,6 @@ const Permission = () => {
         console.error('Error saving permissions:', error);
       }
     } else {
-      // Display a warning or prevent the action
       setWarning(true);
       setWarningMessage("You do not have permission to add users on this page.");
     }

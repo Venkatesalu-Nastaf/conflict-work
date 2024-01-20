@@ -144,7 +144,6 @@ const Billing = () => {
         return true;
     };
 
-
     //for popup
     const hidePopup = () => {
         setSuccess(false);

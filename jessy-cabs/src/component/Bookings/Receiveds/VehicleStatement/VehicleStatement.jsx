@@ -52,6 +52,8 @@ const columns = [
 ];
 
 const VehicleStatement = () => {
+  const user_id = localStorage.getItem('useridno');
+
   const [rows, setRows] = useState([]);
   const [servicestation, setServiceStation] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
@@ -66,6 +68,61 @@ const VehicleStatement = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
+
+  // for page permission
+
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'Booking';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+        console.log('permission data', response.data);
+      } catch (error) {
+        console.error('Error fetching user permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = () => {
+    const currentPageName = 'Booking';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  };
+
+  const permissions = checkPagePermission();
+
+  // Function to determine if a field should be read-only based on permissions
+  const isFieldReadOnly = (fieldName) => {
+    if (permissions.read) {
+      // If user has read permission, check for other specific permissions
+      if (fieldName === "delete" && !permissions.delete) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+
 
   const hidePopup = () => {
     setSuccess(false);
@@ -154,6 +211,7 @@ const VehicleStatement = () => {
   };
 
   const handleShow = useCallback(async () => {
+
     try {
       const response = await axios.get(
         `http://localhost:8081/VehicleStatement-bookings?servicestation=${encodeURIComponent(
@@ -180,10 +238,12 @@ const VehicleStatement = () => {
       setRows([]);
       setErrorMessage("Check your Network Connection");
     }
+
   }, [servicestation, fromDate, toDate]);
 
 
   const handleShowAll = useCallback(async () => {
+
     try {
       const response = await axios.get(
         `http://localhost:8081/booking`
@@ -206,6 +266,7 @@ const VehicleStatement = () => {
       setRows([]);
       setErrorMessage("Check your Network Connection");
     }
+
   }, []);
 
   const handleButtonClick = (row) => {
@@ -286,10 +347,10 @@ const VehicleStatement = () => {
               </div>
               <div className="input-field" style={{ justifyContent: "center" }}>
                 <div className="input" style={{ width: "130px" }} >
-                  <Button variant="outlined" onClick={handleShow}>Show</Button>
+                  <Button variant="outlined" onClick={handleShow} disabled={isFieldReadOnly("read")}>Show</Button>
                 </div>
                 <div className="input" style={{ width: "110px" }} >
-                  <Button variant="contained" onClick={handleShowAll}>Show All</Button>
+                  <Button variant="contained" onClick={handleShowAll} disabled={isFieldReadOnly("read")}>Show All</Button>
                 </div>
               </div>
               <div className="input-field" style={{ justifyContent: "end" }}>

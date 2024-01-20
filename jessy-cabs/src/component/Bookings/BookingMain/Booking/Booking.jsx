@@ -119,6 +119,8 @@ const columns = [
 ];
 
 const Booking = () => {
+  const user_id = localStorage.getItem('useridno');
+
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [actionName] = useState('');
@@ -136,12 +138,67 @@ const Booking = () => {
   const [info, setInfo] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage] = useState({});
+  const [warningMessage, setWarningMessage] = useState({});
   const [infoMessage] = useState({});
   const [searchText, setSearchText] = useState('');
   const [warning, setWarning] = useState(false);
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({});
+
+  // for page permission
+
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'Booking';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+        console.log('permission data', response.data);
+      } catch (error) {
+        console.error('Error fetching user permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = () => {
+    const currentPageName = 'Booking';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  };
+
+  const permissions = checkPagePermission();
+
+  // Function to determine if a field should be read-only based on permissions
+  const isFieldReadOnly = (fieldName) => {
+    if (permissions.read) {
+      // If user has read permission, check for other specific permissions
+      if (fieldName === "delete" && !permissions.delete) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+
   const [formValues, setFormValues] = useState({
     guestname: '',
     guestmobileno: '',
@@ -461,6 +518,7 @@ const Booking = () => {
       [name]: selectedOption,
     }));
   };
+
   const handleDateChange = (date, name) => {
     const formattedDate = dayjs(date).format('YYYY-MM-DD');
     const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
@@ -479,39 +537,47 @@ const Booking = () => {
   };
 
   const handleAdd = async () => {
-    const customer = book.customer;
-    if (!customer) {
-      setError(true);
-      setErrorMessage("fill mantatory fields");
-      return;
-    }
-    try {
-      const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
+    const permissions = checkPagePermission();
 
-      const updatedBook = {
-        ...book,
-        ...formData,
-        bookingtime: bookingtime || getCurrentTime(),
-        starttime: starttime,
-        reporttime: reporttime,
-        triptime: triptime,
-        username: storedUsername,
-        bookingdate: selectedBookingDate,
-        orderbyemail: selectedCustomerDatas.customeremail,
-        orderedby: selectedCustomerDatas.name,
-        mobile: selectedCustomerDatas.phoneno,
-      };
-      await axios.post('http://localhost:8081/booking', updatedBook);
-      handleCancel();
-      setRow([]);
-      setRows([]);
-      setSuccess(true);
-      setSuccessMessage("Successfully Added");
-      handlecheck();
-      handleSendSMS();
-    } catch {
-      setError(true);
-      setErrorMessage("Check your Network Connection");
+    if (permissions.read && permissions.new) {
+      const customer = book.customer;
+      if (!customer) {
+        setError(true);
+        setErrorMessage("fill mantatory fields");
+        return;
+      }
+      try {
+        const selectedBookingDate = selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
+
+        const updatedBook = {
+          ...book,
+          ...formData,
+          bookingtime: bookingtime || getCurrentTime(),
+          starttime: starttime,
+          reporttime: reporttime,
+          triptime: triptime,
+          username: storedUsername,
+          bookingdate: selectedBookingDate,
+          orderbyemail: selectedCustomerDatas.customeremail,
+          orderedby: selectedCustomerDatas.name,
+          mobile: selectedCustomerDatas.phoneno,
+        };
+        await axios.post('http://localhost:8081/booking', updatedBook);
+        handleCancel();
+        setRow([]);
+        setRows([]);
+        setSuccess(true);
+        setSuccessMessage("Successfully Added");
+        handlecheck();
+        handleSendSMS();
+      } catch {
+        setError(true);
+        setErrorMessage("Check your Network Connection");
+      }
+    } else {
+      // Display a warning or prevent the action
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
   };
 
@@ -525,39 +591,53 @@ const Booking = () => {
         setRows([]);
         setRow([]);
       } else if (actionName === 'Delete') {
-        await axios.delete(`http://localhost:8081/booking/${book.bookingno}`);
-        setSelectedCustomerData(null);
-        setSuccess(true);
-        setSuccessMessage("Successfully Deleted");
-        setFormData(null);
-        handleCancel();
-        setRow([]);
-        setRows([]);
-      } else if (actionName === 'Modify') {
-        const selectedCustomer = rows.find((row) => row.bookingno === selectedCustomerData.bookingno || formData.bookingno);
-        const updatedCustomer = {
-          ...formData,
-          ...selectedCustomer,
-          ...selectedCustomerData,
-          bookingtime: bookingtime || selectedCustomerData.bookingtime,
-          starttime: starttime || book.starttime || selectedCustomerData.starttime || formData.starttime,
-          reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
-          triptime: triptime || book.triptime || selectedCustomerData.triptime || formData.triptime,
-          username: storedUsername,
-          bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
-          orderbyemail: selectedCustomerDatas.customeremail,
-          orderedby: selectedCustomerDatas.name,
-          mobile: selectedCustomerDatas.phoneno,
+        const permissions = checkPagePermission();
 
-        };
-        await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
-        handleCancel();
-        setRow([]);
-        setRows([]);
-        handlecheck();
-        handleSendSMS();
-        setSuccess(true);
-        setSuccessMessage("Successfully Updated");
+        if (permissions.read && permissions.delete) {
+          await axios.delete(`http://localhost:8081/booking/${book.bookingno}`);
+          setSelectedCustomerData(null);
+          setSuccess(true);
+          setSuccessMessage("Successfully Deleted");
+          setFormData(null);
+          handleCancel();
+          setRow([]);
+          setRows([]);
+        } else {
+          setWarning(true);
+          setWarningMessage("You do not have permission.");
+        }
+      } else if (actionName === 'Modify') {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+          const selectedCustomer = rows.find((row) => row.bookingno === selectedCustomerData.bookingno || formData.bookingno);
+          const updatedCustomer = {
+            ...formData,
+            ...selectedCustomer,
+            ...selectedCustomerData,
+            bookingtime: bookingtime || selectedCustomerData.bookingtime,
+            starttime: starttime || book.starttime || selectedCustomerData.starttime || formData.starttime,
+            reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+            triptime: triptime || book.triptime || selectedCustomerData.triptime || formData.triptime,
+            username: storedUsername,
+            bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
+            orderbyemail: selectedCustomerDatas.customeremail,
+            orderedby: selectedCustomerDatas.name,
+            mobile: selectedCustomerDatas.phoneno,
+
+          };
+          await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
+          handleCancel();
+          setRow([]);
+          setRows([]);
+          handlecheck();
+          handleSendSMS();
+          setSuccess(true);
+          setSuccessMessage("Successfully Updated");
+        } else {
+          setWarning(true);
+          setWarningMessage("You do not have permission.");
+        }
       } else if (actionName === 'Copy This') {
         handleClickShow();
       } else if (actionName === 'Add') {
@@ -594,6 +674,7 @@ const Booking = () => {
 
 
   const handleKeyDown = useCallback(async (event) => {
+
     if (event.key === 'Enter') {
       event.preventDefault();
       try {
@@ -606,6 +687,7 @@ const Booking = () => {
         setErrorMessage("Error retrieving booking details");
       }
     }
+
   }, []);
 
   const [currentYear, setCurrentYear] = useState("");
@@ -644,6 +726,7 @@ const Booking = () => {
   const [enterPressCount, setEnterPressCount] = useState(0);
 
   const handleKeyEnter = useCallback(async (event) => {
+
     if (event.key === 'Enter') {
       event.preventDefault();
       if (enterPressCount === 0) {
@@ -667,6 +750,7 @@ const Booking = () => {
     if (event.target.value === '') {
       setEnterPressCount(0);
     }
+
   }, [handleChange, rows, enterPressCount]);
 
 
@@ -710,25 +794,32 @@ const Booking = () => {
   const reversedRows = [...row].reverse();
 
   const handleShowAll = async () => {
-    try {
-      const response = await fetch(`http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
-      const data = await response.json();
-      if (data.length > 0) {
-        const rowsWithUniqueId = data.map((row, index) => ({
-          ...row,
-          id: index + 1,
-        }));
-        setRow(rowsWithUniqueId);
-        setSuccess(true);
-        setSuccessMessage("successfully listed")
-      } else {
-        setRow([]);
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.read) {
+      try {
+        const response = await fetch(`http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+        const data = await response.json();
+        if (data.length > 0) {
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRow(rowsWithUniqueId);
+          setSuccess(true);
+          setSuccessMessage("successfully listed")
+        } else {
+          setRow([]);
+          setError(true);
+          setErrorMessage("no data found")
+        }
+      } catch {
         setError(true);
-        setErrorMessage("no data found")
+        setErrorMessage("sorry")
       }
-    } catch {
-      setError(true);
-      setErrorMessage("sorry")
+    } else {
+      setWarning(true);
+      setWarningMessage("You do not have permission.");
     }
   };
 
@@ -771,7 +862,7 @@ const Booking = () => {
           setSuccess(true);
           setSuccessMessage("SMS sent correctly");
         } else {
-          setError(true); 
+          setError(true);
           setErrorMessage("Failed to send SMS");
         }
       } catch {
@@ -1466,7 +1557,7 @@ const Booking = () => {
                 </FormControl>
               </div>
               <div className="input">
-                <Button variant="contained" onClick={handleUpload}>Attach File</Button>
+                <Button variant="contained" onClick={handleUpload} disabled={isFieldReadOnly("new")}>Attach File</Button>
               </div>
             </div>
           </div>
@@ -1600,7 +1691,7 @@ const Booking = () => {
               />
             </div>
             <div className="input" style={{ width: "100px" }}>
-              <Button variant="contained" onClick={handleAdd}>Add</Button>
+              <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
             </div>
           </div>
           {error &&

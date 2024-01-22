@@ -148,6 +148,7 @@ const EmployeeCreation = () => {
     { field: "stationname", headerName: "Station", width: 130 },
     { field: "viewfor", headerName: "Access", width: 130 },
     { field: "designation", headerName: "Designation", width: 130 },
+    { field: "organizationname", headerName: "Organization", width: 130 },
   ];
 
   const [book, setBook] = useState({
@@ -155,6 +156,7 @@ const EmployeeCreation = () => {
     username: '',
     stationname: '',
     designation: '',
+    organizationname: '',
     userpassword: '',
     userconfirmpassword: '',
     active: '',
@@ -212,6 +214,7 @@ const EmployeeCreation = () => {
       username: '',
       stationname: '',
       designation: '',
+      organizationname: '',
       userpassword: '',
       userconfirmpassword: '',
       active: '',
@@ -224,7 +227,7 @@ const EmployeeCreation = () => {
     const permissions = checkPagePermission();
 
     if (permissions.read && permissions.new) {
-      const stationname = book.stationname;
+      const stationname = book.userid;
 
       if (password === confirmPassword) {
         if (!stationname) {
@@ -467,6 +470,21 @@ const EmployeeCreation = () => {
                   value={selectedCustomerData?.designation || book.designation}
                   onChange={handleChange}
                   label="Designation"
+                  id="designation"
+                  sx={{ m: 1, width: "200ch" }}
+                  variant="standard"
+                />
+              </div>
+              <div className="input" style={{ width: "330px" }}>
+                <div className="icone">
+                  <BadgeIcon color="action" />
+                </div>
+                <TextField
+                  size="small"
+                  name="organizationname"
+                  value={selectedCustomerData?.organizationname || book.organizationname}
+                  onChange={handleChange}
+                  label="Organization"
                   id="designation"
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"

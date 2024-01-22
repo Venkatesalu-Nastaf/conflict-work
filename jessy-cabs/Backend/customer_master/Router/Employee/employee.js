@@ -52,4 +52,23 @@ router.get('/employees', (req, res) => {
     });
 });
 
+//for user profile information
+router.get('/userdataforuserinfo/:userid', (req, res) => {
+    const userid = req.params.userid;
+
+    db.query('SELECT * FROM usercreation WHERE userid = ?', userid, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Route data not found' });
+        }
+
+        const routeData = result;
+        return res.status(200).json(routeData);
+    });
+});
+
+
 module.exports = router;

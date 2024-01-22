@@ -52,4 +52,16 @@ router.post('/customers', (req, res) => {
     });
   });
   
+
+// Add organoization Master database
+// router.post('/addcompany', (req, res) => {
+//   const organizationData = req.body;
+//   db.query('INSERT INTO organizationdetails SET ?', organizationData, (err, result) => {
+//       if (err) {
+//           return res.status(500).json({ error: 'Failed to insert data into MySQL' });
+//       }
+//       return res.status(200).json({ message: 'Data inserted successfully' });
+//   });
+// });
+
   module.exports = router;

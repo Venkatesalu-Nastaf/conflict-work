@@ -11,69 +11,68 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import IconButton from '@mui/material/IconButton';
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+// import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 
+
 // REACT ICONS
 import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
 
-const Organization = ({ defaultImage, userid }) => {
+const Organization = ({ organizationname }) => {
+
+
+
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+    // const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [selectedImage, setSelectedImage] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-    const [selectedCustomerId] = useState({});
+    const [successMessage, setSuccessMessage] = useState({});
 
 
     const [book, setBook] = useState({
-        userid: '',
-        ufirstname: '',
-        ulastname: '',
-        mobileno: '',
-        email: '',
-        designation: '',
-        userpassword: '',
-        userconfirmpassword: '',
+        organizationname: '',
+        organizationtype: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        contactPhoneNumber: '',
+        contactEmail: '',
+        location: '',
+        website: '',
+        ownershipLeadership: '',
+        productsServices: '',
+        marketPresence: '',
+        employees: '',
+        legalStructure: '',
+        customerBase: '',
+        partnershipsAlliances: '',
+        recentNewsDevelopments: '',
+        pannumber: '',
+        gstnumber: '',
+        socialMediaPresence: '',
+        sustainabilityCSR: '',
+        customerReviewsFeedback: '',
+        industrySpecificDetails: '',
     });
 
-    const handleCancel = () => {
-        setBook((prevBook) => ({
-            ...prevBook,
-            userid: '',
-            ufirstname: '',
-            ulastname: '',
-            mobileno: '',
-            email: '',
-            designation: '',
-            userpassword: '',
-            userconfirmpassword: '',
-        }));
-        setSelectedCustomerData({});
-    };
-    //password match
+   
     useEffect(() => {
-        if (error || !passwordsMatch) {
+        if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
+            }, 3000);
 
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            return () => clearTimeout(timer);
         }
-    }, [error, passwordsMatch]);
+    }, [error]);
 
-    const validatePasswordMatch = () => {
-        const password = selectedCustomerData?.userpassword || book.userpassword;
-        const confirmPassword = selectedCustomerData?.userconfirmpassword || book.userconfirmpassword;
-        setPasswordsMatch(password === confirmPassword);
-    };
 
     const handleKeyDown = useCallback(async (event) => {
         if (event.key === 'Enter') {
@@ -92,64 +91,134 @@ const Organization = ({ defaultImage, userid }) => {
         }
     }, []);
 
-    const handleUpdate = async () => {
-        if (password === confirmPassword) {
-            setPasswordsMatch(true);
-            validatePasswordMatch();
+    const handleAdd = async () => {
+        const name = selectedCustomerData?.organizationname || book.organizationname;
+        if (!name) {
+            setError(true);
+            setErrorMessage("fill mantatory fields");
+            return;
         }
         try {
-            const selectedCustomer = rows.find((row) => row.userid === userid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://localhost:8081/usercreation/${book.userid}`, updatedCustomer);
-            handleCancel();
-            validatePasswordMatch();
+            await axios.post('http://localhost:8081/addcompany', book);
+          
+            setSuccess(true);
         } catch {
         }
     };
 
-    const handleChange = (event) => {
-        const { name, value, checked, type } = event.target;
-        if (type === 'checkbox') {
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: checked,
-            }));
-            setSelectedCustomerData((prevData) => ({
-                ...prevData,
-                [name]: checked,
-            }));
-        } else {
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: value,
-            }));
-            setSelectedCustomerData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
-            if (name === 'userpassword') {
-                setPassword(value);
-            } else if (name === 'userconfirmpassword') {
-                setConfirmPassword(value);
-            }
+
+    const handleUpdate = async () => {
+        try {
+            const selectedCustomer = rows.find((row) => row.organizationname === organizationname);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
+            console.log('ithuvum etho onnu', companyname);
+            const encode = companyname;
+            const decode = decodeURIComponent(encode);
+            console.log('etho onnu display pannu', decode);
+            await axios.put(`http://localhost:8081/companyupdate/${decode}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            setEditMode((prevEditMode) => !prevEditMode);
+        }
+        catch {
+            setError(true);
+            setErrorMessage("Something went wrong");
         }
     };
 
-    const [file, setFile] = useState(null);
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0]
-        setFile(file);
-        setSelectedImage(file);
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: value,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
     };
 
     const handleUpload = () => {
-        if (!file) {
-            setErrorMessage('Please select an image to upload.');
-            setError(true);
-            return;
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.pdf, .jpg, .jpeg, .png';
+        input.onchange = handleFileChange;
+        input.click();
+    };
+    //file upload
+    const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        setSelectedImage(file);
+        const companyname = localStorage.getItem('usercompany');
+        const formDataUpload = new FormData();
+        formDataUpload.append('file', file);
+        formDataUpload.append('organizationname', selectedCustomerData?.organizationname || book.organizationname || companyname);
+        try {
+            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
+            console.log(response);
+        } catch {
         }
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const organizationname = localStorage.getItem('usercompany');
+                console.log('user company display', organizationname);
+
+                if (!organizationname) {
+                    return;
+                }
+                const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+                console.log(attachedImageUrls);
+                setSelectedImage(attachedImageUrls);
+            } catch {
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const encoded = localStorage.getItem('usercompany');
+            localStorage.setItem('usercompanyname', encoded);
+            const storedcomanyname = localStorage.getItem('usercompanyname');
+            const organizationname = decodeURIComponent(storedcomanyname);
+            console.log('user company summa display', organizationname);
+            try {
+                const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                // const selectedCustomerData = await response.json(); // Parse JSON data
+                // // console.log('collected company datas display', selectedCustomerData);
+                // setSelectedCustomerData(selectedCustomerData);
+                const userDataArray = await response.json();
+                if (userDataArray.length > 0) {
+                    setSelectedCustomerData(userDataArray[0]);
+                } else {
+                    // Handle the case when the array is empty
+                    setErrorMessage('User data not found.');
+                    setError(true);
+                }
+            } catch {
+                setError(true);
+                setErrorMessage('Error fetching tripsheet data.');
+            }
+        };
+
+        fetchData();
+    }, []);
+    const orucompany = selectedCustomerData?.organizationname;
+    console.log('collected company datas display', orucompany);
 
     const hidePopup = () => {
         setSuccess(false);
@@ -190,7 +259,7 @@ const Organization = ({ defaultImage, userid }) => {
                                         <Avatar
                                             sx={{ width: "12ch", height: "12ch" }}
                                             alt="userimage"
-                                            src={selectedImage ? URL.createObjectURL(selectedImage) : undefined}
+                                            src={selectedImage}
                                         >
                                             {selectedImage ? null : (
                                                 <div style={{ 'fontSize': "55px" }}>
@@ -201,18 +270,25 @@ const Organization = ({ defaultImage, userid }) => {
                                     </div>
                                 </div>
                                 <div className="input-field">
-                                    <div className='input'>
-                                        <Button color="primary" size='small' variant="contained" component="label">
-                                            Logo
-                                            <ModeEditIcon />
-                                            <input
-                                                onChange={handleFileChange}
-                                                onClick={handleUpload}
-                                                type="file"
-                                                style={{ display: "none" }}
-                                            />
-                                        </Button>
-                                    </div>
+                                    {editMode ? (
+                                        <div className='input'>
+                                            <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode}>
+                                                Logo
+                                                <ModeEditIcon />
+                                                <input
+                                                    onChange={handleFileChange}
+                                                    onClick={handleUpload}
+                                                    // type="file"
+                                                    style={{ display: "none" }}
+                                                />
+                                            </Button>
+                                        </div>
+                                    ) : (
+                                        <div className="user-photo-edit">
+                                            <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
+                                            </IconButton>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className='container-organisation-right'>
@@ -226,9 +302,9 @@ const Organization = ({ defaultImage, userid }) => {
                                             size="small"
                                             id="id"
                                             label="Organization Name"
-                                            name=""
+                                            name="organizationname"
                                             sx={{ width: "280px" }}
-                                            value={selectedCustomerData?.userid || book.userid}
+                                            value={selectedCustomerData?.organizationname || book.organizationname}
                                             onChange={handleChange}
                                             onKeyDown={handleKeyDown}
                                             disabled={!editMode}
@@ -242,10 +318,10 @@ const Organization = ({ defaultImage, userid }) => {
                                             size="small"
                                             id="role"
                                             label="Organization Type"
-                                            name="designation"
+                                            name="organizationtype"
                                             sx={{ width: "280px" }}
                                             autoComplete="new-password"
-                                            value={selectedCustomerData?.designation || book.designation}
+                                            value={selectedCustomerData?.organizationtype || book.organizationtype}
                                             onChange={handleChange}
                                             disabled={!editMode}
                                         />
@@ -261,10 +337,10 @@ const Organization = ({ defaultImage, userid }) => {
                                             size="small"
                                             id="mobile"
                                             label="Mobile"
-                                            name="mobileno"
+                                            name="contactPhoneNumber"
                                             sx={{ width: "280px" }}
                                             autoComplete="new-password"
-                                            value={selectedCustomerData?.mobileno || book.mobileno}
+                                            value={selectedCustomerData?.contactPhoneNumber || book.contactPhoneNumber}
                                             onChange={handleChange}
                                             disabled={!editMode}
                                         />
@@ -278,9 +354,9 @@ const Organization = ({ defaultImage, userid }) => {
                                             size="small"
                                             id="email"
                                             label="Email"
-                                            name="email"
+                                            name="contactEmail"
                                             autoComplete="new-password"
-                                            value={selectedCustomerData?.email || book.email}
+                                            value={selectedCustomerData?.contactEmail || book.contactEmail}
                                             onChange={handleChange}
                                             disabled={!editMode}
                                         />
@@ -296,9 +372,9 @@ const Organization = ({ defaultImage, userid }) => {
                                         </div>
                                         <div className="input" style={{ width: "150px" }}>
                                             <Button variant="contained"
-                                                onClick={() => handleUpdate(selectedCustomerId)}
+                                                onClick={handleUpdate}
                                             >
-                                                Save
+                                                Update
                                             </Button>
                                         </div>
                                     </div>
@@ -316,23 +392,11 @@ const Organization = ({ defaultImage, userid }) => {
                                         <p>{errorMessage}</p>
                                     </div>
                                 }
-                                {!passwordsMatch &&
-                                    <div className='alert-popup Warning' >
-                                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                        <p>Passwords do not match. Please try again.</p>
-                                    </div>
-                                }
-                                {/* <div className='alert-popup Info' >
-                                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                <p>Info Messages !.</p>
-                            </div> */}
                                 {success &&
                                     <div className='alert-popup Success' >
                                         <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                                         <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                        <p>success fully submitted</p>
+                                        <p>{successMessage}</p>
                                     </div>
                                 }
                             </div>
@@ -350,8 +414,9 @@ const Organization = ({ defaultImage, userid }) => {
                                 sx={{ width: "250ch" }}
                                 size="small"
                                 id="organizationName"
-                                name="organizationName"
-                            // variant="standard"
+                                name="organizationname"
+                                value={selectedCustomerData?.organizationname || book.organizationname}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="input" style={{ width: "160px" }}>
@@ -362,8 +427,9 @@ const Organization = ({ defaultImage, userid }) => {
                                 sx={{ width: "230ch" }}
                                 size="small"
                                 id="organizationType"
-                                name="organizationType"
-                            // variant="standard"
+                                name="organizationtype"
+                                value={selectedCustomerData?.organizationtype || book.organizationtype}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
@@ -378,6 +444,8 @@ const Organization = ({ defaultImage, userid }) => {
                                     size="small"
                                     id="addressLine1"
                                     name="addressLine1"
+                                    value={selectedCustomerData?.addressLine1 || book.addressLine1}
+                                    onChange={handleChange}
                                     label="Address"
                                     variant="standard"
                                 />
@@ -388,6 +456,8 @@ const Organization = ({ defaultImage, userid }) => {
                                     size="small"
                                     id="addressLine2"
                                     name="addressLine2"
+                                    value={selectedCustomerData?.addressLine2 || book.addressLine2}
+                                    onChange={handleChange}
                                     variant="standard"
                                 />
                             </div>
@@ -397,6 +467,8 @@ const Organization = ({ defaultImage, userid }) => {
                                     size="small"
                                     id="city"
                                     name="city"
+                                    value={selectedCustomerData?.city || book.city}
+                                    onChange={handleChange}
                                     variant="standard"
                                 />
                             </div>
@@ -411,7 +483,8 @@ const Organization = ({ defaultImage, userid }) => {
                                     size="small"
                                     id="contactPhoneNumber"
                                     name="contactPhoneNumber"
-                                    // variant="standard"
+                                    value={selectedCustomerData?.contactPhoneNumber || book.contactPhoneNumber}
+                                    onChange={handleChange}
                                     label="Phone Number"
                                 />
                             </div>
@@ -421,7 +494,8 @@ const Organization = ({ defaultImage, userid }) => {
                                     size="small"
                                     id="contactEmail"
                                     name="contactEmail"
-                                    // variant="standard"
+                                    value={selectedCustomerData?.contactEmail || book.contactEmail}
+                                    onChange={handleChange}
                                     label="Email Address"
                                 />
                             </div>
@@ -437,7 +511,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="location"
                                 name="location"
-                            // variant="standard"
+                                value={selectedCustomerData?.location || book.location}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="input" style={{ width: "150px" }}>
@@ -449,7 +524,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="website"
                                 name="website"
-                            // variant="standard"
+                                value={selectedCustomerData?.website || book.website}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
@@ -463,7 +539,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="ownershipLeadership"
                                 name="ownershipLeadership"
-                            // variant="standard"
+                                value={selectedCustomerData?.ownershipLeadership || book.ownershipLeadership}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="input" style={{ width: "150px" }}>
@@ -475,7 +552,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="productsServices"
                                 name="productsServices"
-                            // variant="standard"
+                                value={selectedCustomerData?.productsServices || book.productsServices}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
@@ -489,7 +567,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="marketPresence"
                                 name="marketPresence"
-                            // variant="standard"
+                                value={selectedCustomerData?.marketPresence || book.marketPresence}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="input" style={{ width: "150px" }}>
@@ -501,7 +580,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="employees"
                                 name="employees"
-                            // variant="standard"
+                                value={selectedCustomerData?.employees || book.employees}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
@@ -515,7 +595,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="legalStructure"
                                 name="legalStructure"
-                            // variant="standard"
+                                value={selectedCustomerData?.legalStructure || book.legalStructure}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="input" style={{ width: "150px" }}>
@@ -527,7 +608,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="customerBase"
                                 name="customerBase"
-                            // variant="standard"
+                                value={selectedCustomerData?.customerBase || book.customerBase}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
@@ -541,7 +623,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="partnershipsAlliances"
                                 name="partnershipsAlliances"
-                            // variant="standard"
+                                value={selectedCustomerData?.partnershipsAlliances || book.partnershipsAlliances}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="input" style={{ width: "150px" }}>
@@ -553,24 +636,11 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="recentNewsDevelopments"
                                 name="recentNewsDevelopments"
-                            // variant="standard"
+                                value={selectedCustomerData?.recentNewsDevelopments || book.recentNewsDevelopments}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
-                    {/* <div className="input-field">
-                        <div className="input">
-                            <p className='input-title'>Financial Statements</p>
-                        </div>
-                        <div className="input" style={{ width: "310px" }}>
-                            <TextField
-                                sx={{ width: "280ch" }}
-                                size="small"
-                                id="financialStatements"
-                                name="financialStatements"
-                                variant="standard"
-                            />
-                        </div>
-                    </div> */}
                     <div className="input-field">
                         <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>Organization PAN Number</p>
@@ -580,8 +650,9 @@ const Organization = ({ defaultImage, userid }) => {
                                 sx={{ width: "230ch" }}
                                 size="small"
                                 id="taxIDNumber"
-                                name="taxIDNumber"
-                            // variant="standard"
+                                name="pannumber"
+                                value={selectedCustomerData?.pannumber || book.pannumber}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="input" style={{ width: "150px" }}>
@@ -592,8 +663,9 @@ const Organization = ({ defaultImage, userid }) => {
                                 sx={{ width: "230ch" }}
                                 size="small"
                                 id="taxIDNumber"
-                                name="taxIDNumber"
-                            // variant="standard"
+                                name="gstnumber"
+                                value={selectedCustomerData?.gstnumber || book.gstnumber}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
@@ -607,7 +679,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="socialMediaPresence"
                                 name="socialMediaPresence"
-                            // variant="standard"
+                                value={selectedCustomerData?.socialMediaPresence || book.socialMediaPresence}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="input" style={{ width: "150px" }}>
@@ -619,7 +692,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="sustainabilityCSR"
                                 name="sustainabilityCSR"
-                            // variant="standard"
+                                value={selectedCustomerData?.sustainabilityCSR || book.sustainabilityCSR}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
@@ -633,7 +707,8 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="customerReviewsFeedback"
                                 name="customerReviewsFeedback"
-                            // variant="standard"
+                                value={selectedCustomerData?.customerReviewsFeedback || book.customerReviewsFeedback}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="input" style={{ width: "150px" }}>
@@ -645,19 +720,21 @@ const Organization = ({ defaultImage, userid }) => {
                                 size="small"
                                 id="industrySpecificDetails"
                                 name="industrySpecificDetails"
-                            // variant="standard"
+                                value={selectedCustomerData?.industrySpecificDetails || book.industrySpecificDetails}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
                     <div className="input-field">
                         <div className="input" style={{ width: "150px" }}>
-                            <Button variant="outlined" >
-                                Cancel
+                        <Button variant="contained" onClick={handleAdd}>
+                                Save
                             </Button>
+                            
                         </div>
                         <div className="input" style={{ width: "150px" }}>
-                            <Button variant="contained">
-                                Save
+                        <Button variant="outlined" onClick={handleUpdate} >
+                                Update
                             </Button>
                         </div>
                     </div>

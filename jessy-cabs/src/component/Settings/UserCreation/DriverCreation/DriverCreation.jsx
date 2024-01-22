@@ -162,18 +162,23 @@ const DriverCreation = () => {
         userid: '',
         username: '',
         stationname: '',
-        licenseno: '',
-        badgeno: '',
-        aadharno: '',
-        licenseexpdate: '',
-        badgeexpdate: '',
         designation: '',
         userpassword: '',
         userconfirmpassword: '',
         active: '',
         viewfor: '',
-        licensepath: '',
-        aadharcardpath: '',
+        address1: '',
+        licenseno: '',
+        basicsalary: '',
+        licenseexpdate: '',
+        streetno: '',
+        esino: '',
+        badgeno: '',
+        badgeexpdate: '',
+        city: '',
+        pfno: '',
+        durationofyears: '',
+        aadharno: '',
     });
 
     // TABLE END
@@ -226,18 +231,23 @@ const DriverCreation = () => {
             userid: '',
             username: '',
             stationname: '',
-            licenseno: '',
-            badgeno: '',
-            aadharno: '',
-            licenseexpdate: '',
-            badgeexpdate: '',
             designation: '',
             userpassword: '',
             userconfirmpassword: '',
             active: '',
             viewfor: '',
-            licensepath: '',
-            aadharcardpath: '',
+            address1: '',
+            licenseno: '',
+            basicsalary: '',
+            licenseexpdate: '',
+            streetno: '',
+            esino: '',
+            badgeno: '',
+            badgeexpdate: '',
+            city: '',
+            pfno: '',
+            durationofyears: '',
+            aadharno: '',
         }));
         setSelectedCustomerData({});
     };
@@ -277,64 +287,62 @@ const DriverCreation = () => {
 
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
-        try {
-            if (actionName === 'List') {
-                const permissions = checkPagePermission();
 
-                if (permissions.read && permissions.read) {
+        try {
+            const permissions = checkPagePermission();
+
+            if (actionName === 'List') {
+                if (permissions.read) {
                     const response = await axios.get('http://localhost:8081/drivercreation');
                     const data = response.data;
+
                     if (data.length > 0) {
                         setRows(data);
                         setSuccess(true);
-                        setSuccessMessage("Successfully listed");
+                        setSuccessMessage('Successfully listed');
                     } else {
                         setRows([]);
                         setError(true);
-                        setErrorMessage("No data found");
+                        setErrorMessage('No data found');
                     }
                 } else {
                     setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setWarningMessage('You do not have permission.');
                 }
             } else if (actionName === 'Cancel') {
                 handleCancel();
                 setRows([]);
             } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/drivercreation/${selectedCustomerData?.userid || book.userid}`);
+                    await axios.delete(`http://localhost:8081/drivercreation/${selectedCustomerData?.userid || userid}`);
                     setSelectedCustomerData(null);
-                    setError(true);
-                    setSuccessMessage("Successfully Deleted");
+                    setSuccess(true);
+                    setSuccessMessage('Successfully Deleted');
                     handleCancel();
                     setRows([]);
                 } else {
                     setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setWarningMessage('You do not have permission.');
                 }
             } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.userid === userid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://localhost:8081/drivercreation/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
-                    setError(true);
-                    setSuccessMessage("Successfully updated");
+                    await axios.put(`http://localhost:8081/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
+                    setSuccess(true);
+                    setSuccessMessage('Successfully updated');
                     handleCancel();
                     setRows([]);
                 } else {
                     setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setWarningMessage('You do not have permission.');
                 }
             } else if (actionName === 'Add') {
                 handleAdd();
             }
-        } catch {
+        } catch (error) {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage('Check your Network Connection');
         }
     };
     const hidePopup = () => {
@@ -605,6 +613,8 @@ const DriverCreation = () => {
                                 <TextField
                                     size="small"
                                     name="address1"
+                                    value={selectedCustomerData?.address1 || book.address1}
+                                    onChange={handleChange}
                                     label="Address"
                                     id="address1"
                                     sx={{ m: 1, width: "200ch" }}
@@ -621,6 +631,8 @@ const DriverCreation = () => {
                                     id="basicsalary"
                                     label="Basic Salary"
                                     name="basicsalary"
+                                    value={selectedCustomerData?.basicsalary || book.basicsalary}
+                                    onChange={handleChange}
                                 />
                             </div>
                             <div className="input">
@@ -658,6 +670,8 @@ const DriverCreation = () => {
                                 <TextField
                                     size="small"
                                     name="streetno"
+                                    value={selectedCustomerData?.streetno || book.streetno}
+                                    onChange={handleChange}
                                     id="streetno"
                                     sx={{ m: 1, width: "200ch" }}
                                     variant="standard"
@@ -670,6 +684,8 @@ const DriverCreation = () => {
                                 <TextField
                                     size="small"
                                     name="esino"
+                                    value={selectedCustomerData?.esino || book.esino}
+                                    onChange={handleChange}
                                     label="ESI No"
                                     id="ESINo"
                                 />
@@ -709,6 +725,8 @@ const DriverCreation = () => {
                                 <TextField
                                     size="small"
                                     name="city"
+                                    value={selectedCustomerData?.city || book.city}
+                                    onChange={handleChange}
                                     id="address3"
                                     sx={{ m: 1, width: "200ch" }}
                                     variant="standard"
@@ -722,6 +740,8 @@ const DriverCreation = () => {
                                 <TextField
                                     size="small"
                                     name="pfno"
+                                    value={selectedCustomerData?.pfno || book.pfno}
+                                    onChange={handleChange}
                                     label="PF No"
                                     id="PFNo"
                                 />

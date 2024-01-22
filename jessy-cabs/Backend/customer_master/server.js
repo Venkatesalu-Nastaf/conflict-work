@@ -1,13 +1,13 @@
-//Database connection for TAAF Appliction this file contain Add, Delete, Collect data from mysql, and Update functions:  
+//Database connection for Nastaf Appliction this file contain Add, Delete, Collect data from mysql, and Update functions:  
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
-const fs = require('fs'); // Import the fs module
+const fs = require('fs');
 const db = require('../db');
 const uuid = require('uuid');
 const multer = require('multer');
-const path = require('path'); // Import the path module
+const path = require('path');
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
@@ -50,6 +50,7 @@ const assetsRouer = require('./Router/cashflow/assets');
 const driveractiveRouter = require('./Router/tripsheet/appuserlist');
 const sendsmsRouter = require('./Router/SMS/sms');
 const employeeRouter = require('./Router/Employee/employee');
+const companyRoutes = require('./Router/organization/organization');
 
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// // Customer Master Database
@@ -116,6 +117,8 @@ app.use('/', taxsettingRouter); // mainsettings Database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', taxsettingRouter);//signature database
 // -----------------------------------------------------------------------------------------------------------
+app.use('/', companyRoutes);//signature database
+// -----------------------------------------------------------------------------------------------------------
 //map image upload
 app.post('/mapuploads', upload.single('file'), (req, res) => {
   if (!req.file) {
@@ -168,9 +171,9 @@ app.post('/uploads', upload.single('file'), (req, res) => {
     tripid: req.body.tripid,
     bookingno: req.body.bookingno,
     empid: req.body.empid,
-    // documenttype: req.body.documenttype, 
+    organizationname: req.body.organizationname,
+    userid: req.body.userid,
     vehicleId: req.body.vehicleId,
-    // vehicleId: req.body.documenttype,
   };
   const query = 'INSERT INTO tripsheetupload SET ?';
   db.query(query, fileData, (err, result) => {
@@ -299,6 +302,56 @@ app.use('/images', express.static(attachedDirectory));
 app.get('/get-attachedimage/:tripid', (req, res) => {
   const { tripid } = req.params;
   const query = 'SELECT path FROM tripsheetupload WHERE tripid = ?';
+
+  db.query(query, [tripid], (err, results) => {
+    if (err) {
+      return res.status(500).send('Internal Server Error');
+    }
+
+    if (results.length === 0) {
+      // No record found for the given tripid
+      return res.status(404).send('Images not found');
+    }
+
+    const imagePaths = results.map(result => result.path);
+    res.json({ imagePaths });
+  });
+});
+
+//get image for organization
+
+const companyattachedDirectory = path.join(__dirname, 'uploads');
+// Serve static files from the imageDirectory
+app.use('/images', express.static(companyattachedDirectory));
+// Example route to serve an image by its filename
+app.get('/get-companyimage/:tripid', (req, res) => {
+  const { tripid } = req.params;
+  const query = 'SELECT path FROM tripsheetupload WHERE organizationname = ?';
+
+  db.query(query, [tripid], (err, results) => {
+    if (err) {
+      return res.status(500).send('Internal Server Error');
+    }
+
+    if (results.length === 0) {
+      // No record found for the given tripid
+      return res.status(404).send('Images not found');
+    }
+
+    const imagePaths = results.map(result => result.path);
+    res.json({ imagePaths });
+  });
+});
+
+//get image for user profile
+
+const userattachedDirectory = path.join(__dirname, 'uploads');
+// Serve static files from the imageDirectory
+app.use('/images', express.static(userattachedDirectory));
+// Example route to serve an image by its filename
+app.get('/get-profileimage/:tripid', (req, res) => {
+  const { tripid } = req.params;
+  const query = 'SELECT path FROM tripsheetupload WHERE userid = ?';
 
   db.query(query, [tripid], (err, results) => {
     if (err) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./UserInfo.css";
 import Input from '@mui/material/Input';
@@ -31,12 +31,9 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 
-const UserSetting = ({ defaultImage, userid }) => {
+const UserSetting = ({ userid }) => {
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [showPasswords, setShowPasswords] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -45,16 +42,17 @@ const UserSetting = ({ defaultImage, userid }) => {
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
     const [warning, setWarning] = useState(false);
-    const [selectedCustomerId] = useState({});
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
-
+    const storeUserId = localStorage.getItem('useridno');//for getting userid 
+    // console.log('Stored UserId:', storeUserId);
 
     const [book, setBook] = useState({
         userid: '',
+        username: '',
         ufirstname: '',
         ulastname: '',
         mobileno: '',
@@ -64,103 +62,38 @@ const UserSetting = ({ defaultImage, userid }) => {
         userconfirmpassword: '',
     });
 
-    const handleCancel = () => {
-        setBook((prevBook) => ({
-            ...prevBook,
-            userid: '',
-            ufirstname: '',
-            ulastname: '',
-            mobileno: '',
-            email: '',
-            designation: '',
-            userpassword: '',
-            userconfirmpassword: '',
-        }));
-        setSelectedCustomerData({});
-    };
-    //password match
-    useEffect(() => {
-        if (error || !passwordsMatch) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [error, passwordsMatch]);
-
-    const validatePasswordMatch = () => {
-        const password = selectedCustomerData?.userpassword || book.userpassword;
-        const confirmPassword = selectedCustomerData?.userconfirmpassword || book.userconfirmpassword;
-        setPasswordsMatch(password === confirmPassword);
-    };
-
-    const handleKeyDown = useCallback(async (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            try {
-                const filterValue = event.target.value; // Get the input value
-                const response = await axios.get(`http://localhost:8081/usercreation?filter=${filterValue}`);
-                const bookingDetails = response.data;
-                if (Array.isArray(bookingDetails) && bookingDetails.length > 0) {
-                    setBook(bookingDetails[0]);
-                    setSelectedCustomerData(bookingDetails[0]);
-                } else {
-                }
-            } catch {
-            }
-        }
-    }, []);
-
-
     const handleUpdate = async () => {
-        if (password === confirmPassword) {
-            setPasswordsMatch(true);
-            validatePasswordMatch();
-        }
         try {
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://localhost:8081/usercreation/${book.userid}`, updatedCustomer);
-            handleCancel();
-            validatePasswordMatch();
+            await axios.put(`http://localhost:8081/usercreation/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
-        } catch {
+            setEditMode((prevEditMode) => !prevEditMode);
+        }
+        catch {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Something went wrong");
         }
     };
 
     const handleChange = (event) => {
-        const { name, value, checked, type } = event.target;
+        event.preventDefault();
 
-        if (type === 'checkbox') {
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: checked,
-            }));
-            setSelectedCustomerData((prevData) => ({
-                ...prevData,
-                [name]: checked,
-            }));
-        } else {
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: value,
-            }));
-            setSelectedCustomerData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
-            if (name === 'userpassword') {
-                setPassword(value);
-            } else if (name === 'userconfirmpassword') {
-                setConfirmPassword(value);
-            }
-        }
+        const { name, value } = event.target;
+        console.log('Name:', name);
+        console.log('Value:', value);
+
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: value,
+        }));
+
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
     };
-
 
     const handleClickShowPasswords = () => {
         setShowPasswords((show) => !show);
@@ -178,21 +111,89 @@ const UserSetting = ({ defaultImage, userid }) => {
         event.preventDefault();
     };
 
-    const [file, setFile] = useState(null);
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0]
-        setFile(file);
-        setSelectedImage(file);
-    };
+    useEffect(() => {
+        // Retrieve the stored image URL from localStorage on component mount
+        const storedImage = localStorage.getItem('uploadedImage');
+        if (storedImage) {
+            setSelectedImage(storedImage);
+        }
+    }, []);
 
     const handleUpload = () => {
-        if (!file) {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-            return;
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.pdf, .jpg, .jpeg, .png';
+        input.onchange = handleFileChange;
+        input.click();
+    };
+    //file upload
+    const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        setSelectedImage(file);
+        const formDataUpload = new FormData();
+        formDataUpload.append('file', file);
+        formDataUpload.append('userid', selectedCustomerData[0]?.userid || book.userid || storeUserId);
+        try {
+            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
+            console.log(response);
+            const imageUrl = response.data.imageUrl;
+            setSelectedImage(imageUrl);
+            localStorage.setItem('uploadedImage', imageUrl);
+        } catch {
         }
     };
+    //end file upload  
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userid = localStorage.getItem('useridno');
+                // console.log('user company display', userid);
+
+                if (!userid) {
+                    return;
+                }
+                const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+                // console.log(attachedImageUrls);
+                setSelectedImage(attachedImageUrls);
+            } catch {
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const userid = localStorage.getItem('useridno');
+            try {
+                const response = await fetch(`http://localhost:8081/userdataforuserinfo/${userid}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const userDataArray = await response.json(); // Parse JSON data
+                if (userDataArray.length > 0) {
+                    setSelectedCustomerData(userDataArray[0]);
+                } else {
+                    // Handle the case when the array is empty
+                    setErrorMessage('User data not found.');
+                    setError(true);
+                }
+            } catch {
+                setError(true);
+                setErrorMessage('Error fetching tripsheet data.');
+            }
+        };
+
+        fetchData();
+    }, []);
+    // const orucompany = selectedCustomerData[0]?.username;
+    // // console.log('collected company datas display', orucompany);
 
     const hidePopup = () => {
         setSuccess(false);
@@ -204,8 +205,8 @@ const UserSetting = ({ defaultImage, userid }) => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
 
@@ -213,28 +214,29 @@ const UserSetting = ({ defaultImage, userid }) => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
     const toggleEditMode = () => {
+        // console.log('Toggling edit mode...');
         setEditMode((prevEditMode) => !prevEditMode);
     };
 
@@ -249,26 +251,36 @@ const UserSetting = ({ defaultImage, userid }) => {
                                     <div className="input">
                                         <Avatar sx={{ width: "12ch", height: "12ch" }}
                                             alt="userimage"
-                                            src={selectedImage ? URL.createObjectURL(selectedImage) : defaultImage}
+                                            src={selectedImage}
                                         />
                                     </div>
                                 </div>
                                 <div className="input-field">
                                     <div className='input'>
-                                        <Button color="primary" size='small' variant="contained" component="label">
-                                            Upload
-                                            <ModeEditIcon />
-                                            <input
-                                                onChange={handleFileChange}
-                                                onClick={handleUpload}
-                                                type="file"
-                                                style={{ display: "none" }}
-                                            />
-                                        </Button>
+                                        {editMode ? (
+                                            <div className='input'>
+                                                <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode}>
+                                                    update
+                                                    <ModeEditIcon />
+                                                    <input
+                                                        onChange={handleFileChange}
+                                                        onClick={handleUpload}
+                                                        // type="file"
+                                                        style={{ display: "none" }}
+                                                    />
+                                                </Button>
+                                            </div>
+                                        ) : (
+                                            <div className="user-photo-edit">
+                                                <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
+                                                </IconButton>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                             <div className='container-userinfo-right'>
+                           
                                 <div className="input-field">
                                     <div className="input" style={{ width: "300px" }}>
                                         <div className="icone">
@@ -278,11 +290,10 @@ const UserSetting = ({ defaultImage, userid }) => {
                                             margin="normal"
                                             size="small"
                                             id="id"
-                                            label="ID"
+                                            label="Employee Id"
                                             name="userid"
-                                            value={selectedCustomerData?.userid || book.userid}
+                                            value={selectedCustomerData?.userid || book.userid || ''}
                                             onChange={handleChange}
-                                            onKeyDown={handleKeyDown}
                                             disabled={!editMode}
                                         />
                                     </div>
@@ -298,7 +309,6 @@ const UserSetting = ({ defaultImage, userid }) => {
                                             autoComplete="new-password"
                                             value={selectedCustomerData?.designation || book.designation}
                                             onChange={handleChange}
-                                            autoFocus
                                             disabled={!editMode}
                                         />
                                     </div>
@@ -312,10 +322,10 @@ const UserSetting = ({ defaultImage, userid }) => {
                                             size="small"
                                             id="UserName"
                                             label="UserName"
-                                            name="designation"
+                                            name="username"  // Ensure the name attribute matches your state variable name
                                             autoComplete="new-password"
-                                            value={selectedCustomerData?.designation || book.designation}
-                                            onChange={handleChange}
+                                            value={selectedCustomerData?.username || book.username}
+                                            onChange={handleChange}  // Ensure the onChange prop is set to handleChange
                                             autoFocus
                                             disabled={!editMode}
                                         />
@@ -455,7 +465,7 @@ const UserSetting = ({ defaultImage, userid }) => {
                                         </div>
                                         <div className="input" style={{ width: "150px" }}>
                                             <Button variant="contained"
-                                                onClick={() => handleUpdate(selectedCustomerId)}
+                                                onClick={handleUpdate}
                                             >
                                                 Save
                                             </Button>
@@ -468,13 +478,6 @@ const UserSetting = ({ defaultImage, userid }) => {
                                         </IconButton>
                                     </div>
                                 )}
-                                {!passwordsMatch &&
-                                    <div className='alert-popup Warning' >
-                                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                        <p>Passwords do not match. Please try again.</p>
-                                    </div>
-                                }
                                 {error &&
                                     <div className='alert-popup Error' >
                                         <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>

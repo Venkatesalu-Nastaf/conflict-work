@@ -3,59 +3,51 @@ import axios from 'axios';
 import "./Permission.css";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
+import ClearIcon from '@mui/icons-material/Clear';
 import { faSave } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+
 
 const Permission = () => {
-  // const [routeData, setRouteData] = useState('');
-  // const [selectedCustomerData, setSelectedCustomerData] = useState([]);
-
-  // const storedUsername = localStorage.getItem("username");
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const username = storedUsername;
-  //     try {
-  //       const response = await fetch(`http://localhost:8081/userdata/${encodeURIComponent(username)}`);
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! Status: ${response.status}`);
-  //       }
-  //       const routeData = await response.json();
-  //       setRouteData(routeData);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [storedUsername]);
-
-  // const useridno = routeData[0]?.userid;
-
-  // localStorage.setItem('useridno', useridno);
-  // const storedUserId = localStorage.getItem('useridno');
-
-  // // Display the value in the console
-  // console.log('Stored UserId:', storedUserId);
-
-  // console.log('user id display', useridno);
   const [warning, setWarning] = useState(false);
   const [warningMessage, setWarningMessage] = useState({});
+  const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState({});
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({});
 
   const hidePopup = () => {
+    setSuccess(false);
+    setError(false);
     setWarning(false);
   };
-
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
 
   const user_id = localStorage.getItem('useridno');
 
@@ -173,6 +165,12 @@ const Permission = () => {
   };
 
   const handleSavePermissions = async () => {
+    if (!userId.userid) {
+      setError(true);
+      setErrorMessage("fill mantatory fields");
+      return;
+    }
+
     const permissions = checkPagePermission();
 
     if (permissions.read && permissions.new && permissions.modify) {
@@ -182,13 +180,15 @@ const Permission = () => {
           permissions: permissionsData,
           page_name: permissionsData.name
         });
+        setSuccess(true);
+        setSuccessMessage("Successfully saved user permission");
         handleCancel();
       } catch (error) {
         console.error('Error saving permissions:', error);
       }
     } else {
       setWarning(true);
-      setWarningMessage("You do not have permission to add users on this page.");
+      setWarningMessage("You do not have permission.");
     }
   };
 
@@ -345,11 +345,25 @@ const Permission = () => {
                   </table>
                 </div>
               </div>
+              {error &&
+                <div className='alert-popup Error' >
+                  <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{errorMessage}</p>
+                </div>
+              }
               {warning &&
                 <div className='alert-popup Warning' >
                   <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
                   <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                   <p>{warningMessage}</p>
+                </div>
+              }
+              {success &&
+                <div className='alert-popup Success' >
+                  <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{successMessage}</p>
                 </div>
               }
             </div>

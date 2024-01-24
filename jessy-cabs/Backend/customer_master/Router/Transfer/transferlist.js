@@ -5,8 +5,6 @@ const db = require('../../../db');
 router.get('/payment-detail', (req, res) => {
   const { customer, fromDate, toDate, servicestation } = req.query;
 
-  console.log('Received parameters:', customer, fromDate, toDate, servicestation);
-
   let query = 'SELECT customer, COUNT(tripid) as trip_count, SUM(toll) as total_toll, SUM(netamount) as total_Amount, department FROM tripsheet WHERE 1=1';
   let params = [];
 
@@ -26,9 +24,6 @@ router.get('/payment-detail', (req, res) => {
     query += ' AND department = ?';
     params.push(servicestation);
   }
-
-  console.log('Generated SQL query:', query);
-  console.log('SQL query parameters:', params);
 
   db.query(query, params, (err, result) => {
     if (err) {
@@ -113,7 +108,6 @@ router.get('/normaltransferdata_trip/:customer', (req, res) => {
 
 router.get('/Get-Billing', (req, res) => {
   const { customer, fromDate, toDate, servicestation } = req.query;
-  console.log(customer, fromDate, toDate, servicestation);
 
   let query = 'SELECT * FROM billing WHERE 1';
   let params = [];

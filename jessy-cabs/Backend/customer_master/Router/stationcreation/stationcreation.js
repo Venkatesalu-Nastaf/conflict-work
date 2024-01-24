@@ -14,7 +14,7 @@ router.post('/stationcreation', (req, res) => {
 // delete Station Creation data
 router.delete('/stationcreation/:stationid', (req, res) => {
   const stationid = req.params.stationid;
-  db.query('DELETE FROM stationcreation WHERE customerId = ?', stationid, (err, result) => {
+  db.query('DELETE FROM stationcreation WHERE stationid = ?', stationid, (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
     }
@@ -25,7 +25,7 @@ router.delete('/stationcreation/:stationid', (req, res) => {
   });
 });
 // update  Station Creation details
-router.put('/stationcreation/:customerId', (req, res) => {
+router.put('/stationcreation/:stationid', (req, res) => {
   const stationid = req.params.stationid;
   const updatedCustomerData = req.body;
   db.query('UPDATE stationcreation SET ? WHERE stationid = ?', [updatedCustomerData, stationid], (err, result) => {

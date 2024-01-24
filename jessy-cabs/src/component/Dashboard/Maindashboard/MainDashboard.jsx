@@ -95,25 +95,12 @@ const MainDashboard = () => {
   const useridno = routeData[0]?.userid;
   const usercompany = routeData[0]?.organizationname;
 
-
   //for user id
   localStorage.setItem('useridno', useridno);
-  const storeUserId = localStorage.getItem('useridno');
-  console.log('Stored UserId:', storeUserId);
-
-
+  
   // for organization name
   localStorage.setItem('usercompany', usercompany);
-  const storeUsercompanyId = localStorage.getItem('usercompany');
-  console.log('Stored User company:', storeUsercompanyId);
-
-
-
-  console.log('user id display', useridno);
-  console.log('user company display', usercompany);
-
-  
-
+ 
   return (
     <section className={`dash-board ${selectedTheme}`}>
       <div className="glass">

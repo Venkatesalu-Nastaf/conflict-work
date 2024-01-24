@@ -118,7 +118,6 @@ router.get('/user-permissions/:user_id/:page_name', (req, res) => {
       console.error('Error fetching user permissions:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     } else {
-      console.log('User Permissions:', results); // Log the entire results array
       res.json(results[0]);
     }
   });

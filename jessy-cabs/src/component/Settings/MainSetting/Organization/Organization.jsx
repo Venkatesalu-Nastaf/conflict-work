@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import "./Organization.css";
-import axios from "axios";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import { TextField } from "@mui/material";
@@ -11,242 +10,50 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import IconButton from '@mui/material/IconButton';
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
-// import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import useOrganization from './useOrganization';
 
 
 // REACT ICONS
 import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
 
-const Organization = ({ organizationname }) => {
+const Organization = () => {
 
+    const {
+        selectedCustomerData,
+        actionName,
+        error,
+        success,
+        warning,
+        successMessage,
+        errorMessage,
+        warningMessage,
+        book,
+        handleClick,
+        handleChange,
+        isFieldReadOnly,
+        handleAdd,
+        hidePopup,
+        selectedImage,
+        editMode,
+        handleFileChange,
+        handleUpload,
+        toggleEditMode,
+        handleKeyDown,
+        handleUpdate
 
-
-    const [selectedCustomerData, setSelectedCustomerData] = useState({});
-    const [rows] = useState([]);
-
-    // const [passwordsMatch, setPasswordsMatch] = useState(true);
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [editMode, setEditMode] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [error, setError] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [successMessage, setSuccessMessage] = useState({});
-
-
-    const [book, setBook] = useState({
-        organizationname: '',
-        organizationtype: '',
-        addressLine1: '',
-        addressLine2: '',
-        city: '',
-        contactPhoneNumber: '',
-        contactEmail: '',
-        location: '',
-        website: '',
-        ownershipLeadership: '',
-        productsServices: '',
-        marketPresence: '',
-        employees: '',
-        legalStructure: '',
-        customerBase: '',
-        partnershipsAlliances: '',
-        recentNewsDevelopments: '',
-        pannumber: '',
-        gstnumber: '',
-        socialMediaPresence: '',
-        sustainabilityCSR: '',
-        customerReviewsFeedback: '',
-        industrySpecificDetails: '',
-    });
-
-   
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-
-
-    const handleKeyDown = useCallback(async (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            try {
-                const filterValue = event.target.value;
-                const response = await axios.get(`http://localhost:8081/usercreation?filter=${filterValue}`);
-                const bookingDetails = response.data;
-                if (Array.isArray(bookingDetails) && bookingDetails.length > 0) {
-                    setBook(bookingDetails[0]);
-                    setSelectedCustomerData(bookingDetails[0]);
-                } else {
-                }
-            } catch {
-            }
-        }
-    }, []);
-
-    const handleAdd = async () => {
-        const name = selectedCustomerData?.organizationname || book.organizationname;
-        if (!name) {
-            setError(true);
-            setErrorMessage("fill mantatory fields");
-            return;
-        }
-        try {
-            await axios.post('http://localhost:8081/addcompany', book);
-          
-            setSuccess(true);
-        } catch {
-        }
-    };
-
-
-    const handleUpdate = async () => {
-        try {
-            const selectedCustomer = rows.find((row) => row.organizationname === organizationname);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
-            console.log('ithuvum etho onnu', companyname);
-            const encode = companyname;
-            const decode = decodeURIComponent(encode);
-            console.log('etho onnu display pannu', decode);
-            await axios.put(`http://localhost:8081/companyupdate/${decode}`, updatedCustomer);
-            setSuccess(true);
-            setSuccessMessage("Successfully updated");
-            setEditMode((prevEditMode) => !prevEditMode);
-        }
-        catch {
-            setError(true);
-            setErrorMessage("Something went wrong");
-        }
-    };
-
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: value,
-        }));
-        setSelectedCustomerData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleUpload = () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.pdf, .jpg, .jpeg, .png';
-        input.onchange = handleFileChange;
-        input.click();
-    };
-    //file upload
-    const handleFileChange = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        setSelectedImage(file);
-        const companyname = localStorage.getItem('usercompany');
-        const formDataUpload = new FormData();
-        formDataUpload.append('file', file);
-        formDataUpload.append('organizationname', selectedCustomerData?.organizationname || book.organizationname || companyname);
-        try {
-            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            console.log(response);
-        } catch {
-        }
-    };
+        // ... (other state variables and functions)
+    } = useOrganization();
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const organizationname = localStorage.getItem('usercompany');
-                console.log('user company display', organizationname);
-
-                if (!organizationname) {
-                    return;
-                }
-                const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-                console.log(attachedImageUrls);
-                setSelectedImage(attachedImageUrls);
-            } catch {
-            }
-        };
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const encoded = localStorage.getItem('usercompany');
-            localStorage.setItem('usercompanyname', encoded);
-            const storedcomanyname = localStorage.getItem('usercompanyname');
-            const organizationname = decodeURIComponent(storedcomanyname);
-            console.log('user company summa display', organizationname);
-            try {
-                const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                // const selectedCustomerData = await response.json(); // Parse JSON data
-                // // console.log('collected company datas display', selectedCustomerData);
-                // setSelectedCustomerData(selectedCustomerData);
-                const userDataArray = await response.json();
-                if (userDataArray.length > 0) {
-                    setSelectedCustomerData(userDataArray[0]);
-                } else {
-                    // Handle the case when the array is empty
-                    setErrorMessage('User data not found.');
-                    setError(true);
-                }
-            } catch {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
-            }
-        };
-
-        fetchData();
-    }, []);
-    const orucompany = selectedCustomerData?.organizationname;
-    console.log('collected company datas display', orucompany);
-
-    const hidePopup = () => {
-        setSuccess(false);
-        setError(false);
-        setErrorMessage('');
-    };
-
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
+        if (actionName === 'List') {
+            handleClick(null, 'List');
         }
-    }, [error]);
+    }, [actionName, handleClick]);
 
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-
-    const toggleEditMode = () => {
-        setEditMode((prevEditMode) => !prevEditMode);
-    };
     return (
         <div className="organisation-form Scroll-Style-hide">
             <form>
@@ -380,7 +187,7 @@ const Organization = ({ organizationname }) => {
                                     </div>
                                 ) : (
                                     <div className="user-photo-edit">
-                                        <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
+                                        <IconButton color="primary" onClick={toggleEditMode} disabled={isFieldReadOnly("modify")} size='small' variant="outlined" component="label">
                                             <ModeEditIcon />
                                         </IconButton>
                                     </div>
@@ -397,6 +204,13 @@ const Organization = ({ organizationname }) => {
                                         <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                                         <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                                         <p>{successMessage}</p>
+                                    </div>
+                                }
+                                {warning &&
+                                    <div className='alert-popup Warning' >
+                                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                        <p>{warningMessage}</p>
                                     </div>
                                 }
                             </div>
@@ -727,13 +541,13 @@ const Organization = ({ organizationname }) => {
                     </div>
                     <div className="input-field">
                         <div className="input" style={{ width: "150px" }}>
-                        <Button variant="contained" onClick={handleAdd}>
+                            <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>
                                 Save
                             </Button>
-                            
+
                         </div>
                         <div className="input" style={{ width: "150px" }}>
-                        <Button variant="outlined" onClick={handleUpdate} >
+                            <Button variant="outlined" onClick={handleUpdate} disabled={isFieldReadOnly("modify")} >
                                 Update
                             </Button>
                         </div>

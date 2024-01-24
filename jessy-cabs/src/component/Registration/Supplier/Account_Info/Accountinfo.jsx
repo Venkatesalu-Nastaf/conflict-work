@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import 'jspdf-autotable';
 import dayjs from "dayjs";
-import jsPDF from 'jspdf';
-import axios from "axios";
 import "./Accountinfo.css";
 import Box from "@mui/material/Box";
-import { saveAs } from 'file-saver';
 import Menu from '@mui/material/Menu';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -44,7 +41,7 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-
+import useAccountinfo from './useAccountinfo';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -66,368 +63,41 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 const Accuntinfo = () => {
-  const user_id = localStorage.getItem('useridno');
 
-  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-  // const [value, setValue] = React.useState("online_password");
-  const [selectedCustomerData, setSelectedCustomerData] = useState({});
-  const [rows, setRows] = useState([]);
-  const [actionName] = useState('');
-  const [error, setError] = useState(false);
-  const [info, setInfo] = useState(false);
-  const [warning, setWarning] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [successMessage, setSuccessMessage] = useState({});
-  const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage, setWarningMessage] = useState({});
-  const [infoMessage] = useState({});
+  const {
+    selectedCustomerData,
+    selectedCustomerId,
+    actionName,
+    error,
+    success,
+    info,
+    warning,
+    successMessage,
+    errorMessage,
+    warningMessage,
+    infoMessage,
+    book,
+    handleClick,
+    handleChange,
+    isFieldReadOnly,
+    handleRowClick,
+    handleAdd,
+    hidePopup,
+    handleDateChange,
+    handleAutocompleteChange,
+    handleExcelDownload,
+    handlePdfDownload,
+    reversedRows,
+    columns,
 
-  // for page permission
+    // ... (other state variables and functions)
+  } = useAccountinfo();
 
-  const [userPermissions, setUserPermissions] = useState({});
-
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = 'Supplier Master';
-        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-        setUserPermissions(response.data);
-        console.log('permission data', response.data);
-      } catch (error) {
-        console.error('Error fetching user permissions:', error);
-      }
-    };
-
-    fetchPermissions();
-  }, [user_id]);
-
-  const checkPagePermission = () => {
-    const currentPageName = 'Supplier Master';
-    const permissions = userPermissions || {};
-
-    if (permissions.page_name === currentPageName) {
-      return {
-        read: permissions.read_permission === 1,
-        new: permissions.new_permission === 1,
-        modify: permissions.modify_permission === 1,
-        delete: permissions.delete_permission === 1,
-      };
-    }
-
-    return {
-      read: false,
-      new: false,
-      modify: false,
-      delete: false,
-    };
-  };
-
-  const permissions = checkPagePermission();
-
-  // Function to determine if a field should be read-only based on permissions
-  const isFieldReadOnly = (fieldName) => {
-    if (permissions.read) {
-      // If user has read permission, check for other specific permissions
-      if (fieldName === "delete" && !permissions.delete) {
-        return true;
-      }
-      return false;
-    }
-    return true;
-  };
-
-
-  const hidePopup = () => {
-    setSuccess(false);
-    setError(false);
-    setInfo(false);
-    setWarning(false);
-  };
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [error]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [info]);
-
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [success]);
-
-
-  // download function
-  const convertToCSV = (data) => {
-    const header = columns.map((column) => column.headerName).join(",");
-    const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-    return [header, ...rows].join("\n");
-  };
-  const handleExcelDownload = () => {
-    const csvData = convertToCSV(rows);
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "Account_Info.csv");
-  };
-
-  const handlePdfDownload = () => {
-    const pdf = new jsPDF();
-    pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text("Account_Info", 10, 10);
-
-    // Modify tableData to exclude the index number
-    const tableData = rows.map((row) => [
-      row['id'],
-      row['cperson'],
-      row['accountNo'],
-      row['address1'],
-      row['phone'],
-      row['isRunning'],
-      row['vehicleInfo'],
-      row['vehCommission'],
-      row['rateType'],
-      row['autoRefresh']
-    ]);
-
-    pdf.autoTable({
-      head: [['Sno', 'Supplier_Name', 'Vehicle_No', 'Address', 'Phone', 'Active', 'Owner_Type', 'Percentage', 'Rate_Type', 'Driver']],
-      body: tableData,
-      startY: 20,
-    });
-
-    const pdfBlob = pdf.output('blob');
-    saveAs(pdfBlob, 'Account_Info.pdf');
-  };
-
-
-  // TABLE START
-  const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "cperson", headerName: "Supplier_Name", width: 130 },
-    { field: "accountNo", headerName: "Vehicle_No", width: 130 },
-    { field: "address1", headerName: "Address", width: 130 },
-    { field: "phone", headerName: "Phone", width: 130 },
-    { field: "isRunning", headerName: "Active", width: 160 },
-    { field: "vehicleInfo", headerName: "Owner_Type", width: 130 },
-    { field: "vehCommission", headerName: "Percentage", width: 130 },
-    { field: "rateType", headerName: "Rate_Type", width: 130 },
-    { field: "acType", headerName: "Driver", width: 130 },
-  ];
-  // TABLE END
-  const [book, setBook] = useState({
-    accountNo: '',
-    Accdate: '',
-    vehicleTravels: '',
-    address1: '',
-    cperson: '',
-    streetNo: '',
-    email: '',
-    city: '',
-    phone: '',
-    vehCommission: '',
-    rateType: '',
-    printBill: '',
-    underGroup: '',
-    isRunning: '',
-    entity: '',
-    acType: '',
-    vehicleInfo: '',
-    autoRefresh: '',
-  });
-
-
-  const handleChange = (event) => {
-    const { name, value, checked } = event.target;
-
-    if (event.target.type === 'checkbox') {
-      setBook((prevBook) => ({
-        ...prevBook,
-        [name]: checked,
-      }));
-      setSelectedCustomerData((prevData) => ({
-        ...prevData,
-        [name]: checked,
-      }));
-    } else {
-      setBook((prevBook) => ({
-        ...prevBook,
-        [name]: value,
-      }));
-      setSelectedCustomerData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
-  };
-  // const handleTabChange = (event, newValue) => {
-  //   setValue(newValue);
-  // };
-
-
-  const handleAutocompleteChange = (event, value, name) => {
-    const selectedOption = value ? value.label : '';
-    setBook((prevBook) => ({
-      ...prevBook,
-      [name]: selectedOption,
-    }));
-    setSelectedCustomerData((prevData) => ({
-      ...prevData,
-      [name]: selectedOption,
-    }));
-  };
-
-  const handleDateChange = (date, name) => {
-    const startOfDay = dayjs(date).format('DD/MM/YYYY');
-    setBook((prevBook) => ({
-      ...prevBook,
-      [name]: startOfDay,
-    }));
-    setSelectedCustomerData((prevBook) => ({
-      ...prevBook,
-      [name]: startOfDay,
-    }));
-  };
-
-  const handleCancel = () => {
-    setBook((prevBook) => ({
-      ...prevBook,
-      accountNo: '',
-      Accdate: '',
-      vehicleTravels: '',
-      address1: '',
-      cperson: '',
-      streetNo: '',
-      email: '',
-      city: '',
-      phone: '',
-      vehCommission: '',
-      rateType: '',
-      printBill: '',
-      underGroup: '',
-      isRunning: '',
-      entity: '',
-      acType: '',
-      vehicleInfo: '',
-      autoRefresh: '',
-    }));
-    setSelectedCustomerData({});
-  };
-
-  const handleRowClick = useCallback((params) => {
-    const customerData = params.row;
-    setSelectedCustomerData(customerData);
-    setSelectedCustomerId(params.row.accountNo);
-  }, []);
-
-  const handleAdd = async () => {
-    const permissions = checkPagePermission();
-
-    if (permissions.read && permissions.new) {
-      try {
-        await axios.post('http://localhost:8081/accountinfo', book);
-        handleCancel();
-        setRows([]);
-        setSuccess(true);
-        setSuccessMessage("Successfully Added");
-      } catch {
-        setError(true);
-        setErrorMessage("Check your Network Connection");
-      }
-    } else {
-      // Display a warning or prevent the action
-      setWarning(true);
-      setWarningMessage("You do not have permission.");
-    }
-  };
-
-
-  const handleClick = async (event, actionName, accountNo) => {
-    event.preventDefault();
-    try {
-      if (actionName === 'List') {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.read) {
-          const response = await axios.get('http://localhost:8081/accountinfo');
-          const data = response.data;
-          if (data.length > 0) {
-            const rowsWithUniqueId = data.map((row, index) => ({
-              ...row,
-              id: index + 1,
-            }));
-            setRows(rowsWithUniqueId);
-            setSuccess(true);
-            setSuccessMessage("Successfully listed");
-          } else {
-            setRows([]);
-            setError(true);
-            setErrorMessage("No data found");
-          }
-          setSuccessMessage("Successfully listed");
-        } else {
-          setWarning(true);
-          setWarningMessage("You do not have permission.");
-        }
-      } else if (actionName === 'Cancel') {
-        handleCancel();
-        setRows([]);
-      } else if (actionName === 'Delete') {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.delete) {
-          await axios.delete(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
-          setSelectedCustomerData(null);
-          setSuccess(true);
-          setSuccessMessage("Successfully Deleted");
-          handleCancel();
-          setRows([]);
-        } else {
-          setWarning(true);
-          setWarningMessage("You do not have permission.");
-        }
-      } else if (actionName === 'Edit') {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.modify) {
-          const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
-          const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-          await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
-          setSuccess(true);
-          setSuccessMessage("Successfully updated");
-          handleCancel();
-          setRows([]);
-        } else {
-          setWarning(true);
-          setWarningMessage("You do not have permission.");
-        }
-      } else if (actionName === 'Add') {
-        handleAdd();
-      }
-    } catch {
-      setError(true);
-      setErrorMessage("Check your connection");
-    }
-  };
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
-  });
-
-  const reversedRows = [...rows].reverse();
+  }, [actionName, handleClick]);
 
   return (
     <div className="account-form">

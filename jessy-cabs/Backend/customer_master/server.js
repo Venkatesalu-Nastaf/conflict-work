@@ -51,6 +51,7 @@ const driveractiveRouter = require('./Router/tripsheet/appuserlist');
 const sendsmsRouter = require('./Router/SMS/sms');
 const employeeRouter = require('./Router/Employee/employee');
 const companyRoutes = require('./Router/organization/organization');
+const taxsettingRoutes = require('./Router/taxsetting/taxsettings');
 
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', customerRoutes);// // Customer Master Database
@@ -118,6 +119,8 @@ app.use('/', taxsettingRouter); // mainsettings Database
 app.use('/', taxsettingRouter);//signature database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', companyRoutes);//signature database
+// -----------------------------------------------------------------------------------------------------------
+app.use('/', taxsettingRoutes);//signature database
 // -----------------------------------------------------------------------------------------------------------
 //map image upload
 app.post('/mapuploads', upload.single('file'), (req, res) => {

@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import axios from "axios";
+import React, { useEffect } from 'react';
 import './TaxSetting.css';
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
@@ -12,7 +11,6 @@ import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
@@ -33,24 +31,11 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import useTaxsettings from './useTaxsettings.js';
 
-// date
 
 
-// TABLE START
-const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "DateTaxFrom", headerName: "From_Date", width: 130 },
-    { field: "DateTaxTo", headerName: "To_Date", width: 130 },
-    { field: "STax", headerName: "STax", width: 160 },
-    { field: "SBCess", headerName: "SBCess", width: 130 },
-    { field: "KKCess", headerName: "KK_Cess", width: 130 },
-    // { field: "Rid", headerName: "Rid", width: 130 },
-    { field: "STax_Des", headerName: "StaxDes", width: 130 },
-    { field: "SBCess_Des", headerName: "SBCessDes", width: 130 },
-    { field: "KKCess_Des", headerName: "KKCessDes", width: 130 },
-    { field: "taxtype", headerName: "TAX", width: 130 },
-];
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
     "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -74,194 +59,41 @@ const actions = [
 // Table End
 
 const TaxSetting = () => {
-    const [selectedCustomerData, setSelectedCustomerData] = useState({});
-    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-    const [rows, setRows] = useState([]);
-    const [formData] = useState({});
-    const [actionName] = useState('');
-    const [error, setError] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [info, setInfo] = useState(false);
-    const [warning, setWarning] = useState(false);
-    const [successMessage, setSuccessMessage] = useState({});
-    const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
-    const [infoMessage] = useState({});
 
+    const {
+        selectedCustomerData,
+        selectedCustomerId,
+        rows,
+        actionName,
+        error,
+        success,
+        info,
+        warning,
+        successMessage,
+        errorMessage,
+        warningMessage,
+        infoMessage,
+        book,
+        handleClick,
+        handleChange,
+        isFieldReadOnly,
+        handleRowClick,
+        handleAdd,
+        hidePopup,
+        formData,
+        handleDateChange,
+        handleAutocompleteChange,
+        columns,
 
+        // ... (other state variables and functions)
+    } = useTaxsettings();
 
-    const hidePopup = () => {
-        setSuccess(false);
-        setError(false);
-        setInfo(false);
-        setWarning(false);
-    };
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
-
-    const [book, setBook] = useState({
-        DateTaxFrom: '',
-        DateTaxTo: '',
-        STax: '',
-        SBCess: '',
-        KKCess: '',
-        STax_Des: '',
-        SBCess_Des: '',
-        KKCess_Des: '',
-        taxtype: '',
-    });
-    const handleChange = (event) => {
-        const { name, value, checked, type } = event.target;
-
-        if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: checked,
-            }));
-            setSelectedCustomerData((prevData) => ({
-                ...prevData,
-                [name]: checked,
-            }));
-        } else {
-            // For other input fields, update the state based on the value
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: value,
-            }));
-            setSelectedCustomerData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
-        }
-    };
-
-    const handleAutocompleteChange = (event, value, name) => {
-        const selectedOption = value ? value.label : '';
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: selectedOption,
-        }));
-        setSelectedCustomerData((prevData) => ({
-            ...prevData,
-            [name]: selectedOption,
-        }));
-    };
-
-    const handleDateChange = (date, name) => {
-        const formattedDate = dayjs(date).format('DD/MM/YYYY');
-        // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: formattedDate,
-        }));
-    };
-    const handleCancel = () => {
-        setBook((prevBook) => ({
-            ...prevBook,
-            DateTaxFrom: '',
-            DateTaxTo: '',
-            STax: '',
-            SBCess: '',
-            KKCess: '',
-            STax_Des: '',
-            SBCess_Des: '',
-            KKCess_Des: '',
-            taxtype: '',
-        }));
-        setSelectedCustomerData({});
-    };
-    const handleRowClick = useCallback((params) => {
-        const customerData = params.row;
-        setSelectedCustomerData(customerData);
-        setSelectedCustomerId(params.row.customerId);
-    }, []);
-
-    const handleAdd = async () => {
-        const STax = book.STax;
-        if (!STax) {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-            return;
-        }
-        try {
-            const response = await axios.post('http://localhost:8081/taxsettings', book);
-            console.log(response);
-            handleCancel();
-            setSuccess(true);
-            setSuccessMessage("Successfully Added");
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-
-        }
-    };
-    const handleClick = async (event, actionName, id) => {
-        event.preventDefault();
-        try {
-            if (actionName === 'List') {
-                const response = await axios.get('http://localhost:8081/taxsettings');
-                const data = response.data;
-                setRows(data);
-                setSuccess(true);
-                setSuccessMessage("Successfully listed");
-            } else if (actionName === 'Cancel') {
-                handleCancel();
-            } else if (actionName === 'Delete') {
-                await axios.delete(`http://localhost:8081/taxsettings/${id}`);
-                setSelectedCustomerData(null);
-                setSuccess(true);
-                setSuccessMessage("Successfully Deleted");
-                handleCancel();
-            } else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.id === id);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`http://localhost:8081/taxsettings/${id}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
-            }
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-        }
-    };
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
         }
-    });
+    }, [actionName, handleClick]);
+
     return (
         <div className="TaxSetting-form">
             <form onSubmit={handleClick}>
@@ -269,32 +101,30 @@ const TaxSetting = () => {
                     <div className="input-field" style={{ padding: '0px 15px' }}>
                         <div className="input">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoItem label="Date Tax From">
-                                    <DatePicker
-                                        format="DD/MM/YYYY"
-                                        value={formData.DateTaxFrom || selectedCustomerData.DateTaxFrom ? dayjs(selectedCustomerData.DateTaxFrom) : null}
-                                        onChange={(date) => handleDateChange(date, 'DateTaxFrom')}
-                                    >
-                                        {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.DateTaxFrom} />
-                                        )}
-                                    </DatePicker>
-                                </DemoItem>
+                                <DatePicker
+                                    label="Date Tax From"
+                                    value={formData.startdate || selectedCustomerData.DateTaxFrom ? dayjs(selectedCustomerData.DateTaxFrom) : null || book.DateTaxFrom ? dayjs(book.DateTaxFrom) : null}
+                                    format="DD/MM/YYYY"
+                                    onChange={(date) => handleDateChange(date, 'DateTaxFrom')}
+                                >
+                                    {({ inputProps, inputRef }) => (
+                                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.DateTaxFrom} />
+                                    )}
+                                </DatePicker>
                             </LocalizationProvider>
                         </div>
                         <div className="input">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoItem label="Date Tax To">
-                                    <DatePicker
-                                        format="DD/MM/YYYY"
-                                        value={formData.DateTaxTo || selectedCustomerData.DateTaxTo ? dayjs(selectedCustomerData.DateTaxTo) : null}
-                                        onChange={(date) => handleDateChange(date, 'DateTaxTo')}
-                                    >
-                                        {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.DateTaxTo} />
-                                        )}
-                                    </DatePicker>
-                                </DemoItem>
+                                <DatePicker
+                                    label="Date Tax To"
+                                    value={formData.startdate || selectedCustomerData.DateTaxTo ? dayjs(selectedCustomerData.DateTaxTo) : null || book.DateTaxTo ? dayjs(book.DateTaxTo) : null}
+                                    format="DD/MM/YYYY"
+                                    onChange={(date) => handleDateChange(date, 'DateTaxTo')}
+                                >
+                                    {({ inputProps, inputRef }) => (
+                                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.DateTaxTo} />
+                                    )}
+                                </DatePicker>
                             </LocalizationProvider>
                         </div>
                         <div className="input">
@@ -305,7 +135,7 @@ const TaxSetting = () => {
                                 margin="normal"
                                 size="small"
                                 id="STax"
-                                label="STax"
+                                label="State Tax"
                                 name="STax"
                                 autoComplete="new-password"
                                 value={selectedCustomerData?.STax || book.STax}
@@ -387,7 +217,6 @@ const TaxSetting = () => {
                             <div className="icone">
                                 <QuizOutlinedIcon color="action" />
                             </div>
-
                             <Autocomplete
                                 fullWidth
                                 size="small"
@@ -395,22 +224,21 @@ const TaxSetting = () => {
                                 freeSolo
                                 sx={{ width: "20ch" }}
                                 onChange={(event, value) => handleAutocompleteChange(event, value, "taxtype")}
-                                value={TaxType.find((option) => option.Option)?.label || ''}
+                                value={TaxType.find((option) => option.Option)?.label || selectedCustomerData.taxtype || book.taxtype || ''}
                                 options={TaxType.map((option) => ({
                                     label: option.Option,
                                 }))}
-                                getOptionLabel={(option) => option.label || ''}
+                                getOptionLabel={(option) => option.label || selectedCustomerData.taxtype || book.taxtype || ''}
                                 renderInput={(params) => {
-                                    params.inputProps.value = book.taxtype || selectedCustomerData?.taxtype || ''
                                     return (
-                                        <TextField   {...params} label="Tax Type" name="taxtype" inputRef={params.inputRef} />
+                                        <TextField {...params} label="Tax Type" autoComplete="password" name="taxtype" inputRef={params.inputRef} />
                                     )
                                 }
                                 }
                             />
                         </div>
                         <div className="input" style={{ width: "70px" }}>
-                            <Button color="primary" variant="contained" onClick={handleAdd}>
+                            <Button color="primary" variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>
                                 Add
                             </Button>
                         </div>

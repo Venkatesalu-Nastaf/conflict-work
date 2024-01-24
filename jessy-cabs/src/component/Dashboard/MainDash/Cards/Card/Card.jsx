@@ -52,7 +52,7 @@ function CompactCard({ param, setExpanded }) {
 }
 
 // Expanded Card
-function ExpandedCard({ param, setExpanded }) {
+function ExpandedCard({ param,  setExpanded }) {
   const data = {
     options: {
       chart: {

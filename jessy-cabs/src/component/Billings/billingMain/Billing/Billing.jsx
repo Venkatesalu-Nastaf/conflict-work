@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import "./Billing.css";
 import {
     Autocomplete,
@@ -6,13 +6,12 @@ import {
     TextField,
 } from "@mui/material";
 import dayjs from "dayjs";
-import axios from "axios";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import { useLocation } from "react-router-dom";
+
 import SpeedDial from "@mui/material/SpeedDial";
-import { fetchBankOptions } from './BillingData';
+
 import Paymentinvoice from '../Accountsinvoice/Paymentinvoice';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { GiMoneyStack } from "@react-icons/all-files/gi/GiMoneyStack";
@@ -46,7 +45,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import { faArrowRightArrowLeft, faMoneyBillTransfer, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
-
+import useBilling from './useBilling';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -68,826 +67,78 @@ const actions = [
 ];
 
 const Billing = () => {
-    const user_id = localStorage.getItem('useridno');
 
-    const [bankOptions, setBankOptions] = useState([]);
-    const [formData, setFormData] = useState({});
-    const location = useLocation();
-    const [info, setInfo] = useState(false);
-    const [actionName] = useState('');
-    const [popupOpen, setPopupOpen] = useState(false);
-    const [rows] = useState([]);
-    const [error, setError] = useState(false);
-    const [warning, setWarning] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [successMessage, setSuccessMessage] = useState({});
-    const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage, setWarningMessage] = useState({});
-    const [infoMessage] = useState({});
-    const [selectedBankAccount, setSelectedBankAccount] = useState('');
-    const [selectedCustomerData, setSelectedCustomerData] = useState({
-        totalkm1: ''
-    });
-    const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
+    const {
+        selectedCustomerData,
+        actionName,
+        error,
+        success,
+        info,
+        warning,
+        successMessage,
+        errorMessage,
+        warningMessage,
+        infoMessage,
+        book,
+        handleClick,
+        handleChange,
+        isFieldReadOnly,
+        hidePopup,
+        formData,
+        selectedCustomerDatas,
+        handleKeyDown,
+        handleKeyenter,
+        handleDateChange,
+        calculateTotalAmount,
+        calculateTotalAmount2,
+        calculateTotalAmount3,
+        calculateTotalAmount4,
+        calculateGrossAmount,
+        calculatePayableAmount,
+        calculateRoundOff,
+        calculateroundedPayableAmount,
+        calculatePendingAmount,
+        setSelectedBankAccount,
+        handleAutocompleteChange,
+        selectedBankAccount,
+        bankOptions,
+        popupOpen,
+        handlePopupClose,
+        tripSheetData,
+        triprequest,
+        tripcode,
+        tripdepartment,
+        routeData,
+        BalanceValue,
+        TotalAmountValue,
+        roundOffValue,
+        tripShedkm,
+        tripshedin,
+        tripshedout,
+        tripreporttime,
+        tripshedintime,
+        tripadditionaltime,
+        tripstartkm,
+        tripclosekm,
+        tripstarttime,
+        tripclosetime,
+        tripstartdate,
+        tripclosedate,
+        organizationaddress1,
+        organizationaddress2,
+        organizationcity,
+        organizationgstnumber,
+        GmapimageUrl,
+        mapimageUrl,
 
-    // for page permission
+        // ... (other state variables and functions)
+    } = useBilling();
 
-    const [userPermissions, setUserPermissions] = useState({});
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-                console.log('permission data', response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
-            }
-        };
-
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = () => {
-        const currentPageName = 'CB Billing';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
-    //for popup
-    const hidePopup = () => {
-        setSuccess(false);
-        setError(false);
-        setInfo(false);
-        setWarning(false);
-    };
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
-
-    const handleEInvoiceClick = (row) => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.modify) {
-            const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-            const customer = book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer;
-
-            if (!tripid) {
-                setError(true);
-                setErrorMessage("Please enter the tripid");
-            } else {
-                localStorage.setItem('selectedTripid', tripid);
-                localStorage.setItem('selectedcustomerid', customer);
-                setPopupOpen(true);
-            }
-        } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
-        }
-    };
-
-    const handlePopupClose = () => {
-        setPopupOpen(false);
-    };
-
-    const [book, setBook] = useState({
-        tripid: '',
-        billingno: '',
-        invoiceno: '',
-        Billingdate: '',
-        totalkm1: '',
-        totaltime: '',
-        customer: '',
-        supplier: '',
-        startdate: '',
-        totaldays: '',
-        guestname: '',
-        rateType: '',
-        vehRegNo: '',
-        vehType: '',
-        duty: '',
-        MinCharges: '',
-        minchargeamount: '',
-        ChargesForExtra: '',
-        ChargesForExtraamount: '',
-        cfeamount: '',
-        ChargesForExtraHRS: '',
-        ChargesForExtraHRSamount: '',
-        cfehamount: '',
-        NightHalt: '',
-        NightHaltamount: '',
-        nhamount: '',
-        driverbata: '',
-        driverbataamount: '',
-        dbamount: '',
-        OtherCharges: '',
-        OtherChargesamount: '',
-        permitothertax: '',
-        parkingtollcharges: '',
-        MinKilometers: '',
-        MinHours: '',
-        GrossAmount: '',
-        AfterTaxAmount: '',
-        DiscountAmount: '',
-        DiscountAmount2: '',
-        AdvanceReceived: '',
-        RoundedOff: '',
-        BalanceReceivable: '',
-        NetAmount: '',
-        Totalamount: '',
-        paidamount: '',
-        pendingamount: '',
-        BankAccount: '',
-    });
-
-    const handleChange = (event) => {
-        const { name, value, checked, type } = event.target;
-
-        if (type === 'checkbox') {
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: checked,
-            }));
-            setSelectedCustomerData((prevData) => ({
-                ...prevData,
-                [name]: checked,
-            }));
-            setSelectedCustomerDatas((prevData) => ({
-                ...prevData,
-                [name]: checked,
-            }));
-            setFormData((prevData) => ({
-                ...prevData,
-                [name]: checked,
-            }));
-
-        } else {
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: value,
-            }));
-            setSelectedCustomerData((prevValues) => ({
-                ...prevValues,
-                [name]: value,
-            }));
-            setSelectedCustomerDatas((prevValues) => ({
-                ...prevValues,
-                [name]: value,
-            }));
-            setFormData((prevValues) => ({
-                ...prevValues,
-                [name]: value,
-            }));
-        }
-    };
-
-    const handleAutocompleteChange = (event, newValue, name) => {
-        const selectedOption = newValue ? newValue.label : '';
-
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: selectedOption,
-        }));
-        setSelectedCustomerData((prevData) => ({
-            ...prevData,
-            [name]: selectedOption,
-        }));
-        setSelectedCustomerDatas((prevData) => ({
-            ...prevData,
-            [name]: selectedOption,
-        }));
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: selectedOption,
-        }));
-    };
-
-    const handleDateChange = (date, name) => {
-        const formattedDate = dayjs(date).format('DD/MM/YYYY');
-
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: formattedDate,
-        }));
-        setSelectedCustomerData((prevBook) => ({
-            ...prevBook,
-            [name]: formattedDate,
-        }));
-        setSelectedCustomerDatas((prevBook) => ({
-            ...prevBook,
-            [name]: formattedDate,
-        }));
-        setFormData((prevBook) => ({
-            ...prevBook,
-            [name]: formattedDate,
-        }));
-    };
-
-    const handleCancel = () => {
-        setBook((prevBook) => ({
-            ...prevBook,
-            tripid: '',
-            billingno: '',
-            Billingdate: '',
-            invoiceno: '',
-            totalkm1: '',
-            totaltime: '',
-            customer: '',
-            supplier: '',
-            startdate: '',
-            totaldays: '',
-            guestname: '',
-            rateType: '',
-            vehRegNo: '',
-            vehType: '',
-            duty: '',
-            MinCharges: '',
-            minchargeamount: '',
-            ChargesForExtra: '',
-            ChargesForExtraamount: '',
-            cfeamount: '',
-            ChargesForExtraHRS: '',
-            ChargesForExtraHRSamount: '',
-            cfehamount: '',
-            NightHalt: '',
-            NightHaltamount: '',
-            nhamount: '',
-            driverbata: '',
-            driverbataamount: '',
-            dbamount: '',
-            OtherCharges: '',
-            OtherChargesamount: '',
-            permitothertax: '',
-            parkingtollcharges: '',
-            MinKilometers: '',
-            MinHours: '',
-            GrossAmount: '',
-            AfterTaxAmount: '',
-            DiscountAmount: '',
-            DiscountAmount2: '',
-            AdvanceReceived: '',
-            RoundedOff: '',
-            BalanceReceivable: '',
-            NetAmount: '',
-            Totalamount: '',
-            paidamount: '',
-            pendingamount: '',
-            BankAccount: '',
-        }));
-        setSelectedCustomerData({});
-        setSelectedCustomerDatas({});
-        setSelectedBankAccount('');
-    };
-
-    const handleClick = async (event, actionName, customer, tripid) => {
-        event.preventDefault();
-        try {
-            if (actionName === 'Print') {
-                handleEInvoiceClick();
-            } else if (actionName === 'Cancel') {
-                handleCancel();
-            } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
-                    setFormData(null);
-                    setSelectedCustomerData(null);
-                    setSuccessMessage("Successfully Deleted");
-                    handleCancel();
-                } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.tripid === tripid);
-                    const updatedCustomer = {
-                        ...selectedCustomerDatas,
-                        ...selectedCustomer,
-                        ...selecting,
-                        ...formData,
-                        MinKilometers: selectedCustomerDatas.minkm || selectedCustomerData.minkm || '',
-                        MinHours: selectedCustomerDatas.minhrs || selectedCustomerData.minhrs || '',
-                        minchargeamount: selectedCustomerData.netamount || selectedCustomerDatas.minchargeamount || book.minchargeamount,
-                        MinCharges: selectedCustomerData.package || selectedCustomerDatas.MinCharges || book.MinCharges,
-                        cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
-                        cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
-                        nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
-                        dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
-                    };
-                    await axios.put(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
-                    handleCancel();
-                } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Add') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.new) {
-                    if (!customer) {
-                        setError(true);
-                        setErrorMessage("Fill mandatory fields");
-                        return;
-                    }
-
-                    const updatedBook = {
-                        ...book,
-                        ...selecting,
-                        Billingdate: selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
-                        cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
-                        cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
-                        nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
-                        dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
-                    };
-                    await axios.post('http://localhost:8081/billing', updatedBook);
-                    handleCancel();
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Added");
-                } else {
-                    // Display a warning or prevent the action
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
-                }
-            }
-
-        } catch (err) {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-        }
-    };
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
         }
-    });
-
-    const calculateTotalAmount = () => {
-        const totalkm1 = selectedCustomerDatas?.totalkm1 || selectedCustomerData?.totalkm1 || book.ChargesForExtra;
-        const ChargesForExtraamount = selectedCustomerDatas?.ChargesForExtraamount || selectedCustomerData?.ChargesForExtraamount || book.ChargesForExtraamount;
-        if (totalkm1 !== undefined && ChargesForExtraamount !== undefined) {
-            const totalKm = totalkm1 * ChargesForExtraamount;
-            return totalKm.toFixed(2);
-        }
-        return '';
-    };
-
-    const calculateTotalAmount2 = () => {
-        const totaltime = selectedCustomerData?.totaltime || selectedCustomerDatas?.totaltime || book.ChargesForExtraHRS;
-        const ChargesForExtraHRSamount = selectedCustomerData?.ChargesForExtraHRSamount || selectedCustomerDatas?.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount;
-
-        if (totaltime !== undefined && ChargesForExtraHRSamount !== undefined) {
-            const [hours, minutes] = totaltime.split('h');
-            const hoursInMinutes = parseFloat(hours) * 60 + parseFloat(minutes);
-            const ratePerHour = parseFloat(ChargesForExtraHRSamount);
-            const totalAmount = hoursInMinutes * (ratePerHour / 60);
-
-            if (isNaN(totalAmount)) {
-                return "0.00";
-            } else {
-                return totalAmount.toFixed(2);
-            }
-        }
-        return "0.00";
-    };
-
-    const calculateTotalAmount3 = () => {
-        const NightHalt = selectedCustomerData.night || selectedCustomerDatas.NightHalt || book.NightHalt;
-        const NightHaltamount = selectedCustomerData.NightHaltamount || selectedCustomerDatas.NightHaltamount || book.NightHaltamount;
-        if (NightHalt !== undefined && NightHaltamount !== undefined) {
-            const totalnights = NightHalt * NightHaltamount;
-            return totalnights.toFixed(2);
-        }
-        return '';
-    };
-
-    const calculateTotalAmount4 = () => {
-        const driverbata = selectedCustomerData.driverbata || selectedCustomerDatas.driverbata || book.driverbata;
-        const driverbataamount = selectedCustomerData.driverbataamount || selectedCustomerDatas.driverbataamount || book.driverbataamount;
-        if (driverbata !== undefined && driverbataamount !== undefined) {
-            const totaldriverbata = driverbata * driverbataamount;
-            return totaldriverbata.toFixed(2);
-        }
-        return '';
-    };
-
-    const calculatePayableAmount = () => {
-        const DiscountAmount = selectedCustomerData.DiscountAmount || selectedCustomerDatas.DiscountAmount || book.DiscountAmount;
-        const AdvanceReceived = selectedCustomerData.AdvanceReceived || selectedCustomerDatas.AdvanceReceived || book.AdvanceReceived;
-        if (DiscountAmount !== undefined && AdvanceReceived !== undefined) {
-            const netAmount = calculateGrossAmount() - DiscountAmount - AdvanceReceived;
-            return netAmount.toFixed(2);
-        }
-        return '';
-    };
-
-    const calculatePendingAmount = () => {
-        const totalamount = calculateroundedPayableAmount() || book.Totalamount;
-        const paidamount = selectedCustomerData.paidamount || selectedCustomerDatas.paidamount || book.paidamount;
-        if (totalamount !== undefined && paidamount !== undefined) {
-            const totalpending = totalamount - paidamount;
-            return totalpending.toFixed(2);
-        }
-        return '';
-    };
-
-    const calculateRoundOff = () => {
-        const balanceAmount =
-            parseFloat(calculatePayableAmount()) ||
-            parseFloat(book.BalanceReceivable) ||
-            0;
-        const roundedGrossAmount = Math.ceil(balanceAmount);
-        const roundOff = roundedGrossAmount - balanceAmount;
-        return roundOff.toFixed(2);
-    };
-
-    const calculateroundedPayableAmount = () => {
-        const balanceAmount = parseFloat(calculatePayableAmount() || book.BalanceReceivable) || 0;
-        const roundOff = parseFloat(calculateRoundOff() || book.RoundedOff) || 0;
-
-        const totalAmount = balanceAmount + roundOff;
-        return totalAmount.toFixed(2);
-    };
-
-    const calculateGrossAmount = () => {
-        const {
-            minchargeamount,
-            netamount,
-            cfehamount,
-            cfeamount,
-            nhamount,
-            dbamount,
-            OtherChargesamount,
-            permitothertax,
-            parkingtollcharges,
-        } = selectedCustomerData || selectedCustomerDatas || book;
-
-        const parsedValues = [
-            parseFloat(calculateTotalAmount()) || 0,
-            parseFloat(calculateTotalAmount2() || book.cfehamount) || 0,
-            parseFloat(calculateTotalAmount3() || book.nhamount) || 0,
-            parseFloat(calculateTotalAmount4() || book.dbamount) || 0,
-            parseFloat(minchargeamount || selectedCustomerDatas.minchargeamount) || 0,
-            parseFloat(cfeamount) || 0,
-            parseFloat(netamount) || 0,
-            parseFloat(cfehamount) || 0,
-            parseFloat(nhamount) || 0,
-            parseFloat(dbamount) || 0,
-            parseFloat(OtherChargesamount || selectedCustomerDatas.OtherChargesamount || selectedCustomerData.OtherChargesamount) || 0,
-            parseFloat(permitothertax || selectedCustomerDatas.permitothertax || selectedCustomerData.permitothertax) || 0,
-            parseFloat(parkingtollcharges || selectedCustomerDatas.parkingtollcharges || selectedCustomerData.parkingtollcharges) || 0,
-        ];
-
-        const gross = parsedValues.reduce((sum, value) => sum + value, 0);
-        return gross.toFixed(2);
-    };
-
-    const handleKeyDown = useCallback(async (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            try {
-                const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
-                const bookingDetails = response.data;
-                setSelectedCustomerData(bookingDetails);
-            } catch (error) {
-                setError(true);
-                setErrorMessage('Error retrieving booking details.');
-            }
-        }
-    }, []);
-
-    const handleKeyenter = useCallback(async (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            try {
-                const response = await axios.get(`http://localhost:8081/billing/${event.target.value}`);
-                const billingDetails = response.data;
-                setSelectedCustomerDatas(billingDetails);
-            } catch (error) {
-                setError(true);
-                setErrorMessage('Error retrieving billings details.');
-            }
-        }
-    }, []);
-
-    const selecting = {
-        tripid: selectedCustomerDatas.tripid || selectedCustomerData.tripid || '',
-        billingno: selectedCustomerDatas.billingno || selectedCustomerData.billingno || '',
-        totalkm1: selectedCustomerDatas.totalkm1 || selectedCustomerData.totalkm1 || '',
-        totaltime: selectedCustomerDatas.totaltime || selectedCustomerData.totaltime || '',
-        customer: selectedCustomerDatas.customer || selectedCustomerData.customer || '',
-        supplier: selectedCustomerDatas.supplier || selectedCustomerData.supplier || '',
-        startdate: selectedCustomerDatas.startdate || selectedCustomerData.startdate || '',
-        totaldays: selectedCustomerDatas.totaldays || selectedCustomerData.totaldays || '',
-        guestname: selectedCustomerDatas.guestname || selectedCustomerData.guestname || '',
-        rateType: selectedCustomerDatas.rateType || selectedCustomerData.rateType || '',
-        vehRegNo: selectedCustomerDatas.vehRegNo || selectedCustomerData.vehRegNo || '',
-        vehType: selectedCustomerDatas.vehType || selectedCustomerData.vehType || '',
-        duty: selectedCustomerDatas.duty || selectedCustomerData.duty || '',
-        MinCharges: selectedCustomerDatas.package || selectedCustomerData.package || '',
-        minchargeamount: selectedCustomerDatas.netamount || selectedCustomerData.netamount || '',
-        ChargesForExtra: selectedCustomerDatas.totalkm1 || selectedCustomerData.totalkm1 || '',
-        ChargesForExtraamount: selectedCustomerDatas.ChargesForExtraamount || selectedCustomerData.ChargesForExtraamount || '',
-        cfeamount: selectedCustomerDatas.cfeamount || selectedCustomerData.cfeamount || calculateTotalAmount() || '',
-        ChargesForExtraHRS: selectedCustomerDatas.totaltime || selectedCustomerData.totaltime || '',
-        ChargesForExtraHRSamount: selectedCustomerDatas.ChargesForExtraHRSamount || selectedCustomerData.ChargesForExtraHRSamount || '',
-        cfehamount: selectedCustomerDatas.cfehamount || selectedCustomerData.cfehamount || calculateTotalAmount2() || '',
-        NightHalt: selectedCustomerDatas.night || selectedCustomerData.night || book.NightHalt || '',
-        NightHaltamount: selectedCustomerDatas.NightHaltamount || selectedCustomerData.NightHaltamount || '',
-        nhamount: selectedCustomerDatas.nhamount || selectedCustomerData.nhamount || calculateTotalAmount3() || '',
-        driverbata: selectedCustomerDatas.driverbata || selectedCustomerData.driverbata || '',
-        driverbataamount: selectedCustomerDatas.driverbataamount || selectedCustomerData.driverbataamount || '',
-        dbamount: selectedCustomerDatas.dbamount || selectedCustomerData.dbamount || calculateTotalAmount4() || '',
-        OtherCharges: selectedCustomerDatas.OtherCharges || selectedCustomerData.OtherCharges || '',
-        OtherChargesamount: selectedCustomerDatas.OtherChargesamount || selectedCustomerData.OtherChargesamount || '',
-        permitothertax: selectedCustomerDatas.permitothertax || selectedCustomerData.permitothertax || '',
-        parkingtollcharges: selectedCustomerDatas.parkingtollcharges || selectedCustomerData.parkingtollcharges || '',
-        MinKilometers: selectedCustomerDatas.minkm || selectedCustomerData.minkm || '',
-        MinHours: selectedCustomerDatas.minhrs || selectedCustomerData.minhrs || '',
-        GrossAmount: selectedCustomerDatas.GrossAmount || selectedCustomerData.GrossAmount || calculateGrossAmount() || '',
-        AfterTaxAmount: selectedCustomerDatas.AfterTaxAmount || selectedCustomerData.AfterTaxAmount || '',
-        DiscountAmount: selectedCustomerDatas.DiscountAmount || selectedCustomerData.DiscountAmount || '',
-        DiscountAmount2: selectedCustomerDatas.DiscountAmount2 || selectedCustomerData.DiscountAmount2 || '',
-        AdvanceReceived: selectedCustomerDatas.AdvanceReceived || selectedCustomerData.AdvanceReceived || '',
-        RoundedOff: selectedCustomerDatas.RoundedOff || selectedCustomerData.RoundedOff || calculateRoundOff() || '',
-        BalanceReceivable: selectedCustomerDatas.BalanceReceivable || selectedCustomerData.BalanceReceivable || calculatePayableAmount() || '',
-        NetAmount: selectedCustomerDatas.NetAmount || selectedCustomerData.NetAmount || calculateroundedPayableAmount() || '',
-        Totalamount: selectedCustomerDatas.Totalamount || selectedCustomerData.Totalamount || calculateroundedPayableAmount() || '',
-        paidamount: selectedCustomerDatas.paidamount || selectedCustomerData.paidamount || calculatePayableAmount() || '',
-        pendingamount: selectedCustomerDatas.pendingamount || selectedCustomerData.pendingamount || calculatePendingAmount() || '',
-        BankAccount: selectedCustomerDatas.BankAccount || selectedCustomerData.BankAccount || selectedBankAccount || '',
-    }
-
-    useEffect(() => {
-        fetchBankOptions()
-            .then((data) => {
-                if (data) {
-                    setBankOptions(data);
-                } else {
-                    setError(true);
-                    setErrorMessage('Failed to fetch bank options.');
-                }
-            })
-            .catch(() => {
-                setError(true);
-                setErrorMessage('Failed to fetch bank options.');
-            });
-    }, []);
-
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const formData = {};
-
-        const parameterKeys = [
-            'tripid', 'billingno', 'Billingdate', 'totalkm1', 'totaltime', 'customer', 'supplier', 'startdate', 'totaldays', 'guestname', 'rateType', 'vehRegNo', 'vehType', 'duty', 'MinCharges', 'minchargeamount', 'ChargesForExtra', 'ChargesForExtraamount', 'cfeamount', 'ChargesForExtraHRS', 'ChargesForExtraHRSamount', 'cfehamount', 'NightHalt', 'NightHaltamount', 'nhamount', 'driverbata', 'driverbataamount', 'dbamount', 'OtherCharges', 'OtherChargesamount', 'permitothertax', 'parkingtollcharges', 'MinKilometers', 'MinHours', 'GrossAmount', 'AfterTaxAmount', 'DiscountAmount', 'DiscountAmount2', 'AdvanceReceived', 'RoundedOff', 'BalanceReceivable', 'NetAmount', 'Totalamount', 'paidamount', 'pendingamount', 'BankAccount'
-        ];
-        parameterKeys.forEach(key => {
-            const value = params.get(key);
-            if (value !== null && value !== "null") {
-                formData[key] = value;
-            }
-        });
-        setBook(formData);
-        setFormData(formData);
-    }, [location]);
-
-    useEffect(() => {
-        window.history.replaceState(null, document.title, window.location.pathname);
-        const initialFormData = {};
-        setFormData(initialFormData);
-    }, []);
-
-    const [tripSheetData] = useState({
-        tripid: '',
-        billingno: '',
-        Billingdate: '',
-        totalkm1: '',
-        totaltime: '',
-        customer: '',
-        supplier: '',
-        startdate: '',
-        totaldays: '',
-        guestname: '',
-        rateType: '',
-        vehRegNo: '',
-        vehType: '',
-        duty: '',
-        MinCharges: '',
-        minchargeamount: '',
-        ChargesForExtra: '',
-        ChargesForExtraamount: '',
-        ChargesForExtraHRS: '',
-        ChargesForExtraHRSamount: '',
-        cfehamount: '',
-        NightHalt: '',
-        NightHaltamount: '',
-        nhamount: '',
-        driverbata: '',
-        driverbataamount: '',
-        dbamount: '',
-        OtherCharges: '',
-        OtherChargesamount: '',
-        permitothertax: '',
-        parkingtollcharges: '',
-        MinKilometers: '',
-        MinHours: '',
-        GrossAmount: '',
-        AfterTaxAmount: '',
-        DiscountAmount: '',
-        DiscountAmount2: '',
-        AdvanceReceived: '',
-        paidamount: '',
-        BankAccount: '',
-        RoundedOff: calculateRoundOff(),
-    });
-
-    //for invoice page
-
-    const [routeData, setRouteData] = useState('');
-    const [tripData, setTripData] = useState('');
-    const [customerData, setCustomerData] = useState('');
-    const [mapimageUrl, setMapImageUrl] = useState('');
-    const [GmapimageUrl, setGMapImageUrl] = useState('');
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
-            try {
-                const response = await fetch(`http://localhost:8081/routedata/${encodeURIComponent(tripid)}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const routeData = await response.json();
-                setRouteData(routeData);
-            } catch (error) {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
-            try {
-                const response = await fetch(`http://localhost:8081/tripsheet/${tripid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const tripData = await response.json();
-                setTripData(tripData);
-            } catch (error) {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const customer = localStorage.getItem('selectedcustomerid');
-            try {
-                const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const customerData = await response.json();
-                setCustomerData(customerData);
-            } catch (error) {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
-            }
-        };
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
-            try {
-                const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const imageUrl = URL.createObjectURL(await response.blob());
-                setMapImageUrl(imageUrl);
-            } catch (error) {
-                setError(true);
-                setErrorMessage('Error fetching map image.');
-            }
-        };
-
-        fetchData();
-        return () => { };
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
-            try {
-                const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const gimageUrl = URL.createObjectURL(await response.blob());
-                setGMapImageUrl(gimageUrl);
-            } catch {
-            }
-        };
-        fetchData();
-        return () => {
-        };
-    }, []);
-
-    const organizationaddress1 = customerData.address1;
-    const organizationaddress2 = customerData.address2;
-    const organizationcity = customerData.city;
-    const organizationgstnumber = customerData.gstnumber;
-    const tripdepartment = tripData.department;
-    const tripcode = tripData.customercode;
-    const triprequest = tripData.request;
-    const tripShedkm = tripData.shedkm;
-    const tripshedin = tripData.shedin;
-    const tripshedout = tripData.shedout;
-    const tripreporttime = tripData.reporttime;
-    const tripshedintime = tripData.shedintime;
-    const tripadditionaltime = tripData.additionaltime;
-    const tripstartkm = tripData.startkm;
-    const tripclosekm = tripData.closekm;
-    const tripstarttime = tripData.starttime;
-    const tripclosetime = tripData.closetime;
-    const tripstartdate = tripData.startdate;
-    const tripclosedate = tripData.closedate;
-    const roundOffValue = calculateRoundOff();
-    const BalanceValue = calculatePayableAmount();
-    const TotalAmountValue = calculateroundedPayableAmount();
+    }, [actionName, handleClick]);
 
     return (
         <div className="form-container">

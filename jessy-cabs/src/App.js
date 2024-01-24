@@ -47,7 +47,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 1000);
   }, []);
 
   return (
@@ -92,8 +92,7 @@ function App() {
               </Route>
               <Route path="/home/settings" element={<Settings />}>
                 <Route path="/home/settings/usercreation" element={<UserCreation />} />
-                <Route path="/home/settings/stationcreation" element={<StationCreation />}
-                />
+                <Route path="/home/settings/stationcreation" element={<StationCreation />} />
                 <Route path="/home/settings/permission" element={<Permission />} />
                 <Route path="/home/settings/mainsetting" element={<MainSetting />} />
               </Route>

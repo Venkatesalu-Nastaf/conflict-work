@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
 import "./UserInfo.css";
 import Input from '@mui/material/Input';
 import Button from "@mui/material/Button";
@@ -21,6 +20,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import useUserinfo from './useUserinfo';
 
 // REACT ICONS
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -32,213 +32,44 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 
 const UserSetting = ({ userid }) => {
-    const [selectedCustomerData, setSelectedCustomerData] = useState({});
-    const [rows] = useState([]);
-    const [showPasswords, setShowPasswords] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [editMode, setEditMode] = useState(false);
-    const [error, setError] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [info, setInfo] = useState(false);
-    const [warning, setWarning] = useState(false);
-    const [successMessage, setSuccessMessage] = useState({});
-    const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage] = useState({});
-    const [infoMessage] = useState({});
 
-    const storeUserId = localStorage.getItem('useridno');//for getting userid 
-    // console.log('Stored UserId:', storeUserId);
+    const {
+        selectedCustomerData,
+        actionName,
+        error,
+        success,
+        info,
+        warning,
+        successMessage,
+        errorMessage,
+        warningMessage,
+        infoMessage,
+        book,
+        handleClick,
+        handleChange,
+        hidePopup,
+        selectedImage,
+        editMode,
+        handleFileChange,
+        toggleEditMode,
+        showPasswords,
+        handleClickShowPasswords,
+        handleClickShowPassword,
+        handleMouseDownPassword,
+        handleUpload,
+        handleMouseDownPasswords,
+        showPassword,
+        handleUpdate,
 
-    const [book, setBook] = useState({
-        userid: '',
-        username: '',
-        ufirstname: '',
-        ulastname: '',
-        mobileno: '',
-        email: '',
-        designation: '',
-        userpassword: '',
-        userconfirmpassword: '',
-    });
 
-    const handleUpdate = async () => {
-        try {
-            const selectedCustomer = rows.find((row) => row.userid === userid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://localhost:8081/usercreation/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
-            setSuccess(true);
-            setSuccessMessage("Successfully updated");
-            setEditMode((prevEditMode) => !prevEditMode);
-        }
-        catch {
-            setError(true);
-            setErrorMessage("Something went wrong");
-        }
-    };
-
-    const handleChange = (event) => {
-        event.preventDefault();
-
-        const { name, value } = event.target;
-        console.log('Name:', name);
-        console.log('Value:', value);
-
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: value,
-        }));
-
-        setSelectedCustomerData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleClickShowPasswords = () => {
-        setShowPasswords((show) => !show);
-    };
-
-    const handleMouseDownPasswords = (event) => {
-        event.preventDefault();
-    };
-
-    const handleClickShowPassword = () => {
-        setShowPassword((show) => !show);
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
+        // ... (other state variables and functions)
+    } = useUserinfo();
 
     useEffect(() => {
-        // Retrieve the stored image URL from localStorage on component mount
-        const storedImage = localStorage.getItem('uploadedImage');
-        if (storedImage) {
-            setSelectedImage(storedImage);
+        if (actionName === 'List') {
+            handleClick(null, 'List');
         }
-    }, []);
-
-    const handleUpload = () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.pdf, .jpg, .jpeg, .png';
-        input.onchange = handleFileChange;
-        input.click();
-    };
-    //file upload
-    const handleFileChange = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        setSelectedImage(file);
-        const formDataUpload = new FormData();
-        formDataUpload.append('file', file);
-        formDataUpload.append('userid', selectedCustomerData[0]?.userid || book.userid || storeUserId);
-        try {
-            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            console.log(response);
-            const imageUrl = response.data.imageUrl;
-            setSelectedImage(imageUrl);
-            localStorage.setItem('uploadedImage', imageUrl);
-        } catch {
-        }
-    };
-    //end file upload  
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userid = localStorage.getItem('useridno');
-                // console.log('user company display', userid);
-
-                if (!userid) {
-                    return;
-                }
-                const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-                // console.log(attachedImageUrls);
-                setSelectedImage(attachedImageUrls);
-            } catch {
-            }
-        };
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const userid = localStorage.getItem('useridno');
-            try {
-                const response = await fetch(`http://localhost:8081/userdataforuserinfo/${userid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const userDataArray = await response.json(); // Parse JSON data
-                if (userDataArray.length > 0) {
-                    setSelectedCustomerData(userDataArray[0]);
-                } else {
-                    // Handle the case when the array is empty
-                    setErrorMessage('User data not found.');
-                    setError(true);
-                }
-            } catch {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
-            }
-        };
-
-        fetchData();
-    }, []);
-    // const orucompany = selectedCustomerData[0]?.username;
-    // // console.log('collected company datas display', orucompany);
-
-    const hidePopup = () => {
-        setSuccess(false);
-        setError(false);
-        setInfo(false);
-        setWarning(false);
-    };
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
-
-    const toggleEditMode = () => {
-        // console.log('Toggling edit mode...');
-        setEditMode((prevEditMode) => !prevEditMode);
-    };
+    }, [actionName, handleClick]);
 
     return (
         <div className="userinfo-form Scroll-Style-hide">
@@ -280,7 +111,7 @@ const UserSetting = ({ userid }) => {
                                 </div>
                             </div>
                             <div className='container-userinfo-right'>
-                           
+
                                 <div className="input-field">
                                     <div className="input" style={{ width: "300px" }}>
                                         <div className="icone">

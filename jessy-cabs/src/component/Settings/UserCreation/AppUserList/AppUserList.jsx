@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import "./AppUserList.css";
 import Button from "@mui/material/Button";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -8,95 +8,38 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import DescriptionIcon from "@mui/icons-material/Description";
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import useAppuserlist from './useAppuserlist';
 
-// TABLE START
-const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "driverName", headerName: "Driver Name", width: 130 },
-  { field: "startdate", headerName: "Date", width: 130 },
-  { field: "vehType", headerName: "Vehicle Type", width: 130 },
-  { field: "apps", headerName: "Active", width: 130 },
-  { field: "mobileNo", headerName: "Mobile", width: 130 },
-];
 
-// TABLE END
 const AppUserList = () => {
 
-  const [rows, setRows] = useState([]);
-  const [apps, setApps] = useState('active'); // Default to 'active'
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [info, setInfo] = useState(false);
-  const [warning, setWarning] = useState(false);
-  const [successMessage, setSuccessMessage] = useState({});
-  const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage] = useState({});
-  const [infoMessage] = useState({});
+  const {
+    rows,
+    actionName,
+    error,
+    success,
+    info,
+    warning,
+    successMessage,
+    errorMessage,
+    warningMessage,
+    infoMessage,
+    handleClick,
+    hidePopup,
+    apps,
+    handleChangeStatus,
+    handleListButtonClick,
+    columns,
 
-
-
-  const hidePopup = () => {
-    setSuccess(false);
-    setError(false);
-    setInfo(false);
-    setWarning(false);
-  };
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [error]);
+    // ... (other state variables and functions)
+  } = useAppuserlist();
 
   useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+    if (actionName === 'List') {
+      handleClick(null, 'List');
     }
-  }, [success]);
-  useEffect(() => {
-    if (warning) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [warning]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [info]);
+  }, [actionName, handleClick]);
 
-  const handleListButtonClick = () => {
-    fetch(`http://localhost:8081/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.length > 0) {
-          setRows(data);
-          setSuccess(true);
-          setSuccessMessage("Successfully listed");
-        } else {
-          setRows([]);
-          setError(true);
-          setErrorMessage("No data found");
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  };
-
-  const handleChangeStatus = (event) => {
-    setApps(event.target.value);
-  };
   return (
     <div className="appuserlist-form">
       <form action="">

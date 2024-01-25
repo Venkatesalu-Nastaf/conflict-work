@@ -68,7 +68,6 @@ const useTransferdataentry = () => {
                 const currentPageName = 'CB Billing';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-                console.log('permission data', response.data);
             } catch (error) {
                 console.error('Error fetching user permissions:', error);
             }
@@ -160,6 +159,7 @@ const useTransferdataentry = () => {
         localStorage.removeItem('selectedcustomerid');
         localStorage.removeItem('fromDate');
         localStorage.removeItem('toDate');
+        localStorage.removeItem('selectedRowCount');
     };
 
     const hidePopup = () => {
@@ -319,7 +319,6 @@ const useTransferdataentry = () => {
         const hours = Math.floor(calculatedTotalTimeInMinutes / 60);
         const minutes = calculatedTotalTimeInMinutes % 60;
         const formattedTotalTime = `${hours}h ${minutes}m`;
-        console.log('total tiime: ', formattedTotalTime);
         setTotalTime(formattedTotalTime);
     }, [rows]);
 
@@ -359,7 +358,8 @@ const useTransferdataentry = () => {
         setRowSelectionModel(selectedTripIds);
         const tripsheetid = selectedTripIds;
         localStorage.setItem('selectedtripsheetid', tripsheetid);
-        console.log('Selected Trip IDs:', selectedTripIds);
+        const selectedRowCount = selectedTripIds.length;
+        localStorage.setItem('selectedrowcount', selectedRowCount);
     };
 
     const handleClickGenerateBill = () => {
@@ -371,12 +371,10 @@ const useTransferdataentry = () => {
     const handleButtonClickTripsheet = (row) => {
         const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
         const customername = customerdata;
-        console.log('customer name', customername);
         localStorage.setItem('selectedcustomer', customername);
         const storedCustomer = localStorage.getItem('selectedcustomer');
         const decodedCustomer = decodeURIComponent(storedCustomer);
         localStorage.setItem('selectedcustomerdata', decodedCustomer);
-        console.log(decodedCustomer);
         const billingPageUrl = `/home/billing/transfer?tab=TransferReport`;
         window.location.href = billingPageUrl;
     }
@@ -408,6 +406,37 @@ const useTransferdataentry = () => {
         } catch {
             setError(true);
             setErrorMessage('An error occurred. Please try again later.');
+        }
+    };
+
+
+    const handleAdd = async () => {
+        const permissions = checkPagePermission();
+        const selectedRowCount = localStorage.getItem('selectedrowcount');
+        const selectedTripIds = localStorage.getItem('selectedtripsheetid');
+        const firstSelectedRow = rows.find(row => row.id === parseInt(selectedTripIds[0], 10));
+        const guestnameFromFirstRow = firstSelectedRow ? firstSelectedRow.guestname : '';
+
+        if (permissions.read && permissions.new) {
+            const updatedBook = {
+                ...book,
+                Billingdate: Billingdate || book.Billingdate,
+                invoiceno: invoiceno || book.invoiceno,
+                customer: customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : '') || '',
+                fromdate: fromDate ? dayjs(fromDate).format('YYYY-MM-DD') : book.fromdate.format('YYYY-MM-DD'),
+                todate: toDate ? dayjs(toDate).format('YYYY-MM-DD') : book.todate.format('YYYY-MM-DD'),
+                station: servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '',
+                Totalamount: totalAmount,
+                status: 'Billed',
+                trips: selectedRowCount,
+                guestname: guestnameFromFirstRow,
+            };
+            await axios.post('http://localhost:8081/billing', updatedBook);
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } else {
+            setWarning(true);
+            setWarningMessage("You do not have permission.");
         }
     };
 
@@ -456,35 +485,13 @@ const useTransferdataentry = () => {
 
     // const reversedRows = [...rows].reverse();
 
-    const handleAdd = async () => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.new) {
-            const updatedBook = {
-                ...book,
-                Billingdate: Billingdate || book.Billingdate,
-                invoiceno: invoiceno || book.invoiceno,
-                customer: customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || '',
-                fromdate: (fromDate || book.fromdate).format('YYYY-MM-DD'),
-                todate: (toDate || book.todate).format('YYYY-MM-DD'),
-                station: servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '',
-                Totalamount: totalAmount
-            };
-            await axios.post('http://localhost:8081/billing', updatedBook);
-            setSuccess(true);
-            setSuccessMessage("Successfully Added");
-        } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
-        }
-    };
 
     const handleKeyenter = useCallback(async (event) => {
 
         if (event.key === 'Enter') {
             try {
                 const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
-                console.log('Sending request for invoiceno:', invoiceNumber);
                 const response = await axios.get(`http://localhost:8081/billingdata/${invoiceNumber}`);
                 if (response.status === 200) {
                     const billingDetails = response.data;
@@ -516,8 +523,6 @@ const useTransferdataentry = () => {
             const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
             const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
-
-            console.log('Selected values:', { customer: customerValue, fromDate: fromDateValue, toDate: toDateValue, servicestation: servicestationValue });
 
             const response = await axios.get(`http://localhost:8081/Group-Billing`, {
                 params: {

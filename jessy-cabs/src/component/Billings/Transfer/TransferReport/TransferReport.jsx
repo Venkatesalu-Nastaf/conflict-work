@@ -56,6 +56,7 @@ const TransferReport = () => {
     warningMessage,
     handleClick,
     isFieldReadOnly,
+    ratetypeforpage,
     hidePopup,
     routedData,
     date,
@@ -63,7 +64,6 @@ const TransferReport = () => {
     tripData,
     bankOptions,
     setCustomer,
-    rateType,
     servicestation,
     handleserviceInputChange,
     handleEInvoiceClick,
@@ -175,7 +175,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="Rate Type"
-                    value={(rateType?.rateType) || ''}
+                    value={ratetypeforpage || ''}
                     name="ratetype"
                     autoComplete='off'
                   />
@@ -186,7 +186,7 @@ const TransferReport = () => {
                     id="id"
                     label="Invoice Date"
                     value={(routedData?.[0]?.Billingdate) || ''}
-                    name="ratetype"
+                    name="Billdate"
                     autoComplete='off'
                   />
                 </div>
@@ -198,7 +198,7 @@ const TransferReport = () => {
                     id="id"
                     label="From Date"
                     value={(routedData?.[0]?.fromdate) || ''}
-                    name="ratetype"
+                    name="fromdate"
                     autoComplete='off'
                   />
                 </div>
@@ -208,7 +208,7 @@ const TransferReport = () => {
                     id="id"
                     label="To Date"
                     value={(routedData?.[0]?.todate) || ''}
-                    name="ratetype"
+                    name="todate"
                     autoComplete='off'
                   />
                 </div>
@@ -269,7 +269,7 @@ const TransferReport = () => {
                 </Button>
               </DialogActions>
             </Dialog>
-            {/* //mapinnvoice */}
+            {/* mapinnvoice */}
             <Dialog open={npopupOpen} onClose={handlePopupClose}>
               <DialogContent>
                 <Mapinvoice />

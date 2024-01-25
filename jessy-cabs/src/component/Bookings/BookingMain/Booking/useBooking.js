@@ -92,8 +92,8 @@ const useBooking = () => {
                 const currentPageName = 'Booking';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
+             
             }
         };
 
@@ -511,7 +511,6 @@ const useBooking = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            // Display a warning or prevent the action
             setWarning(true);
             setWarningMessage("You do not have permission.");
         }
@@ -560,7 +559,6 @@ const useBooking = () => {
                         orderbyemail: selectedCustomerDatas.customeremail,
                         orderedby: selectedCustomerDatas.name,
                         mobile: selectedCustomerDatas.phoneno,
-
                     };
                     await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
                     handleCancel();
@@ -689,7 +687,6 @@ const useBooking = () => {
 
     }, [handleChange, rows, enterPressCount]);
 
-
     const handleRowClick = useCallback((params) => {
         setSelectedCustomerDatas(params);
         handleChange({ target: { name: "customer", value: params.customer } });
@@ -807,7 +804,6 @@ const useBooking = () => {
             }
         }
     };
-
 
     return {
         selectedCustomerData,

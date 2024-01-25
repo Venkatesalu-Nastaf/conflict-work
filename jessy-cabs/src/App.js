@@ -56,7 +56,6 @@ function App() {
         {isLoading ? (
           <div className="loading-spinners">
             <ThreeCircles color="#3d92f3" height={80} width={80} />
-            {/* <ThreeCircles color="#00BFFF" height={80} width={130} /> */}
           </div>
         ) : (
           <Routes>

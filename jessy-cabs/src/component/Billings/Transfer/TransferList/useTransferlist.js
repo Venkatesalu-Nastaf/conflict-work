@@ -180,11 +180,11 @@ const useTransferlist = () => {
                 const rowsWithUniqueId = data.map((row, index) => ({
                     ...row,
                     id: index + 1,
-                    Trips: row.trip_count,
-                    toll: row.total_toll,
-                    amount: row.total_Amount,
-                    grossamount: row.total_Amount,
-                    guestname: row.customer,
+                    // Trips: row.trip_count,
+                    // toll: row.total_toll,
+                    // amount: row.total_Amount,
+                    // grossamount: row.total_Amount,
+                    // guestname: row.customer,
                 }));
                 setRows(rowsWithUniqueId);
                 setSuccess(true);
@@ -204,22 +204,15 @@ const useTransferlist = () => {
 
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
-        { field: "vcode", headerName: "VCode", width: 130 },
+        { field: "status", headerName: "Status", width: 130 },
         { field: "invoiceno", headerName: "Invoice No", width: 130 },
         { field: "date", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
         { field: "customer", headerName: "Customer", width: 130 },
-        { field: "monthid", headerName: "MonthID", width: 130 },
-        { field: "fdate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
-        { field: "tdate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+        { field: "fromdate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+        { field: "todate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
         { field: "guestname", headerName: "UserName", width: 150 },
-        { field: "Trips", headerName: "Trips", width: 150 },
-        { field: "Subtotal", headerName: "SubTotal", width: 150 },
-        { field: "grossamount", headerName: "GrossAmount", width: 150 },
-        { field: "gst", headerName: "GST%", width: 130 },
-        { field: "toll", headerName: "Toll", width: 130 },
-        { field: "amount", headerName: "Amount", width: 130 },
-        { field: "status", headerName: "Status", width: 130 },
-        { field: "Diff", headerName: "Diff", width: 130 },
+        { field: "trips", headerName: "Trips", width: 150 },
+        { field: "Totalamount", headerName: "Amount", width: 130 },
     ];
 
     const handleButtonClickTripsheet = (row) => {

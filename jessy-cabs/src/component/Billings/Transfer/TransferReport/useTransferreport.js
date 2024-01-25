@@ -36,7 +36,6 @@ const useTransferreport = () => {
                 const currentPageName = 'CB Billing';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-                console.log('permission data', response.data);
             } catch (error) {
                 console.error('Error fetching user permissions:', error);
             }
@@ -179,6 +178,11 @@ const useTransferreport = () => {
         localStorage.removeItem('selectedcustomerdata');
         localStorage.removeItem('selectedcustomer');
         localStorage.removeItem('selectedcustomerid');
+        localStorage.removeItem('selectedtripsheetid');
+        localStorage.removeItem('fromDate');
+        localStorage.removeItem('toDate');
+        setRoutedData({});
+        setTripData({});
     };
 
     const hidePopup = () => {
@@ -197,8 +201,6 @@ const useTransferreport = () => {
                 localStorage.setItem('selectedcustomer', encoded);
                 const storedCustomer = localStorage.getItem('selectedcustomer');
                 const customer = decodeURIComponent(storedCustomer);
-                console.log('final customer data', customer);
-                console.log('collected data from dataentry', tripid, customer);
                 const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -257,14 +259,12 @@ const useTransferreport = () => {
             const netAmountValue = parseFloat(item.netamount, 10);
             return sum + netAmountValue;
         }, 0);
-
     };
 
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedtripsheetid');
             const customer = localStorage.getItem('selectedcustomer');
-            console.log('local storage customer name', customer);
             if (customer) {
                 try {
                     const response = await fetch(`http://localhost:8081/tripsheetcustomertripid/${customer}/${tripid}`);
@@ -276,15 +276,18 @@ const useTransferreport = () => {
                         setRouteData(responseData);
                         const netAmountSum = calculateNetAmountSum(responseData);
                         setTotalValue(netAmountSum);
+
                         const calculateRoundOff = () => {
                             const balanceAmount = parseFloat(totalValue);
                             const roundedGrossAmount = Math.ceil(balanceAmount);
                             const roundOff = roundedGrossAmount - balanceAmount;
                             return roundOff.toFixed(2);
                         };
+
                         const roundOffValue = calculateRoundOff();
                         setRoundedAmount(roundOffValue);
-                        const sumTotalAndRounded = parseFloat(totalValue) + parseFloat(roundedAmount);
+
+                        const sumTotalAndRounded = parseFloat(netAmountSum) + parseFloat(roundOffValue);
                         setSumTotalAndRounded(sumTotalAndRounded);
                     } else {
                         setError(true);
@@ -301,7 +304,7 @@ const useTransferreport = () => {
 
     useEffect(() => {              //this is for getting organization details
         const fetchData = async () => {
-            const customer = localStorage.getItem('selectedcustomerid');
+            const customer = localStorage.getItem('selectedcustomerdata');
             try {
                 const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
                 if (!response.ok) {
@@ -319,6 +322,7 @@ const useTransferreport = () => {
     const organizationaddress2 = customerData.address2;
     const organizationcity = customerData.city;
     const organizationgstnumber = customerData.gstnumber;
+    const ratetypeforpage = customerData.rateType;
 
 
     useEffect(() => {
@@ -348,9 +352,6 @@ const useTransferreport = () => {
                 const fromDateValue = fromdate;
                 const toDateValue = todate;
                 const servicestationValue = servicestation || (tripData.length > 0 ? tripData[0].department : '');
-
-                console.log('customer:', customerValue, 'fromDate:', fromDateValue, 'toDate:', toDateValue, 'servicestation:', servicestationValue);
-
                 const response = await axios.get(`http://localhost:8081/Get-Billing`, {
                     params: {
                         customer: customerValue,
@@ -362,7 +363,6 @@ const useTransferreport = () => {
 
                 const routedData = response.data;
                 setRoutedData(routedData);
-                console.log(routedData);
             } catch (error) {
                 setError(true);
                 setErrorMessage('Error fetching tripsheet data.');
@@ -373,29 +373,6 @@ const useTransferreport = () => {
         fetchData();
     }, [customer, servicestation, tripData]);
 
-    const [rateType, setRateType] = useState('');
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const customer = localStorage.getItem('selectedcustomerid');
-            try {
-                const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const rateType = await response.json();
-                setRateType(rateType);
-                console.log('rate type', rateType);
-            } catch {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
-            }
-        };
-        fetchData();
-    }, []);
-
-    const ratename = (rateType?.rateType) || '';
-    console.log('ratetype name', ratename);
 
 
     return {
@@ -413,8 +390,8 @@ const useTransferreport = () => {
         customer,
         tripData,
         bankOptions,
+        ratetypeforpage,
         setCustomer,
-        rateType,
         servicestation,
         handleserviceInputChange,
         handleEInvoiceClick,

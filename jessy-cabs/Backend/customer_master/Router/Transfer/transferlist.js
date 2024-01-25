@@ -2,10 +2,42 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
 
+// router.get('/payment-detail', (req, res) => {
+//   const { customer, fromDate, toDate, servicestation } = req.query;
+
+//   let query = 'SELECT customer, COUNT(tripid) as trip_count, SUM(toll) as total_toll, SUM(netamount) as total_Amount, department FROM tripsheet WHERE 1=1';
+//   let params = [];
+
+//   if (customer) {
+//     const decodedCustomer = decodeURIComponent(customer);
+//     query += ' AND customer = ?';
+//     params.push(decodedCustomer);
+//   }
+
+//   if (fromDate && toDate) {
+//     query += ' AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+//     params.push(fromDate);
+//     params.push(toDate);
+//   }
+
+//   if (servicestation) {
+//     query += ' AND department = ?';
+//     params.push(servicestation);
+//   }
+
+//   db.query(query, params, (err, result) => {
+//     if (err) {
+//       console.error('Error executing database query', err);
+//       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+//     }
+//     return res.status(200).json(result);
+//   });
+// });
+
 router.get('/payment-detail', (req, res) => {
   const { customer, fromDate, toDate, servicestation } = req.query;
 
-  let query = 'SELECT customer, COUNT(tripid) as trip_count, SUM(toll) as total_toll, SUM(netamount) as total_Amount, department FROM tripsheet WHERE 1=1';
+  let query = 'SELECT * FROM billing WHERE 1=1';
   let params = [];
 
   if (customer) {
@@ -15,13 +47,13 @@ router.get('/payment-detail', (req, res) => {
   }
 
   if (fromDate && toDate) {
-    query += ' AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+    query += ' AND Billingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND Billingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
     params.push(fromDate);
     params.push(toDate);
   }
 
   if (servicestation) {
-    query += ' AND department = ?';
+    query += ' AND station = ?';
     params.push(servicestation);
   }
 
@@ -33,6 +65,7 @@ router.get('/payment-detail', (req, res) => {
     return res.status(200).json(result);
   });
 });
+
 
 router.get('/tripsheetcustomertripid/:customer/:tripid', (req, res) => {
   const customer = req.params.customer;

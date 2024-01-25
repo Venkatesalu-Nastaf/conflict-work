@@ -2,10 +2,12 @@ import React from 'react';
 import './Reportinvoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
-import numberToWords from 'number-to-words';
+// import numberToWords from 'number-to-words';
 import Logo from "../../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 // import Signature from "../../../billingMain/Accountsinvoice/signature-1692258849846.png";
 const PrintableInvoice = ({ routeData, routedData, organizationaddress1, sumTotalAndRounded, roundedAmount, totalValue, organizationaddress2, organizationcity, organizationgstnumber }) => {
+ 
+
     return (
         <>
             <div className='Reportinvoice-invoice' >
@@ -93,7 +95,7 @@ const PrintableInvoice = ({ routeData, routedData, organizationaddress1, sumTota
                     </div>
                     <div className="Reportinvoice-total-details">
                         <div className="Reportinvoice-amount">
-                            <p>{numberToWords.toWords(sumTotalAndRounded || '')}</p>
+                            <p></p>
                         </div>
                         <div className="Reportinvoice-Total-details">
                             <dl >

@@ -55,9 +55,7 @@ const columns = [
 ];
 
 const useBooking = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState({});
     const [actionName] = useState('');

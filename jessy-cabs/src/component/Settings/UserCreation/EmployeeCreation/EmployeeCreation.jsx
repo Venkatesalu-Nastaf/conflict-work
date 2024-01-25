@@ -41,8 +41,6 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useEmplyeecreation from './useEmplyeecreation';
 
-
-
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -93,9 +91,6 @@ const EmployeeCreation = () => {
     handleClickShowPassword,
     passwordsMatch,
     columns,
-
-
-    // ... (other state variables and functions)
   } = useEmplyeecreation();
 
   useEffect(() => {
@@ -174,7 +169,6 @@ const EmployeeCreation = () => {
                   onChange={handleChange}
                   label="Designation"
                   id="designation"
-                  sx={{ m: 1, width: "200ch" }}
                   variant="standard"
                 />
               </div>
@@ -189,7 +183,6 @@ const EmployeeCreation = () => {
                   onChange={handleChange}
                   label="Organization"
                   id="designation"
-                  sx={{ m: 1, width: "200ch" }}
                   variant="standard"
                 />
               </div>

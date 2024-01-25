@@ -972,24 +972,21 @@ const Booking = () => {
             <div className='alert-popup Error' >
               <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              {/* <p>{String(errorMessage)}</p> */}
-              <p>{errorMessage && typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage}</p>
+              <p>{errorMessage}</p>
             </div>
           }
           {warning &&
             <div className='alert-popup Warning' >
               <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              {/* <p>{String(warningMessage)}</p> */}
-              <p>{warningMessage && typeof warningMessage === 'object' ? JSON.stringify(warningMessage) : warningMessage}</p>
+              <p>{warningMessage}</p>
             </div>
           }
           {info &&
             <div className='alert-popup Info' >
               <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              {/* <p>{String(infoMessage)}</p> */}
-              <p>{infoMessage && typeof infoMessage === 'object' ? JSON.stringify(infoMessage) : infoMessage}</p>
+              <p>{infoMessage}</p>
             </div>
           }
           {success &&

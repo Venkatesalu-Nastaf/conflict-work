@@ -206,7 +206,7 @@ const useTransferlist = () => {
         { field: "id", headerName: "Sno", width: 70 },
         { field: "status", headerName: "Status", width: 130 },
         { field: "invoiceno", headerName: "Invoice No", width: 130 },
-        { field: "date", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+        { field: "Billingdate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
         { field: "customer", headerName: "Customer", width: 130 },
         { field: "fromdate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
         { field: "todate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },

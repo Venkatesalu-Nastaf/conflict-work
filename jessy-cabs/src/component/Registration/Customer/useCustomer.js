@@ -246,15 +246,16 @@ const useCustomer = () => {
         }));
     };
 
-    const handleDateChange = (date) => {
-        const startOfDay = dayjs(date).format('DD/MM/YYYY');
+    const handleDateChange = (date, name) => {
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
         setBook((prevBook) => ({
             ...prevBook,
-            date: startOfDay,
+            [name]: parsedDate,
         }));
-        setSelectedCustomerData((prevBook) => ({
-            ...prevBook,
-            date: startOfDay,
+        setSelectedCustomerData((prevValues) => ({
+            ...prevValues,
+            [name]: parsedDate,
         }));
     };
 

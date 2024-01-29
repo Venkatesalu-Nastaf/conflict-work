@@ -66,7 +66,8 @@ const Organization = () => {
                                         <Avatar
                                             sx={{ width: "12ch", height: "12ch" }}
                                             alt="userimage"
-                                            src={selectedImage}
+                                            // src={selectedImage}
+                                            src={Array.isArray(selectedImage) ? selectedImage[0] : selectedImage}
                                         >
                                             {selectedImage ? null : (
                                                 <div style={{ 'fontSize': "55px" }}>

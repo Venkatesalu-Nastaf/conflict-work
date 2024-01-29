@@ -26,7 +26,6 @@ const useOrganization = () => {
                 const currentPageName = 'User Creation';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-                console.log('permission data', response.data);
             } catch (error) {
                 console.error('Error fetching user permissions:', error);
             }
@@ -160,10 +159,8 @@ const useOrganization = () => {
                 const selectedCustomer = rows.find((row) => row.organizationname === organizationname);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                 const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
-                console.log('ithuvum etho onnu', companyname);
                 const encode = companyname;
                 const decode = decodeURIComponent(encode);
-                console.log('etho onnu display pannu', decode);
                 await axios.put(`http://localhost:8081/companyupdate/${decode}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
@@ -219,7 +216,6 @@ const useOrganization = () => {
         const fetchData = async () => {
             try {
                 const organizationname = localStorage.getItem('usercompany');
-                console.log('user company display', organizationname);
 
                 if (!organizationname) {
                     return;
@@ -230,7 +226,6 @@ const useOrganization = () => {
                 }
                 const data = await response.json();
                 const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-                console.log(attachedImageUrls);
                 setSelectedImage(attachedImageUrls);
             } catch {
             }
@@ -244,7 +239,6 @@ const useOrganization = () => {
             localStorage.setItem('usercompanyname', encoded);
             const storedcomanyname = localStorage.getItem('usercompanyname');
             const organizationname = decodeURIComponent(storedcomanyname);
-            console.log('user company summa display', organizationname);
             try {
                 const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
                 if (!response.ok) {
@@ -254,19 +248,16 @@ const useOrganization = () => {
                 if (userDataArray.length > 0) {
                     setSelectedCustomerData(userDataArray[0]);
                 } else {
-                    setError(true);
-                    setErrorMessage('User data not found.');
+                   
                 }
             } catch {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
+               
             }
         };
 
         fetchData();
     }, []);
-    const orucompany = selectedCustomerData?.organizationname;
-    console.log('collected company datas display', orucompany);
+
 
     const hidePopup = () => {
         setSuccess(false);

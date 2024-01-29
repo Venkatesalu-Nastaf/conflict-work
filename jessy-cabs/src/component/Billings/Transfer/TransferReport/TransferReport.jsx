@@ -16,7 +16,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
-
+import Mailpdf from './Mailpdf/Mailpdf';
 
 //for popup
 import ClearIcon from '@mui/icons-material/Clear';
@@ -72,6 +72,7 @@ const TransferReport = () => {
     pbpopupOpen,
     handlePopupClose,
     npopupOpen,
+    handleETripsheetClick,
     lxpopupOpen,
     handleExcelDownload,
     handlePdfDownload,
@@ -79,8 +80,10 @@ const TransferReport = () => {
     roundedAmount,
     sumTotalAndRounded,
     totalValue,
+    attachedImage,
     organizationaddress1,
     organizationaddress2,
+    popupOpen,
     organizationcity,
     organizationgstnumber,
 
@@ -239,7 +242,7 @@ const TransferReport = () => {
                   <Button variant="contained" onClick={() => handleEInvoiceClick()} disabled={isFieldReadOnly("new")}>PDF Bill</Button>
                 </div>
                 <div className="input" style={{ width: "180px" }}>
-                  <Button variant="outlined" disabled={isFieldReadOnly("new")} >Booking Mail</Button>
+                  <Button variant="outlined" disabled={isFieldReadOnly("new")} onClick={handleETripsheetClick} >Booking Mail</Button>
                 </div>
                 <div className="input" style={{ width: "180px" }}>
                   <Button variant="contained" onClick={() => handleMapInvoiceClick()} disabled={isFieldReadOnly("new")}>Image With Invoice Normal</Button>
@@ -249,6 +252,7 @@ const TransferReport = () => {
                 </div>
               </div>
             </div>
+            {/* normal invoice */}
             <Dialog open={pbpopupOpen} onClose={handlePopupClose}>
               <DialogContent>
                 <Reportinvoice
@@ -269,6 +273,18 @@ const TransferReport = () => {
                 </Button>
               </DialogActions>
             </Dialog>
+            {/* booking mail dialog box */}
+            <Dialog open={popupOpen} onClose={handlePopupClose}>
+              <DialogContent>
+                <Mailpdf attachedImage={attachedImage} />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handlePopupClose} variant="contained" color="primary">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+
             {/* mapinnvoice */}
             <Dialog open={npopupOpen} onClose={handlePopupClose}>
               <DialogContent>

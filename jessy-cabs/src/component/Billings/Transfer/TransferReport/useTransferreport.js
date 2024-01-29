@@ -25,6 +25,8 @@ const useTransferreport = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
+    const [popupOpen, setPopupOpen] = useState(false);
+
 
     // for page permission
 
@@ -171,7 +173,17 @@ const useTransferreport = () => {
         setlxPopupOpen(true);
     };
 
+    const handleETripsheetClick = () => {
+        if (rows.length === 0) {
+            setError(true);
+            setErrorMessage('No data available. Please fetch data');
+            return;
+        }
+        setPopupOpen(true);
+    };
+
     const handlePopupClose = () => {
+        setPopupOpen(false);
         setpbPopupOpen(false);
         setnPopupOpen(false);
         setlxPopupOpen(false);
@@ -363,6 +375,34 @@ const useTransferreport = () => {
 
 
 
+
+
+    const [attachedImage, setAttachedImage] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const tripid = localStorage.getItem('selectedtripsheetid');
+                if (!tripid) {
+                    return;
+                }
+                const response = await fetch(`http://localhost:8081/get-attachedmailimage/${tripid}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+                setAttachedImage(attachedImageUrls);
+                console.log('collected data', data);
+            } catch {
+            }
+        };
+        fetchData();
+    }, []);
+
+    
+
+
     return {
         rows,
         error,
@@ -379,18 +419,21 @@ const useTransferreport = () => {
         tripData,
         bankOptions,
         ratetypeforpage,
+        attachedImage,
         setCustomer,
         servicestation,
         handleserviceInputChange,
         handleEInvoiceClick,
         handleMapInvoiceClick,
         handleLuxuryInvoiceClick,
+        popupOpen,
         pbpopupOpen,
         handlePopupClose,
         npopupOpen,
         lxpopupOpen,
         handleExcelDownload,
         handlePdfDownload,
+        handleETripsheetClick,
         routeData,
         roundedAmount,
         sumTotalAndRounded,

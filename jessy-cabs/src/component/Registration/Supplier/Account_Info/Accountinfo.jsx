@@ -125,12 +125,12 @@ const Accuntinfo = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
+                    value={selectedCustomerData.Accdate ? dayjs(selectedCustomerData.Accdate) : null || book.Accdate ? dayjs(book.Accdate) : null}
                     format="DD/MM/YYYY"
-                    value={selectedCustomerData.Accdate ? dayjs(selectedCustomerData.Accdate) : null}
                     onChange={(date) => handleDateChange(date, 'Accdate')}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='Accdate' value={selectedCustomerData.Accdate} />
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.Accdate} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>

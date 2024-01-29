@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Tripdetails from './Tripdetails';//tripsheet details page
-
+import format from 'date-fns/format';
 import "./Table.css";
 import { Button, IconButton } from "@mui/material";
 //dialog box
@@ -18,6 +18,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 // ICON
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+
 const makeStyle = (status) => {
   if (status === 'Waiting' || status === 'On_Going') {
     return {
@@ -101,7 +102,8 @@ export default function BasicTable() {
                 >
                   <TableCell component="th" scope="row">{trip.driverName}</TableCell>
                   <TableCell align="left">TS{trip.tripid}</TableCell>
-                  <TableCell align="left">{trip.startdate}</TableCell>
+                  {/* <TableCell align="left">{trip.startdate}</TableCell> */}
+                  <TableCell align="left">{format(new Date(trip.startdate), 'dd/MM/yyyy')}</TableCell>
                   <TableCell align="left"><span className="status" style={makeStyle(trip.apps)}>{trip.apps}</span></TableCell>
                   <TableCell align="left" className="Details">
                     <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>

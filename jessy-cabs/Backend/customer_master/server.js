@@ -320,6 +320,33 @@ app.get('/get-attachedimage/:tripid', (req, res) => {
     res.json({ imagePaths });
   });
 });
+//get a booking mail...
+const attachedmaiDirectory = path.join(__dirname, 'uploads');
+// Serve static files from the imageDirectory
+app.use('/images', express.static(attachedmaiDirectory));
+// Example route to serve an image by its filename
+app.get('/get-attachedmailimage/:bookingno', (req, res) => {
+  const { bookingno } = req.params;
+  console.log(bookingno);
+  const query = 'SELECT path FROM tripsheetupload WHERE bookingno = ?';
+
+  db.query(query, [bookingno], (err, results) => {
+    if (err) {
+      return res.status(500).send('Internal Server Error');
+    }
+
+    if (results.length === 0) {
+      // No record found for the given tripid
+      return res.status(404).send('Images not found');
+    }
+
+    const imagePaths = results.map(result => result.path);
+    res.json({ imagePaths });
+  });
+});
+
+
+
 
 //get image for organization
 

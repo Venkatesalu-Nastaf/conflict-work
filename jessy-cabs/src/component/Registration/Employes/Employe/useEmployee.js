@@ -41,6 +41,7 @@ const useEmployee = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage, setWarningMessage] = useState({});
     const [infoMessage] = useState({});
+    const [searchText, setSearchText] = useState('');
 
     // for page permission
 
@@ -228,14 +229,15 @@ const useEmployee = () => {
     };
 
     const handleDateChange = (date, name) => {
-        const formattedDate = dayjs(date).format('DD/MM/YYYY');
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
         setBook((prevBook) => ({
             ...prevBook,
-            [name]: formattedDate,
+            [name]: parsedDate,
         }));
         setSelectedCustomerData((prevBook) => ({
             ...prevBook,
-            [name]: formattedDate,
+            [name]: parsedDate,
         }));
     };
 
@@ -305,7 +307,11 @@ const useEmployee = () => {
                     const response = await axios.get('http://localhost:8081/employees');
                     const data = response.data;
                     if (data.length > 0) {
-                        setRows(data);
+                        const rowsWithUniqueId = data.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        setRows(rowsWithUniqueId);
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                     } else {
@@ -390,6 +396,35 @@ const useEmployee = () => {
     };
     //end file upload
 
+    const handleShowAll = async () => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.read) {
+            try {
+                const response = await fetch(`http://localhost:8081/table-for-employee?searchText=${searchText}`);
+                const data = await response.json();
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("successfully listed")
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("no data found")
+                }
+            } catch {
+                setError(true);
+                setErrorMessage("sorry")
+            }
+        } else {
+            setWarning(true);
+            setWarningMessage("You do not have permission.");
+        }
+    };
 
     return {
         selectedCustomerData,
@@ -417,6 +452,9 @@ const useEmployee = () => {
         handleExcelDownload,
         handlePdfDownload,
         columns,
+        searchText,
+        setSearchText,
+        handleShowAll,
     };
 };
 

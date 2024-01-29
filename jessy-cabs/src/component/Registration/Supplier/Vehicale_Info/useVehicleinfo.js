@@ -254,19 +254,27 @@ const useVehicleinfo = () => {
     };
 
     const handleDateChange = (date, name) => {
-        const startOfDay = dayjs(date).format('DD/MM/YYYY');
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
         setBook((prevBook) => ({
             ...prevBook,
-            [name]: startOfDay,
+            [name]: parsedDate,
         }));
         setSelectedCustomerData((prevBook) => ({
             ...prevBook,
-            [name]: startOfDay,
+            [name]: parsedDate,
         }));
     };
 
     const handleAdd = async () => {
         const permissions = checkPagePermission();
+
+        const vehicleId = book.vehicleId;
+        if (!vehicleId) {
+            setError(true);
+            setErrorMessage("Fill mandatory fields");
+            return;
+        }
 
         if (permissions.read && permissions.new) {
             try {
@@ -280,7 +288,6 @@ const useVehicleinfo = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            // Display a warning or prevent the action
             setWarning(true);
             setWarningMessage("You do not have permission.");
         }

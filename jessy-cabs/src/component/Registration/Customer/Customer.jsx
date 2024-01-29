@@ -178,12 +178,12 @@ const Customer = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
+                    value={selectedCustomerData.date ? dayjs(selectedCustomerData.date) : null || book.date ? dayjs(book.date) : null}
                     format="DD/MM/YYYY"
-                    value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
-                    onChange={handleDateChange}
+                    onChange={(date) => handleDateChange(date, 'date')}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} name='date' inputRef={inputRef} value={selectedCustomerData?.date} />
+                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.date} />
                     )}
                   </DatePicker>
                 </LocalizationProvider>

@@ -70,5 +70,45 @@ router.get('/userdataforuserinfo/:userid', (req, res) => {
     });
 });
 
+router.get('/table-for-employee', (req, res) => {
+    const { searchText } = req.query;
+    let query = 'SELECT * FROM employees WHERE 1=1';
+    let params = [];
+
+    if (searchText) {
+        const columnsToSearch = [
+            'empid',
+            'empname',
+            'empemailid',
+            'empmobile',
+            'jobroll',
+            'joiningdate',
+            'gender',
+            'bloodgroup',
+            'address1',
+            'aadharcard',
+            'pancard',
+            'address2',
+            'guardian',
+            'fixedsalary',
+            'uanid',
+            'esino',
+            'licenceno',
+
+        ];
+
+        const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+
+        query += ` AND (${likeConditions})`;
+        params = columnsToSearch.map(() => `%${searchText}%`);
+    }
+
+    db.query(query, params, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
+        }
+        return res.status(200).json(result);
+    });
+});
 
 module.exports = router;

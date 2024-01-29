@@ -11,7 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
-import { StationName, ViewFor } from "./EmployeeCreationData";
+import { StationName } from "./EmployeeCreationData";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
@@ -34,7 +34,6 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
@@ -182,7 +181,7 @@ const EmployeeCreation = () => {
                   value={selectedCustomerData?.organizationname || book.organizationname}
                   onChange={handleChange}
                   label="Organization"
-                  id="designation"
+                  id="organizationname"
                   variant="standard"
                 />
               </div>
@@ -265,30 +264,6 @@ const EmployeeCreation = () => {
                     />
                   </RadioGroup>
                 </FormControl>
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <QuizOutlinedIcon color="action" />
-                </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo-viewfor"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  value={ViewFor.find((option) => option.Option)?.label || selectedCustomerData?.viewfor || ''}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "viewfor")}
-                  options={ViewFor.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) => option.label || selectedCustomerData?.viewfor || ''}
-                  renderInput={(params) => {
-                    return (
-                      <TextField {...params} label="View For" name="viewfor" />
-                    )
-                  }
-                  }
-                />
               </div>
             </div>
             <div className="input-field">

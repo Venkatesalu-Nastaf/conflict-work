@@ -131,13 +131,13 @@ const usePermission = () => {
         { id: 30, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
         { id: 31, name: 'Employee PayRoll', read: false, new: false, modify: false, delete: false },
         { id: 32, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
-        { id: 38, name: 'Tax settings', read: false, new: false, modify: false, delete: false },
-        { id: 33, name: 'Dashboard page', read: false, new: false, modify: false, delete: false },
-        { id: 34, name: 'Booking page', read: false, new: false, modify: false, delete: false },
-        { id: 35, name: 'Billing page', read: false, new: false, modify: false, delete: false },
-        { id: 36, name: 'Register page', read: false, new: false, modify: false, delete: false },
-        { id: 37, name: 'Settings page', read: false, new: false, modify: false, delete: false },
-        { id: 38, name: 'Info page', read: false, new: false, modify: false, delete: false },
+        { id: 33, name: 'Tax settings', read: false, new: false, modify: false, delete: false },
+        { id: 34, name: 'Dashboard page', read: false, new: false, modify: false, delete: false },
+        { id: 35, name: 'Booking page', read: false, new: false, modify: false, delete: false },
+        { id: 36, name: 'Billing page', read: false, new: false, modify: false, delete: false },
+        { id: 37, name: 'Register page', read: false, new: false, modify: false, delete: false },
+        { id: 38, name: 'Settings page', read: false, new: false, modify: false, delete: false },
+        { id: 39, name: 'Info page', read: false, new: false, modify: false, delete: false },
 
     ];
 

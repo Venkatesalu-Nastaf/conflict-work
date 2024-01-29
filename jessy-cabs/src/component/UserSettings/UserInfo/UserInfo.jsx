@@ -82,7 +82,8 @@ const UserSetting = ({ userid }) => {
                                     <div className="input">
                                         <Avatar sx={{ width: "12ch", height: "12ch" }}
                                             alt="userimage"
-                                            src={selectedImage}
+                                            // src={selectedImage}
+                                            src={Array.isArray(selectedImage) ? selectedImage[0] : selectedImage}
                                         />
                                     </div>
                                 </div>

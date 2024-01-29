@@ -96,6 +96,9 @@ const Employe = () => {
     handleExcelDownload,
     handlePdfDownload,
     columns,
+    searchText,
+    setSearchText,
+    handleShowAll,
   } = useEmployee();
 
   useEffect(() => {
@@ -469,10 +472,12 @@ const Employe = () => {
                 id="id"
                 label="Search"
                 name="searchText"
+                value={searchText || ''}
+                onChange={(e) => setSearchText(e.target.value)}
               />
             </div>
             <div className="input" style={{ width: "140px" }}>
-              <Button variant="contained">Search</Button>
+              <Button variant="contained" onClick={handleShowAll}>Search</Button>
             </div>
           </div>
         </div>
@@ -503,7 +508,6 @@ const Employe = () => {
               columns={columns}
               onRowClick={handleRowClick}
               pageSize={5}
-              checkboxSelection
             />
           </div>
         </div>

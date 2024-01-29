@@ -81,7 +81,6 @@ const useUserinfo = () => {
     };
 
     useEffect(() => {
-        // Retrieve the stored image URL from localStorage on component mount
         const storedImage = localStorage.getItem('uploadedImage');
         if (storedImage) {
             setSelectedImage(storedImage);
@@ -142,17 +141,14 @@ const useUserinfo = () => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                const userDataArray = await response.json(); // Parse JSON data
+                const userDataArray = await response.json();
                 if (userDataArray.length > 0) {
                     setSelectedCustomerData(userDataArray[0]);
                 } else {
-                    // Handle the case when the array is empty
                     setErrorMessage('User data not found.');
                     setError(true);
                 }
             } catch {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
             }
         };
 

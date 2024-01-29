@@ -33,7 +33,6 @@ const useTransferlist = () => {
                 const currentPageName = 'CB Billing';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-                console.log('permission data', response.data);
             } catch (error) {
                 console.error('Error fetching user permissions:', error);
             }
@@ -152,13 +151,9 @@ const useTransferlist = () => {
                 if (data) {
                     setBankOptions(data);
                 } else {
-                    setError(true);
-                    setErrorMessage('Failed to fetch organization options.');
                 }
             })
             .catch(() => {
-                setError(true);
-                setErrorMessage('Failed to fetch organization options.');
             });
     }, []);
 
@@ -218,12 +213,10 @@ const useTransferlist = () => {
     const handleButtonClickTripsheet = (row) => {
         const customername = encodeURIComponent(row.customer);
         const encodedCustomer = customername;
-        console.log(encodedCustomer);
         localStorage.setItem('selectedcustomer', encodedCustomer);
         const storedCustomer = localStorage.getItem('selectedcustomer');
         const decodedCustomer = decodeURIComponent(storedCustomer);
         localStorage.setItem('selectedcustomer', decodedCustomer);
-        console.log(decodedCustomer);
         const billingPageUrl = `/home/billing/transfer?tab=dataentry`;
         window.location.href = billingPageUrl;
     }

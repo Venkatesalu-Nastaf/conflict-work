@@ -152,6 +152,7 @@ const useBilling = () => {
         invoiceno: '',
         Billingdate: '',
         totalkm1: '',
+        trips: '',
         totaltime: '',
         customer: '',
         supplier: '',
@@ -259,23 +260,23 @@ const useBilling = () => {
     };
 
     const handleDateChange = (date, name) => {
-        const formattedDate = dayjs(date).format('DD/MM/YYYY');
-
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
         setBook((prevBook) => ({
             ...prevBook,
-            [name]: formattedDate,
+            [name]: parsedDate,
         }));
         setSelectedCustomerData((prevBook) => ({
             ...prevBook,
-            [name]: formattedDate,
+            [name]: parsedDate,
         }));
         setSelectedCustomerDatas((prevBook) => ({
             ...prevBook,
-            [name]: formattedDate,
+            [name]: parsedDate,
         }));
         setFormData((prevBook) => ({
             ...prevBook,
-            [name]: formattedDate,
+            [name]: parsedDate,
         }));
     };
 
@@ -287,6 +288,7 @@ const useBilling = () => {
             Billingdate: '',
             invoiceno: '',
             totalkm1: '',
+            trips: '',
             totaltime: '',
             customer: '',
             supplier: '',
@@ -442,12 +444,12 @@ const useBilling = () => {
             const totalAmount = hoursInMinutes * (ratePerHour / 60);
 
             if (isNaN(totalAmount)) {
-                return "0.00";
+                return "";
             } else {
                 return totalAmount.toFixed(2);
             }
         }
-        return "0.00";
+        return "";
     };
 
     const calculateTotalAmount3 = () => {
@@ -496,17 +498,24 @@ const useBilling = () => {
             parseFloat(book.BalanceReceivable) ||
             0;
         const roundedGrossAmount = Math.ceil(balanceAmount);
-        const roundOff = roundedGrossAmount - balanceAmount;
-        return roundOff.toFixed(2);
+        if (balanceAmount !== undefined && roundedGrossAmount !== undefined) {
+            const roundOff = roundedGrossAmount - balanceAmount;
+            return roundOff.toFixed(2);
+        }
+        return '';
     };
 
     const calculateroundedPayableAmount = () => {
         const balanceAmount = parseFloat(calculatePayableAmount() || book.BalanceReceivable) || 0;
         const roundOff = parseFloat(calculateRoundOff() || book.RoundedOff) || 0;
-
-        const totalAmount = balanceAmount + roundOff;
-        return totalAmount.toFixed(2);
+        if (balanceAmount !== undefined && roundOff !== undefined) {
+            const totalAmount = balanceAmount + roundOff;
+            return totalAmount.toFixed(2);
+        }
+        return '';
     };
+
+
 
     const calculateGrossAmount = () => {
         const {
@@ -559,8 +568,10 @@ const useBilling = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`http://localhost:8081/billing/${event.target.value}`);
+                const response = await axios.get(`http://localhost:8081/billingdata/${event.target.value}`);
                 const billingDetails = response.data;
+                setSuccess(true);
+                setSuccessMessage("Successfully listed");
                 setSelectedCustomerDatas(billingDetails);
             } catch (error) {
                 setError(true);

@@ -6,12 +6,9 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Organization } from './Customerdata';
 
-
-
 const CustomInput = () => {
     const [BillingGroup, setBillingGroup] = useState([]);
-    const [setCustomer] = useState("");
-    const [setBillingNo] = useState("");
+    const [selectedItems, setSelectedItems] = useState([]);
 
     useEffect(() => {
         Organization()
@@ -23,12 +20,9 @@ const CustomInput = () => {
     }, []);
 
     const handleInputChange = (event, newValue) => {
-        if (event.target.name === 'customer') {
-            setCustomer(newValue ? newValue.label : '');
-        } else if (event.target.name === 'billingno') {
-            setBillingNo(event.target.value);
-        }
+        setSelectedItems(newValue);
     };
+
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
     const checkedIcon = <CheckBoxIcon fontSize="small" />;
     return (
@@ -38,9 +32,10 @@ const CustomInput = () => {
             id="checkboxes-tags-demo"
             options={BillingGroup}
             onChange={(event, value) => handleInputChange(event, value)}
+            value={selectedItems}
             disableCloseOnSelect
-            getOptionLabel={() => BillingGroup}
-            renderOption={(props, BillingGroup, { selected }) => (
+            getOptionLabel={(option) => option}
+            renderOption={(props, option, { selected }) => (
                 <li {...props}>
                     <Checkbox
                         icon={icon}
@@ -48,7 +43,7 @@ const CustomInput = () => {
                         style={{ marginRight: 8 }}
                         checked={selected}
                     />
-                    {BillingGroup}
+                    {option}
                 </li>
             )}
             style={{ width: 500 }}

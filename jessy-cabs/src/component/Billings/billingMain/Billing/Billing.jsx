@@ -200,12 +200,12 @@ const Billing = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Billing Date"
+                                        value={formData.Billingdate || selectedCustomerDatas.Billingdate ? dayjs(selectedCustomerDatas.Billingdate) : null || selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs() || ''}
                                         format="DD/MM/YYYY"
-                                        value={formData.Billingdate || selectedCustomerDatas.Billingdate ? dayjs(selectedCustomerDatas.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs() || ''}
                                         onChange={(date) => handleDateChange(date, 'Billingdate')}
                                     >
                                         {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} />
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.Billingdate} />
                                         )}
                                     </DatePicker>
                                 </LocalizationProvider>
@@ -272,12 +272,12 @@ const Billing = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Trip Date"
+                                        value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || selectedCustomerDatas.startdate ? dayjs(selectedCustomerDatas.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
                                         format="DD/MM/YYYY"
-                                        value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || selectedCustomerDatas.startdate ? dayjs(selectedCustomerDatas.startdate) : null || ''}
                                         onChange={(date) => handleDateChange(date, 'startdate')}
                                     >
                                         {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} />
+                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
                                         )}
                                     </DatePicker>
                                 </LocalizationProvider>
@@ -341,6 +341,21 @@ const Billing = () => {
                                     name="vehRegNo"
                                     autoComplete="new-password"
                                     value={formData.vehRegNo || selectedCustomerData.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="input">
+                                <div className="icone">
+                                    <DirectionsCarFilledIcon color="action" />
+                                </div>
+                                <TextField
+                                    margin="normal"
+                                    size="small"
+                                    id="Trips"
+                                    label="Trips"
+                                    name="trips"
+                                    autoComplete="new-password"
+                                    value={formData.trips || selectedCustomerData.trips || selectedCustomerDatas.trips || book.trips || ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -865,7 +880,7 @@ const Billing = () => {
                                         label="Total Amount"
                                         name="Totalamount"
                                         autoComplete="new-password"
-                                        value={calculateroundedPayableAmount() || ''}
+                                        value={calculateroundedPayableAmount() || selectedCustomerDatas.Totalamount || ''}
                                         onChange={handleChange}
                                     />
                                 </div>

@@ -575,7 +575,6 @@ const useTripsheet = () => {
         setPackageDetails({});
     };
 
-
     const handleETripsheetClick = (row) => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
         if (!tripid) {

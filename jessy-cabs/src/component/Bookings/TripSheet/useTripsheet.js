@@ -1295,8 +1295,6 @@ const useTripsheet = () => {
                 const routeData = await response.json(); // Parse JSON data
                 setRouteData(routeData);
             } catch {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
             }
         };
 

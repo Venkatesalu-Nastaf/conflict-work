@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./MainDashboard.css";
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
@@ -19,6 +19,9 @@ const MainDashboard = () => {
   const { selectedTheme } = useThemes();
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
+
+  const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
+
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
     },
@@ -26,20 +29,48 @@ const MainDashboard = () => {
     },
   }));
 
-  useEffect(() => {
-    if (!localStorage.getItem("auth")) {
-      navigate("/"); // Redirect to the login page
+  const handleLogout = useCallback((e) => {
+    if (e) {
+      e.preventDefault();
     }
-  }, [navigate]);
-
-  const handleLogout = (e) => {
-    e.preventDefault();
     localStorage.removeItem("auth");
     localStorage.removeItem("username");
     localStorage.removeItem("useridno");
     setExpanded(true);
     navigate("/");
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("auth")) {
+      navigate("/");
+    } else {
+      let timeout;
+
+      const resetIdleTimeout = () => {
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+        timeout = setTimeout(() => {
+          handleLogout();
+        }, IDLE_TIMEOUT_DURATION);
+      };
+
+      const handleUserActivity = () => {
+        resetIdleTimeout();
+      };
+
+      window.addEventListener("mousemove", handleUserActivity);
+      window.addEventListener("keydown", handleUserActivity);
+
+      resetIdleTimeout();
+
+      return () => {
+        window.removeEventListener("mousemove", handleUserActivity);
+        window.removeEventListener("keydown", handleUserActivity);
+        clearTimeout(timeout);
+      };
+    }
+  }, [navigate, handleLogout, IDLE_TIMEOUT_DURATION]);
 
   const hidePopup = () => {
     setSuccess(false);
@@ -49,7 +80,7 @@ const MainDashboard = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [success]);
@@ -86,7 +117,6 @@ const MainDashboard = () => {
         const routeData = await response.json();
         setRouteData(routeData);
       } catch (error) {
-        console.error(error);
       }
     };
     fetchData();
@@ -95,12 +125,11 @@ const MainDashboard = () => {
   const useridno = routeData[0]?.userid;
   const usercompany = routeData[0]?.organizationname;
 
-  //for user id
   localStorage.setItem('useridno', useridno);
-  
-  // for organization name
+
   localStorage.setItem('usercompany', usercompany);
- 
+
+
   return (
     <section className={`dash-board ${selectedTheme}`}>
       <div className="glass">

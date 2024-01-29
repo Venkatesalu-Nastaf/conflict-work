@@ -232,8 +232,6 @@ const useTransferreport = () => {
                 } else {
                 }
             } catch {
-                setError(true);
-                setErrorMessage("something went wrong.");
             }
 
         };
@@ -290,12 +288,8 @@ const useTransferreport = () => {
                         const sumTotalAndRounded = parseFloat(netAmountSum) + parseFloat(roundOffValue);
                         setSumTotalAndRounded(sumTotalAndRounded);
                     } else {
-                        setError(true);
-                        setErrorMessage('Something went wrong.');
                     }
                 } catch {
-                    setError(true);
-                    setErrorMessage('Something went wrong.');
                 }
             }
         };
@@ -331,13 +325,9 @@ const useTransferreport = () => {
                 if (data) {
                     setBankOptions(data);
                 } else {
-                    setError(true);
-                    setErrorMessage('Failed to fetch organization options.');
                 }
             })
             .catch(() => {
-                setError(true);
-                setErrorMessage('Failed to fetch organization options.');
             });
     }, []);
 
@@ -363,10 +353,8 @@ const useTransferreport = () => {
 
                 const routedData = response.data;
                 setRoutedData(routedData);
-            } catch (error) {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
-                console.error(error);
+            } catch {
+
             }
         };
 

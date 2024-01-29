@@ -623,13 +623,9 @@ const useBilling = () => {
                 if (data) {
                     setBankOptions(data);
                 } else {
-                    setError(true);
-                    setErrorMessage('Failed to fetch bank options.');
                 }
             })
             .catch(() => {
-                setError(true);
-                setErrorMessage('Failed to fetch bank options.');
             });
     }, []);
 
@@ -719,8 +715,6 @@ const useBilling = () => {
                 const routeData = await response.json();
                 setRouteData(routeData);
             } catch (error) {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
             }
         };
 
@@ -738,9 +732,8 @@ const useBilling = () => {
 
                 const tripData = await response.json();
                 setTripData(tripData);
-            } catch (error) {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
+            } catch {
+
             }
         };
 
@@ -757,9 +750,7 @@ const useBilling = () => {
                 }
                 const customerData = await response.json();
                 setCustomerData(customerData);
-            } catch (error) {
-                setError(true);
-                setErrorMessage('Error fetching tripsheet data.');
+            } catch {
             }
         };
         fetchData();
@@ -775,9 +766,7 @@ const useBilling = () => {
                 }
                 const imageUrl = URL.createObjectURL(await response.blob());
                 setMapImageUrl(imageUrl);
-            } catch (error) {
-                setError(true);
-                setErrorMessage('Error fetching map image.');
+            } catch {
             }
         };
 

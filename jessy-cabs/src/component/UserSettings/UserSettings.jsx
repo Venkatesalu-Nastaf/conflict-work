@@ -1,59 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import './UserSettings.css';
+import React, { useEffect, useState } from "react";
+import "./UserSettings.css";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import Themes from './Themes/Themes';
+import Themes from "./Themes/Themes";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
-import UserSetting from './UserInfo/UserInfo';
-import { ThreeCircles } from "react-loader-spinner";
+import UserSetting from "./UserInfo/UserInfo";
+import { CirclesWithBar } from "react-loader-spinner";
 
 const UserSettings = () => {
-    const [value, setValue] = React.useState("UserInfo");
+  const [value, setValue] = React.useState("UserInfo");
 
-    const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 500);
-    }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+  }, []);
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-    return (
-        <div className={isLoading ? "loading-container" : ""}>
-            {isLoading ? (
-                <div className="loading-spinners">
-                    <ThreeCircles color="#3d92f3" height={80} width={80} />
-
-                </div>
-            ) : (
-                <>
-                    <div className="UserSettings-main">
-                        <div className="form-container-UserSettings">
-                            <div className="container-main">
-                                <Box sx={{ width: "100%", typography: "body1" }}>
-                                    <TabContext value={value}>
-                                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                                            <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                                <Tab label="User Info" value="UserInfo" />
-                                                <Tab label="Themes" value="Themes" />
-                                            </TabList>
-                                        </Box>
-                                        <TabPanel value="UserInfo"><UserSetting /></TabPanel>
-                                        <TabPanel value="Themes"><Themes /></TabPanel>
-                                    </TabContext>
-                                </Box>
-                            </div>
-                        </div>
-                    </div>
-                </>
-            )}
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  return (
+    <div className={isLoading ? "loading-container" : ""}>
+      {isLoading ? (
+        <div className="loading-spinners">
+          <CirclesWithBar color="#fff" height={70} width={70} />
         </div>
-    )
-}
+      ) : (
+        <>
+          <div className="UserSettings-main">
+            <div className="form-container-UserSettings">
+              <div className="container-main">
+                <Box sx={{ width: "100%", typography: "body1" }}>
+                  <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                      <TabList
+                        onChange={handleChange}
+                        aria-label="lab API tabs example"
+                      >
+                        <Tab label="User Info" value="UserInfo" />
+                        <Tab label="Themes" value="Themes" />
+                      </TabList>
+                    </Box>
+                    <TabPanel value="UserInfo">
+                      <UserSetting />
+                    </TabPanel>
+                    <TabPanel value="Themes">
+                      <Themes />
+                    </TabPanel>
+                  </TabContext>
+                </Box>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 
-export default UserSettings
+export default UserSettings;

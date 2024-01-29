@@ -4,7 +4,8 @@ import Info from "./component/Info/Info";
 import Login from "./component/form/LoginForm";
 import { Route, Routes } from "react-router-dom";
 import Page404 from "./component/Page404/page404";
-import { ThreeCircles } from "react-loader-spinner";
+// import { ThreeCircles } from "react-loader-spinner";
+import Logo from "./assets/img/logonas.png";
 import Mailer from "./component/Info/Mailer/Mailer";
 import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
@@ -40,7 +41,6 @@ import StationCreation from "./component/Settings/StationCreation/StationCreatio
 import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapComponent";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 
-
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -55,34 +55,61 @@ function App() {
       <div className={isLoading ? "loading-container" : ""}>
         {isLoading ? (
           <div className="loading-spinners">
-            <ThreeCircles color="#3d92f3" height={80} width={80} />
+            {/* <ThreeCircles color="#3d92f3" height={80} width={80} /> */}
+            <div className="logo-loading">
+              <img src={Logo} alt="logo" />
+            </div>
           </div>
         ) : (
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<MainDashboard />}>
               <Route path="/home/dashboard" element={<MainDash />} />
-              <Route path="/home/bookings" element={<Bookings />} >
-                <Route path="/home/bookings/booking" element={<BookingMain />} />
-                <Route path="/home/bookings/tripsheet" element={<TripSheet />} />
+              <Route path="/home/bookings" element={<Bookings />}>
+                <Route
+                  path="/home/bookings/booking"
+                  element={<BookingMain />}
+                />
+                <Route
+                  path="/home/bookings/tripsheet"
+                  element={<TripSheet />}
+                />
                 <Route path="/home/bookings/received" element={<Received />} />
-                <Route path="/home/bookings/dispatched" element={<Dispatcheds />} />
+                <Route
+                  path="/home/bookings/dispatched"
+                  element={<Dispatcheds />}
+                />
               </Route>
-              <Route path="/home/registration" element={<Registration />} >
-                <Route path="/home/registration/customer" element={<Customer />} />
-                <Route path="/home/registration/supplier" element={<Suppliers />} />
-                <Route path="/home/registration/employes" element={<Employes />} />
+              <Route path="/home/registration" element={<Registration />}>
+                <Route
+                  path="/home/registration/customer"
+                  element={<Customer />}
+                />
+                <Route
+                  path="/home/registration/supplier"
+                  element={<Suppliers />}
+                />
+                <Route
+                  path="/home/registration/employes"
+                  element={<Employes />}
+                />
               </Route>
               <Route path="/home/info" element={<Info />}>
                 <Route path="/home/info/ratetype" element={<RateTypes />} />
-                <Route path="/home/info/ratemanagement" element={<RateManagement />} />
+                <Route
+                  path="/home/info/ratemanagement"
+                  element={<RateManagement />}
+                />
                 <Route path="/home/info/mailer" element={<Mailer />} />
                 <Route path="/home/info/fuelinfo" element={<FuelInfo />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>
                 <Route path="/home/billing/billing" element={<BillingMain />} />
                 <Route path="/home/billing/transfer" element={<Transfer />} />
-                <Route path="/home/billing/coveringbill" element={<CoveringBill />} />
+                <Route
+                  path="/home/billing/coveringbill"
+                  element={<CoveringBill />}
+                />
               </Route>
               <Route path="/home/accounts" element={<Accounts />}>
                 {/* <Route path="/home/accounts/expense" element={<Expense />} />
@@ -90,20 +117,41 @@ function App() {
                 <Route path="/home/accounts/profitandloss" element={<ProfiteLoss />} /> */}
               </Route>
               <Route path="/home/settings" element={<Settings />}>
-                <Route path="/home/settings/usercreation" element={<UserCreation />} />
-                <Route path="/home/settings/stationcreation" element={<StationCreation />} />
-                <Route path="/home/settings/permission" element={<Permission />} />
-                <Route path="/home/settings/mainsetting" element={<MainSetting />} />
+                <Route
+                  path="/home/settings/usercreation"
+                  element={<UserCreation />}
+                />
+                <Route
+                  path="/home/settings/stationcreation"
+                  element={<StationCreation />}
+                />
+                <Route
+                  path="/home/settings/permission"
+                  element={<Permission />}
+                />
+                <Route
+                  path="/home/settings/mainsetting"
+                  element={<MainSetting />}
+                />
               </Route>
-              <Route path="/home/usersettings" element={<UserSettings />} >
-                <Route path="/home/usersettings/usersetting" element={<UserSetting />} />
-                <Route path="/home/usersettings/usersetting" element={<UserSetting />} />
+              <Route path="/home/usersettings" element={<UserSettings />}>
+                <Route
+                  path="/home/usersettings/usersetting"
+                  element={<UserSetting />}
+                />
+                <Route
+                  path="/home/usersettings/usersetting"
+                  element={<UserSetting />}
+                />
               </Route>
             </Route>
             <Route path="/navigationmap" element={<NavigationMap />} />
             <Route path="/onlinelogin" element={<OnlineLoginForm />} />
             <Route path="/onlinebooking" element={<OnlineBooking />} />
-            <Route path="/onlinedigital/digitalsignature" element={<DigitalSignature />} />
+            <Route
+              path="/onlinedigital/digitalsignature"
+              element={<DigitalSignature />}
+            />
             <Route
               path="*"
               element={

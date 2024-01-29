@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap");
 * {
-  font-family: 'Quicksand', sans-serif;
+  font-family: "Quicksand", sans-serif;
 }
 
 body {
@@ -10,7 +9,35 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Loading */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.logo-loading img {
+  width: 100px;
+}
+.logo-loading {
+  color: #3d92f3;
+  height: 80px;
+  width: 80px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
 /* ERROR POPUP */
+
 .Error {
   -webkit-backdrop-filter: blur(0.5rem);
   backdrop-filter: blur(0.5rem);
@@ -92,7 +119,6 @@ body {
     transform: translateX(50px);
     opacity: 0;
   }
-
   to {
     transform: translateX(10);
     opacity: 1;
@@ -100,6 +126,7 @@ body {
 }
 
 /* CSS animation for the .input element */
+
 .input-field {
   opacity: 0;
   transform: translateY(20px);
@@ -108,7 +135,6 @@ body {
 
 .input-field .input {
   transition: transform 0.3s ease;
-
 }
 
 .input-field .input:hover {
@@ -116,34 +142,33 @@ body {
 }
 
 /* CSS animation for the icon */
+
 .input-field .input .icone {
   transition: transform 0.3s ease;
 }
 
 /* Define the keyframes for the zigzag animation */
+
 @keyframes zigzag {
   0% {
     transform: rotate(0deg);
   }
-
   25% {
     transform: rotate(15deg);
   }
-
   50% {
     transform: rotate(-15deg);
   }
-
   75% {
     transform: rotate(15deg);
   }
-
   100% {
     transform: rotate(0deg);
   }
 }
 
 /* Apply the zigzag animation on hover */
+
 .input-field .input .icone:hover {
   animation: zigzag 0.5s ease;
 }
@@ -209,6 +234,7 @@ body {
 }
 
 /* INPUT Fiels*/
+
 .input-select {
   width: 100%;
   margin: auto;
@@ -235,6 +261,7 @@ body {
 }
 
 /* TIMER START */
+
 .input-field .time {
   display: flex;
   position: relative;
@@ -319,14 +346,12 @@ body {
   .customer-form {
     background-color: #000;
   }
-
   .input-field {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
   }
-
   .input-field .input {
     width: 200px;
     display: flex;
@@ -334,38 +359,32 @@ body {
     justify-content: center;
     margin-top: 20px;
   }
-
   .input-field .radio {
     font-size: 20px !important;
   }
-
   .checkbox {
     color: rgb(69, 62, 62);
     margin-top: 10px;
   }
-
   .css-1hbvpl3-MuiSvgIcon-root {
     height: 18px !important;
   }
-
   .css-ahj2mt-MuiTypography-root {
     font-size: 13px !important;
   }
-
   .input-field .input option {
     text-transform: uppercase;
   }
-
   .input-field .input .icone {
     padding: 10px 10px 0px;
   }
-
   .select-field {
     border: #000;
   }
 }
 
 /* TextBox */
+
 .textbox {
   width: 90%;
   display: flex;
@@ -436,17 +455,13 @@ body {
 }
 
 /* Date */
-.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-error
+  .MuiOutlinedInput-notchedOutline {
   border-color: #456ddc !important;
 }
 
 /* dashboard.css or a separate CSS file */
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
 
 /* MENUBAR FOR ALL PAGES */
 
@@ -474,7 +489,6 @@ body {
   position: relative;
   cursor: pointer;
   white-space: nowrap;
-
 }
 
 .menu-link.actives {
@@ -489,14 +503,12 @@ body {
     transition: 0.4s;
     border-radius: 25px;
   }
-
   & {
     &::before {
       background: linear-gradient(to bottom, #eaebeb89, #d2d1d36e);
       box-shadow: 0px 3px 10px 0px rgb(109, 107, 107);
       transform: scale(1.2);
     }
-
     color: black;
   }
 }

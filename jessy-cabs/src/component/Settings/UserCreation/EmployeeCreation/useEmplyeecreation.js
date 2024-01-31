@@ -206,7 +206,11 @@ const useEmplyeecreation = () => {
                     const response = await axios.get('http://localhost:8081/usercreation');
                     const data = response.data;
                     if (data.length > 0) {
-                        setRows(data);
+                        const rowsWithUniqueId = data.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        setRows(rowsWithUniqueId);
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                     } else {

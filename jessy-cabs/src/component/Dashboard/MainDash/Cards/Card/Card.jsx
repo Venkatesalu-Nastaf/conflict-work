@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import "./Card.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -22,37 +23,110 @@ const Card = (props) => {
 };
 
 // Compact Card
+
 function CompactCard({ param, setExpanded }) {
+
+  const user_id = localStorage.getItem('useridno');
+
+  const [userPermissions, setUserPermissions] = useState({});
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'Dashboard page';
+        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        setUserPermissions(response.data);
+      } catch (error) {
+        console.error('Error fetching user permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [user_id]);
+
+  const checkPagePermission = () => {
+    const currentPageName = 'Dashboard page';
+    const permissions = userPermissions || {};
+
+    if (permissions.page_name === currentPageName) {
+      return {
+        read: permissions.read_permission === 1,
+        new: permissions.new_permission === 1,
+        modify: permissions.modify_permission === 1,
+        delete: permissions.delete_permission === 1,
+      };
+    }
+
+    return {
+      read: false,
+      new: false,
+      modify: false,
+      delete: false,
+    };
+  };
+
+  const permissions = checkPagePermission();
+
   const Png = param.png;
   return (
-    <motion.div
-      className="CompactCard"
-      style={{
-        background: param.color.backGround,
-        boxShadow: param.color.boxShadow,
-        border: '2px solid #c7c7c7c0',
-      }}
-      layoutId="expandableCard"
-      onClick={setExpanded}
-    >
-      <div className="radialBar">
-        <CircularProgressbar
-          value={param.barValue}
-          text={`${param.barValue}%`}
-        />
-        <span>{param.title}</span>
-      </div>
-      <div className="detail">
-        <Png />
-        <span> &#8377; {param.value}</span>
-        <span>Last 24 hours</span>
-      </div>
-    </motion.div>
+    <div >
+      {!permissions.read && (
+        <div className="loading-spinners">
+          <motion.div
+            className="CompactCard"
+            style={{
+              background: param.color.backGround,
+              boxShadow: param.color.boxShadow,
+              border: '2px solid #c7c7c7c0',
+            }}
+            layoutId="expandableCard"
+          >
+            <div className="radialBar">
+              <CircularProgressbar
+                value='0'
+                text={`0%`}
+              />
+              <span>{param.title}</span>
+            </div>
+            <div className="detail">
+              <Png />
+              <span> &#8377; 0</span>
+              <span>Last 24 hours</span>
+            </div>
+          </motion.div>
+        </div>
+      )}
+      {permissions.read && (
+        <motion.div
+          className="CompactCard"
+          style={{
+            background: param.color.backGround,
+            boxShadow: param.color.boxShadow,
+            border: '2px solid #c7c7c7c0',
+          }}
+          layoutId="expandableCard"
+          onClick={setExpanded}
+        >
+          <div className="radialBar">
+            <CircularProgressbar
+              value={param.barValue}
+              text={`${param.barValue}%`}
+            />
+            <span>{param.title}</span>
+          </div>
+          <div className="detail">
+            <Png />
+            <span>&#8377; {param.value}</span>
+            <span>Last 24 hours</span>
+          </div>
+        </motion.div>
+      )}
+    </div>
   );
 }
 
 // Expanded Card
-function ExpandedCard({ param,  setExpanded }) {
+function ExpandedCard({ param, setExpanded }) {
   const data = {
     options: {
       chart: {

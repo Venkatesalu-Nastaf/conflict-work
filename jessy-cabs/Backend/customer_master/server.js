@@ -321,9 +321,11 @@ app.get('/get-attachedimage/:tripid', (req, res) => {
   });
 });
 //get a booking mail...
-const attachedmaiDirectory = path.join(__dirname, 'uploads');
+const attachedmailDirectory = path.join(__dirname, 'uploads');
+const pdfDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
-app.use('/images', express.static(attachedmaiDirectory));
+app.use('/images', express.static(attachedmailDirectory));
+app.use('/pdf', express.static(pdfDirectory));
 // Example route to serve an image by its filename
 app.get('/get-attachedmailimage/:bookingno', (req, res) => {
   const { bookingno } = req.params;

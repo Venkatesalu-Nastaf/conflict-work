@@ -6,8 +6,8 @@ const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "VehicleNo", headerName: "Vehicl eNo", width: 130 },
     { field: "VehicleName", headerName: "Vehicle Name", width: 130 },
-    { field: "filldate", headerName: "Fill Date", width: 130 },
-    { field: "emptydate", headerName: "Empty Date", width: 150 },
+    { field: "filldate", headerName: "Fill Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "emptydate", headerName: "Empty Date", width: 150, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
     { field: "DriverName", headerName: "Driver Name", width: 130 },
     { field: "FuelPrice", headerName: "Fuel Price", width: 130 },
     { field: "InitialOdometerReading", headerName: "Initial Odometer Reading", width: 130 },
@@ -18,9 +18,7 @@ const columns = [
 
 
 const useMailagedetails = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [initialOdometer, setInitialOdometer] = useState(0);
     const [finalOdometer, setFinalOdometer] = useState(0);
     const [fuelConsumption, setFuelConsumption] = useState(0);
@@ -170,12 +168,18 @@ const useMailagedetails = () => {
     };
 
     const handleDateChange = (date, name) => {
-        const formattedDate = dayjs(date).format('DD/MM/YYYY');
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
         setBook((prevBook) => ({
             ...prevBook,
-            [name]: formattedDate,
+            [name]: parsedDate,
+        }));
+        setSelectedCustomerData((prevValues) => ({
+            ...prevValues,
+            [name]: parsedDate,
         }));
     };
+
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
@@ -203,14 +207,22 @@ const useMailagedetails = () => {
         const permissions = checkPagePermission();
 
         if (permissions.read && permissions.new) {
+            // const vehiclename = selectedCustomerData.VehicleName;
             const VehicleName = book.VehicleName;
             if (!VehicleName) {
                 setError(true);
-                setErrorMessage("Check your vehicleName");
+                setErrorMessage("Check your Value");
                 return;
             }
             try {
-                await axios.post('http://localhost:8081/MailageDetails', book);
+                const emptydate = selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null || book.emptydate ? dayjs(book.emptydate) : dayjs();
+                const filldate = selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null || book.filldate ? dayjs(book.filldate) : dayjs();
+                const updateBook = {
+                    ...book,
+                    emptydate: emptydate,
+                    filldate: filldate,
+                };
+                await axios.post('http://localhost:8081/fueldetails', updateBook);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -233,10 +245,14 @@ const useMailagedetails = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/MailageDetails');
+                    const response = await axios.get('http://localhost:8081/fueldetails');
                     const data = response.data;
                     if (data.length > 0) {
-                        setRows(data);
+                        const rowsWithUniqueId = data.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        setRows(rowsWithUniqueId);
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                     } else {
@@ -255,7 +271,7 @@ const useMailagedetails = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/MailageDetails/${selectedCustomerData?.VehicleNo || book.VehicleNo}`);
+                    await axios.delete(`http://localhost:8081/fueldetails/${selectedCustomerData?.VehicleNo || book.VehicleNo}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -270,8 +286,15 @@ const useMailagedetails = () => {
 
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.VehicleNo === VehicleNo);
-                    const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://localhost:8081/MailageDetails/${selectedCustomerData?.VehicleNo || book.VehicleNo}`, updatedCustomer);
+                    const emptydate = selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null || book.emptydate ? dayjs(book.emptydate) : dayjs();
+                    const filldate = selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null || book.filldate ? dayjs(book.filldate) : dayjs();
+                    const updatedCustomer = {
+                        ...selectedCustomer,
+                        ...selectedCustomerData,
+                        emptydate: emptydate,
+                        filldate: filldate,
+                    };
+                    await axios.put(`http://localhost:8081/fueldetails/${selectedCustomerData?.VehicleNo || book.VehicleNo}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
                     handleCancel();

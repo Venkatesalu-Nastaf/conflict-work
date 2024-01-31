@@ -1,4 +1,4 @@
-// useStationCreation.js
+
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -54,6 +54,7 @@ const columns = [
     { field: "travelsemail", headerName: "Travels Email", width: 130 },
 ];
 
+
 const useBooking = () => {
     const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -80,9 +81,11 @@ const useBooking = () => {
     const [success, setSuccess] = useState(false);
     const [formData, setFormData] = useState({});
     const [popupOpen, setPopupOpen] = useState(false);
+    const [popupOpenmail, setpopupOpenmail] = useState(false);
 
     const handlePopupClose = () => {
         setPopupOpen(false);
+        setpopupOpenmail(false);
     };
 
 
@@ -645,6 +648,12 @@ const useBooking = () => {
     }, []);
 
     const handleUpload = () => {
+        const bookingno = book.bookingno || selectedCustomerData.bookingno;
+        if (!bookingno) {
+            setError(true);
+            setErrorMessage("Enter booking No")
+            return;
+        }
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.pdf, .jpg, .jpeg, .png';
@@ -816,6 +825,31 @@ const useBooking = () => {
         }
     };
 
+    const [attachedImage, setAttachedImage] = useState('');
+
+    const handleGetMail = useCallback(async () => {
+        try {
+            const bookingno = book.bookingno || selectedCustomerData.bookingno;
+            if (!bookingno) {
+                setError(true);
+                setErrorMessage("Enter booking No")
+                return;
+            }
+            const response = await fetch(`http://localhost:8081/get-attachedmailimage/${bookingno}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+            setAttachedImage(attachedImageUrls);
+            setpopupOpenmail(true);
+        } catch (error) {
+            console.log(error);
+        }
+    }, [book.bookingno, selectedCustomerData.bookingno]);
+
+
+
     return {
         selectedCustomerData,
         selectedCustomerId,
@@ -832,12 +866,14 @@ const useBooking = () => {
         book,
         handleClick,
         handleChange,
+        attachedImage,
         isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,
         formData,
         handleKeyDown,
+        handleGetMail,
         handleDateChange,
         getCurrentTime,
         setBook,
@@ -851,6 +887,7 @@ const useBooking = () => {
         setStartTime,
         guestsms,
         setGuestSms,
+        popupOpenmail,
         sendEmail,
         setSendEmail,
         displayCopy,

@@ -820,6 +820,12 @@ const useTripsheet = () => {
     };
 
     const handleUpload = () => {
+        const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+        if (!tripid) {
+            setError(true);
+            setErrorMessage("Enter booking No")
+            return;
+        }
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.pdf, .jpg, .jpeg, .png';

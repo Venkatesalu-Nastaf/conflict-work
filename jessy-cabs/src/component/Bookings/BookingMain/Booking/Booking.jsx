@@ -128,6 +128,8 @@ const Booking = () => {
     setTripTime,
     handleClickHide,
     handleUpload,
+    handleGetMail,
+    attachedImage,
     actions,
     searchText,
     setSearchText,
@@ -145,6 +147,7 @@ const Booking = () => {
     reversedRows,
     columns,
     handletableClick,
+    popupOpenmail,
     // ... (other state variables and functions)
   } = useBooking();
 
@@ -839,8 +842,21 @@ const Booking = () => {
                 </FormControl>
               </div>
               <div className="input">
-                <Button variant="contained" onClick={handleUpload} disabled={isFieldReadOnly("new")}>Attach File</Button>
+                <Button variant="contained" onClick={handleUpload} disabled={isFieldReadOnly("new")} >Attach File</Button>
+                <Button variant="outlined" onClick={handleGetMail} disabled={isFieldReadOnly("new")} >View</Button>
               </div>
+              <Dialog open={popupOpenmail} onClose={handlePopupClose}>
+                <DialogContent>
+                  {attachedImage && attachedImage.map((imageUrl, index) => (
+                    <img key={index} src={imageUrl} alt='images' style={{ maxWidth: '100%', maxHeight: '500px', marginBottom: '10px' }} />
+                  ))}
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handlePopupClose} variant="contained" color="primary">
+                    OK
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </div>
           </div>
         </div>

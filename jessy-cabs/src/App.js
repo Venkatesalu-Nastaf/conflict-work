@@ -4,7 +4,6 @@ import Info from "./component/Info/Info";
 import Login from "./component/form/LoginForm";
 import { Route, Routes } from "react-router-dom";
 import Page404 from "./component/Page404/page404";
-// import { ThreeCircles } from "react-loader-spinner";
 import Logo from "./assets/img/logonas.png";
 import Mailer from "./component/Info/Mailer/Mailer";
 import Settings from "./component/Settings/Settings";

@@ -36,9 +36,30 @@ const MainDashboard = () => {
     localStorage.removeItem("auth");
     localStorage.removeItem("username");
     localStorage.removeItem("useridno");
+    localStorage.removeItem("usercompany");
     setExpanded(true);
     navigate("/");
   }, [navigate]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // Check if the event's returnValue property is set. If it's set, it means the browser is being closed.
+      if (event) {
+        event.returnValue = ''; // For some browsers to display a confirmation dialog before closing
+      }
+      // Remove auth only if it's not a page refresh
+      if (performance.navigation.type !== 1) {
+        localStorage.removeItem("auth");
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
 
   useEffect(() => {
     if (!localStorage.getItem("auth")) {

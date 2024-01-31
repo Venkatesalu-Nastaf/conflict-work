@@ -15,7 +15,7 @@ async function sendSMS(dataToSend) {
     const params = {
         SenderId: 'JSYCAB',
         Message: `Trip details from JESSY CABS Guest Name ${guestname} contact no ${guestmobileno} T.S no ${tripid} Reporting Date: ${startdate} Reporting Time ${reporttime} Reporting Address ${address1}${streetno}${city}.JESSYC`,
-        MobileNumbers: guestmobileno,
+        MobileNumbers: `${guestmobileno}`,
         TemplateId: '1107169000164228655',
         ApiKey: 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=',
         ClientId: 'a5b891d0-9e91-442b-921b-3f2547a96c8e',

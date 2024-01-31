@@ -33,6 +33,20 @@ router.get('/booking/:bookingno', (req, res) => {
         return res.status(200).json(bookingDetails);
     });
 });
+
+router.get('/last-booking-no', (req, res) => {
+    db.query('SELECT * FROM booking ORDER BY bookingno DESC LIMIT 1', (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+        const lastBooking = result[0];
+        return res.status(200).json(lastBooking);
+    });
+});
+
 // delete booking details
 router.delete('/booking/:bookingno', (req, res) => {
     const bookingno = req.params.bookingno;
@@ -120,8 +134,12 @@ router.post('/send-email', async (req, res) => {
             secure: true,
             auth: {
                 user: 'akash02899@gmail.com',
-                pass: 'yocakaoeoajdaawj',
+                pass: 'jojgadyyolbuxlyo',
             },
+            tls: {
+                // Ignore SSL certificate errors
+                rejectUnauthorized: false
+            }
         });
 
         // Email content for the owner
@@ -149,6 +167,7 @@ router.post('/send-email', async (req, res) => {
 
         res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
+        console.error('Error sending email:', error);
         res.status(500).json({ message: 'An error occurred while sending the email' });
     }
 });
@@ -165,8 +184,12 @@ router.post('/send-onbook-email', async (req, res) => {
             secure: true,
             auth: {
                 user: 'akash02899@gmail.com',
-                pass: 'yocakaoeoajdaawj',
+                pass: 'jojgadyyolbuxlyo',
             },
+            tls: {
+                // Ignore SSL certificate errors
+                rejectUnauthorized: false
+            }
         });
 
         // Email content for the owner
@@ -174,7 +197,7 @@ router.post('/send-onbook-email', async (req, res) => {
             from: 'akash02899@gmail.com',
             to: 'akash02899@gmail.com', // Set the owner's email address
             // subject: ${name} 'sent you a feedback',
-            subject: `${guestname} sent you a feedback`,
+            subject: `${guestname} sent you a booking request`,
             text: `Guest Name: ${guestname}\nEmail: ${email}\nGuest Mobile No: ${guestmobileno}\nStart Date: ${startdate}\nStart Time: ${starttime}\nPickup: ${pickup}\nUseage: ${useage}\nDuty: ${duty}\nVehicle Type: ${vehType}\nRemarks: ${remarks}`,
         };
 

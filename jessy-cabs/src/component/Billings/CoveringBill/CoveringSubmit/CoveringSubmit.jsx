@@ -23,7 +23,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useCoversubmit from './useCoversubmit';
 
-
 const CoveringSubmit = () => {
 
     const {
@@ -50,12 +49,10 @@ const CoveringSubmit = () => {
         setToDate,
         servicestation,
         handleserviceInputChange,
+        handleExcelDownload,
+        handlePdfDownload,
         handleShow,
         columns,
-
-
-
-        // ... (other state variables and functions)
     } = useCoversubmit();
 
     useEffect(() => {
@@ -168,8 +165,8 @@ const CoveringSubmit = () => {
                                     Download
                                 </Button>
                                 <Menu {...bindMenu(popupState)}>
-                                    <MenuItem >Excel</MenuItem>
-                                    <MenuItem >PDF</MenuItem>
+                                    <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                                    <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
                                 </Menu>
                             </React.Fragment>
                         )}

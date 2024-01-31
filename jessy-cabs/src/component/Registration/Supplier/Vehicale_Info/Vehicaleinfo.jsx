@@ -87,6 +87,7 @@ const Vehicaleinfo = () => {
     errorMessage,
     warningMessage,
     infoMessage,
+    handleRowClick,
     book,
     handleClick,
     handleChange,
@@ -681,6 +682,7 @@ const Vehicaleinfo = () => {
             <DataGrid
               rows={rows}
               columns={columns}
+              onRowClick={handleRowClick}
               pageSize={5}
               checkboxSelection
             />

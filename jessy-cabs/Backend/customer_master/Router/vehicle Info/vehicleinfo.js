@@ -15,6 +15,36 @@ router.post('/vehicleinfo', (req, res) => {
   });
 });
 
+// Delete Customer Master data
+router.delete('/vehicleinfo/:vehicleId', (req, res) => {
+  const vehicleId = req.params.vehicleId;
+  db.query('DELETE FROM vehicleinfo WHERE vehicleId = ?', vehicleId, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to delete data from MySQL' });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+    return res.status(200).json({ message: 'Data deleted successfully' });
+  });
+});
+
+// Update Customer Master details
+router.put('/vehicleinfo/:vehicleId', (req, res) => {
+  const vehicleId = req.params.vehicleId;
+  const updatedCustomerData = req.body;
+  db.query('UPDATE vehicleinfo SET ? WHERE vehicleId = ?', [updatedCustomerData, vehicleId], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to update data in MySQL' });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+    return res.status(200).json({ message: 'Data updated successfully' });
+  });
+});
+
+
 router.get('/searchvehicleinfo', (req, res) => {
   const { searchText, fromDate, toDate } = req.query;
 

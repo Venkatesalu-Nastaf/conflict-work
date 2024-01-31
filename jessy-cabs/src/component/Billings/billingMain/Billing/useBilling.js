@@ -72,7 +72,6 @@ const useBilling = () => {
     // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -130,7 +129,7 @@ const useBilling = () => {
 
             if (!tripid) {
                 setError(true);
-                setErrorMessage("Please enter the tripid");
+                setErrorMessage("Please enter the Billing Data");
             } else {
                 localStorage.setItem('selectedTripid', tripid);
                 localStorage.setItem('selectedcustomerid', customer);
@@ -335,9 +334,11 @@ const useBilling = () => {
         setSelectedCustomerData({});
         setSelectedCustomerDatas({});
         setSelectedBankAccount('');
+        setSelectedCustomerDatas({});
     };
 
-    const handleClick = async (event, actionName, customer, tripid) => {
+    const handleClick = async (event, actionName, tripid) => {
+        const customer = formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer
         event.preventDefault();
         try {
             if (actionName === 'Print') {
@@ -378,6 +379,8 @@ const useBilling = () => {
                     };
                     await axios.put(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
                     handleCancel();
+                    setSuccess(true);
+                    setSuccessMessage("Successfully Updated");
                 } else {
                     setWarning(true);
                     setWarningMessage("You do not have permission.");
@@ -395,6 +398,9 @@ const useBilling = () => {
                     const updatedBook = {
                         ...book,
                         ...selecting,
+                        ...selectedCustomerDatas,
+                        ...formData,
+                        customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
                         Billingdate: selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
                         cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
                         cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
@@ -406,7 +412,6 @@ const useBilling = () => {
                     setSuccess(true);
                     setSuccessMessage("Successfully Added");
                 } else {
-                    // Display a warning or prevent the action
                     setWarning(true);
                     setWarningMessage("You do not have permission.");
                 }
@@ -424,18 +429,20 @@ const useBilling = () => {
     });
 
     const calculateTotalAmount = () => {
-        const totalkm1 = selectedCustomerDatas?.totalkm1 || selectedCustomerData?.totalkm1 || book.ChargesForExtra;
-        const ChargesForExtraamount = selectedCustomerDatas?.ChargesForExtraamount || selectedCustomerData?.ChargesForExtraamount || book.ChargesForExtraamount;
-        if (totalkm1 !== undefined && ChargesForExtraamount !== undefined) {
-            const totalKm = totalkm1 * ChargesForExtraamount;
-            return totalKm.toFixed(2);
+        const totalkm1 = parseFloat(formData?.ChargesForExtra || selectedCustomerData?.totalkm1 || selectedCustomerDatas?.ChargesForExtra || book?.ChargesForExtra || 0);
+        const chargesForExtraamount = parseFloat(formData?.ChargesForExtraamount || selectedCustomerData?.ChargesForExtraamount || selectedCustomerDatas?.ChargesForExtraamount || book?.ChargesForExtraamount || 0);
+
+        if (!isNaN(totalkm1) && !isNaN(chargesForExtraamount)) {
+            const totalAmount = totalkm1 * chargesForExtraamount;
+            return totalAmount.toFixed(2);
         }
+
         return '';
     };
 
     const calculateTotalAmount2 = () => {
-        const totaltime = selectedCustomerData?.totaltime || selectedCustomerDatas?.totaltime || book.ChargesForExtraHRS;
-        const ChargesForExtraHRSamount = selectedCustomerData?.ChargesForExtraHRSamount || selectedCustomerDatas?.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount;
+        const totaltime = formData.ChargesForExtraHRS || selectedCustomerData.totaltime || selectedCustomerDatas.ChargesForExtraHRS || book.ChargesForExtraHRS;
+        const ChargesForExtraHRSamount = formData.ChargesForExtraHRSamount || selectedCustomerData.ChargesForExtraHRSamount || selectedCustomerDatas.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount;
 
         if (totaltime !== undefined && ChargesForExtraHRSamount !== undefined) {
             const [hours, minutes] = totaltime.split('h');
@@ -580,6 +587,22 @@ const useBilling = () => {
         }
     }, []);
 
+    const handleKeyenter2 = useCallback(async (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            try {
+                const response = await axios.get(`http://localhost:8081/billing/${event.target.value}`);
+                const billingDetails = response.data;
+                setSuccess(true);
+                setSuccessMessage("Successfully listed");
+                setSelectedCustomerDatas(billingDetails);
+            } catch (error) {
+                setError(true);
+                setErrorMessage('Error retrieving billings details.');
+            }
+        }
+    }, []); 
+
     const selecting = {
         tripid: selectedCustomerDatas.tripid || selectedCustomerData.tripid || '',
         billingno: selectedCustomerDatas.billingno || selectedCustomerData.billingno || '',
@@ -623,7 +646,7 @@ const useBilling = () => {
         BalanceReceivable: selectedCustomerDatas.BalanceReceivable || selectedCustomerData.BalanceReceivable || calculatePayableAmount() || '',
         NetAmount: selectedCustomerDatas.NetAmount || selectedCustomerData.NetAmount || calculateroundedPayableAmount() || '',
         Totalamount: selectedCustomerDatas.Totalamount || selectedCustomerData.Totalamount || calculateroundedPayableAmount() || '',
-        paidamount: selectedCustomerDatas.paidamount || selectedCustomerData.paidamount || calculatePayableAmount() || '',
+        paidamount: formData.paidamount || selectedCustomerData.paidamount || selectedCustomerDatas.paidamount || book.paidamount || '',
         pendingamount: selectedCustomerDatas.pendingamount || selectedCustomerData.pendingamount || calculatePendingAmount() || '',
         BankAccount: selectedCustomerDatas.BankAccount || selectedCustomerData.BankAccount || selectedBankAccount || '',
     }
@@ -880,6 +903,7 @@ const useBilling = () => {
         tripstartkm,
         tripclosekm,
         tripstarttime,
+        handleKeyenter2,
         tripclosetime,
         tripstartdate,
         tripclosedate,

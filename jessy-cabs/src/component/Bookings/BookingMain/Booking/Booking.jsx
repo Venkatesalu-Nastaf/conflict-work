@@ -64,6 +64,11 @@ import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceT
 import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
 import useBooking from './useBooking';
 
+//dialog box
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -118,6 +123,7 @@ const Booking = () => {
     sendEmail,
     setSendEmail,
     displayCopy,
+    lastBookingNo,
     currentYear,
     setTripTime,
     handleClickHide,
@@ -132,6 +138,8 @@ const Booking = () => {
     toDate,
     setToDate,
     handleShowAll,
+    popupOpen,
+    handlePopupClose,
     handleExcelDownload,
     handlePdfDownload,
     reversedRows,
@@ -968,6 +976,16 @@ const Booking = () => {
               <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
             </div>
           </div>
+          <Dialog open={popupOpen} onClose={handlePopupClose}>
+            <DialogContent>
+              Booking Number:<br /> <h1>{lastBookingNo}</h1>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handlePopupClose} variant="contained" color="primary">
+                OK
+              </Button>
+            </DialogActions>
+          </Dialog>
           {error &&
             <div className='alert-popup Error' >
               <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>

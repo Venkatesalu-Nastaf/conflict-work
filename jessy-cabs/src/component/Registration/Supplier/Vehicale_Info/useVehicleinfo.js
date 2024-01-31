@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
@@ -39,6 +39,7 @@ const useVehicleinfo = () => {
     const user_id = localStorage.getItem('useridno');
 
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [actionName] = useState('');
     const [rows, setRows] = useState([]);
     const [info, setInfo] = useState(false);
@@ -293,7 +294,7 @@ const useVehicleinfo = () => {
         }
     };
 
-    const handleClick = async (event, actionName) => {
+    const handleClick = async (event, actionName, vehicleId) => {
         event.preventDefault();
 
         try {
@@ -304,9 +305,38 @@ const useVehicleinfo = () => {
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
             } else if (actionName === 'Delete') {
-                setSuccess(true);
-                setSuccessMessage("Successfully Deleted");
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.delete) {
+                    await axios.delete(`http://localhost:8081/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`);
+                    setSelectedCustomerData(null);
+                    handleCancel();
+                    setRows([]);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully Deleted");
+                } else {
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
+                }
             } else if (actionName === 'Edit') {
+                const permissions = checkPagePermission();
+
+                if (permissions.read && permissions.modify) {
+                    const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
+                    const updatedCustomer = {
+                        ...selectedCustomer,
+                        ...selectedCustomerData,
+
+                    };
+                    await axios.put(`http://localhost:8081/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
+                    handleCancel();
+                    setRows([]);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully Updated");
+                } else {
+                    setWarning(true);
+                    setWarningMessage("You do not have permission.");
+                }
             } else if (actionName === 'Add') {
                 handleAdd();
             }
@@ -357,23 +387,33 @@ const useVehicleinfo = () => {
                 const response = await fetch(`http://localhost:8081/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
                 const data = await response.json();
                 if (data.length > 0) {
-                    setRows(data);
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
                     setSuccess(true);
-                    setSuccessMessage("successfully listed")
+                    setSuccessMessage("Successfully listed")
                 } else {
                     setRows([]);
                     setError(true);
-                    setErrorMessage("no data find")
+                    setErrorMessage("No data found")
                 }
             } catch {
                 setError(true);
-                setErrorMessage("sorry")
+                setErrorMessage("No data found")
             }
         } else {
             setWarning(true);
             setWarningMessage("You do not have permission.");
         }
     };
+
+    const handleRowClick = useCallback((params) => {
+        const customerData = params.row;
+        setSelectedCustomerData(customerData);
+        setSelectedCustomerId(params.row.customerId);
+    }, []);
 
 
     return {
@@ -391,6 +431,8 @@ const useVehicleinfo = () => {
         book,
         handleClick,
         handleChange,
+        selectedCustomerId,
+        handleRowClick,
         isFieldReadOnly,
         handleAdd,
         hidePopup,

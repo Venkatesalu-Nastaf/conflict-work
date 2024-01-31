@@ -79,6 +79,12 @@ const useBooking = () => {
     const [warning, setWarning] = useState(false);
     const [success, setSuccess] = useState(false);
     const [formData, setFormData] = useState({});
+    const [popupOpen, setPopupOpen] = useState(false);
+
+    const handlePopupClose = () => {
+        setPopupOpen(false);
+    };
+
 
     // for page permission
 
@@ -91,7 +97,7 @@ const useBooking = () => {
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
-             
+
             }
         };
 
@@ -470,6 +476,8 @@ const useBooking = () => {
         }));
     };
 
+    const [lastBookingNo, setLastBookingNo] = useState('');
+
     const handleAdd = async () => {
         const permissions = checkPagePermission();
 
@@ -497,6 +505,11 @@ const useBooking = () => {
                     mobile: selectedCustomerDatas.phoneno,
                 };
                 await axios.post('http://localhost:8081/booking', updatedBook);
+                const response = await axios.get('http://localhost:8081/last-booking-no');
+                const lastBookingNo = response.data.bookingno;
+                setLastBookingNo(lastBookingNo);
+                setPopupOpen(true);
+                // alert(`Booking Number: ${lastBookingNo}`);
                 handleCancel();
                 setRow([]);
                 setRows([]);
@@ -712,9 +725,9 @@ const useBooking = () => {
                 await axios.post('http://localhost:8081/send-email', dataToSend);
                 setSuccess(true);
                 setSuccessMessage("Mail Sent Successfully")
-            } catch {
+            } catch (error) {
                 setError(true);
-                setErrorMessage("An error occured while sending mail")
+                setErrorMessage("An error occured while sending mail", error);
             }
         } else {
             setError(true);
@@ -848,9 +861,12 @@ const useBooking = () => {
         actions,
         searchText,
         setSearchText,
+        lastBookingNo,
         setreporttime,
         storedUsername,
         fromDate,
+        popupOpen,
+        handlePopupClose,
         setFromDate,
         toDate,
         setToDate,

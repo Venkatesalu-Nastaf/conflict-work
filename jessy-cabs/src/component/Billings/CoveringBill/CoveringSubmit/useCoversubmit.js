@@ -1,33 +1,25 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
+import jsPDF from 'jspdf';
+import { saveAs } from 'file-saver';
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
-    { field: "vcode", headerName: "VCode", width: 130 },
-    { field: "billno", headerName: "Bill No", width: 130 },
-    { field: "date", headerName: "Date", width: 130 },
-    { field: "customer", headerName: "Customer", width: 130 },
-    { field: "monthid", headerName: "MonthID", width: 130 },
-    { field: "fdate", headerName: "FDate", width: 130 },
-    { field: "tdate", headerName: "TDate", width: 150 },
-    { field: "username", headerName: "UserName", width: 150 },
-    { field: "Trips", headerName: "Trips", width: 150 },
-    { field: "Subtotal", headerName: "SubTotal", width: 150 },
-    { field: "grossamount", headerName: "GrossAmount", width: 150 },
-    { field: "gst", headerName: "GST%", width: 130 },
-    { field: "toll", headerName: "Toll", width: 130 },
-    { field: "Amount", headerName: "Amount", width: 130 },
     { field: "status", headerName: "Status", width: 130 },
-    { field: "Diff", headerName: "Diff", width: 130 },
+    { field: "invoiceno", headerName: "Invoice No", width: 130 },
+    { field: "Billingdate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "customer", headerName: "Customer", width: 130 },
+    { field: "fromdate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "todate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "guestname", headerName: "UserName", width: 150 },
+    { field: "trips", headerName: "Trips", width: 150 },
+    { field: "Totalamount", headerName: "Amount", width: 130 },
 ];
 
-
 const useCoversubmit = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [tripData] = useState('');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
@@ -53,8 +45,7 @@ const useCoversubmit = () => {
                 const currentPageName = 'CB Billing';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -96,6 +87,41 @@ const useCoversubmit = () => {
         return true;
     };
 
+    const convertToCSV = (data) => {
+        const header = columns.map((column) => column.headerName).join(",");
+        const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+        return [header, ...rows].join("\n");
+    };
+    const handleExcelDownload = () => {
+        const csvData = convertToCSV(rows);
+        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+        saveAs(blob, "Cover.csv");
+    };
+    const handlePdfDownload = () => {
+        const pdf = new jsPDF();
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text("Cover Submit", 10, 10);
+        const tableData = rows.map((row) => [
+            row['id'],
+            row['status'],
+            row['invoiceno'],
+            row['Billingdate'],
+            row['customer'],
+            row['fromdate'],
+            row['todate'],
+            row['guestname'],
+            row['trips'],
+            row['Totalamount']
+        ]);
+        pdf.autoTable({
+            head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'From Date', 'To Date', 'UserName', 'Trips', 'Amount']],
+            body: tableData,
+            startY: 20,
+        });
+        const pdfBlob = pdf.output('blob');
+        saveAs(pdfBlob, 'Cover.pdf');
+    };
 
     const hidePopup = () => {
         setError(false);
@@ -128,12 +154,6 @@ const useCoversubmit = () => {
         }
     }, [success]);
 
-    // const handleInputChange = (event, newValue) => {
-    //     if (event.target.name === 'customer') {
-    //         setCustomer(newValue ? newValue.label : '');
-    //     }
-    // };
-
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
     };
@@ -154,33 +174,26 @@ const useCoversubmit = () => {
                 if (data) {
                     setBankOptions(data);
                 } else {
-                    setError(true);
-                    setErrorMessage('Failed to fetch organization options.');
                 }
             })
             .catch(() => {
-                setError(true);
-                setErrorMessage('Failed to fetch organization options.');
             });
     }, []);
 
     const handleShow = useCallback(async () => {
 
         try {
-            const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
-            const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
-            const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
-            const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
-
-            const response = await axios.get(`http://localhost:8081/Group-Billing`, {
+            const response = await axios.get(`http://localhost:8081/payment-detail`, {
                 params: {
-                    customer: customerValue,
-                    fromDate: fromDateValue,
-                    toDate: toDateValue,
-                    servicestation: servicestationValue
+                    customer: encodeURIComponent(customer),
+                    fromDate: fromDate.format('YYYY-MM-DD'),
+                    toDate: toDate.format('YYYY-MM-DD'),
+                    servicestation: encodeURIComponent(servicestation),
                 },
             });
+
             const data = response.data;
+
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
                     ...row,
@@ -188,11 +201,11 @@ const useCoversubmit = () => {
                 }));
                 setRows(rowsWithUniqueId);
                 setSuccess(true);
-                setSuccessMessage("successfully listed")
+                setSuccessMessage("Successfully listed");
             } else {
                 setRows([]);
                 setError(true);
-                setErrorMessage("no data found")
+                setErrorMessage("No data found");
             }
         } catch {
             setRows([]);
@@ -200,7 +213,7 @@ const useCoversubmit = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData]);
+    }, [customer, fromDate, toDate, servicestation]);
 
     return {
         rows,
@@ -225,6 +238,8 @@ const useCoversubmit = () => {
         servicestation,
         handleserviceInputChange,
         handleShow,
+        handleExcelDownload,
+        handlePdfDownload,
         columns,
     };
 };

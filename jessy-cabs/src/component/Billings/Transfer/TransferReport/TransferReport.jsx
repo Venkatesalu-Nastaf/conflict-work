@@ -123,7 +123,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="Invoice No"
-                    value={routedData?.[0]?.invoiceno || ''}
+                    value={routedData[0]?.invoiceno || ''}
                     name="invoiceno"
                     autoComplete='off'
                   />
@@ -188,7 +188,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="Invoice Date"
-                    value={(routedData?.[0]?.Billingdate) || ''}
+                    value={(routedData[0]?.Billingdate) || ''}
                     name="Billdate"
                     autoComplete='off'
                   />
@@ -200,7 +200,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="From Date"
-                    value={(routedData?.[0]?.fromdate) || ''}
+                    value={(routedData[0]?.fromdate) || ''}
                     name="fromdate"
                     autoComplete='off'
                   />
@@ -210,7 +210,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="To Date"
-                    value={(routedData?.[0]?.todate) || ''}
+                    value={(routedData[0]?.todate) || ''}
                     name="todate"
                     autoComplete='off'
                   />

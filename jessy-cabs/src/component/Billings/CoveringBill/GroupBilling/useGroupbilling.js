@@ -63,8 +63,7 @@ const useGroupbilling = () => {
                 const currentPageName = 'CB Billing';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -139,11 +138,6 @@ const useGroupbilling = () => {
         }
     }, [success]);
 
-    // const handleInputChange = (event, newValue) => {
-    //     if (event.target.name === 'customer') {
-    //         setInvoiceNo(newValue ? newValue.label : '');
-    //     }
-    // };
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
     };
@@ -169,7 +163,6 @@ const useGroupbilling = () => {
         }));
     };
 
-
     const [book, setBook] = useState({
         Billingdate: '',
         invoiceno: '',
@@ -185,17 +178,13 @@ const useGroupbilling = () => {
                 if (data) {
                     setBankOptions(data);
                 } else {
-                    setError(true);
-                    setErrorMessage('Failed to fetch organization options.');
                 }
             })
             .catch(() => {
-                setError(true);
-                setErrorMessage('Failed to fetch organization options.');
             });
     }, []);
 
-    const calculateNetAmountSum = (data) => {
+    const calculateNetAmountSum = useCallback((data) => {
         return data.reduce((sum, item) => {
             const netAmountValue = parseFloat(item.netamount, 10);
             if (isNaN(netAmountValue) || !isFinite(netAmountValue)) {
@@ -204,15 +193,14 @@ const useGroupbilling = () => {
             }
             return sum + netAmountValue;
         }, 0);
-    };
+    }, []);
 
     const handleShow = useCallback(async () => {
-
         try {
-            const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+            const customerValue = encodeURIComponent(customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : ''));
             const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
-            const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+            const servicestationValue = servicestation || selectedCustomerDatas?.station || (tripData.length > 0 ? tripData[0].department : '');
 
             const response = await axios.get(`http://localhost:8081/Group-Billing`, {
                 params: {
@@ -223,35 +211,36 @@ const useGroupbilling = () => {
                 },
             });
             const data = response.data;
-            if (Array.isArray(data)) {
+
+            if (Array.isArray(data) && data.length > 0) {
                 setRows(data);
                 const netAmountSum = calculateNetAmountSum(data);
                 setTotalValue(netAmountSum);
-                const calculateRoundOff = () => {
-                    const balanceAmount = parseFloat(totalValue);
-                    const roundedGrossAmount = Math.ceil(balanceAmount);
-                    const roundOff = roundedGrossAmount - balanceAmount;
-                    return roundOff.toFixed(2);
-                };
-                const roundOffValue = calculateRoundOff();
+
+                const roundedGrossAmount = Math.ceil(netAmountSum);
+                const roundOff = roundedGrossAmount - netAmountSum;
+                const roundOffValue = roundOff.toFixed(2);
                 setRoundedAmount(roundOffValue);
-                const sumTotalAndRounded = parseFloat(totalValue) + parseFloat(roundedAmount);
+
+                const sumTotalAndRounded = netAmountSum + parseFloat(roundOffValue);
                 setSumTotalAndRounded(sumTotalAndRounded);
+
                 setTripData(data);
                 setSuccess(true);
-                setSuccessMessage("Successfully listed")
+                setSuccessMessage("Successfully listed");
             } else {
                 setRows([]);
                 setError(true);
                 setErrorMessage("No data found");
             }
-        } catch {
+        } catch (error) {
+            console.error("Error fetching data:", error);
             setRows([]);
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
+    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum]);
 
-    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, roundedAmount, totalValue]);
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");

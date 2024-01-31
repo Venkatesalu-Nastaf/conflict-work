@@ -6,7 +6,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import Booking from "./Booking/Booking.jsx";
 import TabContext from "@mui/lab/TabContext";
 import BookingCopy from "./BookingCopy/BookingCopy.jsx";
-import Excelimport from "./Excelimport/Excelimport.jsx";
+// import Excelimport from "./Excelimport/Excelimport.jsx";
 import BokkingChart from "./BookingChart/BookingChart.jsx";
 
 const BookingMain = () => {
@@ -27,7 +27,7 @@ const BookingMain = () => {
               >
                 <Tab label="Booking" value="booking" />
                 <Tab label="Booking Copy" value="bookingcopy" />
-                <Tab label="Excel Import" value="excelimport" />
+                {/* <Tab label="Excel Import" value="excelimport" /> */}
                 <Tab label="Booking Chart" value="bookingchart" />
               </TabList>
             </Box>
@@ -38,7 +38,7 @@ const BookingMain = () => {
               <BookingCopy />
             </TabPanel>
             <TabPanel value="excelimport">
-              <Excelimport />
+              {/* <Excelimport /> */}
             </TabPanel>
             <TabPanel value="bookingchart">
               <BokkingChart />

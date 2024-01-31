@@ -6,9 +6,7 @@ import { saveAs } from 'file-saver';
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 
 const useTransferlist = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [selectedStatus, setSelectedStatus] = useState('');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
@@ -84,29 +82,32 @@ const useTransferlist = () => {
     const handleExcelDownload = () => {
         const csvData = convertToCSV(rows);
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-        saveAs(blob, "customer_details.csv");
+        saveAs(blob, "Transfer_list.csv");
     };
     const handlePdfDownload = () => {
         const pdf = new jsPDF();
         pdf.setFontSize(12);
         pdf.setFont('helvetica', 'normal');
-        pdf.text("Customer Details", 10, 10);
+        pdf.text("Transfer_list", 10, 10);
         const tableData = rows.map((row) => [
             row['id'],
-            row['voucherno'],
-            row['printName'],
-            row['Billname'],
-            row['date'],
-            row['PaymentCategory'],
-            row['amount']
+            row['status'],
+            row['invoiceno'],
+            row['Billingdate'],
+            row['customer'],
+            row['fromdate'],
+            row['todate'],
+            row['guestname'],
+            row['trips'],
+            row['Totalamount']
         ]);
         pdf.autoTable({
-            head: [['Sno', 'VoucherNo', 'Payment Date', 'Bill Name', 'Payment Category', 'Amount']],
+            head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'From Date', 'To Date', 'UserName', 'Trips', 'Amount']],
             body: tableData,
             startY: 20,
         });
         const pdfBlob = pdf.output('blob');
-        saveAs(pdfBlob, 'Customer_Details.pdf');
+        saveAs(pdfBlob, 'Transfer_list.pdf');
     };
 
     const hidePopup = () => {
@@ -175,11 +176,6 @@ const useTransferlist = () => {
                 const rowsWithUniqueId = data.map((row, index) => ({
                     ...row,
                     id: index + 1,
-                    // Trips: row.trip_count,
-                    // toll: row.total_toll,
-                    // amount: row.total_Amount,
-                    // grossamount: row.total_Amount,
-                    // guestname: row.customer,
                 }));
                 setRows(rowsWithUniqueId);
                 setSuccess(true);
@@ -220,7 +216,6 @@ const useTransferlist = () => {
         const billingPageUrl = `/home/billing/transfer?tab=dataentry`;
         window.location.href = billingPageUrl;
     }
-
 
     return {
         rows,

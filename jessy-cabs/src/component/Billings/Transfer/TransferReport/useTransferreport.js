@@ -187,14 +187,6 @@ const useTransferreport = () => {
         setpbPopupOpen(false);
         setnPopupOpen(false);
         setlxPopupOpen(false);
-        localStorage.removeItem('selectedcustomerdata');
-        localStorage.removeItem('selectedcustomer');
-        localStorage.removeItem('selectedcustomerid');
-        localStorage.removeItem('selectedtripsheetid');
-        localStorage.removeItem('fromDate');
-        localStorage.removeItem('toDate');
-        setRoutedData({});
-        setTripData({});
     };
 
     const hidePopup = () => {
@@ -231,7 +223,7 @@ const useTransferreport = () => {
                             id: index + 1,
                         }));
                         setRows(rowsWithUniqueId);
-                        setSuccess(true);
+                        // setSuccess(true);
                         setSuccessMessage("successfully listed")
                     } else {
                         setRows([]);
@@ -345,8 +337,35 @@ const useTransferreport = () => {
 
     const [routedData, setRoutedData] = useState('');
 
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const fromdate = localStorage.getItem('fromDate');
+    //             const todate = localStorage.getItem('toDate');
+    //             const customerValue = encodeURIComponent(customer) || (tripData.length > 0 ? tripData[0].customer : '');
+    //             const fromDateValue = fromdate;
+    //             const toDateValue = todate;
+    //             const servicestationValue = servicestation || (tripData.length > 0 ? tripData[0].department : '');
+    //             const response = await fetch(`http://localhost:8081/Get-Billing`, {
+    //                 params: {
+    //                     customer: customerValue,
+    //                     fromDate: fromDateValue,
+    //                     toDate: toDateValue,
+    //                     servicestation: servicestationValue
+    //                 },
+    //             });
+    //             const routedData = await response.json();
+    //             setRoutedData(routedData);
+    //         } catch {
+
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [customer, servicestation, tripData]);
+
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData4 = async () => {
             try {
                 const fromdate = localStorage.getItem('fromDate');
                 const todate = localStorage.getItem('toDate');
@@ -354,28 +373,25 @@ const useTransferreport = () => {
                 const fromDateValue = fromdate;
                 const toDateValue = todate;
                 const servicestationValue = servicestation || (tripData.length > 0 ? tripData[0].department : '');
-                const response = await axios.get(`http://localhost:8081/Get-Billing`, {
-                    params: {
-                        customer: customerValue,
-                        fromDate: fromDateValue,
-                        toDate: toDateValue,
-                        servicestation: servicestationValue
-                    },
-                });
+                if (customerValue.trim() !== '' || fromDateValue.trim() !== '' || toDateValue.trim() !== '' || servicestationValue.trim() !== '') {
+                    const response = await fetch(`http://localhost:8081/Get-Billing`, {
+                        params: {
+                            customer: customerValue,
+                            fromDate: fromDateValue,
+                            toDate: toDateValue,
+                            servicestation: servicestationValue
+                        },
+                    });
 
-                const routedData = response.data;
-                setRoutedData(routedData);
+                    const routedData = await response.json();
+                    setRoutedData(routedData);
+                }
             } catch {
-
             }
         };
 
-        fetchData();
+        fetchData4();
     }, [customer, servicestation, tripData]);
-
-
-
-
 
     const [attachedImage, setAttachedImage] = useState('');
 
@@ -399,7 +415,7 @@ const useTransferreport = () => {
         };
         fetchData();
     }, []);
-    
+
 
 
     return {

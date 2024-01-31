@@ -44,7 +44,7 @@ router.put('/tripsheet/:tripid', (req, res) => {
 // collect data from tripsheet database
 router.get('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    db.query('SELECT * FROM tripsheet WHERE tripid = ?', tripid, (err, result) => {
+    db.query('SELECT * FROM tripsheet WHERE tripid = ? AND status != "CBilled"', tripid, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }
@@ -81,8 +81,12 @@ router.post('/send-tripsheet-email', async (req, res) => {
             secure: true,
             auth: {
                 user: 'akash02899@gmail.com',
-                pass: 'yocakaoeoajdaawj',
+                pass: 'jojgadyyolbuxlyo',
             },
+            tls: {
+                // Ignore SSL certificate errors
+                rejectUnauthorized: false
+            }
         });
         // Email content for the owner
         const ownerMailOptions = {

@@ -327,7 +327,6 @@ app.use('/images', express.static(attachedmaiDirectory));
 // Example route to serve an image by its filename
 app.get('/get-attachedmailimage/:bookingno', (req, res) => {
   const { bookingno } = req.params;
-  console.log(bookingno);
   const query = 'SELECT path FROM tripsheetupload WHERE bookingno = ?';
 
   db.query(query, [bookingno], (err, results) => {

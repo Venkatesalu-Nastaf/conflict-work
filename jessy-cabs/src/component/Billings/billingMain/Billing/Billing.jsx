@@ -121,6 +121,7 @@ const Billing = () => {
         tripstartkm,
         tripclosekm,
         tripstarttime,
+        handleKeyenter2,
         tripclosetime,
         tripstartdate,
         tripclosedate,
@@ -177,7 +178,7 @@ const Billing = () => {
                                     autoComplete="new-password"
                                     value={formData.billingno || selectedCustomerData.billingno || selectedCustomerDatas.billingno || book.billingno || ''}
                                     onChange={handleChange}
-                                    onKeyDown={handleKeyenter}
+                                    onKeyDown={handleKeyenter2}
                                 />
                             </div>
                             <div className="input">
@@ -435,7 +436,7 @@ const Billing = () => {
                                         type='number'
                                         name="ChargesForExtra"
                                         autoComplete="new-password"
-                                        value={formData.ChargesForExtra || selectedCustomerData.totalkm1 || selectedCustomerDatas.ChargesForExtra || book.ChargesForExtra || ''}
+                                        value={formData.ChargesForExtra || selectedCustomerData.totalkm1 || selectedCustomerDatas.ChargesForExtra || book?.ChargesForExtra || ''}
                                         onChange={handleChange}
                                         label="Charges For Extra"
                                         id="ChargesForExtra"
@@ -477,7 +478,7 @@ const Billing = () => {
                                         value={calculateTotalAmount() || ''}
                                         onChange={handleChange}
                                         size="small"
-                                        label="Amount"
+                                        label="Amount1"
                                         id="cfeamount"
                                         variant="standard"
                                     />
@@ -530,10 +531,10 @@ const Billing = () => {
                                     <TextField
                                         name="cfehamount"
                                         autoComplete="new-password"
-                                        value={calculateTotalAmount2() || book.cfehamount || ''}
+                                        value={calculateTotalAmount2()}
                                         onChange={handleChange}
                                         size="small"
-                                        label="Amount"
+                                        label="Amount2"
                                         id="cfehamount"
                                         variant="standard"
                                     />

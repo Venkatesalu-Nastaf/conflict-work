@@ -1123,18 +1123,31 @@ const useTripsheet = () => {
     }, [setSelectedCustomerData, setFormData, setTripSheetData, setPackageDetails]);
 
     const handleKeyDown = useCallback(async (event) => {
-
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
                 const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
                 const bookingDetails = response.data;
-                setSelectedCustomerData(bookingDetails);
-                setSelectedCustomerId(bookingDetails.tripid);
-            } catch {
+                if (response.status === 200 && bookingDetails) {
+                    setSelectedCustomerData(bookingDetails);
+                    setSelectedCustomerId(bookingDetails.tripid);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
+                } else {
+                    setError(true);
+                    setErrorMessage("No data found");
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 404) {
+                    setError(true);
+                    setErrorMessage("Tripsheet not found");
+                } else {
+                    setError(true);
+                    setErrorMessage("Failed to fetch data");
+                    console.error("Error fetching data:", error);
+                }
             }
         }
-
     }, []);
 
     const [enterPressCount, setEnterPressCount] = useState(0);

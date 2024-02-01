@@ -11,6 +11,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
 import { Autocomplete } from "@mui/material";
 
@@ -56,6 +57,8 @@ const TransferDataEntry = () => {
     setFromDate,
     toDate,
     setToDate,
+    info,
+    infoMessage,
     servicestation,
     handleserviceInputChange,
     handleShow,
@@ -305,6 +308,13 @@ const TransferDataEntry = () => {
               <p>{warningMessage}</p>
             </div>
           }
+           {info &&
+              <div className='alert-popup Info' >
+                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{infoMessage}</p>
+              </div>
+            }
         </div>
       </form>
     </div>

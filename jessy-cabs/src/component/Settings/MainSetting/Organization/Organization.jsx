@@ -15,6 +15,7 @@ import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import useOrganization from './useOrganization';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
 
 // REACT ICONS
@@ -32,6 +33,8 @@ const Organization = () => {
         errorMessage,
         warningMessage,
         book,
+        info,
+        infoMessage,
         handleClick,
         handleChange,
         isFieldReadOnly,
@@ -553,6 +556,13 @@ const Organization = () => {
                             </Button>
                         </div>
                     </div>
+                    {info &&
+                        <div className='alert-popup Info' >
+                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{infoMessage}</p>
+                        </div>
+                    }
                 </div>
             </form>
         </div>

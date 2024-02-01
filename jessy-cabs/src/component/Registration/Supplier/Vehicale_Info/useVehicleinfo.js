@@ -51,8 +51,8 @@ const useVehicleinfo = () => {
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage, setWarningMessage] = useState({});
-    const [infoMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage,setInfoMessage] = useState({});
 
 
     // for page permission
@@ -289,8 +289,8 @@ const useVehicleinfo = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -315,8 +315,8 @@ const useVehicleinfo = () => {
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
@@ -334,8 +334,8 @@ const useVehicleinfo = () => {
                     setSuccess(true);
                     setSuccessMessage("Successfully Updated");
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Add') {
                 handleAdd();
@@ -404,8 +404,8 @@ const useVehicleinfo = () => {
                 setErrorMessage("No data found")
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 

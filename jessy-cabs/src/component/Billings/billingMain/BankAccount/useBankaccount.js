@@ -15,8 +15,8 @@ const useBankaccount = () => {
     const [bankDetails, setBankDetails] = useState([]);
     const [popupOpen, setPopupOpen] = useState(false);
     const [editingIndex, setEditingIndex] = useState(null);
-    const [infoMessage] = useState('');
-    const [warningMessage, setWarningMessage] = useState('');
+    const [infoMessage, setInfoMessage] = useState('');
+    const [warningMessage] = useState('');
     const [info, setInfo] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [warning, setWarning] = useState(false);
@@ -161,8 +161,8 @@ const useBankaccount = () => {
             setEditingIndex(null);
         } else {
             // Display a warning or prevent the action
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -191,8 +191,8 @@ const useBankaccount = () => {
                 setErrorMessage('Error updating bank account. Please check your Network Connection.');
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -242,8 +242,8 @@ const useBankaccount = () => {
             }
         } else {
             // Display a warning or prevent the action
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -356,8 +356,8 @@ const useBankaccount = () => {
         popupOpen,
         handlePopupClose,
         handleDeleteBank,
-    
-    
+
+
     };
 };
 

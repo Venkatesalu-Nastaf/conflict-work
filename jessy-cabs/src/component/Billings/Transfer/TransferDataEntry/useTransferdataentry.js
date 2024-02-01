@@ -5,6 +5,7 @@ import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData'
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 
+
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "status", headerName: "Status", width: 130 },
@@ -51,12 +52,14 @@ const useTransferdataentry = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const [bankOptions, setBankOptions] = useState([]);
     const [warning, setWarning] = useState(false);
-    const [warningMessage, setWarningMessage] = useState({});
+    const [warningMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [successMessage, setSuccessMessage] = useState({});
     const [servicestation, setServiceStation] = useState("");
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
+    const [info, setInfo] = useState(false);
+    const [infoMessage, setInfoMessage] = useState({});
 
     // for page permission
 
@@ -166,6 +169,7 @@ const useTransferdataentry = () => {
         setError(false);
         setSuccess(false);
         setWarning(false);
+        setInfo(false);
     };
 
     useEffect(() => {
@@ -184,6 +188,14 @@ const useTransferdataentry = () => {
             return () => clearTimeout(timer);
         }
     }, [error]);
+    useEffect(() => {
+        if (info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [info]);
 
     useEffect(() => {
         if (success) {
@@ -435,8 +447,8 @@ const useTransferdataentry = () => {
             setSuccess(true);
             setSuccessMessage("Successfully Added");
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -554,8 +566,6 @@ const useTransferdataentry = () => {
 
     }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData]);
 
-
-
     return {
         rows,
         error,
@@ -582,11 +592,13 @@ const useTransferdataentry = () => {
         setFromDate,
         toDate,
         setToDate,
+        info,
         servicestation,
         handleserviceInputChange,
         handleShow,
         handleCancel,
         handleClickGenerateBill,
+        infoMessage,
         handleExcelDownload,
         handlePdfDownload,
         handleBillRemove,

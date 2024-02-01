@@ -43,8 +43,8 @@ const useTripsheet = () => {
     const [maplogimgpopupOpen, setMaplogimgPopupOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage, setWarningMessage] = useState({});
-    const [infoMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
 
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
@@ -133,8 +133,8 @@ const useTripsheet = () => {
                 }
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -218,8 +218,8 @@ const useTripsheet = () => {
             } catch {
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
     //list data in row
@@ -606,8 +606,8 @@ const useTripsheet = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -685,8 +685,8 @@ const useTripsheet = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -749,8 +749,8 @@ const useTripsheet = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 

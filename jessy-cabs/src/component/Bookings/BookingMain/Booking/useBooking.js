@@ -74,8 +74,8 @@ const useBooking = () => {
     const [info, setInfo] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage, setWarningMessage] = useState({});
-    const [infoMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
     const [searchText, setSearchText] = useState('');
     const [warning, setWarning] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -525,8 +525,8 @@ const useBooking = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -552,8 +552,8 @@ const useBooking = () => {
                     setRow([]);
                     setRows([]);
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Modify') {
                 const permissions = checkPagePermission();
@@ -583,8 +583,8 @@ const useBooking = () => {
                     setSuccess(true);
                     setSuccessMessage("Successfully Updated");
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Copy This') {
                 handleClickShow();
@@ -771,8 +771,8 @@ const useBooking = () => {
                 setErrorMessage("sorry")
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 

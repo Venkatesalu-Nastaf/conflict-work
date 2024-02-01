@@ -35,8 +35,8 @@ const usePackagerateentry = () => {
     const [warning, setWarning] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage, setWarningMessage] = useState({});
-    const [infoMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage,setInfoMessage] = useState({});
 
 
     // for page permission
@@ -247,8 +247,8 @@ const usePackagerateentry = () => {
             }
         } else {
             // Display a warning or prevent the action
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -271,8 +271,8 @@ const usePackagerateentry = () => {
                         setErrorMessage("No data found");
                     }
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Cancel') {
                 handleCancel();
@@ -287,8 +287,8 @@ const usePackagerateentry = () => {
                     handleCancel();
                     setRows([]);
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
@@ -302,8 +302,8 @@ const usePackagerateentry = () => {
                     handleCancel();
                     setRows([]);
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Add') {
                 handleAdd();

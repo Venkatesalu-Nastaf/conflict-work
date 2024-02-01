@@ -4,11 +4,13 @@ import axios from 'axios';
 const usePermission = () => {
 
     const [warning, setWarning] = useState(false);
-    const [warningMessage, setWarningMessage] = useState({});
+    const [warningMessage] = useState({});
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState({});
+    const [info, setInfo] = useState(false);
+    const [infoMessage, setInfoMessage] = useState({});
 
     const hidePopup = () => {
         setSuccess(false);
@@ -39,6 +41,14 @@ const usePermission = () => {
             return () => clearTimeout(timer);
         }
     }, [success]);
+    useEffect(() => {
+        if (info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [info]);
 
     const user_id = localStorage.getItem('useridno');
 
@@ -185,8 +195,8 @@ const usePermission = () => {
                 console.error('Error saving permissions:', error);
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -232,8 +242,8 @@ const usePermission = () => {
                     console.error(error);
                 }
             } else {
-                setWarning(true);
-                setWarningMessage("You do not have permission.");
+                setInfo(true);
+                setInfoMessage("You do not have permission.");
             }
         }
     }, [checkPagePermission]);
@@ -255,6 +265,8 @@ const usePermission = () => {
         handleChange,
         isFieldReadOnly,
         hidePopup,
+        info,
+        infoMessage,
         userId,
         handleKeyDown,
         handleSavePermissions,

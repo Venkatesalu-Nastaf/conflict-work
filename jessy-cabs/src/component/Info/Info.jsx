@@ -1,10 +1,7 @@
-import React, { useEffect } from "react";
+import { useState } from 'react';
 import "./Info.css";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import ClearIcon from "@mui/icons-material/Clear";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { CirclesWithBar } from "react-loader-spinner";
-import useInfo from "./useInfo";
+
 
 const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
   const location = useLocation();
@@ -22,84 +19,54 @@ const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
 };
 
 const Info = () => {
-  const {
-    actionName,
-    warning,
-    warningMessage,
-    handleClick,
-    hidePopup,
-    isLoading,
-    activeMenuItem,
-    handleMenuItemClick,
-    permissions,
+  const [activeMenuItem, setActiveMenuItem] = useState('');
 
-    // ... (other state variables and functions)
-  } = useInfo();
+  const handleMenuItemClick = (menuItem) => {
+    localStorage.setItem('activeMenuItem', menuItem);
+    setActiveMenuItem(menuItem);
+  };
 
-  useEffect(() => {
-    if (actionName === "List") {
-      handleClick(null, "List");
-    }
-  }, [actionName, handleClick]);
 
   return (
-    <div className={isLoading ? "loading-container" : ""}>
-      {isLoading ? (
-        <div className="loading-spinners">
-          <CirclesWithBar color="#fff" height={70} width={70} />
-        </div>
-      ) : (
-        <>
-          <div className="Info-conatiner" id="menu">
-            <div className="menu-bar">
-              <MenuItem
-                label="Rate Type"
-                to="/home/info/ratetype"
-                menuItemKey="Rate Type"
-                activeMenuItem={activeMenuItem}
-                handleMenuItemClick={handleMenuItemClick}
-              />
-              <MenuItem
-                label="Rate Management"
-                to="/home/info/ratemanagement"
-                menuItemKey="Rate Management"
-                activeMenuItem={activeMenuItem}
-                handleMenuItemClick={handleMenuItemClick}
-              />
-              <MenuItem
-                label="Mailers"
-                to="/home/info/mailer"
-                menuItemKey="Mailers"
-                activeMenuItem={activeMenuItem}
-                handleMenuItemClick={handleMenuItemClick}
-              />
-              <MenuItem
-                label="Fuel Info"
-                to="/home/info/fuelinfo"
-                menuItemKey="FuelInfo"
-                activeMenuItem={activeMenuItem}
-                handleMenuItemClick={handleMenuItemClick}
-              />
-            </div>
 
-            {permissions.read && <Outlet />}
+    <div className="Info-conatiner" id="menu">
+      <div className="menu-bar">
+        <MenuItem
+          label="Rate Type"
+          to="/home/info/ratetype"
+          menuItemKey="Rate Type"
+          activeMenuItem={activeMenuItem}
+          handleMenuItemClick={handleMenuItemClick}
+        />
+        <MenuItem
+          label="Rate Management"
+          to="/home/info/ratemanagement"
+          menuItemKey="Rate Management"
+          activeMenuItem={activeMenuItem}
+          handleMenuItemClick={handleMenuItemClick}
+        />
+        <MenuItem
+          label="Mailers"
+          to="/home/info/mailer"
+          menuItemKey="Mailers"
+          activeMenuItem={activeMenuItem}
+          handleMenuItemClick={handleMenuItemClick}
+        />
+        <MenuItem
+          label="Fuel Info"
+          to="/home/info/fuelinfo"
+          menuItemKey="FuelInfo"
+          activeMenuItem={activeMenuItem}
+          handleMenuItemClick={handleMenuItemClick}
+        />
+      </div>
 
-            {warning && (
-              <div className="alert-popup Warning">
-                <div className="popup-icon">
-                  {" "}
-                  <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
-                </div>
-                <span className="cancel-btn" onClick={hidePopup}>
-                  <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-                </span>
-                <p>{warningMessage}</p>
-              </div>
-            )}
-          </div>
-        </>
-      )}
+      <Outlet />
+
+
+
     </div>
+
   );
 };
 

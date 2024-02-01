@@ -16,7 +16,10 @@ const useOrganization = () => {
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [warning, setWarning] = useState(false);
-    const [warningMessage, setWarningMessage] = useState({});
+    const [warningMessage] = useState({});
+
+    const [info, setInfo] = useState(false);
+    const [infoMessage, setInfoMessage] = useState({});
 
     const [userPermissions, setUserPermissions] = useState({});
 
@@ -107,6 +110,14 @@ const useOrganization = () => {
             return () => clearTimeout(timer);
         }
     }, [error]);
+    useEffect(() => {
+        if (info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [info]);
 
 
     const handleKeyDown = useCallback(async (event) => {
@@ -145,8 +156,8 @@ const useOrganization = () => {
                 setErrorMessage("Something went wrong");
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -171,8 +182,8 @@ const useOrganization = () => {
                 setErrorMessage("Something went wrong");
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -248,10 +259,10 @@ const useOrganization = () => {
                 if (userDataArray.length > 0) {
                     setSelectedCustomerData(userDataArray[0]);
                 } else {
-                   
+
                 }
             } catch {
-               
+
             }
         };
 
@@ -261,6 +272,8 @@ const useOrganization = () => {
 
     const hidePopup = () => {
         setSuccess(false);
+        setWarning(false);
+        setInfo(false);
         setError(false);
         setErrorMessage('');
     };
@@ -301,6 +314,8 @@ const useOrganization = () => {
         handleAdd,
         hidePopup,
         selectedImage,
+        info,
+        infoMessage,
         editMode,
         handleFileChange,
         handleUpload,

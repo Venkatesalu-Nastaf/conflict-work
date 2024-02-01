@@ -9,6 +9,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import usePermission from './usePermission';
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
 const Permission = () => {
 
@@ -20,6 +21,8 @@ const Permission = () => {
     successMessage,
     errorMessage,
     warningMessage,
+    info,
+    infoMessage,
     handleClick,
     handleChange,
     isFieldReadOnly,
@@ -158,6 +161,13 @@ const Permission = () => {
                   <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
                   <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                   <p>{successMessage}</p>
+                </div>
+              }
+              {info &&
+                <div className='alert-popup Info' >
+                  <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{infoMessage}</p>
                 </div>
               }
             </div>

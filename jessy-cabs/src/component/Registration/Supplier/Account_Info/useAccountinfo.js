@@ -18,8 +18,8 @@ const useAccountinfo = () => {
   const [success, setSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
-  const [warningMessage, setWarningMessage] = useState({});
-  const [infoMessage] = useState({});
+  const [warningMessage] = useState({});
+  const [infoMessage,setInfoMessage] = useState({});
 
   // for page permission
 
@@ -293,8 +293,8 @@ const useAccountinfo = () => {
       }
     } else {
       // Display a warning or prevent the action
-      setWarning(true);
-      setWarningMessage("You do not have permission.");
+      setInfo(true);
+      setInfoMessage("You do not have permission.");
     }
   };
 
@@ -323,8 +323,8 @@ const useAccountinfo = () => {
           }
           setSuccessMessage("Successfully listed");
         } else {
-          setWarning(true);
-          setWarningMessage("You do not have permission.");
+          setInfo(true);
+          setInfoMessage("You do not have permission.");
         }
       } else if (actionName === 'Cancel') {
         handleCancel();
@@ -340,8 +340,8 @@ const useAccountinfo = () => {
           handleCancel();
           setRows([]);
         } else {
-          setWarning(true);
-          setWarningMessage("You do not have permission.");
+          setInfo(true);
+          setInfoMessage("You do not have permission.");
         }
       } else if (actionName === 'Edit') {
         const permissions = checkPagePermission();
@@ -355,8 +355,8 @@ const useAccountinfo = () => {
           handleCancel();
           setRows([]);
         } else {
-          setWarning(true);
-          setWarningMessage("You do not have permission.");
+          setInfo(true);
+          setInfoMessage("You do not have permission.");
         }
       } else if (actionName === 'Add') {
         handleAdd();

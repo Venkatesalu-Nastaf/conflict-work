@@ -16,8 +16,8 @@ const useStationCreation = () => {
     const [warning, setWarning] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage, setWarningMessage] = useState({});
-    const [infoMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage,setInfoMessage] = useState({});
 
     const [userPermissions, setUserPermissions] = useState({});
 
@@ -185,8 +185,8 @@ const useStationCreation = () => {
             }
         } else {
             // Display a warning or prevent the action
-            setWarning(true);
-            setWarningMessage("You do not have permission to add users on this page.");
+            setInfo(true);
+            setInfoMessage("You do not have permission to add users on this page.");
         }
     };
 
@@ -209,8 +209,8 @@ const useStationCreation = () => {
                         setErrorMessage("No data found");
                     }
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Cancel') {
                 handleCancel();
@@ -226,8 +226,8 @@ const useStationCreation = () => {
                     handleCancel();
                     setRows([]);
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
@@ -240,8 +240,8 @@ const useStationCreation = () => {
                     setSuccessMessage("Successfully updated");
                     handleCancel();
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Add') {
                 handleAdd();

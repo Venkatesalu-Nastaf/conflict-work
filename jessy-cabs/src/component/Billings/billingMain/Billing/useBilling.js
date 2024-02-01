@@ -20,8 +20,8 @@ const useBilling = () => {
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage, setWarningMessage] = useState({});
-    const [infoMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage,setInfoMessage] = useState({});
     const [selectedBankAccount, setSelectedBankAccount] = useState('');
     const [selectedCustomerData, setSelectedCustomerData] = useState({
         totalkm1: ''
@@ -136,8 +136,8 @@ const useBilling = () => {
                 setPopupOpen(true);
             }
         } else {
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -355,8 +355,8 @@ const useBilling = () => {
                     setSuccessMessage("Successfully Deleted");
                     handleCancel();
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
@@ -382,8 +382,8 @@ const useBilling = () => {
                     setSuccess(true);
                     setSuccessMessage("Successfully Updated");
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Add') {
                 const permissions = checkPagePermission();
@@ -412,8 +412,8 @@ const useBilling = () => {
                     setSuccess(true);
                     setSuccessMessage("Successfully Added");
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             }
 

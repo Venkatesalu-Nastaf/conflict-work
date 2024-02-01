@@ -32,8 +32,8 @@ const useTaxsettings = () => {
     const [warning, setWarning] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
-    const [warningMessage, setWarningMessage] = useState({});
-    const [infoMessage] = useState({});
+    const [warningMessage] = useState({});
+    const [infoMessage,setInfoMessage] = useState({});
 
     // for page permission
     const [userPermissions, setUserPermissions] = useState({});
@@ -228,8 +228,8 @@ const useTaxsettings = () => {
             }
         } else {
             // Display a warning or prevent the action
-            setWarning(true);
-            setWarningMessage("You do not have permission.");
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
         }
     };
 
@@ -246,8 +246,8 @@ const useTaxsettings = () => {
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Cancel') {
                 handleCancel();
@@ -261,8 +261,8 @@ const useTaxsettings = () => {
                     setSuccessMessage("Successfully Deleted");
                     handleCancel();
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
@@ -279,8 +279,8 @@ const useTaxsettings = () => {
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
                 } else {
-                    setWarning(true);
-                    setWarningMessage("You do not have permission.");
+                    setInfo(true);
+                    setInfoMessage("You do not have permission.");
                 }
             }
         } catch {

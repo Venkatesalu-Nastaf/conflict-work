@@ -187,7 +187,6 @@ router.post('/send-onbook-email', async (req, res) => {
                 pass: 'jojgadyyolbuxlyo',
             },
             tls: {
-                // Ignore SSL certificate errors
                 rejectUnauthorized: false
             }
         });

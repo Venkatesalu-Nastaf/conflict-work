@@ -341,13 +341,14 @@ app.get('/get-attachedmailimage/:bookingno', (req, res) => {
       return res.status(404).send('Images not found');
     }
 
-    const imagePaths = results.map(result => result.path);
-    res.json({ imagePaths });
+    const files = results.map(result => ({
+      path: result.path,
+      mimetype: result.mimetype // assuming 'type' indicates whether it's an image or PDF
+    }));
+
+    res.json({ files });
   });
 });
-
-
-
 
 //get image for organization
 

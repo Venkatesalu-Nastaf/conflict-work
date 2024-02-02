@@ -845,10 +845,27 @@ const Booking = () => {
                 <Button variant="contained" onClick={handleUpload} disabled={isFieldReadOnly("new")} >Attach File</Button>
                 <Button variant="outlined" onClick={handleGetMail} disabled={isFieldReadOnly("new")} >View</Button>
               </div>
-              <Dialog open={popupOpenmail} onClose={handlePopupClose}>
+              {/* <Dialog open={popupOpenmail} onClose={handlePopupClose}>
                 <DialogContent>
                   {attachedImage && attachedImage.map((imageUrl, index) => (
                     <img key={index} src={imageUrl} alt='images' style={{ maxWidth: '100%', maxHeight: '500px', marginBottom: '10px' }} />
+                  ))}
+                 
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handlePopupClose} variant="contained" color="primary">
+                    OK
+                  </Button>
+                </DialogActions>
+              </Dialog> */}
+              <Dialog open={popupOpenmail} onClose={handlePopupClose}>
+                <DialogContent>
+                  {attachedImage && attachedImage.map((file, index) => (
+                    file.mimetype === 'application/pdf' ? (
+                      <embed key={index} src={`http://localhost:8081/pdf/${file.path}`} type="application/pdf" width="100%" height="500px" />
+                    ) : (
+                      <img key={index} src={`http://localhost:8081/images/${file.path}`} alt={`Attached File ${index}`} style={{ maxWidth: '100%', maxHeight: '500px', marginBottom: '10px' }} />
+                    )
                   ))}
                 </DialogContent>
                 <DialogActions>

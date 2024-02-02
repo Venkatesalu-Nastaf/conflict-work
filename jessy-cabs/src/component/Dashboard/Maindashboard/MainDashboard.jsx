@@ -12,6 +12,12 @@ import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { ThemesProvider } from '../../UserSettings/Themes/ThemesContext';
 import { useUser } from '../../form/UserContext';
+import Button from "@mui/material/Button";
+
+//dialog box
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 
 const MainDashboard = () => {
   const navigate = useNavigate();
@@ -19,6 +25,12 @@ const MainDashboard = () => {
   const { selectedTheme } = useThemes();
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
+
+  const handlePopupClose = () => {
+    setPopupOpen(false);
+  };
+
 
   const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
 
@@ -29,7 +41,10 @@ const MainDashboard = () => {
     },
   }));
 
-  const handleLogout = useCallback((e) => {
+  const handleLogout = () => {
+    setPopupOpen(true)
+  };
+  const handleLogoutdialog = useCallback((e) => {
     if (e) {
       e.preventDefault();
     }
@@ -171,6 +186,19 @@ const MainDashboard = () => {
         </div>
         <Outlet />
       </div>
+      <Dialog open={popupOpen} onClose={handlePopupClose}>
+        <DialogContent>
+          <p>Do you want to logout</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleLogoutdialog} variant="contained" color="primary">
+            Yes
+          </Button>
+          <Button onClick={handlePopupClose} variant="contained" color="primary">
+            NO
+          </Button>
+        </DialogActions>
+      </Dialog>
     </section>
   );
 };

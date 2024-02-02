@@ -85,10 +85,7 @@ const Sidebar = () => {
   };
 
   const handleMenuItemClick = async (menuItemKey, name, alt) => {
-    const location = alt;
-    console.log('location', location);
     const currentPageName = name;
-    console.log('page name', currentPageName);
     localStorage.setItem("selectedMenuItem", menuItemKey);
 
     try {
@@ -106,8 +103,6 @@ const Sidebar = () => {
       console.error('Error fetching user permissions:', error);
     }
   };
-
-
 
   useEffect(() => {
     const selectedMenuItem = localStorage.getItem("selectedMenuItem");
@@ -174,7 +169,6 @@ const Sidebar = () => {
           <MenuItem
             label="Dashboard"
             to="/home/dashboard"
-            menuItemKey="/home/dashboard"
             alt="/home/dashboard"
             name="Dashboard page"
             isActive={isActive}
@@ -244,6 +238,7 @@ const Sidebar = () => {
             to="/home/usersettings/usersetting"
             alt="/home/usersettings/usersetting"
             menuItemKey="/home/usersettings"
+            name="User page"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={FaUserAstronaut}

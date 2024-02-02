@@ -2,13 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const useOrganization = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
-
-    // const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [selectedImage, setSelectedImage] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -17,10 +13,8 @@ const useOrganization = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
-
     const [info, setInfo] = useState(false);
     const [infoMessage, setInfoMessage] = useState({});
-
     const [userPermissions, setUserPermissions] = useState({});
 
     useEffect(() => {

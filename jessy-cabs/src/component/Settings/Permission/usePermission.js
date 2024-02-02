@@ -148,7 +148,7 @@ const usePermission = () => {
         { id: 37, name: 'Register page', read: false, new: false, modify: false, delete: false },
         { id: 38, name: 'Settings page', read: false, new: false, modify: false, delete: false },
         { id: 39, name: 'Info page', read: false, new: false, modify: false, delete: false },
-
+        { id: 40, name: 'User page', read: false, new: false, modify: false, delete: false },
     ];
 
     const [permissionsData, setPermissionsData] = useState(initialPermissionsData);

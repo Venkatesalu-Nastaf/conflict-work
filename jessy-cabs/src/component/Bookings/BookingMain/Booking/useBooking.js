@@ -827,12 +827,34 @@ const useBooking = () => {
 
     const [attachedImage, setAttachedImage] = useState('');
 
+    // const handleGetMail = useCallback(async () => {
+    //     try {
+    //         const bookingno = book.bookingno || selectedCustomerData.bookingno;
+    //         if (!bookingno) {
+    //             setError(true);
+    //             setErrorMessage("Enter booking No");
+    //             return;
+    //         }
+    //         const response = await fetch(`http://localhost:8081/get-attachedmailimage/${bookingno}`);
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! Status: ${response.status}`);
+    //         }
+    //         const data = await response.json();
+    //         const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+    //         setAttachedImage(attachedImageUrls);
+    //         setpopupOpenmail(true);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }, [book.bookingno, selectedCustomerData.bookingno]);
+
+
     const handleGetMail = useCallback(async () => {
         try {
             const bookingno = book.bookingno || selectedCustomerData.bookingno;
             if (!bookingno) {
                 setError(true);
-                setErrorMessage("Enter booking No")
+                setErrorMessage("Enter booking No");
                 return;
             }
             const response = await fetch(`http://localhost:8081/get-attachedmailimage/${bookingno}`);
@@ -840,15 +862,12 @@ const useBooking = () => {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-            setAttachedImage(attachedImageUrls);
+            setAttachedImage(data.files);
             setpopupOpenmail(true);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }, [book.bookingno, selectedCustomerData.bookingno]);
-
-
 
     return {
         selectedCustomerData,

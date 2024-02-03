@@ -41,9 +41,10 @@ const MainDashboard = () => {
     },
   }));
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     setPopupOpen(true)
-  };
+  }, []);
+
   const handleLogoutdialog = useCallback((e) => {
     if (e) {
       e.preventDefault();

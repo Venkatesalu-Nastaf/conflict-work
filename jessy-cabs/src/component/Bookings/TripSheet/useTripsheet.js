@@ -3,15 +3,11 @@ import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import {
-
     VehicleRate,
-
 } from "./TripSheetdata";
 
 const useTripsheet = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
@@ -45,7 +41,6 @@ const useTripsheet = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
-
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
 
@@ -141,8 +136,16 @@ const useTripsheet = () => {
     //generate link
 
     const generateLink = async () => {
+
         try {
+            const tripidNO = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+            if (!tripidNO) {
+                setError(true);
+                setErrorMessage("Please enter the tripid");
+                return;
+            }
             const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
+            // localStorage.setItem('localstoragetripid', tripid);
             const response = await axios.post(`http://localhost:8081/generate-link/${tripid}`)
             setLink(response.data.link);
         } catch {

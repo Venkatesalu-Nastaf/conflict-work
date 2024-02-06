@@ -842,7 +842,7 @@ const useBooking = () => {
     //         const data = await response.json();
     //         const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
     //         setAttachedImage(attachedImageUrls);
-    //         setpopupOpenmail(true);
+    //         setpopupOpenmail(true);[]
     //     } catch (error) {
     //         console.log(error);
     //     }

@@ -25,10 +25,10 @@ import { BiBarChartSquare } from "@react-icons/all-files/bi/BiBarChartSquare";
 import { AiOutlineSetting } from "@react-icons/all-files/ai/AiOutlineSetting";
 import { AiOutlineInfoCircle } from "@react-icons/all-files/ai/AiOutlineInfoCircle";
 
-const MenuItem = ({ label, to, alt, menuItemKey, name, isActive, handleMenuItemClick, icon: Icon }) => {
+const MenuItem = ({ label, to, value, alt, menuItemKey, name, isActive, handleMenuItemClick, icon: Icon }) => {
   return (
     <Link
-      className={isActive(menuItemKey) ? "menuItem active" : "menuItem"}
+      className={isActive(value) ? "menuItem active" : "menuItem"}
       to={to}
       onClick={() => handleMenuItemClick(menuItemKey, name, alt)}
     >
@@ -169,6 +169,7 @@ const Sidebar = () => {
           <MenuItem
             label="Dashboard"
             to="/home/dashboard"
+            value="/home/dashboard"
             alt="/home/dashboard"
             name="Dashboard page"
             isActive={isActive}
@@ -179,6 +180,7 @@ const Sidebar = () => {
             label="Booking"
             to={permissions.read && ("/home/bookings/booking")}
             alt="/home/bookings/booking"
+            value="/home/bookings"
             menuItemKey="/home/bookings"
             name="Booking page"
             isActive={isActive}
@@ -189,6 +191,7 @@ const Sidebar = () => {
             label="Billing"
             to={permissions.read && ("/home/billing/billing")}
             alt="/home/billing/billing"
+            value="/home/billing"
             menuItemKey="/home/billing"
             name="Billing page"
             isActive={isActive}
@@ -199,6 +202,7 @@ const Sidebar = () => {
             label="Register"
             to={permissions.read && ("/home/registration/customer")}
             alt="/home/registration/customer"
+            value="/home/registration"
             menuItemKey="/home/registration"
             name="Register page"
             isActive={isActive}
@@ -217,6 +221,7 @@ const Sidebar = () => {
             label="Settings"
             to={permissions.read && ("/home/settings/usercreation")}
             alt="/home/settings/usercreation"
+            value="/home/settings"
             menuItemKey="/home/settings"
             name="Settings page"
             isActive={isActive}
@@ -227,6 +232,7 @@ const Sidebar = () => {
             label="Info"
             to={permissions.read && ("/home/info/ratetype")}
             alt="/home/info/ratetype"
+            value="/home/info"
             menuItemKey="/home/info"
             name="Info page"
             isActive={isActive}
@@ -237,6 +243,7 @@ const Sidebar = () => {
             label="User"
             to="/home/usersettings/usersetting"
             alt="/home/usersettings/usersetting"
+            value="/home/usersettings"
             menuItemKey="/home/usersettings"
             name="User page"
             isActive={isActive}

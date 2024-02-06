@@ -4,20 +4,26 @@ import './DigitalSignature.css';
 
 const DigitalSignature = () => {
     const sigCanvasRef = useRef(null);
+    const tripId = new URLSearchParams(window.location.search).get('tripid');
+
     const clearSignature = () => {
         sigCanvasRef.current.clear();
     };
 
+    // const tripid = localStorage.getItem('localstoragetripid');
+    // console.log(tripid);
+
     const saveSignature = async () => {
         const dataUrl = sigCanvasRef.current.toDataURL('image/png');
+        console.log('console result', dataUrl);
 
         try {
-            const response = await fetch('http://localhost:8081/api/saveSignature', {
+            const response = await fetch('http://localhost:8081/api/saveSignaturewtid', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ signatureData: dataUrl }),
+                body: JSON.stringify({ signatureData: dataUrl, tripId: tripId }),
             });
             clearSignature();
             if (response.ok) {

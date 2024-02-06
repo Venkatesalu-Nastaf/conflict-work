@@ -272,6 +272,31 @@ app.post('/api/saveSignature', (req, res) => {
   });
 });
 //End signature database
+//for save signature image
+const baseImagetripidPath = path.join(__dirname, 'path_to_save_images');
+app.post('/api/saveSignaturewtid', (req, res) => {
+  const { signatureData, tripId } = req.body;
+  const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
+  const imageBuffer = Buffer.from(base64Data, 'base64');
+  const imageName = `signature-${Date.now()}.png`;
+  const imagePath = path.join(baseImagetripidPath, imageName); // Use the base path
+  fs.writeFile(imagePath, imageBuffer, (error) => {
+    if (error) {
+      res.status(500).json({ error: 'Failed to save signature' });
+    } else {
+      const relativeImagePath = path.relative(baseImagetripidPath, imagePath); // Calculate relative path
+      const sql = 'INSERT INTO signatures (signature_path, tripid) VALUES (?, ?)';
+      db.query(sql, [relativeImagePath, tripId], (dbError, results) => {
+        if (dbError) {
+          res.status(500).json({ error: 'Failed to save signature' });
+        } else {
+          res.json({ message: 'Signature saved successfully' });
+        }
+      });
+    }
+  });
+});
+//End signature database
 //get signature 
 const signatureDirectory = path.join(__dirname, 'path_to_save_images');
 app.use('/signimages', express.static(signatureDirectory));

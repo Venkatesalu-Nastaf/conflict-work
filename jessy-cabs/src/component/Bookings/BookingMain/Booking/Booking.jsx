@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
 
 import Box from "@mui/material/Box";
 
-import Menu from '@mui/material/Menu';
+import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
-import MenuItem from '@mui/material/MenuItem';
+import MenuItem from "@mui/material/MenuItem";
 
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -16,14 +16,29 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import { Duty, Hire, PayType, Report, VehicleModel, Service_Station } from "./Booking";
-import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox } from "@mui/material";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
+import {
+  Duty,
+  Hire,
+  PayType,
+  Report,
+  VehicleModel,
+  Service_Station,
+} from "./Booking";
+import {
+  TextField,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Checkbox,
+} from "@mui/material";
 // ICONS
 import InfoIcon from "@mui/icons-material/Info";
 import SellIcon from "@mui/icons-material/Sell";
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import FmdBadIcon from "@mui/icons-material/FmdBad";
@@ -43,7 +58,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
@@ -56,18 +71,18 @@ import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import TaxiAlertTwoToneIcon from "@mui/icons-material/TaxiAlertTwoTone";
 import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 
 import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
-import useBooking from './useBooking';
+import useBooking from "./useBooking";
 
 //dialog box
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -81,10 +96,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-
-
 const Booking = () => {
-
   const {
     selectedCustomerData,
     selectedCustomerId,
@@ -152,8 +164,8 @@ const Booking = () => {
   } = useBooking();
 
   useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
+    if (actionName === "List") {
+      handleClick(null, "List");
     }
   }, [actionName, handleClick]);
 
@@ -172,7 +184,12 @@ const Booking = () => {
                   label="Booking"
                   id="standard-size-normal"
                   autoComplete="new-password"
-                  value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
+                  value={
+                    formData.bookingno ||
+                    selectedCustomerData.bookingno ||
+                    book.bookingno ||
+                    ""
+                  }
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   variant="standard"
@@ -183,26 +200,45 @@ const Booking = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">
                     <DatePicker
-                      value={formData.bookingdate || selectedCustomerData.bookingdate ? dayjs(selectedCustomerData.bookingdate) : null || book.bookingdate ? dayjs(book.bookingdate) : dayjs()}
+                      value={
+                        formData.bookingdate || selectedCustomerData.bookingdate
+                          ? dayjs(selectedCustomerData.bookingdate)
+                          : null || book.bookingdate
+                          ? dayjs(book.bookingdate)
+                          : dayjs()
+                      }
                       format="DD/MM/YYYY"
-                      onChange={(date) => handleDateChange(date, 'bookingdate')}
+                      onChange={(date) => handleDateChange(date, "bookingdate")}
                     >
                       {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.bookingdate} />
+                        <TextField
+                          {...inputProps}
+                          inputRef={inputRef}
+                          value={selectedCustomerData?.bookingdate}
+                        />
                       )}
                     </DatePicker>
                   </DemoItem>
                 </LocalizationProvider>
               </div>
-              <div className="input time" style={{ marginTop: '45px' }}>
+              <div className="input time" style={{ marginTop: "45px" }}>
                 <label>Booking Time</label>
                 <input
                   type="time"
-                  value={formData.bookingtime || selectedCustomerData.bookingtime || book.bookingtime || getCurrentTime() || ''}
+                  value={
+                    formData.bookingtime ||
+                    selectedCustomerData.bookingtime ||
+                    book.bookingtime ||
+                    getCurrentTime() ||
+                    ""
+                  }
                   format="DD/MM/YYYY"
                   onChange={(event) => {
                     setBook({ ...book, bookingtime: event.target.value });
-                    setSelectedCustomerData({ ...selectedCustomerData, bookingtime: event.target.value });
+                    setSelectedCustomerData({
+                      ...selectedCustomerData,
+                      bookingtime: event.target.value,
+                    });
                     setBookingTime(event.target.value);
                   }}
                   name="bookingtime"
@@ -220,7 +256,12 @@ const Booking = () => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="status"
                     autoComplete="new-password"
-                    value={formData.status || selectedCustomerData.status || book.status || ''}
+                    value={
+                      formData.status ||
+                      selectedCustomerData.status ||
+                      book.status ||
+                      ""
+                    }
                     onChange={handleChange}
                   >
                     <FormControlLabel
@@ -243,7 +284,12 @@ const Booking = () => {
                 <TextField
                   name="tripid"
                   autoComplete="new-password"
-                  value={formData.tripid || selectedCustomerData.tripid || book.tripid || ''}
+                  value={
+                    formData.tripid ||
+                    selectedCustomerData.tripid ||
+                    book.tripid ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Trip Id"
                   id="standard-size-normal"
@@ -256,11 +302,17 @@ const Booking = () => {
                 </div>
                 <TextField
                   margin="normal"
-                  size='small'
+                  size="small"
                   id="customer"
                   label="Customer"
                   name="customer"
-                  value={formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || ''}
+                  value={
+                    formData.customer ||
+                    selectedCustomerData.customer ||
+                    selectedCustomerDatas.customer ||
+                    book.customer ||
+                    ""
+                  }
                   onChange={handleChange}
                   onKeyDown={handleKeyEnter}
                   autoComplete="new-password"
@@ -275,7 +327,13 @@ const Booking = () => {
                 <TextField
                   name="orderedby"
                   autoComplete="new-password"
-                  value={formData.orderedby || selectedCustomerData.orderedby || selectedCustomerDatas.name || book.orderedby || ''}
+                  value={
+                    formData.orderedby ||
+                    selectedCustomerData.orderedby ||
+                    selectedCustomerDatas.name ||
+                    book.orderedby ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Ordered by"
                   id="orderedby"
@@ -289,7 +347,13 @@ const Booking = () => {
                 <TextField
                   name="mobile"
                   autoComplete="new-password"
-                  value={formData.mobile || selectedCustomerData.mobile || selectedCustomerDatas.phoneno || book.mobile || ''}
+                  value={
+                    formData.mobile ||
+                    selectedCustomerData.mobile ||
+                    selectedCustomerDatas.phoneno ||
+                    book.mobile ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Mobile No"
                   id="mobile"
@@ -303,7 +367,13 @@ const Booking = () => {
                 <TextField
                   name="guestname"
                   autoComplete="new-password"
-                  value={formData.guestname || selectedCustomerData.guestname || book.guestname || formValues.guestname || ''}
+                  value={
+                    formData.guestname ||
+                    selectedCustomerData.guestname ||
+                    book.guestname ||
+                    formValues.guestname ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Guest Name"
                   id="guestname"
@@ -320,7 +390,13 @@ const Booking = () => {
                 <TextField
                   name="guestmobileno"
                   autoComplete="new-password"
-                  value={formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
+                  value={
+                    formData.guestmobileno ||
+                    selectedCustomerData.guestmobileno ||
+                    formValues.guestmobileno ||
+                    book.guestmobileno ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Guest Mobile No"
                   id="guestmobileno"
@@ -334,7 +410,13 @@ const Booking = () => {
                 <TextField
                   name="email"
                   autoComplete="new-password"
-                  value={formData.email || selectedCustomerData.email || formValues.email || book.email || ''}
+                  value={
+                    formData.email ||
+                    selectedCustomerData.email ||
+                    formValues.email ||
+                    book.email ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Email"
                   id="email"
@@ -348,7 +430,12 @@ const Booking = () => {
                 <TextField
                   name="employeeno"
                   autoComplete="new-password"
-                  value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
+                  value={
+                    formData.employeeno ||
+                    selectedCustomerData.employeeno ||
+                    book.employeeno ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Employee No"
                   id="employeeno"
@@ -368,7 +455,12 @@ const Booking = () => {
                   label="No.Street Name"
                   name="address1"
                   autoComplete="new-password"
-                  value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
+                  value={
+                    formData.address1 ||
+                    selectedCustomerData.address1 ||
+                    book.address1 ||
+                    ""
+                  }
                   onChange={handleChange}
                 />
               </div>
@@ -379,7 +471,12 @@ const Booking = () => {
                 <TextField
                   name="streetno"
                   autoComplete="new-password"
-                  value={formData.streetno || selectedCustomerData.streetno || book.streetno || ''}
+                  value={
+                    formData.streetno ||
+                    selectedCustomerData.streetno ||
+                    book.streetno ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Address"
                   id="address"
@@ -393,7 +490,12 @@ const Booking = () => {
                 <TextField
                   name="city"
                   autoComplete="new-password"
-                  value={formData.city || selectedCustomerData.city || book.city || ''}
+                  value={
+                    formData.city ||
+                    selectedCustomerData.city ||
+                    book.city ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="City"
                   id="standard-size-normal"
@@ -409,18 +511,37 @@ const Booking = () => {
                   id="free-solo-demo"
                   freeSolo
                   sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "report")}
-                  value={Report.find((option) => option.Option)?.label || formData.report || selectedCustomerData.report || book.report || ''}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "report")
+                  }
+                  value={
+                    Report.find((option) => option.Option)?.label ||
+                    formData.report ||
+                    selectedCustomerData.report ||
+                    book.report ||
+                    ""
+                  }
                   options={Report.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || formData.report || selectedCustomerData.report || book.report || ''}
+                  getOptionLabel={(option) =>
+                    option.label ||
+                    formData.report ||
+                    selectedCustomerData.report ||
+                    book.report ||
+                    ""
+                  }
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="Report" autoComplete="password" name="report" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
+                      <TextField
+                        {...params}
+                        label="Report"
+                        autoComplete="password"
+                        name="report"
+                        inputRef={params.inputRef}
+                      />
+                    );
+                  }}
                 />
               </div>
               <div className="input">
@@ -433,18 +554,36 @@ const Booking = () => {
                   id="free-solo-demo"
                   freeSolo
                   sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                  value={VehicleModel.find((option) => option.carmodel)?.label || formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "vehType")
+                  }
+                  value={
+                    VehicleModel.find((option) => option.carmodel)?.label ||
+                    formData.vehType ||
+                    selectedCustomerData.vehType ||
+                    book.vehType ||
+                    ""
+                  }
                   options={VehicleModel.map((option) => ({
                     label: option.carmodel,
                   }))}
-                  getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || book.vehType || ''}
+                  getOptionLabel={(option) =>
+                    option.label ||
+                    formData.vehType ||
+                    selectedCustomerData.vehType ||
+                    book.vehType ||
+                    ""
+                  }
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="Vehicle Type" name="vehType" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
+                      <TextField
+                        {...params}
+                        label="Vehicle Type"
+                        name="vehType"
+                        inputRef={params.inputRef}
+                      />
+                    );
+                  }}
                 />
               </div>
               <div className="input">
@@ -457,18 +596,36 @@ const Booking = () => {
                   id="free-solo-demo"
                   freeSolo
                   sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "paymenttype")}
-                  value={PayType.find((option) => option.Option)?.label || formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "paymenttype")
+                  }
+                  value={
+                    PayType.find((option) => option.Option)?.label ||
+                    formData.paymenttype ||
+                    selectedCustomerData.paymenttype ||
+                    book.paymenttype ||
+                    ""
+                  }
                   options={PayType.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype || ''}
+                  getOptionLabel={(option) =>
+                    option.label ||
+                    formData.paymenttype ||
+                    selectedCustomerData.paymenttype ||
+                    book.paymenttype ||
+                    ""
+                  }
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="Payment Type" name="paymenttype" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
+                      <TextField
+                        {...params}
+                        label="Payment Type"
+                        name="paymenttype"
+                        inputRef={params.inputRef}
+                      />
+                    );
+                  }}
                 />
               </div>
             </div>
@@ -477,12 +634,22 @@ const Booking = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Report Date"
-                    value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
+                    value={
+                      formData.startdate || selectedCustomerData.startdate
+                        ? dayjs(selectedCustomerData.startdate)
+                        : null || book.startdate
+                        ? dayjs(book.startdate)
+                        : null
+                    }
                     format="DD/MM/YYYY"
-                    onChange={(date) => handleDateChange(date, 'startdate')}
+                    onChange={(date) => handleDateChange(date, "startdate")}
                   >
                     {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                      <TextField
+                        {...inputProps}
+                        inputRef={inputRef}
+                        value={selectedCustomerData?.startdate}
+                      />
                     )}
                   </DatePicker>
                 </LocalizationProvider>
@@ -491,27 +658,46 @@ const Booking = () => {
                 <label>Start Time</label>
                 <input
                   type="time"
-                  value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
+                  value={
+                    formData.starttime ||
+                    selectedCustomerData.starttime ||
+                    book.starttime ||
+                    ""
+                  }
                   onChange={(event) => {
                     setFormData({ ...formData, starttime: event.target.value });
-                    setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
+                    setSelectedCustomerData({
+                      ...selectedCustomerData,
+                      starttime: event.target.value,
+                    });
                     setBook({ ...book, starttime: event.target.value });
                     setStartTime(event.target.value);
                   }}
-                  name='starttime'
+                  name="starttime"
                 />
               </div>
               <div className="input time">
                 <label>Report Time</label>
                 <input
                   type="time"
-                  name='reporttime'
-                  value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
+                  name="reporttime"
+                  value={
+                    formData.reporttime ||
+                    selectedCustomerData.reporttime ||
+                    book.reporttime ||
+                    ""
+                  }
                   onChange={(event) => {
                     setBook({ ...book, reporttime: event.target.value });
                     setreporttime(event.target.value);
-                    setFormData({ ...formData, reporttime: event.target.value });
-                    setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                    setFormData({
+                      ...formData,
+                      reporttime: event.target.value,
+                    });
+                    setSelectedCustomerData({
+                      ...selectedCustomerData,
+                      reporttime: event.target.value,
+                    });
                   }}
                 />
               </div>
@@ -527,18 +713,36 @@ const Booking = () => {
                   id="free-solo-demo"
                   freeSolo
                   sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                  value={Duty.find((option) => option.Option)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "duty")
+                  }
+                  value={
+                    Duty.find((option) => option.Option)?.label ||
+                    formData.duty ||
+                    selectedCustomerData.duty ||
+                    book.duty ||
+                    ""
+                  }
                   options={Duty.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                  getOptionLabel={(option) =>
+                    option.label ||
+                    formData.duty ||
+                    selectedCustomerData.duty ||
+                    book.duty ||
+                    ""
+                  }
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
+                      <TextField
+                        {...params}
+                        label="Duty"
+                        name="duty"
+                        inputRef={params.inputRef}
+                      />
+                    );
+                  }}
                 />
               </div>
               <div className="input">
@@ -552,7 +756,13 @@ const Booking = () => {
                   label="PickUp"
                   name="pickup"
                   autoComplete="new-password"
-                  value={formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
+                  value={
+                    formData.pickup ||
+                    selectedCustomerData.pickup ||
+                    formValues.pickup ||
+                    book.pickup ||
+                    ""
+                  }
                   onChange={handleChange}
                 />
               </div>
@@ -563,7 +773,12 @@ const Booking = () => {
                 <TextField
                   name="customercode"
                   autoComplete="new-password"
-                  value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
+                  value={
+                    formData.customercode ||
+                    selectedCustomerData.customercode ||
+                    book.customercode ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Customer code"
                   id="customercode"
@@ -579,7 +794,12 @@ const Booking = () => {
                 <TextField
                   name="registerno"
                   autoComplete="new-password"
-                  value={formData.registerno || selectedCustomerData.registerno || book.registerno || ''}
+                  value={
+                    formData.registerno ||
+                    selectedCustomerData.registerno ||
+                    book.registerno ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Request No"
                   id="registerno"
@@ -593,7 +813,12 @@ const Booking = () => {
                 <TextField
                   name="flightno"
                   autoComplete="new-password"
-                  value={formData.flightno || selectedCustomerData.flightno || book.flightno || ''}
+                  value={
+                    formData.flightno ||
+                    selectedCustomerData.flightno ||
+                    book.flightno ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Flight No"
                   id="flight"
@@ -607,7 +832,13 @@ const Booking = () => {
                 <TextField
                   name="orderbyemail"
                   autoComplete="new-password"
-                  value={formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail || ''}
+                  value={
+                    formData.orderbyemail ||
+                    selectedCustomerData.orderbyemail ||
+                    selectedCustomerDatas.customeremail ||
+                    book.orderbyemail ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Order By Email"
                   id="orederbyemail"
@@ -623,7 +854,12 @@ const Booking = () => {
                 <TextField
                   name="remarks"
                   autoComplete="new-password"
-                  value={formData.remarks || selectedCustomerData.remarks || book.remarks || ''}
+                  value={
+                    formData.remarks ||
+                    selectedCustomerData.remarks ||
+                    book.remarks ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Remarks"
                   id="remarks"
@@ -640,18 +876,37 @@ const Booking = () => {
                   id="free-solo-demo"
                   freeSolo
                   sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
-                  value={Service_Station.find((option) => option.optionvalue)?.label || formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "servicestation")
+                  }
+                  value={
+                    Service_Station.find((option) => option.optionvalue)
+                      ?.label ||
+                    formData.servicestation ||
+                    selectedCustomerData.servicestation ||
+                    book.servicestation ||
+                    ""
+                  }
                   options={Service_Station.map((option) => ({
                     label: option.optionvalue,
                   }))}
-                  getOptionLabel={(option) => option.label || formData.servicestation || selectedCustomerData.servicestation || book.servicestation || ''}
+                  getOptionLabel={(option) =>
+                    option.label ||
+                    formData.servicestation ||
+                    selectedCustomerData.servicestation ||
+                    book.servicestation ||
+                    ""
+                  }
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="Service Station" name="servicestation" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
+                      <TextField
+                        {...params}
+                        label="Service Station"
+                        name="servicestation"
+                        inputRef={params.inputRef}
+                      />
+                    );
+                  }}
                 />
               </div>
               <div className="input">
@@ -659,10 +914,15 @@ const Booking = () => {
                   <InfoIcon color="action" />
                 </div>
                 <TextField
-                  size='small'
-                  name='advance'
+                  size="small"
+                  name="advance"
                   autoComplete="new-password"
-                  value={formData.advance || selectedCustomerData.advance || book.advance || ''}
+                  value={
+                    formData.advance ||
+                    selectedCustomerData.advance ||
+                    book.advance ||
+                    ""
+                  }
                   onChange={handleChange}
                   label="Advance"
                   id="advance"
@@ -679,9 +939,12 @@ const Booking = () => {
           <div className="container-right">
             <div className="booking-update-main">
               <div className="booking-update">
-                <div className="Scroll-Style" style={{ overflow: 'scroll', height: '220px' }}>
-                  <table >
-                    <thead id='update-header'>
+                <div
+                  className="Scroll-Style"
+                  style={{ overflow: "scroll", height: "220px" }}
+                >
+                  <table>
+                    <thead id="update-header">
                       <tr>
                         <th>Organization_Name</th>
                         <th>Organizer</th>
@@ -697,7 +960,11 @@ const Booking = () => {
                         </tr>
                       ) : (
                         rows.map((row) => (
-                          <tr id='update-row' key={row.id} onClick={() => handleRowClick(row)}>
+                          <tr
+                            id="update-row"
+                            key={row.id}
+                            onClick={() => handleRowClick(row)}
+                          >
                             <td>{row.customer}</td>
                             <td>{row.name}</td>
                             <td>{row.email}</td>
@@ -722,7 +989,13 @@ const Booking = () => {
               <div className="input">
                 <FormControlLabel
                   value="guestsms"
-                  control={<Checkbox size="small" checked={guestsms} onChange={(event) => setGuestSms(event.target.checked)} />}
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={guestsms}
+                      onChange={(event) => setGuestSms(event.target.checked)}
+                    />
+                  }
                   label="Guest SMS"
                 />
                 <FormControlLabel
@@ -731,9 +1004,15 @@ const Booking = () => {
                   label="Booking SMS"
                 />
                 <FormControlLabel
-                  id='sendMailCheckbox'
+                  id="sendMailCheckbox"
                   value="sendemail"
-                  control={<Checkbox size="small" checked={sendEmail} onChange={(event) => setSendEmail(event.target.checked)} />}
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={sendEmail}
+                      onChange={(event) => setSendEmail(event.target.checked)}
+                    />
+                  }
                   label="Send Email"
                 />
               </div>
@@ -745,7 +1024,13 @@ const Booking = () => {
                   label="Usage"
                   name="useage"
                   autoComplete="new-password"
-                  value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
+                  value={
+                    formData.useage ||
+                    selectedCustomerData.useage ||
+                    formValues.useage ||
+                    book.useage ||
+                    ""
+                  }
                   onChange={handleChange}
                 />
               </div>
@@ -757,7 +1042,13 @@ const Booking = () => {
                   label="User Name"
                   name="username"
                   autoComplete="new-password"
-                  value={formData.username || selectedCustomerData.username || book.username || storedUsername || ''}
+                  value={
+                    formData.username ||
+                    selectedCustomerData.username ||
+                    book.username ||
+                    storedUsername ||
+                    ""
+                  }
                   onChange={handleChange}
                 />
               </div>
@@ -783,10 +1074,14 @@ const Booking = () => {
                     <DemoItem label="Trip Date">
                       <DatePicker
                         value={book.tripdate ? dayjs(book.tripdate) : dayjs()}
-                        onChange={(date) => handleDateChange(date, 'tripdate')}
+                        onChange={(date) => handleDateChange(date, "tripdate")}
                       >
                         {({ inputProps, inputRef }) => (
-                          <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripdate} />
+                          <TextField
+                            {...inputProps}
+                            inputRef={inputRef}
+                            value={selectedCustomerData?.tripdate}
+                          />
                         )}
                       </DatePicker>
                     </DemoItem>
@@ -796,8 +1091,13 @@ const Booking = () => {
                   <label>Trip Time</label>
                   <input
                     type="time"
-                    name='triptime'
-                    value={formData.triptime || selectedCustomerData.triptime || book.triptime || ''}
+                    name="triptime"
+                    value={
+                      formData.triptime ||
+                      selectedCustomerData.triptime ||
+                      book.triptime ||
+                      ""
+                    }
                     onChange={(event) => {
                       setBook({ ...book, triptime: event.target.value });
                       setTripTime(event.target.value);
@@ -825,7 +1125,12 @@ const Booking = () => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="emaildoggle"
                     autoComplete="new-password"
-                    value={formData.emaildoggle || selectedCustomerData.emaildoggle || book.emaildoggle || ''}
+                    value={
+                      formData.emaildoggle ||
+                      selectedCustomerData.emaildoggle ||
+                      book.emaildoggle ||
+                      ""
+                    }
                     onChange={handleChange}
                   >
                     <FormControlLabel
@@ -841,10 +1146,6 @@ const Booking = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-              <div className="input">
-                <Button variant="contained" onClick={handleUpload} disabled={isFieldReadOnly("new")} >Attach File</Button>
-                <Button variant="outlined" onClick={handleGetMail} disabled={isFieldReadOnly("new")} >View</Button>
-              </div>
               {/* <Dialog open={popupOpenmail} onClose={handlePopupClose}>
                 <DialogContent>
                   {attachedImage && attachedImage.map((imageUrl, index) => (
@@ -858,18 +1159,58 @@ const Booking = () => {
                   </Button>
                 </DialogActions>
               </Dialog> */}
+              <div className="input-field">
+                <div className="input">
+                  <Button
+                    variant="contained"
+                    onClick={handleUpload}
+                    disabled={isFieldReadOnly("new")}
+                  >
+                    Attach File
+                  </Button>
+                </div>
+                <div className="input">
+                  <Button
+                    variant="outlined"
+                    onClick={handleGetMail}
+                    disabled={isFieldReadOnly("new")}
+                  >
+                    View
+                  </Button>
+                </div>
+              </div>
               <Dialog open={popupOpenmail} onClose={handlePopupClose}>
                 <DialogContent>
-                  {attachedImage && attachedImage.map((file, index) => (
-                    file.mimetype === 'application/pdf' ? (
-                      <embed key={index} src={`http://localhost:8081/pdf/${file.path}`} type="application/pdf" width="100%" height="500px" />
-                    ) : (
-                      <img key={index} src={`http://localhost:8081/images/${file.path}`} alt={`Attached File ${index}`} style={{ maxWidth: '100%', maxHeight: '500px', marginBottom: '10px' }} />
-                    )
-                  ))}
+                  {attachedImage &&
+                    attachedImage.map((file, index) =>
+                      file.mimetype === "application/pdf" ? (
+                        <embed
+                          key={index}
+                          src={`http://localhost:8081/pdf/${file.path}`}
+                          type="application/pdf"
+                          width="100%"
+                          height="500px"
+                        />
+                      ) : (
+                        <img
+                          key={index}
+                          src={`http://localhost:8081/images/${file.path}`}
+                          alt={`Attached File ${index}`}
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "500px",
+                            marginBottom: "10px",
+                          }}
+                        />
+                      )
+                    )}
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handlePopupClose} variant="contained" color="primary">
+                  <Button
+                    onClick={handlePopupClose}
+                    variant="contained"
+                    color="primary"
+                  >
                     OK
                   </Button>
                 </DialogActions>
@@ -887,7 +1228,9 @@ const Booking = () => {
                 key={action.name}
                 icon={action.icon}
                 tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
+                onClick={(event) =>
+                  handleClick(event, action.name, selectedCustomerId)
+                }
               />
             ))}
           </StyledSpeedDial>
@@ -904,18 +1247,36 @@ const Booking = () => {
                 id="free-solo-demo"
                 freeSolo
                 sx={{ width: "20ch" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
-                value={Hire.find((option) => option.Option)?.label || formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "hireTypes")
+                }
+                value={
+                  Hire.find((option) => option.Option)?.label ||
+                  formData.hireTypes ||
+                  selectedCustomerData.hireTypes ||
+                  book.hireTypes ||
+                  ""
+                }
                 options={Hire.map((option) => ({
                   label: option.Option,
                 }))}
-                getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.hireTypes ||
+                  selectedCustomerData.hireTypes ||
+                  book.hireTypes ||
+                  ""
+                }
                 renderInput={(params) => {
                   return (
-                    <TextField {...params} label="Hire Types" name="hireTypes" inputRef={params.inputRef} />
-                  )
-                }
-                }
+                    <TextField
+                      {...params}
+                      label="Hire Types"
+                      name="hireTypes"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
               />
             </div>
             <div className="input">
@@ -925,7 +1286,12 @@ const Booking = () => {
               <TextField
                 name="travelsname"
                 autoComplete="new-password"
-                value={formData.travelsname || selectedCustomerData.travelsname || book.travelsname || ''}
+                value={
+                  formData.travelsname ||
+                  selectedCustomerData.travelsname ||
+                  book.travelsname ||
+                  ""
+                }
                 onChange={handleChange}
                 label="Travels Name"
                 id="travelsname"
@@ -939,7 +1305,12 @@ const Booking = () => {
               <TextField
                 name="vehRegNo"
                 autoComplete="new-password"
-                value={formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || ''}
+                value={
+                  formData.vehRegNo ||
+                  selectedCustomerData.vehRegNo ||
+                  book.vehRegNo ||
+                  ""
+                }
                 onChange={handleChange}
                 label="Vehicle Register No"
                 id="vehRegNo"
@@ -953,7 +1324,12 @@ const Booking = () => {
               <TextField
                 name="vehiclemodule"
                 autoComplete="new-password"
-                value={formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || ''}
+                value={
+                  formData.vehiclemodule ||
+                  selectedCustomerData.vehiclemodule ||
+                  book.vehiclemodule ||
+                  ""
+                }
                 onChange={handleChange}
                 label="Vehical Type"
                 id="vehiclemodule"
@@ -970,7 +1346,12 @@ const Booking = () => {
               <TextField
                 name="driverName"
                 autoComplete="new-password"
-                value={formData.driverName || selectedCustomerData.driverName || book.driverName || ''}
+                value={
+                  formData.driverName ||
+                  selectedCustomerData.driverName ||
+                  book.driverName ||
+                  ""
+                }
                 onChange={handleChange}
                 label="Driver Name"
                 id="drivername"
@@ -984,7 +1365,12 @@ const Booking = () => {
               <TextField
                 name="mobileNo"
                 autoComplete="new-password"
-                value={formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || ''}
+                value={
+                  formData.mobileNo ||
+                  selectedCustomerData.mobileNo ||
+                  book.mobileNo ||
+                  ""
+                }
                 onChange={handleChange}
                 label="Driver Phone"
                 id="mobileNo"
@@ -998,7 +1384,12 @@ const Booking = () => {
               <TextField
                 name="travelsemail"
                 autoComplete="new-password"
-                value={formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail || ''}
+                value={
+                  formData.travelsemail ||
+                  selectedCustomerData.travelsemail ||
+                  book.travelsemail ||
+                  ""
+                }
                 onChange={handleChange}
                 label="Travels Email"
                 id="travelsemail"
@@ -1006,71 +1397,104 @@ const Booking = () => {
               />
             </div>
             <div className="input" style={{ width: "100px" }}>
-              <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+              <Button
+                variant="contained"
+                onClick={handleAdd}
+                disabled={isFieldReadOnly("new")}
+              >
+                Add
+              </Button>
             </div>
           </div>
           <Dialog open={popupOpen} onClose={handlePopupClose}>
             <DialogContent>
-              Booking Number:<br /> <h1>{lastBookingNo}</h1>
+              Booking Number:
+              <br /> <h1>{lastBookingNo}</h1>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handlePopupClose} variant="contained" color="primary">
+              <Button
+                onClick={handlePopupClose}
+                variant="contained"
+                color="primary"
+              >
                 OK
               </Button>
             </DialogActions>
           </Dialog>
-          {error &&
-            <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+          {error && (
+            <div className="alert-popup Error">
+              <div className="popup-icon">
+                {" "}
+                <ClearIcon style={{ color: "#fff" }} />{" "}
+              </div>
+              <span className="cancel-btn" onClick={hidePopup}>
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              </span>
               <p>{errorMessage}</p>
             </div>
-          }
-          {warning &&
-            <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+          )}
+          {warning && (
+            <div className="alert-popup Warning">
+              <div className="popup-icon">
+                {" "}
+                <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
+              </div>
+              <span className="cancel-btn" onClick={hidePopup}>
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              </span>
               <p>{warningMessage}</p>
             </div>
-          }
-          {info &&
-            <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+          )}
+          {info && (
+            <div className="alert-popup Info">
+              <div className="popup-icon">
+                {" "}
+                <BsInfo style={{ color: "#fff" }} />{" "}
+              </div>
+              <span className="cancel-btn" onClick={hidePopup}>
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              </span>
               <p>{infoMessage}</p>
             </div>
-          }
-          {success &&
-            <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+          )}
+          {success && (
+            <div className="alert-popup Success">
+              <div className="popup-icon">
+                {" "}
+                <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+              </div>
+              <span className="cancel-btn" onClick={hidePopup}>
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              </span>
               <p>{successMessage}</p>
             </div>
-          }
+          )}
         </div>
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Booking">
-              <div className="input-field" style={{ justifyContent: 'center' }}>
+              <div className="input-field" style={{ justifyContent: "center" }}>
                 <div className="input" style={{ width: "230px" }}>
                   <div className="icone">
-                    <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
+                    <AiOutlineFileSearch
+                      color="action"
+                      style={{ fontSize: "27px" }}
+                    />
                   </div>
                   <TextField
                     size="small"
                     id="id"
                     label="Search"
                     name="searchText"
-                    value={searchText || ''}
+                    value={searchText || ""}
                     onChange={(e) => setSearchText(e.target.value)}
                   />
-
                 </div>
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="From Date"
-                      name='fromDate'
+                      name="fromDate"
                       format="DD/MM/YYYY"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
@@ -1089,7 +1513,9 @@ const Booking = () => {
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained" onClick={handleShowAll}>Search</Button>
+                  <Button variant="contained" onClick={handleShowAll}>
+                    Search
+                  </Button>
                 </div>
               </div>
             </div>
@@ -1099,7 +1525,11 @@ const Booking = () => {
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                <Button
+                  variant="contained"
+                  endIcon={<ExpandCircleDownOutlinedIcon />}
+                  {...bindTrigger(popupState)}
+                >
                   Download
                 </Button>
                 <Menu {...bindMenu(popupState)}>

@@ -112,21 +112,29 @@ const useUserinfo = () => {
     };
     //end file upload  
 
+    const handledelete = async () => {
+        await axios.delete(`http://localhost:8081/userprofiledelete/${selectedCustomerData?.userid || book.userid}`);
+        setSuccess(true);
+        setSuccessMessage("Successfully updated");
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const userid = localStorage.getItem('useridno');
-
                 if (!userid) {
                     return;
                 }
                 const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+                    setSelectedImage(attachedImageUrls);
+                } else {
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
                 }
-                const data = await response.json();
-                const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-                setSelectedImage(attachedImageUrls);
             } catch {
             }
         };
@@ -214,6 +222,7 @@ const useUserinfo = () => {
         handleChange,
         hidePopup,
         selectedImage,
+        handledelete,
         editMode,
         handleFileChange,
         toggleEditMode,

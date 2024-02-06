@@ -10,6 +10,7 @@ import { TextField, FormControl } from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import IconButton from '@mui/material/IconButton';
+import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -46,6 +47,7 @@ const UserSetting = ({ userid }) => {
         infoMessage,
         book,
         handleClick,
+        handledelete,
         handleChange,
         hidePopup,
         selectedImage,
@@ -90,18 +92,26 @@ const UserSetting = ({ userid }) => {
                                 <div className="input-field">
                                     <div className='input'>
                                         {editMode ? (
-                                            <div className='input'>
-                                                <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode}>
-                                                    update
-                                                    <ModeEditIcon />
-                                                    <input
-                                                        onChange={handleFileChange}
-                                                        onClick={handleUpload}
-                                                        // type="file"
-                                                        style={{ display: "none" }}
-                                                    />
-                                                </Button>
-                                            </div>
+                                            <>
+                                                <div className='input-field'>
+                                                    <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode || !!selectedImage}>
+                                                        update
+                                                        <ModeEditIcon />
+                                                        <input
+                                                            onChange={handleFileChange}
+                                                            onClick={handleUpload}
+                                                            // type="file"
+                                                            style={{ display: "none" }}
+                                                        />
+                                                    </Button>
+                                                </div>
+                                                <div className='input-field'>
+                                                    <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode} onClick={handledelete}>
+                                                        Remove
+                                                        <DeleteIcon />
+                                                    </Button>
+                                                </div>
+                                            </>
                                         ) : (
                                             <div className="user-photo-edit">
                                                 <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">

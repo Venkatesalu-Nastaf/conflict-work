@@ -217,6 +217,7 @@ const useOrganization = () => {
         }
     };
 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -226,15 +227,21 @@ const useOrganization = () => {
                     return;
                 }
                 const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+
+                // Check if the response status is 200
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+                    setSelectedImage(attachedImageUrls);
+                } else {
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
                 }
-                const data = await response.json();
-                const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-                setSelectedImage(attachedImageUrls);
-            } catch {
+            } catch (error) {
+                console.error('Error fetching image data:', error);
             }
         };
+
         fetchData();
     }, []);
 

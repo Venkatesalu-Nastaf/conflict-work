@@ -72,7 +72,7 @@ router.get('/usercreationgetdata/:value', (req, res) => {
       'organizationname',
       'ufirstname',
       'ulastname',
-      'mobileno', 
+      'mobileno',
       'email',
     ];
 
@@ -89,5 +89,20 @@ router.get('/usercreationgetdata/:value', (req, res) => {
     return res.status(200).json(result);
   });
 });
+
+
+router.delete('/userprofiledelete/:userid', (req, res) => {
+  const userid = req.params.userid;
+  db.query('DELETE FROM tripsheetupload WHERE userid = ?', userid, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
 
 module.exports = router;

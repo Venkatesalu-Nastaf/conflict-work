@@ -86,13 +86,12 @@ const Organization = () => {
                                     {editMode ? (
                                         <>
                                             <div className='input-field'>
-                                                <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode}>
+                                                <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode || !!selectedImage} >
                                                     Logo
                                                     <ModeEditIcon />
                                                     <input
                                                         onChange={handleFileChange}
                                                         onClick={handleUpload}
-                                                        // type="file"
                                                         style={{ display: "none" }}
                                                     />
                                                 </Button>

@@ -20,7 +20,7 @@
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    /* padding: 20px; */
+    padding: 20px;
     color: #000;
     background-color: var(--glass);
 }

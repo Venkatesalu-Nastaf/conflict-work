@@ -21,7 +21,7 @@ const useBilling = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
     const [selectedBankAccount, setSelectedBankAccount] = useState('');
     const [selectedCustomerData, setSelectedCustomerData] = useState({
         totalkm1: ''
@@ -352,6 +352,7 @@ const useBilling = () => {
                     await axios.delete(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
                     setFormData(null);
                     setSelectedCustomerData(null);
+                    setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
                     handleCancel();
                 } else {
@@ -601,7 +602,7 @@ const useBilling = () => {
                 setErrorMessage('Error retrieving billings details.');
             }
         }
-    }, []); 
+    }, []);
 
     const selecting = {
         tripid: selectedCustomerDatas.tripid || selectedCustomerData.tripid || '',
@@ -913,7 +914,6 @@ const useBilling = () => {
         organizationgstnumber,
         GmapimageUrl,
         mapimageUrl,
-        // ... (other state variables and functions)
     };
 };
 

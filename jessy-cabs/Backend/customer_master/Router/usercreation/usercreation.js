@@ -40,7 +40,7 @@ router.put('/usercreation/:userid', (req, res) => {
     return res.status(200).json({ message: "Data updated successfully" });
   });
 });
- 
+
 router.get('/usercreation', (req, res) => {
   const filterValue = req.query.filter; // Assuming you want to filter based on a query parameter 'filter'
   let query = 'SELECT * FROM usercreation';
@@ -55,6 +55,38 @@ router.get('/usercreation', (req, res) => {
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
     return res.status(200).json(results);
+  });
+});
+
+router.get('/usercreationgetdata/:value', (req, res) => {
+  const { value } = req.query;
+  let query = 'SELECT * FROM usercreation WHERE 1=1';
+  let params = [];
+
+  if (value) {
+    const columnsToSearch = [
+      'userid',
+      'username',
+      'stationname',
+      'designation',
+      'organizationname',
+      'ufirstname',
+      'ulastname',
+      'mobileno', 
+      'email',
+    ];
+
+    const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+
+    query += ` AND (${likeConditions})`;
+    params = columnsToSearch.map(() => `%${searchText}%`);
+  }
+
+  db.query(query, params, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
+    }
+    return res.status(200).json(result);
   });
 });
 

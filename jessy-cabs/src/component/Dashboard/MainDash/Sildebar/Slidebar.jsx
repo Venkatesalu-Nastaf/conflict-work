@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "./Sidebar.css";
-import Logo from "./Logo-Img/logo.png";
+// import Logo from "./Logo-Img/logo.png";
 import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
 import Badge from '@mui/material/Badge';
@@ -42,6 +42,7 @@ const Sidebar = () => {
   const location = useLocation();
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const navigate = useNavigate();
   const currentPath = location.pathname;
   const [expanded, setExpanded] = useState(true); const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -147,6 +148,43 @@ const Sidebar = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const organizationname = localStorage.getItem('usercompany');
+
+        if (!organizationname) {
+          return;
+        }
+
+        const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
+
+        // Check if the response status is 200
+        if (response.status === 200) {
+          const data = await response.json();
+          const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+
+          // Store image URLs in local storage
+          localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
+
+          setSelectedImage(attachedImageUrls);
+        } else {
+          // If the response status is not 200, wait for 2 seconds and fetch again
+          const timer = setTimeout(fetchData, 2000);
+          // Clear the timer to avoid memory leaks
+          return () => clearTimeout(timer);
+        }
+      } catch (error) {
+        // Handle errors
+        console.error('Error fetching image data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const storedImageUrls = JSON.parse(localStorage.getItem('selectedImage'));
+
   return (
     <>
       <div
@@ -161,8 +199,12 @@ const Sidebar = () => {
         variants={sidebarVariants}
         animate={window.innerWidth <= 768 ? `${expanded}` : ""}
       >
+        {/* <div className="logo">
+          <img src={imageUrls} alt="logo" />
+        </div> */}
+
         <div className="logo">
-          <img src={Logo} alt="logo" />
+          <img src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage} alt={'Logo'} />
         </div>
 
         <div className="menu">

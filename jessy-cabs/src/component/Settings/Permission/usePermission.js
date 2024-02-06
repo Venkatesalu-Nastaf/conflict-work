@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const usePermission = () => {
-
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
     const [success, setSuccess] = useState(false);
@@ -11,6 +10,9 @@ const usePermission = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [info, setInfo] = useState(false);
     const [infoMessage, setInfoMessage] = useState({});
+    const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
+
+    const [userData, setUserData] = useState(null);
 
     const hidePopup = () => {
         setSuccess(false);
@@ -164,13 +166,26 @@ const usePermission = () => {
         );
     };
 
-    const handleChange = (event) => {
+    const handleChange = useCallback(async (event) => {
         const { name, value } = event.target;
-        setUserId((prevBook) => ({
-            ...prevBook,
+        setUserId((prevUserId) => ({
+            ...prevUserId,
             [name]: value,
         }));
-    };
+
+        try {
+            const response = await fetch(`http://localhost:8081/usercreationgetdata/${value}`);
+            const data = await response.json();
+            setUserData(data);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    }, []);
+
+    const handleRowClick = useCallback((user) => {
+        setSelectedCustomerDatas(user); // Update selected user data
+        setUserId((prevUserId) => ({ ...prevUserId, userid: user.userid })); // Update userid field
+    }, []);
 
     const handleSavePermissions = async () => {
         if (!userId.userid) {
@@ -251,6 +266,8 @@ const usePermission = () => {
     const handleCancel = () => {
         setUserId({ userid: '' });
         setPermissionsData(initialPermissionsData);
+        setSelectedCustomerDatas({});
+        setUserData(null);
     };
 
 
@@ -266,9 +283,12 @@ const usePermission = () => {
         isFieldReadOnly,
         hidePopup,
         info,
+        handleRowClick,
+        selectedCustomerDatas,
         infoMessage,
         userId,
         handleKeyDown,
+        userData,
         handleSavePermissions,
         handleCancel,
         permissionsData,

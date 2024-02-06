@@ -204,8 +204,8 @@ const Booking = () => {
                         formData.bookingdate || selectedCustomerData.bookingdate
                           ? dayjs(selectedCustomerData.bookingdate)
                           : null || book.bookingdate
-                          ? dayjs(book.bookingdate)
-                          : dayjs()
+                            ? dayjs(book.bookingdate)
+                            : dayjs()
                       }
                       format="DD/MM/YYYY"
                       onChange={(date) => handleDateChange(date, "bookingdate")}
@@ -638,8 +638,8 @@ const Booking = () => {
                       formData.startdate || selectedCustomerData.startdate
                         ? dayjs(selectedCustomerData.startdate)
                         : null || book.startdate
-                        ? dayjs(book.startdate)
-                        : null
+                          ? dayjs(book.startdate)
+                          : null
                     }
                     format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, "startdate")}
@@ -1146,19 +1146,6 @@ const Booking = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-              {/* <Dialog open={popupOpenmail} onClose={handlePopupClose}>
-                <DialogContent>
-                  {attachedImage && attachedImage.map((imageUrl, index) => (
-                    <img key={index} src={imageUrl} alt='images' style={{ maxWidth: '100%', maxHeight: '500px', marginBottom: '10px' }} />
-                  ))}
-                 
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handlePopupClose} variant="contained" color="primary">
-                    OK
-                  </Button>
-                </DialogActions>
-              </Dialog> */}
               <div className="input-field">
                 <div className="input">
                   <Button

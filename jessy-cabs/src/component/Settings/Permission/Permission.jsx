@@ -18,13 +18,16 @@ const Permission = () => {
     success,
     warning,
     successMessage,
+    selectedCustomerDatas,
     errorMessage,
     warningMessage,
+    handleRowClick,
     info,
     infoMessage,
     handleClick,
     handleChange,
     isFieldReadOnly,
+    userData,
     hidePopup,
     userId,
     handleKeyDown,
@@ -32,8 +35,6 @@ const Permission = () => {
     handleCancel,
     permissionsData,
     handlePermissionChange,
-
-    // ... (other state variables and functions)
   } = usePermission();
 
   useEffect(() => {
@@ -59,7 +60,9 @@ const Permission = () => {
                   id="id"
                   label="ID"
                   name="userid"
-                  value={userId.userid || ""}
+                  autoComplete="off"
+                  autoFocus
+                  value={userId.userid || selectedCustomerDatas.userid || ""}
                   onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   sx={{ m: 1, width: "200ch" }}
@@ -101,11 +104,22 @@ const Permission = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr id="update-row">
-                        <td>123456</td>
-                        <td>fahad</td>
-                        <td>fahad@nastaf.com</td>
-                      </tr>
+                      {userData && userData.length > 0 ? (
+                        userData.map((user) => (
+                          <tr
+                            key={user.id}
+                            onClick={() => handleRowClick(user)}
+                          >
+                            <td>{user.userid}</td>
+                            <td>{user.username}</td>
+                            <td>{user.email}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="3">No data available</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>

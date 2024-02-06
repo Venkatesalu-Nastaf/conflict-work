@@ -197,7 +197,7 @@ const useOrganization = () => {
     const handleUpload = () => {
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = '.pdf, .jpg, .jpeg, .png';
+        input.accept = '.jpg, .jpeg, .png';
         input.onchange = handleFileChange;
         input.click();
     };
@@ -263,6 +263,39 @@ const useOrganization = () => {
         fetchData();
     }, []);
 
+    // const handledelete =
+
+    // const permissions = checkPagePermission();
+
+    // if (permissions.read && permissions.delete) {
+    //     await axios.delete(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
+    //     setFormData(null);
+    //     setSelectedCustomerData(null);
+    //     setSuccessMessage("Successfully Deleted");
+    //     handleCancel();
+    // } else {
+    //     setInfo(true);
+    //     setInfoMessage("You do not have permission.");
+    // }
+
+
+    const handledelete = async () => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.delete) {
+            const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
+            const encode = companyname;
+            const decode = decodeURIComponent(encode);
+            await axios.delete(`http://localhost:8081/companydelete/${decode}`);
+            // setFormData(null);
+            setSelectedCustomerData(null);
+            setSuccess(true);
+            setSuccessMessage("Successfully Deleted");
+        } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
 
     const hidePopup = () => {
         setSuccess(false);
@@ -305,6 +338,7 @@ const useOrganization = () => {
         book,
         handleChange,
         isFieldReadOnly,
+        handledelete,
         handleAdd,
         hidePopup,
         selectedImage,

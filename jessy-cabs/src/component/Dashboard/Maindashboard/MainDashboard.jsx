@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import Sidebar from "../MainDash/Sildebar/Slidebar";
 import { useNavigate, Outlet } from "react-router-dom";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
-import logoImage from "../MainDash/Sildebar/Logo-Img/logo.png";
+// import logoImage from "../MainDash/Sildebar/Logo-Img/logo.png";
 import { useThemes } from '../../UserSettings/Themes/ThemesContext';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
@@ -26,6 +26,7 @@ const MainDashboard = () => {
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -52,6 +53,8 @@ const MainDashboard = () => {
     localStorage.removeItem("auth");
     localStorage.removeItem("username");
     localStorage.removeItem("useridno");
+    localStorage.removeItem("selectedImage");
+    localStorage.removeItem("selectedprofileImage");
     localStorage.removeItem("usercompany");
     localStorage.removeItem("selectedMenuItem");
     setExpanded(true);
@@ -149,6 +152,33 @@ const MainDashboard = () => {
   localStorage.setItem('usercompany', usercompany);
 
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userid = localStorage.getItem('useridno');
+        if (!userid) {
+          return;
+        }
+        const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
+     
+        if (response.status === 200) {
+          const data = await response.json();
+          const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+          localStorage.setItem('selectedprofileImage', JSON.stringify(attachedImageUrls));
+          setSelectedImage(attachedImageUrls);
+        } else {
+          const timer = setTimeout(fetchData, 2000);
+          return () => clearTimeout(timer);
+        }
+      } catch {
+      }
+    };
+    fetchData();
+  }, []);
+
+
+  const storedImageUrls = JSON.parse(localStorage.getItem('selectedprofileImage'));
+
   return (
     <section className={`dash-board ${selectedTheme}`}>
       <div className="glass">
@@ -160,7 +190,12 @@ const MainDashboard = () => {
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               variant="dot"
             >
-              <Avatar alt="userimage" src={logoImage} />
+              {/* <Avatar alt="userimage" src={logoImage} /> */}
+              <Avatar
+                alt="userimage"
+                // src={selectedImage}
+                src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage}
+              />
             </StyledBadge>
           </div>
           <div className="user-name-item">

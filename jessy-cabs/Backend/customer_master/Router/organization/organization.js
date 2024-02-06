@@ -47,4 +47,17 @@ router.put('/companyupdate/:organizationname', (req, res) => {
 });
 
 
+router.delete('/companydelete/:organizationname', (req, res) => {
+    const organizationname = req.params.organizationname;
+    db.query('DELETE FROM tripsheetupload WHERE organizationname = ?', organizationname, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to delete data from MySQL" });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Customer not found" });
+        }
+        return res.status(200).json({ message: "Data deleted successfully" });
+    });
+});
+
 module.exports = router;

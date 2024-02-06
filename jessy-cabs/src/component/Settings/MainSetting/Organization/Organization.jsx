@@ -9,6 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import IconButton from '@mui/material/IconButton';
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
@@ -32,6 +33,7 @@ const Organization = () => {
         successMessage,
         errorMessage,
         warningMessage,
+        handledelete,
         book,
         info,
         infoMessage,
@@ -82,18 +84,26 @@ const Organization = () => {
                                 </div>
                                 <div className="input-field">
                                     {editMode ? (
-                                        <div className='input'>
-                                            <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode}>
-                                                Logo
-                                                <ModeEditIcon />
-                                                <input
-                                                    onChange={handleFileChange}
-                                                    onClick={handleUpload}
-                                                    // type="file"
-                                                    style={{ display: "none" }}
-                                                />
-                                            </Button>
-                                        </div>
+                                        <>
+                                            <div className='input-field'>
+                                                <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode}>
+                                                    Logo
+                                                    <ModeEditIcon />
+                                                    <input
+                                                        onChange={handleFileChange}
+                                                        onClick={handleUpload}
+                                                        // type="file"
+                                                        style={{ display: "none" }}
+                                                    />
+                                                </Button>
+                                            </div>
+                                            <div className='input-field'>
+                                                <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode} onClick={handledelete}>
+                                                    Remove
+                                                    <DeleteIcon />
+                                                </Button>
+                                            </div>
+                                        </>
                                     ) : (
                                         <div className="user-photo-edit">
                                             <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">

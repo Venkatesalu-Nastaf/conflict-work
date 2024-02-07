@@ -204,10 +204,10 @@ const Sidebar = () => {
         </div> */}
 
         <div className="logo">
-          <img src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage} alt={"Logo"} />
+          <img src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage} alt="" />
         </div>
 
-     
+
 
         <div className="menu">
           <MenuItem

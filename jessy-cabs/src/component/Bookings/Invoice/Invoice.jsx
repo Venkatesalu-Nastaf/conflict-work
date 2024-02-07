@@ -2,15 +2,18 @@ import React from 'react';
 import './invoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
-import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-const PrintableInvoice = ({ tripSheetData, book, GmapimageUrl, attachedImage, signimageUrl, routeData, selectedCustomerData, selectedCustomerDatas, formData }) => {
+// import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
+const PrintableInvoice = ({ tripSheetData, selectedImage, book, GmapimageUrl, attachedImage, signimageUrl, routeData, selectedCustomerData, selectedCustomerDatas, formData }) => {
 
   return (
     <div className="invoice-wrapper">
       <article>
         <div className='invoice-container-header'>
           <div className="logo-image-invoice">
-            <img src={Logo} alt="logo" />
+            {/* <img src={Logo} alt="logo" /> */}
+
+            <img src={Array.isArray(selectedImage) ? selectedImage[0] : selectedImage} alt={"Logo"} />
+
           </div>
           <div className="invoice-address">
             <address >
@@ -161,11 +164,11 @@ const PrintableInvoice = ({ tripSheetData, book, GmapimageUrl, attachedImage, si
     </div>
   );
 };
-const Invoice = ({ tripSheetData, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData }) => {
+const Invoice = ({ tripSheetData, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData }) => {
 
   const handlePrint = () => {
     const invoiceContent = ReactDOMServer.renderToString(
-      <PrintableInvoice tripSheetData={tripSheetData} attachedImage={attachedImage} routeData={routeData} selectedCustomerData={selectedCustomerData} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
+      <PrintableInvoice tripSheetData={tripSheetData} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} selectedCustomerData={selectedCustomerData} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} formData={formData} book={book} selectedCustomerDatas={selectedCustomerDatas} />
     );
     const printWindow = window.open('', '_blank');
     printWindow.document.open();
@@ -494,7 +497,7 @@ const Invoice = ({ tripSheetData, selectedCustomerData, attachedImage, signimage
 
   return (
     <div className="invoice-wrapper">
-      <PrintableInvoice tripSheetData={tripSheetData} attachedImage={attachedImage} routeData={routeData} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
+      <PrintableInvoice tripSheetData={tripSheetData} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} formData={formData} />
       <Button variant="contained" onClick={handlePrint}>Print</Button>
     </div>
   );

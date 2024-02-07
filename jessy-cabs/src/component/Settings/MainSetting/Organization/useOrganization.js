@@ -294,7 +294,7 @@ const useOrganization = () => {
             const encode = companyname;
             const decode = decodeURIComponent(encode);
             await axios.delete(`http://localhost:8081/companydelete/${decode}`);
-            // setFormData(null);
+            localStorage.removeItem("selectedImage");
             setSelectedCustomerData(null);
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");

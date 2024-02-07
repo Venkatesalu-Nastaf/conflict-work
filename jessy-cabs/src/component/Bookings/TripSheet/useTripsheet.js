@@ -1380,6 +1380,43 @@ const useTripsheet = () => {
         fetchData();
     }, []);
 
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const organizationname = localStorage.getItem('usercompany');
+
+                if (!organizationname) {
+                    return;
+                }
+
+                const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
+
+                // Check if the response status is 200
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+
+                    // Store image URLs in local storage
+                    localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
+
+                    setSelectedImage(attachedImageUrls);
+                } else {
+                    // If the response status is not 200, wait for 2 seconds and fetch again
+                    const timer = setTimeout(fetchData, 2000);
+                    // Clear the timer to avoid memory leaks
+                    return () => clearTimeout(timer);
+                }
+            } catch (error) {
+                // Handle errors
+                console.error('Error fetching image data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return {
         selectedCustomerData,
         selectedCustomerId,
@@ -1388,6 +1425,7 @@ const useTripsheet = () => {
         success,
         info,
         warning,
+        selectedImage,
         successMessage,
         errorMessage,
         warningMessage,

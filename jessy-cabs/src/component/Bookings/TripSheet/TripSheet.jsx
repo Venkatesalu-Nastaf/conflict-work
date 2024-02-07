@@ -213,6 +213,7 @@ const TripSheet = () => {
     attachedImage,
     routeData,
     signimageUrl,
+    selectedImage,
     GmapimageUrl,
     setCloseTime2,
     setStartTime2,
@@ -1219,7 +1220,7 @@ const TripSheet = () => {
               </div>
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
-                  <Invoice tripSheetData={tripSheetData} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
+                  <Invoice tripSheetData={tripSheetData} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">

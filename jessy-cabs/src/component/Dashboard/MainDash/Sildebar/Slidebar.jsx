@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "./Sidebar.css";
-// import Logo from "./Logo-Img/logo.png";
+// import Logo from "./Logo-Img/logo.png";  
 import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
 import Badge from '@mui/material/Badge';
@@ -200,12 +200,14 @@ const Sidebar = () => {
         animate={window.innerWidth <= 768 ? `${expanded}` : ""}
       >
         {/* <div className="logo">
-          <img src={imageUrls} alt="logo" />
+          <img src={Logo} alt="logo" />
         </div> */}
 
         <div className="logo">
-          <img src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage} alt={'Logo'} />
+          <img src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage} alt={"Logo"} />
         </div>
+
+     
 
         <div className="menu">
           <MenuItem

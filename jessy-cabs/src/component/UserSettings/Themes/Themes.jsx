@@ -1,12 +1,19 @@
 import React from "react";
+import axios from "axios";
 import "./Themes.css";
 import { useThemes } from "./ThemesContext"; // Import the useThemes hook
 
 const Themes = () => {
   const { setSelectedTheme } = useThemes();
 
-  const handleThemeChange = (theme) => {
+  const handleThemeChange = async (theme) => {
+    const userid = localStorage.getItem('useridno');
     setSelectedTheme(theme);
+    localStorage.removeItem("selectedusertheme");
+    await axios.post('http://localhost:8081/updatethemename', {
+      userid: userid,
+      theme: theme
+    });
   };
 
   return (

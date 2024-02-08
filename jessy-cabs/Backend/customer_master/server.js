@@ -122,6 +122,21 @@ app.use('/', companyRoutes);//signature database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', taxsettingRoutes);//signature database
 // -----------------------------------------------------------------------------------------------------------
+
+//theme update in user creation
+app.post('/updatethemename', (req, res) => {
+  const { userid, theme } = req.body;
+  const query = 'UPDATE usercreation SET theme = ? WHERE userid IN (?)';
+  db.query(query, [theme, userid], (err, results) => {
+    if (err) {
+      res.status(500).json({ message: 'Internal server error' });
+      return;
+    }
+    res.status(200).json({ message: 'Status updated successfully' });
+  });
+});
+
+
 //map image upload
 app.post('/mapuploads', upload.single('file'), (req, res) => {
   if (!req.file) {

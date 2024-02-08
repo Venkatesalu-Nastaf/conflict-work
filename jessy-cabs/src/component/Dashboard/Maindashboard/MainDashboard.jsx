@@ -23,6 +23,7 @@ const MainDashboard = () => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const { selectedTheme } = useThemes();
+  const { setSelectedTheme } = useThemes();
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -31,7 +32,6 @@ const MainDashboard = () => {
   const handlePopupClose = () => {
     setPopupOpen(false);
   };
-
 
   const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
 
@@ -60,7 +60,6 @@ const MainDashboard = () => {
     setExpanded(true);
     navigate("/");
   }, [navigate]);
-
 
   useEffect(() => {
     if (!localStorage.getItem("auth")) {
@@ -137,12 +136,25 @@ const MainDashboard = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const routeData = await response.json();
+        const usertheme = routeData[0]?.theme;
+        setSelectedTheme(usertheme);
+        localStorage.setItem('selectedusertheme', JSON.stringify(usertheme));
         setRouteData(routeData);
       } catch (error) {
       }
     };
     fetchData();
-  }, [storeUsername]);
+  }, [storeUsername, setSelectedTheme]);
+  const storedusertheme = JSON.parse(localStorage.getItem('selectedusertheme'));
+
+
+  // useEffect(() => {
+  //   const usertheme = routeData[0]?.theme;
+  //   setselectedtheme(usertheme);
+
+  //   console.log('user theme for dashboard', usertheme);
+  // }, [routeData, setselectedtheme]);
+
 
   const useridno = routeData[0]?.userid;
   const usercompany = routeData[0]?.organizationname;
@@ -159,7 +171,7 @@ const MainDashboard = () => {
           return;
         }
         const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
-     
+
         if (response.status === 200) {
           const data = await response.json();
           const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
@@ -175,11 +187,10 @@ const MainDashboard = () => {
     fetchData();
   }, []);
 
-
   const storedImageUrls = JSON.parse(localStorage.getItem('selectedprofileImage'));
 
   return (
-    <section className={`dash-board ${selectedTheme}`}>
+    <section className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme}`}>
       <div className="glass">
         <Sidebar expanded={expanded} />
         <div className="header-user">

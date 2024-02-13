@@ -114,3 +114,7 @@
   width: 535px;
   /* height: 535px; */
 }
+.mapview {
+  width: 580px !important;
+  height: 550px !important;
+}

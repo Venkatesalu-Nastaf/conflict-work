@@ -837,8 +837,7 @@ const Billing = () => {
                                 </div>
                             </div>
                             <div className="input-field">
-
-                                <div className="input" style={{ width: "180px" }}>
+                                <div className="input" >
                                     <div className="icone">
                                         <ChangeCircleIcon color="active" />
                                     </div>
@@ -853,7 +852,7 @@ const Billing = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "180px" }}>
+                                <div className="input" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faSackDollar} size="xl" />
                                     </div>

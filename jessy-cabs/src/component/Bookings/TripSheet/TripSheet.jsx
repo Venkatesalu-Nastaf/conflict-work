@@ -2475,7 +2475,7 @@ const TripSheet = () => {
                     </div>
                     <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
                       <DialogContent>
-                        <img className='dialogboximg' src={mapimageUrls} alt='imagess' />
+                        <img className='dialogboximg mapview' src={mapimageUrls} alt='imagess' />
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleimgPopupClose} variant="contained" color="primary">

@@ -69,40 +69,6 @@
   color: #000;
   background-color: var(--glass);
 }
-.input-field {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.input-field .input {
-  width: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-}
-.input-field .radio {
-  font-size: 20px !important;
-}
-.checkbox {
-  color: rgb(69, 62, 62);
-  margin-top: 10px;
-}
-.css-1hbvpl3-MuiSvgIcon-root {
-  height: 18px !important;
-}
-.css-ahj2mt-MuiTypography-root {
-  font-size: 13px !important;
-}
-.input-field .input option {
-  text-transform: uppercase;
-}
-.input-field .input .icone {
-  padding: 15px 10px 0px;
-}
-.select-field {
-  border: #000;
-}
 
 /* TextBox */
 .textbox {

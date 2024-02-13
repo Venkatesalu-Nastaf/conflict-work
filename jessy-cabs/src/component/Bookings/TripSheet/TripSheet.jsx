@@ -231,7 +231,7 @@ const TripSheet = () => {
     handleTripmapClick,
     mapimgpopupOpen,
     handleimgPopupClose,
-    mapimageUrl,
+    mapimageUrls,
     handleTripmaplogClick,
     maplogimgpopupOpen,
     row,
@@ -245,8 +245,6 @@ const TripSheet = () => {
     imageUrl,
     link,
     isSignatureSubmitted,
-
-    // ... (other state variables and functions)
   } = useTripsheet();
 
   useEffect(() => {
@@ -409,8 +407,19 @@ const TripSheet = () => {
               </div>
               <FormControlLabel
                 value="smsguest"
-                control={<Checkbox size="small" checked={smsguest} onChange={(event) => setSmsGuest(event.target.checked)} />}
-                label="SMS Guest"
+                control={
+                  <Checkbox
+                    size="small"
+                    name="smsguest"
+                    checked={smsguest || formData.smsguest || book.smsguest}
+                    onChange={(event) => {
+                      setBook({ ...book, smsguest: event.target.checked });
+                      setFormData({ ...formData, guestsms: event.target.checked });
+                      setSmsGuest(event.target.checked);
+                    }}
+                  />
+                }
+                label="Guest SMS"
               />
               <FormControlLabel
                 name="booker"
@@ -428,7 +437,7 @@ const TripSheet = () => {
                 autoComplete="new-password"
                 onChange={handleChange}
                 checked={Boolean(formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck)}
-                control={<Checkbox size="small" checked={sendEmail} onChange={(event) => setSendEmail(event.target.checked)} />}
+                control={<Checkbox size="small" checked={sendEmail || formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck} onChange={(event) => setSendEmail(event.target.checked)} />}
               />
             </div>
             <div className="input-field">
@@ -722,20 +731,37 @@ const TripSheet = () => {
               </div>
               <div className="input radio">
                 <FormControlLabel
+                  id="DriverSMS"
                   value="DriverSMS"
-                  control={<Checkbox size="small" checked={DriverSMS} onChange={(event) => setDriverSMS(event.target.checked)} />}
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={DriverSMS || formData.DriverSMS || book.DriverSMS}
+                      onChange={(event) => {
+                        setBook({ ...book, DriverSMS: event.target.checked });
+                        setFormData({ ...formData, DriverSMS: event.target.checked });
+                        setDriverSMS(event.target.checked);
+                      }}
+                    />
+                  }
                   label="Driver SMS"
                 />
               </div>
               <div className="input radio">
                 <FormControlLabel
-                  name="gps"
-                  value="GPS"
-                  control={<Checkbox size="small" />}
+                  id="DriverSMS"
+                  value="DriverSMS"
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={formData.gps || book.gps}
+                      onChange={(event) => {
+                        setBook({ ...book, gps: event.target.checked });
+                        setFormData({ ...formData, gps: event.target.checked });
+                      }}
+                    />
+                  }
                   label="GPS"
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                  checked={Boolean(formData.gps || selectedCustomerData?.gps || book.gps)}
                 />
               </div>
               <div className="input">
@@ -2449,7 +2475,7 @@ const TripSheet = () => {
                     </div>
                     <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
                       <DialogContent>
-                        <img className='dialogboximg' src={mapimageUrl} aria-label='summa' />
+                        <img className='dialogboximg' src={mapimageUrls} alt='imagess' />
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleimgPopupClose} variant="contained" color="primary">

@@ -154,10 +154,12 @@ app.post('/mapuploads', upload.single('file'), (req, res) => {
     return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
   });
 });
+
+
 //get map image from the folder
 const mapimageDirectory = path.join(__dirname, 'uploads');
 app.use('/mapimages', express.static(mapimageDirectory));
-app.get('/get-mapimage/:tripid', (req, res) => {
+app.get('/getmapimages/:tripid', (req, res) => {
   const { tripid } = req.params;
   const query = 'SELECT path FROM mapimage WHERE tripid = ?';
   db.query(query, [tripid], (err, results) => {
@@ -176,6 +178,7 @@ app.get('/get-mapimage/:tripid', (req, res) => {
     });
   });
 });
+
 //file upload in tripsheet
 app.post('/uploads', upload.single('file'), (req, res) => {
   if (!req.file) {

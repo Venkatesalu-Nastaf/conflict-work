@@ -201,80 +201,6 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
     }
 }
 
-// function generateStaticMap() {
-//     const mapCenter = map.getCenter().toJSON();
-//     // Sort waypoints based on the label
-//     const sortedWaypoints = waypoints.slice().sort((a, b) => {
-//         return a.order - b.order || a.label.localeCompare(b.label);
-//     });
-//     // Add markers to the static map URL
-//     const markers = [];
-//     if (startMarker) {
-//         markers.push(`markers=color:red%7Clabel:A%7C${startMarker.getPosition().lat()},${startMarker.getPosition().lng()}`);
-//     }
-//     if (endMarker) {
-//         // Check if there are waypoints
-//         if (waypoints.length > 0) {
-//             // If waypoints exist, use the last waypoint label
-//             const lastWaypointLabel = sortedWaypoints[sortedWaypoints.length - 1].label;
-//             const nextEndLabel = String.fromCharCode(lastWaypointLabel.charCodeAt(0) + 1);
-//             markers.push(`markers=color:red%7Clabel:${nextEndLabel}%7C${endMarker.getPosition().lat()},${endMarker.getPosition().lng()}`);
-//         } else {
-//             // If no waypoints, use 'B'
-//             markers.push(`markers=color:red%7Clabel:B%7C${endMarker.getPosition().lat()},${endMarker.getPosition().lng()}`);
-//         }
-//     }
-//     // Calculate route using Directions API
-//     const directionsService = new google.maps.DirectionsService();
-//     if (startMarker && endMarker) {
-//         const startLocation = startMarker.getPosition();
-//         const endLocation = endMarker.getPosition();
-//         const waypointsPositions = sortedWaypoints.map((waypoint) => ({
-//             location: waypoint.getPosition(),
-//             stopover: true,
-//         }));
-//        directionsService.route({
-//             origin: startLocation,
-//             destination: endLocation,
-//             waypoints: waypointsPositions,
-//             travelMode: google.maps.TravelMode.DRIVING,
-//         }, (response, status) => {
-//             if (status === 'OK') {
-//                 // Extract polylines from Directions API response
-//                 const routePolyline = response.routes[0].overview_polyline;
-//                 // Add markers for waypoints to the static map URL
-//                 for (let i = 0; i < sortedWaypoints.length; i++) {
-//                     const label = sortedWaypoints[i].label;
-//                     markers.push(`markers=color:red%7Clabel:${label}%7C${sortedWaypoints[i].getPosition().lat()},${sortedWaypoints[i].getPosition().lng()}`);
-//                 }
-//                 // Create an array of LatLng objects for all markers and route
-//                 const allPositions = [startLocation, endLocation, ...waypointsPositions.map(waypoint => waypoint.location)];
-//                 const bounds = new google.maps.LatLngBounds();
-//                 // Extend the bounds for each position
-//                 allPositions.forEach(position => bounds.extend(position));
-//                 // Fit the map to the bounds
-//                 map.fitBounds(bounds);
-//                 const zoom = calculateZoomLevel(bounds);
-//                 const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${mapCenter.lat},${mapCenter.lng}&zoom=${zoom}&size=800x400&dpi=720`;
-//                 // Add route path to the static map URL
-//                 const pathEncoded = encodeURIComponent(`enc:${routePolyline}`);
-//                 const pathParam = `path=${pathEncoded}`;
-//                 // Add the API key to the static map URL (replace 'YOUR_GOOGLE_MAPS_API_KEY' with your actual API key)
-//                 const apiKey = 'AIzaSyAKgTjrRsR4GqXNKOp8RNc3WfMaAv8hVSU&libraries=places';
-//                 const finalStaticMapUrl = `${staticMapUrl}&${markers.join('&')}&${pathParam}&key=${apiKey}`;
-//                 // Create a link element and trigger a download
-//                 const a = document.createElement('a');
-//                 a.href = finalStaticMapUrl;
-//                 a.download = 'static_map.png';
-//                 a.click();
-//             } else {
-//                 console.error('Directions request failed due to ' + status);
-//             }
-//         });
-//     }
-// }
-
-
 function generateStaticMap() {
     const mapCenter = map.getCenter().toJSON();
     // Sort waypoints based on the label
@@ -334,7 +260,7 @@ function generateStaticMap() {
                 const pathEncoded = encodeURIComponent(`enc:${routePolyline}`);
                 const pathParam = `path=${pathEncoded}`;
                 // Add the API key to the static map URL (replace 'YOUR_GOOGLE_MAPS_API_KEY' with your actual API key)
-                const apiKey = 'AIzaSyAKgTjrRsR4GqXNKOp8RNc3WfMaAv8hVSU&libraries=places';
+                const apiKey = 'AIzaSyCp2ePjsrBdrvgYCQs1d1dTaDe5DzXNjYk&libraries=places';
 
                 async function urlToBlob(url) {
                     const response = await fetch(url);
@@ -356,6 +282,7 @@ function generateStaticMap() {
                     const response = await axios.post('http://localhost:8081/mapuploads', formDataUpload, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
+                            'Accept': 'image/png',
                         },
                     });
                     console.log('uploaded file details 2', response.data);

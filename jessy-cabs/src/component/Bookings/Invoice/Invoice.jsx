@@ -161,7 +161,7 @@ const PrintableInvoice = ({ tripSheetData, selectedImage, book, GmapimageUrl, at
           </ol>
         </div>
       </article>
-    </div>
+    </div> 
   );
 };
 const Invoice = ({ tripSheetData, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData }) => {

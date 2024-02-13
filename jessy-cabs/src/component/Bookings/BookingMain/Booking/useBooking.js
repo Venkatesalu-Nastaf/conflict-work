@@ -205,11 +205,14 @@ const useBooking = () => {
         const params = new URLSearchParams(location.search);
         const statusValue = params.get('status') || 'pending';
         const stationValue = params.get('servicestation') || 'Chennai';
+        const bookingsmsValue = params.get('guestsms') || 'guestsms';
+        const sendemailValue = params.get('sendemail') || 'sendemail';
         const payValue = params.get('paymenttype') || 'BTC';
         const formData = {};
 
         const parameterKeys = [
-            'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno', 'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'reporttime', 'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'triptime', 'emaildoggle', 'hireTypes', 'travelsname', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'travelsemail'];
+            'bookingno', 'bookingdate', 'bookingtime', 'status', 'tripid', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'employeeno', 'address1', 'streetno', 'city', 'report', 'vehType', 'paymenttype', 'startdate', 'starttime', 'reporttime', 'duty', 'pickup', 'customercode', 'registerno', 'flightno', 'orderbyemail', 'remarks', 'servicestation', 'advance', 'nameupdate', 'address3', 'address4', 'cityupdate', 'useage', 'username', 'tripdate', 'triptime', 'emaildoggle', 'hireTypes', 'travelsname', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'travelsemail'
+        ];
 
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -220,6 +223,8 @@ const useBooking = () => {
 
         formData['status'] = statusValue;
         formData['servicestation'] = stationValue;
+        formData['guestsms'] = bookingsmsValue;
+        formData['sendemail'] = sendemailValue;
         formData['paymenttype'] = payValue;
 
         setBook(formData);
@@ -259,6 +264,8 @@ const useBooking = () => {
         customercode: '',
         registerno: '',
         flightno: '',
+        guestsms: '',
+        sendemail: '',
         orderbyemail: '',
         remarks: '',
         servicestation: '',
@@ -826,28 +833,6 @@ const useBooking = () => {
     };
 
     const [attachedImage, setAttachedImage] = useState('');
-
-    // const handleGetMail = useCallback(async () => {
-    //     try {
-    //         const bookingno = book.bookingno || selectedCustomerData.bookingno;
-    //         if (!bookingno) {
-    //             setError(true);
-    //             setErrorMessage("Enter booking No");
-    //             return;
-    //         }
-    //         const response = await fetch(`http://localhost:8081/get-attachedmailimage/${bookingno}`);
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! Status: ${response.status}`);
-    //         }
-    //         const data = await response.json();
-    //         const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-    //         setAttachedImage(attachedImageUrls);
-    //         setpopupOpenmail(true);[]
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }, [book.bookingno, selectedCustomerData.bookingno]);
-
 
     const handleGetMail = useCallback(async () => {
         try {

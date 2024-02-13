@@ -145,7 +145,6 @@ const useTripsheet = () => {
                 return;
             }
             const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
-            // localStorage.setItem('localstoragetripid', tripid);
             const response = await axios.post(`http://localhost:8081/generate-link/${tripid}`)
             setLink(response.data.link);
         } catch {
@@ -156,20 +155,22 @@ const useTripsheet = () => {
         setPopupOpen(false);
     };
 
-    const [mapimageUrl, setMapImageUrl] = useState('');
+    const [mapimageUrls, setMapImageUrls] = useState([]);
+
     const handleTripmapClick = async () => {
         try {
             const tripid = selectedRow?.tripid || book?.tripid || selectedCustomerData?.tripid || formData?.tripid;
             if (!tripid) {
-                setError(true);
-                setErrorMessage("Please enter the tripid");
+                return;
             }
-            const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
+            const response = await fetch(`http://localhost:8081/getmapimages/${tripid}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            const imageUrl = URL.createObjectURL(await response.blob());
-            setMapImageUrl(imageUrl);
+            const responseData = await response.blob();
+            // Assuming you want to display the image directly
+            const imageUrl = URL.createObjectURL(responseData);
+            setMapImageUrls(imageUrl);
             setMapimgPopupOpen(true);
         } catch {
         }
@@ -322,6 +323,11 @@ const useTripsheet = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const statusValue = params.get('status') || 'Opened';
+        const bookingsmsValue = params.get('smsguest') || 'smsguest';
+        const sendemailValue = params.get('booker') || 'booker';
+        const emailcheckValue = params.get('emailcheck') || 'emailcheck';
+        const DriverSMSValue = params.get('DriverSMS') || 'DriverSMS';
+        const gpsValue = params.get('gps') || 'gps';
         const appsValue = params.get('apps') || 'Waiting';
         const formData = {};
 
@@ -335,6 +341,11 @@ const useTripsheet = () => {
             }
         });
         formData['status'] = statusValue;
+        formData['smsguest'] = bookingsmsValue;
+        formData['booker'] = sendemailValue;
+        formData['emailcheck'] = emailcheckValue;
+        formData['DriverSMS'] = DriverSMSValue;
+        formData['gps'] = gpsValue;
         formData['apps'] = appsValue;
         setTripSheetData(formData);
         setBook(formData);
@@ -392,6 +403,7 @@ const useTripsheet = () => {
         permit: '',
         parking: '',
         toll: '',
+        emailcheck: '',
         vpermettovendor: '',
         vendortoll: '',
         customeradvance: '',
@@ -452,7 +464,7 @@ const useTripsheet = () => {
         on1: '',
         smsguest: '',
         booker: '',
-        emailcheck: '',
+        DriverSMS: '',
         manualbillss: '',
         reload: '',
         locks: '',
@@ -964,9 +976,7 @@ const useTripsheet = () => {
     };
 
     const calculateTotalKilometers = () => {
-        // const startKm = formData.startkm || selectedCustomerData.startkm || book.startkm;
         const startKm = formData.shedout || book.shedout || selectedCustomerData.shedout || '';
-        // const closeKm = formData.closekm || selectedCustomerData.closekm || book.closekm;
         const closeKm = formData.shedin || book.shedin || selectedCustomerData.shedin || '';
 
         if (startKm !== undefined && closeKm !== undefined) {
@@ -1310,11 +1320,14 @@ const useTripsheet = () => {
             const tripid = localStorage.getItem('selectedTripid');
             try {
                 const response = await fetch(`http://localhost:8081/routedata/${encodeURIComponent(tripid)}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+
+                if (response.status === 200) {
+                    const routeData = await response.json();
+                    setRouteData(routeData);
+                } else {
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
                 }
-                const routeData = await response.json(); // Parse JSON data
-                setRouteData(routeData);
             } catch {
             }
         };
@@ -1328,30 +1341,10 @@ const useTripsheet = () => {
 
             try {
                 const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                if (response.status === 200) {
+                    const imageUrl = URL.createObjectURL(await response.blob());
+                    setSignImageUrl(imageUrl);
                 }
-                const imageUrl = URL.createObjectURL(await response.blob());
-                setSignImageUrl(imageUrl);
-            } catch {
-            }
-        };
-        fetchData();
-        return () => {
-        };
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
-
-            try {
-                const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const gimageUrl = URL.createObjectURL(await response.blob());
-                setGMapImageUrl(gimageUrl);
             } catch {
             }
         };
@@ -1367,13 +1360,38 @@ const useTripsheet = () => {
                 if (!tripid) {
                     return;
                 }
-                const response = await fetch(`http://localhost:8081/get-attachedimage/${tripid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+
+                const response = await fetch(`http://localhost:8081/getmapimages/${tripid}`);
+                if (response.status === 200) {
+                    const responseData = await response.blob();
+                    const imageUrl = URL.createObjectURL(responseData);
+                    setGMapImageUrl(imageUrl);
+                } else {
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
                 }
-                const data = await response.json();
-                const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-                setAttachedImage(attachedImageUrls);
+            } catch {
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const tripid = localStorage.getItem('selectedTripid');
+                if (!tripid) {
+                    return;
+                }
+                const response = await fetch(`http://localhost:8081/get-attachedimage/${tripid}`);
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+                    setAttachedImage(attachedImageUrls);
+                } else {
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
+                }
             } catch {
             }
         };
@@ -1488,7 +1506,7 @@ const useTripsheet = () => {
         handleTripmapClick,
         mapimgpopupOpen,
         handleimgPopupClose,
-        mapimageUrl,
+        mapimageUrls,
         handleTripmaplogClick,
         maplogimgpopupOpen,
         row,

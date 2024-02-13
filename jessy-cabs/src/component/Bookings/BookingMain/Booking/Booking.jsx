@@ -981,19 +981,17 @@ const Booking = () => {
             <div className="inpu-field">
               <div className="input">
                 <FormControlLabel
-                  value="vehiclechanges"
-                  control={<Checkbox size="small" />}
-                  label="Vehicle Changes"
-                />
-              </div>
-              <div className="input">
-                <FormControlLabel
                   value="guestsms"
                   control={
                     <Checkbox
                       size="small"
-                      checked={guestsms}
-                      onChange={(event) => setGuestSms(event.target.checked)}
+                      name="guestsms"
+                      checked={guestsms || formData.guestsms || book.guestsms}
+                      onChange={(event) => {
+                        setBook({ ...book, guestsms: event.target.checked });
+                        setFormData({ ...formData, guestsms: event.target.checked });
+                        setGuestSms(event.target.checked);
+                      }}
                     />
                   }
                   label="Guest SMS"
@@ -1009,8 +1007,12 @@ const Booking = () => {
                   control={
                     <Checkbox
                       size="small"
-                      checked={sendEmail}
-                      onChange={(event) => setSendEmail(event.target.checked)}
+                      checked={sendEmail || formData.sendemail || book.sendemail}
+                      onChange={(event) => {
+                        setBook({ ...book, sendemail: event.target.checked });
+                        setFormData({ ...formData, sendemail: event.target.checked });
+                        setSendEmail(event.target.checked);
+                      }}
                     />
                   }
                   label="Send Email"

@@ -58,11 +58,13 @@ const TransferReport = () => {
     isFieldReadOnly,
     ratetypeforpage,
     hidePopup,
+    organizationdata,
     routedData,
     date,
     customer,
     tripData,
     bankOptions,
+    selectedImage,
     setCustomer,
     servicestation,
     handleserviceInputChange,
@@ -256,7 +258,9 @@ const TransferReport = () => {
             <Dialog open={pbpopupOpen} onClose={handlePopupClose}>
               <DialogContent>
                 <Reportinvoice
+                  organizationdata={organizationdata}
                   routedData={routedData}
+                  selectedImage={selectedImage}
                   routeData={routeData}
                   roundedAmount={roundedAmount}
                   sumTotalAndRounded={sumTotalAndRounded}

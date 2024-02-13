@@ -104,6 +104,7 @@ const Billing = () => {
         bankOptions,
         popupOpen,
         handlePopupClose,
+        organizationdata,
         tripSheetData,
         triprequest,
         tripcode,
@@ -116,6 +117,7 @@ const Billing = () => {
         tripshedin,
         tripshedout,
         tripreporttime,
+        selectedImage,
         tripshedintime,
         tripadditionaltime,
         tripstartkm,
@@ -947,6 +949,8 @@ const Billing = () => {
                             <Paymentinvoice tripSheetData={tripSheetData}
                                 triprequest={triprequest}
                                 tripcode={tripcode}
+                                selectedImage={selectedImage}
+                                organizationdata={organizationdata}
                                 tripdepartment={tripdepartment}
                                 routeData={routeData}
                                 BalanceValue={BalanceValue}

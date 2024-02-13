@@ -2,8 +2,8 @@ import React from 'react';
 import './Paymentinvoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
-import Logo from "../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
-const PrintableInvoice = ({ tripSheetData, book, tripshedin, tripshedout, tripreporttime, tripshedintime, selectedCustomerData, GmapimageUrl, mapimageUrl, organizationaddress1, organizationaddress2, organizationcity, organizationgstnumber, tripShedkm, tripadditionaltime, tripstartkm, tripclosekm, tripstarttime, tripclosetime, tripstartdate, tripclosedate, triprequest, routeData, tripcode, tripdepartment, BalanceValue, TotalAmountValue, roundOff, selectedCustomerDatas, formData }) => {
+// import Logo from "../../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
+const PrintableInvoice = ({ tripSheetData, organizationdata, selectedImage, book, tripshedin, tripshedout, tripreporttime, tripshedintime, selectedCustomerData, GmapimageUrl, mapimageUrl, organizationaddress1, organizationaddress2, organizationcity, organizationgstnumber, tripShedkm, tripadditionaltime, tripstartkm, tripclosekm, tripstarttime, tripclosetime, tripstartdate, tripclosedate, triprequest, routeData, tripcode, tripdepartment, BalanceValue, TotalAmountValue, roundOff, selectedCustomerDatas, formData }) => {
 
     return (
         <>
@@ -11,7 +11,8 @@ const PrintableInvoice = ({ tripSheetData, book, tripshedin, tripshedout, tripre
                 <div className="Individual-table-container">
                     <div className="page-title">
                         <div className="sheet-logo">
-                            <img src={Logo} alt="logo" />
+                            {/* <img src={selectedImage} alt="logo" /> */}
+                            <img src={Array.isArray(selectedImage) ? selectedImage[0] : selectedImage} alt={"Logo"} />
                         </div>
                         <div className="sheet-type">
                             <h1>Tax Invoice</h1>
@@ -19,21 +20,22 @@ const PrintableInvoice = ({ tripSheetData, book, tripshedin, tripshedout, tripre
                     </div>
                     <div className="header-title">
                         <div className="left-title">
-                            <h3>JESSYCABS</h3>
-                            <p>Flat No 2, II Floor, Swathi Complex, (Venkatnarayana Road)
-                                Nandanam, Chennai - 600017
-                                booking@jessycabs.in
-                                <span>Tel:044-24354247,Mob:9841505689</span>
+                            <h3>{organizationdata.organizationname}</h3>
+                            <p>{organizationdata.addressLine1}
+                                {organizationdata.addressLine2}
+                                {organizationdata.city}<br />
+                                {organizationdata.contactEmail}
+                                <span>Contact:-{organizationdata.contactPhoneNumber}</span>
                             </p>
                         </div>
                         <div className="right-title">
                             <dl className="dl-horizontal">
                                 <dt>OUR GSTIN</dt>
-                                <dd><strong>: 33AVNPM9362R1ZK</strong></dd>
+                                <dd><strong>: {organizationdata.gstnumber}</strong></dd>
                                 <dt>State</dt>
-                                <dd>: Tamilnadu,Code : 33 </dd>
+                                <dd>: {organizationdata.location}</dd>
                                 <dt>Pan No</dt>
-                                <dd>: AVNPM9362R</dd>
+                                <dd>: {organizationdata.pannumber}</dd>
                                 <dt>Sac Code</dt>
                                 <dd>: 996601</dd>
                             </dl>
@@ -194,13 +196,15 @@ const PrintableInvoice = ({ tripSheetData, book, tripshedin, tripshedout, tripre
         </>
     );
 };
-const Invoice = ({ tripSheetData, tripcode, tripshedin, tripshedout, tripreporttime, tripshedintime, organizationaddress1, GmapimageUrl, mapimageUrl, organizationaddress2, organizationcity, organizationgstnumber, selectedCustomerData, tripShedkm, tripadditionaltime, tripstartkm, tripclosekm, tripstarttime, tripclosetime, tripstartdate, tripclosedate, triprequest, tripdepartment, TotalAmountValue, BalanceValue, tripData, selectedCustomerDatas, customerData, routeData, book, roundOff, formData }) => {
+const Invoice = ({ tripSheetData, selectedImage, organizationdata, tripcode, tripshedin, tripshedout, tripreporttime, tripshedintime, organizationaddress1, GmapimageUrl, mapimageUrl, organizationaddress2, organizationcity, organizationgstnumber, selectedCustomerData, tripShedkm, tripadditionaltime, tripstartkm, tripclosekm, tripstarttime, tripclosetime, tripstartdate, tripclosedate, triprequest, tripdepartment, TotalAmountValue, BalanceValue, tripData, selectedCustomerDatas, customerData, routeData, book, roundOff, formData }) => {
 
     const handlePrint = async () => {
         const invoiceContent = ReactDOMServer.renderToString(
             <PrintableInvoice
                 tripSheetData={tripSheetData}
+                organizationdata={organizationdata}
                 BalanceValue={BalanceValue}
+                selectedImage={selectedImage}
                 TotalAmountValue={TotalAmountValue}
                 roundOff={roundOff}
                 tripdepartment={tripdepartment}
@@ -409,9 +413,11 @@ const Invoice = ({ tripSheetData, tripcode, tripshedin, tripshedout, tripreportt
                 tripSheetData={tripSheetData}
                 BalanceValue={BalanceValue}
                 TotalAmountValue={TotalAmountValue}
+                organizationdata={organizationdata}
                 roundOff={roundOff}
                 book={book}
                 tripdepartment={tripdepartment}
+                selectedImage={selectedImage}
                 selectedCustomerData={selectedCustomerData}
                 selectedCustomerDatas={selectedCustomerDatas}
                 formData={formData}

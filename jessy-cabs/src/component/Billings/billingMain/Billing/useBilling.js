@@ -811,20 +811,22 @@ const useBilling = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
             try {
-                const response = await fetch(`http://localhost:8081/get-mapimage/${tripid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                const tripid = localStorage.getItem('selectedTripid');
+               
+                const response = await fetch(`http://localhost:8081/getmapimages/${tripid}`);
+                if (response.status === 200) {
+                    const responseData = await response.blob();
+                    const imageUrl = URL.createObjectURL(responseData);
+                    setGMapImageUrl(imageUrl);
+                } else {
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
                 }
-                const gimageUrl = URL.createObjectURL(await response.blob());
-                setGMapImageUrl(gimageUrl);
             } catch {
             }
         };
         fetchData();
-        return () => {
-        };
     }, []);
 
     const organizationaddress1 = customerData.address1;
@@ -851,6 +853,62 @@ const useBilling = () => {
     const TotalAmountValue = calculateroundedPayableAmount();
 
 
+    const [organizationdata, setorganizationData] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const encoded = localStorage.getItem('usercompany');
+            localStorage.setItem('usercompanyname', encoded);
+            const storedcomanyname = localStorage.getItem('usercompanyname');
+            const organizationname = decodeURIComponent(storedcomanyname);
+            try {
+                const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
+                if (response.status === 200) {
+
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setorganizationData(userDataArray[0]);
+                    }
+                } else {
+                    // If the response status is not 200, wait for 2 seconds and fetch again
+                    const timer = setTimeout(fetchData, 2000);
+                    // Clear the timer to avoid memory leaks
+                    return () => clearTimeout(timer);
+                }
+            } catch {
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const organizationname = localStorage.getItem('usercompany');
+                if (!organizationname) {
+                    return;
+                }
+                const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+                    localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
+                    setSelectedImage(attachedImageUrls);
+                } else {
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
+                }
+            } catch {
+            }
+        };
+        fetchData();
+    }, []);
+
+   
+
     return {
         selectedCustomerData,
         actionName,
@@ -873,10 +931,12 @@ const useBilling = () => {
         handleKeyenter,
         handleDateChange,
         calculateTotalAmount,
+        selectedImage,
         calculateTotalAmount2,
         calculateTotalAmount3,
         calculateTotalAmount4,
         calculateGrossAmount,
+        organizationdata,
         calculatePayableAmount,
         calculateRoundOff,
         calculateroundedPayableAmount,

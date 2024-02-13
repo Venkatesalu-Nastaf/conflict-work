@@ -1435,6 +1435,37 @@ const useTripsheet = () => {
         fetchData();
     }, []);
 
+
+    const [organizationdata, setorganizationData] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const encoded = localStorage.getItem('usercompany');
+            localStorage.setItem('usercompanyname', encoded);
+            const storedcomanyname = localStorage.getItem('usercompanyname');
+            const organizationname = decodeURIComponent(storedcomanyname);
+            try {
+                const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
+                if (response.status === 200) {
+
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setorganizationData(userDataArray[0]);
+                    }
+                } else {
+                    // If the response status is not 200, wait for 2 seconds and fetch again
+                    const timer = setTimeout(fetchData, 2000);
+                    // Clear the timer to avoid memory leaks
+                    return () => clearTimeout(timer);
+                }
+            } catch {
+            }
+        };
+
+        fetchData();
+    }, []);
+
+
     return {
         selectedCustomerData,
         selectedCustomerId,
@@ -1467,6 +1498,7 @@ const useTripsheet = () => {
         selectedCustomerDatas,
         setDriverSMS,
         DriverSMS,
+        organizationdata,
         calculateTotalDays,
         setStartTime,
         setBook,

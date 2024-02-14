@@ -204,8 +204,8 @@ const Booking = () => {
                         formData.bookingdate || selectedCustomerData.bookingdate
                           ? dayjs(selectedCustomerData.bookingdate)
                           : null || book.bookingdate
-                            ? dayjs(book.bookingdate)
-                            : dayjs()
+                          ? dayjs(book.bookingdate)
+                          : dayjs()
                       }
                       format="DD/MM/YYYY"
                       onChange={(date) => handleDateChange(date, "bookingdate")}
@@ -503,7 +503,51 @@ const Booking = () => {
                 />
               </div>
             </div>
+
             <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <DomainAddIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "servicestation")
+                  }
+                  value={
+                    Service_Station.find((option) => option.optionvalue)
+                      ?.label ||
+                    formData.servicestation ||
+                    selectedCustomerData.servicestation ||
+                    book.servicestation ||
+                    ""
+                  }
+                  options={Service_Station.map((option) => ({
+                    label: option.optionvalue,
+                  }))}
+                  getOptionLabel={(option) =>
+                    option.label ||
+                    formData.servicestation ||
+                    selectedCustomerData.servicestation ||
+                    book.servicestation ||
+                    ""
+                  }
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        {...params}
+                        label="Service Station"
+                        name="servicestation"
+                        inputRef={params.inputRef}
+                      />
+                    );
+                  }}
+                />
+              </div>
               <div className="input">
                 <Autocomplete
                   fullWidth
@@ -586,48 +630,6 @@ const Booking = () => {
                   }}
                 />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <AccountBalanceWalletTwoToneIcon color="action" />
-                </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) =>
-                    handleAutocompleteChange(event, value, "paymenttype")
-                  }
-                  value={
-                    PayType.find((option) => option.Option)?.label ||
-                    formData.paymenttype ||
-                    selectedCustomerData.paymenttype ||
-                    book.paymenttype ||
-                    ""
-                  }
-                  options={PayType.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) =>
-                    option.label ||
-                    formData.paymenttype ||
-                    selectedCustomerData.paymenttype ||
-                    book.paymenttype ||
-                    ""
-                  }
-                  renderInput={(params) => {
-                    return (
-                      <TextField
-                        {...params}
-                        label="Payment Type"
-                        name="paymenttype"
-                        inputRef={params.inputRef}
-                      />
-                    );
-                  }}
-                />
-              </div>
             </div>
             <div className="input-field">
               <div className="input">
@@ -638,8 +640,8 @@ const Booking = () => {
                       formData.startdate || selectedCustomerData.startdate
                         ? dayjs(selectedCustomerData.startdate)
                         : null || book.startdate
-                          ? dayjs(book.startdate)
-                          : null
+                        ? dayjs(book.startdate)
+                        : null
                     }
                     format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, "startdate")}
@@ -868,7 +870,7 @@ const Booking = () => {
               </div>
               <div className="input">
                 <div className="icone">
-                  <DomainAddIcon color="action" />
+                  <AccountBalanceWalletTwoToneIcon color="action" />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -877,32 +879,31 @@ const Booking = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) =>
-                    handleAutocompleteChange(event, value, "servicestation")
+                    handleAutocompleteChange(event, value, "paymenttype")
                   }
                   value={
-                    Service_Station.find((option) => option.optionvalue)
-                      ?.label ||
-                    formData.servicestation ||
-                    selectedCustomerData.servicestation ||
-                    book.servicestation ||
+                    PayType.find((option) => option.Option)?.label ||
+                    formData.paymenttype ||
+                    selectedCustomerData.paymenttype ||
+                    book.paymenttype ||
                     ""
                   }
-                  options={Service_Station.map((option) => ({
-                    label: option.optionvalue,
+                  options={PayType.map((option) => ({
+                    label: option.Option,
                   }))}
                   getOptionLabel={(option) =>
                     option.label ||
-                    formData.servicestation ||
-                    selectedCustomerData.servicestation ||
-                    book.servicestation ||
+                    formData.paymenttype ||
+                    selectedCustomerData.paymenttype ||
+                    book.paymenttype ||
                     ""
                   }
                   renderInput={(params) => {
                     return (
                       <TextField
                         {...params}
-                        label="Service Station"
-                        name="servicestation"
+                        label="Payment Type"
+                        name="paymenttype"
                         inputRef={params.inputRef}
                       />
                     );
@@ -989,7 +990,10 @@ const Booking = () => {
                       checked={guestsms || formData.guestsms || book.guestsms}
                       onChange={(event) => {
                         setBook({ ...book, guestsms: event.target.checked });
-                        setFormData({ ...formData, guestsms: event.target.checked });
+                        setFormData({
+                          ...formData,
+                          guestsms: event.target.checked,
+                        });
                         setGuestSms(event.target.checked);
                       }}
                     />
@@ -1007,10 +1011,15 @@ const Booking = () => {
                   control={
                     <Checkbox
                       size="small"
-                      checked={sendEmail || formData.sendemail || book.sendemail}
+                      checked={
+                        sendEmail || formData.sendemail || book.sendemail
+                      }
                       onChange={(event) => {
                         setBook({ ...book, sendemail: event.target.checked });
-                        setFormData({ ...formData, sendemail: event.target.checked });
+                        setFormData({
+                          ...formData,
+                          sendemail: event.target.checked,
+                        });
                         setSendEmail(event.target.checked);
                       }}
                     />

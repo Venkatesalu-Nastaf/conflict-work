@@ -10,7 +10,7 @@ import { TextField, FormControl } from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import IconButton from '@mui/material/IconButton';
-import DeleteIcon from "@mui/icons-material/Delete";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -47,12 +47,12 @@ const UserSetting = ({ userid }) => {
         infoMessage,
         book,
         handleClick,
-        handledelete,
+        // handledelete,
         handleChange,
         hidePopup,
         selectedImage,
         editMode,
-        handleFileChange,
+        // handleFileChange,
         toggleEditMode,
         showPasswords,
         handleClickShowPasswords,
@@ -63,8 +63,6 @@ const UserSetting = ({ userid }) => {
         showPassword,
         handleUpdate,
 
-
-        // ... (other state variables and functions)
     } = useUserinfo();
 
     useEffect(() => {
@@ -85,7 +83,8 @@ const UserSetting = ({ userid }) => {
                                         <Avatar sx={{ width: "12ch", height: "12ch" }}
                                             alt="userimage"
                                             // src={selectedImage}
-                                            src={Array.isArray(selectedImage) ? selectedImage[0] : selectedImage}
+                                            // src={Array.isArray(selectedImage) ? selectedImage[0] : selectedImage}
+                                            src={`http://localhost:8081/images/${selectedImage}`}
                                         />
                                     </div>
                                 </div>
@@ -94,7 +93,7 @@ const UserSetting = ({ userid }) => {
                                         {editMode ? (
                                             <>
                                                 <div className='input-field'>
-                                                    <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode || !!selectedImage}>
+                                                    {/* <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode || !!selectedImage}>
                                                         update
                                                         <ModeEditIcon />
                                                         <input
@@ -103,14 +102,15 @@ const UserSetting = ({ userid }) => {
                                                             // type="file"
                                                             style={{ display: "none" }}
                                                         />
-                                                    </Button>
+                                                    </Button> */}
+                                                    <Button color="primary" size='small' variant="contained" onClick={handleUpload} component="label" disabled={!editMode} > update</Button>
                                                 </div>
-                                                <div className='input-field'>
+                                                {/* <div className='input-field'>
                                                     <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode} onClick={handledelete}>
                                                         Remove
                                                         <DeleteIcon />
                                                     </Button>
-                                                </div>
+                                                </div> */}
                                             </>
                                         ) : (
                                             <div className="user-photo-edit">

@@ -8,25 +8,11 @@ router.post('/taxsetting', (req, res) => {
     const customerData = req.body;
     db.query('INSERT INTO taxsettings SET ?', customerData, (err, result) => {
         if (err) {
-            console.error('Error inserting data into MySQL:', err);
             return res.status(500).json({ error: 'Failed to insert data into MySQL' });
         }
         return res.status(200).json({ message: 'Data inserted successfully' });
     });
 });
-// delete Billing data
-// router.delete('/taxsetting/:STax', (req, res) => {
-//     const STax = req.params.STax;
-//     db.query('DELETE FROM billing WHERE STax = ?', STax, (err, result) => {
-//         if (err) {
-//             return res.status(500).json({ error: "Failed to delete data from MySQL" });
-//         }
-//         if (result.affectedRows === 0) {
-//             return res.status(404).json({ error: "Customer not found" });
-//         }
-//         return res.status(200).json({ message: "Data deleted successfully" });
-//     });
-// });
 
 router.delete('/taxsetting/:STax', (req, res) => {
     const STax = req.params.STax;

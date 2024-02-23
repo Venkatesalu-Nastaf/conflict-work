@@ -17,8 +17,8 @@ const useStationCreation = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
-
+    const [infoMessage, setInfoMessage] = useState({});
+    const [isEditMode, setIsEditMode] = useState(false);
     const [userPermissions, setUserPermissions] = useState({});
 
     useEffect(() => {
@@ -28,7 +28,6 @@ const useStationCreation = () => {
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch (error) {
-                console.error('Error fetching user permissions:', error);
             }
         };
 
@@ -157,17 +156,19 @@ const useStationCreation = () => {
         }));
         setSelectedCustomerData({});
         setRows([]);
+        setIsEditMode(false);
     };
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
     const handleAdd = async () => {
         const Stationname = book.Stationname;
         if (!Stationname) {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Fill Mandatery Fields");
             return;
         }
         const permissions = checkPagePermission();
@@ -184,11 +185,49 @@ const useStationCreation = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            // Display a warning or prevent the action
             setInfo(true);
             setInfoMessage("You do not have permission to add users on this page.");
         }
     };
+
+
+    const handleEdit = async (stationid) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.stationid === stationid);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            await axios.put(`http://localhost:8081/stationcreation/${selectedCustomerData?.stationid || book.stationid}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+        } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+    useEffect(() => {
+        const handlelist = async () => {
+            if (permissions.read) {
+                const response = await axios.get('http://localhost:8081/stationcreation');
+                const data = response.data;
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                } else {
+                    setRows([]);
+                }
+            }
+        }
+
+        handlelist();
+    }, [permissions]);
+
 
     const handleClick = async (event, actionName, stationid) => {
         event.preventDefault();
@@ -277,7 +316,8 @@ const useStationCreation = () => {
         handleRowClick,
         handleAdd,
         hidePopup,
-        // ... (other state variables and functions)
+        isEditMode,
+        handleEdit,
     };
 };
 

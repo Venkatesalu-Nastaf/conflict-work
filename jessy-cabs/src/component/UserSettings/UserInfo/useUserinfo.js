@@ -87,6 +87,31 @@ const useUserinfo = () => {
         }
     }, []);
 
+    // const handleUpload = () => {
+    //     const input = document.createElement('input');
+    //     input.type = 'file';
+    //     input.accept = '.pdf, .jpg, .jpeg, .png';
+    //     input.onchange = handleFileChange;
+    //     input.click();
+    // };
+    // //file upload
+    // const handleFileChange = async (event) => {
+    //     const file = event.target.files[0];
+    //     if (!file) return;
+    //     setSelectedImage(file);
+    //     const formDataUpload = new FormData();
+    //     formDataUpload.append('file', file);
+    //     formDataUpload.append('userid', selectedCustomerData[0]?.userid || book.userid || storeUserId);
+    //     try {
+    //         const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
+    //         const imageUrl = response.data.imageUrl;
+    //         setSelectedImage(imageUrl);
+    //         localStorage.setItem('uploadedImage', imageUrl);
+    //     } catch {
+    //     }
+    // };
+
+
     const handleUpload = () => {
         const input = document.createElement('input');
         input.type = 'file';
@@ -94,22 +119,36 @@ const useUserinfo = () => {
         input.onchange = handleFileChange;
         input.click();
     };
-    //file upload
-    const handleFileChange = async (event) => {
+
+    const handleFileChange = (event) => {
+        const userid = selectedCustomerData[0]?.userid || book.userid || storeUserId;
         const file = event.target.files[0];
         if (!file) return;
-        setSelectedImage(file);
-        const formDataUpload = new FormData();
-        formDataUpload.append('file', file);
-        formDataUpload.append('userid', selectedCustomerData[0]?.userid || book.userid || storeUserId);
-        try {
-            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            const imageUrl = response.data.imageUrl;
-            setSelectedImage(imageUrl);
-            localStorage.setItem('uploadedImage', imageUrl);
-        } catch {
+        setSelectedImage(file)
+        if (file) { // Ensure a file is selected before uploading
+            const formData = new FormData();
+            formData.append('image', file);
+
+            axios.put(`http://localhost:8081/userprofileupload/${userid}`, formData)
         }
     };
+
+    useEffect(() => {
+        const handleImageView = () => {
+            const userid = localStorage.getItem('useridno');
+            axios.get(`http://localhost:8081/userprofileview/${userid}`)
+                .then(res => {
+                    if (res.status === 200) {
+                        setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
+                    } else {
+                        const timer = setTimeout(handleImageView, 100);
+                        return () => clearTimeout(timer);
+                    }
+                })
+        };
+        handleImageView();
+    }, [selectedImage]);
+
     //end file upload  
 
     const handledelete = async () => {
@@ -118,50 +157,55 @@ const useUserinfo = () => {
         setSuccessMessage("Successfully updated");
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userid = localStorage.getItem('useridno');
-                if (!userid) {
-                    return;
-                }
-                const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const userid = localStorage.getItem('useridno');
+    //             if (!userid) {
+    //                 return;
+    //             }
+    //             const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
 
-                if (response.status === 200) {
-                    const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-                    setSelectedImage(attachedImageUrls);
-                } else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
-                }
-            } catch {
-            }
-        };
-        fetchData();
-    }, []);
+    //             if (response.status === 200) {
+    //                 const data = await response.json();
+    //                 const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+    //                 setSelectedImage(attachedImageUrls);
+    //             } else {
+    //                 const timer = setTimeout(fetchData, 2000);
+    //                 return () => clearTimeout(timer);
+    //             }
+    //         } catch {
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
 
     useEffect(() => {
         const fetchData = async () => {
             const userid = localStorage.getItem('useridno');
             try {
                 const response = await fetch(`http://localhost:8081/userdataforuserinfo/${userid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const userDataArray = await response.json();
-                if (userDataArray.length > 0) {
-                    setSelectedCustomerData(userDataArray[0]);
+                if (response.status === 200) {
+
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setSelectedCustomerData(userDataArray[0]);
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }
                 } else {
-                    setErrorMessage('User data not found.');
-                    setError(true);
+                    const timer = setTimeout(fetchData, 50);
+                    return () => clearTimeout(timer);
                 }
             } catch {
+                setErrorMessage('Something Went Wrong');
+                setError(true);
             }
         };
 
         fetchData();
-    }, []);
+    }, [selectedCustomerData]);
 
     const hidePopup = () => {
         setSuccess(false);

@@ -38,8 +38,7 @@ const useBilling = () => {
                 const currentPageName = 'CB Billing';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -813,7 +812,7 @@ const useBilling = () => {
         const fetchData = async () => {
             try {
                 const tripid = localStorage.getItem('selectedTripid');
-               
+
                 const response = await fetch(`http://localhost:8081/getmapimages/${tripid}`);
                 if (response.status === 200) {
                     const responseData = await response.blob();
@@ -907,7 +906,7 @@ const useBilling = () => {
         fetchData();
     }, []);
 
-   
+
 
     return {
         selectedCustomerData,

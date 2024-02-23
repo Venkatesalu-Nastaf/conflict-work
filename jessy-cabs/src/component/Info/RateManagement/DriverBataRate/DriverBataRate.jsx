@@ -71,12 +71,11 @@ const DriverBataRate = () => {
     handleRowClick,
     handleAdd,
     hidePopup,
-    formData,
     handleDateChange,
     handleAutocompleteChange,
     columns,
-
-    // ... (other state variables and functions)
+    isEditMode,
+    handleEdit,
   } = useDriverbatarate();
 
   useEffect(() => {
@@ -95,14 +94,13 @@ const DriverBataRate = () => {
                 <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
-                      label='From Date'
+                      label="From Date"
                       format="DD/MM/YYYY"
-                      defaultValue={dayjs()}
-                      value={formData.fromdate || selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
+                      value={selectedCustomerData.fromdate ? dayjs(selectedCustomerData.fromdate) : null}
                       onChange={(date) => handleDateChange(date, 'fromdate')}
                     >
                       {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.fromdate} />
+                        <TextField {...inputProps} inputRef={inputRef} name='fromdate' value={selectedCustomerData.fromdate} />
                       )}
                     </DatePicker>
                   </LocalizationProvider>
@@ -110,14 +108,13 @@ const DriverBataRate = () => {
                 <div className="input" >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
-                      label='To Date'
+                      label="To Date"
                       format="DD/MM/YYYY"
-                      defaultValue={dayjs()}
-                      value={formData.todate || selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
+                      value={selectedCustomerData.todate ? dayjs(selectedCustomerData.todate) : null}
                       onChange={(date) => handleDateChange(date, 'todate')}
                     >
                       {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.todate} />
+                        <TextField {...inputProps} inputRef={inputRef} name='todate' value={selectedCustomerData.todate} />
                       )}
                     </DatePicker>
                   </LocalizationProvider>
@@ -247,8 +244,12 @@ const DriverBataRate = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")} >Add</Button>
+                <div className="input" style={{ width: "160px" }}>
+                  {isEditMode ? (
+                    <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  ) : (
+                    <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -305,7 +306,6 @@ const DriverBataRate = () => {
               columns={columns}
               onRowClick={handleRowClick}
               pageSize={5}
-              checkboxSelection
             />
           </div>
         </div>

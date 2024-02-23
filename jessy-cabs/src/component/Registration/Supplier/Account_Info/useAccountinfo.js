@@ -19,7 +19,8 @@ const useAccountinfo = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
-  const [infoMessage,setInfoMessage] = useState({});
+  const [infoMessage, setInfoMessage] = useState({});
+  const [isEditMode, setIsEditMode] = useState(false);
 
   // for page permission
 
@@ -31,8 +32,7 @@ const useAccountinfo = () => {
         const currentPageName = 'Supplier Master';
         const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
         setUserPermissions(response.data);
-      } catch (error) {
-        console.error('Error fetching user permissions:', error);
+      } catch {
       }
     };
 
@@ -62,10 +62,8 @@ const useAccountinfo = () => {
 
   const permissions = checkPagePermission();
 
-  // Function to determine if a field should be read-only based on permissions
   const isFieldReadOnly = (fieldName) => {
     if (permissions.read) {
-      // If user has read permission, check for other specific permissions
       if (fieldName === "delete" && !permissions.delete) {
         return true;
       }
@@ -263,12 +261,14 @@ const useAccountinfo = () => {
       autoRefresh: '',
     }));
     setSelectedCustomerData({});
+    setIsEditMode(false);
   };
 
   const handleRowClick = useCallback((params) => {
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.accountNo);
+    setIsEditMode(true);
   }, []);
 
   const handleAdd = async () => {
@@ -298,6 +298,40 @@ const useAccountinfo = () => {
     }
   };
 
+  const handleEdit = async (accountNo) => {
+    const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.modify) {
+      const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+      const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+      await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+      setSuccess(true);
+      setSuccessMessage("Successfully updated");
+      handleCancel();
+      setRows([]);
+    } else {
+      setInfo(true);
+      setInfoMessage("You do not have permission.");
+    }
+  };
+
+  useEffect(() => {
+    const handleList = async () => {
+      if (permissions.read && permissions.read) {
+        try {
+          const response = await axios.get('http://localhost:8081/accountinfo');
+          const data = response.data;
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
+        } catch {
+        }
+      }
+    }
+    handleList();
+  }, [permissions]);
 
   const handleClick = async (event, actionName, accountNo) => {
     event.preventDefault();
@@ -372,7 +406,7 @@ const useAccountinfo = () => {
     }
   });
 
-  const reversedRows = [...rows].reverse();
+  // const reversedRows = [...rows].reverse();
 
 
   return {
@@ -398,9 +432,10 @@ const useAccountinfo = () => {
     handleAutocompleteChange,
     handleExcelDownload,
     handlePdfDownload,
-    reversedRows,
+    rows,
     columns,
-
+    isEditMode,
+    handleEdit,
   };
 };
 

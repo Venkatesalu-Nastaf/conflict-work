@@ -23,8 +23,7 @@ const useOrganization = () => {
                 const currentPageName = 'User Creation';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -211,8 +210,7 @@ const useOrganization = () => {
         formDataUpload.append('file', file);
         formDataUpload.append('organizationname', selectedCustomerData?.organizationname || book.organizationname || companyname);
         try {
-            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            console.log(response);
+            await axios.post('http://localhost:8081/uploads', formDataUpload);
         } catch {
         }
     };
@@ -237,8 +235,7 @@ const useOrganization = () => {
                     const timer = setTimeout(fetchData, 2000);
                     return () => clearTimeout(timer);
                 }
-            } catch (error) {
-                console.error('Error fetching image data:', error);
+            } catch {
             }
         };
 

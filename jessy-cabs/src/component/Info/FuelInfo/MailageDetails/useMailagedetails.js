@@ -36,6 +36,7 @@ const useMailagedetails = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
+    const [isEditMode, setIsEditMode] = useState(false);
 
     // for page permission
 
@@ -47,8 +48,7 @@ const useMailagedetails = () => {
                 const currentPageName = 'User Creation';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -174,8 +174,8 @@ const useMailagedetails = () => {
             ...prevBook,
             [name]: parsedDate,
         }));
-        setSelectedCustomerData((prevValues) => ({
-            ...prevValues,
+        setSelectedCustomerData((prevBook) => ({
+            ...prevBook,
             [name]: parsedDate,
         }));
     };
@@ -197,11 +197,13 @@ const useMailagedetails = () => {
         setFuelConsumption(0);
         setFinalOdometer(0);
         setInitialOdometer(0);
+        setIsEditMode(false);
     };
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
     const handleAdd = async () => {
         const permissions = checkPagePermission();
@@ -238,7 +240,61 @@ const useMailagedetails = () => {
         }
     };
 
-    const handleClick = async (event, actionName, VehicleNo) => {
+    const handleEdit = async () => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.VehicleNo === selectedCustomerData?.id);
+
+            // Parse and format the date fields
+            const emptydate = selectedCustomerData?.emptydate ? dayjs(selectedCustomerData?.emptydate).format('YYYY-MM-DD') : null;
+            const filldate = selectedCustomerData?.filldate ? dayjs(selectedCustomerData?.filldate).format('YYYY-MM-DD') : null;
+
+            // Update the selected customer with new data
+            const updatedCustomer = {
+                ...selectedCustomer,
+                ...selectedCustomerData,
+                emptydate: emptydate,
+                filldate: filldate,
+            };
+
+            try {
+                // Make PUT request to update the record
+                await axios.put(`http://localhost:8081/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
+
+                // Set success message and reset state
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                handleCancel();
+                setRows([]);
+            } catch (error) {
+                console.error("Error updating data:", error);
+                // Handle error
+            }
+        } else {
+            // Handle permission denied
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+    useEffect(() => {
+        const handlelist = async () => {
+            if (permissions.read) {
+                const response = await axios.get('http://localhost:8081/fueldetails');
+                const data = response.data;
+
+                if (data.length > 0) {
+                    setRows(data);
+                } else {
+                    setRows([]);
+                }
+            }
+        }
+
+        handlelist();
+    }, [permissions]);
+
+    const handleClick = async (event, actionName) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
@@ -248,11 +304,8 @@ const useMailagedetails = () => {
                     const response = await axios.get('http://localhost:8081/fueldetails');
                     const data = response.data;
                     if (data.length > 0) {
-                        const rowsWithUniqueId = data.map((row, index) => ({
-                            ...row,
-                            id: index + 1,
-                        }));
-                        setRows(rowsWithUniqueId);
+
+                        setRows(data);
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                     } else {
@@ -271,7 +324,7 @@ const useMailagedetails = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/fueldetails/${selectedCustomerData?.VehicleNo || book.VehicleNo}`);
+                    await axios.delete(`http://localhost:8081/fueldetails/${selectedCustomerData?.id}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -285,20 +338,26 @@ const useMailagedetails = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.VehicleNo === VehicleNo);
-                    const emptydate = selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null || book.emptydate ? dayjs(book.emptydate) : dayjs();
-                    const filldate = selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null || book.filldate ? dayjs(book.filldate) : dayjs();
+                    const selectedCustomer = rows.find((row) => row.VehicleNo === selectedCustomerData?.id);
+
+                    const emptydate = selectedCustomerData?.emptydate ? dayjs(selectedCustomerData?.emptydate).format('YYYY-MM-DD') : null;
+                    const filldate = selectedCustomerData?.filldate ? dayjs(selectedCustomerData?.filldate).format('YYYY-MM-DD') : null;
+
                     const updatedCustomer = {
                         ...selectedCustomer,
                         ...selectedCustomerData,
                         emptydate: emptydate,
                         filldate: filldate,
                     };
-                    await axios.put(`http://localhost:8081/fueldetails/${selectedCustomerData?.VehicleNo || book.VehicleNo}`, updatedCustomer);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully updated");
-                    handleCancel();
-                    setRows([]);
+
+                    try {
+                        await axios.put(`http://localhost:8081/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
+                        setSuccess(true);
+                        setSuccessMessage("Successfully updated");
+                        handleCancel();
+                        setRows([]);
+                    } catch  {                   
+                    }
                 } else {
                     setInfo(true);
                     setInfoMessage("You do not have permission.");
@@ -357,6 +416,8 @@ const useMailagedetails = () => {
         calculateMileage,
         mileage,
         columns,
+        isEditMode,
+        handleEdit,
     };
 };
 

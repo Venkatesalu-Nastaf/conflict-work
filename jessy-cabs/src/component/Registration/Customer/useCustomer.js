@@ -7,7 +7,7 @@ import { saveAs } from 'file-saver';
 
 // TABLE START
 const columns = [
-    { field: "id", headerName: "S.No", width: 130 },
+    { field: "id", headerName: "S.No", width: 60 },
     { field: "customerId", headerName: "Customer ID", width: 130 },
     { field: "customer", headerName: "Name", width: 160 },
     { field: "customeremail", headerName: "E-mail", width: 160 },
@@ -21,9 +21,7 @@ const columns = [
 // TABLE END
 
 const useCustomer = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -37,6 +35,7 @@ const useCustomer = () => {
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
     const [isInputVisible, setIsInputVisible] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
 
     // for page permission
     const [userPermissions, setUserPermissions] = useState({});
@@ -47,8 +46,7 @@ const useCustomer = () => {
                 const currentPageName = 'Customer Master';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -89,9 +87,6 @@ const useCustomer = () => {
         }
         return true;
     };
-
-
-
 
     const handleButtonClick = () => {
         setIsInputVisible(!isInputVisible);
@@ -294,12 +289,14 @@ const useCustomer = () => {
             billingGroup: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
 
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
 
     const handleAdd = async () => {
@@ -329,6 +326,44 @@ const useCustomer = () => {
             setInfoMessage("You do not have permission.");
         }
     };
+
+    const handleEdit = async (customerId) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.customerId === customerId);
+            const updatedCustomer = {
+                ...selectedCustomer,
+                ...selectedCustomerData,
+                date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
+            };
+            await axios.put(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
+            handleCancel();
+            setRows([]);
+        } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+    useEffect(() => {
+        const handleList = async () => {
+            if (permissions.read && permissions.read) {
+                try {
+                    const response = await axios.get('http://localhost:8081/customers');
+                    const data = response.data;
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                } catch {
+                }
+            }
+        }
+        handleList();
+    }, [permissions]);
+
 
     const handleClick = async (event, actionName, customerId) => {
         event.preventDefault();
@@ -402,7 +437,7 @@ const useCustomer = () => {
         }
     });
 
-    const reversedRows = [...rows].reverse();
+    // const reversedRows = [...rows].reverse();
 
     return {
         selectedCustomerData,
@@ -429,8 +464,10 @@ const useCustomer = () => {
         isInputVisible,
         handleExcelDownload,
         handlePdfDownload,
-        reversedRows,
-        columns
+        rows,
+        columns,
+        isEditMode,
+        handleEdit,
     };
 };
 

@@ -82,8 +82,8 @@ const RateType = () => {
         handleExcelDownload,
         handlePdfDownload,
         columns,
-
-        // ... (other state variables and functions)
+        isEditMode,
+        handleEdit,
     } = useRatype();
 
     useEffect(() => {
@@ -219,8 +219,12 @@ const RateType = () => {
                                 </div>
                             </div>
                             <div className="input-field">
-                                <div className="input" style={{ width: "100px" }}>
-                                    <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                                <div className="input" style={{ width: "160px" }}>
+                                    {isEditMode ? (
+                                        <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                                    ) : (
+                                        <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                                    )}
                                 </div>
                             </div>
                         </div>

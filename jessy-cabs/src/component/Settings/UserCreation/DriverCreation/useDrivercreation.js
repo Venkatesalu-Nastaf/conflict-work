@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import Button from "@mui/material/Button";
 
 const useDrivercreation = () => {
 
@@ -21,9 +22,9 @@ const useDrivercreation = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
-
+    const [infoMessage, setInfoMessage] = useState({});
     const [userPermissions, setUserPermissions] = useState({});
+    const [isEditMode, setIsEditMode] = useState(false);
 
     useEffect(() => {
         const fetchPermissions = async () => {
@@ -31,8 +32,7 @@ const useDrivercreation = () => {
                 const currentPageName = 'Driver Master';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -77,6 +77,23 @@ const useDrivercreation = () => {
     // TABLE START
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 130,
+            //ayyanar
+            renderCell: (params) => (
+                <Button
+                    onClick={() => handleButtonClick(params.row.image, params)}
+                    aria-label="open-dialog"
+                >
+                    <Button variant="contained" color="primary">
+                        view
+                    </Button>
+
+                </Button>
+            ),
+        },
         { field: "username", headerName: "User_Name", width: 130 },
         { field: "userpassword", headerName: "Password", width: 130 },
         { field: "viewfor", headerName: "Access", width: 130 },
@@ -89,6 +106,8 @@ const useDrivercreation = () => {
         { field: "badgeexpdate", headerName: "Badge Exp Date", width: 130 },
         { field: "active", headerName: "Active", width: 160 },
     ];
+
+
 
     const [book, setBook] = useState({
         userid: '',
@@ -182,6 +201,63 @@ const useDrivercreation = () => {
             aadharno: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
+    };
+
+
+    const user__id = selectedCustomerData?.userid || book.userid;
+    const [file, setFile] = useState({});
+
+    const addPdf = async () => {
+        if (file !== null) {
+            const formData = new FormData();
+            formData.append("file", file);
+            await axios.post(`http://localhost:8081/driver-pdf/${user__id}`, formData)
+                .then(res => {
+                })
+                .catch();
+
+        } else {
+            return
+        }
+    }
+
+    const [licencepdf, setLicencepdf] = useState({})
+
+    const licenceSubmit = async () => {
+        if (licencepdf !== null) {
+
+            const formData = new FormData();
+            formData.append("file", licencepdf);
+            await axios.post(`http://localhost:8081/driver-licencepdf/${user__id}`, formData)
+                .then(res => {
+                })
+                .catch();
+        } else {
+            return
+        }
+    };
+
+    const [allFile, setAllFile] = useState([]);
+
+    const showPdf = (showID) => {
+        axios.get(`http://localhost:8081/pdf-view/${showID}`)
+            .then(res => {
+                setAllFile(res.data)
+            })
+            .catch()
+    }
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const handleButtonClick = (image, params) => {
+        const { userid } = params.row;
+        setDialogOpen(true);
+        showPdf(userid);
+    };
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
     };
 
     const handleAdd = async () => {
@@ -199,6 +275,8 @@ const useDrivercreation = () => {
                 try {
                     await axios.post('http://localhost:8081/drivercreation', book);
                     handleCancel();
+                    addPdf();
+                    licenceSubmit();
                     setRows([]);
                     validatePasswordMatch();
                     setSuccess(true);
@@ -217,6 +295,66 @@ const useDrivercreation = () => {
         }
     };
 
+    // const handlelist = useCallback(async () => {
+    //     if (permissions.read) {
+    //         const response = await axios.get('http://localhost:8081/drivercreation');
+    //         const data = response.data;
+
+    //         if (data.length > 0) {
+    //             setRows(data);
+    //             // setSuccess(true);
+    //             // setSuccessMessage('Successfully listed');
+    //         } else {
+    //             setRows([]);
+    //             // setError(true);
+    //             // setErrorMessage('No data found');
+    //         }
+    //     } else {
+    //         setInfo(true);
+    //         setInfoMessage('You do not have permission.');
+    //     }
+    // }, [permissions]);
+    useEffect(() => {
+        const handlelist = async () => {
+            if (permissions.read) {
+                const response = await axios.get('http://localhost:8081/drivercreation');
+                const data = response.data;
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                } else {
+                    setRows([]);
+                }
+            }
+        }
+
+        handlelist();
+    }, [permissions]);
+
+    const handleEdit = async (userid) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.userid === userid);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            await axios.put(`http://localhost:8081/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage('Successfully updated');
+            handleCancel();
+            addPdf();
+            licenceSubmit();
+            setRows([]);
+        } else {
+            setInfo(true);
+            setInfoMessage('You do not have permission.');
+        }
+    };
+
+
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
 
@@ -229,7 +367,11 @@ const useDrivercreation = () => {
                     const data = response.data;
 
                     if (data.length > 0) {
-                        setRows(data);
+                        const rowsWithUniqueId = data.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        setRows(rowsWithUniqueId);
                         setSuccess(true);
                         setSuccessMessage('Successfully listed');
                     } else {
@@ -264,6 +406,8 @@ const useDrivercreation = () => {
                     setSuccess(true);
                     setSuccessMessage('Successfully updated');
                     handleCancel();
+                    addPdf();
+                    licenceSubmit();
                     setRows([]);
                 } else {
                     setInfo(true);
@@ -333,6 +477,7 @@ const useDrivercreation = () => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
 
     const handleClickShowPasswords = () => {
@@ -386,6 +531,9 @@ const useDrivercreation = () => {
         showPassword,
         handleClickShowPassword,
         handleMouseDownPassword,
+        handleCloseDialog, dialogOpen, allFile, setFile, setLicencepdf,
+        isEditMode,
+        handleEdit,
     };
 };
 

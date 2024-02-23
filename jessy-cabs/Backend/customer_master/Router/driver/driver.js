@@ -68,8 +68,7 @@ router.post('/save-permissions', async (req, res) => {
     }
 
     res.status(200).json({ message: 'Permissions saved successfully' });
-  } catch (error) {
-    console.error(error);
+  } catch {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -115,7 +114,6 @@ router.get('/user-permissions/:user_id/:page_name', (req, res) => {
 
   db.query(query, [user_id, page_name], (error, results) => {
     if (error) {
-      console.error('Error fetching user permissions:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     } else {
       res.json(results[0]);

@@ -22,10 +22,8 @@ async function sendSMS(dataToSend) {
     };
 
     try {
-        const response = await axios.post(apiUrl, params);
-        console.log('SMS sent successfully:', response.data);
-    } catch (error) {
-        console.error('Error sending SMS:', error.message);
+        await axios.post(apiUrl, params);
+    } catch {
     }
 }
 
@@ -49,10 +47,8 @@ async function tripguestsendSMS(dataToSend) {
     };
 
     try {
-        const response = await axios.post(apiUrl, params);
-        console.log('SMS sent successfully:', response.data);
+        await axios.post(apiUrl, params);
     } catch (error) {
-        console.error('Error sending SMS:', error.message);
     }
 }
 
@@ -77,9 +73,7 @@ async function tripdriversendSMS(dataSend) {
 
     try {
         const response = await axios.post(apiUrl, params);
-        console.log('SMS sent successfully:', response.data);
-    } catch (error) {
-        console.error('Error sending SMS:', error.message);
+    } catch {
     }
 }
 

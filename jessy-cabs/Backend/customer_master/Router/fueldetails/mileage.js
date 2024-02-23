@@ -13,9 +13,9 @@ router.post('/fueldetails', (req, res) => {
     });
   });
   // delete Fuel Details data
-  router.delete('/fueldetails/:VehicleNo', (req, res) => {
-    const VehicleNo = req.params.VehicleNo;
-    db.query('DELETE FROM fueldetails WHERE VehicleNo = ?', VehicleNo, (err, result) => {
+  router.delete('/fueldetails/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('DELETE FROM fueldetails WHERE id = ?', id, (err, result) => {
       if (err) {
         return res.status(500).json({ error: "Failed to delete data from MySQL" });
       }
@@ -26,10 +26,10 @@ router.post('/fueldetails', (req, res) => {
     });
   });
   // update Fuel Details
-  router.put('/fueldetails/:VehicleNo', (req, res) => {
-    const VehicleNo = req.params.VehicleNo;
+  router.put('/fueldetails/:id', (req, res) => {
+    const id = req.params.id;
     const updatedCustomerData = req.body;
-    db.query('UPDATE fueldetails SET ? WHERE VehicleNo = ?', [updatedCustomerData, VehicleNo], (err, result) => {
+    db.query('UPDATE fueldetails SET ? WHERE id = ?', [updatedCustomerData, id], (err, result) => {
       if (err) {
         return res.status(500).json({ error: "Failed to update data in MySQL" });
       }

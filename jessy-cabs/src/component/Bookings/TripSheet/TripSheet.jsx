@@ -246,6 +246,8 @@ const TripSheet = () => {
     imageUrl,
     link,
     isSignatureSubmitted,
+    isEditMode,
+    handleEdit,
   } = useTripsheet();
 
   useEffect(() => {
@@ -1255,8 +1257,12 @@ const TripSheet = () => {
                   </Button>
                 </DialogActions>
               </Dialog>
-              <div className="input" style={{ width: "175px" }}>
-                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+              <div className="input" style={{ width: "160px" }}>
+                {isEditMode ? (
+                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                )}
               </div>
             </div>
           </div>
@@ -1292,6 +1298,7 @@ const TripSheet = () => {
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
+              direction="left"
             >
               {actions.map((action) => (
                 <SpeedDialAction
@@ -2599,7 +2606,8 @@ const TripSheet = () => {
                   <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
                     <DialogContent>
                       {selectedRow && (
-                        <img className='dialogboximg' src={imageUrl} alt={selectedRow.name} />
+                        // <img className='dialogboximg' src={imageUrl} alt={selectedRow.name} />
+                        <embed src={imageUrl} type="application/pdf" width="100%" height="600px" />
                       )}
                     </DialogContent>
                     <DialogActions>

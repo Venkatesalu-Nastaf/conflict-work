@@ -15,6 +15,12 @@ import { StationName, ViewFor } from "./DriverCreationData";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
+
+// ayyanar-----------------------
+
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+
 // FONTAWESOME
 import { faFileInvoice, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -100,9 +106,9 @@ const DriverCreation = () => {
         showPassword,
         handleClickShowPassword,
         handleMouseDownPassword,
-
-
-        // ... (other state variables and functions)
+        handleCloseDialog, dialogOpen, allFile, setFile, setLicencepdf,
+        isEditMode,
+        handleEdit,
     } = useDrivercreation();
 
     useEffect(() => {
@@ -439,6 +445,7 @@ const DriverCreation = () => {
                                     <input
                                         type="file"
                                         style={{ display: "none" }}
+                                        onChange={(e) => setLicencepdf(e.target.files[0])}
                                     />
                                 </Button>
                             </div>
@@ -479,12 +486,16 @@ const DriverCreation = () => {
                                     <input
                                         type="file"
                                         style={{ display: "none" }}
-
+                                        onChange={(e) => setFile(e.target.files[0])}
                                     />
                                 </Button>
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-                                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                                {isEditMode ? (
+                                    <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                                ) : (
+                                    <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -553,6 +564,20 @@ const DriverCreation = () => {
                                 pageSizeOptions={[5, 10]}
                             />
                         </div>
+
+                        <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+                            <DialogContent>
+
+                                <div>
+                                    {Array.isArray(allFile) && allFile.map((img, index) => (
+                                        img.file_type === 'application/pdf' ?
+                                            <embed key={index} src={`http://localhost:8081/images/${img.fileName}`} type="application/pdf" width="100%" height="600px" />
+                                            : <img key={index} src={`http://localhost:8081/images/${img.fileName}`} alt='images' width="100%" height="500px" />
+                                    ))}
+                                </div>
+
+                            </DialogContent>
+                        </Dialog>
                     </div>
                 </form>
             </div>

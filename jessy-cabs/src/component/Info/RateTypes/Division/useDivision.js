@@ -16,7 +16,8 @@ const useDivision = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
+    const [isEditMode, setIsEditMode] = useState(false);
 
     // for page permission
 
@@ -28,8 +29,7 @@ const useDivision = () => {
                 const currentPageName = 'Rate Type';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -167,11 +167,13 @@ const useDivision = () => {
             active: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
     const handleAdd = async () => {
         const permissions = checkPagePermission();
@@ -200,6 +202,44 @@ const useDivision = () => {
         }
     };
 
+    const handleEdit = async (driverid) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.driverid === driverid);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            await axios.put(`http://localhost:8081/division/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            setRows([]);
+        } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+    useEffect(() => {
+        const handlelist = async () => {
+            if (permissions.read) {
+                const response = await axios.get('http://localhost:8081/division');
+                const data = response.data;
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                } else {
+                    setRows([]);
+                }
+            }
+        }
+
+        handlelist();
+    }, [permissions]);
+
     const handleClick = async (event, actionName, driverid) => {
         event.preventDefault();
         try {
@@ -210,7 +250,11 @@ const useDivision = () => {
                     const response = await axios.get('http://localhost:8081/division');
                     const data = response.data;
                     if (data.length > 0) {
-                        setRows(data);
+                        const rowsWithUniqueId = data.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        setRows(rowsWithUniqueId);
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                     } else {
@@ -290,6 +334,8 @@ const useDivision = () => {
         handleAdd,
         hidePopup,
         handleAutocompleteChange,
+        isEditMode,
+        handleEdit,
     };
 };
 

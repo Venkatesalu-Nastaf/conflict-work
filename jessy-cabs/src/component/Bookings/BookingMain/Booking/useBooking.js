@@ -517,7 +517,7 @@ const useBooking = () => {
         setDialogOpen(false);
     };
 
-    const [file, setFile] = useState({});
+    const [file, setFile] = useState(null);
     const addPdf = async () => {
         if (file !== null) {
             const formData = new FormData();

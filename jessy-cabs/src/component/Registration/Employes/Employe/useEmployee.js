@@ -317,7 +317,7 @@ const useEmployee = () => {
     ///--------------------------------------------
 
     const empid = selectedCustomerData?.empid || book.empid
-    const [file, setFile] = useState({});
+    const [file, setFile] = useState(null);
 
     const addPdf = async () => {
         if (file !== null) {

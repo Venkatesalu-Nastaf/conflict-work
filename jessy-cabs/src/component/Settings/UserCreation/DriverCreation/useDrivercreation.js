@@ -107,8 +107,6 @@ const useDrivercreation = () => {
         { field: "active", headerName: "Active", width: 160 },
     ];
 
-
-
     const [book, setBook] = useState({
         userid: '',
         username: '',
@@ -206,33 +204,38 @@ const useDrivercreation = () => {
 
 
     const user__id = selectedCustomerData?.userid || book.userid;
-    const [file, setFile] = useState({});
+    const [file, setFile] = useState(null);
 
     const addPdf = async () => {
         if (file !== null) {
             const formData = new FormData();
             formData.append("file", file);
-            await axios.post(`http://localhost:8081/driver-pdf/${user__id}`, formData)
-                .then(res => {
-                })
-                .catch();
+            try {
+                await axios.post(`http://localhost:8081/driver-pdf/${user__id}`, formData);
+            }
+            catch {
+                setError(true);
+                setErrorMessage('something wrong');
+            }
 
         } else {
             return
         }
     }
 
-    const [licencepdf, setLicencepdf] = useState({})
+    const [licencepdf, setLicencepdf] = useState(null)
 
     const licenceSubmit = async () => {
         if (licencepdf !== null) {
-
             const formData = new FormData();
             formData.append("file", licencepdf);
-            await axios.post(`http://localhost:8081/driver-licencepdf/${user__id}`, formData)
-                .then(res => {
-                })
-                .catch();
+            try {
+                await axios.post(`http://localhost:8081/driver-licencepdf/${user__id}`, formData);
+            }
+            catch {
+                setError(true);
+                setErrorMessage('something wrong');
+            }
         } else {
             return
         }

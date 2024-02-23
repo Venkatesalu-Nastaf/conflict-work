@@ -97,6 +97,8 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const Booking = () => {
+
+
   const {
     selectedCustomerData,
     selectedCustomerId,
@@ -159,7 +161,9 @@ const Booking = () => {
     setFile, dialogOpen, handleCloseDialog, allFile, handleButtonClick,
     isEditMode,
     handleEdit,
-    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
+    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen, handleprevent,
+    setErrorMessage,
+    setError,
   } = useBooking();
 
   useEffect(() => {
@@ -1120,15 +1124,45 @@ const Booking = () => {
               <div className="input radio">
               </div>
               <div className="input-field">
-                <div className="input">
+                {/* <div className="input">
+
                   <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
                     Attach File
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(e) => setFile(e.target.files[0])}
-                    />
+                    {
+                      formData.bookingno || selectedCustomerData.bookingno || book.bookingno ? (
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onClick={handleprevent}
+                          onChange={(e) => setFile(e.target.files[0])}
+                        />
+                      ) : null
+                    }
                   </Button>
+
+
+                </div> */}
+                <div className="input">
+                  {formData.bookingno || selectedCustomerData.bookingno || book.bookingno ? (
+                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
+                      Attach File
+
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onClick={handleprevent}
+                        onChange={(e) => setFile(e.target.files[0])}
+                      />
+
+                    </Button>
+                  ) : (
+                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                      setError(true);
+                      setErrorMessage("Please Enter Booking No");
+                    }}>
+                      Attach File
+                    </Button>
+                  )}
                 </div>
                 <div className="input">
                   <Button variant="outlined" onClick={handleButtonClick} disabled={isFieldReadOnly("new")} >

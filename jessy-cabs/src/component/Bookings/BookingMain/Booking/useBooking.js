@@ -491,6 +491,12 @@ const useBooking = () => {
 
     const booking_id = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
     const handleButtonClick = () => {
+        const booking_no = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+        if (!booking_no) {
+            setError(true);
+            setErrorMessage("PLease Enter Booking No");
+            return;
+        }
         // setDialogOpen(true);
         showPdf();
     };
@@ -529,6 +535,15 @@ const useBooking = () => {
                 .catch();
         } else {
             return
+        }
+    };
+
+    const handleprevent= ()=>{
+        const booking_no = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+        if (!booking_no) {
+            setError(true);
+            setErrorMessage("PLease Enter Booking No");
+            return;
         }
     };
 
@@ -999,8 +1014,9 @@ const useBooking = () => {
         setFile, dialogOpen, handleCloseDialog, allFile, handleButtonClick,
         isEditMode,
         handleEdit,
-        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
-
+        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,handleprevent,
+        setErrorMessage,
+        setError,
     };
 };
 

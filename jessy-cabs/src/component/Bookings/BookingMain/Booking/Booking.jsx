@@ -159,6 +159,7 @@ const Booking = () => {
     setFile, dialogOpen, handleCloseDialog, allFile, handleButtonClick,
     isEditMode,
     handleEdit,
+    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
   } = useBooking();
 
   useEffect(() => {
@@ -1135,7 +1136,7 @@ const Booking = () => {
                   </Button>
                 </div>
               </div>
-              <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+              {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogContent>
                   <div>
                     {Array.isArray(allFile) && allFile.map((img, index) => (
@@ -1143,7 +1144,7 @@ const Booking = () => {
                     ))}
                   </div>
                 </DialogContent>
-              </Dialog>
+              </Dialog> */}
             </div>
           </div>
         </div>
@@ -1479,6 +1480,36 @@ const Booking = () => {
               pageSize={5}
               checkboxSelection
             />
+            <Dialog open={dialogOpen} onClose={handleCloseDialog} >
+              <DialogContent>
+                <div style={{ position: 'relative' }}>
+                  {Array.isArray(allFile) && allFile.map((img, index) => (
+                    <div key={index} style={{ position: 'relative' }}>
+                      <embed src={`http://localhost:8081/images/` + img.fileName} type="application/pdf" width="100%" height="600px" />
+                      <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} />
+                    </div>
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+
+
+            <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
+              <DialogContent>
+                <div>
+                  <h3>are you sure you want to delete</h3>
+                  <div>
+                    <Button onClick={handleContextMenu}>yes</Button>
+                    <Button onClick={handleClosedeleteDialog}>No</Button>
+                  </div>
+
+                </div>
+
+
+              </DialogContent>
+            </Dialog>
+
+
           </div>
         </div>
       </form>

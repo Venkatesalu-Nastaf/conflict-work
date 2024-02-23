@@ -491,7 +491,7 @@ const useBooking = () => {
 
     const booking_id = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
     const handleButtonClick = () => {
-        setDialogOpen(true);
+        // setDialogOpen(true);
         showPdf();
     };
 
@@ -501,13 +501,19 @@ const useBooking = () => {
     const showPdf = () => {
         axios.get(`http://localhost:8081/booking-docView/${booking_id}`)
             .then(res => {
-                setAllFile(res.data)
+                if (res.data.length > 0) {
+                    setAllFile(res.data);
+                    setDialogOpen(true);
+                } else {
+                    setError(true);
+                    setErrorMessage('No data found');
+                }
             })
             .catch()
     }
 
     const handleCloseDialog = () => {
-        showPdf('');
+
         setDialogOpen(false);
     };
 
@@ -902,6 +908,32 @@ const useBooking = () => {
         }
     }, [book.bookingno, selectedCustomerData.bookingno]);
 
+    //ayyanar---------to delte dialog box image
+
+    const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
+
+    const handleClosedeleteDialog = () => {
+        setDialogdeleteOpen(false);
+    };
+
+    const [imagedata, setImagedata] = useState(null);
+
+    const handleimagedelete = (imageName) => {
+        setImagedata(imageName)
+        setDialogdeleteOpen(true);
+    };
+
+    const handleContextMenu = () => {
+        axios.delete('http://localhost:8081/booking_doc/' + imagedata)
+            .then(res => {
+                console.log("deleted")
+            })
+            .catch(err => console.log(err))
+        setDialogdeleteOpen(false);
+        setDialogOpen(false);
+        // setDialogOpen(false);
+    };
+
     return {
         selectedCustomerData,
         selectedCustomerId,
@@ -967,6 +999,8 @@ const useBooking = () => {
         setFile, dialogOpen, handleCloseDialog, allFile, handleButtonClick,
         isEditMode,
         handleEdit,
+        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
+
     };
 };
 

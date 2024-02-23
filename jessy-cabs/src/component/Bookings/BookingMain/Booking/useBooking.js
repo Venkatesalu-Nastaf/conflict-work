@@ -538,15 +538,6 @@ const useBooking = () => {
         }
     };
 
-    const handleprevent= ()=>{
-        const booking_no = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
-        if (!booking_no) {
-            setError(true);
-            setErrorMessage("PLease Enter Booking No");
-            return;
-        }
-    };
-
     //--------------------------------------------------------------
 
     const [lastBookingNo, setLastBookingNo] = useState('');
@@ -1014,7 +1005,7 @@ const useBooking = () => {
         setFile, dialogOpen, handleCloseDialog, allFile, handleButtonClick,
         isEditMode,
         handleEdit,
-        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,handleprevent,
+        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
         setErrorMessage,
         setError,
     };

@@ -259,9 +259,19 @@ const useDrivercreation = () => {
 
     const [dialogOpen, setDialogOpen] = useState(false);
 
+    // const handleButtonClick = (params) => {
+    //     const { userid } = params.row;
+    //     // setDialogOpen(true);
+    //     showPdf(userid);
+    // };
+
     const handleButtonClick = (params) => {
         const { userid } = params.row;
-        // setDialogOpen(true);
+        if (!userid) {
+            setError(true);
+            setErrorMessage("PLease Enter Booking No");
+            return;
+        }
         showPdf(userid);
     };
 
@@ -569,6 +579,7 @@ const useDrivercreation = () => {
         isEditMode,
         handleEdit,
         handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
+        setError, setErrorMessage
     };
 };
 

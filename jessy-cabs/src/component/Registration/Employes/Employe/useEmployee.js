@@ -25,10 +25,21 @@ const useEmployee = () => {
     const [isEditMode, setIsEditMode] = useState(false);
 
     const [dialogOpen, setDialogOpen] = useState(false);
-    const handleButtonClick = (image, params) => {
+    // const handleButtonClick = (params) => {
+    //     const { empid } = params.row;
+    //     showPdf(empid);
+    // };
+
+    const handleButtonClick = (params) => {
         const { empid } = params.row;
+        if (!empid) {
+            setError(true);
+            setErrorMessage("PLease Enter Booking No");
+            return;
+        }
         showPdf(empid);
     };
+
 
     // TABLE STRAT
     const columns = [
@@ -39,7 +50,7 @@ const useEmployee = () => {
             width: 130,
             renderCell: (params) => (
                 <Button
-                    onClick={() => handleButtonClick(params.row.image, params)}
+                    onClick={() => handleButtonClick(params)}
                     aria-label="open-dialog"
                 >
                     <Button variant="contained" color="primary">
@@ -550,6 +561,7 @@ const useEmployee = () => {
         isEditMode,
         handleEdit,
         handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
+        setError, setErrorMessage,
 
     };
 };

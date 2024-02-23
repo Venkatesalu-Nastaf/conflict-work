@@ -120,7 +120,7 @@ const Vehicaleinfo = () => {
     dialogOpen,
     isEditMode,
     handleEdit,
-    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
+    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen, setError, setErrorMessage
   } = useVehicleinfo();
 
   useEffect(() => {
@@ -288,14 +288,35 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   Insurance Copy
                   <input
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => setInsurance(e.target.files[0])}
                   />
-                </Button>
+                </Button> */}
+
+                {selectedCustomerData.vehicleId || book.vehicleId ? (
+                  <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                    Insurance Copy
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setInsurance(e.target.files[0])}
+                    />
+                  </Button>
+                ) : (
+                  <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                    setError(true);
+                    setErrorMessage("Please Enter Booking No");
+                  }}>
+                    Insurance Copy
+                  </Button>
+                )}
+
+
+
               </div>
             </div>
             <div className="input-field">
@@ -342,14 +363,38 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   License Copy
                   <input
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => setLicence(e.target.files[0])}
                   />
-                </Button>
+                </Button> */}
+
+
+
+
+                {selectedCustomerData.vehicleId || book.vehicleId ? (
+                  <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                    License Copy
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setLicence(e.target.files[0])}
+                    />
+                  </Button>
+                ) : (
+                  <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                    setError(true);
+                    setErrorMessage("Please Enter Booking No");
+                  }}>
+                    License Copy
+                  </Button>
+                )}
+
+
+
               </div>
             </div>
             <div className="input-field">
@@ -382,14 +427,35 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   National Permit Copy
                   <input
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => setNationalPermit(e.target.files[0])}
                   />
-                </Button>
+                </Button> */}
+
+
+                {selectedCustomerData.vehicleId || book.vehicleId ? (
+                  <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                    National Permit Copy
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setNationalPermit(e.target.files[0])}
+                    />
+                  </Button>
+                ) : (
+                  <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                    setError(true);
+                    setErrorMessage("Please Enter Booking No");
+                  }}>
+                    National Permit Copy
+                  </Button>
+                )}
+
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -435,14 +501,34 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   State Permit Copy
                   <input
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => setStatePermit(e.target.files[0])}
                   />
-                </Button>
+                </Button> */}
+                {selectedCustomerData.vehicleId || book.vehicleId ? (
+                  <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                    State Permit Copy
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setStatePermit(e.target.files[0])}
+                    />
+                  </Button>
+                ) : (
+                  <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                    setError(true);
+                    setErrorMessage("Please Enter Booking No");
+                  }}>
+                    State Permit Copy
+                  </Button>
+                )}
+
+
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -488,24 +574,60 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   RC-Book Copy
                   <input
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => setRcbook(e.target.files[0])}
                   />
-                </Button>
+                </Button> */}
+
+                {selectedCustomerData.vehicleId || book.vehicleId ? (
+                  <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                    RC-Book Copy
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setRcbook(e.target.files[0])}
+                    />
+                  </Button>
+                ) : (
+                  <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                    setError(true);
+                    setErrorMessage("Please Enter Booking No");
+                  }}>
+                    RC-Book Copy
+                  </Button>
+                )}
               </div>
               <div className="input" style={{ width: "160px" }}>
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   FC Copy
                   <input
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => setFcCopy(e.target.files[0])}
                   />
-                </Button>
+                </Button> */}
+
+                {selectedCustomerData.vehicleId || book.vehicleId ? (
+                  <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                    FC Copy
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setFcCopy(e.target.files[0])}
+                    />
+                  </Button>
+                ) : (
+                  <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                    setError(true);
+                    setErrorMessage("Please Enter Booking No");
+                  }}>
+                    FC Copy
+                  </Button>
+                )}
               </div>
             </div>
             <div className="input-field">
@@ -616,7 +738,7 @@ const Vehicaleinfo = () => {
                 ) : (
                   <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
                 )}
-                
+
               </div>
             </div>
 

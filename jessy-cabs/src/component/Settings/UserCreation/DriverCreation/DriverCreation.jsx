@@ -110,6 +110,7 @@ const DriverCreation = () => {
         isEditMode,
         handleEdit,
         handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
+        setError, setErrorMessage,
     } = useDrivercreation();
 
     useEffect(() => {
@@ -441,14 +442,33 @@ const DriverCreation = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-                                <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
+                                {/* <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
                                     License
                                     <input
                                         type="file"
                                         style={{ display: "none" }}
                                         onChange={(e) => setLicencepdf(e.target.files[0])}
                                     />
-                                </Button>
+                                </Button> */}
+
+                                {selectedCustomerData?.userid || book.userid ? (
+                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
+                                        License
+                                        <input
+                                            type="file"
+                                            style={{ display: "none" }}
+                                            onChange={(e) => setLicencepdf(e.target.files[0])}
+                                        />
+                                    </Button>
+                                ) : (
+                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                                        setError(true);
+                                        setErrorMessage("Please Enter Booking No");
+                                    }}>
+                                        License
+                                    </Button>
+                                )}
+
                             </div>
                             <div className="input" >
                                 <div className="icone">
@@ -482,14 +502,34 @@ const DriverCreation = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-                                <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
+                                {/* <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
                                     aadhar card
                                     <input
                                         type="file"
                                         style={{ display: "none" }}
                                         onChange={(e) => setFile(e.target.files[0])}
                                     />
-                                </Button>
+                                </Button> */}
+
+                                {selectedCustomerData?.userid || book.userid ? (
+                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
+                                        aadhar card
+                                        <input
+                                            type="file"
+                                            style={{ display: "none" }}
+                                            onChange={(e) => setFile(e.target.files[0])}
+                                        />
+                                    </Button>
+                                ) : (
+                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                                        setError(true);
+                                        setErrorMessage("Please Enter Booking No");
+                                    }}>
+                                        aadhar card
+                                    </Button>
+                                )}
+
+
                             </div>
                             <div className="input" style={{ width: "160px" }}>
                                 {isEditMode ? (

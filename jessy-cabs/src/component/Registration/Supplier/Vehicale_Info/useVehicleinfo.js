@@ -92,7 +92,12 @@ const useVehicleinfo = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const handleButtonClick = (params) => {
         const { vehicleId } = params.row;
-        // setDialogOpen(true);
+        if (!vehicleId) {
+            setError(true);
+            setErrorMessage("PLease Enter Booking No");
+            return;
+        }
+
         showPdf(vehicleId);
     };
 
@@ -664,7 +669,7 @@ const useVehicleinfo = () => {
         dialogOpen,
         isEditMode,
         handleEdit,
-        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
+        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen, setError, setErrorMessage
     };
 };
 

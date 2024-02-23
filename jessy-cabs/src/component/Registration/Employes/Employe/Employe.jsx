@@ -105,7 +105,7 @@ const Employe = () => {
     handleShowAll, allFile, handleCloseDialog, dialogOpen, setFile,
     isEditMode,
     handleEdit,
-    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
+    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen, setError, setErrorMessage,
   } = useEmployee();
 
   useEffect(() => {
@@ -378,14 +378,32 @@ const Employe = () => {
                 />
               </div>
               <div className="input" style={{ width: "20px" }}>
-                <Button component="label">
+                {/* <Button component="label">
                   <UploadFileIcon />
                   <input
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => setFile(e.target.files[0])}
                   />
-                </Button>
+                </Button> */}
+
+                {selectedCustomerData?.empid || book.empid ? (
+                  <Button component="label">
+                    <UploadFileIcon />
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setFile(e.target.files[0])}
+                    />
+                  </Button>
+                ) : (
+                  <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                    setError(true);
+                    setErrorMessage("Please Enter Booking No");
+                  }}>
+                    <UploadFileIcon />
+                  </Button>
+                )}
               </div>
             </div>
             <div className="input-field">

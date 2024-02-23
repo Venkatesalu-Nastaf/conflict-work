@@ -84,24 +84,28 @@ export default function BasicTable() {
   };
 
   const permissions = checkPagePermission();
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('http://localhost:8081/tripsheet');
-      if (response.ok) {
-        const data = await response.json();
-        if (data.length > 0) {
-          setFilteredData(data);
-        } else {
-          setFilteredData([]);
-        }
-      } else {
-      }
-    } catch {
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8081/tripsheet');
+        if (response.status === 200) {
+          if (response.ok) {
+            const data = await response.json();
+            if (data.length > 0) {
+              setFilteredData(data);
+            } else {
+              setFilteredData([]);
+            }
+          } else {
+          }
+        } else {
+          const timer = setTimeout(fetchData, 2000);
+          return () => clearTimeout(timer);
+        }
+      } catch {
+      }
+    };
+
     fetchData();
   }, []);
 

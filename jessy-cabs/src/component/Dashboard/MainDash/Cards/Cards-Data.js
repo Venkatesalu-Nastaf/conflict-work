@@ -7,8 +7,13 @@ const fetchDataFromBackend = async (date) => {
     if (!response.ok) {
       return { totalAmount: 0, totalPaid: 0, totalPending: 0 };
     }
-    const data = await response.json();
-    return data;
+    if (response.status === 200) {
+      const data = await response.json();
+      return data;
+    } else {
+      const timer = setTimeout(fetchDataFromBackend, 2000);
+      return () => clearTimeout(timer);
+    }
   } catch {
     return { totalAmount: 0, totalPaid: 0, totalPending: 0 };
   }
@@ -20,8 +25,13 @@ const fetchMonthlyDataFromBackend = async (startDate, endDate) => {
     if (!response.ok) {
       return [];
     }
-    const data = await response.json();
-    return data;
+    if (response.status === 200) {
+      const data = await response.json();
+      return data;
+    } else {
+      const timer = setTimeout(fetchMonthlyDataFromBackend, 2000);
+      return () => clearTimeout(timer);
+    }
   } catch {
     return [];
   }

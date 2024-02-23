@@ -36,8 +36,8 @@ const usePackagerateentry = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
-
+    const [infoMessage, setInfoMessage] = useState({});
+    const [isEditMode, setIsEditMode] = useState(false);
 
     // for page permission
 
@@ -49,8 +49,7 @@ const usePackagerateentry = () => {
                 const currentPageName = 'Rate Type';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -218,11 +217,13 @@ const usePackagerateentry = () => {
             chtime: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
 
     const handleAdd = async () => {
@@ -247,6 +248,38 @@ const usePackagerateentry = () => {
             }
         } else {
             // Display a warning or prevent the action
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+
+    useEffect(() => {
+        const handleList = async () => {
+            if (permissions.read && permissions.read) {
+                try {
+                    const response = await axios.get('http://localhost:8081/ratemanagement');
+                    const data = response.data;
+                    setRows(data);
+                } catch {
+                }
+            }
+        }
+        handleList();
+    }, [permissions]);
+
+    const handleEdit = async (userid) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            await axios.put(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            setRows([]);
+        } else {
             setInfo(true);
             setInfoMessage("You do not have permission.");
         }
@@ -297,7 +330,7 @@ const usePackagerateentry = () => {
                     const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
                     await axios.put(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
-                    setError(true);
+                    setSuccess(true);
                     setSuccessMessage("Successfully updated");
                     handleCancel();
                     setRows([]);
@@ -341,6 +374,8 @@ const usePackagerateentry = () => {
         hidePopup,
         handleAutocompleteChange,
         columns,
+        isEditMode,
+        handleEdit,
     };
 };
 

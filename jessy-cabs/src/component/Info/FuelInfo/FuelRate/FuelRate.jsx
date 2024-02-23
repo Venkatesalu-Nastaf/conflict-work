@@ -42,9 +42,7 @@ const FuelRate = () => {
                 const { petrol, diesel } = fuelData;
                 setFuelData({ petrol, diesel });
             })
-            .catch(error => {
-                console.error(error);
-            });
+            .catch();
     };
 
     const capitalizeFirstLetter = (string) => {

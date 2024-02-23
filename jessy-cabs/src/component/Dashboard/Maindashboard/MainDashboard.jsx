@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./MainDashboard.css";
 import Badge from '@mui/material/Badge';
-import Avatar from '@mui/material/Avatar';
+// import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';
 import Sidebar from "../MainDash/Sildebar/Slidebar";
 import { useNavigate, Outlet } from "react-router-dom";
@@ -27,7 +27,7 @@ const MainDashboard = () => {
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -147,15 +147,6 @@ const MainDashboard = () => {
   }, [storeUsername, setSelectedTheme]);
   const storedusertheme = JSON.parse(localStorage.getItem('selectedusertheme'));
 
-
-  // useEffect(() => {
-  //   const usertheme = routeData[0]?.theme;
-  //   setselectedtheme(usertheme);
-
-  //   console.log('user theme for dashboard', usertheme);
-  // }, [routeData, setselectedtheme]);
-
-
   const useridno = routeData[0]?.userid;
   const usercompany = routeData[0]?.organizationname;
 
@@ -163,31 +154,31 @@ const MainDashboard = () => {
 
   localStorage.setItem('usercompany', usercompany);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userid = localStorage.getItem('useridno');
-        if (!userid) {
-          return;
-        }
-        const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const userid = localStorage.getItem('useridno');
+  //       if (!userid) {
+  //         return;
+  //       }
+  //       const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
 
-        if (response.status === 200) {
-          const data = await response.json();
-          const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-          localStorage.setItem('selectedprofileImage', JSON.stringify(attachedImageUrls));
-          setSelectedImage(attachedImageUrls);
-        } else {
-          const timer = setTimeout(fetchData, 2000);
-          return () => clearTimeout(timer);
-        }
-      } catch {
-      }
-    };
-    fetchData();
-  }, []);
+  //       if (response.status === 200) {
+  //         const data = await response.json();
+  //         const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+  //         localStorage.setItem('selectedprofileImage', JSON.stringify(attachedImageUrls));
+  //         setSelectedImage(attachedImageUrls);
+  //       } else {
+  //         const timer = setTimeout(fetchData, 2000);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     } catch {
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
-  const storedImageUrls = JSON.parse(localStorage.getItem('selectedprofileImage'));
+  // const storedImageUrls = JSON.parse(localStorage.getItem('selectedprofileImage'));
 
   return (
     <section className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme}`}>
@@ -201,11 +192,11 @@ const MainDashboard = () => {
               variant="dot"
             >
               {/* <Avatar alt="userimage" src={logoImage} /> */}
-              <Avatar
+              {/* <Avatar
                 alt="userimage"
                 // src={selectedImage}
                 src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage}
-              />
+              /> */}
             </StyledBadge>
           </div>
           <div className="user-name-item">

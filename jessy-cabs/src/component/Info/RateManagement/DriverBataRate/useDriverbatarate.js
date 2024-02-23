@@ -10,8 +10,8 @@ const columns = [
     { field: "ExtraPerDayPrice", headerName: "ExtraPerDayPrice", width: 130 },
     { field: "ExtraHours", headerName: "ExtraHours", width: 130 },
     { field: "ExtraDays", headerName: "ExtraDays", width: 130 },
-    { field: "fromdate", headerName: "From_Date", width: 130 },
-    { field: "todate", headerName: "To_Date", width: 130 },
+    { field: "fromdate", headerName: "From_Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
+    { field: "todate", headerName: "To_Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
     { field: "Bata", headerName: "Bata", width: 130 },
 ];
 // TABLE END
@@ -33,7 +33,8 @@ const useDriverbatarate = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
+    const [isEditMode, setIsEditMode] = useState(false);
 
     // for page permission
 
@@ -45,8 +46,7 @@ const useDriverbatarate = () => {
                 const currentPageName = 'Rate Type';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -181,13 +181,18 @@ const useDriverbatarate = () => {
 
 
     const handleDateChange = (date, name) => {
-        const formattedDate = dayjs(date).format('DD/MM/YYYY');
-        // const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
         setBook((prevBook) => ({
             ...prevBook,
-            [name]: formattedDate,
+            [name]: parsedDate,
+        }));
+        setSelectedCustomerData((prevBook) => ({
+            ...prevBook,
+            [name]: parsedDate,
         }));
     };
+
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
@@ -202,11 +207,13 @@ const useDriverbatarate = () => {
             fromdate: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
 
     const handleAdd = async () => {
@@ -235,6 +242,39 @@ const useDriverbatarate = () => {
             setInfoMessage("You do not have permission.");
         }
     };
+
+    const handleEdit = async () => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+
+            // Format the date fields to match the expected format for your backend
+            updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
+            updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
+
+            await axios.put(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            setRows([]);
+        } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+    useEffect(() => {
+        const handlelist = async () => {
+            if (permissions.read) {
+                const response = await axios.get('http://localhost:8081/driverbatarate');
+                const data = response.data;
+                setRows(data);
+            }
+        }
+        handlelist();
+    }, [permissions]);
 
     const handleClick = async (event, actionName, id) => {
         event.preventDefault();
@@ -281,6 +321,11 @@ const useDriverbatarate = () => {
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+
+                    // Format the date fields to match the expected format for your backend
+                    updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
+                    updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
+
                     await axios.put(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
@@ -329,6 +374,8 @@ const useDriverbatarate = () => {
         handleDateChange,
         handleAutocompleteChange,
         columns,
+        isEditMode,
+        handleEdit,
     };
 };
 

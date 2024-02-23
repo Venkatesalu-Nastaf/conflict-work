@@ -17,12 +17,12 @@ const useEmplyeecreation = () => {
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
-
+    const [isEditMode, setIsEditMode] = useState(false);
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
 
     // for page permission
 
@@ -34,11 +34,9 @@ const useEmplyeecreation = () => {
                 const currentPageName = 'User Creation';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
-
         fetchPermissions();
     }, [user_id]);
 
@@ -160,6 +158,7 @@ const useEmplyeecreation = () => {
             viewfor: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
 
     const handleAdd = async () => {
@@ -195,6 +194,42 @@ const useEmplyeecreation = () => {
             setInfoMessage("You do not have permission.");
         }
     };
+
+    const handleEdit = async (userid) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.userid === userid);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            await axios.put(`http://localhost:8081/usercreation/${book.userid || selectedCustomerData?.userid}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            setRows([]);
+        } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+    useEffect(() => {
+        const handleList = async () => {
+            if (permissions.read && permissions.read) {
+                try {
+                    const response = await axios.get('http://localhost:8081/usercreation');
+                    const data = response.data;
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                } catch {
+                }
+            }
+        }
+        handleList();
+    }, [permissions]);
+
 
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
@@ -320,6 +355,7 @@ const useEmplyeecreation = () => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
 
     const handleClickShowPasswords = () => {
@@ -374,6 +410,8 @@ const useEmplyeecreation = () => {
         handleClickShowPassword,
         passwordsMatch,
         columns,
+        isEditMode,
+        handleEdit,
     };
 };
 

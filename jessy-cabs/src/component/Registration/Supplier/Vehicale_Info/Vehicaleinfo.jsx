@@ -50,6 +50,11 @@ import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineE
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useVehicleinfo from './useVehicleinfo';
 
+// ayyanar-----------------------
+
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+
 
 
 
@@ -67,7 +72,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const actions = [
-  // { icon: <ChecklistIcon />, name: "List" }, 
   { icon: <CancelPresentationIcon />, name: "Cancel" },
   { icon: <DeleteIcon />, name: "Delete" },
   { icon: <ModeEditIcon />, name: "Edit" },
@@ -95,7 +99,6 @@ const Vehicaleinfo = () => {
     handleAdd,
     hidePopup,
     handleDateChange,
-    handleUpload,
     searchText,
     setSearchText,
     fromDate,
@@ -106,8 +109,17 @@ const Vehicaleinfo = () => {
     handleExcelDownload,
     handlePdfDownload,
     columns,
-
-    // ... (other state variables and functions)
+    setInsurance,
+    setLicence,
+    setNationalPermit,
+    setStatePermit,
+    setRcbook,
+    setFcCopy,
+    allFile,
+    handleCloseDialog,
+    dialogOpen,
+    isEditMode,
+    handleEdit,
   } = useVehicleinfo();
 
   useEffect(() => {
@@ -275,8 +287,13 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={() => handleUpload('InsuranceCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   Insurance Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setInsurance(e.target.files[0])}
+                  />
                 </Button>
               </div>
             </div>
@@ -324,8 +341,13 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={() => handleUpload('LicenseCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   License Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setLicence(e.target.files[0])}
+                  />
                 </Button>
               </div>
             </div>
@@ -359,8 +381,13 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" onClick={() => handleUpload('NationalPermitCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   National Permit Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setNationalPermit(e.target.files[0])}
+                  />
                 </Button>
               </div>
               <div className="input">
@@ -407,8 +434,13 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" onClick={() => handleUpload('StatePermitCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   State Permit Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setStatePermit(e.target.files[0])}
+                  />
                 </Button>
               </div>
               <div className="input">
@@ -455,13 +487,23 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                <Button color="primary" onClick={() => handleUpload('RCBookCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   RC-Book Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setRcbook(e.target.files[0])}
+                  />
                 </Button>
               </div>
               <div className="input" style={{ width: "160px" }}>
-                <Button color="primary" onClick={() => handleUpload('FCCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                   FC Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setFcCopy(e.target.files[0])}
+                  />
                 </Button>
               </div>
             </div>
@@ -567,8 +609,12 @@ const Vehicaleinfo = () => {
                   list
                 </Button>
               </div>
-              <div className="input" style={{ width: "80px" }}>
-                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+              <div className="input" style={{ width: "160px" }}>
+                {isEditMode ? (
+                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                )}
               </div>
             </div>
 
@@ -604,6 +650,7 @@ const Vehicaleinfo = () => {
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
+            direction="left"
           >
             {actions.map((action) => (
               <SpeedDialAction
@@ -684,9 +731,19 @@ const Vehicaleinfo = () => {
               columns={columns}
               onRowClick={handleRowClick}
               pageSize={5}
-              checkboxSelection
             />
           </div>
+          <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+            <DialogContent>
+              <div>
+                {Array.isArray(allFile) && allFile.map((img, index) => (
+                  img.file_type === 'application/pdf' ?
+                    <embed key={index} src={`http://localhost:8081/images/${img.fileName}`} type="application/pdf" width="100%" height="600px" />
+                    : <img key={index} src={`http://localhost:8081/images/${img.fileName}`} width="100%" height="600px" alt='images' />
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </form>
     </div>

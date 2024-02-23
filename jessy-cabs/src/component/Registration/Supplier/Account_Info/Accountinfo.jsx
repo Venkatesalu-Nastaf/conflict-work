@@ -87,10 +87,10 @@ const Accuntinfo = () => {
     handleAutocompleteChange,
     handleExcelDownload,
     handlePdfDownload,
-    reversedRows,
+    rows,
     columns,
-
-    // ... (other state variables and functions)
+    isEditMode,
+    handleEdit,
   } = useAccountinfo();
 
   useEffect(() => {
@@ -377,8 +377,12 @@ const Accuntinfo = () => {
               variant="standard"
             />
           </div>
-          <div className="input" style={{ width: "100px" }}>
-            <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+          <div className="input" style={{ width: "160px" }}>
+            {isEditMode ? (
+              <Button variant="contained" onClick={handleEdit}>Edit</Button>
+            ) : (
+              <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+            )}
           </div>
         </div>
         {error &&
@@ -445,7 +449,7 @@ const Accuntinfo = () => {
         </div>
         <div className="table-customer-lists">
           <DataGrid
-            rows={reversedRows}
+            rows={rows}
             columns={columns}
             onRowClick={handleRowClick}
             initialState={{

@@ -20,7 +20,7 @@ const columns = [
 const useTaxsettings = () => {
 
     const user_id = localStorage.getItem('useridno');
-
+    const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -33,7 +33,7 @@ const useTaxsettings = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
 
     // for page permission
     const [userPermissions, setUserPermissions] = useState({});
@@ -44,8 +44,7 @@ const useTaxsettings = () => {
                 const currentPageName = 'Tax settings';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -205,11 +204,13 @@ const useTaxsettings = () => {
             taxtype: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
 
     const handleAdd = async () => {
@@ -233,6 +234,48 @@ const useTaxsettings = () => {
         }
     };
 
+    const handleEdit = async (STax) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.STax === STax);
+            const updatedCustomer = {
+                ...selectedCustomer,
+                ...selectedCustomerData,
+            };
+            await axios.put(`http://localhost:8081/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
+            handleCancel();
+            setRows([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+        } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+    useEffect(() => {
+        const handlelist = async () => {
+            if (permissions.read) {
+                const response = await axios.get('http://localhost:8081/taxsetting');
+                const data = response.data;
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                } else {
+                    setRows([]);
+                }
+            }
+        }
+
+        handlelist();
+    }, [permissions]);
+
+
     const handleClick = async (event, actionName, STax) => {
         event.preventDefault();
         try {
@@ -242,7 +285,11 @@ const useTaxsettings = () => {
                 if (permissions.read && permissions.read) {
                     const response = await axios.get('http://localhost:8081/taxsetting');
                     const data = response.data;
-                    setRows(data);
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
                 } else {
@@ -318,6 +365,8 @@ const useTaxsettings = () => {
         handleDateChange,
         handleAutocompleteChange,
         columns,
+        isEditMode,
+        handleEdit,
     };
 };
 

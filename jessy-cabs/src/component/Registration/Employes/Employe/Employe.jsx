@@ -19,6 +19,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 
+// ayyanar-----------------------
+
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+
 // ICONS
 import useEmployee from "./useEmployee";
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -92,13 +97,14 @@ const Employe = () => {
     hidePopup,
     formData,
     handleDateChange,
-    handleUpload,
     handleExcelDownload,
     handlePdfDownload,
     columns,
     searchText,
     setSearchText,
-    handleShowAll,
+    handleShowAll, allFile, handleCloseDialog, dialogOpen, setFile, handleContextMenu,
+    isEditMode,
+    handleEdit,
   } = useEmployee();
 
   useEffect(() => {
@@ -371,24 +377,23 @@ const Employe = () => {
                 />
               </div>
               <div className="input" style={{ width: "20px" }}>
-                <Button
-                  color="primary"
-                  onClick={() => handleUpload("LicenseCopy")}
-                  size="md"
-                >
+                <Button component="label">
                   <UploadFileIcon />
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setFile(e.target.files[0])}
+                  />
                 </Button>
               </div>
             </div>
             <div className="input-field">
-              <div className="input" style={{ width: "100px" }}>
-                <Button
-                  variant="contained"
-                  onClick={handleAdd}
-                  disabled={isFieldReadOnly("new")}
-                >
-                  Add
-                </Button>
+              <div className="input" style={{ width: "160px" }}>
+                {isEditMode ? (
+                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                )}
               </div>
             </div>
           </div>
@@ -445,6 +450,7 @@ const Employe = () => {
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
+            direction="left"
           >
             {actions.map((action) => (
               <SpeedDialAction
@@ -510,6 +516,43 @@ const Employe = () => {
               pageSize={5}
             />
           </div>
+          {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+            <DialogContent>
+              <div>
+                {Array.isArray(allFile) && allFile.map((img, index) => (
+                  <embed key={index} src={`http://localhost:8081/images/` + img.fileName} type="application/pdf" width="100%" height="600px" />
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog> */}
+          {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+            <DialogContent>
+              <div>
+                {Array.isArray(allFile) && allFile.map((img, index) => (
+                  <div key={index} onContextMenu={(e) => handleContextMenu(e, img)}>
+                    <embed src={`http://localhost:8081/images/` + img.fileName} type="application/pdf" width="100%" height="600px" />
+                  </div>
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog> */}
+          <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+            <DialogContent>
+              <div>
+                {Array.isArray(allFile) && allFile.map((img, index) => (
+                  <div key={index}>
+                    <embed
+                      src={`http://localhost:8081/images/` + img.fileName}
+                      type="application/pdf"
+                      width="100%"
+                      height="600px"
+                      onContextMenu={(e) => handleContextMenu(e, img)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </form>
     </div>

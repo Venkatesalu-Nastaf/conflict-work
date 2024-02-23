@@ -82,9 +82,7 @@ const useAppuserlist = () => {
                     setErrorMessage("No data found");
                 }
             })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
+            .catch();
     };
 
     const handleChangeStatus = (event) => {

@@ -73,7 +73,8 @@ const PackageRateEntery = () => {
     hidePopup,
     handleAutocompleteChange,
     columns,
-
+    isEditMode,
+    handleEdit,
   } = usePackagerateentry();
 
   useEffect(() => {
@@ -194,9 +195,9 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-                <div className="input">
+                {/* <div className="input">
                   <Button variant="outlined">Show All Date</Button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -386,8 +387,15 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "100px" }}>
+            {/* <div className="input" style={{ width: "100px" }}>
               <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Save All</Button>
+            </div> */}
+            <div className="input" style={{ width: "100px" }}>
+              {isEditMode ? (
+                <Button variant="contained" onClick={handleEdit}>Edit</Button>
+              ) : (
+                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Save</Button>
+              )}
             </div>
           </div>
         </div>
@@ -423,7 +431,7 @@ const PackageRateEntery = () => {
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
-            direction="left"
+            // direction="left"
           >
             {actions.map((action) => (
               <SpeedDialAction

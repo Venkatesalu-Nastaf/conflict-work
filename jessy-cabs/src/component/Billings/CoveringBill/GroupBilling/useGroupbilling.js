@@ -188,7 +188,6 @@ const useGroupbilling = () => {
         return data.reduce((sum, item) => {
             const netAmountValue = parseFloat(item.netamount, 10);
             if (isNaN(netAmountValue) || !isFinite(netAmountValue)) {
-                console.error(`Invalid netamount value: ${item.netamount}`);
                 return sum;
             }
             return sum + netAmountValue;
@@ -233,8 +232,7 @@ const useGroupbilling = () => {
                 setError(true);
                 setErrorMessage("No data found");
             }
-        } catch (error) {
-            console.error("Error fetching data:", error);
+        } catch {
             setRows([]);
             setError(true);
             setErrorMessage("Check your Network Connection");

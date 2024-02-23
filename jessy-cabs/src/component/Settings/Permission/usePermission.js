@@ -63,8 +63,7 @@ const usePermission = () => {
                 const currentPageName = 'Permission';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -177,8 +176,7 @@ const usePermission = () => {
             const response = await fetch(`http://localhost:8081/usercreationgetdata/${value}`);
             const data = await response.json();
             setUserData(data);
-        } catch (error) {
-            console.error('Error fetching user data:', error);
+        } catch {
         }
     }, []);
 
@@ -206,8 +204,7 @@ const usePermission = () => {
                 setSuccess(true);
                 setSuccessMessage("Successfully saved user permission");
                 handleCancel();
-            } catch (error) {
-                console.error('Error saving permissions:', error);
+            } catch {
             }
         } else {
             setInfo(true);
@@ -250,11 +247,8 @@ const usePermission = () => {
                             });
                         });
                     } else {
-                        console.error('Invalid response format: Expected an array.');
                     }
-
-                } catch (error) {
-                    console.error(error);
+                } catch {
                 }
             } else {
                 setInfo(true);

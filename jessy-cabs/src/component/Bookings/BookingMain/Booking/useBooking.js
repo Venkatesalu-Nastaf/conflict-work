@@ -54,7 +54,6 @@ const columns = [
     { field: "travelsemail", headerName: "Travels Email", width: 130 },
 ];
 
-
 const useBooking = () => {
     const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -80,6 +79,7 @@ const useBooking = () => {
     const [warning, setWarning] = useState(false);
     const [success, setSuccess] = useState(false);
     const [formData, setFormData] = useState({});
+    const [isEditMode, setIsEditMode] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupOpenmail, setpopupOpenmail] = useState(false);
 
@@ -87,7 +87,6 @@ const useBooking = () => {
         setPopupOpen(false);
         setpopupOpenmail(false);
     };
-
 
     // for page permission
 
@@ -341,6 +340,7 @@ const useBooking = () => {
         setSelectedCustomerData({});
         setSelectedCustomerDatas({});
         setFormData({});
+        setIsEditMode(false);
     };
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -486,6 +486,48 @@ const useBooking = () => {
         }));
     };
 
+    // ------its for dialog--------------------
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const booking_id = formData.bookingno || selectedCustomerData.bookingno || book.bookingno;
+    const handleButtonClick = () => {
+        setDialogOpen(true);
+        showPdf();
+    };
+
+    // ------------------------------------------------------------
+    const [allFile, setAllFile] = useState([]);
+
+    const showPdf = () => {
+        axios.get(`http://localhost:8081/booking-docView/${booking_id}`)
+            .then(res => {
+                setAllFile(res.data)
+            })
+            .catch()
+    }
+
+    const handleCloseDialog = () => {
+        showPdf('');
+        setDialogOpen(false);
+    };
+
+    const [file, setFile] = useState({});
+    const addPdf = async () => {
+        if (file !== null) {
+            const formData = new FormData();
+
+            formData.append("file", file);
+            await axios.post(`http://localhost:8081/bookingpdf/${booking_id}`, formData)
+                .then(res => {
+                })
+                .catch();
+        } else {
+            return
+        }
+    };
+
+    //--------------------------------------------------------------
+
     const [lastBookingNo, setLastBookingNo] = useState('');
 
     const handleAdd = async () => {
@@ -519,8 +561,8 @@ const useBooking = () => {
                 const lastBookingNo = response.data.bookingno;
                 setLastBookingNo(lastBookingNo);
                 setPopupOpen(true);
-                // alert(`Booking Number: ${lastBookingNo}`);
                 handleCancel();
+                addPdf();
                 setRow([]);
                 setRows([]);
                 setSuccess(true);
@@ -531,6 +573,41 @@ const useBooking = () => {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
             }
+        } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+
+    const handleEdit = async (userid) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.bookingno === selectedCustomerData.bookingno || formData.bookingno);
+            const updatedCustomer = {
+                ...formData,
+                ...selectedCustomer,
+                ...selectedCustomerData,
+                bookingtime: bookingtime || selectedCustomerData.bookingtime,
+                starttime: starttime || book.starttime || selectedCustomerData.starttime || formData.starttime,
+                reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+                triptime: triptime || book.triptime || selectedCustomerData.triptime || formData.triptime,
+                username: storedUsername,
+                bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
+                orderbyemail: selectedCustomerDatas.customeremail,
+                orderedby: selectedCustomerDatas.name,
+                mobile: selectedCustomerDatas.phoneno,
+            };
+            await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
+            handleCancel();
+            addPdf();
+            setRow([]);
+            setRows([]);
+            handlecheck();
+            handleSendSMS();
+            setSuccess(true);
+            setSuccessMessage("Successfully Updated");
         } else {
             setInfo(true);
             setInfoMessage("You do not have permission.");
@@ -583,6 +660,7 @@ const useBooking = () => {
                     };
                     await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
                     handleCancel();
+                    addPdf();
                     setRow([]);
                     setRows([]);
                     handlecheck();
@@ -627,7 +705,6 @@ const useBooking = () => {
         { icon: <BookmarkAddedIcon />, name: "Add" },
     ];
 
-
     const handleKeyDown = useCallback(async (event) => {
 
         if (event.key === 'Enter') {
@@ -637,12 +714,12 @@ const useBooking = () => {
                 const bookingDetails = response.data;
                 setSelectedCustomerData(bookingDetails);
                 setSelectedCustomerId(bookingDetails.tripid);
+                setIsEditMode(true);
             } catch {
                 setError(true);
                 setErrorMessage("Error retrieving booking details");
             }
         }
-
     }, []);
 
     const [currentYear, setCurrentYear] = useState("");
@@ -653,36 +730,6 @@ const useBooking = () => {
         const value = `JESSY CABS ${pastYear}-${current}`;
         setCurrentYear(value);
     }, []);
-
-    const handleUpload = () => {
-        const bookingno = book.bookingno || selectedCustomerData.bookingno;
-        if (!bookingno) {
-            setError(true);
-            setErrorMessage("Enter booking No")
-            return;
-        }
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.pdf, .jpg, .jpeg, .png';
-        input.onchange = handleFileChange;
-        input.click();
-    };
-    //file upload
-    const handleFileChange = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        const bookingno = book.bookingno || selectedCustomerData.bookingno;
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('bookingno', bookingno);
-        try {
-            const response = await axios.post('http://localhost:8081/uploads', formData);
-            console.log('uploaded file details 2', response.data);
-        } catch {
-            setError(true);
-            setErrorMessage('Error uploading file.');
-        }
-    };
 
     const [enterPressCount, setEnterPressCount] = useState(0);
 
@@ -717,12 +764,14 @@ const useBooking = () => {
     const handleRowClick = useCallback((params) => {
         setSelectedCustomerDatas(params);
         handleChange({ target: { name: "customer", value: params.customer } });
+        // setIsEditMode(true);
     }, [handleChange]);
 
     const handletableClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
 
     const [sendEmail, setSendEmail] = useState(false);
@@ -849,8 +898,7 @@ const useBooking = () => {
             const data = await response.json();
             setAttachedImage(data.files);
             setpopupOpenmail(true);
-        } catch (error) {
-            console.error(error);
+        } catch {
         }
     }, [book.bookingno, selectedCustomerData.bookingno]);
 
@@ -898,7 +946,6 @@ const useBooking = () => {
         currentYear,
         setTripTime,
         handleClickHide,
-        handleUpload,
         actions,
         searchText,
         setSearchText,
@@ -917,6 +964,9 @@ const useBooking = () => {
         reversedRows,
         columns,
         handletableClick,
+        setFile, dialogOpen, handleCloseDialog, allFile, handleButtonClick,
+        isEditMode,
+        handleEdit,
     };
 };
 

@@ -3,31 +3,11 @@ import axios from 'axios';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
-
-
-// TABLE STRAT
-const columns = [
-    { field: "id", headerName: "Sno", width: 50 },
-    { field: "empid", headerName: "Employe ID", width: 140 },
-    { field: "empname", headerName: "Name", width: 130 },
-    { field: "empemailid", headerName: "Email", width: 130 },
-    { field: "empmobile", headerName: "Mobile", width: 130 },
-    { field: "jobroll", headerName: "Job Roll", width: 130 },
-    { field: "joiningdate", headerName: "Joining Date", width: 130 },
-    { field: "gender", headerName: "Gender", width: 130 },
-    { field: "bloodgroup", headerName: "Bloog Group", width: 130 },
-    { field: "guardian", headerName: "Guardian", width: 130 },
-    { field: "uanid", headerName: "UAN ID", width: 140 },
-    { field: "esino", headerName: "ESI NO", width: 140 },
-    { field: "fixedsalary", headerName: "Net Salary", width: 130 },
-    { field: "licenceno", headerName: "Driving Licence No", width: 140 },
-];
-// TABLE END
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import Button from "@mui/material/Button";
 
 const useEmployee = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -40,8 +20,51 @@ const useEmployee = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
     const [searchText, setSearchText] = useState('');
+    const [isEditMode, setIsEditMode] = useState(false);
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const handleButtonClick = (image, params) => {
+        const { empid } = params.row;
+        setDialogOpen(true);
+        showPdf(empid);
+    };
+
+    // TABLE STRAT
+    const columns = [
+        { field: "id", headerName: "Sno", width: 50 },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 130,
+            renderCell: (params) => (
+                <Button
+                    onClick={() => handleButtonClick(params.row.image, params)}
+                    aria-label="open-dialog"
+                >
+                    <Button variant="contained" color="primary">
+                        <UploadFileIcon />
+                        view
+                    </Button>
+                </Button>
+            ),
+        },
+        { field: "empid", headerName: "Employe ID", width: 140 },
+        { field: "empname", headerName: "Name", width: 130 },
+        { field: "empemailid", headerName: "Email", width: 130 },
+        { field: "empmobile", headerName: "Mobile", width: 130 },
+        { field: "jobroll", headerName: "Job Roll", width: 130 },
+        { field: "joiningdate", headerName: "Joining Date", width: 130 },
+        { field: "gender", headerName: "Gender", width: 130 },
+        { field: "bloodgroup", headerName: "Bloog Group", width: 130 },
+        { field: "guardian", headerName: "Guardian", width: 130 },
+        { field: "uanid", headerName: "UAN ID", width: 140 },
+        { field: "esino", headerName: "ESI NO", width: 140 },
+        { field: "fixedsalary", headerName: "Net Salary", width: 130 },
+        { field: "licenceno", headerName: "Driving Licence No", width: 140 },
+    ];
+    // TABLE END
 
     // for page permission
 
@@ -53,8 +76,7 @@ const useEmployee = () => {
                 const currentPageName = 'Employee PayRoll';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -87,7 +109,6 @@ const useEmployee = () => {
     // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -263,13 +284,53 @@ const useEmployee = () => {
             licenceno: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
 
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
+
+    //--------show pdf---------------
+    const [allFile, setAllFile] = useState([]);
+
+    const showPdf = (showID) => {
+        axios.get(`http://localhost:8081/employee-docView/${showID}`)
+            .then(res => {
+                setAllFile(res.data)
+            })
+            .catch()
+    }
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+    };
+
+    ///--------------------------------------------
+
+    const empid = selectedCustomerData?.empid || book.empid
+    const [file, setFile] = useState({});
+
+    const addPdf = async () => {
+        if (file !== null) {
+            const formData = new FormData();
+            formData.append("file", file);
+            try {
+                await axios.post(`http://localhost:8081/employee-pdf/${empid}`, formData)
+            }
+            catch {
+                setError(true);
+                setErrorMessage('something wrong');
+            }
+        } else {
+            return
+        }
+    }
+
+    //----------------------------------------------
     const handleAdd = async () => {
         const permissions = checkPagePermission();
 
@@ -283,6 +344,7 @@ const useEmployee = () => {
             try {
                 await axios.post('http://localhost:8081/employees', book);
                 handleCancel();
+                addPdf();
                 setRows([]);
                 setSuccess(true);
                 setSuccessMessage("Successfully Added");
@@ -291,6 +353,24 @@ const useEmployee = () => {
             }
         } else {
             // Display a warning or prevent the action
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+    const handleEdit = async (userid) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.empid === empid);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            await axios.put(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            addPdf();
+            setRows([]);
+        } else {
             setInfo(true);
             setInfoMessage("You do not have permission.");
         }
@@ -350,6 +430,7 @@ const useEmployee = () => {
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
                     handleCancel();
+                    addPdf();
                     setRows([]);
                 } else {
                     setInfo(true);
@@ -368,33 +449,6 @@ const useEmployee = () => {
             handleClick(null, 'List');
         }
     });
-
-    const handleUpload = () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.pdf, .jpg, .jpeg, .png';
-        input.onchange = handleFileChange;
-        input.click();
-    };
-    //file upload
-    const handleFileChange = async (event, documentType) => {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const uniqueFileName = `${documentType}_${Date.now()}_${file.name}`;
-        const formDataUpload = new FormData();
-        formDataUpload.append('file', file);
-        formDataUpload.append('documenttype', book.documenttype || selectedCustomerData.documenttype);
-        formDataUpload.append('documenttype', documentType);
-        formDataUpload.append('empid', book.empid || selectedCustomerData.empid);
-        formDataUpload.append('filename', uniqueFileName);
-        try {
-            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            console.log(response);
-        } catch {
-        }
-    };
-    //end file upload
 
     const handleShowAll = async () => {
         const permissions = checkPagePermission();
@@ -426,6 +480,11 @@ const useEmployee = () => {
         }
     };
 
+    const handleContextMenu = (e, img) => {
+        e.preventDefault();
+        console.log("image right clicked");
+    };
+
     return {
         selectedCustomerData,
         selectedCustomerId,
@@ -448,13 +507,15 @@ const useEmployee = () => {
         hidePopup,
         formData,
         handleDateChange,
-        handleUpload,
         handleExcelDownload,
         handlePdfDownload,
         columns,
         searchText,
         setSearchText,
         handleShowAll,
+        allFile, handleCloseDialog, dialogOpen, setFile, handleContextMenu,
+        isEditMode,
+        handleEdit,
     };
 };
 

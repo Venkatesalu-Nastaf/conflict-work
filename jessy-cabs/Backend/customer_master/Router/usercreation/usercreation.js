@@ -1,6 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
+const multer = require('multer');
+const path = require('path');
+
+
+
+router.use(express.static('images'));
+router.use(express.static('public'));
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './public/images')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+  }
+
+})
+
+const upload = multer({
+  storage: storage
+})
 
 // user creation database
 // add user creation database
@@ -91,18 +112,78 @@ router.get('/usercreationgetdata/:value', (req, res) => {
 });
 
 
-router.delete('/userprofiledelete/:userid', (req, res) => {
-  const userid = req.params.userid;
-  db.query('DELETE FROM tripsheetupload WHERE userid = ?', userid, (err, result) => {
+// router.delete('/userprofiledelete/:userid', (req, res) => {
+//   const userid = req.params.userid;
+//   db.query('DELETE FROM tripsheetupload WHERE userid = ?', userid, (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ error: "Failed to delete data from MySQL" });
+//     }
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ error: "Customer not found" });
+//     }
+//     return res.status(200).json({ message: "Data deleted successfully" });
+//   });
+// });
+
+
+//user profile upload
+
+// router.put('/userprofileupload/:id', upload.single('image'), (req, res) => {
+//   const userId = req.params.id;
+//   const fileName = req.file.filename;
+//   const sql = `UPDATE user_profile SET filename = ? WHERE userid = ?`;
+//   db.query(sql, [fileName, userId], (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ Message: "Error updating profile picture" });
+//     }
+//     return res.status(200).json({ Status: "success" });
+//   });
+// })
+
+
+router.put('/userprofileupload/:id', upload.single('image'), (req, res) => {
+  const userId = req.params.id;
+  const fileName = req.file.filename;
+
+  // Check if the user profile already exists
+  const checkIfExistsQuery = `SELECT * FROM user_profile WHERE userid = ?`;
+  db.query(checkIfExistsQuery, [userId], (err, rows) => {
     if (err) {
-      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+      return res.status(500).json({ Message: "Error checking profile existence", err });
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Customer not found" });
+
+    if (rows.length > 0) {
+      // Profile already exists, update the record
+      const updateQuery = `UPDATE user_profile SET filename = ? WHERE userid = ?`;
+      db.query(updateQuery, [fileName, userId], (err, result) => {
+        if (err) {
+          return res.status(500).json({ Message: "Error updating profile picture", err });
+        }
+        return res.status(200).json({ Status: "success" });
+      });
+    } else {
+      // Profile doesn't exist, insert a new record
+      const insertQuery = `INSERT INTO user_profile (userid, filename) VALUES (?, ?)`;
+      db.query(insertQuery, [userId, fileName], (err, result) => {
+        if (err) {
+          return res.status(500).json({ Message: "Error inserting profile picture", err });
+        }
+        return res.status(200).json({ Status: "success" });
+      });
     }
-    return res.status(200).json({ message: "Data deleted successfully" });
   });
 });
+
+//getting user profile
+
+router.get('/userprofileview/:id', (req, res) => {
+  const userid = req.params.id
+  const sql = 'select * from user_profile where userid=?';
+  db.query(sql, [userid], (err, result) => {
+    if (err) return res.json({ Message: "error" })
+    return res.json(result);
+  })
+})
 
 
 module.exports = router;

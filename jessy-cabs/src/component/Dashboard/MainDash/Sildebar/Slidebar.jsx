@@ -100,8 +100,7 @@ const Sidebar = () => {
         setInfo(true);
         setInfoMessage("You do not have permission to access this page.");
       }
-    } catch (error) {
-      console.error('Error fetching user permissions:', error);
+    } catch {
     }
   };
 

@@ -43,6 +43,7 @@ const useTripsheet = () => {
     const [infoMessage, setInfoMessage] = useState({});
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
 
     // for page permission
 
@@ -54,8 +55,7 @@ const useTripsheet = () => {
                 const currentPageName = 'Trip Sheet';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -588,6 +588,7 @@ const useTripsheet = () => {
         setFormValues({});
         setPackageData({});
         setPackageDetails({});
+        setIsEditMode(false);
     };
 
     const handleETripsheetClick = (row) => {
@@ -834,33 +835,54 @@ const useTripsheet = () => {
         }
     };
 
+    // const handleUpload = () => {
+    //     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    //     if (!tripid) {
+    //         setError(true);
+    //         setErrorMessage("Enter booking No")
+    //         return;
+    //     }
+    //     const input = document.createElement('input');
+    //     input.type = 'file';
+    //     input.accept = '.pdf, .jpg, .jpeg, .png';
+    //     input.onchange = handleFileChange;
+    //     input.click();
+    // };
+    // //file upload
+    // const handleFileChange = async (event) => {
+    //     const file = event.target.files[0];
+    //     if (!file) return;
+    //     const formDataUpload = new FormData();
+    //     formDataUpload.append('file', file);
+    //     formDataUpload.append('tripid', book.tripid || selectedCustomerData.tripid || formData.tripid);
+    //     try {
+    //        await axios.post('http://localhost:8081/uploads', formDataUpload);
+    //     } catch {
+    //     }
+    // };
+    //end file upload
+
+
     const handleUpload = () => {
-        const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-        if (!tripid) {
-            setError(true);
-            setErrorMessage("Enter booking No")
-            return;
-        }
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.pdf, .jpg, .jpeg, .png';
         input.onchange = handleFileChange;
         input.click();
     };
-    //file upload
-    const handleFileChange = async (event) => {
+
+    const handleFileChange = (event) => {
+        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
         const file = event.target.files[0];
         if (!file) return;
-        const formDataUpload = new FormData();
-        formDataUpload.append('file', file);
-        formDataUpload.append('tripid', book.tripid || selectedCustomerData.tripid || formData.tripid);
-        try {
-            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            console.log(response);
-        } catch {
+        // setSelectedImage(file)
+        if (file) { // Ensure a file is selected before uploading
+            const formData = new FormData();
+            formData.append('image', file);
+
+            axios.put(`http://localhost:8081/tripsheet_uploads/${tripid}`, formData)
         }
     };
-    //end file upload
     // Function to calculate total time
     const calculateTotalTime = useCallback(() => {
         const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
@@ -1152,6 +1174,7 @@ const useTripsheet = () => {
                     setSelectedCustomerId(bookingDetails.tripid);
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
+                    setIsEditMode(true);
                 } else {
                     setError(true);
                     setErrorMessage("No data found");
@@ -1163,7 +1186,6 @@ const useTripsheet = () => {
                 } else {
                     setError(true);
                     setErrorMessage("Failed to fetch data");
-                    console.error("Error fetching data:", error);
                 }
             }
         }
@@ -1426,9 +1448,7 @@ const useTripsheet = () => {
                     // Clear the timer to avoid memory leaks
                     return () => clearTimeout(timer);
                 }
-            } catch (error) {
-                // Handle errors
-                console.error('Error fetching image data:', error);
+            } catch {
             }
         };
 
@@ -1552,6 +1572,8 @@ const useTripsheet = () => {
         imageUrl,
         link,
         isSignatureSubmitted,
+        isEditMode,
+        handleEdit,
     };
 };
 

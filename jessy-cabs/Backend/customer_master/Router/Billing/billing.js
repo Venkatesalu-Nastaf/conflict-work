@@ -72,11 +72,9 @@ router.get('/billingdata/:invoiceno', (req, res) => {
 
   db.query('SELECT * FROM billing WHERE invoiceno = ?', invoiceno, (err, result) => {
     if (err) {
-      console.error('Error querying database:', err);
       return res.status(500).json({ error: 'Failed to retrieve billing details from MySQL' });
     }
     if (result.length === 0) {
-      console.error('Billing not found for invoiceno:', invoiceno);
       return res.status(404).json({ error: 'Billing not found' });
     }
     const billingDetails = result[0];

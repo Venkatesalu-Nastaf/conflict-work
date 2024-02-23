@@ -6,9 +6,7 @@ import jsPDF from 'jspdf';
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 
 const useTransferreport = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [pbpopupOpen, setpbPopupOpen] = useState(false);
     const [npopupOpen, setnPopupOpen] = useState(false);
     const [lxpopupOpen, setlxPopupOpen] = useState(false);
@@ -27,7 +25,6 @@ const useTransferreport = () => {
     const [warningMessage] = useState({});
     const [popupOpen, setPopupOpen] = useState(false);
 
-
     // for page permission
 
     const [userPermissions, setUserPermissions] = useState({});
@@ -39,7 +36,6 @@ const useTransferreport = () => {
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch (error) {
-                console.error('Error fetching user permissions:', error);
             }
         };
 
@@ -111,8 +107,6 @@ const useTransferreport = () => {
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Transfer Report.pdf');
     };
-
-
 
     useEffect(() => {
         if (error) {
@@ -322,7 +316,6 @@ const useTransferreport = () => {
     const organizationgstnumber = customerData.gstnumber;
     const ratetypeforpage = customerData.rateType;
 
-
     useEffect(() => {
         Organization()
             .then((data) => {
@@ -336,33 +329,6 @@ const useTransferreport = () => {
     }, []);
 
     const [routedData, setRoutedData] = useState('');
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const fromdate = localStorage.getItem('fromDate');
-    //             const todate = localStorage.getItem('toDate');
-    //             const customerValue = encodeURIComponent(customer) || (tripData.length > 0 ? tripData[0].customer : '');
-    //             const fromDateValue = fromdate;
-    //             const toDateValue = todate;
-    //             const servicestationValue = servicestation || (tripData.length > 0 ? tripData[0].department : '');
-    //             const response = await fetch(`http://localhost:8081/Get-Billing`, {
-    //                 params: {
-    //                     customer: customerValue,
-    //                     fromDate: fromDateValue,
-    //                     toDate: toDateValue,
-    //                     servicestation: servicestationValue
-    //                 },
-    //             });
-    //             const routedData = await response.json();
-    //             setRoutedData(routedData);
-    //         } catch {
-
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, [customer, servicestation, tripData]);
 
     useEffect(() => {
         const fetchData4 = async () => {
@@ -409,7 +375,6 @@ const useTransferreport = () => {
                 const data = await response.json();
                 const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
                 setAttachedImage(attachedImageUrls);
-                console.log('collected data', data);
             } catch {
             }
         };
@@ -441,7 +406,6 @@ const useTransferreport = () => {
         fetchData();
     }, []);
 
-
     const [organizationdata, setorganizationData] = useState('');
 
     useEffect(() => {
@@ -459,9 +423,7 @@ const useTransferreport = () => {
                         setorganizationData(userDataArray[0]);
                     }
                 } else {
-                    // If the response status is not 200, wait for 2 seconds and fetch again
                     const timer = setTimeout(fetchData, 2000);
-                    // Clear the timer to avoid memory leaks
                     return () => clearTimeout(timer);
                 }
             } catch {
@@ -470,7 +432,6 @@ const useTransferreport = () => {
 
         fetchData();
     }, []);
-
 
     return {
         rows,

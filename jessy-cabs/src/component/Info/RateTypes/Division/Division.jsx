@@ -77,8 +77,8 @@ const Division = () => {
     handleAdd,
     hidePopup,
     handleAutocompleteChange,
-
-    // ... (other state variables and functions)
+    isEditMode,
+    handleEdit,
   } = useDivision();
 
   useEffect(() => {
@@ -177,7 +177,11 @@ const Division = () => {
                   </FormControl>
                 </div>
                 <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                  {isEditMode ? (
+                    <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  ) : (
+                    <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                  )}
                 </div>
               </div>
             </div>

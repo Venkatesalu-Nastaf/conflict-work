@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "ratename", headerName: "Rate Validity", width: 130 },
-    { field: "ReMarks", headerName: "Remarks", width: 130 },
+    { field: "Remarks", headerName: "Remarks", width: 130 },
     { field: "active", headerName: "Active", width: 130 },
     { field: "fromdate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
     { field: "todate", headerName: "To Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
@@ -29,8 +29,8 @@ const useRatevalidity = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
-
+    const [infoMessage, setInfoMessage] = useState({});
+    const [isEditMode, setIsEditMode] = useState(false);
 
     // for page permission
 
@@ -42,8 +42,7 @@ const useRatevalidity = () => {
                 const currentPageName = 'Rate Type';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -132,7 +131,7 @@ const useRatevalidity = () => {
         ratename: '',
         fromdate: '',
         todate: '',
-        ReMarks: '',
+        Remarks: '',
         active: '',
 
     });
@@ -163,12 +162,18 @@ const useRatevalidity = () => {
     };
 
     const handleDateChange = (date, name) => {
-        const formattedDate = dayjs(date).format('DD/MM/YYYY');
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        const parsedDate = dayjs(formattedDate).format('YYYY-MM-DD');
         setBook((prevBook) => ({
             ...prevBook,
-            [name]: formattedDate,
+            [name]: parsedDate,
+        }));
+        setSelectedCustomerData((prevBook) => ({
+            ...prevBook,
+            [name]: parsedDate,
         }));
     };
+
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
@@ -176,16 +181,18 @@ const useRatevalidity = () => {
             ratename: '',
             fromdate: '',
             todate: '',
-            ReMarks: '',
+            Remarks: '',
             active: '',
 
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
     const handleAdd = async () => {
         const permissions = checkPagePermission();
@@ -208,11 +215,53 @@ const useRatevalidity = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            // Display a warning or prevent the action
             setInfo(true);
             setInfoMessage("You do not have permission.");
         }
     };
+
+    const handleEdit = async (driverid) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.driverid === driverid);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+
+            // Format the date fields to match the expected format for your backend
+            updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
+            updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
+
+            await axios.put(`http://localhost:8081/ratevalidity/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            setRows([]);
+        } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+    useEffect(() => {
+        const handlelist = async () => {
+            if (permissions.read) {
+                const response = await axios.get('http://localhost:8081/ratevalidity');
+                const data = response.data;
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                } else {
+                    setRows([]);
+                }
+            }
+        }
+
+        handlelist();
+    }, [permissions]);
 
     const handleClick = async (event, actionName, driverid) => {
         event.preventDefault();
@@ -224,7 +273,11 @@ const useRatevalidity = () => {
                     const response = await axios.get('http://localhost:8081/ratevalidity');
                     const data = response.data;
                     if (data.length > 0) {
-                        setRows(data);
+                        const rowsWithUniqueId = data.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        setRows(rowsWithUniqueId);
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                     } else {
@@ -258,6 +311,11 @@ const useRatevalidity = () => {
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.driverid === driverid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+
+                    // Format the date fields to match the expected format for your backend
+                    updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
+                    updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
+
                     await axios.put(`http://localhost:8081/ratevalidity/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
@@ -303,7 +361,8 @@ const useRatevalidity = () => {
         handleRowClick,
         handleAdd,
         hidePopup,
-        
+        isEditMode,
+        handleEdit,
         formData,
         handleDateChange,
         columns,

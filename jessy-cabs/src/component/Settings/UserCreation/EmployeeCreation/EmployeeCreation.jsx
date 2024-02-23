@@ -90,6 +90,8 @@ const EmployeeCreation = () => {
     handleClickShowPassword,
     passwordsMatch,
     columns,
+    isEditMode,
+    handleEdit,
   } = useEmplyeecreation();
 
   useEffect(() => {
@@ -266,11 +268,22 @@ const EmployeeCreation = () => {
                 </FormControl>
               </div>
             </div>
-            <div className="input-field">
+            {/* <div className="input-field">
               <div className="input" style={{ width: "160px" }}>
                 <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
               </div>
+            </div> */}
+
+            <div className="input-field">
+              <div className="input" style={{ width: "160px" }}>
+                {isEditMode ? (
+                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                )}
+              </div>
             </div>
+
           </div>
           {error &&
             <div className='alert-popup Error' >

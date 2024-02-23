@@ -139,9 +139,6 @@ const Booking = () => {
     currentYear,
     setTripTime,
     handleClickHide,
-    handleUpload,
-    handleGetMail,
-    attachedImage,
     actions,
     searchText,
     setSearchText,
@@ -159,8 +156,9 @@ const Booking = () => {
     reversedRows,
     columns,
     handletableClick,
-    popupOpenmail,
-    // ... (other state variables and functions)
+    setFile, dialogOpen, handleCloseDialog, allFile, handleButtonClick,
+    isEditMode,
+    handleEdit,
   } = useBooking();
 
   useEffect(() => {
@@ -637,9 +635,9 @@ const Booking = () => {
                     value={
                       formData.startdate || selectedCustomerData.startdate
                         ? dayjs(selectedCustomerData.startdate)
-                        : null || book.startdate
+                        : dayjs() || book.startdate
                           ? dayjs(book.startdate)
-                          : null
+                          : dayjs()
                     }
                     format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, "startdate")}
@@ -1077,6 +1075,7 @@ const Booking = () => {
                       <DatePicker
                         value={book.tripdate ? dayjs(book.tripdate) : dayjs()}
                         onChange={(date) => handleDateChange(date, "tripdate")}
+                        format="DD/MM/YYYY"
                       >
                         {({ inputProps, inputRef }) => (
                           <TextField
@@ -1118,91 +1117,32 @@ const Booking = () => {
             </div>
             <div className="inpu-field">
               <div className="input radio">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    Email
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="emaildoggle"
-                    autoComplete="new-password"
-                    value={
-                      formData.emaildoggle ||
-                      selectedCustomerData.emaildoggle ||
-                      book.emaildoggle ||
-                      ""
-                    }
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel
-                      value="Local"
-                      control={<Radio />}
-                      label="Local"
-                    />
-                    <FormControlLabel
-                      value="service"
-                      control={<Radio />}
-                      label="Service"
-                    />
-                  </RadioGroup>
-                </FormControl>
               </div>
               <div className="input-field">
                 <div className="input">
-                  <Button
-                    variant="contained"
-                    onClick={handleUpload}
-                    disabled={isFieldReadOnly("new")}
-                  >
+                  <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
                     Attach File
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setFile(e.target.files[0])}
+                    />
                   </Button>
                 </div>
                 <div className="input">
-                  <Button
-                    variant="outlined"
-                    onClick={handleGetMail}
-                    disabled={isFieldReadOnly("new")}
-                  >
+                  <Button variant="outlined" onClick={handleButtonClick} disabled={isFieldReadOnly("new")} >
                     View
                   </Button>
                 </div>
               </div>
-              <Dialog open={popupOpenmail} onClose={handlePopupClose}>
+              <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogContent>
-                  {attachedImage &&
-                    attachedImage.map((file, index) =>
-                      file.mimetype === "application/pdf" ? (
-                        <embed
-                          key={index}
-                          src={`http://localhost:8081/pdf/${file.path}`}
-                          type="application/pdf"
-                          width="100%"
-                          height="500px"
-                        />
-                      ) : (
-                        <img
-                          key={index}
-                          src={`http://localhost:8081/images/${file.path}`}
-                          alt={`Attached File ${index}`}
-                          style={{
-                            maxWidth: "100%",
-                            maxHeight: "500px",
-                            marginBottom: "10px",
-                          }}
-                        />
-                      )
-                    )}
+                  <div>
+                    {Array.isArray(allFile) && allFile.map((img, index) => (
+                      <embed key={index} src={`http://localhost:8081/images/` + img.fileName} type="application/pdf" width="100%" height="600px" />
+                    ))}
+                  </div>
                 </DialogContent>
-                <DialogActions>
-                  <Button
-                    onClick={handlePopupClose}
-                    variant="contained"
-                    color="primary"
-                  >
-                    OK
-                  </Button>
-                </DialogActions>
               </Dialog>
             </div>
           </div>
@@ -1211,6 +1151,7 @@ const Booking = () => {
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
+            direction="left"
           >
             {actions.map((action) => (
               <SpeedDialAction
@@ -1386,13 +1327,13 @@ const Booking = () => {
               />
             </div>
             <div className="input" style={{ width: "100px" }}>
-              <Button
-                variant="contained"
-                onClick={handleAdd}
-                disabled={isFieldReadOnly("new")}
-              >
-                Add
-              </Button>
+              <div className="input" style={{ width: "160px" }}>
+                {isEditMode ? (
+                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                )}
+              </div>
             </div>
           </div>
           <Dialog open={popupOpen} onClose={handlePopupClose}>

@@ -10,10 +10,7 @@ const PrintableInvoice = ({ tripSheetData, organizationdata, selectedImage, book
       <article>
         <div className='invoice-container-header'>
           <div className="logo-image-invoice">
-            {/* <img src={Logo} alt="logo" /> */}
-
             <img src={Array.isArray(selectedImage) ? selectedImage[0] : selectedImage} alt={"Logo"} />
-
           </div>
           <div className="invoice-address">
             <address >

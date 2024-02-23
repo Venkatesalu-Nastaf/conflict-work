@@ -88,9 +88,9 @@ const MailageDetails = () => {
     calculateMileage,
     mileage,
     columns,
+    isEditMode,
+    handleEdit,
 
-
-    // ... (other state variables and functions)
   } = useMailagedetails();
 
   useEffect(() => {
@@ -135,7 +135,7 @@ const MailageDetails = () => {
                   />
                 </div>
                 <div className="input">
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Fill Date"
                       value={selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null || book.filldate ? dayjs(book.filldate) : dayjs()}
@@ -146,10 +146,22 @@ const MailageDetails = () => {
                         <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.filldate} />
                       )}
                     </DatePicker>
+                  </LocalizationProvider> */}
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Fill Date"
+                      format="DD/MM/YYYY"
+                      value={selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null}
+                      onChange={(date) => handleDateChange(date, 'filldate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='filldate' value={selectedCustomerData.filldate} />
+                      )}
+                    </DatePicker>
                   </LocalizationProvider>
                 </div>
                 <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Empty Date"
                       value={selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null || book.emptydate ? dayjs(book.emptydate) : dayjs()}
@@ -158,6 +170,18 @@ const MailageDetails = () => {
                     >
                       {({ inputProps, inputRef }) => (
                         <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.emptydate} />
+                      )}
+                    </DatePicker>
+                  </LocalizationProvider> */}
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Empty Date"
+                      format="DD/MM/YYYY"
+                      value={selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null}
+                      onChange={(date) => handleDateChange(date, 'emptydate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} name='emptydate' value={selectedCustomerData.emptydate} />
                       )}
                     </DatePicker>
                   </LocalizationProvider>
@@ -257,9 +281,16 @@ const MailageDetails = () => {
                   </Button>
                 </div>
                 <div className="input" style={{ width: "70px" }}>
-                  <Button color="primary" variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>
+                  {/* <Button color="primary" variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>
                     Add
-                  </Button>
+                  </Button> */}
+                  <div className="input" style={{ width: "160px" }}>
+                    {isEditMode ? (
+                      <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                    ) : (
+                      <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -338,7 +369,6 @@ const MailageDetails = () => {
                   columns={columns}
                   onRowClick={handleRowClick}
                   pageSize={5}
-                  // checkboxSelection
                 />
               </div>
             </div>

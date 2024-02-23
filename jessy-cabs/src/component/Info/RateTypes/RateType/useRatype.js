@@ -19,7 +19,7 @@ const columns = [
 const useRatype = () => {
 
     const user_id = localStorage.getItem('useridno');
-
+    const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -34,7 +34,7 @@ const useRatype = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
 
 
     // for page permission
@@ -47,8 +47,7 @@ const useRatype = () => {
                 const currentPageName = 'Rate Type';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -230,11 +229,13 @@ const useRatype = () => {
             closetime: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
     const handleAdd = async () => {
         const permissions = checkPagePermission();
@@ -268,6 +269,45 @@ const useRatype = () => {
         }
     };
 
+    useEffect(() => {
+        const handlelist = async () => {
+            if (permissions.read) {
+                const response = await axios.get('http://localhost:8081/ratetype');
+                const data = response.data;
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                } else {
+                    setRows([]);
+                }
+            }
+        }
+
+        handlelist();
+    }, [permissions]);
+
+    const handleEdit = async (driverid) => {
+        const permissions = checkPagePermission();
+
+        if (permissions.read && permissions.modify) {
+            const selectedCustomer = rows.find((row) => row.driverid === driverid);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            await axios.put(`http://localhost:8081/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            setRows([]);
+        } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+    };
+
+
     const handleClick = async (event, actionName, driverid) => {
         event.preventDefault();
         try {
@@ -278,7 +318,11 @@ const useRatype = () => {
                     const response = await axios.get('http://localhost:8081/ratetype');
                     const data = response.data;
                     if (data.length > 0) {
-                        setRows(data);
+                        const rowsWithUniqueId = data.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        setRows(rowsWithUniqueId);
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                     } else {
@@ -336,7 +380,6 @@ const useRatype = () => {
         }
     });
 
-
     return {
         selectedCustomerData,
         selectedCustomerId,
@@ -365,6 +408,8 @@ const useRatype = () => {
         handleExcelDownload,
         handlePdfDownload,
         columns,
+        isEditMode,
+        handleEdit,
     };
 };
 

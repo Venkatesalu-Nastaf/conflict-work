@@ -33,7 +33,7 @@ const useVehicleinfo = () => {
             width: 130,
             renderCell: (params) => (
                 <Button
-                    onClick={() => handleButtonClick(params.row.image, params)}
+                    onClick={() => handleButtonClick(params)}
                     aria-label="open-dialog"
                 >
                     <Button variant="contained" color="primary">
@@ -74,7 +74,13 @@ const useVehicleinfo = () => {
     const showPdf = (showID) => {
         axios.get(`http://localhost:8081/vehicle-docView/${showID}`)
             .then(res => {
-                setAllFile(res.data)
+                if (res.data.length > 0) {
+                    setAllFile(res.data);
+                    setDialogOpen(true);
+                } else {
+                    setError(true);
+                    setErrorMessage('No data found');
+                }
             })
             .catch()
     }
@@ -84,9 +90,9 @@ const useVehicleinfo = () => {
     };
 
     const [dialogOpen, setDialogOpen] = useState(false);
-    const handleButtonClick = (image, params) => {
+    const handleButtonClick = (params) => {
         const { vehicleId } = params.row;
-        setDialogOpen(true);
+        // setDialogOpen(true);
         showPdf(vehicleId);
     };
 
@@ -590,6 +596,31 @@ const useVehicleinfo = () => {
         setIsEditMode(true);
     }, []);
 
+    //ayyanar---------to delte dialog box image
+
+    const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
+
+    const handleClosedeleteDialog = () => {
+        setDialogdeleteOpen(false);
+    };
+
+    const [imagedata, setImagedata] = useState(null);
+
+    const handleimagedelete = (imageName) => {
+        setImagedata(imageName)
+        setDialogdeleteOpen(true);
+    };
+
+    const handleContextMenu = () => {
+        axios.delete('http://localhost:8081/vehicle_documents/' + imagedata)
+            .then(res => {
+                console.log("deleted")
+            })
+            .catch(err => console.log(err))
+        setDialogdeleteOpen(false);
+        setDialogOpen(false);
+    };
+
 
     return {
         selectedCustomerData,
@@ -633,6 +664,7 @@ const useVehicleinfo = () => {
         dialogOpen,
         isEditMode,
         handleEdit,
+        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
     };
 };
 

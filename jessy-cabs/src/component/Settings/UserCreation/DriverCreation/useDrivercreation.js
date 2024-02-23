@@ -84,7 +84,7 @@ const useDrivercreation = () => {
             //ayyanar
             renderCell: (params) => (
                 <Button
-                    onClick={() => handleButtonClick(params.row.image, params)}
+                    onClick={() => handleButtonClick(params)}
                     aria-label="open-dialog"
                 >
                     <Button variant="contained" color="primary">
@@ -243,16 +243,22 @@ const useDrivercreation = () => {
     const showPdf = (showID) => {
         axios.get(`http://localhost:8081/pdf-view/${showID}`)
             .then(res => {
-                setAllFile(res.data)
+                if (res.data.length > 0) {
+                    setAllFile(res.data);
+                    setDialogOpen(true);
+                } else {
+                    setError(true);
+                    setErrorMessage('No data found');
+                }
             })
             .catch()
     }
 
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    const handleButtonClick = (image, params) => {
+    const handleButtonClick = (params) => {
         const { userid } = params.row;
-        setDialogOpen(true);
+        // setDialogOpen(true);
         showPdf(userid);
     };
 
@@ -502,6 +508,31 @@ const useDrivercreation = () => {
         setPasswordsMatch(password !== confirmPassword);
     };
 
+    //ayyanar---------to delte dialog box image
+
+    const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
+
+    const handleClosedeleteDialog = () => {
+        setDialogdeleteOpen(false);
+    };
+
+    const [imagedata, setImagedata] = useState(null);
+
+    const handleimagedelete = (imageName) => {
+        setImagedata(imageName)
+        setDialogdeleteOpen(true);
+    };
+
+    const handleContextMenu = () => {
+        axios.delete('http://localhost:8081/driver_proof/' + imagedata)
+            .then(res => {
+                console.log("deleted")
+            })
+            .catch(err => console.log(err))
+        setDialogdeleteOpen(false);
+        setDialogOpen(false);
+    };
+
     return {
         selectedCustomerData,
         selectedCustomerId,
@@ -534,6 +565,7 @@ const useDrivercreation = () => {
         handleCloseDialog, dialogOpen, allFile, setFile, setLicencepdf,
         isEditMode,
         handleEdit,
+        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
     };
 };
 

@@ -27,7 +27,6 @@ const useEmployee = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const handleButtonClick = (image, params) => {
         const { empid } = params.row;
-        setDialogOpen(true);
         showPdf(empid);
     };
 
@@ -300,7 +299,13 @@ const useEmployee = () => {
     const showPdf = (showID) => {
         axios.get(`http://localhost:8081/employee-docView/${showID}`)
             .then(res => {
-                setAllFile(res.data)
+                if (res.data.length > 0) {
+                    setAllFile(res.data);
+                    setDialogOpen(true);
+                } else {
+                    setError(true);
+                    setErrorMessage('No data found');
+                }
             })
             .catch()
     }
@@ -480,10 +485,38 @@ const useEmployee = () => {
         }
     };
 
-    const handleContextMenu = (e, img) => {
-        e.preventDefault();
-        console.log("image right clicked");
+    // const handleContextMenu = (e, img) => {
+    //     e.preventDefault();
+    //     console.log("image right clicked");
+    // };
+
+
+
+    //ayyanar---------
+
+    const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
+
+    const handleClosedeleteDialog = () => {
+        setDialogdeleteOpen(false);
     };
+
+    const [imagedata, setImagedata] = useState(null);
+
+    const handleimagedelete = (imageName) => {
+        setImagedata(imageName)
+        setDialogdeleteOpen(true);
+    };
+
+    const handleContextMenu = () => {
+        axios.delete('http://localhost:8081/image-delete/' + imagedata)
+            .then(res => {
+                console.log("deleted")
+            })
+            .catch(err => console.log(err))
+        setDialogdeleteOpen(false);
+        setDialogOpen(false);
+    };
+
 
     return {
         selectedCustomerData,
@@ -513,9 +546,11 @@ const useEmployee = () => {
         searchText,
         setSearchText,
         handleShowAll,
-        allFile, handleCloseDialog, dialogOpen, setFile, handleContextMenu,
+        allFile, handleCloseDialog, dialogOpen, setFile,
         isEditMode,
         handleEdit,
+        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
+
     };
 };
 

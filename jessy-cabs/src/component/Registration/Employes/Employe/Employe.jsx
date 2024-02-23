@@ -102,9 +102,10 @@ const Employe = () => {
     columns,
     searchText,
     setSearchText,
-    handleShowAll, allFile, handleCloseDialog, dialogOpen, setFile, handleContextMenu,
+    handleShowAll, allFile, handleCloseDialog, dialogOpen, setFile,
     isEditMode,
     handleEdit,
+    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
   } = useEmployee();
 
   useEffect(() => {
@@ -516,43 +517,39 @@ const Employe = () => {
               pageSize={5}
             />
           </div>
-          {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+
+          <Dialog open={dialogOpen} onClose={handleCloseDialog} >
             <DialogContent>
-              <div>
+              <div style={{ position: 'relative' }}>
                 {Array.isArray(allFile) && allFile.map((img, index) => (
-                  <embed key={index} src={`http://localhost:8081/images/` + img.fileName} type="application/pdf" width="100%" height="600px" />
-                ))}
-              </div>
-            </DialogContent>
-          </Dialog> */}
-          {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-            <DialogContent>
-              <div>
-                {Array.isArray(allFile) && allFile.map((img, index) => (
-                  <div key={index} onContextMenu={(e) => handleContextMenu(e, img)}>
+                  <div key={index} style={{ position: 'relative' }}>
                     <embed src={`http://localhost:8081/images/` + img.fileName} type="application/pdf" width="100%" height="600px" />
-                  </div>
-                ))}
-              </div>
-            </DialogContent>
-          </Dialog> */}
-          <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-            <DialogContent>
-              <div>
-                {Array.isArray(allFile) && allFile.map((img, index) => (
-                  <div key={index}>
-                    <embed
-                      src={`http://localhost:8081/images/` + img.fileName}
-                      type="application/pdf"
-                      width="100%"
-                      height="600px"
-                      onContextMenu={(e) => handleContextMenu(e, img)}
-                    />
+                    <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} />
                   </div>
                 ))}
               </div>
             </DialogContent>
           </Dialog>
+
+
+          <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
+            <DialogContent>
+              <div>
+                <h3>are you sure you want to delete</h3>
+                <div>
+                  <Button onClick={handleContextMenu}>yes</Button>
+                  <Button onClick={handleClosedeleteDialog}>No</Button>
+                </div>
+
+              </div>
+
+
+            </DialogContent>
+          </Dialog>
+
+
+
+
         </div>
       </form>
     </div>

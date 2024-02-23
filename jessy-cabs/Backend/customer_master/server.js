@@ -273,8 +273,8 @@ app.post('/login', (req, res) => {
   });
 });
 // for save map image
-const basemapImagePath = path.join(__dirname, 'path_to_save_mapimages'); 
-app.post('/api/savemapimage', (req, res) => { 
+const basemapImagePath = path.join(__dirname, 'path_to_save_mapimages');
+app.post('/api/savemapimage', (req, res) => {
   const { mapData } = req.body;
   const base64Data = mapData.replace(/^data:image\/png;base64,/, '');
   const imageBuffer = Buffer.from(base64Data, 'base64');
@@ -944,6 +944,43 @@ app.get('/booking-docView/:id', (req, res) => {
 })
 
 ///------
+
+/////---image delete --for register ->employee- TO Delete
+// TO Delete
+app.delete('/image-delete/:filename', (req, res) => {
+  const sql = "delete from rigister_employee_doc where fileName=?";
+  const fileName = req.params.filename;
+  console.log("delete file name :", fileName)
+  db.query(sql, [fileName], (err, result) => {
+    if (err) return res.json({ Message: "Error inside serevre" });
+    return res.json(result);
+  })
+})
+// ------------------------
+/////---image delete --for register ->supplier-vehicle- TO Delete
+// TO Delete
+app.delete('/vehicle_documents/:filename', (req, res) => {
+  const sql = "delete from vehicle_documents where fileName=?";
+  const fileName = req.params.filename;
+  console.log("delete file name :", fileName)
+  db.query(sql, [fileName], (err, result) => {
+    if (err) return res.json({ Message: "Error inside serevre" });
+    return res.json(result);
+  })
+})
+
+/////---image delete --for register ->employee- TO Delete
+// TO Delete
+app.delete('/driver_proof/:filename', (req, res) => {
+  const sql = "delete from driver_proof where fileName=?";
+  const fileName = req.params.filename;
+  console.log("delete file name :", fileName)
+  db.query(sql, [fileName], (err, result) => {
+    if (err) return res.json({ Message: "Error inside serevre" });
+    return res.json(result);
+  })
+})
+
 
 const port = 8081;
 app.listen(port, () => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./MainDashboard.css";
 import Badge from '@mui/material/Badge';
-// import Avatar from '@mui/material/Avatar';
+import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';
 import Sidebar from "../MainDash/Sildebar/Slidebar";
 import { useNavigate, Outlet } from "react-router-dom";
@@ -13,6 +13,8 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { ThemesProvider } from '../../UserSettings/Themes/ThemesContext';
 import { useUser } from '../../form/UserContext';
 import Button from "@mui/material/Button";
+import { useData } from './DataContext'
+import axios from "axios";
 
 //dialog box
 import Dialog from '@material-ui/core/Dialog';
@@ -20,6 +22,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
 const MainDashboard = () => {
+
+  const { sharedData } = useData();
+  console.log("icon image maindashbord :", sharedData)
+
+
+
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const { selectedTheme } = useThemes();
@@ -27,7 +35,7 @@ const MainDashboard = () => {
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
-  // const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -180,6 +188,22 @@ const MainDashboard = () => {
 
   // const storedImageUrls = JSON.parse(localStorage.getItem('selectedprofileImage'));
 
+  useEffect(() => {
+    const handleImageView = () => {
+      const userid = localStorage.getItem('useridno');
+      axios.get(`http://localhost:8081/userprofileview/${userid}`)
+        .then(res => {
+          if (res.status === 200) {
+            setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
+          } else {
+            const timer = setTimeout(handleImageView, 100);
+            return () => clearTimeout(timer);
+          }
+        })
+    };
+    handleImageView();
+  }, [sharedData]);
+
   return (
     <section className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme}`}>
       <div className="glass">
@@ -191,7 +215,8 @@ const MainDashboard = () => {
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               variant="dot"
             >
-              {/* <Avatar alt="userimage" src={logoImage} /> */}
+
+              <Avatar alt="userimage" src={`http://localhost:8081/images/${selectedImage}`} />
               {/* <Avatar
                 alt="userimage"
                 // src={selectedImage}
@@ -223,6 +248,7 @@ const MainDashboard = () => {
         </div>
         <Outlet />
       </div>
+      {/* <h1>shared data:{sharedData}</h1> */}
       <Dialog open={popupOpen} onClose={handlePopupClose}>
         <DialogContent>
           <p>Do you want to logout</p>

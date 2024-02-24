@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useData } from '../../Dashboard/Maindashboard/DataContext';
 
 const useUserinfo = () => {
+
+    const { sharedData, setSharedData } = useData(); // -->  its for context for image
 
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
@@ -80,37 +83,7 @@ const useUserinfo = () => {
         event.preventDefault();
     };
 
-    useEffect(() => {
-        const storedImage = localStorage.getItem('uploadedImage');
-        if (storedImage) {
-            setSelectedImage(storedImage);
-        }
-    }, []);
-
-    // const handleUpload = () => {
-    //     const input = document.createElement('input');
-    //     input.type = 'file';
-    //     input.accept = '.pdf, .jpg, .jpeg, .png';
-    //     input.onchange = handleFileChange;
-    //     input.click();
-    // };
-    // //file upload
-    // const handleFileChange = async (event) => {
-    //     const file = event.target.files[0];
-    //     if (!file) return;
-    //     setSelectedImage(file);
-    //     const formDataUpload = new FormData();
-    //     formDataUpload.append('file', file);
-    //     formDataUpload.append('userid', selectedCustomerData[0]?.userid || book.userid || storeUserId);
-    //     try {
-    //         const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-    //         const imageUrl = response.data.imageUrl;
-    //         setSelectedImage(imageUrl);
-    //         localStorage.setItem('uploadedImage', imageUrl);
-    //     } catch {
-    //     }
-    // };
-
+    // profile image upload--------------------------------------
 
     const handleUpload = () => {
         const input = document.createElement('input');
@@ -123,8 +96,17 @@ const useUserinfo = () => {
     const handleFileChange = (event) => {
         const userid = selectedCustomerData[0]?.userid || book.userid || storeUserId;
         const file = event.target.files[0];
+        // setSharedData(event.target.files[0].name);
+
+
         if (!file) return;
+
+        setSharedData(file.name);
+        console.log("context data :", sharedData)
+
         setSelectedImage(file)
+        console.log("selectedImage :", selectedImage)
+
         if (file) { // Ensure a file is selected before uploading
             const formData = new FormData();
             formData.append('image', file);
@@ -132,6 +114,8 @@ const useUserinfo = () => {
             axios.put(`http://localhost:8081/userprofileupload/${userid}`, formData)
         }
     };
+
+
 
     useEffect(() => {
         const handleImageView = () => {
@@ -149,36 +133,9 @@ const useUserinfo = () => {
         handleImageView();
     }, [selectedImage]);
 
-    //end file upload  
+    /// end profile upload-------------------------------------------------
 
-    const handledelete = async () => {
-        await axios.delete(`http://localhost:8081/userprofiledelete/${selectedCustomerData?.userid || book.userid}`);
-        setSuccess(true);
-        setSuccessMessage("Successfully updated");
-    };
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const userid = localStorage.getItem('useridno');
-    //             if (!userid) {
-    //                 return;
-    //             }
-    //             const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
-
-    //             if (response.status === 200) {
-    //                 const data = await response.json();
-    //                 const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-    //                 setSelectedImage(attachedImageUrls);
-    //             } else {
-    //                 const timer = setTimeout(fetchData, 2000);
-    //                 return () => clearTimeout(timer);
-    //             }
-    //         } catch {
-    //         }
-    //     };
-    //     fetchData();
-    // }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -266,7 +223,6 @@ const useUserinfo = () => {
         handleChange,
         hidePopup,
         selectedImage,
-        handledelete,
         editMode,
         handleFileChange,
         toggleEditMode,

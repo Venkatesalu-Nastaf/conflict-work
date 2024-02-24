@@ -47,12 +47,10 @@ const UserSetting = ({ userid }) => {
         infoMessage,
         book,
         handleClick,
-        // handledelete,
         handleChange,
         hidePopup,
         selectedImage,
         editMode,
-        // handleFileChange,
         toggleEditMode,
         showPasswords,
         handleClickShowPasswords,
@@ -90,34 +88,10 @@ const UserSetting = ({ userid }) => {
                                 </div>
                                 <div className="input-field">
                                     <div className='input'>
-                                        {editMode ? (
-                                            <>
-                                                <div className='input-field'>
-                                                    {/* <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode || !!selectedImage}>
-                                                        update
-                                                        <ModeEditIcon />
-                                                        <input
-                                                            onChange={handleFileChange}
-                                                            onClick={handleUpload}
-                                                            // type="file"
-                                                            style={{ display: "none" }}
-                                                        />
-                                                    </Button> */}
-                                                    <Button color="primary" size='small' variant="contained" onClick={handleUpload} component="label" disabled={!editMode} > update</Button>
-                                                </div>
-                                                {/* <div className='input-field'>
-                                                    <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode} onClick={handledelete}>
-                                                        Remove
-                                                        <DeleteIcon />
-                                                    </Button>
-                                                </div> */}
-                                            </>
-                                        ) : (
-                                            <div className="user-photo-edit">
-                                                <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
-                                                </IconButton>
-                                            </div>
-                                        )}
+                                        {/* //image button */}
+                                        <div className='input-field'>
+                                            <Button color="primary" size='small' variant="contained" onClick={handleUpload} component="label" > update</Button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

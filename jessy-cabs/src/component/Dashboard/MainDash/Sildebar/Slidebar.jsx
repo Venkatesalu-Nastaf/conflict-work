@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useData } from '../../MainDash/Sildebar/DataContext2';
 import axios from 'axios';
 import "./Sidebar.css";
 // import Logo from "./Logo-Img/logo.png";  
 import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
 import Badge from '@mui/material/Badge';
-import Avatar from '@mui/material/Avatar';
+// import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';
-import logoImage from "../Sildebar/Logo-Img/logo.png";
+// import logoImage from "../Sildebar/Logo-Img/logo.png";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -42,7 +43,6 @@ const Sidebar = () => {
   const location = useLocation();
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
   const navigate = useNavigate();
   const currentPath = location.pathname;
   const [expanded, setExpanded] = useState(true); const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -54,6 +54,36 @@ const Sidebar = () => {
 
   const user_id = localStorage.getItem('useridno');
   const [permissions, setPermissions] = useState({});
+
+  //--------------------------to show logo 
+
+  const { sharedData } = useData();
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    const handleImageView = async () => {
+      const organizationname = localStorage.getItem('usercompany');
+      await axios.get(`http://localhost:8081/log-imageview/${organizationname}`)
+        .then(res => {
+          if (res.status === 200) {
+            setSelectedImage(res.data[0]?.fileName); // Assuming res.data.prof contains the image data
+
+          } else {
+            const timer = setTimeout(handleImageView, 100);
+            return () => clearTimeout(timer);
+          }
+        })
+    };
+    handleImageView();
+    handleImageView();
+
+  }, [sharedData]);
+
+  console.log("slide bar context ", sharedData)
+  console.log("slidebar selected  selectedImage :", selectedImage)
+
+
+  //------------------------------------------
 
   // const pagename = localStorage.getItem('selectedMenuItem');
 
@@ -158,19 +188,14 @@ const Sidebar = () => {
 
         const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
 
-        // Check if the response status is 200
         if (response.status === 200) {
           const data = await response.json();
           const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
 
-          // Store image URLs in local storage
           localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
 
-          setSelectedImage(attachedImageUrls);
         } else {
-          // If the response status is not 200, wait for 2 seconds and fetch again
           const timer = setTimeout(fetchData, 2000);
-          // Clear the timer to avoid memory leaks
           return () => clearTimeout(timer);
         }
       } catch (error) {
@@ -182,7 +207,7 @@ const Sidebar = () => {
     fetchData();
   }, []);
 
-  const storedImageUrls = JSON.parse(localStorage.getItem('selectedImage'));
+  // const storedImageUrls = JSON.parse(localStorage.getItem('selectedImage'));
 
   return (
     <>
@@ -198,12 +223,10 @@ const Sidebar = () => {
         variants={sidebarVariants}
         animate={window.innerWidth <= 768 ? `${expanded}` : ""}
       >
-        {/* <div className="logo">
-          <img src={Logo} alt="logo" />
-        </div> */}
+
 
         <div className="logo">
-          <img src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage} alt="" />
+          <img src={`http://localhost:8081/images/${selectedImage}`} alt="" />
         </div>
 
 
@@ -252,14 +275,6 @@ const Sidebar = () => {
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}
           />
-          {/* <MenuItem
-            label="Accounts"
-            to="/home/accounts/expense"
-            menuItemKey="/home/accounts"
-            isActive={isActive}
-            handleMenuItemClick={handleMenuItemClick}
-            icon={AiOutlineSetting}
-          />  */}
           <MenuItem
             label="Settings"
             to={permissions.read && ("/home/settings/usercreation")}
@@ -324,7 +339,10 @@ const Sidebar = () => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 variant="dot"
               >
-                <Avatar alt="userimage" src={logoImage} />
+
+                {/* <Avatar alt="userimage" src={`http://localhost:8081/images/${selectedImage}`} /> */}
+                {/* src={`http://localhost:8081/images/${selectedImage}`} */}
+
               </StyledBadge>
             </div>
 

@@ -112,35 +112,6 @@ router.get('/usercreationgetdata/:value', (req, res) => {
 });
 
 
-// router.delete('/userprofiledelete/:userid', (req, res) => {
-//   const userid = req.params.userid;
-//   db.query('DELETE FROM tripsheetupload WHERE userid = ?', userid, (err, result) => {
-//     if (err) {
-//       return res.status(500).json({ error: "Failed to delete data from MySQL" });
-//     }
-//     if (result.affectedRows === 0) {
-//       return res.status(404).json({ error: "Customer not found" });
-//     }
-//     return res.status(200).json({ message: "Data deleted successfully" });
-//   });
-// });
-
-
-//user profile upload
-
-// router.put('/userprofileupload/:id', upload.single('image'), (req, res) => {
-//   const userId = req.params.id;
-//   const fileName = req.file.filename;
-//   const sql = `UPDATE user_profile SET filename = ? WHERE userid = ?`;
-//   db.query(sql, [fileName, userId], (err, result) => {
-//     if (err) {
-//       return res.status(500).json({ Message: "Error updating profile picture" });
-//     }
-//     return res.status(200).json({ Status: "success" });
-//   });
-// })
-
-
 router.put('/userprofileupload/:id', upload.single('image'), (req, res) => {
   const userId = req.params.id;
   const fileName = req.file.filename;

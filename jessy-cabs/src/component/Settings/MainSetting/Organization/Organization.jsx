@@ -9,7 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import IconButton from '@mui/material/IconButton';
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
@@ -33,7 +33,7 @@ const Organization = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        handledelete,
+        // handledelete,
         book,
         info,
         infoMessage,
@@ -44,11 +44,12 @@ const Organization = () => {
         hidePopup,
         selectedImage,
         editMode,
-        handleFileChange,
+        // handleFileChange,
         handleUpload,
         toggleEditMode,
         handleKeyDown,
-        handleUpdate
+        handleUpdate,
+
 
         // ... (other state variables and functions)
     } = useOrganization();
@@ -71,8 +72,9 @@ const Organization = () => {
                                         <Avatar
                                             sx={{ width: "12ch", height: "12ch" }}
                                             alt="userimage"
+                                            // // src={selectedImage}
                                             // src={selectedImage}
-                                            src={Array.isArray(selectedImage) ? selectedImage[0] : selectedImage}
+                                            src={`http://localhost:8081/images/${selectedImage}`}
                                         >
                                             {selectedImage ? null : (
                                                 <div style={{ 'fontSize': "55px" }}>
@@ -83,32 +85,35 @@ const Organization = () => {
                                     </div>
                                 </div>
                                 <div className="input-field">
-                                    {editMode ? (
-                                        <>
+
+
+                                    {/* <div className='input-field'>
+                                        <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode || !!selectedImage} >
+                                            Logo
+                                            <ModeEditIcon />
+                                            <input
+                                                onChange={handleFileChange}
+                                                onClick={handleUpload}
+                                                style={{ display: "none" }}
+                                            />
+                                        </Button>
+                                    </div>
+                                    <div className='input-field'>
+                                        <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode} onClick={handledelete}>
+                                            Remove
+                                            <DeleteIcon />
+                                        </Button>
+                                    </div> */}
+
+                                    <div className="input-field">
+                                        <div className='input'>
+                                            {/* //image button */}
                                             <div className='input-field'>
-                                                <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode || !!selectedImage} >
-                                                    Logo
-                                                    <ModeEditIcon />
-                                                    <input
-                                                        onChange={handleFileChange}
-                                                        onClick={handleUpload}
-                                                        style={{ display: "none" }}
-                                                    />
-                                                </Button>
+                                                <Button color="primary" size='small' variant="contained" onClick={handleUpload} component="label" > update</Button>
                                             </div>
-                                            <div className='input-field'>
-                                                <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode} onClick={handledelete}>
-                                                    Remove
-                                                    <DeleteIcon />
-                                                </Button>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <div className="user-photo-edit">
-                                            <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
-                                            </IconButton>
                                         </div>
-                                    )}
+                                    </div>
+
                                 </div>
                             </div>
                             <div className='container-organisation-right'>

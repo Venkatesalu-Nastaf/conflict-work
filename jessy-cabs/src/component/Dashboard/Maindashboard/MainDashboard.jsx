@@ -13,7 +13,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { ThemesProvider } from '../../UserSettings/Themes/ThemesContext';
 import { useUser } from '../../form/UserContext';
 import Button from "@mui/material/Button";
-import { useData } from './DataContext'
+import { useData } from './DataContext' //- data contaxt
 import axios from "axios";
 
 //dialog box
@@ -24,7 +24,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 const MainDashboard = () => {
 
   const { sharedData } = useData();
-  console.log("icon image maindashbord :", sharedData)
+  // console.log("icon image maindashbord :", sharedData)
 
 
 
@@ -162,32 +162,7 @@ const MainDashboard = () => {
 
   localStorage.setItem('usercompany', usercompany);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const userid = localStorage.getItem('useridno');
-  //       if (!userid) {
-  //         return;
-  //       }
-  //       const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
-
-  //       if (response.status === 200) {
-  //         const data = await response.json();
-  //         const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-  //         localStorage.setItem('selectedprofileImage', JSON.stringify(attachedImageUrls));
-  //         setSelectedImage(attachedImageUrls);
-  //       } else {
-  //         const timer = setTimeout(fetchData, 2000);
-  //         return () => clearTimeout(timer);
-  //       }
-  //     } catch {
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
-  // const storedImageUrls = JSON.parse(localStorage.getItem('selectedprofileImage'));
-
+  // to show icon image 
   useEffect(() => {
     const handleImageView = () => {
       const userid = localStorage.getItem('useridno');
@@ -195,6 +170,7 @@ const MainDashboard = () => {
         .then(res => {
           if (res.status === 200) {
             setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
+            // console.log("M selectedImage :", selectedImage)
           } else {
             const timer = setTimeout(handleImageView, 100);
             return () => clearTimeout(timer);
@@ -202,7 +178,7 @@ const MainDashboard = () => {
         })
     };
     handleImageView();
-  }, [sharedData]);
+  }, [sharedData, selectedImage]);
 
   return (
     <section className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme}`}>

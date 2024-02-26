@@ -962,7 +962,7 @@ app.delete('/image-delete/:filename', (req, res) => {
 app.delete('/vehicle_documents/:filename', (req, res) => {
   const sql = "delete from vehicle_documents where fileName=?";
   const fileName = req.params.filename;
-  console.log("delete file name :", fileName)
+  // console.log("delete file name :", fileName)
   db.query(sql, [fileName], (err, result) => {
     if (err) return res.json({ Message: "Error inside serevre" });
     return res.json(result);
@@ -974,7 +974,7 @@ app.delete('/vehicle_documents/:filename', (req, res) => {
 app.delete('/driver_proof/:filename', (req, res) => {
   const sql = "delete from driver_proof where fileName=?";
   const fileName = req.params.filename;
-  console.log("delete file name :", fileName)
+  // console.log("delete file name :", fileName)
   db.query(sql, [fileName], (err, result) => {
     if (err) return res.json({ Message: "Error inside serevre" });
     return res.json(result);
@@ -987,12 +987,27 @@ app.delete('/driver_proof/:filename', (req, res) => {
 app.delete('/booking_doc/:filename', (req, res) => {
   const sql = "delete from booking_doc where fileName=?";
   const fileName = req.params.filename;
-  console.log("delete file name :", fileName)
+  // console.log("delete file name :", fileName)
   db.query(sql, [fileName], (err, result) => {
     if (err) return res.json({ Message: "Error inside serevre" });
     return res.json(result);
   })
 })
+
+
+//logo view profile
+
+app.get('/log-imageview/:sharedData', (req, res) => {
+  const imageNAme = req.params.sharedData;
+  console.log("logo name :", imageNAme)
+  const sql = 'select * from organisation_logo where organisation_name=?';
+  db.query(sql, [imageNAme], (err, result) => {
+    if (err) return res.json({ Message: "error" })
+    return res.json(result);
+  })
+})
+
+
 
 const port = 8081;
 app.listen(port, () => {

@@ -638,312 +638,314 @@ function generateUniqueNumber() {
 
 // ----------ayyanar----register->suplier->vehicle info -  docuemnt insert and view-------
 
-// -----------------------insurence ---------------
-const Insurance_storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/images')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
+// // -----------------------insurence ---------------
+// const Insurance_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/images')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
 
-})
+// })
 
-const Insurance_uploadfile = multer({ storage: Insurance_storage });
-app.post('/insurance-pdf/:id', Insurance_uploadfile.single("file"), async (req, res) => {
-  const vehicleId = req.params.id;
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-})
+// const Insurance_uploadfile = multer({ storage: Insurance_storage });
+// app.post('/insurance-pdf/:id', Insurance_uploadfile.single("file"), async (req, res) => {
+//   const vehicleId = req.params.id;
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
+//   db.query(sql, (err, result) => {
+//     if (err) return res.json({ Message: "Error" });
+//     return res.json({ Status: "success" });
+//   })
+// })
 
-// ----------------------Licence----------------------
+// // ----------------------Licence----------------------
 
-const Licence_storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/images')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
+// const Licence_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/images')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
 
-})
+// })
 
-const Licence_uploadfile = multer({ storage: Licence_storage });
-app.post('/licence-pdf/:id', Licence_uploadfile.single("file"), async (req, res) => {
-  const vehicleId = req.params.id;
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-})
-
-
-// ----------------------NationalPermit----------------------
-
-const NationalPermit_storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/images')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
-})
-
-const NationalPermit_uploadfile = multer({ storage: NationalPermit_storage });
-app.post('/nationalPermit-pdf/:id', NationalPermit_uploadfile.single("file"), async (req, res) => {
-  const vehicleId = req.params.id;
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-})
+// const Licence_uploadfile = multer({ storage: Licence_storage });
+// app.post('/licence-pdf/:id', Licence_uploadfile.single("file"), async (req, res) => {
+//   const vehicleId = req.params.id;
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
+//   db.query(sql, (err, result) => {
+//     if (err) return res.json({ Message: "Error" });
+//     return res.json({ Status: "success" });
+//   })
+// })
 
 
-// ----------------------StatePermit----------------------
+// // ----------------------NationalPermit----------------------
 
-const StatePermit_storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/images')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
-})
+// const NationalPermit_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/images')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
 
-const StatePermit_uploadfile = multer({ storage: StatePermit_storage });
-app.post('/statePermit-pdf/:id', StatePermit_uploadfile.single("file"), async (req, res) => {
-  const vehicleId = req.params.id;
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-})
-
-
-// ----------------------Rcbook----------------------
-
-const Rcbook_storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/images')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
-})
-
-const Rcbook_uploadfile = multer({ storage: Rcbook_storage });
-app.post('/rcBook-pdf/:id', Rcbook_uploadfile.single("file"), async (req, res) => {
-  const vehicleId = req.params.id;
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-})
+// const NationalPermit_uploadfile = multer({ storage: NationalPermit_storage });
+// app.post('/nationalPermit-pdf/:id', NationalPermit_uploadfile.single("file"), async (req, res) => {
+//   const vehicleId = req.params.id;
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
+//   db.query(sql, (err, result) => {
+//     if (err) return res.json({ Message: "Error" });
+//     return res.json({ Status: "success" });
+//   })
+// })
 
 
+// // ----------------------StatePermit----------------------
 
-// ----------------------setFcCopy----------------------
+// const StatePermit_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/images')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
 
-const setFcCopy_storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/images')
-
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
-})
-
-const setFcCopy_uploadfile = multer({ storage: setFcCopy_storage });
-app.post('/fcCopy-pdf/:id', setFcCopy_uploadfile.single("file"), async (req, res) => {
-  const vehicleId = req.params.id;
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-})
-
-//-----------------fetch ---------------
-app.get('/vehicle-docView/:id', (req, res) => {
-  const id = req.params.id
-  const sql = 'select * from vehicle_documents where vehicleId=?';
-  db.query(sql, [id], (err, result) => {
-    if (err) return res.json({ Message: "error" })
-    return res.json(result);
-  })
-})
+// const StatePermit_uploadfile = multer({ storage: StatePermit_storage });
+// app.post('/statePermit-pdf/:id', StatePermit_uploadfile.single("file"), async (req, res) => {
+//   const vehicleId = req.params.id;
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
+//   db.query(sql, (err, result) => {
+//     if (err) return res.json({ Message: "Error" });
+//     return res.json({ Status: "success" });
+//   })
+// })
 
 
-///---------------------------------------------------------------------------------------------------------
-//---------------Rigister->employee-------------------
+// // ----------------------Rcbook----------------------
 
-// its for make folder puclicc
-app.use(express.static('public'));
+// const Rcbook_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/images')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
 
-// its for multer file- 1
-const employee_storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/images')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
-})
-
-const employee_uploadfile = multer({ storage: employee_storage });
-
-app.post('/employee-pdf/:id', employee_uploadfile.single("file"), async (req, res) => {
-  const emp_id = req.params.id;
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const sql = `insert into rigister_employee_doc(emp_id,fileName,file_type)values(${emp_id},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-})
-
-//-----------------fetch ---------------
-app.get('/employee-docView/:id', (req, res) => {
-  const id = req.params.id
-  const sql = 'select * from rigister_employee_doc where emp_id=?';
-  db.query(sql, [id], (err, result) => {
-    if (err) return res.json({ Message: "error" })
-    return res.json(result);
-  })
-})
-
-
-// -------------------------------------------------driver page--------------------------------------------------------------
-
-
-app.use(express.static('public'));
-
-// adthar --upload
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/images')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
-
-})
-
-
-const uploadfile = multer({ storage: storage });
-
-app.post('/driver-pdf/:id', uploadfile.single("file"), async (req, res) => {
-  const userId = req.params.id;
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const sql = `insert into driver_proof(driverid,fileName,file_type	)values(${userId},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-})
+// const Rcbook_uploadfile = multer({ storage: Rcbook_storage });
+// app.post('/rcBook-pdf/:id', Rcbook_uploadfile.single("file"), async (req, res) => {
+//   const vehicleId = req.params.id;
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
+//   db.query(sql, (err, result) => {
+//     if (err) return res.json({ Message: "Error" });
+//     return res.json({ Status: "success" });
+//   })
+// })
 
 
 
-//licence 
+// // ----------------------setFcCopy----------------------
 
-const storageLicence = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/images')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
+// const setFcCopy_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/images')
 
-})
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
+
+// const setFcCopy_uploadfile = multer({ storage: setFcCopy_storage });
+// app.post('/fcCopy-pdf/:id', setFcCopy_uploadfile.single("file"), async (req, res) => {
+//   const vehicleId = req.params.id;
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values(${vehicleId},'${fileName}','${fileType}')`;
+//   db.query(sql, (err, result) => {
+//     if (err) return res.json({ Message: "Error" });
+//     return res.json({ Status: "success" });
+//   })
+// })
+
+// //-----------------fetch ---------------
+// app.get('/vehicle-docView/:id', (req, res) => {
+//   const id = req.params.id
+//   const sql = 'select * from vehicle_documents where vehicleId=?';
+//   db.query(sql, [id], (err, result) => {
+//     if (err) return res.json({ Message: "error" })
+//     return res.json(result);
+//   })
+// })
 
 
-const uploadfileLicence = multer({ storage: storageLicence });
+//---------------------------------------------------------------------------------------------------
+// ///---------------------------------------------------------------------------------------------------------
+// //---------------Rigister->employee-------------------
 
-app.post('/driver-licencepdf/:id', uploadfileLicence.single("file"), async (req, res) => {
-  const userId = req.params.id
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const sql = `insert into driver_proof(driverid,fileName,file_type)values(${userId},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-})
+// // its for make folder puclicc
+// app.use(express.static('public'));
+
+// // its for multer file- 1
+// const employee_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/images')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+// })
+
+// const employee_uploadfile = multer({ storage: employee_storage });
+
+// app.post('/employee-pdf/:id', employee_uploadfile.single("file"), async (req, res) => {
+//   const emp_id = req.params.id;
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const sql = `insert into rigister_employee_doc(emp_id,fileName,file_type)values(${emp_id},'${fileName}','${fileType}')`;
+//   db.query(sql, (err, result) => {
+//     if (err) return res.json({ Message: "Error" });
+//     return res.json({ Status: "success" });
+//   })
+// })
+
+// //-----------------fetch ---------------
+// app.get('/employee-docView/:id', (req, res) => {
+//   const id = req.params.id
+//   const sql = 'select * from rigister_employee_doc where emp_id=?';
+//   db.query(sql, [id], (err, result) => {
+//     if (err) return res.json({ Message: "error" })
+//     return res.json(result);
+//   })
+// })
+
+// //--------------------------------------------------------------------------------------
+// // -------------------------------------------------driver  creation page--------------------------------------------------------------
 
 
-//pdf view -
-app.get('/pdf-view/:id', (req, res) => {
-  const id = req.params.id
-  const sql = 'select * from driver_proof where driverid=?';
-  db.query(sql, [id], (err, result) => {
-    if (err) return res.json({ Message: "error" })
-    return res.json(result);
-  })
-})
+// app.use(express.static('public'));
+
+// // adthar --upload
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/images')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+
+// })
+
+
+// const uploadfile = multer({ storage: storage });
+
+// app.post('/driver-pdf/:id', uploadfile.single("file"), async (req, res) => {
+//   const userId = req.params.id;
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const sql = `insert into driver_proof(driverid,fileName,file_type	)values(${userId},'${fileName}','${fileType}')`;
+//   db.query(sql, (err, result) => {
+//     if (err) return res.json({ Message: "Error" });
+//     return res.json({ Status: "success" });
+//   })
+// })
+
+
+
+// //licence 
+
+// const storageLicence = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/images')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
+
+// })
+
+
+// const uploadfileLicence = multer({ storage: storageLicence });
+
+// app.post('/driver-licencepdf/:id', uploadfileLicence.single("file"), async (req, res) => {
+//   const userId = req.params.id
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const sql = `insert into driver_proof(driverid,fileName,file_type)values(${userId},'${fileName}','${fileType}')`;
+//   db.query(sql, (err, result) => {
+//     if (err) return res.json({ Message: "Error" });
+//     return res.json({ Status: "success" });
+//   })
+// })
+
+
+// //pdf view -
+// app.get('/pdf-view/:id', (req, res) => {
+//   const id = req.params.id
+//   const sql = 'select * from driver_proof where driverid=?';
+//   db.query(sql, [id], (err, result) => {
+//     if (err) return res.json({ Message: "error" })
+//     return res.json(result);
+//   })
+// })
+//--------------------------------------------------------------------------------------
 
 //// booking ->booking----------------------------------------
 
-// its for multer file- 1
-const booking_storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/images')
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
-  }
+// // its for multer file- 1
+// const booking_storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/images')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+//   }
 
-})
+// })
 
 
-const booking_uploadfile = multer({ storage: booking_storage });
+// const booking_uploadfile = multer({ storage: booking_storage });
 
-app.post('/bookingpdf/:id', booking_uploadfile.single("file"), async (req, res) => {
-  const booking_id = req.params.id;
+// app.post('/bookingpdf/:id', booking_uploadfile.single("file"), async (req, res) => {
+//   const booking_id = req.params.id;
 
-  const fileName = req.file.filename;
-  const fileType = req.file.mimetype;
-  const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-})
+//   const fileName = req.file.filename;
+//   const fileType = req.file.mimetype;
+//   const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
+//   db.query(sql, (err, result) => {
+//     if (err) return res.json({ Message: "Error" });
+//     return res.json({ Status: "success" });
+//   })
+// })
 
-// booking_id	fileName	file_type	
+// // booking_id	fileName	file_type	
 
-//-----------------fetch ---------------
-app.get('/booking-docView/:id', (req, res) => {
-  const id = req.params.id
-  const sql = 'select * from booking_doc where booking_id=?';
-  db.query(sql, [id], (err, result) => {
-    if (err) return res.json({ Message: "error" })
-    return res.json(result);
-  })
-})
+// //-----------------fetch ---------------
+// app.get('/booking-docView/:id', (req, res) => {
+//   const id = req.params.id
+//   const sql = 'select * from booking_doc where booking_id=?';
+//   db.query(sql, [id], (err, result) => {
+//     if (err) return res.json({ Message: "error" })
+//     return res.json(result);
+//   })
+// })
 
-///------
+// ///------
 
 /////---image delete --for register ->employee- TO Delete
 // TO Delete
@@ -995,11 +997,11 @@ app.delete('/booking_doc/:filename', (req, res) => {
 })
 
 
-//logo view profile
+//company logo-------------------
 
 app.get('/log-imageview/:sharedData', (req, res) => {
   const imageNAme = req.params.sharedData;
-  console.log("logo name :", imageNAme)
+  // console.log("logo name :", imageNAme)
   const sql = 'select * from organisation_logo where organisation_name=?';
   db.query(sql, [imageNAme], (err, result) => {
     if (err) return res.json({ Message: "error" })

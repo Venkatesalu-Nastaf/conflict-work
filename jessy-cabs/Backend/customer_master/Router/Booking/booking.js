@@ -4,6 +4,8 @@ const nodemailer = require('nodemailer');
 const db = require('../../../db');
 const multer = require('multer');
 const moment = require('moment'); // or import dayjs from 'dayjs';
+// const multer = require('multer');
+const path = require('path');
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -313,5 +315,49 @@ router.get('/table-for-booking', (req, res) => {
         return res.status(200).json(result);
     });
 });
+
+
+/// booking ->booking----------------------------------------
+
+// its for multer file- 1
+const booking_storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/images')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+    }
+
+})
+
+
+const booking_uploadfile = multer({ storage: booking_storage });
+
+router.post('/bookingpdf/:id', booking_uploadfile.single("file"), async (req, res) => {
+    const booking_id = req.params.id;
+
+    const fileName = req.file.filename;
+    const fileType = req.file.mimetype;
+    const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
+    db.query(sql, (err, result) => {
+        if (err) return res.json({ Message: "Error" });
+        return res.json({ Status: "success" });
+    })
+})
+
+// booking_id	fileName	file_type	
+
+//-----------------fetch ---------------
+router.get('/booking-docView/:id', (req, res) => {
+    const id = req.params.id
+    const sql = 'select * from booking_doc where booking_id=?';
+    db.query(sql, [id], (err, result) => {
+        if (err) return res.json({ Message: "error" })
+        return res.json(result);
+    })
+})
+
+///--------------------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 module.exports = router;

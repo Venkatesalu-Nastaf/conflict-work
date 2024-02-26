@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
+const multer = require('multer');
+const path = require('path');
 
 // add driver master database
 router.post('/drivermaster', (req, res) => {
@@ -120,5 +122,76 @@ router.get('/user-permissions/:user_id/:page_name', (req, res) => {
     }
   });
 });
+
+/// ----------------------------------ayyanar---------------------------------------
+// -------------------------------------------------driver  creation page--------------------------------------------------------------
+
+
+router.use(express.static('public'));
+
+// adthar --upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/images')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+  }
+
+})
+
+
+const uploadfile = multer({ storage: storage });
+
+router.post('/driver-pdf/:id', uploadfile.single("file"), async (req, res) => {
+  const userId = req.params.id;
+  const fileName = req.file.filename;
+  const fileType = req.file.mimetype;
+  const sql = `insert into driver_proof(driverid,fileName,file_type	)values(${userId},'${fileName}','${fileType}')`;
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Message: "Error" });
+    return res.json({ Status: "success" });
+  })
+})
+
+
+
+//licence 
+
+const storageLicence = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/images')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+  }
+
+})
+
+
+const uploadfileLicence = multer({ storage: storageLicence });
+
+router.post('/driver-licencepdf/:id', uploadfileLicence.single("file"), async (req, res) => {
+  const userId = req.params.id
+  const fileName = req.file.filename;
+  const fileType = req.file.mimetype;
+  const sql = `insert into driver_proof(driverid,fileName,file_type)values(${userId},'${fileName}','${fileType}')`;
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Message: "Error" });
+    return res.json({ Status: "success" });
+  })
+})
+
+
+//pdf view -
+router.get('/pdf-view/:id', (req, res) => {
+  const id = req.params.id
+  const sql = 'select * from driver_proof where driverid=?';
+  db.query(sql, [id], (err, result) => {
+    if (err) return res.json({ Message: "error" })
+    return res.json(result);
+  })
+})
+
 
 module.exports = router;

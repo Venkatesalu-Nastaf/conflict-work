@@ -789,7 +789,7 @@ const useBooking = () => {
     const [sendEmail, setSendEmail] = useState(false);
     const handlecheck = async () => {
 
-        if (sendEmail) {
+        if (sendEmail || formData.sendemail || book.sendemail) {
             try {
                 const dataToSend = {
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname,
@@ -855,7 +855,7 @@ const useBooking = () => {
     const [guestsms, setGuestSms] = useState(false);
 
     const handleSendSMS = async () => {
-        if (guestsms) {
+        if (guestsms || formData.guestsms || book.guestsms) {
             try {
                 const dataToSend = {
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',

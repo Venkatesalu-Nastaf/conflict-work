@@ -1260,7 +1260,7 @@ const useTripsheet = () => {
     const [smsguest, setSmsGuest] = useState(false);
 
     const handleSendSMS = async () => {
-        if (smsguest) {
+        if (smsguest || formData.smsguest || book.smsguest) {
             try {
                 const dataToSend = {
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
@@ -1298,7 +1298,7 @@ const useTripsheet = () => {
     const [DriverSMS, setDriverSMS] = useState(false);
 
     const handleDriverSendSMS = async () => {
-        if (smsguest) {
+        if (DriverSMS || formData.DriverSMS || book.DriverSMS) {
             try {
                 const dataSend = {
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',

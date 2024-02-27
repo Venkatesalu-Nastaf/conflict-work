@@ -129,7 +129,7 @@ const PrintableInvoice = ({ tripSheetData, organizationdata, selectedImage, book
                 <p id='line'>------------------</p>
               </div>
               <div className="guest-sign">
-                <img className='dialogboximg' src={signimageUrl} alt='mapimage' />
+                <img className='dialogboximg' src={signimageUrl} alt='Signature' />
                 <p>Guest Signature</p>
               </div>
             </div>

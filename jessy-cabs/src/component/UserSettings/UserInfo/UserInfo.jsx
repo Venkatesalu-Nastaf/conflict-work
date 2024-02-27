@@ -10,7 +10,6 @@ import { TextField, FormControl } from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import IconButton from '@mui/material/IconButton';
-// import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -32,7 +31,7 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 
-const UserSetting = ({ userid }) => {
+const UserSetting = () => {
 
     const {
         selectedCustomerData,
@@ -60,7 +59,6 @@ const UserSetting = ({ userid }) => {
         handleMouseDownPasswords,
         showPassword,
         handleUpdate,
-
     } = useUserinfo();
 
     useEffect(() => {
@@ -86,7 +84,6 @@ const UserSetting = ({ userid }) => {
                                 </div>
                                 <div className="input-field">
                                     <div className='input'>
-                                        {/* //image button */}
                                         <div className='input-field'>
                                             <Button color="primary" size='small' variant="contained" onClick={handleUpload} component="label" > update</Button>
                                         </div>
@@ -94,7 +91,6 @@ const UserSetting = ({ userid }) => {
                                 </div>
                             </div>
                             <div className='container-userinfo-right'>
-
                                 <div className="input-field">
                                     <div className="input" style={{ width: "300px" }}>
                                         <div className="icone">
@@ -136,10 +132,10 @@ const UserSetting = ({ userid }) => {
                                             size="small"
                                             id="UserName"
                                             label="UserName"
-                                            name="username"  // Ensure the name attribute matches your state variable name
+                                            name="username" 
                                             autoComplete="new-password"
                                             value={selectedCustomerData?.username || book.username}
-                                            onChange={handleChange}  // Ensure the onChange prop is set to handleChange
+                                            onChange={handleChange}
                                             autoFocus
                                             disabled={!editMode}
                                         />
@@ -173,7 +169,6 @@ const UserSetting = ({ userid }) => {
                                             disabled={!editMode}
                                         />
                                     </div>
-
                                 </div>
                                 <div className="input-field">
                                     <div className="input" >
@@ -210,7 +205,6 @@ const UserSetting = ({ userid }) => {
                                             disabled={!editMode}
                                         />
                                     </div>
-
                                 </div>
                                 <div className="input-field">
                                     <div className="input" style={{ width: "309px" }}>
@@ -328,4 +322,5 @@ const UserSetting = ({ userid }) => {
         </div>
     );
 };
+
 export default UserSetting;

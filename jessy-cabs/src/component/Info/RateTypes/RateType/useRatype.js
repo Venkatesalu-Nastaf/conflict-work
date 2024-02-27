@@ -3,7 +3,6 @@ import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
 
-
 // TABLE
 
 const columns = [
@@ -15,9 +14,7 @@ const columns = [
     { field: "closetime", headerName: "Close Time", width: 130 },
 ];
 
-
 const useRatype = () => {
-
     const user_id = localStorage.getItem('useridno');
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -36,7 +33,6 @@ const useRatype = () => {
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
 
-
     // for page permission
 
     const [userPermissions, setUserPermissions] = useState({});
@@ -50,14 +46,12 @@ const useRatype = () => {
             } catch {
             }
         };
-
         fetchPermissions();
     }, [user_id]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';
         const permissions = userPermissions || {};
-
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -66,7 +60,6 @@ const useRatype = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -77,10 +70,8 @@ const useRatype = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -107,7 +98,6 @@ const useRatype = () => {
         pdf.setFont('helvetica', 'normal');
         pdf.text("Rate Type Details", 10, 10);
 
-        // Modify tableData to exclude the index number
         const tableData = rows.map((row) => [
             row['id'],
             row['driverid'],
@@ -127,7 +117,6 @@ const useRatype = () => {
         saveAs(pdfBlob, 'Rate_Type.pdf');
     };
 
-
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
@@ -138,8 +127,8 @@ const useRatype = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
 
@@ -147,24 +136,24 @@ const useRatype = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
@@ -182,7 +171,6 @@ const useRatype = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -192,7 +180,6 @@ const useRatype = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -215,7 +202,6 @@ const useRatype = () => {
             [name]: selectedOption,
         }));
     };
-
 
     const handleCancel = () => {
         setBook((prevBook) => ({
@@ -263,7 +249,6 @@ const useRatype = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            // Display a warning or prevent the action
             setInfo(true);
             setInfoMessage("You do not have permission.");
         }
@@ -306,7 +291,6 @@ const useRatype = () => {
             setInfoMessage("You do not have permission.");
         }
     };
-
 
     const handleClick = async (event, actionName, driverid) => {
         event.preventDefault();

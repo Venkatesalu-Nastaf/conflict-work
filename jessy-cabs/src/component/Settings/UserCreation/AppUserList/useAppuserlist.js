@@ -13,10 +13,8 @@ const columns = [
 // TABLE END
 
 const useAppuserlist = () => {
-
-
     const [rows, setRows] = useState([]);
-    const [apps, setApps] = useState('active'); // Default to 'active'
+    const [apps, setApps] = useState('active');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
@@ -25,8 +23,6 @@ const useAppuserlist = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
-
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -38,8 +34,8 @@ const useAppuserlist = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer); 
         }
     }, [error]);
 
@@ -47,24 +43,24 @@ const useAppuserlist = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer); 
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [info]);
 

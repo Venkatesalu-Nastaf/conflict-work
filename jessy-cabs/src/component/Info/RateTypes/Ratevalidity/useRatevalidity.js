@@ -14,9 +14,7 @@ const columns = [
 ];
 
 const useRatevalidity = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -45,7 +43,6 @@ const useRatevalidity = () => {
             } catch {
             }
         };
-
         fetchPermissions();
     }, [user_id]);
 
@@ -72,10 +69,8 @@ const useRatevalidity = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -83,7 +78,6 @@ const useRatevalidity = () => {
         }
         return true;
     };
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -125,7 +119,6 @@ const useRatevalidity = () => {
         }
     }, [info]);
 
-
     const [book, setBook] = useState({
         driverid: '',
         ratename: '',
@@ -139,7 +132,6 @@ const useRatevalidity = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -149,7 +141,6 @@ const useRatevalidity = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -196,7 +187,6 @@ const useRatevalidity = () => {
     }, []);
     const handleAdd = async () => {
         const permissions = checkPagePermission();
-
         if (permissions.read && permissions.new) {
             const ratename = book.ratename;
             if (!ratename) {
@@ -221,24 +211,28 @@ const useRatevalidity = () => {
     };
 
     const handleEdit = async (driverid) => {
-        const permissions = checkPagePermission();
+        try {
+            const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.driverid === driverid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            if (permissions.read && permissions.modify) {
+                const selectedCustomer = rows.find((row) => row.driverid === driverid);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
 
-            // Format the date fields to match the expected format for your backend
-            updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
-            updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
+                updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
+                updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
 
-            await axios.put(`http://localhost:8081/ratevalidity/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
-            setSuccess(true);
-            setSuccessMessage("Successfully updated");
-            handleCancel();
-            setRows([]);
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+                await axios.put(`http://localhost:8081/ratevalidity/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                handleCancel();
+                setRows([]);
+            } else {
+                setInfo(true);
+                setInfoMessage("You do not have permission.");
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -312,7 +306,6 @@ const useRatevalidity = () => {
                     const selectedCustomer = rows.find((row) => row.driverid === driverid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
 
-                    // Format the date fields to match the expected format for your backend
                     updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
                     updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
 
@@ -338,8 +331,6 @@ const useRatevalidity = () => {
             handleClick(null, 'List');
         }
     });
-
-
 
     return {
         selectedCustomerData,

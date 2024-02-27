@@ -62,7 +62,6 @@ function App() {
         ) : (
           <Routes>
             <Route path="/" element={<Login />} />
-
             <Route path="/home" element={<MainDashboard />}>
               <Route path="/home/dashboard" element={<MainDash />} />
               <Route path="/home/bookings" element={<Bookings />}>

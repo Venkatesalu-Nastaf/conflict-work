@@ -2,9 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const useDivision = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -39,7 +37,6 @@ const useDivision = () => {
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';
         const permissions = userPermissions || {};
-
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -48,7 +45,6 @@ const useDivision = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -59,10 +55,8 @@ const useDivision = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -82,8 +76,8 @@ const useDivision = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
 
@@ -91,24 +85,24 @@ const useDivision = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
@@ -123,7 +117,6 @@ const useDivision = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -133,7 +126,6 @@ const useDivision = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -156,7 +148,6 @@ const useDivision = () => {
             [name]: selectedOption,
         }));
     };
-
 
     const handleCancel = () => {
         setBook((prevBook) => ({
@@ -196,26 +187,29 @@ const useDivision = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            // Display a warning or prevent the action
             setInfo(true);
             setInfoMessage("You do not have permission.");
         }
     };
 
     const handleEdit = async (driverid) => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.driverid === driverid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://localhost:8081/division/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
-            setSuccess(true);
-            setSuccessMessage("Successfully updated");
-            handleCancel();
-            setRows([]);
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        try {
+            const permissions = checkPagePermission();
+            if (permissions.read && permissions.modify) {
+                const selectedCustomer = rows.find((row) => row.driverid === driverid);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`http://localhost:8081/division/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                handleCancel();
+                setRows([]);
+            } else {
+                setInfo(true);
+                setInfoMessage("You do not have permission.");
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -271,7 +265,6 @@ const useDivision = () => {
                 setRows([]);
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.delete) {
                     await axios.delete(`http://localhost:8081/division/${selectedCustomerData?.driverid || book.driverid}`);
                     setSelectedCustomerData(null);
@@ -285,7 +278,6 @@ const useDivision = () => {
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.driverid === driverid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
@@ -311,7 +303,6 @@ const useDivision = () => {
             handleClick(null, 'List');
         }
     });
-
 
     return {
         selectedCustomerData,

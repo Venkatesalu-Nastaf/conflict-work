@@ -50,14 +50,8 @@ import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineE
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useVehicleinfo from './useVehicleinfo';
 
-// ayyanar-----------------------
-
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-
-
-
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -120,7 +114,12 @@ const Vehicaleinfo = () => {
     dialogOpen,
     isEditMode,
     handleEdit,
-    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen, setError, setErrorMessage
+    handleContextMenu,
+    handleimagedelete,
+    handleClosedeleteDialog,
+    dialogdeleteOpen,
+    setError,
+    setErrorMessage
   } = useVehicleinfo();
 
   useEffect(() => {
@@ -288,8 +287,6 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-
-
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                     Insurance Copy
@@ -307,9 +304,6 @@ const Vehicaleinfo = () => {
                     Insurance Copy
                   </Button>
                 )}
-
-
-
               </div>
             </div>
             <div className="input-field">
@@ -356,7 +350,6 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                     License Copy
@@ -374,9 +367,6 @@ const Vehicaleinfo = () => {
                     License Copy
                   </Button>
                 )}
-
-
-
               </div>
             </div>
             <div className="input-field">
@@ -409,7 +399,6 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                     National Permit Copy
@@ -427,8 +416,6 @@ const Vehicaleinfo = () => {
                     National Permit Copy
                   </Button>
                 )}
-
-
               </div>
               <div className="input">
                 <div className="icone">
@@ -474,7 +461,6 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                     State Permit Copy
@@ -492,9 +478,6 @@ const Vehicaleinfo = () => {
                     State Permit Copy
                   </Button>
                 )}
-
-
-
               </div>
               <div className="input">
                 <div className="icone">
@@ -540,7 +523,6 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                     RC-Book Copy
@@ -560,7 +542,6 @@ const Vehicaleinfo = () => {
                 )}
               </div>
               <div className="input" style={{ width: "160px" }}>
-
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                     FC Copy
@@ -688,10 +669,8 @@ const Vehicaleinfo = () => {
                 ) : (
                   <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
                 )}
-
               </div>
             </div>
-
           </div>
         </div>
         {error && <div className='alert-popup Error' >
@@ -752,7 +731,6 @@ const Vehicaleinfo = () => {
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                   />
-
                 </div>
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -807,7 +785,6 @@ const Vehicaleinfo = () => {
               pageSize={5}
             />
           </div>
-
           <Dialog open={dialogOpen} onClose={handleCloseDialog} >
             <DialogContent>
               <div style={{ position: 'relative' }}>
@@ -820,8 +797,6 @@ const Vehicaleinfo = () => {
               </div>
             </DialogContent>
           </Dialog>
-
-
           <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
             <DialogContent>
               <div>
@@ -830,13 +805,9 @@ const Vehicaleinfo = () => {
                   <Button onClick={handleContextMenu}>yes</Button>
                   <Button onClick={handleClosedeleteDialog}>No</Button>
                 </div>
-
               </div>
-
-
             </DialogContent>
           </Dialog>
-
         </div>
       </form>
     </div>

@@ -593,42 +593,46 @@ const useBooking = () => {
 
 
     const handleEdit = async (userid) => {
-        const permissions = checkPagePermission();
+        try {
+            const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.bookingno === selectedCustomerData.bookingno || formData.bookingno);
-            const updatedCustomer = {
-                ...formData,
-                ...selectedCustomer,
-                ...selectedCustomerData,
-                bookingtime: bookingtime || selectedCustomerData.bookingtime,
-                starttime: starttime || book.starttime || selectedCustomerData.starttime || formData.starttime,
-                reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
-                triptime: triptime || book.triptime || selectedCustomerData.triptime || formData.triptime,
-                username: storedUsername,
-                bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
-                orderbyemail: selectedCustomerDatas.customeremail,
-                orderedby: selectedCustomerDatas.name,
-                mobile: selectedCustomerDatas.phoneno,
-            };
-            await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
-            handleCancel();
-            addPdf();
-            setRow([]);
-            setRows([]);
-            handlecheck();
-            handleSendSMS();
-            setSuccess(true);
-            setSuccessMessage("Successfully Updated");
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            if (permissions.read && permissions.modify) {
+                const selectedCustomer = rows.find((row) => row.bookingno === selectedCustomerData.bookingno || formData.bookingno);
+                const updatedCustomer = {
+                    ...formData,
+                    ...selectedCustomer,
+                    ...selectedCustomerData,
+                    bookingtime: bookingtime || selectedCustomerData.bookingtime,
+                    starttime: starttime || book.starttime || selectedCustomerData.starttime || formData.starttime,
+                    reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+                    triptime: triptime || book.triptime || selectedCustomerData.triptime || formData.triptime,
+                    username: storedUsername,
+                    bookingdate: selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
+                    orderbyemail: selectedCustomerDatas.customeremail,
+                    orderedby: selectedCustomerDatas.name,
+                    mobile: selectedCustomerDatas.phoneno,
+                };
+                await axios.put(`http://localhost:8081/booking/${book.bookingno || selectedCustomerData.bookingno || formData.bookingno}`, updatedCustomer);
+                handleCancel();
+                addPdf();
+                setRow([]);
+                setRows([]);
+                handlecheck();
+                handleSendSMS();
+                setSuccess(true);
+                setSuccessMessage("Successfully Updated");
+            } else {
+                setInfo(true);
+                setInfoMessage("You do not have permission.");
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
     const handleClick = async (event, actionName) => {
         event.preventDefault();
-
         try {
             if (actionName === 'Email') {
             } else if (actionName === 'Clear') {
@@ -637,7 +641,6 @@ const useBooking = () => {
                 setRow([]);
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.delete) {
                     await axios.delete(`http://localhost:8081/booking/${book.bookingno}`);
                     setSelectedCustomerData(null);
@@ -653,7 +656,6 @@ const useBooking = () => {
                 }
             } else if (actionName === 'Modify') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.bookingno === selectedCustomerData.bookingno || formData.bookingno);
                     const updatedCustomer = {
@@ -776,7 +778,6 @@ const useBooking = () => {
     const handleRowClick = useCallback((params) => {
         setSelectedCustomerDatas(params);
         handleChange({ target: { name: "customer", value: params.customer } });
-        // setIsEditMode(true);
     }, [handleChange]);
 
     const handletableClick = useCallback((params) => {
@@ -914,8 +915,6 @@ const useBooking = () => {
         }
     }, [book.bookingno, selectedCustomerData.bookingno]);
 
-    //ayyanar---------to delte dialog box image
-
     const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
 
     const handleClosedeleteDialog = () => {
@@ -932,12 +931,10 @@ const useBooking = () => {
     const handleContextMenu = () => {
         axios.delete('http://localhost:8081/booking_doc/' + imagedata)
             .then(res => {
-                // console.log("deleted")
             })
             .catch(err => console.log(err))
         setDialogdeleteOpen(false);
         setDialogOpen(false);
-        // setDialogOpen(false);
     };
 
     return {
@@ -1002,10 +999,17 @@ const useBooking = () => {
         reversedRows,
         columns,
         handletableClick,
-        setFile, dialogOpen, handleCloseDialog, allFile, handleButtonClick,
+        setFile,
+        dialogOpen,
+        handleCloseDialog,
+        allFile,
+        handleButtonClick,
         isEditMode,
         handleEdit,
-        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
+        handleContextMenu,
+        handleimagedelete,
+        handleClosedeleteDialog,
+        dialogdeleteOpen,
         setErrorMessage,
         setError,
     };

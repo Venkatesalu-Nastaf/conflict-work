@@ -120,7 +120,6 @@ router.put('/logo-upload/:organizationname', upload.single('image'), (req, res) 
 
 router.get('/logo-view/:organizationname', (req, res) => {
     const organization_Name = req.params.organizationname
-    // console.log("name :", organization_Name)
     const sql = 'select * from organisation_logo where organisation_name=?';
     db.query(sql, [organization_Name], (err, result) => {
         if (err) return res.json({ Message: "error" })

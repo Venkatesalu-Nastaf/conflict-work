@@ -62,11 +62,9 @@ router.get('/userdataforuserinfo/:userid', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
         }
-
         if (result.length === 0) {
             return res.status(404).json({ error: 'Route data not found' });
         }
-
         const routeData = result;
         return res.status(200).json(routeData);
     });
@@ -96,7 +94,6 @@ router.get('/table-for-employee', (req, res) => {
             'uanid',
             'esino',
             'licenceno',
-
         ];
 
         const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
@@ -114,7 +111,6 @@ router.get('/table-for-employee', (req, res) => {
 });
 
 
-//------------------------------------------------------------
 //---------------Rigister->employee-------------------
 
 // its for make folder puclicc
@@ -154,6 +150,5 @@ router.get('/employee-docView/:id', (req, res) => {
 })
 
 //--------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------
 
 module.exports = router;

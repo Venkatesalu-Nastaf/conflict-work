@@ -21,9 +21,7 @@ const columns = [
 ];
 
 const useDispatched = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [rows, setRows] = useState([]);
     const [department, setdepartment] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
@@ -79,10 +77,8 @@ const useDispatched = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -160,13 +156,11 @@ const useDispatched = () => {
             row['streetno'],
             row['customer'],
         ]);
-
         pdf.autoTable({
             head: [['Sno', 'Status', 'Booking ID', 'Tripsheet No', 'Date', 'Time', 'Guest Name', 'Mobile', 'R.Address', 'R.Address1', 'R.Address2', 'Company']],
             body: tableData,
             startY: 20,
         });
-
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Pending Reports.pdf');
     };
@@ -178,7 +172,6 @@ const useDispatched = () => {
     const reversedRows = [...rows].reverse();
 
     const handleShow = useCallback(async () => {
-
         try {
             const response = await axios.get(
                 `http://localhost:8081/pending_tripsheet?department=${encodeURIComponent(
@@ -210,7 +203,6 @@ const useDispatched = () => {
     }, [department, fromDate, toDate]);
 
     const handleShowAll = useCallback(async () => {
-
         try {
             const response = await axios.get(
                 `http://localhost:8081/tripsheet`
@@ -234,7 +226,6 @@ const useDispatched = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-
     }, []);
 
     const handleButtonClick = (row) => {

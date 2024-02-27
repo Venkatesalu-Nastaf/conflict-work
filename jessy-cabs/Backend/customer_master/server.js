@@ -40,7 +40,7 @@ const driverbataRouter = require('./Router/Ratemanagement/driverbatarate');
 const billingRouter = require('./Router/Billing/billing');
 const bankaccountRouter = require('./Router/Billing/bankaccountdetails/backaccountddetails');
 const paymentRouter = require('./Router/Billing/payment/payment');
-const triplistRouter = require('./Router/Transfer/transferlist');
+const transferlistRouter = require('./Router/Transfer/transferlist');
 const pettycashRouter = require('./Router/cashflow/pettycash');
 const payrollRouter = require('./Router/cashflow/payroll');
 const fueldetailsRouter = require('./Router/fueldetails/mileage');
@@ -52,40 +52,43 @@ const sendsmsRouter = require('./Router/SMS/sms');
 const employeeRouter = require('./Router/Employee/employee');
 const companyRoutes = require('./Router/organization/organization');
 const taxsettingRoutes = require('./Router/taxsetting/taxsettings');
-const image_delete = require('./Router/delete_image_fun')
+const image_delete = require('./Router/delete_uploaded_files/delete_image_fun');
+const DashboardRouter = require('./Router/Dashboard/Dashboard');
+const User_Permission = require('./Router/userpermission/userermissionpage');
+const SignatureRouter = require('./Router/signature/signature');
 
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', customerRoutes);// // Customer Master Database
+app.use('/', customerRoutes);// Customer Page Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', accountinfoRoutes); // // account_info database:-
+app.use('/', accountinfoRoutes); // account_info page database:-
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', vehicleinfoRouter); // Add vehicle_info database
+app.use('/', vehicleinfoRouter); // vehicle_info page database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', bookingRouter); // Booking page database:-
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', bookingcopyRouter); // booking copy data collect: 
+app.use('/', bookingcopyRouter); // booking copy page database: 
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', triplistRouter); // booking copy data collect:
+app.use('/', transferlistRouter); // Transfer lsit Database:
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', bookingchartRouter); // booking CHART data collect
+app.use('/', bookingchartRouter); // booking CHART database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', tripsheetRouter); // trip sheet database:
+app.use('/', tripsheetRouter); // tripsheet page database:
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', pendingRouter); // order/Received/Pending data collect from database
+app.use('/', pendingRouter); // Booking/Received/Pending page database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', sendsmsRouter); // order/Received/Pending data collect from database
+app.use('/', sendsmsRouter); // send sms fron booking and tripsheet database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', closedRouter); // order/Dispatch/closed data collect from database
+app.use('/', closedRouter); // Booking/Dispatch/closed page database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', dispatchRouter); // order/Dispatch/closed data collect from database
+app.use('/', dispatchRouter); // Booking/Dispatch/Dispatch page database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', driverRouter); // driver master database
+app.use('/', driverRouter); // driver page database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', usercreationRouter); // Settings page database:
+app.use('/', usercreationRouter); // usercreation page database:
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', stationcreationRouter); // Station Creation Database
+app.use('/', stationcreationRouter); // StationCreation page Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', packagerateRouter); // Rate Management Database
+app.use('/', packagerateRouter); // Rate Management page Database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', ratetypeRouter); // Ratetype Database
 // -----------------------------------------------------------------------------------------------------------
@@ -97,33 +100,37 @@ app.use('/', driveractiveRouter); // division Database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', driverbataRouter); // driverbatarate Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', drivercreationRouter); // driverbatarate Database
+app.use('/', drivercreationRouter); // driver creation page Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', employeeRouter); // Employees Database
+app.use('/', employeeRouter); // Employees page Database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', billingRouter); // Billing Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', bankaccountRouter); // Billing Database
+app.use('/', bankaccountRouter); // Bank accounts page Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', paymentRouter); // Billing Database
+app.use('/', paymentRouter); // payment page Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', pettycashRouter); // cashflow Database
+app.use('/', pettycashRouter); // petty cash page Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', assetsRouer); // cashflow Database
+app.use('/', assetsRouer); // assets page Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', payrollRouter); // Add payroll database
+app.use('/', payrollRouter); // payroll page database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', fueldetailsRouter); // Options/Fuel Details
+app.use('/', fueldetailsRouter); // info/Fuel Details page database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', taxsettingRouter); // mainsettings Database
+app.use('/', taxsettingRouter); // taxsetting page Database
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', taxsettingRouter);//signature database
+app.use('/', SignatureRouter);//signature database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', companyRoutes);//signature database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', taxsettingRoutes);//signature database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', image_delete);// image delete 
+//------------------------------------------------------------------------------------------------------------
+app.use('/', DashboardRouter);// image delete 
+//------------------------------------------------------------------------------------------------------------
+app.use('/', User_Permission);// image delete 
 //------------------------------------------------------------------------------------------------------------
 //theme update in user creation
 app.post('/updatethemename', (req, res) => {
@@ -298,66 +305,66 @@ app.post('/api/savemapimage', (req, res) => {
     }
   });
 });
-//for save signature image
-const baseImagePath = path.join(__dirname, 'path_to_save_images');
-app.post('/api/saveSignature', (req, res) => {
-  const { signatureData } = req.body;
-  const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
-  const imageBuffer = Buffer.from(base64Data, 'base64');
-  const imageName = `signature-${Date.now()}.png`;
-  const imagePath = path.join(baseImagePath, imageName); // Use the base path
-  fs.writeFile(imagePath, imageBuffer, (error) => {
-    if (error) {
-      res.status(500).json({ error: 'Failed to save signature' });
-    } else {
-      const relativeImagePath = path.relative(baseImagePath, imagePath); // Calculate relative path
-      const sql = 'INSERT INTO signatures (signature_path) VALUES (?)';
-      db.query(sql, [relativeImagePath], (dbError, results) => {
-        if (dbError) {
-          res.status(500).json({ error: 'Failed to save signature' });
-        } else {
-          res.json({ message: 'Signature saved successfully' });
-        }
-      });
-    }
-  });
-});
+// //for save signature image
+// const baseImagePath = path.join(__dirname, 'path_to_save_images');
+// app.post('/api/saveSignature', (req, res) => {
+//   const { signatureData } = req.body;
+//   const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
+//   const imageBuffer = Buffer.from(base64Data, 'base64');
+//   const imageName = `signature-${Date.now()}.png`;
+//   const imagePath = path.join(baseImagePath, imageName); // Use the base path
+//   fs.writeFile(imagePath, imageBuffer, (error) => {
+//     if (error) {
+//       res.status(500).json({ error: 'Failed to save signature' });
+//     } else {
+//       const relativeImagePath = path.relative(baseImagePath, imagePath); // Calculate relative path
+//       const sql = 'INSERT INTO signatures (signature_path) VALUES (?)';
+//       db.query(sql, [relativeImagePath], (dbError, results) => {
+//         if (dbError) {
+//           res.status(500).json({ error: 'Failed to save signature' });
+//         } else {
+//           res.json({ message: 'Signature saved successfully' });
+//         }
+//       });
+//     }
+//   });
+// });
 
 
-const baseImagetripidPath = path.join(__dirname, 'path_to_save_images');
-app.post('/api/saveSignaturewtid', (req, res) => {
-  const { signatureData, tripId, uniqueno } = req.body;
-  const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
-  const imageBuffer = Buffer.from(base64Data, 'base64');
-  const imageName = `signature-${Date.now()}.png`;
-  const imagePath = path.join(baseImagetripidPath, imageName); // Use the base path
-  fs.writeFile(imagePath, imageBuffer, (error) => {
-    if (error) {
-      res.status(500).json({ error: 'Failed to save signature' });
-    } else {
-      const relativeImagePath = path.relative(baseImagetripidPath, imagePath);
-      const sql = 'UPDATE signatures SET signature_path = ? WHERE tripid = ? AND unique_number = ?';
-      db.query(sql, [relativeImagePath, tripId, uniqueno], (dbError, results) => {
-        if (dbError) {
-          res.status(500).json({ error: 'Failed to save signature' });
-        } else {
-          const uniqueNumber = generateUniqueNumbers();
-          const sql2 = 'UPDATE signatures SET unique_number = ? WHERE tripid = ? ';
-          db.query(sql2, [uniqueNumber, tripId], (dbError, results) => {
-            if (dbError) {
-              res.status(500).json({ error: 'Failed to save unique number' });
-            } else {
-              res.json({ message: 'Signature and unique number saved successfully' });
-            }
-          });
-        }
-      });
-    }
-  });
-});
-function generateUniqueNumbers() {
-  return Math.floor(10000 + Math.random() * 90000);
-}
+// const baseImagetripidPath = path.join(__dirname, 'path_to_save_images');
+// app.post('/api/saveSignaturewtid', (req, res) => {
+//   const { signatureData, tripId, uniqueno } = req.body;
+//   const base64Data = signatureData.replace(/^data:image\/png;base64,/, '');
+//   const imageBuffer = Buffer.from(base64Data, 'base64');
+//   const imageName = `signature-${Date.now()}.png`;
+//   const imagePath = path.join(baseImagetripidPath, imageName); // Use the base path
+//   fs.writeFile(imagePath, imageBuffer, (error) => {
+//     if (error) {
+//       res.status(500).json({ error: 'Failed to save signature' });
+//     } else {
+//       const relativeImagePath = path.relative(baseImagetripidPath, imagePath);
+//       const sql = 'UPDATE signatures SET signature_path = ? WHERE tripid = ? AND unique_number = ?';
+//       db.query(sql, [relativeImagePath, tripId, uniqueno], (dbError, results) => {
+//         if (dbError) {
+//           res.status(500).json({ error: 'Failed to save signature' });
+//         } else {
+//           const uniqueNumber = generateUniqueNumbers();
+//           const sql2 = 'UPDATE signatures SET unique_number = ? WHERE tripid = ? ';
+//           db.query(sql2, [uniqueNumber, tripId], (dbError, results) => {
+//             if (dbError) {
+//               res.status(500).json({ error: 'Failed to save unique number' });
+//             } else {
+//               res.json({ message: 'Signature and unique number saved successfully' });
+//             }
+//           });
+//         }
+//       });
+//     }
+//   });
+// });
+// function generateUniqueNumbers() {
+//   return Math.floor(10000 + Math.random() * 90000);
+// }
 
 
 

@@ -25,8 +25,6 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useDispatched from './useDispatched.js';
 
-
-
 const Dispatched = () => {
 
   const {
@@ -60,7 +58,6 @@ const Dispatched = () => {
     selectedRow,
     handleTripsheetClick,
     columns
-    // ... (other state variables and functions)
   } = useDispatched();
 
   useEffect(() => {
@@ -184,7 +181,6 @@ const Dispatched = () => {
               <DialogContent>
                 {selectedRow && (
                   <div>
-                    {/* <Button onClick={handleBookingClick}>Booking</Button> */}
                     <Button onClick={handleTripsheetClick}>Tripsheet</Button>
                   </div>
                 )}

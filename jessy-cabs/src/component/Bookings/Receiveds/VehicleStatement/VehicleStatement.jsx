@@ -60,7 +60,6 @@ const VehicleStatement = () => {
     handleTripsheetClick,
     setToDate,
     columns
-    // ... (other state variables and functions)
   } = useVehiclestatement();
 
   useEffect(() => {

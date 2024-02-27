@@ -22,8 +22,6 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useClosed from './useClosed.js';
 
-
-
 const Closed = () => {
 
   const {
@@ -53,7 +51,6 @@ const Closed = () => {
     reversedRows,
     handleButtonClickTripsheet,
     columns
-    // ... (other state variables and functions)
   } = useClosed();
 
   useEffect(() => {

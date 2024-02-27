@@ -25,10 +25,6 @@ const useEmployee = () => {
     const [isEditMode, setIsEditMode] = useState(false);
 
     const [dialogOpen, setDialogOpen] = useState(false);
-    // const handleButtonClick = (params) => {
-    //     const { empid } = params.row;
-    //     showPdf(empid);
-    // };
 
     const handleButtonClick = (params) => {
         const { empid } = params.row;
@@ -39,7 +35,6 @@ const useEmployee = () => {
         }
         showPdf(empid);
     };
-
 
     // TABLE STRAT
     const columns = [
@@ -116,7 +111,6 @@ const useEmployee = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
             if (fieldName === "delete" && !permissions.delete) {
@@ -143,7 +137,6 @@ const useEmployee = () => {
         pdf.setFont('helvetica', 'normal');
         pdf.text("Employee Details", 10, 10);
 
-        // Modify tableData to exclude the index number
         const tableData = rows.map((row) => [
             row['id'],
             row['empid'],
@@ -237,7 +230,6 @@ const useEmployee = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -247,7 +239,6 @@ const useEmployee = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -368,7 +359,6 @@ const useEmployee = () => {
 
             }
         } else {
-            // Display a warning or prevent the action
             setInfo(true);
             setInfoMessage("You do not have permission.");
         }
@@ -496,15 +486,6 @@ const useEmployee = () => {
         }
     };
 
-    // const handleContextMenu = (e, img) => {
-    //     e.preventDefault();
-    //     console.log("image right clicked");
-    // };
-
-
-
-    //ayyanar---------
-
     const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
 
     const handleClosedeleteDialog = () => {
@@ -527,7 +508,6 @@ const useEmployee = () => {
         setDialogdeleteOpen(false);
         setDialogOpen(false);
     };
-
 
     return {
         selectedCustomerData,
@@ -557,12 +537,18 @@ const useEmployee = () => {
         searchText,
         setSearchText,
         handleShowAll,
-        allFile, handleCloseDialog, dialogOpen, setFile,
+        allFile,
+        handleCloseDialog,
+        dialogOpen,
+        setFile,
         isEditMode,
         handleEdit,
-        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
-        setError, setErrorMessage,
-
+        handleContextMenu,
+        handleimagedelete,
+        handleClosedeleteDialog,
+        dialogdeleteOpen,
+        setError,
+        setErrorMessage,
     };
 };
 

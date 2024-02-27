@@ -4,8 +4,6 @@ import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import { saveAs } from 'file-saver';
 
-
-
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "tripid", headerName: "Trip No", width: 130 },

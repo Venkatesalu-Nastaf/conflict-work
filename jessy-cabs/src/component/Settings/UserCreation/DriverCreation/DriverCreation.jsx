@@ -15,9 +15,6 @@ import { StationName, ViewFor } from "./DriverCreationData";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
-
-// ayyanar-----------------------
-
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 
@@ -106,11 +103,19 @@ const DriverCreation = () => {
         showPassword,
         handleClickShowPassword,
         handleMouseDownPassword,
-        handleCloseDialog, dialogOpen, allFile, setFile, setLicencepdf,
+        handleCloseDialog,
+        dialogOpen,
+        allFile,
+        setFile,
+        setLicencepdf,
         isEditMode,
         handleEdit,
-        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
-        setError, setErrorMessage,
+        handleContextMenu,
+        handleimagedelete,
+        handleClosedeleteDialog,
+        dialogdeleteOpen,
+        setError,
+        setErrorMessage,
     } = useDrivercreation();
 
     useEffect(() => {
@@ -171,7 +176,6 @@ const DriverCreation = () => {
                                     }))}
                                     getOptionLabel={(option) => option.label || selectedCustomerData?.stationname || ''}
                                     renderInput={(params) => {
-                                        // params.inputProps.value = selectedCustomerData?.stationname || ''
                                         return (
                                             <TextField {...params} label="Station Name" name="stationname" />
                                         )
@@ -191,7 +195,6 @@ const DriverCreation = () => {
                                     label="Designation"
                                     id="designation"
                                     sx={{ m: 1, width: "200ch" }}
-                                // variant="standard"
                                 />
                             </div>
                         </div>
@@ -291,7 +294,6 @@ const DriverCreation = () => {
                                     }))}
                                     getOptionLabel={(option) => option.label || selectedCustomerData?.viewfor || ''}
                                     renderInput={(params) => {
-                                        // params.inputProps.value = selectedCustomerData?.viewfor || ''
                                         return (
                                             <TextField {...params} label="View For" name="viewfor" />
                                         )
@@ -341,7 +343,6 @@ const DriverCreation = () => {
                                     onChange={handleChange}
                                     label="License No"
                                     id="licenseno"
-                                // variant="standard"
                                 />
                             </div>
                             <div className="input" style={{ width: "170px" }}>
@@ -353,7 +354,6 @@ const DriverCreation = () => {
                                     label="License Exp Date"
                                     id="licenseexpdate"
                                     sx={{ m: 1, width: "140ch" }}
-                                // variant="standard"
                                 />
                             </div>
                         </div>
@@ -396,7 +396,6 @@ const DriverCreation = () => {
                                     onChange={handleChange}
                                     label="Badge No"
                                     id="badgeno"
-                                // variant="standard"
                                 />
                             </div>
                             <div className="input" style={{ width: "170px" }}>
@@ -408,7 +407,6 @@ const DriverCreation = () => {
                                     label="Badge Exp Date"
                                     id="badgeexpdate"
                                     sx={{ m: 1, width: "140ch" }}
-                                // variant="standard"
                                 />
                             </div>
                         </div>
@@ -494,7 +492,6 @@ const DriverCreation = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-
                                 {selectedCustomerData?.userid || book.userid ? (
                                     <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
                                         aadhar card
@@ -512,8 +509,6 @@ const DriverCreation = () => {
                                         aadhar card
                                     </Button>
                                 )}
-
-
                             </div>
                             <div className="input" style={{ width: "160px" }}>
                                 {isEditMode ? (
@@ -589,7 +584,6 @@ const DriverCreation = () => {
                                 pageSizeOptions={[5, 10]}
                             />
                         </div>
-
                         <Dialog open={dialogOpen} onClose={handleCloseDialog} >
                             <DialogContent>
                                 <div style={{ position: 'relative' }}>
@@ -602,20 +596,16 @@ const DriverCreation = () => {
                                 </div>
                             </DialogContent>
                         </Dialog>
-
-
                         <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
                             <DialogContent>
                                 <div>
-                                    <h3>are you sure you want to delete</h3>
+                                    <h3>Are you sure you want to delete?</h3>
                                     <div>
                                         <Button onClick={handleContextMenu}>yes</Button>
                                         <Button onClick={handleClosedeleteDialog}>No</Button>
                                     </div>
 
                                 </div>
-
-
                             </DialogContent>
                         </Dialog>
                     </div>

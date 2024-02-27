@@ -5,9 +5,7 @@ import { fetchBankOptions } from './BillingData';
 import dayjs from "dayjs";
 
 const useBilling = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [bankOptions, setBankOptions] = useState([]);
     const [formData, setFormData] = useState({});
     const location = useLocation();
@@ -360,7 +358,6 @@ const useBilling = () => {
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.tripid === tripid);
                     const updatedCustomer = {
@@ -394,7 +391,6 @@ const useBilling = () => {
                         setErrorMessage("Fill mandatory fields");
                         return;
                     }
-
                     const updatedBook = {
                         ...book,
                         ...selecting,
@@ -431,25 +427,21 @@ const useBilling = () => {
     const calculateTotalAmount = () => {
         const totalkm1 = parseFloat(formData?.ChargesForExtra || selectedCustomerData?.totalkm1 || selectedCustomerDatas?.ChargesForExtra || book?.ChargesForExtra || 0);
         const chargesForExtraamount = parseFloat(formData?.ChargesForExtraamount || selectedCustomerData?.ChargesForExtraamount || selectedCustomerDatas?.ChargesForExtraamount || book?.ChargesForExtraamount || 0);
-
         if (!isNaN(totalkm1) && !isNaN(chargesForExtraamount)) {
             const totalAmount = totalkm1 * chargesForExtraamount;
             return totalAmount.toFixed(2);
         }
-
         return '';
     };
 
     const calculateTotalAmount2 = () => {
         const totaltime = formData.ChargesForExtraHRS || selectedCustomerData.totaltime || selectedCustomerDatas.ChargesForExtraHRS || book.ChargesForExtraHRS;
         const ChargesForExtraHRSamount = formData.ChargesForExtraHRSamount || selectedCustomerData.ChargesForExtraHRSamount || selectedCustomerDatas.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount;
-
         if (totaltime !== undefined && ChargesForExtraHRSamount !== undefined) {
             const [hours, minutes] = totaltime.split('h');
             const hoursInMinutes = parseFloat(hours) * 60 + parseFloat(minutes);
             const ratePerHour = parseFloat(ChargesForExtraHRSamount);
             const totalAmount = hoursInMinutes * (ratePerHour / 60);
-
             if (isNaN(totalAmount)) {
                 return "";
             } else {
@@ -521,8 +513,6 @@ const useBilling = () => {
         }
         return '';
     };
-
-
 
     const calculateGrossAmount = () => {
         const {
@@ -850,8 +840,6 @@ const useBilling = () => {
     const roundOffValue = calculateRoundOff();
     const BalanceValue = calculatePayableAmount();
     const TotalAmountValue = calculateroundedPayableAmount();
-
-
     const [organizationdata, setorganizationData] = useState('');
 
     useEffect(() => {
@@ -863,21 +851,17 @@ const useBilling = () => {
             try {
                 const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
                 if (response.status === 200) {
-
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
                         setorganizationData(userDataArray[0]);
                     }
                 } else {
-                    // If the response status is not 200, wait for 2 seconds and fetch again
                     const timer = setTimeout(fetchData, 2000);
-                    // Clear the timer to avoid memory leaks
                     return () => clearTimeout(timer);
                 }
             } catch {
             }
         };
-
         fetchData();
     }, []);
 
@@ -905,8 +889,6 @@ const useBilling = () => {
         };
         fetchData();
     }, []);
-
-
 
     return {
         selectedCustomerData,

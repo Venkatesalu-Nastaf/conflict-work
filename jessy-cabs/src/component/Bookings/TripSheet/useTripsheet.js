@@ -85,10 +85,8 @@ const useTripsheet = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -635,74 +633,80 @@ const useTripsheet = () => {
     }
 
     const handleEdit = async () => {
-        const permissions = checkPagePermission();
+        try {
 
-        if (permissions.read && permissions.modify) {
+            const permissions = checkPagePermission();
 
-            try {
-                const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
-                const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
-                const updatedCustomer = {
-                    ...book,
-                    ...selectedCustomer,
-                    ...vehilcedetails,
-                    ...selectedCustomerData,
-                    ...formData,
-                    starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
-                    closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
-                    reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
-                    shedintime: shedintime || book.shedintime || selectedCustomerData.shedintime || formData.shedintime,
-                    starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
-                    closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
-                    additionaltime: additionalTime.additionaltime,
-                    tripsheetdate: selectedBookingDate,
-                    vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
-                    vehType: VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '',
-                    driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
-                    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
-                    shedkm: shedKilometers.shedkm,
-                    totaldays: calculateTotalDays(),
-                    totalkm1: calculateTotalKilometers(),
-                    totaltime: calculateTotalTime(),
-                    netamount: calculateTotalAmount(),
-                    exkm: packageDetails[0]?.extraKMS,
-                    exHrs: packageDetails[0]?.extraHours,
-                    night: packageDetails[0]?.NHalt,
-                    amount: packageDetails[0]?.Rate,
-                    exkm1: packageDetails[0]?.extraKMS,
-                    exHrs1: packageDetails[0]?.extraHours,
-                    night1: packageDetails[0]?.NHalt,
-                    amount5: packageDetails[0]?.Rate,
-                    amount1: calculateExkmAmount(),
-                    amount2: calculateExHrsAmount(),
-                    amount3: calculateNightAmount(),
-                    amount4: calculatedriverconvienceAmount(),
-                    package: packageDetails[0]?.package,
-                    pack: packageDetails[0]?.package,
-                    minhrs: packageDetails[0]?.Hours,
-                    minkm: packageDetails[0]?.KMS,
-                };
-                for (const key in updatedCustomer) {
-                    if (key === '0') {
-                        delete updatedCustomer[key];
+            if (permissions.read && permissions.modify) {
+
+                try {
+                    const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
+                    const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+                    const updatedCustomer = {
+                        ...book,
+                        ...selectedCustomer,
+                        ...vehilcedetails,
+                        ...selectedCustomerData,
+                        ...formData,
+                        starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
+                        closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
+                        reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+                        shedintime: shedintime || book.shedintime || selectedCustomerData.shedintime || formData.shedintime,
+                        starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
+                        closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
+                        additionaltime: additionalTime.additionaltime,
+                        tripsheetdate: selectedBookingDate,
+                        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
+                        vehType: VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '',
+                        driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
+                        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
+                        shedkm: shedKilometers.shedkm,
+                        totaldays: calculateTotalDays(),
+                        totalkm1: calculateTotalKilometers(),
+                        totaltime: calculateTotalTime(),
+                        netamount: calculateTotalAmount(),
+                        exkm: packageDetails[0]?.extraKMS,
+                        exHrs: packageDetails[0]?.extraHours,
+                        night: packageDetails[0]?.NHalt,
+                        amount: packageDetails[0]?.Rate,
+                        exkm1: packageDetails[0]?.extraKMS,
+                        exHrs1: packageDetails[0]?.extraHours,
+                        night1: packageDetails[0]?.NHalt,
+                        amount5: packageDetails[0]?.Rate,
+                        amount1: calculateExkmAmount(),
+                        amount2: calculateExHrsAmount(),
+                        amount3: calculateNightAmount(),
+                        amount4: calculatedriverconvienceAmount(),
+                        package: packageDetails[0]?.package,
+                        pack: packageDetails[0]?.package,
+                        minhrs: packageDetails[0]?.Hours,
+                        minkm: packageDetails[0]?.KMS,
+                    };
+                    for (const key in updatedCustomer) {
+                        if (key === '0') {
+                            delete updatedCustomer[key];
+                        }
                     }
+                    await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
+                    handleCancel();
+                    setRow([]);
+                    setRows([]);
+                    handleDriverSendSMS();
+                    handleSendSMS();
+                    handlecheck();
+                    setSuccess(true);
+                    setSuccessMessage("Successfully updated");
+                } catch {
+                    setError(true);
+                    setErrorMessage("Check your Network Connection");
                 }
-                await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
-                handleCancel();
-                setRow([]);
-                setRows([]);
-                handleDriverSendSMS();
-                handleSendSMS();
-                handlecheck();
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-            } catch {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
+            } else {
+                setInfo(true);
+                setInfoMessage("You do not have permission.");
             }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -835,8 +839,6 @@ const useTripsheet = () => {
         }
     };
 
-
-
     const handleUpload = () => {
         const input = document.createElement('input');
         input.type = 'file';
@@ -849,15 +851,14 @@ const useTripsheet = () => {
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
         const file = event.target.files[0];
         if (!file) return;
-        // setSelectedImage(file)
-        if (file) { // Ensure a file is selected before uploading
+        if (file) {
             const formData = new FormData();
             formData.append('image', file);
 
             axios.put(`http://localhost:8081/tripsheet_uploads/${tripid}`, formData)
         }
     };
-    // Function to calculate total time
+
     const calculateTotalTime = useCallback(() => {
         const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
         const closeTime = formData.closetime || selectedCustomerData.closetime || book.closetime;
@@ -992,7 +993,7 @@ const useTripsheet = () => {
         const amount2 = parseFloat(formData.amount2 || selectedCustomerData.amount2 || book.amount2) || calculateExHrsAmount() || 0;
         const amount3 = parseFloat(formData.amount3 || selectedCustomerData.amount3 || book.amount3) || calculateNightAmount() || 0;
         const amount4 = parseFloat(formData.amount4 || selectedCustomerData.amount4 || book.amount4) || calculatedriverconvienceAmount() || 0;
-        // Calculate the total amount
+
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4;
         return totalAmount;
     }
@@ -1003,7 +1004,7 @@ const useTripsheet = () => {
         const amount7 = parseFloat(formData.amount7 || selectedCustomerData.amount7 || book.amount7) || calculateExHrsAmount2();
         const amount8 = parseFloat(formData.amount8 || selectedCustomerData.amount8 || book.amount8) || calculateNightAmount2();
         const amount9 = parseFloat(formData.amount9 || selectedCustomerData.amount9 || book.amount9) || calculatedriverconvienceAmount2();
-        // Calculate the total amount
+
         const totalAmount = amount5 + amount6 + amount7 + amount8 + amount9;
         return totalAmount;
     }
@@ -1081,7 +1082,6 @@ const useTripsheet = () => {
                 [name]: checked,
             }));
         } else {
-            // Check if the field is the time field
             if (name === 'starttime') {
                 const formattedTime = value;
                 setBook((prevBook) => ({
@@ -1407,19 +1407,13 @@ const useTripsheet = () => {
 
                 const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
 
-                // Check if the response status is 200
                 if (response.status === 200) {
                     const data = await response.json();
                     const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-
-                    // Store image URLs in local storage
                     localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
-
                     setSelectedImage(attachedImageUrls);
                 } else {
-                    // If the response status is not 200, wait for 2 seconds and fetch again
                     const timer = setTimeout(fetchData, 2000);
-                    // Clear the timer to avoid memory leaks
                     return () => clearTimeout(timer);
                 }
             } catch {
@@ -1447,9 +1441,7 @@ const useTripsheet = () => {
                         setorganizationData(userDataArray[0]);
                     }
                 } else {
-                    // If the response status is not 200, wait for 2 seconds and fetch again
                     const timer = setTimeout(fetchData, 2000);
-                    // Clear the timer to avoid memory leaks
                     return () => clearTimeout(timer);
                 }
             } catch {

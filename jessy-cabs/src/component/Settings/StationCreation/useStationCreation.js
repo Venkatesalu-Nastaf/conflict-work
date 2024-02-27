@@ -3,9 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const useStationCreation = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -57,10 +55,8 @@ const useStationCreation = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -68,7 +64,6 @@ const useStationCreation = () => {
         }
         return true;
     };
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -80,8 +75,8 @@ const useStationCreation = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
 
@@ -89,24 +84,24 @@ const useStationCreation = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
@@ -122,7 +117,6 @@ const useStationCreation = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -132,7 +126,6 @@ const useStationCreation = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -164,6 +157,7 @@ const useStationCreation = () => {
         setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
     }, []);
+
     const handleAdd = async () => {
         const Stationname = book.Stationname;
         if (!Stationname) {
@@ -172,7 +166,6 @@ const useStationCreation = () => {
             return;
         }
         const permissions = checkPagePermission();
-
         if (permissions.read && permissions.new) {
             try {
                 await axios.post('http://localhost:8081/stationcreation', book);
@@ -192,18 +185,23 @@ const useStationCreation = () => {
 
 
     const handleEdit = async (stationid) => {
-        const permissions = checkPagePermission();
+        try {
+            const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.stationid === stationid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://localhost:8081/stationcreation/${selectedCustomerData?.stationid || book.stationid}`, updatedCustomer);
-            setSuccess(true);
-            setSuccessMessage("Successfully updated");
-            handleCancel();
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            if (permissions.read && permissions.modify) {
+                const selectedCustomer = rows.find((row) => row.stationid === stationid);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`http://localhost:8081/stationcreation/${selectedCustomerData?.stationid || book.stationid}`, updatedCustomer);
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                handleCancel();
+            } else {
+                setInfo(true);
+                setInfoMessage("You do not have permission.");
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -227,7 +225,6 @@ const useStationCreation = () => {
 
         handlelist();
     }, [permissions]);
-
 
     const handleClick = async (event, actionName, stationid) => {
         event.preventDefault();
@@ -256,7 +253,6 @@ const useStationCreation = () => {
                 setRows([]);
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.delete) {
                     await axios.delete(`http://localhost:8081/stationcreation/${selectedCustomerData?.stationid || book.stationid}`);
                     setSelectedCustomerData(null);
@@ -270,7 +266,6 @@ const useStationCreation = () => {
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.stationid === stationid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };

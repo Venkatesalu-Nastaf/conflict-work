@@ -60,7 +60,6 @@ const Pending = () => {
     handleBookingClick,
     handleTripsheetClick,
     columns
-    // ... (other state variables and functions)
   } = usePending();
 
   useEffect(() => {

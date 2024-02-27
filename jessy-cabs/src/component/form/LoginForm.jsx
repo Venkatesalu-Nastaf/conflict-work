@@ -43,8 +43,8 @@ const Login = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -52,24 +52,24 @@ const Login = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
 
@@ -170,7 +170,6 @@ const Login = () => {
             <div className="group button-group">
               <button type="submit" className="signup-btn" onClick={formSubmitter}>
                 Login
-                {/* <span>Login</span> */}
               </button>
             </div>
             <div className="social_media_container">

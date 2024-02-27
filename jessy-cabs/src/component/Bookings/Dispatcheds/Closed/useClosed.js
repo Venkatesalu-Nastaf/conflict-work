@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import { jsPDF } from 'jspdf';
 import { saveAs } from 'file-saver';
 
-
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "status", headerName: "Status", width: 130 },
@@ -24,9 +23,7 @@ const columns = [
 ];
 
 const useClosed = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [rows, setRows] = useState([]);
     const [department, setDepartment] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
@@ -80,10 +77,8 @@ const useClosed = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -91,7 +86,6 @@ const useClosed = () => {
         }
         return true;
     };
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -133,7 +127,6 @@ const useClosed = () => {
         }
     }, [info]);
 
-
     // download function
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -151,7 +144,6 @@ const useClosed = () => {
         pdf.setFont('helvetica', 'normal');
         pdf.text("Customer Details", 10, 10);
 
-        // Modify tableData to exclude the index number
         const tableData = rows.map((row) => [
             row['id'],
             row['tripid'],
@@ -175,9 +167,7 @@ const useClosed = () => {
             body: tableData,
             startY: 20,
             columnWidth: 'auto',
-
         });
-
         const pdfBlob = pdf.output('blob');
         saveAs(pdfBlob, 'Customer_Details.pdf');
     };
@@ -185,13 +175,12 @@ const useClosed = () => {
     // End
 
     const handleInputChange = (event, newValue) => {
-        setDepartment(newValue ? newValue.label : ''); // Assuming the label field contains the station name
+        setDepartment(newValue ? newValue.label : '');
     };
 
     const reversedRows = [...rows].reverse();
 
     const handleShow = useCallback(async () => {
-
         try {
             const response = await axios.get(
                 `http://localhost:8081/closed-tripsheet?department=${encodeURIComponent(
@@ -223,7 +212,6 @@ const useClosed = () => {
     }, [department, fromDate, toDate]);
 
     const handleShowAll = useCallback(async () => {
-
         try {
             const response = await axios.get(
                 `http://localhost:8081/tripsheet`
@@ -247,7 +235,6 @@ const useClosed = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-
     }, []);
 
     const handleButtonClickTripsheet = (selectedRow) => {
@@ -284,7 +271,6 @@ const useClosed = () => {
         reversedRows,
         handleButtonClickTripsheet,
         columns
-        // ... (other state variables and functions)
     };
 };
 

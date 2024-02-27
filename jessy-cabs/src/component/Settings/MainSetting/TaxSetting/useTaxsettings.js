@@ -18,7 +18,6 @@ const columns = [
 ];
 
 const useTaxsettings = () => {
-
     const user_id = localStorage.getItem('useridno');
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -74,10 +73,8 @@ const useTaxsettings = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -85,8 +82,6 @@ const useTaxsettings = () => {
         }
         return true;
     };
-
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -143,7 +138,6 @@ const useTaxsettings = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -153,7 +147,6 @@ const useTaxsettings = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -184,12 +177,12 @@ const useTaxsettings = () => {
             ...prevBook,
             [name]: parsedDate,
         }));
-
         setSelectedCustomerData((prevValues) => ({
             ...prevValues,
             [name]: parsedDate,
         }));
     };
+
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
@@ -206,6 +199,7 @@ const useTaxsettings = () => {
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
+
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
@@ -215,7 +209,6 @@ const useTaxsettings = () => {
 
     const handleAdd = async () => {
         const permissions = checkPagePermission();
-
         if (permissions.read && permissions.new) {
             try {
                 await axios.post('http://localhost:8081/taxsetting', book);
@@ -235,22 +228,27 @@ const useTaxsettings = () => {
     };
 
     const handleEdit = async (STax) => {
-        const permissions = checkPagePermission();
+        try {
+            const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.STax === STax);
-            const updatedCustomer = {
-                ...selectedCustomer,
-                ...selectedCustomerData,
-            };
-            await axios.put(`http://localhost:8081/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
-            handleCancel();
-            setRows([]);
-            setSuccess(true);
-            setSuccessMessage("Successfully updated");
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            if (permissions.read && permissions.modify) {
+                const selectedCustomer = rows.find((row) => row.STax === STax);
+                const updatedCustomer = {
+                    ...selectedCustomer,
+                    ...selectedCustomerData,
+                };
+                await axios.put(`http://localhost:8081/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
+                handleCancel();
+                setRows([]);
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+            } else {
+                setInfo(true);
+                setInfoMessage("You do not have permission.");
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -275,13 +273,11 @@ const useTaxsettings = () => {
         handlelist();
     }, [permissions]);
 
-
     const handleClick = async (event, actionName, STax) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.read) {
                     const response = await axios.get('http://localhost:8081/taxsetting');
                     const data = response.data;
@@ -300,7 +296,6 @@ const useTaxsettings = () => {
                 handleCancel();
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.delete) {
                     await axios.delete(`http://localhost:8081/taxsetting/${selectedCustomerData?.STax || book.STax}`);
                     setSelectedCustomerData(null);
@@ -313,7 +308,6 @@ const useTaxsettings = () => {
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.STax === STax);
                     const updatedCustomer = {

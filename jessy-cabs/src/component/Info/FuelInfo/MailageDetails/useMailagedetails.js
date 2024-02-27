@@ -15,8 +15,6 @@ const columns = [
     { field: "FuelConsumptioninliters", headerName: "Fuel Consumption (in liters)", width: 130 },
 ];
 
-
-
 const useMailagedetails = () => {
     const user_id = localStorage.getItem('useridno');
     const [initialOdometer, setInitialOdometer] = useState(0);
@@ -58,7 +56,6 @@ const useMailagedetails = () => {
     const checkPagePermission = () => {
         const currentPageName = 'User Creation';
         const permissions = userPermissions || {};
-
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -67,7 +64,6 @@ const useMailagedetails = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -78,10 +74,8 @@ const useMailagedetails = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -89,8 +83,6 @@ const useMailagedetails = () => {
         }
         return true;
     };
-
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -209,7 +201,6 @@ const useMailagedetails = () => {
         const permissions = checkPagePermission();
 
         if (permissions.read && permissions.new) {
-            // const vehiclename = selectedCustomerData.VehicleName;
             const VehicleName = book.VehicleName;
             if (!VehicleName) {
                 setError(true);
@@ -234,7 +225,6 @@ const useMailagedetails = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            // Display a warning or prevent the action
             setInfo(true);
             setInfoMessage("You do not have permission.");
         }
@@ -246,11 +236,9 @@ const useMailagedetails = () => {
         if (permissions.read && permissions.modify) {
             const selectedCustomer = rows.find((row) => row.VehicleNo === selectedCustomerData?.id);
 
-            // Parse and format the date fields
             const emptydate = selectedCustomerData?.emptydate ? dayjs(selectedCustomerData?.emptydate).format('YYYY-MM-DD') : null;
             const filldate = selectedCustomerData?.filldate ? dayjs(selectedCustomerData?.filldate).format('YYYY-MM-DD') : null;
 
-            // Update the selected customer with new data
             const updatedCustomer = {
                 ...selectedCustomer,
                 ...selectedCustomerData,
@@ -259,20 +247,15 @@ const useMailagedetails = () => {
             };
 
             try {
-                // Make PUT request to update the record
                 await axios.put(`http://localhost:8081/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
-
-                // Set success message and reset state
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
                 setRows([]);
             } catch (error) {
                 console.error("Error updating data:", error);
-                // Handle error
             }
         } else {
-            // Handle permission denied
             setInfo(true);
             setInfoMessage("You do not have permission.");
         }

@@ -33,12 +33,10 @@ router.get('/payment-detail', (req, res) => {
   });
 });
 
-
 router.get('/tripsheetcustomertripid/:customer/:tripid', (req, res) => {
   const customer = req.params.customer;
   const tripid = req.params.tripid.split(',');
   const decodedCustomer = decodeURIComponent(customer);
-  // Use placeholders in the query to prevent SQL injection
   db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?)', [decodedCustomer, tripid], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
@@ -65,10 +63,8 @@ router.get('/tripsheetcustomer/:customer', (req, res) => {
 
 //for status update
 router.post('/updateStatus', (req, res) => {
-
   const { tripids, status } = req.body;
 
-  // Update the database with the new status for multiple tripids
   const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
 
   db.query(query, [status, tripids], (err, results) => {

@@ -107,8 +107,6 @@ router.get('/searchvehicleinfo', (req, res) => {
   });
 });
 
-
-// ayyanar----------------------
 // -----------------------insurence ---------------
 const Insurance_storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -180,7 +178,6 @@ router.post('/nationalPermit-pdf/:id', NationalPermit_uploadfile.single("file"),
   })
 })
 
-
 // ----------------------StatePermit----------------------
 
 const StatePermit_storage = multer.diskStorage({
@@ -204,7 +201,6 @@ router.post('/statePermit-pdf/:id', StatePermit_uploadfile.single("file"), async
   })
 })
 
-
 // ----------------------Rcbook----------------------
 
 const Rcbook_storage = multer.diskStorage({
@@ -227,8 +223,6 @@ router.post('/rcBook-pdf/:id', Rcbook_uploadfile.single("file"), async (req, res
     return res.json({ Status: "success" });
   })
 })
-
-
 
 // ----------------------setFcCopy----------------------
 
@@ -263,8 +257,5 @@ router.get('/vehicle-docView/:id', (req, res) => {
     return res.json(result);
   })
 })
-
-///---------------------ayyanar end-----------------------------
-
 
 module.exports = router;

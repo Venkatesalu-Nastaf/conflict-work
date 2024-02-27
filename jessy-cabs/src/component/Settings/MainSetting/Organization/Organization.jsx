@@ -9,7 +9,6 @@ import ClearIcon from '@mui/icons-material/Clear';
 import BadgeIcon from "@mui/icons-material/Badge";
 import IconButton from '@mui/material/IconButton';
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-// import DeleteIcon from "@mui/icons-material/Delete";
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import SettingsPhoneIcon from '@mui/icons-material/SettingsPhone';
@@ -17,11 +16,8 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import useOrganization from './useOrganization';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-
-
 // REACT ICONS
 import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
-
 
 const Organization = () => {
 
@@ -34,7 +30,6 @@ const Organization = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        // handledelete,
         book,
         info,
         infoMessage,
@@ -45,14 +40,10 @@ const Organization = () => {
         hidePopup,
         selectedImage,
         editMode,
-        // handleFileChange,
         handleUpload,
         toggleEditMode,
         handleKeyDown,
         handleUpdate,
-
-
-        // ... (other state variables and functions)
     } = useOrganization();
 
     useEffect(() => {
@@ -84,18 +75,13 @@ const Organization = () => {
                                     </div>
                                 </div>
                                 <div className="input-field">
-
-
-
                                     <div className="input-field">
                                         <div className='input'>
-                                            {/* //image button */}
                                             <div className='input-field'>
                                                 <Button color="primary" size='small' variant="contained" onClick={handleUpload} component="label" > update</Button>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                             <div className='container-organisation-right'>
@@ -168,7 +154,6 @@ const Organization = () => {
                                             disabled={!editMode}
                                         />
                                     </div>
-
                                 </div>
                                 {editMode ? (
                                     <div className="input-field">
@@ -216,7 +201,6 @@ const Organization = () => {
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div className="organisation-details">
                     <div className="input-field">

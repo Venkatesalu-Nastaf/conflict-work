@@ -21,9 +21,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
 const MainDashboard = () => {
-
   const { sharedData } = useData();
-
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const { selectedTheme } = useThemes();
@@ -186,7 +184,6 @@ const MainDashboard = () => {
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               variant="dot"
             >
-
               <Avatar alt="userimage" src={`http://localhost:8081/images/${selectedImage}`} />
             </StyledBadge>
           </div>
@@ -214,7 +211,6 @@ const MainDashboard = () => {
         </div>
         <Outlet />
       </div>
-      {/* <h1>shared data:{sharedData}</h1> */}
       <Dialog open={popupOpen} onClose={handlePopupClose}>
         <DialogContent>
           <p>Do you want to logout</p>

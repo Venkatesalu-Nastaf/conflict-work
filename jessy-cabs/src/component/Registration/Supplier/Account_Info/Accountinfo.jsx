@@ -209,7 +209,6 @@ const Accuntinfo = () => {
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData?.underGroup || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = selectedCustomerData?.underGroup || ''
                     return (
                       <TextField {...params} label="Under Group" name="underGroup" inputRef={params.inputRef} />
                     )
@@ -311,7 +310,6 @@ const Accuntinfo = () => {
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleInfo || ''}
                   renderInput={(params) => {
-                    // params.inputProps.value = selectedCustomerData?.vehicleInfo || ''
                     return (
                       <TextField {...params} label="Vehicle Info" name="vehicleInfo" inputRef={params.inputRef} />
                     )

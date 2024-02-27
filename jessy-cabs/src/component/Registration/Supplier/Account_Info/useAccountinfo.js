@@ -8,7 +8,6 @@ const useAccountinfo = () => {
   const user_id = localStorage.getItem('useridno');
 
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-  // const [value, setValue] = React.useState("online_password");
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
@@ -72,7 +71,6 @@ const useAccountinfo = () => {
     return true;
   };
 
-
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
@@ -83,16 +81,16 @@ const useAccountinfo = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
 
@@ -100,11 +98,10 @@ const useAccountinfo = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
-
 
   // download function
   const convertToCSV = (data) => {
@@ -124,7 +121,6 @@ const useAccountinfo = () => {
     pdf.setFont('helvetica', 'normal');
     pdf.text("Account_Info", 10, 10);
 
-    // Modify tableData to exclude the index number
     const tableData = rows.map((row) => [
       row['id'],
       row['cperson'],
@@ -147,7 +143,6 @@ const useAccountinfo = () => {
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'Account_Info.pdf');
   };
-
 
   // TABLE START
   const columns = [
@@ -184,7 +179,6 @@ const useAccountinfo = () => {
     autoRefresh: '',
   });
 
-
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
 
@@ -208,10 +202,6 @@ const useAccountinfo = () => {
       }));
     }
   };
-  // const handleTabChange = (event, newValue) => {
-  //   setValue(newValue);
-  // };
-
 
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
@@ -292,26 +282,29 @@ const useAccountinfo = () => {
         setErrorMessage("Check your Network Connection");
       }
     } else {
-      // Display a warning or prevent the action
       setInfo(true);
       setInfoMessage("You do not have permission.");
     }
   };
 
   const handleEdit = async (accountNo) => {
-    const permissions = checkPagePermission();
-
-    if (permissions.read && permissions.modify) {
-      const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
-      const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-      await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
-      setSuccess(true);
-      setSuccessMessage("Successfully updated");
-      handleCancel();
-      setRows([]);
-    } else {
-      setInfo(true);
-      setInfoMessage("You do not have permission.");
+    try {
+      const permissions = checkPagePermission();
+      if (permissions.read && permissions.modify) {
+        const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+        setSuccess(true);
+        setSuccessMessage("Successfully updated");
+        handleCancel();
+        setRows([]);
+      } else {
+        setInfo(true);
+        setInfoMessage("You do not have permission.");
+      }
+    } catch {
+      setError(true);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
@@ -405,9 +398,6 @@ const useAccountinfo = () => {
       handleClick(null, 'List');
     }
   });
-
-  // const reversedRows = [...rows].reverse();
-
 
   return {
     selectedCustomerData,

@@ -3,9 +3,7 @@ import axios from 'axios';
 import Button from "@mui/material/Button";
 
 const useDrivercreation = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [showPasswords, setShowPasswords] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -42,7 +40,6 @@ const useDrivercreation = () => {
     const checkPagePermission = () => {
         const currentPageName = 'Driver Master';
         const permissions = userPermissions || {};
-
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -51,7 +48,6 @@ const useDrivercreation = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -62,10 +58,8 @@ const useDrivercreation = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for    other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -81,7 +75,6 @@ const useDrivercreation = () => {
             field: 'actions',
             headerName: 'Actions',
             width: 130,
-            //ayyanar
             renderCell: (params) => (
                 <Button
                     onClick={() => handleButtonClick(params)}
@@ -136,7 +129,6 @@ const useDrivercreation = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -146,7 +138,6 @@ const useDrivercreation = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -202,7 +193,6 @@ const useDrivercreation = () => {
         setIsEditMode(false);
     };
 
-
     const user__id = selectedCustomerData?.userid || book.userid;
     const [file, setFile] = useState(null);
 
@@ -217,7 +207,6 @@ const useDrivercreation = () => {
                 setError(true);
                 setErrorMessage('something wrong');
             }
-
         } else {
             return
         }
@@ -299,7 +288,6 @@ const useDrivercreation = () => {
                     setErrorMessage("Check your Network Connection");
                 }
             } else {
-                // Display a warning or prevent the action
                 setInfo(true);
                 setInfoMessage("You do not have permission.");
             }
@@ -347,7 +335,6 @@ const useDrivercreation = () => {
             setInfoMessage('You do not have permission.');
         }
     };
-
 
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
@@ -426,40 +413,40 @@ const useDrivercreation = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
     useEffect(() => {
         if (passwordsMatch) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [passwordsMatch]);
     useEffect(() => {
@@ -496,8 +483,6 @@ const useDrivercreation = () => {
         setPasswordsMatch(password !== confirmPassword);
     };
 
-    //ayyanar---------to delte dialog box image
-
     const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
 
     const handleClosedeleteDialog = () => {
@@ -512,13 +497,13 @@ const useDrivercreation = () => {
     };
 
     const handleContextMenu = () => {
-        axios.delete('http://localhost:8081/driver_proof/' + imagedata)
-            .then(res => {
-                // console.log("deleted")
-            })
-            .catch(err => console.log(err))
-        setDialogdeleteOpen(false);
-        setDialogOpen(false);
+        try {
+            axios.delete('http://localhost:8081/driver_proof/' + imagedata)
+            setDialogdeleteOpen(false);
+            setDialogOpen(false);
+        } catch {
+
+        }
     };
 
     return {
@@ -550,11 +535,19 @@ const useDrivercreation = () => {
         showPassword,
         handleClickShowPassword,
         handleMouseDownPassword,
-        handleCloseDialog, dialogOpen, allFile, setFile, setLicencepdf,
+        handleCloseDialog,
+        dialogOpen,
+        allFile,
+        setFile,
+        setLicencepdf,
         isEditMode,
         handleEdit,
-        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen,
-        setError, setErrorMessage
+        handleContextMenu,
+        handleimagedelete,
+        handleClosedeleteDialog,
+        dialogdeleteOpen,
+        setError,
+        setErrorMessage
     };
 };
 

@@ -4,8 +4,6 @@ const db = require('../../../db');
 const multer = require('multer');
 const path = require('path');
 
-
-
 router.use(express.static('images'));
 router.use(express.static('public'));
 

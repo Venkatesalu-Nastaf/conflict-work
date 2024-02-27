@@ -76,10 +76,8 @@ const useCustomer = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -107,7 +105,6 @@ const useCustomer = () => {
         pdf.setFont('helvetica', 'normal');
         pdf.text("Customer Details", 10, 10);
 
-        // Modify tableData to exclude the index number
         const tableData = rows.map((row) => [
             row['id'],
             row['customerId'],
@@ -206,7 +203,6 @@ const useCustomer = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -216,7 +212,6 @@ const useCustomer = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -321,7 +316,6 @@ const useCustomer = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            // Display a warning or prevent the action
             setInfo(true);
             setInfoMessage("You do not have permission.");
         }
@@ -436,8 +430,6 @@ const useCustomer = () => {
             handleClick(null, 'List');
         }
     });
-
-    // const reversedRows = [...rows].reverse();
 
     return {
         selectedCustomerData,

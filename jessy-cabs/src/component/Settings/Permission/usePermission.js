@@ -93,10 +93,8 @@ const usePermission = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for    other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -181,8 +179,8 @@ const usePermission = () => {
     }, []);
 
     const handleRowClick = useCallback((user) => {
-        setSelectedCustomerDatas(user); // Update selected user data
-        setUserId((prevUserId) => ({ ...prevUserId, userid: user.userid })); // Update userid field
+        setSelectedCustomerDatas(user);
+        setUserId((prevUserId) => ({ ...prevUserId, userid: user.userid }));
     }, []);
 
     const handleSavePermissions = async () => {
@@ -224,18 +222,15 @@ const usePermission = () => {
                     if (Array.isArray(response.data)) {
                         const receivedPermissions = response.data;
 
-                        // Create a map from page_name to permission object
                         const permissionMap = receivedPermissions.reduce((map, permission) => {
                             map[permission.page_name] = permission;
                             return map;
                         }, {});
 
-                        // Update the state with the received permissions
                         setPermissionsData(prevPermissions => {
                             return prevPermissions.map(permission => {
                                 const receivedPermission = permissionMap[permission.name] || {};
 
-                                // Keep the original "ID" and "Form Name" columns fixed
                                 return {
                                     id: permission.id,
                                     name: permission.name,
@@ -264,8 +259,6 @@ const usePermission = () => {
         setUserData(null);
     };
 
-
-
     return {
         error,
         success,
@@ -287,7 +280,6 @@ const usePermission = () => {
         handleCancel,
         permissionsData,
         handlePermissionChange,
-
     };
 };
 

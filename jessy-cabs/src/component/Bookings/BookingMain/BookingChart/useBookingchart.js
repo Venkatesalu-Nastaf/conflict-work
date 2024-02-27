@@ -5,7 +5,6 @@ import { VehicleModel } from "./BookingChart";
 
 const useBookingchart = () => {
     const user_id = localStorage.getItem('useridno');
-
     const [fromDate, setFromDate] = useState(dayjs());
     const [toDate, setToDate] = useState(dayjs());
     const [error, setError] = useState(false);
@@ -80,8 +79,8 @@ const useBookingchart = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
 
@@ -89,24 +88,24 @@ const useBookingchart = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
     const [vehicles, setVehicles] = useState(() => {
@@ -131,7 +130,7 @@ const useBookingchart = () => {
                     toDate: to.format('YYYY-MM-DD'),
                 },
             });
-            const bookingData = response.data; // Fetch the booking data from the API response
+            const bookingData = response.data;
             const bookingCounts = {};
             bookingData.forEach((booking) => {
                 const vehicleName = booking.vehType;

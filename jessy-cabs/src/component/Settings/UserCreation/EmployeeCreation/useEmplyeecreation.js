@@ -2,9 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const useEmplyeecreation = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [showPasswords, setShowPasswords] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -63,10 +61,8 @@ const useEmplyeecreation = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -74,7 +70,6 @@ const useEmplyeecreation = () => {
         }
         return true;
     };
-
 
     // TABLE START
     const columns = [
@@ -106,7 +101,6 @@ const useEmplyeecreation = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -116,7 +110,6 @@ const useEmplyeecreation = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -163,17 +156,14 @@ const useEmplyeecreation = () => {
 
     const handleAdd = async () => {
         const permissions = checkPagePermission();
-
         if (permissions.read && permissions.new) {
             const stationname = book.userid;
-
             if (password === confirmPassword) {
                 if (!stationname) {
                     setError(true);
                     setErrorMessage("Fill mandatory fields");
                     return;
                 }
-
                 try {
                     await axios.post('http://localhost:8081/usercreation', book);
                     handleCancel();
@@ -196,19 +186,23 @@ const useEmplyeecreation = () => {
     };
 
     const handleEdit = async (userid) => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.userid === userid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://localhost:8081/usercreation/${book.userid || selectedCustomerData?.userid}`, updatedCustomer);
-            setSuccess(true);
-            setSuccessMessage("Successfully updated");
-            handleCancel();
-            setRows([]);
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        try {
+            const permissions = checkPagePermission();
+            if (permissions.read && permissions.modify) {
+                const selectedCustomer = rows.find((row) => row.userid === userid);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`http://localhost:8081/usercreation/${book.userid || selectedCustomerData?.userid}`, updatedCustomer);
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                handleCancel();
+                setRows([]);
+            } else {
+                setInfo(true);
+                setInfoMessage("You do not have permission.");
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -229,7 +223,6 @@ const useEmplyeecreation = () => {
         }
         handleList();
     }, [permissions]);
-
 
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
@@ -262,7 +255,6 @@ const useEmplyeecreation = () => {
                 setRows([]);
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.delete) {
                     await axios.delete(`http://localhost:8081/usercreation/${book.userid || selectedCustomerData?.userid}`);
                     setSelectedCustomerData(null);
@@ -276,7 +268,6 @@ const useEmplyeecreation = () => {
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.userid === userid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
@@ -379,7 +370,6 @@ const useEmplyeecreation = () => {
         const confirmPassword = selectedCustomerData?.userconfirmpassword || book.userconfirmpassword;
         setPasswordsMatch(password !== confirmPassword);
     };
-
 
     return {
         selectedCustomerData,

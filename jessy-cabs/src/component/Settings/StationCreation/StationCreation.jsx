@@ -55,7 +55,6 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-
 const StationCreation = () => {
   const {
     selectedCustomerData,
@@ -197,9 +196,6 @@ const StationCreation = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-              {/* <div className="input" style={{ width: "100px" }}>
-                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
-              </div> */}
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
                   <Button variant="contained" onClick={handleEdit}>Edit</Button>

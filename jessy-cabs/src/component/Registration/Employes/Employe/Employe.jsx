@@ -19,8 +19,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 
-// ayyanar-----------------------
-
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 
@@ -102,10 +100,19 @@ const Employe = () => {
     columns,
     searchText,
     setSearchText,
-    handleShowAll, allFile, handleCloseDialog, dialogOpen, setFile,
+    handleShowAll,
+    allFile,
+    handleCloseDialog,
+    dialogOpen,
+    setFile,
     isEditMode,
     handleEdit,
-    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen, setError, setErrorMessage,
+    handleContextMenu,
+    handleimagedelete,
+    handleClosedeleteDialog,
+    dialogdeleteOpen,
+    setError,
+    setErrorMessage,
   } = useEmployee();
 
   useEffect(() => {
@@ -378,15 +385,6 @@ const Employe = () => {
                 />
               </div>
               <div className="input" style={{ width: "20px" }}>
-                {/* <Button component="label">
-                  <UploadFileIcon />
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(e) => setFile(e.target.files[0])}
-                  />
-                </Button> */}
-
                 {selectedCustomerData?.empid || book.empid ? (
                   <Button component="label">
                     <UploadFileIcon />
@@ -535,7 +533,6 @@ const Employe = () => {
               pageSize={5}
             />
           </div>
-
           <Dialog open={dialogOpen} onClose={handleCloseDialog} >
             <DialogContent>
               <div style={{ position: 'relative' }}>
@@ -548,8 +545,6 @@ const Employe = () => {
               </div>
             </DialogContent>
           </Dialog>
-
-
           <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
             <DialogContent>
               <div>
@@ -558,16 +553,9 @@ const Employe = () => {
                   <Button onClick={handleContextMenu}>yes</Button>
                   <Button onClick={handleClosedeleteDialog}>No</Button>
                 </div>
-
               </div>
-
-
             </DialogContent>
           </Dialog>
-
-
-
-
         </div>
       </form>
     </div>

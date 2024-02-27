@@ -35,7 +35,6 @@ const BookingChart = () => {
     vehicles,
     columns,
     showBookedStatusAll,
-    
   } = useBookingchart();
 
   useEffect(() => {

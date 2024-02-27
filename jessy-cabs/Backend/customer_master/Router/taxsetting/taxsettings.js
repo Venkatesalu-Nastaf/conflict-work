@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
 
-
 // Add Billing database
 router.post('/taxsetting', (req, res) => {
     const customerData = req.body;
@@ -28,7 +27,6 @@ router.delete('/taxsetting/:STax', (req, res) => {
 });
 
 // update Billing details
-
 
 router.put('/taxsetting/:STax', (req, res) => {
     const STax = req.params.STax;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useData } from '../../MainDash/Sildebar/DataContext2';
 import axios from 'axios';
 import "./Sidebar.css";
+import Avatar from '@mui/material/Avatar';
 import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
 import Badge from '@mui/material/Badge';
@@ -57,6 +58,7 @@ const Sidebar = () => {
 
   const { sharedData } = useData();
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedprofileImage, setSelectedprofileImage] = useState(null);
 
   useEffect(() => {
     const handleImageView = async () => {
@@ -64,8 +66,7 @@ const Sidebar = () => {
       await axios.get(`http://localhost:8081/log-imageview/${organizationname}`)
         .then(res => {
           if (res.status === 200) {
-
-            setSelectedImage(res.data[0]?.fileName); // Assuming res.data.prof contains the image data
+            setSelectedImage(res.data[0]?.fileName);
             localStorage.setItem('selectedlogo', selectedImage);
             if (selectedImage === null) {
               const storedImage = localStorage.getItem('selectedlogo');
@@ -79,7 +80,6 @@ const Sidebar = () => {
           }
         })
         .catch(error => {
-          // Handle error if any
           console.error("Error fetching image data:", error);
         });
     };
@@ -88,8 +88,6 @@ const Sidebar = () => {
 
 
   //------------------------------------------
-
-  // const pagename = localStorage.getItem('selectedMenuItem');
 
   const [info, setInfo] = useState(false);
   const [infoMessage, setInfoMessage] = useState({});
@@ -203,7 +201,6 @@ const Sidebar = () => {
           return () => clearTimeout(timer);
         }
       } catch (error) {
-        // Handle errors
         console.error('Error fetching image data:', error);
       }
     };
@@ -211,8 +208,23 @@ const Sidebar = () => {
     fetchData();
   }, []);
 
-  // const storedImageUrls = JSON.parse(localStorage.getItem('selectedImage'));
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  useEffect(() => {
+    const handleImageView = () => {
+      const userid = localStorage.getItem('useridno');
+      axios.get(`http://localhost:8081/userprofileview/${userid}`)
+        .then(res => {
+          if (res.status === 200) {
+            setSelectedprofileImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
+          } else {
+            const timer = setTimeout(handleImageView, 100);
+            return () => clearTimeout(timer);
+          }
+        })
+    };
+    handleImageView();
+  }, [sharedData, selectedprofileImage]);
 
   return (
     <>
@@ -228,8 +240,6 @@ const Sidebar = () => {
         variants={sidebarVariants}
         animate={window.innerWidth <= 768 ? `${expanded}` : ""}
       >
-
-
         <div className="logo">
           {selectedImage !== null ? (
             <>
@@ -250,14 +260,7 @@ const Sidebar = () => {
               <BiBuildings />
             </div>
           )}
-
-
-
-
         </div>
-
-
-
         <div className="menu">
           <MenuItem
             label="Dashboard"
@@ -351,7 +354,6 @@ const Sidebar = () => {
                         <p>{success}</p>
                       </div>
                     }
-
                   </div>
                 ) : (
                   <div>
@@ -366,10 +368,9 @@ const Sidebar = () => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 variant="dot"
               >
-
+                <Avatar alt="userimage" src={`http://localhost:8081/images/${selectedprofileImage}`} />
               </StyledBadge>
             </div>
-
           </div>
         </div>
         {info &&

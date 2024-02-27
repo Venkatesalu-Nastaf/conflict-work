@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import "./Themes.css";
-import { useThemes } from "./ThemesContext"; // Import the useThemes hook
+import { useThemes } from "./ThemesContext"; 
 
 const Themes = () => {
   const { setSelectedTheme } = useThemes();

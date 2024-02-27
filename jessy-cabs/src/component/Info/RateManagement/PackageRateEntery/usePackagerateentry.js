@@ -22,9 +22,7 @@ const columns = [
 // TABLE END
 
 const usePackagerateentry = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -59,7 +57,6 @@ const usePackagerateentry = () => {
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';
         const permissions = userPermissions || {};
-
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -68,7 +65,6 @@ const usePackagerateentry = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -79,10 +75,8 @@ const usePackagerateentry = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -90,7 +84,6 @@ const usePackagerateentry = () => {
         }
         return true;
     };
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -102,8 +95,8 @@ const usePackagerateentry = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
 
@@ -111,27 +104,26 @@ const usePackagerateentry = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
-
 
     const [book, setBook] = useState({
         ratetype: '',
@@ -158,7 +150,6 @@ const usePackagerateentry = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -168,7 +159,6 @@ const usePackagerateentry = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -191,7 +181,6 @@ const usePackagerateentry = () => {
             [name]: selectedOption,
         }));
     };
-
 
     const handleCancel = () => {
         setBook((prevBook) => ({
@@ -247,7 +236,6 @@ const usePackagerateentry = () => {
                 setErrorMessage("Check your Network Connection");
             }
         } else {
-            // Display a warning or prevent the action
             setInfo(true);
             setInfoMessage("You do not have permission.");
         }
@@ -268,20 +256,24 @@ const usePackagerateentry = () => {
         handleList();
     }, [permissions]);
 
-    const handleEdit = async (userid) => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
-            setSuccess(true);
-            setSuccessMessage("Successfully updated");
-            handleCancel();
-            setRows([]);
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+    const handleEdit = async () => {
+        try {
+            const permissions = checkPagePermission();
+            if (permissions.read && permissions.modify) {
+                const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                handleCancel();
+                setRows([]);
+            } else {
+                setInfo(true);
+                setInfoMessage("You do not have permission.");
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -311,7 +303,6 @@ const usePackagerateentry = () => {
                 handleCancel();
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.delete) {
                     await axios.delete(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`);
                     setSelectedCustomerData(null);
@@ -325,7 +316,6 @@ const usePackagerateentry = () => {
                 }
             } else if (actionName === 'Edit') {
                 const permissions = checkPagePermission();
-
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };

@@ -27,12 +27,10 @@ const useOrganization = () => {
             } catch {
             }
         };
-
         fetchPermissions();
     }, [user_id]);
 
     const { setSharedData } = useData();
-
 
     const checkPagePermission = () => {
         const currentPageName = 'User Creation';
@@ -46,7 +44,6 @@ const useOrganization = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -57,10 +54,8 @@ const useOrganization = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -68,8 +63,6 @@ const useOrganization = () => {
         }
         return true;
     };
-
-
 
     const [book, setBook] = useState({
         organizationname: '',
@@ -97,7 +90,6 @@ const useOrganization = () => {
         industrySpecificDetails: '',
     });
 
-
     useEffect(() => {
         if (error) {
             const timer = setTimeout(() => {
@@ -115,7 +107,6 @@ const useOrganization = () => {
             return () => clearTimeout(timer);
         }
     }, [info]);
-
 
     const handleKeyDown = useCallback(async (event) => {
         if (event.key === 'Enter') {
@@ -158,7 +149,6 @@ const useOrganization = () => {
         }
     };
 
-
     const handleUpdate = async (organizationname) => {
         const permissions = checkPagePermission();
 
@@ -184,7 +174,6 @@ const useOrganization = () => {
         }
     };
 
-
     const handleChange = (event) => {
         const { name, value } = event.target;
         setBook((prevBook) => ({
@@ -196,7 +185,6 @@ const useOrganization = () => {
             [name]: value,
         }));
     };
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -219,7 +207,6 @@ const useOrganization = () => {
 
             }
         };
-
         fetchData();
     }, []);
 
@@ -272,14 +259,12 @@ const useOrganization = () => {
         setSharedData(file.name);
         setSelectedImage(file)
 
-        if (file) { // Ensure a file is selected before uploading
+        if (file) {
             const formData = new FormData();
             formData.append('image', file);
-
             axios.put(`http://localhost:8081/logo-upload/${organizationname}`, formData)
         }
     };
-
 
     useEffect(() => {
         const handleImageView = () => {
@@ -287,7 +272,7 @@ const useOrganization = () => {
             axios.get(`http://localhost:8081/logo-view/${organizationname}`)
                 .then(res => {
                     if (res.status === 200) {
-                        setSelectedImage(res.data[0]?.fileName); // Assuming res.data.prof contains the image data
+                        setSelectedImage(res.data[0]?.fileName);
                     } else {
                         const timer = setTimeout(handleImageView, 100);
                         return () => clearTimeout(timer);
@@ -296,8 +281,6 @@ const useOrganization = () => {
         };
         handleImageView();
     }, [organizationname, selectedImage]);
-
-
 
     return {
         selectedCustomerData,

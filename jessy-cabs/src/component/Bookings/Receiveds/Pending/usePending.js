@@ -21,9 +21,7 @@ const columns = [
 ];
 
 const usePending = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [rows, setRows] = useState([]);
     const [servicestation, setServiceStation] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
@@ -49,8 +47,7 @@ const usePending = () => {
                 const currentPageName = 'Booking';
                 const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+            } catch {
             }
         };
 
@@ -80,10 +77,8 @@ const usePending = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -148,7 +143,6 @@ const usePending = () => {
         pdf.setFont('helvetica', 'normal');
         pdf.text("Pending Reports", 10, 10);
 
-        // Modify tableData to exclude the index number
         const tableData = rows.map((row) => [
             row['id'],
             row['status'],
@@ -175,7 +169,7 @@ const usePending = () => {
     };
 
     const handleInputChange = (event, newValue) => {
-        setServiceStation(newValue ? newValue.label : ''); // Assuming the label field contains the station name
+        setServiceStation(newValue ? newValue.label : ''); 
     };
 
     const reversedRows = [...rows].reverse();
@@ -210,12 +204,10 @@ const usePending = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-
     }, [servicestation, fromDate, toDate]);
 
 
     const handleShowAll = useCallback(async () => {
-
         try {
             const response = await axios.get(
                 `http://localhost:8081/booking`
@@ -239,7 +231,6 @@ const usePending = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-
     }, []);
 
     const handleButtonClick = (row) => {

@@ -5,7 +5,6 @@ import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
 import Button from "@mui/material/Button";
 
-
 const useVehicleinfo = () => {
     const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -141,10 +140,8 @@ const useVehicleinfo = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -152,7 +149,6 @@ const useVehicleinfo = () => {
         }
         return true;
     };
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -461,37 +457,40 @@ const useVehicleinfo = () => {
     };
 
     const handleEdit = async (vehicleId) => {
-        const permissions = checkPagePermission();
+        try {
+            const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
-            const updatedCustomer = {
-                ...selectedCustomer,
-                ...selectedCustomerData,
-            };
-            await axios.put(`http://localhost:8081/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
-            handleCancel();
+            if (permissions.read && permissions.modify) {
+                const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
+                const updatedCustomer = {
+                    ...selectedCustomer,
+                    ...selectedCustomerData,
+                };
+                await axios.put(`http://localhost:8081/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
+                handleCancel();
 
-            addFcCopy_copy();
-            addRcBook_copy();
-            addStatePermit_copy();
-            addNationalPermit_copy();
-            addLicence_copy();
-            addInsurence_copy();
+                addFcCopy_copy();
+                addRcBook_copy();
+                addStatePermit_copy();
+                addNationalPermit_copy();
+                addLicence_copy();
+                addInsurence_copy();
 
-            setRows([]);
-            setSuccess(true);
-            setSuccessMessage("Successfully Updated");
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+                setRows([]);
+                setSuccess(true);
+                setSuccessMessage("Successfully Updated");
+            } else {
+                setInfo(true);
+                setInfoMessage("You do not have permission.");
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
-
     const handleClick = async (event, actionName, vehicleId) => {
         event.preventDefault();
-
         try {
             if (actionName === 'List') {
             } else if (actionName === 'Cancel') {
@@ -524,14 +523,14 @@ const useVehicleinfo = () => {
                     };
                     await axios.put(`http://localhost:8081/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
                     handleCancel();
-
+                    //
                     addFcCopy_copy();
                     addRcBook_copy();
                     addStatePermit_copy();
                     addNationalPermit_copy();
                     addLicence_copy();
                     addInsurence_copy();
-
+                    //
                     setRows([]);
                     setSuccess(true);
                     setSuccessMessage("Successfully Updated");
@@ -592,7 +591,6 @@ const useVehicleinfo = () => {
         setIsEditMode(true);
     }, []);
 
-    //ayyanar---------to delte dialog box image
 
     const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
 
@@ -608,13 +606,13 @@ const useVehicleinfo = () => {
     };
 
     const handleContextMenu = () => {
+        try{
         axios.delete('http://localhost:8081/vehicle_documents/' + imagedata)
-            .then(res => {
-                // console.log("deleted")
-            })
-            .catch(err => console.log(err))
         setDialogdeleteOpen(false);
         setDialogOpen(false);
+        }catch{
+            
+        }
     };
 
 

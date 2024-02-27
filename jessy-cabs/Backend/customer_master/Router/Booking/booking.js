@@ -3,8 +3,7 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const db = require('../../../db');
 const multer = require('multer');
-const moment = require('moment'); // or import dayjs from 'dayjs';
-// const multer = require('multer');
+const moment = require('moment'); 
 const path = require('path');
 
 const upload = multer({ dest: 'uploads/' });
@@ -129,7 +128,6 @@ router.get('/name-customers/:customer', (req, res) => {
 router.post('/send-email', async (req, res) => {
     try {
         const { guestname, guestmobileno, email, useage, pickup } = req.body;
-        // Create a Nodemailer transporter
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -148,7 +146,6 @@ router.post('/send-email', async (req, res) => {
         const ownerMailOptions = {
             from: 'akash02899@gmail.com',
             to: 'akash02899@gmail.com', // Set the owner's email address
-            // subject: ${name} 'sent you a feedback',
             subject: `${guestname} sent you a feedback`,
             text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nPickup: ${pickup}\nUsage: ${useage}`,
         };
@@ -196,7 +193,6 @@ router.post('/send-onbook-email', async (req, res) => {
         const ownerMailOptions = {
             from: 'akash02899@gmail.com',
             to: 'akash02899@gmail.com', // Set the owner's email address
-            // subject: ${name} 'sent you a feedback',
             subject: `${guestname} sent you a booking request`,
             text: `Guest Name: ${guestname}\nEmail: ${email}\nGuest Mobile No: ${guestmobileno}\nStart Date: ${startdate}\nStart Time: ${starttime}\nPickup: ${pickup}\nUseage: ${useage}\nDuty: ${duty}\nVehicle Type: ${vehType}\nRemarks: ${remarks}`,
         };
@@ -330,12 +326,10 @@ const booking_storage = multer.diskStorage({
 
 })
 
-
 const booking_uploadfile = multer({ storage: booking_storage });
 
 router.post('/bookingpdf/:id', booking_uploadfile.single("file"), async (req, res) => {
     const booking_id = req.params.id;
-
     const fileName = req.file.filename;
     const fileType = req.file.mimetype;
     const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
@@ -358,6 +352,5 @@ router.get('/booking-docView/:id', (req, res) => {
 })
 
 ///--------------------------------------------------------------------------------
-//-------------------------------------------------------------------
 
 module.exports = router;

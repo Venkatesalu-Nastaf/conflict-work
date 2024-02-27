@@ -9,7 +9,6 @@ import TabContext from "@mui/lab/TabContext";
 import TaxSetting from "./TaxSetting/TaxSetting";
 import Organization from "./Organization/Organization";
 
-
 const MainSetting = () => {
   const [value, setValue] = React.useState("Organization");
 

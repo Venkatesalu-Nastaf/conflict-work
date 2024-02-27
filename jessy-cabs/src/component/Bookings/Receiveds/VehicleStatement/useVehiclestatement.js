@@ -4,7 +4,6 @@ import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import { saveAs } from 'file-saver';
 
-
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "tripno", headerName: "Trip No", width: 130 },
@@ -29,9 +28,7 @@ const columns = [
 ];
 
 const useVehiclestatement = () => {
-
     const user_id = localStorage.getItem('useridno');
-
     const [rows, setRows] = useState([]);
     const [servicestation, setServiceStation] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
@@ -88,10 +85,8 @@ const useVehiclestatement = () => {
 
     const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
         if (permissions.read) {
-            // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
             }
@@ -99,7 +94,6 @@ const useVehiclestatement = () => {
         }
         return true;
     };
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -111,8 +105,8 @@ const useVehiclestatement = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [error]);
 
@@ -120,24 +114,24 @@ const useVehiclestatement = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [info]);
 
@@ -157,7 +151,6 @@ const useVehiclestatement = () => {
         pdf.setFont('helvetica', 'normal');
         pdf.text("VehicleStatement Reports", 10, 10);
 
-        // Modify tableData to exclude the index number
         const tableData = rows.map((row) => [
             row['id'],
             row['status'],
@@ -184,7 +177,7 @@ const useVehiclestatement = () => {
     };
 
     const handleInputChange = (event, newValue) => {
-        setServiceStation(newValue ? newValue.label : ''); // Assuming the label field contains the station name
+        setServiceStation(newValue ? newValue.label : ''); 
     };
 
     const handleShow = useCallback(async () => {
@@ -217,7 +210,6 @@ const useVehiclestatement = () => {
         }
 
     }, [servicestation, fromDate, toDate]);
-
 
     const handleShowAll = useCallback(async () => {
 

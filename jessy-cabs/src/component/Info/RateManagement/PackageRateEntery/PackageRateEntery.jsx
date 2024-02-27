@@ -47,8 +47,6 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-
-
 const PackageRateEntery = () => {
 
   const {
@@ -106,7 +104,6 @@ const PackageRateEntery = () => {
                     }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.ratetype || ''}
                     renderInput={(params) => {
-                      // params.inputProps.value = selectedCustomerData?.ratetype || ''
                       return (
                         <TextField {...params} label="RateType" name="ratetype" inputRef={params.inputRef} />
                       )
@@ -131,7 +128,6 @@ const PackageRateEntery = () => {
                     }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.pricetag || ''}
                     renderInput={(params) => {
-                      // params.inputProps.value = selectedCustomerData?.pricetag || ''
                       return (
                         <TextField {...params} label="PriceTag" name="pricetag" inputRef={params.inputRef} />
                       )
@@ -187,7 +183,6 @@ const PackageRateEntery = () => {
                     }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleType || ''}
                     renderInput={(params) => {
-
                       return (
                         <TextField {...params} label="VehicleType" name="vehicleType" inputRef={params.inputRef} />
                       )
@@ -195,7 +190,6 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-
               </div>
             </div>
           </div>
@@ -219,7 +213,6 @@ const PackageRateEntery = () => {
                 }))}
                 getOptionLabel={(option) => option.label || selectedCustomerData?.duty || ''}
                 renderInput={(params) => {
-
                   return (
                     <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
                   )
@@ -427,7 +420,6 @@ const PackageRateEntery = () => {
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
-          // direction="left"
           >
             {actions.map((action) => (
               <SpeedDialAction
@@ -448,7 +440,6 @@ const PackageRateEntery = () => {
               pageSize={5}
             />
           </div>
-
         </div>
       </form>
     </div>

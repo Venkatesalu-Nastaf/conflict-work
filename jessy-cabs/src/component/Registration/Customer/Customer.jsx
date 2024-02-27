@@ -61,10 +61,6 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-
-
-
-
 const Customer = () => {
 
   const {

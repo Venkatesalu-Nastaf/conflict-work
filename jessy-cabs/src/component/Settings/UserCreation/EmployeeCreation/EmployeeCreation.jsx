@@ -240,7 +240,6 @@ const EmployeeCreation = () => {
                     }
                   />
                 </FormControl>
-
               </div>
               <div className="input radio">
                 <FormControl>
@@ -277,7 +276,6 @@ const EmployeeCreation = () => {
                 )}
               </div>
             </div>
-
           </div>
           {error &&
             <div className='alert-popup Error' >

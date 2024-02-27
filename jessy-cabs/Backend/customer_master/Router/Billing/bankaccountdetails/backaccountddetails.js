@@ -45,7 +45,6 @@ router.put('/updatebankdetails/:id', (req, res) => {
     });
 });
 
-
 //delete bank account
 router.delete('/deletebankdetails/:id', (req, res) => {
     const idToDelete = req.params.id;

@@ -1,15 +1,12 @@
 import React, { useEffect } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
-
 import Box from "@mui/material/Box";
-
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
-
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -98,7 +95,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const Booking = () => {
 
-
   const {
     selectedCustomerData,
     selectedCustomerId,
@@ -158,10 +154,18 @@ const Booking = () => {
     reversedRows,
     columns,
     handletableClick,
-    setFile, dialogOpen, handleCloseDialog, allFile, handleButtonClick,
+    setFile,
+    dialogOpen,
+    handleCloseDialog,
+    allFile,
+    handleButtonClick,
     isEditMode,
     handleEdit,
-    handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen, handleprevent,
+    handleContextMenu,
+    handleimagedelete,
+    handleClosedeleteDialog,
+    dialogdeleteOpen,
+    handleprevent,
     setErrorMessage,
     setError,
   } = useBooking();
@@ -1124,24 +1128,6 @@ const Booking = () => {
               <div className="input radio">
               </div>
               <div className="input-field">
-                {/* <div className="input">
-
-                  <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
-                    Attach File
-                    {
-                      formData.bookingno || selectedCustomerData.bookingno || book.bookingno ? (
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onClick={handleprevent}
-                          onChange={(e) => setFile(e.target.files[0])}
-                        />
-                      ) : null
-                    }
-                  </Button>
-
-
-                </div> */}
                 <div className="input">
                   {formData.bookingno || selectedCustomerData.bookingno || book.bookingno ? (
                     <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
@@ -1170,15 +1156,6 @@ const Booking = () => {
                   </Button>
                 </div>
               </div>
-              {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-                <DialogContent>
-                  <div>
-                    {Array.isArray(allFile) && allFile.map((img, index) => (
-                      <embed key={index} src={`http://localhost:8081/images/` + img.fileName} type="application/pdf" width="100%" height="600px" />
-                    ))}
-                  </div>
-                </DialogContent>
-              </Dialog> */}
             </div>
           </div>
         </div>
@@ -1526,8 +1503,6 @@ const Booking = () => {
                 </div>
               </DialogContent>
             </Dialog>
-
-
             <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
               <DialogContent>
                 <div>
@@ -1538,12 +1513,8 @@ const Booking = () => {
                   </div>
 
                 </div>
-
-
               </DialogContent>
             </Dialog>
-
-
           </div>
         </div>
       </form>

@@ -26,8 +26,6 @@ import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useDivision from './useDivision.js';
 
-
-
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -142,7 +140,6 @@ const Division = () => {
                     }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.customername || ''}
                     renderInput={(params) => {
-                      // params.inputProps.value = selectedCustomerData?.customername || ''
                       return (
                         <TextField {...params} label="Customer Name" name="customername" inputRef={params.inputRef} />
                       )

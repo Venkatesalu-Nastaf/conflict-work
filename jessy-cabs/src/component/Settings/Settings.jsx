@@ -58,7 +58,6 @@ const Settings = () => {
         />
       </div>
       <Outlet />
-
     </div>
 
   );

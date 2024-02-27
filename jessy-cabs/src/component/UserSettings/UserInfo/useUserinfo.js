@@ -3,9 +3,7 @@ import axios from 'axios';
 import { useData } from '../../Dashboard/Maindashboard/DataContext';
 
 const useUserinfo = () => {
-
     const { sharedData, setSharedData } = useData(); // -->  its for context for image
-
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
     const [showPasswords, setShowPasswords] = useState(false);
@@ -22,7 +20,6 @@ const useUserinfo = () => {
     const [infoMessage] = useState({});
 
     const storeUserId = localStorage.getItem('useridno'); //for getting userid 
-
 
     const [book, setBook] = useState({
         userid: '',
@@ -53,14 +50,11 @@ const useUserinfo = () => {
 
     const handleChange = (event) => {
         event.preventDefault();
-
         const { name, value } = event.target;
-
         setBook((prevBook) => ({
             ...prevBook,
             [name]: value,
         }));
-
         setSelectedCustomerData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -96,26 +90,15 @@ const useUserinfo = () => {
     const handleFileChange = (event) => {
         const userid = selectedCustomerData[0]?.userid || book.userid || storeUserId;
         const file = event.target.files[0];
-        // setSharedData(event.target.files[0].name);
-
-
         if (!file) return;
-
         setSharedData(file.name);
-        console.log("context data :", sharedData)
-
         setSelectedImage(file)
-        console.log("selectedImage :", selectedImage)
-
-        if (file) { // Ensure a file is selected before uploading
+        if (file) {
             const formData = new FormData();
             formData.append('image', file);
-
             axios.put(`http://localhost:8081/userprofileupload/${userid}`, formData)
         }
     };
-
-
 
     useEffect(() => {
         const handleImageView = () => {
@@ -123,7 +106,7 @@ const useUserinfo = () => {
             axios.get(`http://localhost:8081/userprofileview/${userid}`)
                 .then(res => {
                     if (res.status === 200) {
-                        setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
+                        setSelectedImage(res.data[0]?.filename);
                     } else {
                         const timer = setTimeout(handleImageView, 100);
                         return () => clearTimeout(timer);
@@ -132,10 +115,6 @@ const useUserinfo = () => {
         };
         handleImageView();
     }, [selectedImage]);
-
-    /// end profile upload-------------------------------------------------
-
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -160,7 +139,6 @@ const useUserinfo = () => {
                 setError(true);
             }
         };
-
         fetchData();
     }, [selectedCustomerData]);
 
@@ -207,7 +185,6 @@ const useUserinfo = () => {
     const toggleEditMode = () => {
         setEditMode((prevEditMode) => !prevEditMode);
     };
-
 
     return {
         selectedCustomerData,

@@ -2,7 +2,6 @@ import React from 'react';
 import './invoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
-// import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 const PrintableInvoice = ({ tripSheetData, organizationdata, selectedImage, book, GmapimageUrl, attachedImage, signimageUrl, routeData, selectedCustomerData, selectedCustomerDatas, formData }) => {
 
   return (

@@ -259,12 +259,6 @@ const useDrivercreation = () => {
 
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    // const handleButtonClick = (params) => {
-    //     const { userid } = params.row;
-    //     // setDialogOpen(true);
-    //     showPdf(userid);
-    // };
-
     const handleButtonClick = (params) => {
         const { userid } = params.row;
         if (!userid) {
@@ -314,25 +308,6 @@ const useDrivercreation = () => {
         }
     };
 
-    // const handlelist = useCallback(async () => {
-    //     if (permissions.read) {
-    //         const response = await axios.get('http://localhost:8081/drivercreation');
-    //         const data = response.data;
-
-    //         if (data.length > 0) {
-    //             setRows(data);
-    //             // setSuccess(true);
-    //             // setSuccessMessage('Successfully listed');
-    //         } else {
-    //             setRows([]);
-    //             // setError(true);
-    //             // setErrorMessage('No data found');
-    //         }
-    //     } else {
-    //         setInfo(true);
-    //         setInfoMessage('You do not have permission.');
-    //     }
-    // }, [permissions]);
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
@@ -539,7 +514,7 @@ const useDrivercreation = () => {
     const handleContextMenu = () => {
         axios.delete('http://localhost:8081/driver_proof/' + imagedata)
             .then(res => {
-                console.log("deleted")
+                // console.log("deleted")
             })
             .catch(err => console.log(err))
         setDialogdeleteOpen(false);

@@ -350,17 +350,7 @@ const Liabilities = () => {
             </div>
 
             <div className="input">
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Date of Acquisition"
-                  value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
-                  onChange={handleDateChange}
-                >
-                  {({ inputProps, inputRef }) => (
-                    <TextField {...inputProps} name='dateofacquisition' inputRef={inputRef} value={selectedCustomerData?.date} />
-                  )}
-                </DatePicker>
-              </LocalizationProvider> */}
+
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Invoice Date"
@@ -580,17 +570,7 @@ const Liabilities = () => {
               />
             </div>
             <div className="input">
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Date of Acquisition"
-                  value={selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null}
-                  onChange={handleDateChange}
-                >
-                  {({ inputProps, inputRef }) => (
-                    <TextField {...inputProps} name='dateofacquisition' inputRef={inputRef} value={selectedCustomerData?.date} />
-                  )}
-                </DatePicker>
-              </LocalizationProvider> */}
+
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Due Date"

@@ -6,7 +6,6 @@ import { styled } from '@mui/material/styles';
 import Sidebar from "../MainDash/Sildebar/Slidebar";
 import { useNavigate, Outlet } from "react-router-dom";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
-// import logoImage from "../MainDash/Sildebar/Logo-Img/logo.png";
 import { useThemes } from '../../UserSettings/Themes/ThemesContext';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
@@ -24,9 +23,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 const MainDashboard = () => {
 
   const { sharedData } = useData();
-  // console.log("icon image maindashbord :", sharedData)
-
-
 
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
@@ -170,7 +166,6 @@ const MainDashboard = () => {
         .then(res => {
           if (res.status === 200) {
             setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
-            // console.log("M selectedImage :", selectedImage)
           } else {
             const timer = setTimeout(handleImageView, 100);
             return () => clearTimeout(timer);
@@ -193,11 +188,6 @@ const MainDashboard = () => {
             >
 
               <Avatar alt="userimage" src={`http://localhost:8081/images/${selectedImage}`} />
-              {/* <Avatar
-                alt="userimage"
-                // src={selectedImage}
-                src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage}
-              /> */}
             </StyledBadge>
           </div>
           <div className="user-name-item">

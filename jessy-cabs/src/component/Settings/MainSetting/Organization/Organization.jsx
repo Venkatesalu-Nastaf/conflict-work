@@ -22,6 +22,7 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 // REACT ICONS
 import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
 
+
 const Organization = () => {
 
     const {
@@ -72,8 +73,6 @@ const Organization = () => {
                                         <Avatar
                                             sx={{ width: "12ch", height: "12ch" }}
                                             alt="userimage"
-                                            // // src={selectedImage}
-                                            // src={selectedImage}
                                             src={`http://localhost:8081/images/${selectedImage}`}
                                         >
                                             {selectedImage ? null : (
@@ -87,23 +86,6 @@ const Organization = () => {
                                 <div className="input-field">
 
 
-                                    {/* <div className='input-field'>
-                                        <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode || !!selectedImage} >
-                                            Logo
-                                            <ModeEditIcon />
-                                            <input
-                                                onChange={handleFileChange}
-                                                onClick={handleUpload}
-                                                style={{ display: "none" }}
-                                            />
-                                        </Button>
-                                    </div>
-                                    <div className='input-field'>
-                                        <Button color="primary" size='small' variant="contained" component="label" disabled={!editMode} onClick={handledelete}>
-                                            Remove
-                                            <DeleteIcon />
-                                        </Button>
-                                    </div> */}
 
                                     <div className="input-field">
                                         <div className='input'>

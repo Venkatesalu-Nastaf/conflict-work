@@ -425,15 +425,6 @@ const useVehicleinfo = () => {
         }
     };
 
-    // const addFileDocuments = () => {
-    //     addFcCopy_copy();
-    //     addRcBook_copy();
-    //     addStatePermit_copy();
-    //     addNationalPermit_copy();
-    //     addLicence_copy();
-    //     addInsurence_copy();
-    // };
-
     const handleAdd = async () => {
         const permissions = checkPagePermission();
 
@@ -619,7 +610,7 @@ const useVehicleinfo = () => {
     const handleContextMenu = () => {
         axios.delete('http://localhost:8081/vehicle_documents/' + imagedata)
             .then(res => {
-                console.log("deleted")
+                // console.log("deleted")
             })
             .catch(err => console.log(err))
         setDialogdeleteOpen(false);

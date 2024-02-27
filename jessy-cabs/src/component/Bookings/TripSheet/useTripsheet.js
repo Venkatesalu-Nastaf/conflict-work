@@ -835,32 +835,6 @@ const useTripsheet = () => {
         }
     };
 
-    // const handleUpload = () => {
-    //     const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-    //     if (!tripid) {
-    //         setError(true);
-    //         setErrorMessage("Enter booking No")
-    //         return;
-    //     }
-    //     const input = document.createElement('input');
-    //     input.type = 'file';
-    //     input.accept = '.pdf, .jpg, .jpeg, .png';
-    //     input.onchange = handleFileChange;
-    //     input.click();
-    // };
-    // //file upload
-    // const handleFileChange = async (event) => {
-    //     const file = event.target.files[0];
-    //     if (!file) return;
-    //     const formDataUpload = new FormData();
-    //     formDataUpload.append('file', file);
-    //     formDataUpload.append('tripid', book.tripid || selectedCustomerData.tripid || formData.tripid);
-    //     try {
-    //        await axios.post('http://localhost:8081/uploads', formDataUpload);
-    //     } catch {
-    //     }
-    // };
-    //end file upload
 
 
     const handleUpload = () => {

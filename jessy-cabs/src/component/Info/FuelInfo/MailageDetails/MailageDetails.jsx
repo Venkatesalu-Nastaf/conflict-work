@@ -135,18 +135,7 @@ const MailageDetails = () => {
                   />
                 </div>
                 <div className="input">
-                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      label="Fill Date"
-                      value={selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null || book.filldate ? dayjs(book.filldate) : dayjs()}
-                      format="DD/MM/YYYY"
-                      onChange={(date) => handleDateChange(date, 'filldate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.filldate} />
-                      )}
-                    </DatePicker>
-                  </LocalizationProvider> */}
+
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Fill Date"
@@ -161,18 +150,7 @@ const MailageDetails = () => {
                   </LocalizationProvider>
                 </div>
                 <div className="input">
-                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      label="Empty Date"
-                      value={selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null || book.emptydate ? dayjs(book.emptydate) : dayjs()}
-                      format="DD/MM/YYYY"
-                      onChange={(date) => handleDateChange(date, 'emptydate')}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.emptydate} />
-                      )}
-                    </DatePicker>
-                  </LocalizationProvider> */}
+
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Empty Date"

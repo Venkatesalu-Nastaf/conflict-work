@@ -932,7 +932,7 @@ const useBooking = () => {
     const handleContextMenu = () => {
         axios.delete('http://localhost:8081/booking_doc/' + imagedata)
             .then(res => {
-                console.log("deleted")
+                // console.log("deleted")
             })
             .catch(err => console.log(err))
         setDialogdeleteOpen(false);

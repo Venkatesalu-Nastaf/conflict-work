@@ -268,12 +268,6 @@ const EmployeeCreation = () => {
                 </FormControl>
               </div>
             </div>
-            {/* <div className="input-field">
-              <div className="input" style={{ width: "160px" }}>
-                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
-              </div>
-            </div> */}
-
             <div className="input-field">
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (

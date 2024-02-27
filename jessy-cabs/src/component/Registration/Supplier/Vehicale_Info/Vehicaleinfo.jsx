@@ -288,14 +288,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
-                  Insurance Copy
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(e) => setInsurance(e.target.files[0])}
-                  />
-                </Button> */}
+
 
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
@@ -363,17 +356,6 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
-                  License Copy
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(e) => setLicence(e.target.files[0])}
-                  />
-                </Button> */}
-
-
-
 
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
@@ -427,15 +409,6 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
-                  National Permit Copy
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(e) => setNationalPermit(e.target.files[0])}
-                  />
-                </Button> */}
-
 
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
@@ -501,14 +474,7 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "220px" }}>
-                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
-                  State Permit Copy
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(e) => setStatePermit(e.target.files[0])}
-                  />
-                </Button> */}
+
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
                     State Permit Copy
@@ -574,14 +540,6 @@ const Vehicaleinfo = () => {
                 </LocalizationProvider>
               </div>
               <div className="input">
-                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
-                  RC-Book Copy
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(e) => setRcbook(e.target.files[0])}
-                  />
-                </Button> */}
 
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
@@ -602,14 +560,6 @@ const Vehicaleinfo = () => {
                 )}
               </div>
               <div className="input" style={{ width: "160px" }}>
-                {/* <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
-                  FC Copy
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(e) => setFcCopy(e.target.files[0])}
-                  />
-                </Button> */}
 
                 {selectedCustomerData.vehicleId || book.vehicleId ? (
                   <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
@@ -857,18 +807,6 @@ const Vehicaleinfo = () => {
               pageSize={5}
             />
           </div>
-          {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-            <DialogContent>
-              <div>
-                {Array.isArray(allFile) && allFile.map((img, index) => (
-                  img.file_type === 'application/pdf' ?
-                    <embed key={index} src={`http://localhost:8081/images/${img.fileName}`} type="application/pdf" width="100%" height="600px" />
-                    : <img key={index} src={`http://localhost:8081/images/${img.fileName}`} width="100%" height="600px" alt='images' />
-                ))}
-              </div>
-            </DialogContent>
-          </Dialog> */}
-
 
           <Dialog open={dialogOpen} onClose={handleCloseDialog} >
             <DialogContent>

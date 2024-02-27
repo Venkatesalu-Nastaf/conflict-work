@@ -39,11 +39,9 @@ const page404 = () => {
                   exists. Please try again, or take a look at our.
                 </p>
               </div>
-              {/* <div className="error__nav e-nav">
-              <a href="/" target="_blanck" className="e-nav__link"></a>
-            </div> */}
+
             </div>
-            {/* <!-- END Content --> */}
+
           </section>
         </a>
       </div>

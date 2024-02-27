@@ -187,7 +187,7 @@ const PackageRateEntery = () => {
                     }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleType || ''}
                     renderInput={(params) => {
-                      // params.inputProps.value = selectedCustomerData?.vehicleType || ''
+
                       return (
                         <TextField {...params} label="VehicleType" name="vehicleType" inputRef={params.inputRef} />
                       )
@@ -195,9 +195,7 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-                {/* <div className="input">
-                  <Button variant="outlined">Show All Date</Button>
-                </div> */}
+
               </div>
             </div>
           </div>
@@ -221,7 +219,7 @@ const PackageRateEntery = () => {
                 }))}
                 getOptionLabel={(option) => option.label || selectedCustomerData?.duty || ''}
                 renderInput={(params) => {
-                  // params.inputProps.value = selectedCustomerData?.duty || ''
+
                   return (
                     <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
                   )
@@ -387,9 +385,7 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            {/* <div className="input" style={{ width: "100px" }}>
-              <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Save All</Button>
-            </div> */}
+
             <div className="input" style={{ width: "100px" }}>
               {isEditMode ? (
                 <Button variant="contained" onClick={handleEdit}>Edit</Button>
@@ -431,7 +427,7 @@ const PackageRateEntery = () => {
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
-            // direction="left"
+          // direction="left"
           >
             {actions.map((action) => (
               <SpeedDialAction

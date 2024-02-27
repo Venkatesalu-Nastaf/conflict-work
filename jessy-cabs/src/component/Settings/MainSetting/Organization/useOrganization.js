@@ -197,54 +197,6 @@ const useOrganization = () => {
         }));
     };
 
-    // const handleUpload = () => {
-    //     const input = document.createElement('input');
-    //     input.type = 'file';
-    //     input.accept = '.jpg, .jpeg, .png';
-    //     input.onchange = handleFileChange;
-    //     input.click();
-    // };
-    // //file upload
-    // const handleFileChange = async (event) => {
-    //     const file = event.target.files[0];
-    //     if (!file) return;
-    //     setSelectedImage(file);
-    //     const companyname = localStorage.getItem('usercompany');
-    //     const formDataUpload = new FormData();
-    //     formDataUpload.append('file', file);
-    //     formDataUpload.append('organizationname', selectedCustomerData?.organizationname || book.organizationname || companyname);
-    //     try {
-    //         await axios.post('http://localhost:8081/uploads', formDataUpload);
-    //     } catch {
-    //     }
-    // };
-
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const organizationname = localStorage.getItem('usercompany');
-
-    //             if (!organizationname) {
-    //                 return;
-    //             }
-    //             const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
-
-    //             // Check if the response status is 200
-    //             if (response.status === 200) {
-    //                 const data = await response.json();
-    //                 const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-    //                 setSelectedImage(attachedImageUrls);
-    //             } else {
-    //                 const timer = setTimeout(fetchData, 2000);
-    //                 return () => clearTimeout(timer);
-    //             }
-    //         } catch {
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -271,24 +223,6 @@ const useOrganization = () => {
         fetchData();
     }, []);
 
-
-    // const handledelete = async () => {
-    //     const permissions = checkPagePermission();
-
-    //     if (permissions.read && permissions.delete) {
-    //         const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
-    //         const encode = companyname;
-    //         const decode = decodeURIComponent(encode);
-    //         await axios.delete(`http://localhost:8081/companydelete/${decode}`);
-    //         localStorage.removeItem("selectedImage");
-    //         setSelectedCustomerData(null);
-    //         setSuccess(true);
-    //         setSuccessMessage("Successfully Deleted");
-    //     } else {
-    //         setInfo(true);
-    //         setInfoMessage("You do not have permission.");
-    //     }
-    // };
 
     const hidePopup = () => {
         setSuccess(false);
@@ -331,17 +265,12 @@ const useOrganization = () => {
     };
 
     const organizationname = localStorage.getItem('usercompany');
-    // console.log('organizationname :', organizationname)
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        // setSharedData(event.target.files[0].name);
         if (!file) return;
 
         setSharedData(file.name);
-        // console.log("context data :", sharedData)
-
         setSelectedImage(file)
-        // console.log("selectedImage :", selectedImage)
 
         if (file) { // Ensure a file is selected before uploading
             const formData = new FormData();
@@ -355,15 +284,10 @@ const useOrganization = () => {
     useEffect(() => {
         const handleImageView = () => {
 
-            // const encoded = localStorage.getItem('usercompany');
-            // localStorage.setItem('usercompanyname', encoded);
-            // const storedcomanyname = localStorage.getItem('usercompanyname');
-            // const organization_name = decodeURIComponent(storedcomanyname);
             axios.get(`http://localhost:8081/logo-view/${organizationname}`)
                 .then(res => {
                     if (res.status === 200) {
                         setSelectedImage(res.data[0]?.fileName); // Assuming res.data.prof contains the image data
-                        // console.log("selectedImage fetch image:", selectedImage)
                     } else {
                         const timer = setTimeout(handleImageView, 100);
                         return () => clearTimeout(timer);
@@ -386,7 +310,6 @@ const useOrganization = () => {
         book,
         handleChange,
         isFieldReadOnly,
-        // handledelete,
         handleAdd,
         hidePopup,
         selectedImage,

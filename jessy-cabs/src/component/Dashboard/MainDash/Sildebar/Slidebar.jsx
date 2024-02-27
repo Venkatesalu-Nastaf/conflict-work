@@ -2,16 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useData } from '../../MainDash/Sildebar/DataContext2';
 import axios from 'axios';
 import "./Sidebar.css";
-// import Logo from "./Logo-Img/logo.png";  
 import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
 import Badge from '@mui/material/Badge';
-// import Avatar from '@mui/material/Avatar';
 import { styled } from '@mui/material/styles';
-// import logoImage from "../Sildebar/Logo-Img/logo.png";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
 
 // ICONS
 import { useUser } from '../../../form/UserContext';
@@ -66,21 +64,27 @@ const Sidebar = () => {
       await axios.get(`http://localhost:8081/log-imageview/${organizationname}`)
         .then(res => {
           if (res.status === 200) {
-            setSelectedImage(res.data[0]?.fileName); // Assuming res.data.prof contains the image data
 
-          } else {
-            const timer = setTimeout(handleImageView, 100);
-            return () => clearTimeout(timer);
+            setSelectedImage(res.data[0]?.fileName); // Assuming res.data.prof contains the image data
+            localStorage.setItem('selectedlogo', selectedImage);
+            if (selectedImage === null) {
+              const storedImage = localStorage.getItem('selectedlogo');
+              if (storedImage) {
+                setSelectedImage(storedImage);
+              }
+            } else {
+              const timer = setTimeout(handleImageView, 100);
+              return () => clearTimeout(timer);
+            }
           }
         })
+        .catch(error => {
+          // Handle error if any
+          console.error("Error fetching image data:", error);
+        });
     };
     handleImageView();
-    handleImageView();
-
-  }, [sharedData]);
-
-  console.log("slide bar context ", sharedData)
-  console.log("slidebar selected  selectedImage :", selectedImage)
+  }, [sharedData, selectedImage]);
 
 
   //------------------------------------------
@@ -208,6 +212,7 @@ const Sidebar = () => {
   }, []);
 
   // const storedImageUrls = JSON.parse(localStorage.getItem('selectedImage'));
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   return (
     <>
@@ -226,7 +231,29 @@ const Sidebar = () => {
 
 
         <div className="logo">
-          <img src={`http://localhost:8081/images/${selectedImage}`} alt="" />
+          {selectedImage !== null ? (
+            <>
+              {!isImageLoaded && (
+                <div style={{ fontSize: "55px" }}>
+                  <BiBuildings />
+                </div>
+              )}
+              <img
+                src={`http://localhost:8081/images/${selectedImage}`}
+                alt=""
+                onLoad={() => setIsImageLoaded(true)}
+                style={{ display: isImageLoaded ? "block" : "none" }}
+              />
+            </>
+          ) : (
+            <div style={{ fontSize: "55px" }}>
+              <BiBuildings />
+            </div>
+          )}
+
+
+
+
         </div>
 
 
@@ -339,9 +366,6 @@ const Sidebar = () => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 variant="dot"
               >
-
-                {/* <Avatar alt="userimage" src={`http://localhost:8081/images/${selectedImage}`} /> */}
-                {/* src={`http://localhost:8081/images/${selectedImage}`} */}
 
               </StyledBadge>
             </div>

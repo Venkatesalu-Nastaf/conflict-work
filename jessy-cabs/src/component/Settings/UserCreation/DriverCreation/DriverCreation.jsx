@@ -442,14 +442,6 @@ const DriverCreation = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-                                {/* <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
-                                    License
-                                    <input
-                                        type="file"
-                                        style={{ display: "none" }}
-                                        onChange={(e) => setLicencepdf(e.target.files[0])}
-                                    />
-                                </Button> */}
 
                                 {selectedCustomerData?.userid || book.userid ? (
                                     <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
@@ -502,14 +494,6 @@ const DriverCreation = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-                                {/* <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
-                                    aadhar card
-                                    <input
-                                        type="file"
-                                        style={{ display: "none" }}
-                                        onChange={(e) => setFile(e.target.files[0])}
-                                    />
-                                </Button> */}
 
                                 {selectedCustomerData?.userid || book.userid ? (
                                     <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
@@ -605,20 +589,6 @@ const DriverCreation = () => {
                                 pageSizeOptions={[5, 10]}
                             />
                         </div>
-
-                        {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-                            <DialogContent>
-
-                                <div>
-                                    {Array.isArray(allFile) && allFile.map((img, index) => (
-                                        img.file_type === 'application/pdf' ?
-                                            <embed key={index} src={`http://localhost:8081/images/${img.fileName}`} type="application/pdf" width="100%" height="600px" />
-                                            : <img key={index} src={`http://localhost:8081/images/${img.fileName}`} alt='images' width="100%" height="500px" />
-                                    ))}
-                                </div>
-
-                            </DialogContent>
-                        </Dialog> */}
 
                         <Dialog open={dialogOpen} onClose={handleCloseDialog} >
                             <DialogContent>

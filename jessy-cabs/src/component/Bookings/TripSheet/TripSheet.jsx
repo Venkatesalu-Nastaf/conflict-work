@@ -408,7 +408,7 @@ const TripSheet = () => {
                   required
                 />
               </div>
-              <FormControlLabel
+              {/* <FormControlLabel
                 value="smsguest"
                 control={
                   <Checkbox
@@ -423,8 +423,19 @@ const TripSheet = () => {
                   />
                 }
                 label="Guest SMS"
-              />
-              <FormControlLabel
+              /> */}
+               <FormControlLabel
+                  value="smsguest"
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={smsguest}
+                      onChange={(event) => setSmsGuest(event.target.checked)}
+                    />
+                  }
+                  label="Guest SMS"
+                />
+              {/* <FormControlLabel
                 name="booker"
                 value="booker"
                 control={<Checkbox size="small" />}
@@ -432,8 +443,8 @@ const TripSheet = () => {
                 autoComplete="new-password"
                 onChange={handleChange}
                 checked={Boolean(formData.booker || selectedCustomerData?.booker || book.booker)}
-              />
-              <FormControlLabel
+              /> */}
+              {/* <FormControlLabel
                 name="emailcheck"
                 value="email"
                 label="Email"
@@ -441,7 +452,18 @@ const TripSheet = () => {
                 onChange={handleChange}
                 checked={Boolean(formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck)}
                 control={<Checkbox size="small" checked={sendEmail || formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck} onChange={(event) => setSendEmail(event.target.checked)} />}
-              />
+              /> */}
+                   <FormControlLabel
+                  value="email"
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={sendEmail}
+                      onChange={(event) => setSendEmail(event.target.checked)}
+                    />
+                  }
+                  label="Email"
+                />
             </div>
             <div className="input-field">
               <div className="input">
@@ -733,7 +755,7 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input radio">
-                <FormControlLabel
+                {/* <FormControlLabel
                   id="DriverSMS"
                   value="DriverSMS"
                   control={
@@ -748,10 +770,22 @@ const TripSheet = () => {
                     />
                   }
                   label="Driver SMS"
+                /> */}
+                     <FormControlLabel
+                  value="DriverSMS"
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={DriverSMS}
+                      onChange={(event) => setDriverSMS(event.target.checked)}
+                    />
+                  }
+                  label="Driver SMS"
+
                 />
               </div>
               <div className="input radio">
-                <FormControlLabel
+                {/* <FormControlLabel
                   id="DriverSMS"
                   value="DriverSMS"
                   control={
@@ -765,7 +799,8 @@ const TripSheet = () => {
                     />
                   }
                   label="GPS"
-                />
+                /> */}
+            
               </div>
               <div className="input">
                 <div className="icone">

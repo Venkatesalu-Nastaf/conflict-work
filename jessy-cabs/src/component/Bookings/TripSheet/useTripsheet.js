@@ -321,11 +321,11 @@ const useTripsheet = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const statusValue = params.get('status') || 'Opened';
-        const bookingsmsValue = params.get('smsguest') || 'smsguest';
-        const sendemailValue = params.get('booker') || 'booker';
-        const emailcheckValue = params.get('emailcheck') || 'emailcheck';
-        const DriverSMSValue = params.get('DriverSMS') || 'DriverSMS';
-        const gpsValue = params.get('gps') || 'gps';
+        // const bookingsmsValue = params.get('smsguest') || 'smsguest';
+        // const sendemailValue = params.get('booker') || 'booker';
+        // const emailcheckValue = params.get('emailcheck') || 'emailcheck';
+        // const DriverSMSValue = params.get('DriverSMS') || 'DriverSMS';
+        // const gpsValue = params.get('gps') || 'gps';
         const appsValue = params.get('apps') || 'Waiting';
         const formData = {};
 
@@ -339,11 +339,11 @@ const useTripsheet = () => {
             }
         });
         formData['status'] = statusValue;
-        formData['smsguest'] = bookingsmsValue;
-        formData['booker'] = sendemailValue;
-        formData['emailcheck'] = emailcheckValue;
-        formData['DriverSMS'] = DriverSMSValue;
-        formData['gps'] = gpsValue;
+        // formData['smsguest'] = bookingsmsValue;
+        // formData['booker'] = sendemailValue;
+        // formData['emailcheck'] = emailcheckValue;
+        // formData['DriverSMS'] = DriverSMSValue;
+        // formData['gps'] = gpsValue;
         formData['apps'] = appsValue;
         setTripSheetData(formData);
         setBook(formData);

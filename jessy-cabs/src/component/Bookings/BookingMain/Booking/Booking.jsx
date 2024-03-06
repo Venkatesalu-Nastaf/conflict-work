@@ -32,6 +32,7 @@ import {
   RadioGroup,
   Checkbox,
 } from "@mui/material";
+
 // ICONS
 import InfoIcon from "@mui/icons-material/Info";
 import SellIcon from "@mui/icons-material/Sell";
@@ -94,7 +95,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const Booking = () => {
-
   const {
     selectedCustomerData,
     selectedCustomerId,
@@ -125,6 +125,7 @@ const Booking = () => {
     selectedCustomerDatas,
     handleKeyEnter,
     formValues,
+    handleenterSearch,
     handleAutocompleteChange,
     setFormData,
     setStartTime,
@@ -211,8 +212,8 @@ const Booking = () => {
                         formData.bookingdate || selectedCustomerData.bookingdate
                           ? dayjs(selectedCustomerData.bookingdate)
                           : null || book.bookingdate
-                            ? dayjs(book.bookingdate)
-                            : dayjs()
+                          ? dayjs(book.bookingdate)
+                          : dayjs()
                       }
                       format="DD/MM/YYYY"
                       onChange={(date) => handleDateChange(date, "bookingdate")}
@@ -645,8 +646,8 @@ const Booking = () => {
                       formData.startdate || selectedCustomerData.startdate
                         ? dayjs(selectedCustomerData.startdate)
                         : dayjs() || book.startdate
-                          ? dayjs(book.startdate)
-                          : dayjs()
+                        ? dayjs(book.startdate)
+                        : dayjs()
                     }
                     format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, "startdate")}
@@ -987,13 +988,15 @@ const Booking = () => {
             </div>
             <div className="inpu-field">
               <div className="input">
-                <FormControlLabel
+                {/* <FormControlLabel
                   value="guestsms"
                   control={
                     <Checkbox
                       size="small"
                       name="guestsms"
-                      checked={guestsms || formData.guestsms || book.guestsms}
+                      // checked={guestsms || formData.guestsms || book.guestsms}
+                      checked={Boolean(guestsms || formData.guestsms || book.guestsms)}
+
                       onChange={(event) => {
                         setBook({ ...book, guestsms: event.target.checked });
                         setFormData({ ...formData, guestsms: event.target.checked });
@@ -1002,28 +1005,60 @@ const Booking = () => {
                     />
                   }
                   label="Guest SMS"
-                />
+                /> */}
+
                 <FormControlLabel
+                  value="guestsms"
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={guestsms}
+                      onChange={(event) => setGuestSms(event.target.checked)}
+                    />
+                  }
+                  label="Guest SMS"
+                />
+
+                {/* <FormControlLabel
                   value="bookingsms"
                   control={<Checkbox size="small" />}
                   label="Booking SMS"
-                />
+                /> */}
+                {/* <FormControlLabel
+                  id="sendMailCheckbox"
+                  value="sendemail"
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={Boolean(
+                        sendEmail || formData.sendemail || book.sendemail
+                      )}
+                      onChange={(event) => {
+                        setBook({ ...book, sendemail: event.target.checked });
+                        setFormData({
+                          ...formData,
+                          sendemail: event.target.checked,
+                        });
+                        setSendEmail(event.target.checked);
+                      }}
+                    />
+                  }
+                  label="Send Email"
+                /> */}
+
                 <FormControlLabel
                   id="sendMailCheckbox"
                   value="sendemail"
                   control={
                     <Checkbox
                       size="small"
-                      checked={sendEmail || formData.sendemail || book.sendemail}
-                      onChange={(event) => {
-                        setBook({ ...book, sendemail: event.target.checked });
-                        setFormData({ ...formData, sendemail: event.target.checked });
-                        setSendEmail(event.target.checked);
-                      }}
+                      checked={sendEmail}
+                      onChange={(event) => setSendEmail(event.target.checked)}
                     />
                   }
                   label="Send Email"
                 />
+
               </div>
               <div className="input">
                 <TextField
@@ -1125,33 +1160,46 @@ const Booking = () => {
               </div>
             </div>
             <div className="inpu-field">
-              <div className="input radio">
-              </div>
+              <div className="input radio"></div>
               <div className="input-field">
                 <div className="input">
-                  {formData.bookingno || selectedCustomerData.bookingno || book.bookingno ? (
-                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
+                  {formData.bookingno ||
+                  selectedCustomerData.bookingno ||
+                  book.bookingno ? (
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      disabled={isFieldReadOnly("new")}
+                      component="label"
+                    >
                       Attach File
-
                       <input
                         type="file"
                         style={{ display: "none" }}
                         onClick={handleprevent}
                         onChange={(e) => setFile(e.target.files[0])}
                       />
-
                     </Button>
                   ) : (
-                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
-                      setError(true);
-                      setErrorMessage("Please Enter Booking No");
-                    }}>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      disabled={isFieldReadOnly("new")}
+                      onClick={() => {
+                        setError(true);
+                        setErrorMessage("Please Enter Booking No");
+                      }}
+                    >
                       Attach File
                     </Button>
                   )}
                 </div>
                 <div className="input">
-                  <Button variant="outlined" onClick={handleButtonClick} disabled={isFieldReadOnly("new")} >
+                  <Button
+                    variant="outlined"
+                    onClick={handleButtonClick}
+                    disabled={isFieldReadOnly("new")}
+                  >
                     View
                   </Button>
                 </div>
@@ -1341,9 +1389,17 @@ const Booking = () => {
             <div className="input" style={{ width: "100px" }}>
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
-                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  <Button variant="contained" onClick={handleEdit}>
+                    Edit
+                  </Button>
                 ) : (
-                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                  <Button
+                    variant="contained"
+                    onClick={handleAdd}
+                    disabled={isFieldReadOnly("new")}
+                  >
+                    Add
+                  </Button>
                 )}
               </div>
             </div>
@@ -1429,6 +1485,7 @@ const Booking = () => {
                     label="Search"
                     name="searchText"
                     value={searchText || ""}
+                    onKeyDown={handleenterSearch}
                     onChange={(e) => setSearchText(e.target.value)}
                   />
                 </div>
@@ -1491,15 +1548,31 @@ const Booking = () => {
               pageSize={5}
               checkboxSelection
             />
-            <Dialog open={dialogOpen} onClose={handleCloseDialog} >
+            <Dialog open={dialogOpen} onClose={handleCloseDialog}>
               <DialogContent>
-                <div style={{ position: 'relative' }}>
-                  {Array.isArray(allFile) && allFile.map((img, index) => (
-                    <div key={index} style={{ position: 'relative' }}>
-                      <embed src={`http://localhost:8081/images/` + img.fileName} type="application/pdf" width="100%" height="600px" />
-                      <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} />
-                    </div>
-                  ))}
+                <div style={{ position: "relative" }}>
+                  {Array.isArray(allFile) &&
+                    allFile.map((img, index) => (
+                      <div key={index} style={{ position: "relative" }}>
+                        <embed
+                          src={`http://localhost:8081/images/` + img.fileName}
+                          type="application/pdf"
+                          width="100%"
+                          height="600px"
+                        />
+                        <button
+                          onClick={() => handleimagedelete(img.fileName)}
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            opacity: 0,
+                          }}
+                        />
+                      </div>
+                    ))}
                 </div>
               </DialogContent>
             </Dialog>
@@ -1511,7 +1584,6 @@ const Booking = () => {
                     <Button onClick={handleContextMenu}>yes</Button>
                     <Button onClick={handleClosedeleteDialog}>No</Button>
                   </div>
-
                 </div>
               </DialogContent>
             </Dialog>

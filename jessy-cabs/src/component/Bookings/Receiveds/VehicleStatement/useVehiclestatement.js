@@ -3,6 +3,7 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import { saveAs } from 'file-saver';
+import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -28,6 +29,7 @@ const columns = [
 ];
 
 const useVehiclestatement = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [servicestation, setServiceStation] = useState("");
@@ -52,7 +54,7 @@ const useVehiclestatement = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Booking';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch (error) {
                 console.error('Error fetching user permissions:', error);
@@ -60,7 +62,7 @@ const useVehiclestatement = () => {
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Booking';
@@ -184,7 +186,7 @@ const useVehiclestatement = () => {
 
         try {
             const response = await axios.get(
-                `http://localhost:8081/VehicleStatement-bookings?servicestation=${encodeURIComponent(
+                `http://${apiUrl}/VehicleStatement-bookings?servicestation=${encodeURIComponent(
                     servicestation
                 )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
                     toDate.toISOString()
@@ -209,13 +211,13 @@ const useVehiclestatement = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [servicestation, fromDate, toDate]);
+    }, [servicestation, fromDate, toDate,apiUrl]);
 
     const handleShowAll = useCallback(async () => {
 
         try {
             const response = await axios.get(
-                `http://localhost:8081/booking`
+                `http://${apiUrl}/booking`
             );
             const data = response.data;
             if (data.length > 0) {
@@ -236,7 +238,7 @@ const useVehiclestatement = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, []);
+    }, [apiUrl]);
 
     const handleButtonClick = (row) => {
         setSelectedRow(row);

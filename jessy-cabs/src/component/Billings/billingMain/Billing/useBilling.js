@@ -3,8 +3,10 @@ import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import { fetchBankOptions } from './BillingData';
 import dayjs from "dayjs";
+import { APIURL } from "../../../url.js";
 
 const useBilling = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [bankOptions, setBankOptions] = useState([]);
     const [formData, setFormData] = useState({});
@@ -34,14 +36,14 @@ const useBilling = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'CB Billing';
@@ -346,7 +348,7 @@ const useBilling = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
+                    await axios.delete(`http://${apiUrl}/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
                     setFormData(null);
                     setSelectedCustomerData(null);
                     setSuccess(true);
@@ -374,7 +376,7 @@ const useBilling = () => {
                         nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
                         dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
                     };
-                    await axios.put(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
+                    await axios.put(`http://${apiUrl}/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
                     handleCancel();
                     setSuccess(true);
                     setSuccessMessage("Successfully Updated");
@@ -403,7 +405,7 @@ const useBilling = () => {
                         nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
                         dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
                     };
-                    await axios.post('http://localhost:8081/billing', updatedBook);
+                    await axios.post(`http://${apiUrl}/billing`, updatedBook);
                     handleCancel();
                     setSuccess(true);
                     setSuccessMessage("Successfully Added");
@@ -551,7 +553,7 @@ const useBilling = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
+                const response = await axios.get(`http://${apiUrl}/tripsheet/${event.target.value}`);
                 const bookingDetails = response.data;
                 setSelectedCustomerData(bookingDetails);
             } catch (error) {
@@ -559,13 +561,13 @@ const useBilling = () => {
                 setErrorMessage('Error retrieving booking details.');
             }
         }
-    }, []);
+    }, [apiUrl]);
 
     const handleKeyenter = useCallback(async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`http://localhost:8081/billingdata/${event.target.value}`);
+                const response = await axios.get(`http://${apiUrl}/billingdata/${event.target.value}`);
                 const billingDetails = response.data;
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
@@ -575,13 +577,13 @@ const useBilling = () => {
                 setErrorMessage('Error retrieving billings details.');
             }
         }
-    }, []);
+    }, [apiUrl]);
 
     const handleKeyenter2 = useCallback(async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`http://localhost:8081/billing/${event.target.value}`);
+                const response = await axios.get(`http://${apiUrl}/billing/${event.target.value}`);
                 const billingDetails = response.data;
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
@@ -591,7 +593,7 @@ const useBilling = () => {
                 setErrorMessage('Error retrieving billings details.');
             }
         }
-    }, []);
+    }, [apiUrl]);
 
     const selecting = {
         tripid: selectedCustomerDatas.tripid || selectedCustomerData.tripid || '',
@@ -732,7 +734,7 @@ const useBilling = () => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
             try {
-                const response = await fetch(`http://localhost:8081/routedata/${encodeURIComponent(tripid)}`);
+                const response = await fetch(`http://${apiUrl}/routedata/${encodeURIComponent(tripid)}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -743,13 +745,13 @@ const useBilling = () => {
         };
 
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
             try {
-                const response = await fetch(`http://localhost:8081/tripsheet/${tripid}`);
+                const response = await fetch(`http://${apiUrl}/tripsheet/${tripid}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -762,13 +764,13 @@ const useBilling = () => {
         };
 
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
             const customer = localStorage.getItem('selectedcustomerid');
             try {
-                const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
+                const response = await fetch(`http://${apiUrl}/customers/${encodeURIComponent(customer)}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -778,13 +780,13 @@ const useBilling = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
             try {
-                const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
+                const response = await fetch(`http://${apiUrl}/get-signimage/${tripid}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -796,14 +798,14 @@ const useBilling = () => {
 
         fetchData();
         return () => { };
-    }, []);
+    }, [apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const tripid = localStorage.getItem('selectedTripid');
 
-                const response = await fetch(`http://localhost:8081/getmapimages/${tripid}`);
+                const response = await fetch(`http://${apiUrl}/getmapimages/${tripid}`);
                 if (response.status === 200) {
                     const responseData = await response.blob();
                     const imageUrl = URL.createObjectURL(responseData);
@@ -816,7 +818,7 @@ const useBilling = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     const organizationaddress1 = customerData.address1;
     const organizationaddress2 = customerData.address2;
@@ -849,7 +851,7 @@ const useBilling = () => {
             const storedcomanyname = localStorage.getItem('usercompanyname');
             const organizationname = decodeURIComponent(storedcomanyname);
             try {
-                const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
+                const response = await fetch(`http://${apiUrl}/organizationdata/${organizationname}`);
                 if (response.status === 200) {
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
@@ -863,7 +865,7 @@ const useBilling = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -874,10 +876,10 @@ const useBilling = () => {
                 if (!organizationname) {
                     return;
                 }
-                const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
+                const response = await fetch(`http://${apiUrl}/get-companyimage/${organizationname}`);
                 if (response.status === 200) {
                     const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+                    const attachedImageUrls = data.imagePaths.map(path => `http://${apiUrl}/images/${path}`);
                     localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
                     setSelectedImage(attachedImageUrls);
                 } else {
@@ -888,7 +890,7 @@ const useBilling = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     return {
         selectedCustomerData,

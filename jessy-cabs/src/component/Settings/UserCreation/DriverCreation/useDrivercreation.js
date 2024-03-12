@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Button from "@mui/material/Button";
+import { APIURL } from "../../../url";
 
 const useDrivercreation = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [showPasswords, setShowPasswords] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -28,14 +30,14 @@ const useDrivercreation = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Driver Master';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id, apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Driver Master';
@@ -89,9 +91,9 @@ const useDrivercreation = () => {
         },
         { field: "username", headerName: "User_Name", width: 130 },
         { field: "userpassword", headerName: "Password", width: 130 },
-        { field: "viewfor", headerName: "Access", width: 130 },
-        { field: "designation", headerName: "Designation", width: 130 },
-        { field: "stationname", headerName: "Station", width: 130 },
+        // { field: "viewfor", headerName: "Access", width: 130 },
+        // { field: "designation", headerName: "Designation", width: 130 },
+        // { field: "stationname", headerName: "Station", width: 130 },
         { field: "licenseno", headerName: "License No", width: 130 },
         { field: "badgeno", headerName: "Badge No", width: 130 },
         { field: "aadharno", headerName: "Aadhar Card No", width: 130 },
@@ -196,12 +198,14 @@ const useDrivercreation = () => {
     const user__id = selectedCustomerData?.userid || book.userid;
     const [file, setFile] = useState(null);
 
+    // adhar
     const addPdf = async () => {
         if (file !== null) {
             const formData = new FormData();
             formData.append("file", file);
             try {
-                await axios.post(`http://localhost:8081/driver-pdf/${user__id}`, formData);
+                await axios.post(`http://${apiUrl}/driver-pdf/${user__id}`, formData);
+                setFile(null);
             }
             catch {
                 setError(true);
@@ -210,8 +214,11 @@ const useDrivercreation = () => {
         } else {
             return
         }
+        setFile(null);
     }
 
+
+    // licence
     const [licencepdf, setLicencepdf] = useState(null)
 
     const licenceSubmit = async () => {
@@ -219,7 +226,8 @@ const useDrivercreation = () => {
             const formData = new FormData();
             formData.append("file", licencepdf);
             try {
-                await axios.post(`http://localhost:8081/driver-licencepdf/${user__id}`, formData);
+                await axios.post(`http://${apiUrl}/driver-licencepdf/${user__id}`, formData);
+                setFile(null);
             }
             catch {
                 setError(true);
@@ -228,12 +236,13 @@ const useDrivercreation = () => {
         } else {
             return
         }
+        setFile(null);
     };
 
     const [allFile, setAllFile] = useState([]);
 
     const showPdf = (showID) => {
-        axios.get(`http://localhost:8081/pdf-view/${showID}`)
+        axios.get(`http://${apiUrl}/pdf-view/${showID}`)
             .then(res => {
                 if (res.data.length > 0) {
                     setAllFile(res.data);
@@ -275,7 +284,7 @@ const useDrivercreation = () => {
 
             if (permissions.read && permissions.new) {
                 try {
-                    await axios.post('http://localhost:8081/drivercreation', book);
+                    await axios.post(`http://${apiUrl}/drivercreation`, book);
                     handleCancel();
                     addPdf();
                     licenceSubmit();
@@ -299,7 +308,7 @@ const useDrivercreation = () => {
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
-                const response = await axios.get('http://localhost:8081/drivercreation');
+                const response = await axios.get(`http://${apiUrl}/drivercreation`);
                 const data = response.data;
 
                 if (data.length > 0) {
@@ -315,7 +324,7 @@ const useDrivercreation = () => {
         }
 
         handlelist();
-    }, [permissions]);
+    }, [permissions, apiUrl]);
 
     const handleEdit = async (userid) => {
         const permissions = checkPagePermission();
@@ -323,7 +332,7 @@ const useDrivercreation = () => {
         if (permissions.read && permissions.modify) {
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://localhost:8081/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
+            await axios.put(`http://${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage('Successfully updated');
             handleCancel();
@@ -344,7 +353,7 @@ const useDrivercreation = () => {
 
             if (actionName === 'List') {
                 if (permissions.read) {
-                    const response = await axios.get('http://localhost:8081/drivercreation');
+                    const response = await axios.get(`http://${apiUrl}/drivercreation`);
                     const data = response.data;
 
                     if (data.length > 0) {
@@ -369,7 +378,7 @@ const useDrivercreation = () => {
                 setRows([]);
             } else if (actionName === 'Delete') {
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/drivercreation/${selectedCustomerData?.userid || userid}`);
+                    await axios.delete(`http://${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage('Successfully Deleted');
@@ -383,7 +392,7 @@ const useDrivercreation = () => {
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.userid === userid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://localhost:8081/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
+                    await axios.put(`http://${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage('Successfully updated');
                     handleCancel();
@@ -498,7 +507,7 @@ const useDrivercreation = () => {
 
     const handleContextMenu = () => {
         try {
-            axios.delete('http://localhost:8081/driver_proof/' + imagedata)
+            axios.delete(`http://${apiUrl}/driver_proof/` + imagedata)
             setDialogdeleteOpen(false);
             setDialogOpen(false);
         } catch {

@@ -81,6 +81,7 @@ import useBooking from "./useBooking";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import { APIURL } from "../../../url";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -95,6 +96,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const Booking = () => {
+  const apiUrl = APIURL;
   const {
     selectedCustomerData,
     selectedCustomerId,
@@ -212,8 +214,8 @@ const Booking = () => {
                         formData.bookingdate || selectedCustomerData.bookingdate
                           ? dayjs(selectedCustomerData.bookingdate)
                           : null || book.bookingdate
-                          ? dayjs(book.bookingdate)
-                          : dayjs()
+                            ? dayjs(book.bookingdate)
+                            : dayjs()
                       }
                       format="DD/MM/YYYY"
                       onChange={(date) => handleDateChange(date, "bookingdate")}
@@ -513,6 +515,9 @@ const Booking = () => {
             </div>
             <div className="input-field">
               <div className="input">
+                <div className="icone">
+                  <LocationCityIcon color="action" />
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -646,8 +651,8 @@ const Booking = () => {
                       formData.startdate || selectedCustomerData.startdate
                         ? dayjs(selectedCustomerData.startdate)
                         : dayjs() || book.startdate
-                        ? dayjs(book.startdate)
-                        : dayjs()
+                          ? dayjs(book.startdate)
+                          : dayjs()
                     }
                     format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, "startdate")}
@@ -1164,8 +1169,8 @@ const Booking = () => {
               <div className="input-field">
                 <div className="input">
                   {formData.bookingno ||
-                  selectedCustomerData.bookingno ||
-                  book.bookingno ? (
+                    selectedCustomerData.bookingno ||
+                    book.bookingno ? (
                     <Button
                       color="primary"
                       variant="contained"
@@ -1555,7 +1560,7 @@ const Booking = () => {
                     allFile.map((img, index) => (
                       <div key={index} style={{ position: "relative" }}>
                         <embed
-                          src={`http://localhost:8081/images/` + img.fileName}
+                          src={`http://${apiUrl}/public/booking_doc/` + img.fileName}
                           type="application/pdf"
                           width="100%"
                           height="600px"

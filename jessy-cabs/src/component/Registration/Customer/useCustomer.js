@@ -3,6 +3,7 @@ import jsPDF from 'jspdf';
 import axios from "axios";
 import dayjs from "dayjs";
 import { saveAs } from 'file-saver';
+import { APIURL } from "../../url";
 
 
 // TABLE START
@@ -21,6 +22,7 @@ const columns = [
 // TABLE END
 
 const useCustomer = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -44,14 +46,14 @@ const useCustomer = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Customer Master';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Customer Master';
@@ -306,7 +308,7 @@ const useCustomer = () => {
             }
 
             try {
-                await axios.post('http://localhost:8081/customers', book);
+                await axios.post(`http://${apiUrl}/customers`, book);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -331,7 +333,7 @@ const useCustomer = () => {
                 ...selectedCustomerData,
                 date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
             };
-            await axios.put(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
+            await axios.put(`http://${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
             handleCancel();
             setRows([]);
         } else {
@@ -344,7 +346,7 @@ const useCustomer = () => {
         const handleList = async () => {
             if (permissions.read && permissions.read) {
                 try {
-                    const response = await axios.get('http://localhost:8081/customers');
+                    const response = await axios.get(`http://${apiUrl}/customers`);
                     const data = response.data;
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,
@@ -356,7 +358,7 @@ const useCustomer = () => {
             }
         }
         handleList();
-    }, [permissions]);
+    }, [permissions,apiUrl]);
 
 
     const handleClick = async (event, actionName, customerId) => {
@@ -366,7 +368,7 @@ const useCustomer = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/customers');
+                    const response = await axios.get(`http://${apiUrl}/customers`);
                     const data = response.data;
                     if (data.length > 0) {
                         const rowsWithUniqueId = data.map((row, index) => ({
@@ -392,7 +394,7 @@ const useCustomer = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`);
+                    await axios.delete(`http://${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`);
                     setSelectedCustomerData(null);
                     handleCancel();
                     setRows([]);
@@ -410,7 +412,7 @@ const useCustomer = () => {
                         ...selectedCustomerData,
                         date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
                     };
-                    await axios.put(`http://localhost:8081/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
+                    await axios.put(`http://${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
                     handleCancel();
                     setRows([]);
                 } else {

@@ -11,12 +11,12 @@ import InputLabel from '@mui/material/InputLabel';
 import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
-import { StationName } from "./EmployeeCreationData";
+import { StationName } from "./EmployeeCreationData";      //Branch Name
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 // FONTAWESOME
-import { faLock } from "@fortawesome/free-solid-svg-icons";
+// import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
@@ -85,9 +85,9 @@ const EmployeeCreation = () => {
     showPasswords,
     handleClickShowPasswords,
     handleMouseDownPasswords,
-    handleMouseDownPassword,
-    showPassword,
-    handleClickShowPassword,
+    // handleMouseDownPassword,
+    // showPassword,
+    // handleClickShowPassword,
     passwordsMatch,
     columns,
     isEditMode,
@@ -153,7 +153,7 @@ const EmployeeCreation = () => {
                   getOptionLabel={(option) => option.label || selectedCustomerData?.stationname || ''}
                   renderInput={(params) => {
                     return (
-                      <TextField {...params} label="Station Name" name="stationname" />
+                      <TextField {...params} label="Branch Name" name="stationname" />
                     )
                   }
                   }
@@ -170,10 +170,10 @@ const EmployeeCreation = () => {
                   onChange={handleChange}
                   label="Designation"
                   id="designation"
-                  variant="standard"
+                // variant="standard"
                 />
               </div>
-              <div className="input" style={{ width: "330px" }}>
+              {/* <div className="input" style={{ width: "330px" }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -186,7 +186,7 @@ const EmployeeCreation = () => {
                   id="organizationname"
                   variant="standard"
                 />
-              </div>
+              </div> */}
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "240px" }}>
@@ -215,7 +215,7 @@ const EmployeeCreation = () => {
                   />
                 </FormControl>
               </div>
-              <div className="input" style={{ width: "240px" }}>
+              {/* <div className="input" style={{ width: "240px" }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faLock} size="lg" />
                 </div>
@@ -240,7 +240,7 @@ const EmployeeCreation = () => {
                     }
                   />
                 </FormControl>
-              </div>
+              </div> */}
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -266,8 +266,6 @@ const EmployeeCreation = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-            </div>
-            <div className="input-field">
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
                   <Button variant="contained" onClick={handleEdit}>Edit</Button>

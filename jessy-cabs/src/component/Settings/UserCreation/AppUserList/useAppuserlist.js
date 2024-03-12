@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { APIURL } from "../../../url";
 
 // TABLE START
 const columns = [
@@ -13,6 +14,7 @@ const columns = [
 // TABLE END
 
 const useAppuserlist = () => {
+    const apiUrl = APIURL;
     const [rows, setRows] = useState([]);
     const [apps, setApps] = useState('active');
     const [error, setError] = useState(false);
@@ -65,7 +67,7 @@ const useAppuserlist = () => {
     }, [info]);
 
     const handleListButtonClick = () => {
-        fetch(`http://localhost:8081/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
+        fetch(`http://${apiUrl}/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.length > 0) {

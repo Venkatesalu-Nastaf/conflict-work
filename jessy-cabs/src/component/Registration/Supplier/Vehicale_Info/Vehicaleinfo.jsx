@@ -52,6 +52,7 @@ import useVehicleinfo from './useVehicleinfo';
 
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
+import { APIURL } from "../../../url";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -72,7 +73,7 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 const Vehicaleinfo = () => {
-
+  const apiUrl = APIURL;
   const {
     selectedCustomerData,
     rows,
@@ -790,7 +791,7 @@ const Vehicaleinfo = () => {
               <div style={{ position: 'relative' }}>
                 {Array.isArray(allFile) && allFile.map((img, index) => (
                   <div key={index} style={{ position: 'relative' }}>
-                    <embed src={`http://localhost:8081/images/` + img.fileName} type="application/pdf" width="100%" height="600px" />
+                    <embed src={`http://${apiUrl}/public/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="600px" />
                     <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} />
                   </div>
                 ))}

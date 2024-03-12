@@ -6,9 +6,10 @@ import "react-circular-progressbar/dist/styles.css";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import { MdCancel } from "@react-icons/all-files/md/MdCancel";
 import Chart from "react-apexcharts";
+import { APIURL } from "../../../../url";
 
 // parent Card
-
+const apiUrl = APIURL;
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
   return (
@@ -34,7 +35,7 @@ function CompactCard({ param, setExpanded }) {
     const fetchPermissions = async () => {
       try {
         const currentPageName = 'Dashboard page';
-        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
         setUserPermissions(response.data);
       } catch {
       }

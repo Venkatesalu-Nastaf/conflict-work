@@ -3,6 +3,7 @@ import axios from "axios";
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
+import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -21,6 +22,7 @@ const columns = [
 ];
 
 const useDispatched = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [department, setdepartment] = useState("");
@@ -45,14 +47,14 @@ const useDispatched = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Booking';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Booking';
@@ -174,7 +176,7 @@ const useDispatched = () => {
     const handleShow = useCallback(async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8081/pending_tripsheet?department=${encodeURIComponent(
+                `http://${apiUrl}/pending_tripsheet?department=${encodeURIComponent(
                     department
                 )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
                     toDate.toISOString()
@@ -200,12 +202,12 @@ const useDispatched = () => {
             setErrorMessage("Error retrieving data");
         }
 
-    }, [department, fromDate, toDate]);
+    }, [department, fromDate, toDate,apiUrl]);
 
     const handleShowAll = useCallback(async () => {
         try {
             const response = await axios.get(
-                `http://localhost:8081/tripsheet`
+                `http://${apiUrl}/tripsheet`
             );
             const data = response.data;
             if (data.length > 0) {
@@ -226,7 +228,7 @@ const useDispatched = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-    }, []);
+    }, [apiUrl]);
 
     const handleButtonClick = (row) => {
         setSelectedRow(row);

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
+import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -16,6 +17,7 @@ const columns = [
 ];
 
 const useMailagedetails = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [initialOdometer, setInitialOdometer] = useState(0);
     const [finalOdometer, setFinalOdometer] = useState(0);
@@ -44,14 +46,14 @@ const useMailagedetails = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'User Creation';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'User Creation';
@@ -215,7 +217,7 @@ const useMailagedetails = () => {
                     emptydate: emptydate,
                     filldate: filldate,
                 };
-                await axios.post('http://localhost:8081/fueldetails', updateBook);
+                await axios.post(`http://${apiUrl}/fueldetails`, updateBook);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -247,7 +249,7 @@ const useMailagedetails = () => {
             };
 
             try {
-                await axios.put(`http://localhost:8081/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
+                await axios.put(`http://${apiUrl}/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
@@ -263,7 +265,7 @@ const useMailagedetails = () => {
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
-                const response = await axios.get('http://localhost:8081/fueldetails');
+                const response = await axios.get(`http://${apiUrl}/fueldetails`);
                 const data = response.data;
 
                 if (data.length > 0) {
@@ -275,7 +277,7 @@ const useMailagedetails = () => {
         }
 
         handlelist();
-    }, [permissions]);
+    }, [permissions,apiUrl]);
 
     const handleClick = async (event, actionName) => {
         event.preventDefault();
@@ -284,7 +286,7 @@ const useMailagedetails = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/fueldetails');
+                    const response = await axios.get(`http://${apiUrl}/fueldetails`);
                     const data = response.data;
                     if (data.length > 0) {
 
@@ -307,7 +309,7 @@ const useMailagedetails = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/fueldetails/${selectedCustomerData?.id}`);
+                    await axios.delete(`http://${apiUrl}/fueldetails/${selectedCustomerData?.id}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -334,7 +336,7 @@ const useMailagedetails = () => {
                     };
 
                     try {
-                        await axios.put(`http://localhost:8081/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
+                        await axios.put(`http://${apiUrl}/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
                         setSuccess(true);
                         setSuccessMessage("Successfully updated");
                         handleCancel();

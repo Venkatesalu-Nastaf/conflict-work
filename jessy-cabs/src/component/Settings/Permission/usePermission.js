@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { APIURL } from "../../url";
 
 const usePermission = () => {
+    const apiUrl = APIURL;
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
     const [success, setSuccess] = useState(false);
@@ -61,14 +63,14 @@ const usePermission = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Permission';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = useCallback(() => {
         const currentPageName = 'Permission';
@@ -171,12 +173,12 @@ const usePermission = () => {
         }));
 
         try {
-            const response = await fetch(`http://localhost:8081/usercreationgetdata/${value}`);
+            const response = await fetch(`http://${apiUrl}/usercreationgetdata/${value}`);
             const data = await response.json();
             setUserData(data);
         } catch {
         }
-    }, []);
+    }, [apiUrl]);
 
     const handleRowClick = useCallback((user) => {
         setSelectedCustomerDatas(user);
@@ -194,7 +196,7 @@ const usePermission = () => {
 
         if (permissions.read && permissions.new && permissions.modify) {
             try {
-                await axios.post('http://localhost:8081/save-permissions', {
+                await axios.post(`http://${apiUrl}/save-permissions`, {
                     userId: userId.userid,
                     permissions: permissionsData,
                     page_name: permissionsData.name
@@ -217,7 +219,7 @@ const usePermission = () => {
 
             if (permissions.read && permissions.read) {
                 try {
-                    const response = await axios.get(`http://localhost:8081/userdataid/${event.target.value}`);
+                    const response = await axios.get(`http://${apiUrl}/userdataid/${event.target.value}`);
 
                     if (Array.isArray(response.data)) {
                         const receivedPermissions = response.data;
@@ -250,7 +252,7 @@ const usePermission = () => {
                 setInfoMessage("You do not have permission.");
             }
         }
-    }, [checkPagePermission]);
+    }, [checkPagePermission,apiUrl]);
 
     const handleCancel = () => {
         setUserId({ userid: '' });

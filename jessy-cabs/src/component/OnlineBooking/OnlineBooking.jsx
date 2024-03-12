@@ -5,8 +5,11 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import { APIURL } from "../url";
 
 const OnlineBooking = () => {
+  const apiUrl = APIURL;
+
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
@@ -121,7 +124,7 @@ const OnlineBooking = () => {
   const handleAdd = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:8081/booking', book);
+      await axios.post(`http://${apiUrl}/booking`, book);
       handleCancel();
       handlecheck();
       setSuccess(true);
@@ -148,7 +151,7 @@ const OnlineBooking = () => {
         remarks: formValues.remarks,
       };
 
-      await axios.post('http://localhost:8081/send-onbook-email', dataToSend);
+      await axios.post(`http://${apiUrl}/send-onbook-email`, dataToSend);
       setSuccess(true);
       setSuccessMessage("Mail sented Successfully");
     } catch (error) {

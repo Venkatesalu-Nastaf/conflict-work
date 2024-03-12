@@ -3,6 +3,7 @@ import axios from "axios";
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import { saveAs } from 'file-saver';
+import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -16,6 +17,7 @@ const columns = [
 ];
 
 const useBilled = () => {
+    const apiUrl = APIURL;
     const [fromDate, setFromDate] = useState(dayjs());
     const [toDate, setToDate] = useState(dayjs());
     const [success, setSuccess] = useState(false);
@@ -101,7 +103,7 @@ const useBilled = () => {
     const handleShow = useCallback(async () => {
 
         try {
-            const response = await axios.get(`http://localhost:8081/payment-detail`, {
+            const response = await axios.get(`http://${apiUrl}/payment-detail`, {
                 params: {
 
                     fromDate: fromDate.format('YYYY-MM-DD'),
@@ -131,13 +133,13 @@ const useBilled = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [fromDate, toDate, servicestation]);
+    }, [fromDate, toDate, servicestation,apiUrl]);
 
     const handleShowAll = useCallback(async () => {
 
         try {
             const response = await axios.get(
-                `http://localhost:8081/billing`
+                `http://${apiUrl}/billing`
             );
             const data = response.data;
             if (data.length > 0) {
@@ -159,7 +161,7 @@ const useBilled = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, []);
+    }, [apiUrl]);
 
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');

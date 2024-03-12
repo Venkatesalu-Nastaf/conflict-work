@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
+import { APIURL } from "../../../url";
 
 // TABLE START
 const columns = [
@@ -17,6 +18,7 @@ const columns = [
 // TABLE END
 
 const useDriverbatarate = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -41,14 +43,14 @@ const useDriverbatarate = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Rate Type';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';
@@ -216,7 +218,7 @@ const useDriverbatarate = () => {
                 return;
             }
             try {
-                await axios.post('http://localhost:8081/driverbatarate', book);
+                await axios.post(`http://${apiUrl}/driverbatarate`, book);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -242,7 +244,7 @@ const useDriverbatarate = () => {
                 updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
                 updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
 
-                await axios.put(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`, updatedCustomer);
+                await axios.put(`http://${apiUrl}/driverbatarate/${selectedCustomerData.id}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
@@ -260,13 +262,13 @@ const useDriverbatarate = () => {
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
-                const response = await axios.get('http://localhost:8081/driverbatarate');
+                const response = await axios.get(`http://${apiUrl}/driverbatarate`);
                 const data = response.data;
                 setRows(data);
             }
         }
         handlelist();
-    }, [permissions]);
+    }, [permissions,apiUrl]);
 
     const handleClick = async (event, actionName, id) => {
         event.preventDefault();
@@ -274,7 +276,7 @@ const useDriverbatarate = () => {
             if (actionName === 'List') {
                 const permissions = checkPagePermission();
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/driverbatarate');
+                    const response = await axios.get(`http://${apiUrl}/driverbatarate`);
                     const data = response.data;
                     if (data.length > 0) {
                         setRows(data);
@@ -296,7 +298,7 @@ const useDriverbatarate = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`);
+                    await axios.delete(`http://${apiUrl}/driverbatarate/${selectedCustomerData.id}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -316,7 +318,7 @@ const useDriverbatarate = () => {
                     updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
                     updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
 
-                    await axios.put(`http://localhost:8081/driverbatarate/${selectedCustomerData.id}`, updatedCustomer);
+                    await axios.put(`http://${apiUrl}/driverbatarate/${selectedCustomerData.id}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
                     handleCancel();

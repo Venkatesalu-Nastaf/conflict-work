@@ -147,7 +147,7 @@ header img {
 }
 
 .guest-signature-details .guest-sign {
-  width: 40%;
+  width: 45%;
   position: relative;
 }
 
@@ -303,12 +303,14 @@ header img {
   font-size: 12px;
   font-weight: 500;
 }
-.attached-toll{
+
+.attached-toll {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 10px auto;
 }
+
 .attached-toll img {
   width: 500px;
 }

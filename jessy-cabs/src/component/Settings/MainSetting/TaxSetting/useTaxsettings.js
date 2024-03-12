@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
+import { APIURL } from "../../../url";
 
 
 // TABLE START
@@ -18,6 +19,7 @@ const columns = [
 ];
 
 const useTaxsettings = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -41,14 +43,14 @@ const useTaxsettings = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Tax settings';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Tax settings';
@@ -211,7 +213,7 @@ const useTaxsettings = () => {
         const permissions = checkPagePermission();
         if (permissions.read && permissions.new) {
             try {
-                await axios.post('http://localhost:8081/taxsetting', book);
+                await axios.post(`http://${apiUrl}/taxsetting`, book);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -237,7 +239,7 @@ const useTaxsettings = () => {
                     ...selectedCustomer,
                     ...selectedCustomerData,
                 };
-                await axios.put(`http://localhost:8081/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
+                await axios.put(`http://${apiUrl}/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -255,7 +257,7 @@ const useTaxsettings = () => {
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
-                const response = await axios.get('http://localhost:8081/taxsetting');
+                const response = await axios.get(`http://${apiUrl}/taxsetting`);
                 const data = response.data;
 
                 if (data.length > 0) {
@@ -271,7 +273,7 @@ const useTaxsettings = () => {
         }
 
         handlelist();
-    }, [permissions]);
+    }, [permissions,apiUrl]);
 
     const handleClick = async (event, actionName, STax) => {
         event.preventDefault();
@@ -279,7 +281,7 @@ const useTaxsettings = () => {
             if (actionName === 'List') {
                 const permissions = checkPagePermission();
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/taxsetting');
+                    const response = await axios.get(`http://${apiUrl}/taxsetting`);
                     const data = response.data;
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,
@@ -297,7 +299,7 @@ const useTaxsettings = () => {
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/taxsetting/${selectedCustomerData?.STax || book.STax}`);
+                    await axios.delete(`http://${apiUrl}/taxsetting/${selectedCustomerData?.STax || book.STax}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -314,7 +316,7 @@ const useTaxsettings = () => {
                         ...selectedCustomer,
                         ...selectedCustomerData,
                     };
-                    await axios.put(`http://localhost:8081/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
+                    await axios.put(`http://${apiUrl}/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
                     handleCancel();
                     setRows([]);
                     setSuccess(true);

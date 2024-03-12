@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { APIURL } from "../../../url";
 
 const useDivision = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -25,14 +27,14 @@ const useDivision = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Rate Type';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';
@@ -177,7 +179,7 @@ const useDivision = () => {
                 return;
             }
             try {
-                await axios.post('http://localhost:8081/division', book);
+                await axios.post(`http://${apiUrl}/division`, book);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -198,7 +200,7 @@ const useDivision = () => {
             if (permissions.read && permissions.modify) {
                 const selectedCustomer = rows.find((row) => row.driverid === driverid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`http://localhost:8081/division/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+                await axios.put(`http://${apiUrl}/division/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
@@ -216,7 +218,7 @@ const useDivision = () => {
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
-                const response = await axios.get('http://localhost:8081/division');
+                const response = await axios.get(`http://${apiUrl}/division`);
                 const data = response.data;
 
                 if (data.length > 0) {
@@ -232,7 +234,7 @@ const useDivision = () => {
         }
 
         handlelist();
-    }, [permissions]);
+    }, [permissions,apiUrl]);
 
     const handleClick = async (event, actionName, driverid) => {
         event.preventDefault();
@@ -241,7 +243,7 @@ const useDivision = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/division');
+                    const response = await axios.get(`http://${apiUrl}/division`);
                     const data = response.data;
                     if (data.length > 0) {
                         const rowsWithUniqueId = data.map((row, index) => ({
@@ -266,7 +268,7 @@ const useDivision = () => {
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/division/${selectedCustomerData?.driverid || book.driverid}`);
+                    await axios.delete(`http://${apiUrl}/division/${selectedCustomerData?.driverid || book.driverid}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -281,7 +283,7 @@ const useDivision = () => {
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.driverid === driverid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://localhost:8081/division/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+                    await axios.put(`http://${apiUrl}/division/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
                     handleCancel();

@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { APIURL } from "../../../url";
 
 const useBankaccount = () => {
-
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
 
     const [showAddBankForm, setShowAddBankForm] = useState(false);
@@ -30,14 +31,14 @@ const useBankaccount = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Payments';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id, apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Payments';
@@ -179,7 +180,7 @@ const useBankaccount = () => {
                         totalin: book.netbalance || updatedBank.totalin,
                         totalout: book.totalout || updatedBank.totalout,
                     };
-                    await axios.put(`http://localhost:8081/updatebankdetails/${updatedBank.id}`, updateData);
+                    await axios.put(`http://${apiUrl}/updatebankdetails/${updatedBank.id}`, updateData);
                     setSuccess(true);
                     setSuccessMessage('Successfully Updated');
                     setEditingIndex(null);
@@ -232,7 +233,7 @@ const useBankaccount = () => {
                     totalin: book.capital,
                     totalout: 0,
                 };
-                await axios.post('http://localhost:8081/bankdetails', newBank);
+                await axios.post(`http://${apiUrl}/bankdetails`, newBank);
                 handleAddBank();
                 handleCancel();
             } catch {
@@ -249,7 +250,7 @@ const useBankaccount = () => {
     const fetchData = useCallback(async () => {
 
         try {
-            const response = await fetch('http://localhost:8081/getbankdetails');
+            const response = await fetch(`http://${apiUrl}/getbankdetails`);
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) {
@@ -264,7 +265,7 @@ const useBankaccount = () => {
         } catch {
         }
 
-    }, []);
+    }, [apiUrl]);
 
     useEffect(() => {
         fetchData();
@@ -286,7 +287,7 @@ const useBankaccount = () => {
             return;
         }
         try {
-            await axios.delete(`http://localhost:8081/deletebankdetails/${id}`);
+            await axios.delete(`http://${apiUrl}/deletebankdetails/${id}`);
             fetchData();
             handlePopupClose();
         } catch (error) {
@@ -294,7 +295,7 @@ const useBankaccount = () => {
             setErrorMessage('Error deleting bank account. Please check your Network Connection.');
         }
 
-    }, [fetchData, handlePopupClose]); // Add dependencies as needed
+    }, [fetchData, handlePopupClose, apiUrl]); // Add dependencies as needed
 
     useEffect(() => {
         if (deleteId !== null) {
@@ -307,7 +308,10 @@ const useBankaccount = () => {
     };
     //calculate totalout amount
     useEffect(() => {
-        const calculatedTotalOut = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalout, 10) || parseInt(book.totalout, 10) || 0), 0);
+        // const calculatedTotalOut = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalout, 10) || parseInt(book.totalout, 10) || 0), 0);
+        const calculatedTotalOut = bankDetails.reduce((total, bankDetail) => (
+            total + (parseInt(bankDetail.totalout, 10) || 0)
+        ), 0) || parseInt(book.totalout, 10) || 0;
         setTotalOut(calculatedTotalOut);
     }, [bankDetails, book]);
     //calculate totalin amount
@@ -318,13 +322,13 @@ const useBankaccount = () => {
     //calculate totalcapital amount
     useEffect(() => {
         // Make API request to fetch total capital amount
-        axios.get('http://localhost:8081/totalCapital_from_billing')
+        axios.get(`http://${apiUrl}/totalCapital_from_billing`)
             .then(response => {
                 setTotalCapital(response.data.totalAmount);
             })
             .catch(error => {
             });
-    }, []);
+    }, [apiUrl]);
 
     return {
         error,

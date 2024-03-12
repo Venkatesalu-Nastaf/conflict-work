@@ -14,8 +14,11 @@ import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";
 import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircleFill";
+import { APIURL } from "../url.js";
+
 
 const Login = () => {
+  const apiUrl = APIURL;
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const toggle = () => {
@@ -84,7 +87,7 @@ const Login = () => {
   const formSubmitter = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8081/login", input);
+      const response = await axios.post(`http://${apiUrl}/login`, input);
       if (response.status === 200) {
         loginUser(input.username);
         setSuccessMessage("Successfully Added");

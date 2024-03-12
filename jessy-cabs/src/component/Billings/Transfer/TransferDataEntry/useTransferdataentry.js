@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
-
+import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -34,9 +34,8 @@ const columns = [
 
 
 const useTransferdataentry = () => {
-
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
-
     const [rows, setRows] = useState([]);
     const [totalKm, setTotalKM] = useState(0);
     const [error, setError] = useState(false);
@@ -69,14 +68,14 @@ const useTransferdataentry = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'CB Billing';
@@ -255,7 +254,7 @@ const useTransferdataentry = () => {
 
             try {
                 const customer = localStorage.getItem('selectedcustomer');
-                const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
+                const response = await fetch(`http://${apiUrl}/tripsheetcustomer/${customer}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -291,7 +290,7 @@ const useTransferdataentry = () => {
 
         };
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     //calculate total amount in column
     useEffect(() => {
@@ -403,7 +402,7 @@ const useTransferdataentry = () => {
                 setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
                 return;
             }
-            const response = await axios.post('http://localhost:8081/updateStatus', {
+            const response = await axios.post(`http://${apiUrl}/updateStatus`, {
                 tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),
                 status: 'CBilled',
             });
@@ -442,7 +441,7 @@ const useTransferdataentry = () => {
                 trips: selectedRowCount,
                 guestname: guestnameFromFirstRow,
             };
-            await axios.post('http://localhost:8081/billing', updatedBook);
+            await axios.post(`http://${apiUrl}/billing`, updatedBook);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
         } else {
@@ -477,7 +476,7 @@ const useTransferdataentry = () => {
                 setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
                 return;
             }
-            const response = await axios.post('http://localhost:8081/updateStatusremove', {
+            const response = await axios.post(`http://${apiUrl}/updateStatusremove`, {
                 tripids: tripids,
                 status: 'Closed',
             });
@@ -503,7 +502,7 @@ const useTransferdataentry = () => {
         if (event.key === 'Enter') {
             try {
                 const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
-                const response = await axios.get(`http://localhost:8081/billingdata/${invoiceNumber}`);
+                const response = await axios.get(`http://${apiUrl}/billingdata/${invoiceNumber}`);
                 if (response.status === 200) {
                     const billingDetails = response.data;
                     if (billingDetails) {
@@ -525,7 +524,7 @@ const useTransferdataentry = () => {
             }
         }
 
-    }, [invoiceno, book, selectedCustomerDatas]);
+    }, [invoiceno, book, selectedCustomerDatas,apiUrl]);
 
     const handleShow = useCallback(async () => {
 
@@ -535,7 +534,7 @@ const useTransferdataentry = () => {
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
             const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
 
-            const response = await axios.get(`http://localhost:8081/Group-Billing`, {
+            const response = await axios.get(`http://${apiUrl}/Group-Billing`, {
                 params: {
                     customer: customerValue,
                     fromDate: fromDateValue,
@@ -563,7 +562,7 @@ const useTransferdataentry = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData]);
+    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData,apiUrl]);
 
     return {
         rows,

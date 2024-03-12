@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useData } from '../../../Dashboard/MainDash/Sildebar/DataContext2';
+import { APIURL } from "../../../url";
 
 const useOrganization = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
@@ -22,13 +24,13 @@ const useOrganization = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'User Creation';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const { setSharedData } = useData();
 
@@ -113,7 +115,7 @@ const useOrganization = () => {
             event.preventDefault();
             try {
                 const filterValue = event.target.value;
-                const response = await axios.get(`http://localhost:8081/usercreation?filter=${filterValue}`);
+                const response = await axios.get(`http://${apiUrl}/usercreation?filter=${filterValue}`);
                 const bookingDetails = response.data;
                 if (Array.isArray(bookingDetails) && bookingDetails.length > 0) {
                     setBook(bookingDetails[0]);
@@ -123,7 +125,7 @@ const useOrganization = () => {
             } catch {
             }
         }
-    }, []);
+    }, [apiUrl]);
 
     const handleAdd = async () => {
         const permissions = checkPagePermission();
@@ -136,7 +138,7 @@ const useOrganization = () => {
                 return;
             }
             try {
-                await axios.post('http://localhost:8081/addcompany', book);
+                await axios.post(`http://${apiUrl}/addcompany`, book);
                 setSuccess(true);
                 setSuccessMessage("Organization Added Successfully");
             } catch {
@@ -159,7 +161,7 @@ const useOrganization = () => {
                 const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
                 const encode = companyname;
                 const decode = decodeURIComponent(encode);
-                await axios.put(`http://localhost:8081/companyupdate/${decode}`, updatedCustomer);
+                await axios.put(`http://${apiUrl}/companyupdate/${decode}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 setEditMode((prevEditMode) => !prevEditMode);
@@ -193,7 +195,7 @@ const useOrganization = () => {
             const storedcomanyname = localStorage.getItem('usercompanyname');
             const organizationname = decodeURIComponent(storedcomanyname);
             try {
-                const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
+                const response = await fetch(`http://${apiUrl}/organizationdata/${organizationname}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -208,7 +210,7 @@ const useOrganization = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
 
     const hidePopup = () => {
@@ -262,14 +264,14 @@ const useOrganization = () => {
         if (file) {
             const formData = new FormData();
             formData.append('image', file);
-            axios.put(`http://localhost:8081/logo-upload/${organizationname}`, formData)
+            axios.put(`http://${apiUrl}/logo-upload/${organizationname}`, formData)
         }
     };
 
     useEffect(() => {
         const handleImageView = () => {
 
-            axios.get(`http://localhost:8081/logo-view/${organizationname}`)
+            axios.get(`http://${apiUrl}/logo-view/${organizationname}`)
                 .then(res => {
                     if (res.status === 200) {
                         setSelectedImage(res.data[0]?.fileName);
@@ -280,7 +282,7 @@ const useOrganization = () => {
                 })
         };
         handleImageView();
-    }, [organizationname, selectedImage]);
+    }, [organizationname, selectedImage,apiUrl]);
 
     return {
         selectedCustomerData,

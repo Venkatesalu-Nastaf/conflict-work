@@ -1,8 +1,11 @@
 // useStationCreation.js
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { APIURL } from "../../url";
 
 const useStationCreation = () => {
+    const apiUrl = APIURL;
+
     const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -23,14 +26,14 @@ const useStationCreation = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Station Creation';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch (error) {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Station Creation';
@@ -168,7 +171,7 @@ const useStationCreation = () => {
         const permissions = checkPagePermission();
         if (permissions.read && permissions.new) {
             try {
-                await axios.post('http://localhost:8081/stationcreation', book);
+                await axios.post(`http://${apiUrl}/stationcreation`, book);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -191,7 +194,7 @@ const useStationCreation = () => {
             if (permissions.read && permissions.modify) {
                 const selectedCustomer = rows.find((row) => row.stationid === stationid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`http://localhost:8081/stationcreation/${selectedCustomerData?.stationid || book.stationid}`, updatedCustomer);
+                await axios.put(`http://${apiUrl}/stationcreation/${selectedCustomerData?.stationid || book.stationid}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
@@ -208,7 +211,7 @@ const useStationCreation = () => {
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
-                const response = await axios.get('http://localhost:8081/stationcreation');
+                const response = await axios.get(`http://${apiUrl}/stationcreation`);
                 const data = response.data;
 
                 if (data.length > 0) {
@@ -224,7 +227,7 @@ const useStationCreation = () => {
         }
 
         handlelist();
-    }, [permissions]);
+    }, [permissions,apiUrl]);
 
     const handleClick = async (event, actionName, stationid) => {
         event.preventDefault();
@@ -233,7 +236,7 @@ const useStationCreation = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/stationcreation');
+                    const response = await axios.get(`http://${apiUrl}/stationcreation`);
                     const data = response.data;
                     if (data.length > 0) {
                         setRows(data);
@@ -254,7 +257,7 @@ const useStationCreation = () => {
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/stationcreation/${selectedCustomerData?.stationid || book.stationid}`);
+                    await axios.delete(`http://${apiUrl}/stationcreation/${selectedCustomerData?.stationid || book.stationid}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -269,7 +272,7 @@ const useStationCreation = () => {
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.stationid === stationid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://localhost:8081/stationcreation/${selectedCustomerData?.stationid || book.stationid}`, updatedCustomer);
+                    await axios.put(`http://${apiUrl}/stationcreation/${selectedCustomerData?.stationid || book.stationid}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
                     handleCancel();

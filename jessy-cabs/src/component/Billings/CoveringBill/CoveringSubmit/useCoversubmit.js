@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
+import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -19,6 +20,7 @@ const columns = [
 ];
 
 const useCoversubmit = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [tripData] = useState('');
     const [rows, setRows] = useState([]);
@@ -43,14 +45,14 @@ const useCoversubmit = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'CB Billing';
@@ -183,7 +185,7 @@ const useCoversubmit = () => {
     const handleShow = useCallback(async () => {
 
         try {
-            const response = await axios.get(`http://localhost:8081/payment-detail`, {
+            const response = await axios.get(`http://${apiUrl}/payment-detail`, {
                 params: {
                     customer: encodeURIComponent(customer),
                     fromDate: fromDate.format('YYYY-MM-DD'),
@@ -213,7 +215,7 @@ const useCoversubmit = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [customer, fromDate, toDate, servicestation]);
+    }, [customer, fromDate, toDate, servicestation,apiUrl]);
 
     return {
         rows,

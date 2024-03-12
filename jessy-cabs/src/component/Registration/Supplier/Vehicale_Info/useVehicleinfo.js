@@ -4,8 +4,10 @@ import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
 import Button from "@mui/material/Button";
+import { APIURL } from "../../../url";
 
 const useVehicleinfo = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -71,7 +73,7 @@ const useVehicleinfo = () => {
     //to see pdf
     const [allFile, setAllFile] = useState([]);
     const showPdf = (showID) => {
-        axios.get(`http://localhost:8081/vehicle-docView/${showID}`)
+        axios.get(`http://${apiUrl}/vehicle-docView/${showID}`)
             .then(res => {
                 if (res.data.length > 0) {
                     setAllFile(res.data);
@@ -108,14 +110,14 @@ const useVehicleinfo = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Supplier Master';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id, apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Supplier Master';
@@ -318,7 +320,8 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", insurance);
             try {
-                await axios.post(`http://localhost:8081/insurance-pdf/${vehicleID}`, formData)
+                await axios.post(`http://${apiUrl}/insurance-pdf/${vehicleID}`, formData)
+                setInsurance(null)
             }
             catch {
                 setError(true);
@@ -327,6 +330,7 @@ const useVehicleinfo = () => {
         } else {
             return
         }
+        setInsurance(null);
     };
 
     // licence copyy---2
@@ -337,7 +341,8 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", licence);
             try {
-                await axios.post(`http://localhost:8081/licence-pdf/${vehicleID}`, formData)
+                await axios.post(`http://${apiUrl}/licence-pdf/${vehicleID}`, formData);
+                setLicence(null)
             }
             catch {
                 setError(true);
@@ -346,6 +351,7 @@ const useVehicleinfo = () => {
         } else {
             return
         }
+        setLicence(null);
     };
 
     // nationalPermit copyy---3
@@ -356,7 +362,8 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", nationalPermit);
             try {
-                await axios.post(`http://localhost:8081/nationalPermit-pdf/${vehicleID}`, formData)
+                await axios.post(`http://${apiUrl}/nationalPermit-pdf/${vehicleID}`, formData);
+                setNationalPermit(null);
             }
             catch {
                 setError(true);
@@ -365,6 +372,7 @@ const useVehicleinfo = () => {
         } else {
             return
         }
+        setNationalPermit(null);
     };
 
     // statePermit copyy---4
@@ -374,7 +382,8 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", statePermit);
             try {
-                await axios.post(`http://localhost:8081/statePermit-pdf/${vehicleID}`, formData)
+                await axios.post(`http://${apiUrl}/statePermit-pdf/${vehicleID}`, formData);
+                setStatePermit(null);
             }
             catch {
                 setError(true);
@@ -383,6 +392,7 @@ const useVehicleinfo = () => {
         } else {
             return
         }
+        setStatePermit(null);
     };
 
     // rcBook copyy---5
@@ -392,7 +402,8 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", rcBook);
             try {
-                await axios.post(`http://localhost:8081/rcBook-pdf/${vehicleID}`, formData)
+                await axios.post(`http://${apiUrl}/rcBook-pdf/${vehicleID}`, formData);
+                setRcbook(null);
             }
             catch {
                 setError(true);
@@ -401,6 +412,7 @@ const useVehicleinfo = () => {
         } else {
             return
         }
+        setRcbook(null);
     };
 
     // FcCopy copyy---6
@@ -410,7 +422,8 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", fcCopy);
             try {
-                await axios.post(`http://localhost:8081/fcCopy-pdf/${vehicleID}`, formData)
+                await axios.post(`http://${apiUrl}/fcCopy-pdf/${vehicleID}`, formData);
+                setFcCopy(null);
             }
             catch {
                 setError(true);
@@ -419,6 +432,7 @@ const useVehicleinfo = () => {
         } else {
             return
         }
+        setFcCopy(null);
     };
 
     const handleAdd = async () => {
@@ -433,7 +447,7 @@ const useVehicleinfo = () => {
 
         if (permissions.read && permissions.new) {
             try {
-                await axios.post('http://localhost:8081/vehicleinfo', book);
+                await axios.post(`http://${apiUrl}/vehicleinfo`, book);
                 handleCancel();
 
                 addFcCopy_copy();
@@ -466,7 +480,7 @@ const useVehicleinfo = () => {
                     ...selectedCustomer,
                     ...selectedCustomerData,
                 };
-                await axios.put(`http://localhost:8081/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
+                await axios.put(`http://${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
                 handleCancel();
 
                 addFcCopy_copy();
@@ -502,7 +516,7 @@ const useVehicleinfo = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`);
+                    await axios.delete(`http://${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`);
                     setSelectedCustomerData(null);
                     handleCancel();
                     setRows([]);
@@ -521,7 +535,7 @@ const useVehicleinfo = () => {
                         ...selectedCustomer,
                         ...selectedCustomerData,
                     };
-                    await axios.put(`http://localhost:8081/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
+                    await axios.put(`http://${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
                     handleCancel();
                     //
                     addFcCopy_copy();
@@ -559,7 +573,7 @@ const useVehicleinfo = () => {
 
         if (permissions.read && permissions.read) {
             try {
-                const response = await fetch(`http://localhost:8081/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+                const response = await fetch(`http://${apiUrl}/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
                 const data = await response.json();
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -606,12 +620,12 @@ const useVehicleinfo = () => {
     };
 
     const handleContextMenu = () => {
-        try{
-        axios.delete('http://localhost:8081/vehicle_documents/' + imagedata)
-        setDialogdeleteOpen(false);
-        setDialogOpen(false);
-        }catch{
-            
+        try {
+            axios.delete(`http://${apiUrl}/vehicle_documents/` + imagedata)
+            setDialogdeleteOpen(false);
+            setDialogOpen(false);
+        } catch {
+
         }
     };
 

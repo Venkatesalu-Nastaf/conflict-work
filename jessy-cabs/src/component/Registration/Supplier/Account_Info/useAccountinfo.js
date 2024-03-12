@@ -3,10 +3,11 @@ import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
+import { APIURL } from "../../../url";
+
 const useAccountinfo = () => {
-
+  const apiUrl = APIURL;
   const user_id = localStorage.getItem('useridno');
-
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
@@ -29,14 +30,14 @@ const useAccountinfo = () => {
     const fetchPermissions = async () => {
       try {
         const currentPageName = 'Supplier Master';
-        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
         setUserPermissions(response.data);
       } catch {
       }
     };
 
     fetchPermissions();
-  }, [user_id]);
+  }, [user_id,apiUrl]);
 
   const checkPagePermission = () => {
     const currentPageName = 'Supplier Master';
@@ -272,7 +273,7 @@ const useAccountinfo = () => {
 
     if (permissions.read && permissions.new) {
       try {
-        await axios.post('http://localhost:8081/accountinfo', book);
+        await axios.post(`ttp://${apiUrl}/accountinfo`, book);
         handleCancel();
         setRows([]);
         setSuccess(true);
@@ -293,7 +294,7 @@ const useAccountinfo = () => {
       if (permissions.read && permissions.modify) {
         const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+        await axios.put(`http://${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
@@ -312,7 +313,7 @@ const useAccountinfo = () => {
     const handleList = async () => {
       if (permissions.read && permissions.read) {
         try {
-          const response = await axios.get('http://localhost:8081/accountinfo');
+          const response = await axios.get(`http://${apiUrl}/accountinfo`);
           const data = response.data;
           const rowsWithUniqueId = data.map((row, index) => ({
             ...row,
@@ -324,7 +325,7 @@ const useAccountinfo = () => {
       }
     }
     handleList();
-  }, [permissions]);
+  }, [permissions,apiUrl]);
 
   const handleClick = async (event, actionName, accountNo) => {
     event.preventDefault();
@@ -333,7 +334,7 @@ const useAccountinfo = () => {
         const permissions = checkPagePermission();
 
         if (permissions.read && permissions.read) {
-          const response = await axios.get('http://localhost:8081/accountinfo');
+          const response = await axios.get(`http://${apiUrl}/accountinfo`);
           const data = response.data;
           if (data.length > 0) {
             const rowsWithUniqueId = data.map((row, index) => ({
@@ -360,7 +361,7 @@ const useAccountinfo = () => {
         const permissions = checkPagePermission();
 
         if (permissions.read && permissions.delete) {
-          await axios.delete(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
+          await axios.delete(`http://${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
           setSelectedCustomerData(null);
           setSuccess(true);
           setSuccessMessage("Successfully Deleted");
@@ -376,7 +377,7 @@ const useAccountinfo = () => {
         if (permissions.read && permissions.modify) {
           const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
           const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-          await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+          await axios.put(`http://${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
           setSuccess(true);
           setSuccessMessage("Successfully updated");
           handleCancel();

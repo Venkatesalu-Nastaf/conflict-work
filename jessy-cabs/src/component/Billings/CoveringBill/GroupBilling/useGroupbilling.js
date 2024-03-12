@@ -5,7 +5,7 @@ import ReactDOMServer from 'react-dom/server';
 import Coverpdf from './coverpdf/Coverpdf';
 import { saveAs } from 'file-saver';
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
-
+import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -30,9 +30,8 @@ const columns = [
 ];
 
 const useGroupbilling = () => {
-
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
-
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
     const [tripData, setTripData] = useState("");
@@ -61,14 +60,14 @@ const useGroupbilling = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
 
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'CB Billing';
@@ -201,7 +200,7 @@ const useGroupbilling = () => {
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
             const servicestationValue = servicestation || selectedCustomerDatas?.station || (tripData.length > 0 ? tripData[0].department : '');
 
-            const response = await axios.get(`http://localhost:8081/Group-Billing`, {
+            const response = await axios.get(`http://${apiUrl}/Group-Billing`, {
                 params: {
                     customer: customerValue,
                     fromDate: fromDateValue,
@@ -237,7 +236,7 @@ const useGroupbilling = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum]);
+    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum,apiUrl]);
 
 
     const convertToCSV = (data) => {
@@ -267,7 +266,7 @@ const useGroupbilling = () => {
         if (event.key === 'Enter') {
             try {
                 const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
-                const response = await axios.get(`http://localhost:8081/billingdata/${invoiceNumber}`);
+                const response = await axios.get(`http://${apiUrl}/billingdata/${invoiceNumber}`);
                 if (response.status === 200) {
                     const billingDetails = response.data;
                     if (billingDetails) {
@@ -289,7 +288,7 @@ const useGroupbilling = () => {
             }
         }
 
-    }, [invoiceno, book, selectedCustomerDatas]);
+    }, [invoiceno, book, selectedCustomerDatas,apiUrl]);
 
     return {
         rows,

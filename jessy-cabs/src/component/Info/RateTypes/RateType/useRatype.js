@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
+import { APIURL } from "../../../url";
 
 // TABLE
 
@@ -15,6 +16,7 @@ const columns = [
 ];
 
 const useRatype = () => {
+    const apiUrl = APIURL;
     const user_id = localStorage.getItem('useridno');
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -41,13 +43,13 @@ const useRatype = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Rate Type';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
         };
         fetchPermissions();
-    }, [user_id]);
+    }, [user_id,apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';
@@ -239,7 +241,7 @@ const useRatype = () => {
                     starttime: starttime,
                     closetime: closetime,
                 };
-                await axios.post('http://localhost:8081/ratetype', updatedBook);
+                await axios.post(`http://${apiUrl}/ratetype`, updatedBook);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -257,7 +259,7 @@ const useRatype = () => {
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
-                const response = await axios.get('http://localhost:8081/ratetype');
+                const response = await axios.get(`http://${apiUrl}/ratetype`);
                 const data = response.data;
 
                 if (data.length > 0) {
@@ -273,7 +275,7 @@ const useRatype = () => {
         }
 
         handlelist();
-    }, [permissions]);
+    }, [permissions,apiUrl]);
 
     const handleEdit = async (driverid) => {
         const permissions = checkPagePermission();
@@ -281,7 +283,7 @@ const useRatype = () => {
         if (permissions.read && permissions.modify) {
             const selectedCustomer = rows.find((row) => row.driverid === driverid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://localhost:8081/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+            await axios.put(`http://${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
@@ -299,7 +301,7 @@ const useRatype = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/ratetype');
+                    const response = await axios.get(`http://${apiUrl}/ratetype`);
                     const data = response.data;
                     if (data.length > 0) {
                         const rowsWithUniqueId = data.map((row, index) => ({
@@ -325,7 +327,7 @@ const useRatype = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
+                    await axios.delete(`http://${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -341,7 +343,7 @@ const useRatype = () => {
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.driverid === driverid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://localhost:8081/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+                    await axios.put(`http://${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
                     handleCancel();

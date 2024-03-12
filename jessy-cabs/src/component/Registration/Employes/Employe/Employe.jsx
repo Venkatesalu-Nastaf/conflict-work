@@ -52,6 +52,8 @@ import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
+import { APIURL } from "../../../url";
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -73,6 +75,7 @@ const actions = [
 ];
 
 const Employe = () => {
+  const apiUrl = APIURL;
   const {
     selectedCustomerData,
     selectedCustomerId,
@@ -538,7 +541,8 @@ const Employe = () => {
               <div style={{ position: 'relative' }}>
                 {Array.isArray(allFile) && allFile.map((img, index) => (
                   <div key={index} style={{ position: 'relative' }}>
-                    <embed src={`http://localhost:8081/images/` + img.fileName} type="application/pdf" width="100%" height="600px" />
+
+                    <embed src={`http://${apiUrl}/public/employee_doc/` + img.fileName} type="application/pdf" width="100%" height="600px" />
                     <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} />
                   </div>
                 ))}

@@ -11,6 +11,7 @@ import { useLocation } from "react-router-dom";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
+import { APIURL } from "../../../url.js";
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -59,6 +60,7 @@ const columns = [
 ];
 
 const useBooking = () => {
+  const apiUrl = APIURL;
   const user_id = localStorage.getItem("useridno");
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
@@ -96,19 +98,32 @@ const useBooking = () => {
 
   const [userPermissions, setUserPermissions] = useState({});
 
+  // useEffect(() => {
+  //   const fetchPermissions = async () => {
+  //     try {
+  //       const currentPageName = "Booking";
+  //       const response = await axios.get(
+  //         `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+  //       );
+  //       setUserPermissions(response.data);
+  //     } catch {}
+  //   };
+
+  //   fetchPermissions();
+  // }, [user_id]);
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
         const currentPageName = "Booking";
         const response = await axios.get(
-          `http://localhost:8081/user-permissions/${user_id}/${currentPageName}`
+          `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
         );
         setUserPermissions(response.data);
       } catch {}
     };
 
     fetchPermissions();
-  }, [user_id]);
+  }, [user_id, apiUrl]); // Include apiUrl in the dependency array
 
   const checkPagePermission = () => {
     const currentPageName = "Booking";
@@ -584,7 +599,7 @@ const useBooking = () => {
 
   const showPdf = () => {
     axios
-      .get(`http://localhost:8081/booking-docView/${booking_id}`)
+      .get(`http://${apiUrl}/booking-docView/${booking_id}`)
       .then((res) => {
         if (res.data.length > 0) {
           setAllFile(res.data);
@@ -608,7 +623,7 @@ const useBooking = () => {
 
       formData.append("file", file);
       await axios
-        .post(`http://localhost:8081/bookingpdf/${booking_id}`, formData)
+        .post(`http://${apiUrl}/bookingpdf/${booking_id}`, formData)
         .then((res) => {})
         .catch();
     } else {
@@ -647,10 +662,8 @@ const useBooking = () => {
           orderedby: selectedCustomerDatas.name,
           mobile: selectedCustomerDatas.phoneno,
         };
-        await axios.post("http://localhost:8081/booking", updatedBook);
-        const response = await axios.get(
-          "http://localhost:8081/last-booking-no"
-        );
+        await axios.post(`http://${apiUrl}/booking`, updatedBook);
+        const response = await axios.get(`http://${apiUrl}/last-booking-no`);
         const lastBookingNo = response.data.bookingno;
         setLastBookingNo(lastBookingNo);
         setPopupOpen(true);
@@ -711,7 +724,7 @@ const useBooking = () => {
           mobile: selectedCustomerDatas.phoneno,
         };
         await axios.put(
-          `http://localhost:8081/booking/${
+          `http://${apiUrl}/booking/${
             book.bookingno ||
             selectedCustomerData.bookingno ||
             formData.bookingno
@@ -749,7 +762,7 @@ const useBooking = () => {
         const permissions = checkPagePermission();
         if (permissions.read && permissions.delete) {
           await axios.delete(
-            `http://localhost:8081/booking/${
+            `http://${apiUrl}/booking/${
               book.bookingno || selectedCustomerData.bookingno
             }`
           );
@@ -803,7 +816,7 @@ const useBooking = () => {
             mobile: selectedCustomerDatas.phoneno,
           };
           await axios.put(
-            `http://localhost:8081/booking/${
+            `http://${apiUrl}/booking/${
               book.bookingno ||
               selectedCustomerData.bookingno ||
               formData.bookingno
@@ -862,11 +875,12 @@ const useBooking = () => {
       event.preventDefault();
       try {
         const response = await axios.get(
-          `http://localhost:8081/booking/${event.target.value}`
+          `http://${apiUrl}/booking/${event.target.value}`
         );
         const bookingDetails = response.data;
         setSelectedCustomerData(bookingDetails);
         console.log(bookingDetails);
+        // console.log(apiUrl);
         setSelectedCustomerId(bookingDetails.tripid);
         setIsEditMode(true);
       } catch {
@@ -874,7 +888,7 @@ const useBooking = () => {
         setErrorMessage("Error retrieving booking details");
       }
     }
-  }, []);
+  }, [apiUrl]);
 
   const [currentYear, setCurrentYear] = useState("");
 
@@ -894,7 +908,7 @@ const useBooking = () => {
         if (enterPressCount === 0) {
           try {
             const response = await axios.get(
-              `http://localhost:8081/name-customers/${event.target.value}`
+              `http://${apiUrl}/name-customers/${event.target.value}`
             );
             const vehicleData = response.data;
             setRows([vehicleData]);
@@ -917,7 +931,7 @@ const useBooking = () => {
         setEnterPressCount(0);
       }
     },
-    [handleChange, rows, enterPressCount]
+    [handleChange, rows, enterPressCount,apiUrl]
   );
 
   const handleRowClick = useCallback(
@@ -964,7 +978,7 @@ const useBooking = () => {
             formData.useage,
         };
 
-        await axios.post("http://localhost:8081/send-email", dataToSend);
+        await axios.post(`http://${apiUrl}/send-email`, dataToSend);
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
       } catch (error) {
@@ -985,7 +999,7 @@ const useBooking = () => {
     if (permissions.read && permissions.read) {
       try {
         const response = await fetch(
-          `http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
+          `http://${apiUrl}/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
         );
         const data = await response.json();
         if (data.length > 0) {
@@ -1017,7 +1031,7 @@ const useBooking = () => {
       if (permissions.read && permissions.read) {
         try {
           const response = await fetch(
-            `http://localhost:8081/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
+            `http://${apiUrl}/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
           );
           const data = await response.json();
           if (data.length > 0) {
@@ -1126,7 +1140,7 @@ const useBooking = () => {
             "",
         };
 
-        const response = await fetch("http://localhost:8081/send-sms", {
+        const response = await fetch(`http://${apiUrl}/send-sms`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -1159,7 +1173,7 @@ const useBooking = () => {
         return;
       }
       const response = await fetch(
-        `http://localhost:8081/get-attachedmailimage/${bookingno}`
+        `http://${apiUrl}/get-attachedmailimage/${bookingno}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -1168,7 +1182,7 @@ const useBooking = () => {
       setAttachedImage(data.files);
       setpopupOpenmail(true);
     } catch {}
-  }, [book.bookingno, selectedCustomerData.bookingno]);
+  }, [book.bookingno, selectedCustomerData.bookingno,apiUrl]);
 
   const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
 
@@ -1185,7 +1199,7 @@ const useBooking = () => {
 
   const handleContextMenu = () => {
     axios
-      .delete("http://localhost:8081/booking_doc/" + imagedata)
+      .delete(`http://${apiUrl}/booking_doc/` + imagedata)
       .then((res) => {})
       .catch((err) => console.log(err));
     setDialogdeleteOpen(false);

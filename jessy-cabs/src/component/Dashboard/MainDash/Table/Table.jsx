@@ -15,9 +15,12 @@ import { Button, IconButton } from "@mui/material";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import { APIURL } from "../../../url";
 
 // ICON
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+
+const apiUrl = APIURL;
 
 const makeStyle = (status) => {
   if (status === 'Waiting' || status === 'On_Going') {
@@ -53,7 +56,7 @@ export default function BasicTable() {
     const fetchPermissions = async () => {
       try {
         const currentPageName = 'Dashboard page';
-        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
+        const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
         setUserPermissions(response.data);
       } catch {
       }
@@ -87,7 +90,7 @@ export default function BasicTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8081/tripsheet');
+        const response = await fetch(`http://${apiUrl}/tripsheet`);
         if (response.status === 200) {
           if (response.ok) {
             const data = await response.json();
@@ -148,7 +151,7 @@ export default function BasicTable() {
                     <TableCell component="th" scope="row">{trip.driverName}</TableCell>
                     <TableCell align="left">TS{trip.tripid}</TableCell>
                     {/* <TableCell align="left">{trip.startdate}</TableCell> */}
-                    <TableCell align="left">{format(new Date(trip.startdate), 'dd/MM/yyyy')}</TableCell>
+                    <TableCell align="left">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
                     <TableCell align="left"><span className="status" style={makeStyle(trip.apps)}>{trip.apps}</span></TableCell>
                     <TableCell align="left" className="Details">
                       <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>

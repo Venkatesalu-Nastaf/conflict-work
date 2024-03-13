@@ -68,7 +68,7 @@ const useTransferdataentry = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -254,7 +254,7 @@ const useTransferdataentry = () => {
 
             try {
                 const customer = localStorage.getItem('selectedcustomer');
-                const response = await fetch(`http://${apiUrl}/tripsheetcustomer/${customer}`);
+                const response = await fetch(`${apiUrl}/tripsheetcustomer/${customer}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -402,7 +402,7 @@ const useTransferdataentry = () => {
                 setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
                 return;
             }
-            const response = await axios.post(`http://${apiUrl}/updateStatus`, {
+            const response = await axios.post(`${apiUrl}/updateStatus`, {
                 tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),
                 status: 'CBilled',
             });
@@ -441,7 +441,7 @@ const useTransferdataentry = () => {
                 trips: selectedRowCount,
                 guestname: guestnameFromFirstRow,
             };
-            await axios.post(`http://${apiUrl}/billing`, updatedBook);
+            await axios.post(`${apiUrl}/billing`, updatedBook);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
         } else {
@@ -476,7 +476,7 @@ const useTransferdataentry = () => {
                 setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
                 return;
             }
-            const response = await axios.post(`http://${apiUrl}/updateStatusremove`, {
+            const response = await axios.post(`${apiUrl}/updateStatusremove`, {
                 tripids: tripids,
                 status: 'Closed',
             });
@@ -502,7 +502,7 @@ const useTransferdataentry = () => {
         if (event.key === 'Enter') {
             try {
                 const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
-                const response = await axios.get(`http://${apiUrl}/billingdata/${invoiceNumber}`);
+                const response = await axios.get(`${apiUrl}/billingdata/${invoiceNumber}`);
                 if (response.status === 200) {
                     const billingDetails = response.data;
                     if (billingDetails) {
@@ -534,7 +534,7 @@ const useTransferdataentry = () => {
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
             const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
 
-            const response = await axios.get(`http://${apiUrl}/Group-Billing`, {
+            const response = await axios.get(`${apiUrl}/Group-Billing`, {
                 params: {
                     customer: customerValue,
                     fromDate: fromDateValue,

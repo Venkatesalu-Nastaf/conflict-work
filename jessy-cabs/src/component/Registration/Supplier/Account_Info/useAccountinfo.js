@@ -30,7 +30,7 @@ const useAccountinfo = () => {
     const fetchPermissions = async () => {
       try {
         const currentPageName = 'Supplier Master';
-        const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+        const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
         setUserPermissions(response.data);
       } catch {
       }
@@ -294,7 +294,7 @@ const useAccountinfo = () => {
       if (permissions.read && permissions.modify) {
         const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
         const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-        await axios.put(`http://${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+        await axios.put(`${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
         setSuccess(true);
         setSuccessMessage("Successfully updated");
         handleCancel();
@@ -313,7 +313,7 @@ const useAccountinfo = () => {
     const handleList = async () => {
       if (permissions.read && permissions.read) {
         try {
-          const response = await axios.get(`http://${apiUrl}/accountinfo`);
+          const response = await axios.get(`${apiUrl}/accountinfo`);
           const data = response.data;
           const rowsWithUniqueId = data.map((row, index) => ({
             ...row,
@@ -334,7 +334,7 @@ const useAccountinfo = () => {
         const permissions = checkPagePermission();
 
         if (permissions.read && permissions.read) {
-          const response = await axios.get(`http://${apiUrl}/accountinfo`);
+          const response = await axios.get(`${apiUrl}/accountinfo`);
           const data = response.data;
           if (data.length > 0) {
             const rowsWithUniqueId = data.map((row, index) => ({
@@ -361,7 +361,7 @@ const useAccountinfo = () => {
         const permissions = checkPagePermission();
 
         if (permissions.read && permissions.delete) {
-          await axios.delete(`http://${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
+          await axios.delete(`${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
           setSelectedCustomerData(null);
           setSuccess(true);
           setSuccessMessage("Successfully Deleted");
@@ -377,7 +377,7 @@ const useAccountinfo = () => {
         if (permissions.read && permissions.modify) {
           const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
           const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-          await axios.put(`http://${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+          await axios.put(`${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
           setSuccess(true);
           setSuccessMessage("Successfully updated");
           handleCancel();

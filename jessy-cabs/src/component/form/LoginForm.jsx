@@ -87,7 +87,7 @@ const Login = () => {
   const formSubmitter = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://${apiUrl}/login`, input);
+      const response = await axios.post(`${apiUrl}/login`, input);
       if (response.status === 200) {
         loginUser(input.username);
         setSuccessMessage("Successfully Added");

@@ -81,7 +81,7 @@ const useEmployee = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Employee PayRoll';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -301,7 +301,7 @@ const useEmployee = () => {
     const [allFile, setAllFile] = useState([]);
 
     const showPdf = (showID) => {
-        axios.get(`http://${apiUrl}/employee-docView/${showID}`)
+        axios.get(`${apiUrl}/employee-docView/${showID}`)
             .then(res => {
                 if (res.data.length > 0) {
                     setAllFile(res.data);
@@ -328,7 +328,7 @@ const useEmployee = () => {
             const formData = new FormData();
             formData.append("file", file);
             try {
-                await axios.post(`http://${apiUrl}/employee-pdf/${empid}`, formData)
+                await axios.post(`${apiUrl}/employee-pdf/${empid}`, formData)
             }
             catch {
                 setError(true);
@@ -351,7 +351,7 @@ const useEmployee = () => {
                 return;
             }
             try {
-                await axios.post(`http://${apiUrl}/employees`, book);
+                await axios.post(`${apiUrl}/employees`, book);
                 handleCancel();
                 addPdf();
                 setRows([]);
@@ -372,7 +372,7 @@ const useEmployee = () => {
         if (permissions.read && permissions.modify) {
             const selectedCustomer = rows.find((row) => row.empid === empid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
+            await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
@@ -392,7 +392,7 @@ const useEmployee = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get(`http://${apiUrl}/employees`);
+                    const response = await axios.get(`${apiUrl}/employees`);
                     const data = response.data;
                     if (data.length > 0) {
                         const rowsWithUniqueId = data.map((row, index) => ({
@@ -418,7 +418,7 @@ const useEmployee = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`);
+                    await axios.delete(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -434,7 +434,7 @@ const useEmployee = () => {
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.empid === empid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
+                    await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
                     handleCancel();
@@ -463,7 +463,7 @@ const useEmployee = () => {
 
         if (permissions.read && permissions.read) {
             try {
-                const response = await fetch(`http://${apiUrl}/table-for-employee?searchText=${searchText}`);
+                const response = await fetch(`${apiUrl}/table-for-employee?searchText=${searchText}`);
                 const data = await response.json();
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -502,7 +502,7 @@ const useEmployee = () => {
     };
 
     const handleContextMenu = () => {
-        axios.delete(`http://${apiUrl}/image-delete/` + imagedata)
+        axios.delete(`${apiUrl}/image-delete/` + imagedata)
             .then(res => {
                 console.log("deleted")
             })

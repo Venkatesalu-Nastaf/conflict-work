@@ -6,7 +6,7 @@ const apiUrl = APIURL;
 
 const fetchDataFromBackend = async (date) => {
   try {
-    const response = await fetch(`http://${apiUrl}/total_amounts_from_billing?date=${date}`);
+    const response = await fetch(`${apiUrl}/total_amounts_from_billing?date=${date}`);
     if (!response.ok) {
       return { totalAmount: 0, totalPaid: 0, totalPending: 0 };
     }
@@ -24,7 +24,7 @@ const fetchDataFromBackend = async (date) => {
 
 const fetchMonthlyDataFromBackend = async (startDate, endDate) => {
   try {
-    const response = await fetch(`http://${apiUrl}/monthly_data?startDate=${startDate}&endDate=${endDate}`);
+    const response = await fetch(`${apiUrl}/monthly_data?startDate=${startDate}&endDate=${endDate}`);
     if (!response.ok) {
       return [];
     }

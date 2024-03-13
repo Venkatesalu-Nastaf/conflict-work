@@ -45,7 +45,7 @@ const useCoversubmit = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -185,7 +185,7 @@ const useCoversubmit = () => {
     const handleShow = useCallback(async () => {
 
         try {
-            const response = await axios.get(`http://${apiUrl}/payment-detail`, {
+            const response = await axios.get(`${apiUrl}/payment-detail`, {
                 params: {
                     customer: encodeURIComponent(customer),
                     fromDate: fromDate.format('YYYY-MM-DD'),

@@ -32,7 +32,7 @@ const useEmplyeecreation = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'User Creation';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -167,7 +167,7 @@ const useEmplyeecreation = () => {
                     return;
                 }
                 try {
-                    await axios.post(`http://${apiUrl}/usercreation`, book);
+                    await axios.post(`${apiUrl}/usercreation`, book);
                     handleCancel();
                     setRows([]);
                     validatePasswordMatch();
@@ -193,7 +193,7 @@ const useEmplyeecreation = () => {
             if (permissions.read && permissions.modify) {
                 const selectedCustomer = rows.find((row) => row.userid === userid);
                 const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`http://${apiUrl}/usercreation/${book.userid || selectedCustomerData?.userid}`, updatedCustomer);
+                await axios.put(`${apiUrl}/usercreation/${book.userid || selectedCustomerData?.userid}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
@@ -212,7 +212,7 @@ const useEmplyeecreation = () => {
         const handleList = async () => {
             if (permissions.read && permissions.read) {
                 try {
-                    const response = await axios.get(`http://${apiUrl}/usercreation`);
+                    const response = await axios.get(`${apiUrl}/usercreation`);
                     const data = response.data;
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,
@@ -233,7 +233,7 @@ const useEmplyeecreation = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get(`http://${apiUrl}/usercreation`);
+                    const response = await axios.get(`${apiUrl}/usercreation`);
                     const data = response.data;
                     if (data.length > 0) {
                         const rowsWithUniqueId = data.map((row, index) => ({
@@ -258,7 +258,7 @@ const useEmplyeecreation = () => {
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://${apiUrl}/usercreation/${book.userid || selectedCustomerData?.userid}`);
+                    await axios.delete(`${apiUrl}/usercreation/${book.userid || selectedCustomerData?.userid}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -273,7 +273,7 @@ const useEmplyeecreation = () => {
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.userid === userid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://${apiUrl}/usercreation/${book.userid || selectedCustomerData?.userid}`, updatedCustomer);
+                    await axios.put(`${apiUrl}/usercreation/${book.userid || selectedCustomerData?.userid}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
                     handleCancel();

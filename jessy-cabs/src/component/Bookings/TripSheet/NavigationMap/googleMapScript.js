@@ -71,7 +71,7 @@ function submitPopup() {
         return;
     }
     const selectedTripType = tripTypeElement.value;
-    fetch(`http://${apiUrl}/gmap-submitForm`, {
+    fetch(`${apiUrl}/gmap-submitForm`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -283,7 +283,7 @@ function generateStaticMap() {
                 formDataUpload.append('tripid', tripid);
 
                 try {
-                    const response = await axios.post(`http://${apiUrl}/mapuploads`, formDataUpload, {
+                    const response = await axios.post(`${apiUrl}/mapuploads`, formDataUpload, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'Accept': 'image/png',

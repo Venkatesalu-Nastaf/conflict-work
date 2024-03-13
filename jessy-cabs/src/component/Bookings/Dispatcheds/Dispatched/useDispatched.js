@@ -47,7 +47,7 @@ const useDispatched = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Booking';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -176,7 +176,7 @@ const useDispatched = () => {
     const handleShow = useCallback(async () => {
         try {
             const response = await axios.get(
-                `http://${apiUrl}/pending_tripsheet?department=${encodeURIComponent(
+                `${apiUrl}/pending_tripsheet?department=${encodeURIComponent(
                     department
                 )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
                     toDate.toISOString()
@@ -207,7 +207,7 @@ const useDispatched = () => {
     const handleShowAll = useCallback(async () => {
         try {
             const response = await axios.get(
-                `http://${apiUrl}/tripsheet`
+                `${apiUrl}/tripsheet`
             );
             const data = response.data;
             if (data.length > 0) {

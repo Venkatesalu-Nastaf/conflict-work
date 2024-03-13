@@ -53,7 +53,7 @@ const useClosed = () => {
       try {
         const currentPageName = "Booking";
         const response = await axios.get(
-          `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
         );
         setUserPermissions(response.data);
       } catch {}
@@ -211,7 +211,7 @@ const useClosed = () => {
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://${apiUrl}/closed-tripsheet?department=${encodeURIComponent(
+        `${apiUrl}/closed-tripsheet?department=${encodeURIComponent(
           department
         )}&fromDate=${encodeURIComponent(
           fromDate.toISOString()
@@ -240,7 +240,7 @@ const useClosed = () => {
 
   const handleShowAll = useCallback(async () => {
     try {
-      const response = await axios.get(`http://${apiUrl}/tripsheet`);
+      const response = await axios.get(`${apiUrl}/tripsheet`);
       const data = response.data;
       if (data.length > 0) {
         const rowsWithUniqueId = data.map((row, index) => ({

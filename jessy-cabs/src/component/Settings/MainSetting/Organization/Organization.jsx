@@ -66,7 +66,7 @@ const Organization = () => {
                                         <Avatar
                                             sx={{ width: "12ch", height: "12ch" }}
                                             alt="userimage"
-                                            src={`http://${apiUrl}/public/org_logo/${selectedImage}`}
+                                            src={`${apiUrl}/public/org_logo/${selectedImage}`}
 
                                         >
                                             {console.log("image log", selectedImage)}

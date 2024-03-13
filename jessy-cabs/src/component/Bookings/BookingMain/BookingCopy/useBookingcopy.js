@@ -44,7 +44,7 @@ const useBookingcopy = () => {
       try {
         const currentPageName = "Booking";
         const response = await axios.get(
-          `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
         );
         setUserPermissions(response.data);
       } catch {}
@@ -134,7 +134,7 @@ const useBookingcopy = () => {
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://${apiUrl}/booking?bookingno=${bookingno}&fromDate=${fromDate.format(
+        `${apiUrl}/booking?bookingno=${bookingno}&fromDate=${fromDate.format(
           "YYYY-MM-DD"
         )}&toDate=${toDate.format("YYYY-MM-DD")}`
       );

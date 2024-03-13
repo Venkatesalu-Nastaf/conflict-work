@@ -67,7 +67,7 @@ const useAppuserlist = () => {
     }, [info]);
 
     const handleListButtonClick = () => {
-        fetch(`http://${apiUrl}/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
+        fetch(`${apiUrl}/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.length > 0) {

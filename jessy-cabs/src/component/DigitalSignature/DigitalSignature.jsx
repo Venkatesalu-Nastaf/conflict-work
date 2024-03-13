@@ -26,7 +26,7 @@ const DigitalSignature = () => {
     const dataUrl = sigCanvasRef.current.toDataURL("image/png");
 
     try {
-      await fetch(`http://${apiUrl}/api/saveSignaturewtid`, {
+      await fetch(`${apiUrl}/api/saveSignaturewtid`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

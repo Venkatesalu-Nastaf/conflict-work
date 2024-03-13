@@ -1560,7 +1560,7 @@ const Booking = () => {
                     allFile.map((img, index) => (
                       <div key={index} style={{ position: "relative" }}>
                         <embed
-                          src={`http://${apiUrl}/public/booking_doc/` + img.fileName}
+                          src={`${apiUrl}/public/booking_doc/` + img.fileName}
                           type="application/pdf"
                           width="100%"
                           height="600px"

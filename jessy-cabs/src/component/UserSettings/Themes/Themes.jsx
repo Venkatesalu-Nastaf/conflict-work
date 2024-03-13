@@ -12,7 +12,7 @@ const Themes = () => {
     const userid = localStorage.getItem('useridno');
     setSelectedTheme(theme);
     localStorage.removeItem("selectedusertheme");
-    await axios.post(`http://${apiUrl}/updatethemename`, {
+    await axios.post(`${apiUrl}/updatethemename`, {
       userid: userid,
       theme: theme
     });

@@ -80,7 +80,7 @@ const UserSetting = () => {
                     <Avatar
                       sx={{ width: "12ch", height: "12ch" }}
                       alt="userimage"
-                      src={`http://${apiUrl}/public/user_profile/${selectedImage}`}
+                      src={`${apiUrl}/public/user_profile/${selectedImage}`}
 
                     />
 

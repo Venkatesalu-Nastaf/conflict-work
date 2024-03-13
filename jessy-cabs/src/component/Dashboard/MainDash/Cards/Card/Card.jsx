@@ -35,7 +35,7 @@ function CompactCard({ param, setExpanded }) {
     const fetchPermissions = async () => {
       try {
         const currentPageName = 'Dashboard page';
-        const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+        const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
         setUserPermissions(response.data);
       } catch {
       }

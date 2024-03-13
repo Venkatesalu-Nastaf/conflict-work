@@ -63,7 +63,7 @@ const usePermission = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Permission';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -173,7 +173,7 @@ const usePermission = () => {
         }));
 
         try {
-            const response = await fetch(`http://${apiUrl}/usercreationgetdata/${value}`);
+            const response = await fetch(`${apiUrl}/usercreationgetdata/${value}`);
             const data = await response.json();
             setUserData(data);
         } catch {
@@ -196,7 +196,7 @@ const usePermission = () => {
 
         if (permissions.read && permissions.new && permissions.modify) {
             try {
-                await axios.post(`http://${apiUrl}/save-permissions`, {
+                await axios.post(`${apiUrl}/save-permissions`, {
                     userId: userId.userid,
                     permissions: permissionsData,
                     page_name: permissionsData.name
@@ -219,7 +219,7 @@ const usePermission = () => {
 
             if (permissions.read && permissions.read) {
                 try {
-                    const response = await axios.get(`http://${apiUrl}/userdataid/${event.target.value}`);
+                    const response = await axios.get(`${apiUrl}/userdataid/${event.target.value}`);
 
                     if (Array.isArray(response.data)) {
                         const receivedPermissions = response.data;

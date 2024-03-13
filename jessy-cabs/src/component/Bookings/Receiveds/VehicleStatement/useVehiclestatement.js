@@ -54,7 +54,7 @@ const useVehiclestatement = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Booking';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch (error) {
                 console.error('Error fetching user permissions:', error);
@@ -186,7 +186,7 @@ const useVehiclestatement = () => {
 
         try {
             const response = await axios.get(
-                `http://${apiUrl}/VehicleStatement-bookings?servicestation=${encodeURIComponent(
+                `${apiUrl}/VehicleStatement-bookings?servicestation=${encodeURIComponent(
                     servicestation
                 )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
                     toDate.toISOString()
@@ -217,7 +217,7 @@ const useVehiclestatement = () => {
 
         try {
             const response = await axios.get(
-                `http://${apiUrl}/booking`
+                `${apiUrl}/booking`
             );
             const data = response.data;
             if (data.length > 0) {

@@ -36,7 +36,7 @@ const useTransferreport = () => {
       try {
         const currentPageName = "CB Billing";
         const response = await axios.get(
-          `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
         );
         setUserPermissions(response.data);
       } catch (error) {}
@@ -206,7 +206,7 @@ const useTransferreport = () => {
         const storedCustomer = localStorage.getItem("selectedcustomer");
         const customer = decodeURIComponent(storedCustomer);
         const response = await fetch(
-          `http://${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
+          `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
             customer
           )}/${tripid}`
         );
@@ -274,7 +274,7 @@ const useTransferreport = () => {
       if (customer) {
         try {
           const response = await fetch(
-            `http://${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`
+            `${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`
           );
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -312,7 +312,7 @@ const useTransferreport = () => {
       const customer = localStorage.getItem("selectedcustomerdata");
       try {
         const response = await fetch(
-          `http://${apiUrl}/customers/${encodeURIComponent(customer)}`
+          `${apiUrl}/customers/${encodeURIComponent(customer)}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -361,7 +361,7 @@ const useTransferreport = () => {
           toDateValue.trim() !== "" ||
           servicestationValue.trim() !== ""
         ) {
-          const response = await fetch(`http://${apiUrl}/Get-Billing`, {
+          const response = await fetch(`${apiUrl}/Get-Billing`, {
             params: {
               customer: customerValue,
               fromDate: fromDateValue,
@@ -389,14 +389,14 @@ const useTransferreport = () => {
           return;
         }
         const response = await fetch(
-          `http://${apiUrl}/get-attachedmailimage/${tripid}`
+          `${apiUrl}/get-attachedmailimage/${tripid}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         const attachedImageUrls = data.imagePaths.map(
-          (path) => `http://${apiUrl}/images/${path}`
+          (path) => `${apiUrl}/images/${path}`
         );
         setAttachedImage(attachedImageUrls);
       } catch {}
@@ -414,12 +414,12 @@ const useTransferreport = () => {
           return;
         }
         const response = await fetch(
-          `http://${apiUrl}/get-companyimage/${organizationname}`
+          `${apiUrl}/get-companyimage/${organizationname}`
         );
         if (response.status === 200) {
           const data = await response.json();
           const attachedImageUrls = data.imagePaths.map(
-            (path) => `http://${apiUrl}/images/${path}`
+            (path) => `${apiUrl}/images/${path}`
           );
           localStorage.setItem(
             "selectedImage",
@@ -445,7 +445,7 @@ const useTransferreport = () => {
       const organizationname = decodeURIComponent(storedcomanyname);
       try {
         const response = await fetch(
-          `http://${apiUrl}/organizationdata/${organizationname}`
+          `${apiUrl}/organizationdata/${organizationname}`
         );
         if (response.status === 200) {
           const userDataArray = await response.json();

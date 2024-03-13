@@ -46,7 +46,7 @@ const useMailagedetails = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'User Creation';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -217,7 +217,7 @@ const useMailagedetails = () => {
                     emptydate: emptydate,
                     filldate: filldate,
                 };
-                await axios.post(`http://${apiUrl}/fueldetails`, updateBook);
+                await axios.post(`${apiUrl}/fueldetails`, updateBook);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -249,7 +249,7 @@ const useMailagedetails = () => {
             };
 
             try {
-                await axios.put(`http://${apiUrl}/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
+                await axios.put(`${apiUrl}/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
@@ -265,7 +265,7 @@ const useMailagedetails = () => {
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
-                const response = await axios.get(`http://${apiUrl}/fueldetails`);
+                const response = await axios.get(`${apiUrl}/fueldetails`);
                 const data = response.data;
 
                 if (data.length > 0) {
@@ -286,7 +286,7 @@ const useMailagedetails = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get(`http://${apiUrl}/fueldetails`);
+                    const response = await axios.get(`${apiUrl}/fueldetails`);
                     const data = response.data;
                     if (data.length > 0) {
 
@@ -309,7 +309,7 @@ const useMailagedetails = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://${apiUrl}/fueldetails/${selectedCustomerData?.id}`);
+                    await axios.delete(`${apiUrl}/fueldetails/${selectedCustomerData?.id}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage("Successfully Deleted");
@@ -336,7 +336,7 @@ const useMailagedetails = () => {
                     };
 
                     try {
-                        await axios.put(`http://${apiUrl}/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
+                        await axios.put(`${apiUrl}/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
                         setSuccess(true);
                         setSuccessMessage("Successfully updated");
                         handleCancel();

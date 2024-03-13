@@ -4,7 +4,7 @@ const apiUrl = APIURL;
 
 export const Organization = async () => {
   try {
-    const response = await axios.get(`http://${apiUrl}/organizationoptions`);
+    const response = await axios.get(`${apiUrl}/organizationoptions`);
     return response.data;
   } catch (error) {
     console.error('Error fetching bank options:', error);

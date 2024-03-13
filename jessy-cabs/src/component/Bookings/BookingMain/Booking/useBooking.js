@@ -103,7 +103,7 @@ const useBooking = () => {
   //     try {
   //       const currentPageName = "Booking";
   //       const response = await axios.get(
-  //         `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+  //         `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
   //       );
   //       setUserPermissions(response.data);
   //     } catch {}
@@ -116,7 +116,7 @@ const useBooking = () => {
       try {
         const currentPageName = "Booking";
         const response = await axios.get(
-          `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
         );
         setUserPermissions(response.data);
       } catch {}
@@ -599,7 +599,7 @@ const useBooking = () => {
 
   const showPdf = () => {
     axios
-      .get(`http://${apiUrl}/booking-docView/${booking_id}`)
+      .get(`${apiUrl}/booking-docView/${booking_id}`)
       .then((res) => {
         if (res.data.length > 0) {
           setAllFile(res.data);
@@ -623,7 +623,7 @@ const useBooking = () => {
 
       formData.append("file", file);
       await axios
-        .post(`http://${apiUrl}/bookingpdf/${booking_id}`, formData)
+        .post(`${apiUrl}/bookingpdf/${booking_id}`, formData)
         .then((res) => {})
         .catch();
     } else {
@@ -662,8 +662,8 @@ const useBooking = () => {
           orderedby: selectedCustomerDatas.name,
           mobile: selectedCustomerDatas.phoneno,
         };
-        await axios.post(`http://${apiUrl}/booking`, updatedBook);
-        const response = await axios.get(`http://${apiUrl}/last-booking-no`);
+        await axios.post(`${apiUrl}/booking`, updatedBook);
+        const response = await axios.get(`${apiUrl}/last-booking-no`);
         const lastBookingNo = response.data.bookingno;
         setLastBookingNo(lastBookingNo);
         setPopupOpen(true);
@@ -724,7 +724,7 @@ const useBooking = () => {
           mobile: selectedCustomerDatas.phoneno,
         };
         await axios.put(
-          `http://${apiUrl}/booking/${
+          `${apiUrl}/booking/${
             book.bookingno ||
             selectedCustomerData.bookingno ||
             formData.bookingno
@@ -762,7 +762,7 @@ const useBooking = () => {
         const permissions = checkPagePermission();
         if (permissions.read && permissions.delete) {
           await axios.delete(
-            `http://${apiUrl}/booking/${
+            `${apiUrl}/booking/${
               book.bookingno || selectedCustomerData.bookingno
             }`
           );
@@ -816,7 +816,7 @@ const useBooking = () => {
             mobile: selectedCustomerDatas.phoneno,
           };
           await axios.put(
-            `http://${apiUrl}/booking/${
+            `${apiUrl}/booking/${
               book.bookingno ||
               selectedCustomerData.bookingno ||
               formData.bookingno
@@ -875,7 +875,7 @@ const useBooking = () => {
       event.preventDefault();
       try {
         const response = await axios.get(
-          `http://${apiUrl}/booking/${event.target.value}`
+          `${apiUrl}/booking/${event.target.value}`
         );
         const bookingDetails = response.data;
         setSelectedCustomerData(bookingDetails);
@@ -908,7 +908,7 @@ const useBooking = () => {
         if (enterPressCount === 0) {
           try {
             const response = await axios.get(
-              `http://${apiUrl}/name-customers/${event.target.value}`
+              `${apiUrl}/name-customers/${event.target.value}`
             );
             const vehicleData = response.data;
             setRows([vehicleData]);
@@ -978,7 +978,7 @@ const useBooking = () => {
             formData.useage,
         };
 
-        await axios.post(`http://${apiUrl}/send-email`, dataToSend);
+        await axios.post(`${apiUrl}/send-email`, dataToSend);
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
       } catch (error) {
@@ -999,7 +999,7 @@ const useBooking = () => {
     if (permissions.read && permissions.read) {
       try {
         const response = await fetch(
-          `http://${apiUrl}/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
+          `${apiUrl}/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
         );
         const data = await response.json();
         if (data.length > 0) {
@@ -1031,7 +1031,7 @@ const useBooking = () => {
       if (permissions.read && permissions.read) {
         try {
           const response = await fetch(
-            `http://${apiUrl}/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
+            `${apiUrl}/table-for-booking?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
           );
           const data = await response.json();
           if (data.length > 0) {
@@ -1140,7 +1140,7 @@ const useBooking = () => {
             "",
         };
 
-        const response = await fetch(`http://${apiUrl}/send-sms`, {
+        const response = await fetch(`${apiUrl}/send-sms`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -1173,7 +1173,7 @@ const useBooking = () => {
         return;
       }
       const response = await fetch(
-        `http://${apiUrl}/get-attachedmailimage/${bookingno}`
+        `${apiUrl}/get-attachedmailimage/${bookingno}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -1199,7 +1199,7 @@ const useBooking = () => {
 
   const handleContextMenu = () => {
     axios
-      .delete(`http://${apiUrl}/booking_doc/` + imagedata)
+      .delete(`${apiUrl}/booking_doc/` + imagedata)
       .then((res) => {})
       .catch((err) => console.log(err));
     setDialogdeleteOpen(false);

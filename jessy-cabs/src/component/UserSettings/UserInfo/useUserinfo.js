@@ -39,7 +39,7 @@ const useUserinfo = () => {
         try {
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://${apiUrl}/usercreation/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
+            await axios.put(`${apiUrl}/usercreation/${selectedCustomerData?.userid || book.userid}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             setEditMode((prevEditMode) => !prevEditMode);
@@ -98,14 +98,14 @@ const useUserinfo = () => {
         if (file) {
             const formData = new FormData();
             formData.append('image', file);
-            axios.put(`http://${apiUrl}/userprofileupload/${userid}`, formData)
+            axios.put(`${apiUrl}/userprofileupload/${userid}`, formData)
         }
     };
 
     useEffect(() => {
         const handleImageView = () => {
             const userid = localStorage.getItem('useridno');
-            axios.get(`http://${apiUrl}/userprofileview/${userid}`)
+            axios.get(`${apiUrl}/userprofileview/${userid}`)
                 .then(res => {
                     if (res.status === 200) {
                         setSelectedImage(res.data[0]?.filename);
@@ -123,7 +123,7 @@ const useUserinfo = () => {
         const fetchData = async () => {
             const userid = localStorage.getItem('useridno');
             try {
-                const response = await fetch(`http://${apiUrl}/userdataforuserinfo/${userid}`);
+                const response = await fetch(`${apiUrl}/userdataforuserinfo/${userid}`);
                 if (response.status === 200) {
 
                     const userDataArray = await response.json();

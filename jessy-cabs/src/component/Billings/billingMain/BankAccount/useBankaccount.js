@@ -31,7 +31,7 @@ const useBankaccount = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Payments';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -180,7 +180,7 @@ const useBankaccount = () => {
                         totalin: book.netbalance || updatedBank.totalin,
                         totalout: book.totalout || updatedBank.totalout,
                     };
-                    await axios.put(`http://${apiUrl}/updatebankdetails/${updatedBank.id}`, updateData);
+                    await axios.put(`${apiUrl}/updatebankdetails/${updatedBank.id}`, updateData);
                     setSuccess(true);
                     setSuccessMessage('Successfully Updated');
                     setEditingIndex(null);
@@ -233,7 +233,7 @@ const useBankaccount = () => {
                     totalin: book.capital,
                     totalout: 0,
                 };
-                await axios.post(`http://${apiUrl}/bankdetails`, newBank);
+                await axios.post(`${apiUrl}/bankdetails`, newBank);
                 handleAddBank();
                 handleCancel();
             } catch {
@@ -250,7 +250,7 @@ const useBankaccount = () => {
     const fetchData = useCallback(async () => {
 
         try {
-            const response = await fetch(`http://${apiUrl}/getbankdetails`);
+            const response = await fetch(`${apiUrl}/getbankdetails`);
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) {
@@ -287,7 +287,7 @@ const useBankaccount = () => {
             return;
         }
         try {
-            await axios.delete(`http://${apiUrl}/deletebankdetails/${id}`);
+            await axios.delete(`${apiUrl}/deletebankdetails/${id}`);
             fetchData();
             handlePopupClose();
         } catch (error) {
@@ -322,7 +322,7 @@ const useBankaccount = () => {
     //calculate totalcapital amount
     useEffect(() => {
         // Make API request to fetch total capital amount
-        axios.get(`http://${apiUrl}/totalCapital_from_billing`)
+        axios.get(`${apiUrl}/totalCapital_from_billing`)
             .then(response => {
                 setTotalCapital(response.data.totalAmount);
             })

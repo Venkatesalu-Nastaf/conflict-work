@@ -76,7 +76,7 @@ const Sidebar = () => {
     const handleImageView = async () => {
       const organizationname = localStorage.getItem("usercompany");
       await axios
-        .get(`http://${apiUrl}/log-imageview/${organizationname}`)
+        .get(`${apiUrl}/log-imageview/${organizationname}`)
         .then((res) => {
           if (res.status === 200) {
             setSelectedImage(res.data[0]?.fileName);
@@ -134,7 +134,7 @@ const Sidebar = () => {
 
     try {
       const response = await axios.get(
-        `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+        `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
       );
       const permissions = response.data;
       setPermissions(permissions);
@@ -203,13 +203,13 @@ const Sidebar = () => {
         }
 
         const response = await fetch(
-          `http://${apiUrl}/get-companyimage/${organizationname}`
+          `${apiUrl}/get-companyimage/${organizationname}`
         );
 
         if (response.status === 200) {
           const data = await response.json();
           const attachedImageUrls = data.imagePaths.map(
-            (path) => `http://${apiUrl}/images/${path}`
+            (path) => `${apiUrl}/images/${path}`
           );
 
           localStorage.setItem(
@@ -234,7 +234,7 @@ const Sidebar = () => {
     const handleImageView = () => {
       const userid = localStorage.getItem("useridno");
       axios
-        .get(`http://${apiUrl}/userprofileview/${userid}`)
+        .get(`${apiUrl}/userprofileview/${userid}`)
         .then((res) => {
           if (res.status === 200) {
             setSelectedprofileImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
@@ -270,7 +270,7 @@ const Sidebar = () => {
                 </div>
               )}
               <img
-                src={`http://${apiUrl}/public/org_logo/${selectedImage}`}
+                src={`${apiUrl}/public/org_logo/${selectedImage}`}
                 alt=""
                 onLoad={() => setIsImageLoaded(true)}
                 style={{ display: isImageLoaded ? "block" : "none" }}
@@ -401,7 +401,7 @@ const Sidebar = () => {
               >
                 <Avatar
                   alt="userimage"
-                  src={`http://${apiUrl}/images/${selectedprofileImage}`}
+                  src={`${apiUrl}/images/${selectedprofileImage}`}
                 />
               </StyledBadge>
             </div>

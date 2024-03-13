@@ -103,7 +103,7 @@ const useBilled = () => {
     const handleShow = useCallback(async () => {
 
         try {
-            const response = await axios.get(`http://${apiUrl}/payment-detail`, {
+            const response = await axios.get(`${apiUrl}/payment-detail`, {
                 params: {
 
                     fromDate: fromDate.format('YYYY-MM-DD'),
@@ -139,7 +139,7 @@ const useBilled = () => {
 
         try {
             const response = await axios.get(
-                `http://${apiUrl}/billing`
+                `${apiUrl}/billing`
             );
             const data = response.data;
             if (data.length > 0) {

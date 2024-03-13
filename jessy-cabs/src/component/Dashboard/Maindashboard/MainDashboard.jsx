@@ -137,7 +137,7 @@ const MainDashboard = () => {
       const username = storeUsername;
       try {
         const response = await fetch(
-          `http://${apiUrl}/userdata/${encodeURIComponent(username)}`
+          `${apiUrl}/userdata/${encodeURIComponent(username)}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -164,7 +164,7 @@ const MainDashboard = () => {
   useEffect(() => {
     const handleImageView = () => {
       const userid = localStorage.getItem("useridno");
-      axios.get(`http://${apiUrl}/userprofileview/${userid}`).then((res) => {
+      axios.get(`${apiUrl}/userprofileview/${userid}`).then((res) => {
         if (res.status === 200) {
           setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
         } else {
@@ -192,7 +192,7 @@ const MainDashboard = () => {
             >
               <Avatar
                 alt="userimage"
-                src={`http://${apiUrl}/public/user_profile/${selectedImage}`}
+                src={`${apiUrl}/public/user_profile/${selectedImage}`}
               />
             </StyledBadge>
 

@@ -56,7 +56,7 @@ export default function BasicTable() {
     const fetchPermissions = async () => {
       try {
         const currentPageName = 'Dashboard page';
-        const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+        const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
         setUserPermissions(response.data);
       } catch {
       }
@@ -90,7 +90,7 @@ export default function BasicTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://${apiUrl}/tripsheet`);
+        const response = await fetch(`${apiUrl}/tripsheet`);
         if (response.status === 200) {
           if (response.ok) {
             const data = await response.json();

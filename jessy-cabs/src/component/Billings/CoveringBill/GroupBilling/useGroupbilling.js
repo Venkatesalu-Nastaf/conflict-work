@@ -60,7 +60,7 @@ const useGroupbilling = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -200,7 +200,7 @@ const useGroupbilling = () => {
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
             const servicestationValue = servicestation || selectedCustomerDatas?.station || (tripData.length > 0 ? tripData[0].department : '');
 
-            const response = await axios.get(`http://${apiUrl}/Group-Billing`, {
+            const response = await axios.get(`${apiUrl}/Group-Billing`, {
                 params: {
                     customer: customerValue,
                     fromDate: fromDateValue,
@@ -266,7 +266,7 @@ const useGroupbilling = () => {
         if (event.key === 'Enter') {
             try {
                 const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
-                const response = await axios.get(`http://${apiUrl}/billingdata/${invoiceNumber}`);
+                const response = await axios.get(`${apiUrl}/billingdata/${invoiceNumber}`);
                 if (response.status === 200) {
                     const billingDetails = response.data;
                     if (billingDetails) {

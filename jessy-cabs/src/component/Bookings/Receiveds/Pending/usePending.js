@@ -48,7 +48,7 @@ const usePending = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Booking';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -182,7 +182,7 @@ const usePending = () => {
 
         try {
             const response = await axios.get(
-                `http://${apiUrl}/pending-bookings?servicestation=${encodeURIComponent(
+                `${apiUrl}/pending-bookings?servicestation=${encodeURIComponent(
                     servicestation
                 )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
                     toDate.toISOString()
@@ -213,7 +213,7 @@ const usePending = () => {
     const handleShowAll = useCallback(async () => {
         try {
             const response = await axios.get(
-                `http://${apiUrl}/booking`
+                `${apiUrl}/booking`
             );
             const data = response.data;
             if (data.length > 0) {

@@ -24,7 +24,7 @@ const useOrganization = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'User Creation';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -115,7 +115,7 @@ const useOrganization = () => {
             event.preventDefault();
             try {
                 const filterValue = event.target.value;
-                const response = await axios.get(`http://${apiUrl}/usercreation?filter=${filterValue}`);
+                const response = await axios.get(`${apiUrl}/usercreation?filter=${filterValue}`);
                 const bookingDetails = response.data;
                 if (Array.isArray(bookingDetails) && bookingDetails.length > 0) {
                     setBook(bookingDetails[0]);
@@ -138,7 +138,7 @@ const useOrganization = () => {
                 return;
             }
             try {
-                await axios.post(`http://${apiUrl}/addcompany`, book);
+                await axios.post(`${apiUrl}/addcompany`, book);
                 setSuccess(true);
                 setSuccessMessage("Organization Added Successfully");
             } catch {
@@ -161,7 +161,7 @@ const useOrganization = () => {
                 const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
                 const encode = companyname;
                 const decode = decodeURIComponent(encode);
-                await axios.put(`http://${apiUrl}/companyupdate/${decode}`, updatedCustomer);
+                await axios.put(`${apiUrl}/companyupdate/${decode}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 setEditMode((prevEditMode) => !prevEditMode);
@@ -195,7 +195,7 @@ const useOrganization = () => {
             const storedcomanyname = localStorage.getItem('usercompanyname');
             const organizationname = decodeURIComponent(storedcomanyname);
             try {
-                const response = await fetch(`http://${apiUrl}/organizationdata/${organizationname}`);
+                const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -264,14 +264,14 @@ const useOrganization = () => {
         if (file) {
             const formData = new FormData();
             formData.append('image', file);
-            axios.put(`http://${apiUrl}/logo-upload/${organizationname}`, formData)
+            axios.put(`${apiUrl}/logo-upload/${organizationname}`, formData)
         }
     };
 
     useEffect(() => {
         const handleImageView = () => {
 
-            axios.get(`http://${apiUrl}/logo-view/${organizationname}`)
+            axios.get(`${apiUrl}/logo-view/${organizationname}`)
                 .then(res => {
                     if (res.status === 200) {
                         setSelectedImage(res.data[0]?.fileName);

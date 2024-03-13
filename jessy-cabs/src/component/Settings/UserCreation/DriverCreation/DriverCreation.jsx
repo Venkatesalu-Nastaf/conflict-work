@@ -595,7 +595,7 @@ const DriverCreation = () => {
                                 <div style={{ position: 'relative' }}>
                                     {Array.isArray(allFile) && allFile.map((img, index) => (
                                         <div key={index} style={{ position: 'relative' }}>
-                                            <embed src={`http://${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="600px" />
+                                            <embed src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="600px" />
                                             <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} />
                                         </div>
                                     ))}

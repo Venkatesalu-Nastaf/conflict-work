@@ -32,7 +32,7 @@ const useTransferlist = () => {
       try {
         const currentPageName = "CB Billing";
         const response = await axios.get(
-          `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
         );
         setUserPermissions(response.data);
       } catch {}
@@ -176,7 +176,7 @@ const useTransferlist = () => {
 
   const handleShow = useCallback(async () => {
     try {
-      const response = await axios.get(`http://${apiUrl}/payment-detail`, {
+      const response = await axios.get(`${apiUrl}/payment-detail`, {
         params: {
           customer: encodeURIComponent(customer),
           fromDate: fromDate.format("YYYY-MM-DD"),

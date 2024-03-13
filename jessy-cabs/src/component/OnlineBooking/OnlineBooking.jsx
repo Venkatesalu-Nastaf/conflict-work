@@ -124,7 +124,7 @@ const OnlineBooking = () => {
   const handleAdd = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(`http://${apiUrl}/booking`, book);
+      await axios.post(`${apiUrl}/booking`, book);
       handleCancel();
       handlecheck();
       setSuccess(true);
@@ -151,7 +151,7 @@ const OnlineBooking = () => {
         remarks: formValues.remarks,
       };
 
-      await axios.post(`http://${apiUrl}/send-onbook-email`, dataToSend);
+      await axios.post(`${apiUrl}/send-onbook-email`, dataToSend);
       setSuccess(true);
       setSuccessMessage("Mail sented Successfully");
     } catch (error) {

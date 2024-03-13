@@ -30,7 +30,7 @@ const useDrivercreation = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Driver Master';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -204,7 +204,7 @@ const useDrivercreation = () => {
             const formData = new FormData();
             formData.append("file", file);
             try {
-                await axios.post(`http://${apiUrl}/driver-pdf/${user__id}`, formData);
+                await axios.post(`${apiUrl}/driver-pdf/${user__id}`, formData);
                 setFile(null);
             }
             catch {
@@ -226,7 +226,7 @@ const useDrivercreation = () => {
             const formData = new FormData();
             formData.append("file", licencepdf);
             try {
-                await axios.post(`http://${apiUrl}/driver-licencepdf/${user__id}`, formData);
+                await axios.post(`${apiUrl}/driver-licencepdf/${user__id}`, formData);
                 setFile(null);
             }
             catch {
@@ -242,7 +242,7 @@ const useDrivercreation = () => {
     const [allFile, setAllFile] = useState([]);
 
     const showPdf = (showID) => {
-        axios.get(`http://${apiUrl}/pdf-view/${showID}`)
+        axios.get(`${apiUrl}/pdf-view/${showID}`)
             .then(res => {
                 if (res.data.length > 0) {
                     setAllFile(res.data);
@@ -284,7 +284,7 @@ const useDrivercreation = () => {
 
             if (permissions.read && permissions.new) {
                 try {
-                    await axios.post(`http://${apiUrl}/drivercreation`, book);
+                    await axios.post(`${apiUrl}/drivercreation`, book);
                     handleCancel();
                     addPdf();
                     licenceSubmit();
@@ -308,7 +308,7 @@ const useDrivercreation = () => {
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
-                const response = await axios.get(`http://${apiUrl}/drivercreation`);
+                const response = await axios.get(`${apiUrl}/drivercreation`);
                 const data = response.data;
 
                 if (data.length > 0) {
@@ -332,7 +332,7 @@ const useDrivercreation = () => {
         if (permissions.read && permissions.modify) {
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`http://${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
+            await axios.put(`${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage('Successfully updated');
             handleCancel();
@@ -353,7 +353,7 @@ const useDrivercreation = () => {
 
             if (actionName === 'List') {
                 if (permissions.read) {
-                    const response = await axios.get(`http://${apiUrl}/drivercreation`);
+                    const response = await axios.get(`${apiUrl}/drivercreation`);
                     const data = response.data;
 
                     if (data.length > 0) {
@@ -378,7 +378,7 @@ const useDrivercreation = () => {
                 setRows([]);
             } else if (actionName === 'Delete') {
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`);
+                    await axios.delete(`${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage('Successfully Deleted');
@@ -392,7 +392,7 @@ const useDrivercreation = () => {
                 if (permissions.read && permissions.modify) {
                     const selectedCustomer = rows.find((row) => row.userid === userid);
                     const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
+                    await axios.put(`${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage('Successfully updated');
                     handleCancel();
@@ -507,7 +507,7 @@ const useDrivercreation = () => {
 
     const handleContextMenu = () => {
         try {
-            axios.delete(`http://${apiUrl}/driver_proof/` + imagedata)
+            axios.delete(`${apiUrl}/driver_proof/` + imagedata)
             setDialogdeleteOpen(false);
             setDialogOpen(false);
         } catch {

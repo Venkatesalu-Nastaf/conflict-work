@@ -41,7 +41,7 @@ const useRatevalidity = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Rate Type';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -198,7 +198,7 @@ const useRatevalidity = () => {
                 return;
             }
             try {
-                await axios.post(`http://${apiUrl}/ratevalidity`, book);
+                await axios.post(`${apiUrl}/ratevalidity`, book);
                 handleCancel();
                 setRows([]);
                 setSuccess(true);
@@ -224,7 +224,7 @@ const useRatevalidity = () => {
                 updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
                 updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
 
-                await axios.put(`http://${apiUrl}/ratevalidity/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+                await axios.put(`${apiUrl}/ratevalidity/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
                 handleCancel();
@@ -242,7 +242,7 @@ const useRatevalidity = () => {
     useEffect(() => {
         const handlelist = async () => {
             if (permissions.read) {
-                const response = await axios.get(`http://${apiUrl}/ratevalidity`);
+                const response = await axios.get(`${apiUrl}/ratevalidity`);
                 const data = response.data;
 
                 if (data.length > 0) {
@@ -267,7 +267,7 @@ const useRatevalidity = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.read) {
-                    const response = await axios.get(`http://${apiUrl}/ratevalidity`);
+                    const response = await axios.get(`${apiUrl}/ratevalidity`);
                     const data = response.data;
                     if (data.length > 0) {
                         const rowsWithUniqueId = data.map((row, index) => ({
@@ -293,7 +293,7 @@ const useRatevalidity = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://${apiUrl}/ratevalidity/${selectedCustomerData?.driverid || book.driverid}`);
+                    await axios.delete(`${apiUrl}/ratevalidity/${selectedCustomerData?.driverid || book.driverid}`);
                     setSelectedCustomerData(null);
                     setSuccessMessage("Successfully Deleted");
                     handleCancel();
@@ -312,7 +312,7 @@ const useRatevalidity = () => {
                     updatedCustomer.fromdate = dayjs(updatedCustomer.fromdate).format('YYYY-MM-DD');
                     updatedCustomer.todate = dayjs(updatedCustomer.todate).format('YYYY-MM-DD');
 
-                    await axios.put(`http://${apiUrl}/ratevalidity/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+                    await axios.put(`${apiUrl}/ratevalidity/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
                     setSuccess(true);
                     setSuccessMessage("Successfully updated");
                     handleCancel();

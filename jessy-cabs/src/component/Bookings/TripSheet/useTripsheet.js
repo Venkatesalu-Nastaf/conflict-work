@@ -56,7 +56,7 @@ const useTripsheet = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Trip Sheet';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -146,7 +146,7 @@ const useTripsheet = () => {
                 return;
             }
             const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
-            const response = await axios.post(`http://${apiUrl}/generate-link/${tripid}`)
+            const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
             setLink(response.data.link);
         } catch {
         }
@@ -164,7 +164,7 @@ const useTripsheet = () => {
             if (!tripid) {
                 return;
             }
-            const response = await fetch(`http://${apiUrl}/getmapimages/${tripid}`);
+            const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -184,7 +184,7 @@ const useTripsheet = () => {
                 setError(true);
                 setErrorMessage("Please enter the tripid");
             } else {
-                const response = await axios.get(`http://${apiUrl}/get-gmapdata/${tripid}`);
+                const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
                 const data = response.data;
                 setRow(data);
                 setMaplogimgPopupOpen(true);
@@ -204,7 +204,7 @@ const useTripsheet = () => {
                     setError(true);
                     setErrorMessage("Please enter the tripid");
                 } else {
-                    const response = await axios.get(`http://${apiUrl}/tripuploadcollect/${tripid}`);
+                    const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}`);
                     const data = response.data;
                     if (data.length > 0) {
                         const rowsWithUniqueId = data.map((row, index) => ({
@@ -233,7 +233,7 @@ const useTripsheet = () => {
         setSelectedRow(params.row);
         const encodedPath = encodeURIComponent(params.row.path);
         setimgPopupOpen(true);
-        setImageUrl(`http://${apiUrl}/get-image/${encodedPath}`);
+        setImageUrl(`${apiUrl}/get-image/${encodedPath}`);
     };
     const handleimgPopupClose = () => {
         setimgPopupOpen(false);
@@ -273,7 +273,7 @@ const useTripsheet = () => {
                     driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
                     mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo
                 };
-                await axios.post(`http://${apiUrl}/send-tripsheet-email`, dataToSend);
+                await axios.post(`${apiUrl}/send-tripsheet-email`, dataToSend);
                 setSuccess(true);
             } catch {
                 alert('An error occurred while sending the email');
@@ -612,7 +612,7 @@ const useTripsheet = () => {
                 return;
             }
             try {
-                await axios.delete(`http://${apiUrl}/tripsheet/${selectedCustomerData.tripid}`);
+                await axios.delete(`${apiUrl}/tripsheet/${selectedCustomerData.tripid}`);
                 setFormData({});
                 setSelectedCustomerData({});
                 handleCancel();
@@ -690,7 +690,7 @@ const useTripsheet = () => {
                             delete updatedCustomer[key];
                         }
                     }
-                    await axios.put(`http://${apiUrl}/tripsheet/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
+                    await axios.put(`${apiUrl}/tripsheet/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
                     handleCancel();
                     setRow([]);
                     setRows([]);
@@ -758,7 +758,7 @@ const useTripsheet = () => {
                     minhrs: packageDetails[0]?.Hours,
                     minkm: packageDetails[0]?.KMS,
                 };
-                await axios.post(`http://${apiUrl}/tripsheet`, updatedBook);
+                await axios.post(`${apiUrl}/tripsheet`, updatedBook);
                 handleCancel();
                 setRow([]);
                 setRows([]);
@@ -858,7 +858,7 @@ const useTripsheet = () => {
             const formData = new FormData();
             formData.append('image', file);
 
-            axios.put(`http://${apiUrl}/tripsheet_uploads/${tripid}`, formData)
+            axios.put(`${apiUrl}/tripsheet_uploads/${tripid}`, formData)
         }
     };
 
@@ -1144,7 +1144,7 @@ const useTripsheet = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`http://${apiUrl}/tripsheet/${event.target.value}`);
+                const response = await axios.get(`${apiUrl}/tripsheet/${event.target.value}`);
                 const bookingDetails = response.data;
                 if (response.status === 200 && bookingDetails) {
                     setSelectedCustomerData(bookingDetails);
@@ -1176,7 +1176,7 @@ const useTripsheet = () => {
             event.preventDefault();
             if (enterPressCount === 0) {
                 try {
-                    const response = await axios.get(`http://${apiUrl}/vehicleinfo/${event.target.value}`);
+                    const response = await axios.get(`${apiUrl}/vehicleinfo/${event.target.value}`);
                     const vehicleData = response.data;
                     setRows([vehicleData]);
                 } catch {
@@ -1210,7 +1210,7 @@ const useTripsheet = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get(`http://${apiUrl}/getPackageDetails`, {
+                const response = await axios.get(`${apiUrl}/getPackageDetails`, {
                     params: {
                         totalkm1: totalKilometers,
                         totaltime: totalTime,
@@ -1251,7 +1251,7 @@ const useTripsheet = () => {
                     ofclanno: '044-49105959',
                 };
 
-                const response = await fetch(`http://${apiUrl}/tripguest-send-sms`, {
+                const response = await fetch(`${apiUrl}/tripguest-send-sms`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1289,7 +1289,7 @@ const useTripsheet = () => {
                     ofclanno: '044-49105959',
                 };
 
-                const response = await fetch(`http://${apiUrl}/tripdriver-send-sms`, {
+                const response = await fetch(`${apiUrl}/tripdriver-send-sms`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1318,7 +1318,7 @@ const useTripsheet = () => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
             try {
-                const response = await fetch(`http://${apiUrl}/routedata/${encodeURIComponent(tripid)}`);
+                const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);
 
                 if (response.status === 200) {
                     const routeData = await response.json();
@@ -1339,7 +1339,7 @@ const useTripsheet = () => {
             const tripid = localStorage.getItem('selectedTripid');
 
             try {
-                const response = await fetch(`http://${apiUrl}/get-signimage/${tripid}`);
+                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
                     setSignImageUrl(imageUrl);
@@ -1360,7 +1360,7 @@ const useTripsheet = () => {
                     return;
                 }
 
-                const response = await fetch(`http://${apiUrl}/getmapimages/${tripid}`);
+                const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
                 if (response.status === 200) {
                     const responseData = await response.blob();
                     const imageUrl = URL.createObjectURL(responseData);
@@ -1382,10 +1382,10 @@ const useTripsheet = () => {
                 if (!tripid) {
                     return;
                 }
-                const response = await fetch(`http://${apiUrl}/get-attachedimage/${tripid}`);
+                const response = await fetch(`${apiUrl}/get-attachedimage/${tripid}`);
                 if (response.status === 200) {
                     const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `http://${apiUrl}/images/${path}`);
+                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
                     setAttachedImage(attachedImageUrls);
                 } else {
                     const timer = setTimeout(fetchData, 2000);
@@ -1408,11 +1408,11 @@ const useTripsheet = () => {
                     return;
                 }
 
-                const response = await fetch(`http://${apiUrl}/get-companyimage/${organizationname}`);
+                const response = await fetch(`${apiUrl}/get-companyimage/${organizationname}`);
 
                 if (response.status === 200) {
                     const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `http://${apiUrl}/images/${path}`);
+                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
                     localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
                     setSelectedImage(attachedImageUrls);
                 } else {
@@ -1436,7 +1436,7 @@ const useTripsheet = () => {
             const storedcomanyname = localStorage.getItem('usercompanyname');
             const organizationname = decodeURIComponent(storedcomanyname);
             try {
-                const response = await fetch(`http://${apiUrl}/organizationdata/${organizationname}`);
+                const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
                 if (response.status === 200) {
 
                     const userDataArray = await response.json();

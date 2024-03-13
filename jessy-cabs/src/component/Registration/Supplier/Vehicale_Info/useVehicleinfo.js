@@ -73,7 +73,7 @@ const useVehicleinfo = () => {
     //to see pdf
     const [allFile, setAllFile] = useState([]);
     const showPdf = (showID) => {
-        axios.get(`http://${apiUrl}/vehicle-docView/${showID}`)
+        axios.get(`${apiUrl}/vehicle-docView/${showID}`)
             .then(res => {
                 if (res.data.length > 0) {
                     setAllFile(res.data);
@@ -110,7 +110,7 @@ const useVehicleinfo = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Supplier Master';
-                const response = await axios.get(`http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -320,7 +320,7 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", insurance);
             try {
-                await axios.post(`http://${apiUrl}/insurance-pdf/${vehicleID}`, formData)
+                await axios.post(`${apiUrl}/insurance-pdf/${vehicleID}`, formData)
                 setInsurance(null)
             }
             catch {
@@ -341,7 +341,7 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", licence);
             try {
-                await axios.post(`http://${apiUrl}/licence-pdf/${vehicleID}`, formData);
+                await axios.post(`${apiUrl}/licence-pdf/${vehicleID}`, formData);
                 setLicence(null)
             }
             catch {
@@ -362,7 +362,7 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", nationalPermit);
             try {
-                await axios.post(`http://${apiUrl}/nationalPermit-pdf/${vehicleID}`, formData);
+                await axios.post(`${apiUrl}/nationalPermit-pdf/${vehicleID}`, formData);
                 setNationalPermit(null);
             }
             catch {
@@ -382,7 +382,7 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", statePermit);
             try {
-                await axios.post(`http://${apiUrl}/statePermit-pdf/${vehicleID}`, formData);
+                await axios.post(`${apiUrl}/statePermit-pdf/${vehicleID}`, formData);
                 setStatePermit(null);
             }
             catch {
@@ -402,7 +402,7 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", rcBook);
             try {
-                await axios.post(`http://${apiUrl}/rcBook-pdf/${vehicleID}`, formData);
+                await axios.post(`${apiUrl}/rcBook-pdf/${vehicleID}`, formData);
                 setRcbook(null);
             }
             catch {
@@ -422,7 +422,7 @@ const useVehicleinfo = () => {
             const formData = new FormData();
             formData.append("file", fcCopy);
             try {
-                await axios.post(`http://${apiUrl}/fcCopy-pdf/${vehicleID}`, formData);
+                await axios.post(`${apiUrl}/fcCopy-pdf/${vehicleID}`, formData);
                 setFcCopy(null);
             }
             catch {
@@ -447,7 +447,7 @@ const useVehicleinfo = () => {
 
         if (permissions.read && permissions.new) {
             try {
-                await axios.post(`http://${apiUrl}/vehicleinfo`, book);
+                await axios.post(`${apiUrl}/vehicleinfo`, book);
                 handleCancel();
 
                 addFcCopy_copy();
@@ -480,7 +480,7 @@ const useVehicleinfo = () => {
                     ...selectedCustomer,
                     ...selectedCustomerData,
                 };
-                await axios.put(`http://${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
+                await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
                 handleCancel();
 
                 addFcCopy_copy();
@@ -516,7 +516,7 @@ const useVehicleinfo = () => {
                 const permissions = checkPagePermission();
 
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`);
+                    await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`);
                     setSelectedCustomerData(null);
                     handleCancel();
                     setRows([]);
@@ -535,7 +535,7 @@ const useVehicleinfo = () => {
                         ...selectedCustomer,
                         ...selectedCustomerData,
                     };
-                    await axios.put(`http://${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
+                    await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
                     handleCancel();
                     //
                     addFcCopy_copy();
@@ -573,7 +573,7 @@ const useVehicleinfo = () => {
 
         if (permissions.read && permissions.read) {
             try {
-                const response = await fetch(`http://${apiUrl}/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+                const response = await fetch(`${apiUrl}/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
                 const data = await response.json();
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
@@ -621,7 +621,7 @@ const useVehicleinfo = () => {
 
     const handleContextMenu = () => {
         try {
-            axios.delete(`http://${apiUrl}/vehicle_documents/` + imagedata)
+            axios.delete(`${apiUrl}/vehicle_documents/` + imagedata)
             setDialogdeleteOpen(false);
             setDialogOpen(false);
         } catch {

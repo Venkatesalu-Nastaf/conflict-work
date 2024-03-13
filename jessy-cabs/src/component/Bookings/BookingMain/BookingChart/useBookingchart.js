@@ -28,7 +28,7 @@ const useBookingchart = () => {
       try {
         const currentPageName = "Booking";
         const response = await axios.get(
-          `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
         );
         setUserPermissions(response.data);
       } catch {}
@@ -126,7 +126,7 @@ const useBookingchart = () => {
   });
   const showBookedStatusAll = useCallback(async (from, to) => {
     try {
-      const response = await axios.get(`http://${apiUrl}/bookingchart`, {
+      const response = await axios.get(`${apiUrl}/bookingchart`, {
         params: {
           fromDate: from.format("YYYY-MM-DD"),
           toDate: to.format("YYYY-MM-DD"),

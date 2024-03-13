@@ -49,7 +49,7 @@ const usePaymentdetails = () => {
       try {
         const currentPageName = "Payments";
         const response = await axios.get(
-          `http://${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
         );
         setUserPermissions(response.data);
       } catch {}
@@ -186,7 +186,7 @@ const usePaymentdetails = () => {
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://${apiUrl}/payment-details?billingno=${billingno}&customer=${encodeURIComponent(
+        `${apiUrl}/payment-details?billingno=${billingno}&customer=${encodeURIComponent(
           customer
         )}&fromDate=${fromDate.format("YYYY-MM-DD")}&toDate=${toDate.format(
           "YYYY-MM-DD"

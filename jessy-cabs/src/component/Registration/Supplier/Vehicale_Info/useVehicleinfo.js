@@ -25,6 +25,7 @@ const useVehicleinfo = () => {
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
+    const [selectAll, setSelectAll] = useState(false);
 
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -70,6 +71,19 @@ const useVehicleinfo = () => {
         { field: "remarks", headerName: "Remarks", width: 130 },
         { field: "OwnerType", headerName: "Owner Type", width: 130 },
     ];
+
+    const handleSelectAll = () => {
+        if (selectAll) {
+            setDeleteFile([]);
+            // setCheckbox([])
+        } else {
+            const allFiles = allFile.map(img => img.fileName);
+            setDeleteFile(allFiles);
+            // setCheckbox(allFiles)
+            setSelectAll(false)
+        }
+        setSelectAll(prevState => !prevState);
+    };
     //to see pdf
     const [allFile, setAllFile] = useState([]);
     const showPdf = (showID) => {
@@ -469,6 +483,20 @@ const useVehicleinfo = () => {
             setInfoMessage("You do not have permission.");
         }
     };
+    const [deletefile, setDeleteFile] = useState([])
+
+
+    const handlecheckbox = (fileName) => {
+        console.log(fileName,';;;;;;');
+
+        if (deletefile.includes(fileName)) {
+            setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
+            // setCheckbox(fileName)
+        } else {
+            setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
+            // setCheckbox(prevDeleteFile => [...prevDeleteFile, fileName]);
+        }
+    };
 
     const handleEdit = async (vehicleId) => {
         try {
@@ -614,19 +642,55 @@ const useVehicleinfo = () => {
 
     const [imagedata, setImagedata] = useState(null);
 
-    const handleimagedelete = (imageName) => {
-        setImagedata(imageName)
+//     const handleimagedelete = (imageName) => {
+//         console.log(deletefile, 'fileeee');
+
+//         if (deletefile.length > 0) {
+//             setImagedata(prevDeleteFile => [...prevDeleteFile, imageName]);
+
+//             setDialogdeleteOpen(true);
+//             setDeleteFile([]);
+//         }
+// }
+
+
+const handleimagedelete = (imageName) => {
+    console.log(deletefile, 'fileeee');
+
+    if (deletefile.length > 0) {
+        setImagedata(prevDeleteFile => {
+            if (!prevDeleteFile || !Array.isArray(prevDeleteFile)) {
+                return [imageName]; // Initialize as array if not already
+            }
+            return [...prevDeleteFile, imageName]; // Spread if already an array
+        });
+
         setDialogdeleteOpen(true);
-    };
+        setDeleteFile([]);
+    }
+};
 
     const handleContextMenu = () => {
         try {
-            axios.delete(`${apiUrl}/vehicle_documents/` + imagedata)
-            setDialogdeleteOpen(false);
-            setDialogOpen(false);
-        } catch {
+            console.log(imagedata,'---------');
 
+            axios.delete(`${apiUrl}/vehicle_documents/` + imagedata)
+                .then(() => {
+                    setDialogdeleteOpen(false);
+                    setDialogOpen(false);
+                    setImagedata([]);
+                    setDeleteFile([]);
+                    setSelectAll(false)
+                })
+                .catch(error => {
+                    console.log(error, 'error');
+                });
+        } catch (error) {
+            console.log(error, 'error');
         }
+        setDialogdeleteOpen(false);
+        setDialogOpen(false);
+        setSelectAll(false)
     };
 
 
@@ -672,7 +736,13 @@ const useVehicleinfo = () => {
         dialogOpen,
         isEditMode,
         handleEdit,
-        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen, setError, setErrorMessage
+        handleContextMenu, handleimagedelete, handleClosedeleteDialog, dialogdeleteOpen, setError, setErrorMessage,
+        handlecheckbox,
+        deletefile,
+        setDeleteFile,
+        setSelectAll,
+        selectAll,
+        handleSelectAll
     };
 };
 

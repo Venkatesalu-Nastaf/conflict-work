@@ -248,6 +248,8 @@ const TripSheet = () => {
     isSignatureSubmitted,
     isEditMode,
     handleEdit,
+    SignPage,
+    sign
   } = useTripsheet();
 
   useEffect(() => {
@@ -2654,7 +2656,7 @@ const TripSheet = () => {
                 </div>
               </TabPanel>
               <TabPanel value={6} sx={{ p: 2 }}>
-                <div className="Customer-Message-Slider">
+              <div className="Customer-Message-Slider">
                   <div className="input-field">
                     <div>
                       <Button onClick={generateLink}>Generate Link</Button>
@@ -2666,9 +2668,11 @@ const TripSheet = () => {
                         ) : (
                           <div>
                             <p>Copy this link to send to the passenger:</p>
-                            <div>
+                            <div className='link-blank-button'>
                               <textarea readOnly style={{ width: '400px', height: '8  0px' }}>{link}</textarea>
+                              <button onClick={SignPage} className='signature'>Copy </button>
                             </div>
+                            {sign?<p style={{color:'green'}}>Link Copied......</p>:<></>}
                           </div>
                         )}
                       </div>

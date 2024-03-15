@@ -47,6 +47,11 @@ const useTripsheet = () => {
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
+    {/* venkat */}
+
+    const [tripiddata,setTripiddata] = useState("");
+    const [sign,setSign] = useState(false)
+{/* venkat */}
 
     // for page permission
 
@@ -151,6 +156,18 @@ const useTripsheet = () => {
         } catch {
         }
     };
+{/* venkat */}
+
+    const SignPage = (event)=>{
+        event.preventDefault();
+    
+        navigator.clipboard.writeText(link); 
+        setSign(true)
+        setTimeout(()=>{
+             setSign(false)
+        },2000)
+       }
+{/* venkat */}
 
     const handlePopupClose = () => {
         setPopupOpen(false);
@@ -592,17 +609,24 @@ const useTripsheet = () => {
         setIsEditMode(false);
     };
 
+    {/* venkat */}
+
     const handleETripsheetClick = (row) => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+        setTripiddata(tripid)
+
         if (!tripid) {
             setError(true);
             setErrorMessage("please enter the tripid");
         }
         else {
             localStorage.setItem('selectedTripid', tripid);
+            setTripiddata(tripid)
             setPopupOpen(true);
         }
     };
+    {/* venkat */}
+
 
     const handleDelete = async () => {
         const permissions = checkPagePermission();
@@ -1324,6 +1348,7 @@ const useTripsheet = () => {
                     const routeData = await response.json();
                     setRouteData(routeData);
                 } else {
+                    setRouteData("")
                     const timer = setTimeout(fetchData, 2000);
                     return () => clearTimeout(timer);
                 }
@@ -1332,28 +1357,44 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [apiUrl]);
+    }, [apiUrl,tripiddata]);
+
+    {/* venkat */}
 
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
+        setTripiddata(tripid);
 
             try {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
+                console.log(response,'resssss');
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
+                    console.log(imageUrl,'imgggggg');
                     setSignImageUrl(imageUrl);
                 }
-            } catch {
+                
+                else{
+                    fetchData()
+                    const timer = setTimeout(fetchData, 500);
+                    setSignImageUrl("");
+                    return () => clearTimeout(timer);
+                }
+            } catch(err) {
+                console.log(err,'error');
             }
         };
         fetchData();
         return () => {
         };
-    }, [apiUrl]);
+    }, [apiUrl,tripiddata]);
+{/* venkat */}
 
     useEffect(() => {
         const fetchData = async () => {
+            const tripid = localStorage.getItem('selectedTripid');
+
             try {
                 const tripid = localStorage.getItem('selectedTripid');
                 if (!tripid) {
@@ -1366,6 +1407,8 @@ const useTripsheet = () => {
                     const imageUrl = URL.createObjectURL(responseData);
                     setGMapImageUrl(imageUrl);
                 } else {
+                    setGMapImageUrl("")
+
                     const timer = setTimeout(fetchData, 2000);
                     return () => clearTimeout(timer);
                 }
@@ -1373,7 +1416,7 @@ const useTripsheet = () => {
             }
         };
         fetchData();
-    }, [apiUrl]);
+    }, [apiUrl,tripiddata]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -1543,6 +1586,8 @@ const useTripsheet = () => {
         isSignatureSubmitted,
         isEditMode,
         handleEdit,
+        SignPage,
+        sign
     };
 };
 

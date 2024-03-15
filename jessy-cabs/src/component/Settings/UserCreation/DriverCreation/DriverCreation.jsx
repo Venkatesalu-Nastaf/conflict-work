@@ -17,6 +17,8 @@ import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup 
 
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
+import Checkbox from '@mui/material/Checkbox';
+
 
 // FONTAWESOME
 // import { faFileInvoice, faLock } from "@fortawesome/free-solid-svg-icons";
@@ -24,6 +26,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 // import { faSheetPlastic } from "@fortawesome/free-solid-svg-icons";
 
 // REACT ICONS
@@ -117,6 +120,11 @@ const DriverCreation = () => {
         dialogdeleteOpen,
         setError,
         setErrorMessage,
+        handlecheckbox,
+        deletefile,
+        Deleted,
+        selectAll,
+        handleSelectAll
     } = useDrivercreation();
 
     useEffect(() => {
@@ -124,6 +132,9 @@ const DriverCreation = () => {
             handleClick(null, 'List');
         }
     }, [actionName, handleClick]);
+
+
+
 
     return (
         <div className="DriverCreation-main">
@@ -590,17 +601,40 @@ const DriverCreation = () => {
                                 pageSizeOptions={[5, 10]}
                             />
                         </div>
+                        {/* venkat */}
+
                         <Dialog open={dialogOpen} onClose={handleCloseDialog} >
                             <DialogContent>
+
                                 <div style={{ position: 'relative' }}>
-                                    {Array.isArray(allFile) && allFile.map((img, index) => (
-                                        <div key={index} style={{ position: 'relative' }}>
-                                            <embed src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="600px" />
-                                            <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} />
+                                    <Button variant='contained' style={{ marginBottom: 10 }} onClick={handleSelectAll}>
+                                        {selectAll ? 'Deselect All' : 'Select All'}
+                                    </Button>                                    {Array.isArray(allFile) && allFile.map((img, index) => (
+                                        <div key={index} style={{ borderBottom: '1px solid black' }} >
+                                            {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
+                                                ? <img src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" /> :
+                                                <embed src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />}
+
+
+                                            <Checkbox typeof='checked'
+                                                checked={deletefile.includes(img.fileName)}
+                                                onClick={(event) => {
+
+                                                    handlecheckbox(img.fileName)
+
+                                                }} />
+
                                         </div>
                                     ))}
                                 </div>
+                                <div style={{ display: 'flex', padding: 10, gap: 15 }}>
+
+                                    <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                                    <Button variant='contained'>Print</Button>
+                                </div>
                             </DialogContent>
+                            {/* venkat */}
+
                         </Dialog>
                         <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
                             <DialogContent>
@@ -614,6 +648,17 @@ const DriverCreation = () => {
                                 </div>
                             </DialogContent>
                         </Dialog>
+
+                        {/* venkat */}
+
+                        <Dialog open={Deleted}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <FontAwesomeIcon icon={faCheckCircle} style={{ color: 'green', fontSize: 25, paddingLeft: 10 }} />
+                                <p style={{ fontSize: 15, color: 'green', fontWeight: 500, padding: 10 }}>Deleted Successfully...</p>
+                            </div>
+                        </Dialog>
+                        {/* venkat */}
+
                     </div>
                 </form>
             </div>

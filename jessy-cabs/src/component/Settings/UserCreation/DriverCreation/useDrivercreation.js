@@ -25,6 +25,12 @@ const useDrivercreation = () => {
     const [infoMessage, setInfoMessage] = useState({});
     const [userPermissions, setUserPermissions] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
+   //venkat 
+    const [Deleted, setDeleted] = useState(false);
+    const [checkbox, setCheckbox] = useState([]);
+    const [selectAll, setSelectAll] = useState(false);
+    // venkat
+
 
     useEffect(() => {
         const fetchPermissions = async () => {
@@ -57,6 +63,22 @@ const useDrivercreation = () => {
             delete: false,
         };
     };
+
+        // venkat
+
+    const handleSelectAll = () => {
+        if (selectAll) {
+            setDeleteFile([]);
+            // setCheckbox([])
+        } else {
+            const allFiles = allFile.map(img => img.fileName);
+            setDeleteFile(allFiles);
+            // setCheckbox(allFiles)
+            setSelectAll(false)
+        }
+        setSelectAll(prevState => !prevState);
+    };
+        // venkat
 
     const permissions = checkPagePermission();
 
@@ -498,22 +520,74 @@ const useDrivercreation = () => {
         setDialogdeleteOpen(false);
     };
 
-    const [imagedata, setImagedata] = useState(null);
+        // venkat
+
+    const [imagedata, setImagedata] = useState([]);
 
     const handleimagedelete = (imageName) => {
-        setImagedata(imageName)
-        setDialogdeleteOpen(true);
+        console.log(deletefile, 'fileeee');
+        console.log(deletefile.length, 'lennnnn');
+        setSelectAll(false)
+        if (deletefile.length > 0) {
+            setSelectAll(false)
+            console.log(imageName, 'val---')
+            setImagedata(prevDeleteFile => [...prevDeleteFile, imageName]);
+            setDialogdeleteOpen(true);
+            setDeleteFile([])
+        }
     };
+    const [deletefile, setDeleteFile] = useState([])
+
+
+ 
+    const handlecheckbox = (fileName) => {
+        if (deletefile.includes(fileName)) {
+            setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
+            // setCheckbox(fileName)
+        } else {
+            setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
+            setCheckbox(prevDeleteFile => [...prevDeleteFile, fileName]);
+        }
+    };
+
+
+    const handleDeleted = () => {
+        setDeleted(true)
+        setTimeout(() => {
+            setDeleted(false)
+        }, 2000)
+    }
+    // venkat
+
+    // venkat
 
     const handleContextMenu = () => {
         try {
+            // Assuming imagedata is the filename or identifier of the image to be deleted
             axios.delete(`${apiUrl}/driver_proof/` + imagedata)
-            setDialogdeleteOpen(false);
-            setDialogOpen(false);
-        } catch {
-
+                .then(response => {
+                    console.log("Image deleted:", imagedata);
+                    setDialogdeleteOpen(false);
+                    setDialogOpen(false);
+                    setImagedata([]);
+                    handleDeleted();
+                })
+                .catch(error => {
+                    console.error("Error deleting image:", error);
+                    // Handle error
+                });
+        } catch (error) {
+            console.error("Error:", error);
+            // Handle error
         }
+
+
+        // Reset imagedata and deleteFile arrays regardless of checkbox state
+        setImagedata([]);
+        setDeleteFile([]);
     };
+        // venkat
+
 
     return {
         selectedCustomerData,
@@ -556,7 +630,20 @@ const useDrivercreation = () => {
         handleClosedeleteDialog,
         dialogdeleteOpen,
         setError,
-        setErrorMessage
+
+
+            // venkat
+        setErrorMessage,
+        handlecheckbox,
+        deletefile,
+        Deleted,
+        checkbox,
+        setCheckbox,
+        setDeleteFile,
+        selectAll,
+        setSelectAll,
+        handleSelectAll
+            // venkat
     };
 };
 

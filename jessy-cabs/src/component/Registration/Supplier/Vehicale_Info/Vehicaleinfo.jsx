@@ -16,6 +16,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import Checkbox from '@mui/material/Checkbox';
 
 // FONTAWESOME ICON
 import { TbLicense } from "react-icons/tb";
@@ -120,9 +121,15 @@ const Vehicaleinfo = () => {
     handleClosedeleteDialog,
     dialogdeleteOpen,
     setError,
-    setErrorMessage
+    setErrorMessage,
+    deletefile,
+    setDeleteFile,
+    handlecheckbox,
+    setSelectAll,
+    selectAll,
+    handleSelectAll
   } = useVehicleinfo();
-
+  console.log(allFile, 'data.........');
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -789,12 +796,31 @@ const Vehicaleinfo = () => {
           <Dialog open={dialogOpen} onClose={handleCloseDialog} >
             <DialogContent>
               <div style={{ position: 'relative' }}>
+                <Button variant='contained' style={{ marginBottom: 10 }} onClick={handleSelectAll}>
+                  {selectAll ? 'Deselect All' : 'Select All'}
+                </Button>
                 {Array.isArray(allFile) && allFile.map((img, index) => (
-                  <div key={index} style={{ position: 'relative' }}>
-                    <embed src={`${apiUrl}/public/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="600px" />
-                    <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} />
+                  <div key={index} style={{ borderBottom: '1px solid black' }}>
+                    {/* <embed src={`${apiUrl}/public/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="600px" /> */}
+                    {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
+                      ? <img src={`${apiUrl}/public/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" /> :
+                      <embed src={`${apiUrl}/public/vehicle_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />}
+                    {/* <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} /> */}
+
+                    <Checkbox typeof='checked'
+                      checked={deletefile.includes(img.fileName)}
+                      onClick={(event) => {
+
+                        handlecheckbox(img.fileName)
+
+                      }} />
                   </div>
                 ))}
+              </div>
+              <div style={{ display: 'flex', padding: 10, gap: 15 }}>
+
+                <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                <Button variant='contained'>Print</Button>
               </div>
             </DialogContent>
           </Dialog>

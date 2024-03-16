@@ -127,7 +127,8 @@ const Vehicaleinfo = () => {
     handlecheckbox,
     setSelectAll,
     selectAll,
-    handleSelectAll
+    handleSelectAll,
+    handleDocumentDownload
   } = useVehicleinfo();
   console.log(allFile, 'data.........');
   useEffect(() => {
@@ -820,7 +821,7 @@ const Vehicaleinfo = () => {
               <div style={{ display: 'flex', padding: 10, gap: 15 }}>
 
                 <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
-                <Button variant='contained'>Print</Button>
+                <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
               </div>
             </DialogContent>
           </Dialog>

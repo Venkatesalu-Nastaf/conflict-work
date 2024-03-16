@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
 
 const useDrivercreation = () => {
     const apiUrl = APIURL;
@@ -25,7 +27,7 @@ const useDrivercreation = () => {
     const [infoMessage, setInfoMessage] = useState({});
     const [userPermissions, setUserPermissions] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
-   //venkat 
+    //venkat 
     const [Deleted, setDeleted] = useState(false);
     const [checkbox, setCheckbox] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
@@ -64,7 +66,7 @@ const useDrivercreation = () => {
         };
     };
 
-        // venkat
+    // venkat
 
     const handleSelectAll = () => {
         if (selectAll) {
@@ -78,7 +80,7 @@ const useDrivercreation = () => {
         }
         setSelectAll(prevState => !prevState);
     };
-        // venkat
+    // venkat
 
     const permissions = checkPagePermission();
 
@@ -520,7 +522,7 @@ const useDrivercreation = () => {
         setDialogdeleteOpen(false);
     };
 
-        // venkat
+    // venkat
 
     const [imagedata, setImagedata] = useState([]);
 
@@ -539,7 +541,7 @@ const useDrivercreation = () => {
     const [deletefile, setDeleteFile] = useState([])
 
 
- 
+
     const handlecheckbox = (fileName) => {
         if (deletefile.includes(fileName)) {
             setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
@@ -586,7 +588,79 @@ const useDrivercreation = () => {
         setImagedata([]);
         setDeleteFile([]);
     };
-        // venkat
+    // venkat
+
+    // venkat-saturday
+
+    const handleDocumentDownload = async () => {
+        try {
+            // Filter selected files
+            const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
+
+            // Download each file
+            for (const file of selectedFiles) {
+                const response = await axios.get(`${apiUrl}/public/driver_doc/` + file.fileName, {
+                    responseType: 'blob', // Important to get a binary response
+                });
+
+                // Convert image blob to base64 data URL
+                const reader = new FileReader();
+                reader.readAsDataURL(response.data);
+                reader.onloadend = () => {
+                    const imageDataUrl = reader.result;
+
+                    // Create PDF document
+                    const pdf = new jsPDF();
+                    const imgWidth = pdf.internal.pageSize.getWidth();
+                    const imgHeight = pdf.internal.pageSize.getHeight();
+                    pdf.addImage(imageDataUrl, 'JPEG', 0, 0, imgWidth, imgHeight);
+
+                    // Save PDF file
+                    pdf.save(file.fileName + '.pdf');
+                };
+            }
+        } catch (error) {
+            console.error('Error downloading files:', error);
+            // Handle error if needed
+        }
+    };
+
+
+    //       const handleDocumentDownload = async () => {
+    //     try {
+    //         // Filter selected files
+    //         const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
+
+    //         // Download each file
+    //         for (const file of selectedFiles) {
+    //             const response = await axios.get(`${apiUrl}/public/driver_doc/` + file.fileName, {
+    //                 responseType: 'blob', // Important to get a binary response
+    //             });
+
+    //             // Save the file to the downloads directory
+    //             saveAs(response.data, file.fileName);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error downloading files:', error);
+    //         // Handle error if needed
+    //     }
+    // };
+
+    // const handleDocumentDownload = () => {
+    //     // Filter selected files
+    //     const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
+
+    //     // Open each file URL in a new tab
+    //     selectedFiles.forEach((file, index) => {
+    //         const url = `${apiUrl}/public/driver_doc/${file.fileName}`;
+    //         console.log(url);
+    //         window.open(url, '_blank');
+
+
+    //     });
+    // };
+
+    // venkat-saturday
 
 
     return {
@@ -632,7 +706,7 @@ const useDrivercreation = () => {
         setError,
 
 
-            // venkat
+        // venkat
         setErrorMessage,
         handlecheckbox,
         deletefile,
@@ -642,8 +716,9 @@ const useDrivercreation = () => {
         setDeleteFile,
         selectAll,
         setSelectAll,
-        handleSelectAll
-            // venkat
+        handleSelectAll,
+        handleDocumentDownload
+        // venkat
     };
 };
 

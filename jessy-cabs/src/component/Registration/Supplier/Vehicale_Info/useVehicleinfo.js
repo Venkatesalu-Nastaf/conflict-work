@@ -225,7 +225,7 @@ const useVehicleinfo = () => {
                 if (label === 'id' || rowData[label] === undefined) return;
 
                 // Format label and value into a string
-                const text = `${label}: ${rowData[label]}`;
+                // const text = `${label}: ${rowData[label]}`;
 
                 // Check if the label is 'active'
                 if (label === 'active') {

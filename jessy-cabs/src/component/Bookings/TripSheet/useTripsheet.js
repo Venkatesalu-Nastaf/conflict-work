@@ -47,11 +47,11 @@ const useTripsheet = () => {
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    {/* venkat */}
 
-    const [tripiddata,setTripiddata] = useState("");
-    const [sign,setSign] = useState(false)
-{/* venkat */}
+
+    const [tripiddata, setTripiddata] = useState("");
+    const [sign, setSign] = useState(false)
+
 
     // for page permission
 
@@ -68,7 +68,7 @@ const useTripsheet = () => {
         };
 
         fetchPermissions();
-    }, [user_id ,apiUrl]);
+    }, [user_id, apiUrl]);
 
     const checkPagePermission = () => {
         const currentPageName = 'Trip Sheet';
@@ -156,18 +156,18 @@ const useTripsheet = () => {
         } catch {
         }
     };
-{/* venkat */}
 
-    const SignPage = (event)=>{
+
+    const SignPage = (event) => {
         event.preventDefault();
-    
-        navigator.clipboard.writeText(link); 
+
+        navigator.clipboard.writeText(link);
         setSign(true)
-        setTimeout(()=>{
-             setSign(false)
-        },2000)
-       }
-{/* venkat */}
+        setTimeout(() => {
+            setSign(false)
+        }, 2000)
+    }
+
 
     const handlePopupClose = () => {
         setPopupOpen(false);
@@ -609,7 +609,7 @@ const useTripsheet = () => {
         setIsEditMode(false);
     };
 
-    {/* venkat */}
+
 
     const handleETripsheetClick = (row) => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
@@ -625,7 +625,7 @@ const useTripsheet = () => {
             setPopupOpen(true);
         }
     };
-    {/* venkat */}
+
 
 
     const handleDelete = async () => {
@@ -1221,7 +1221,7 @@ const useTripsheet = () => {
             setEnterPressCount(0);
         }
 
-    }, [handleChange, rows, enterPressCount,apiUrl]);
+    }, [handleChange, rows, enterPressCount, apiUrl]);
 
     const handleRowClick = useCallback((params) => {
         setSelectedCustomerDatas(params);
@@ -1255,7 +1255,7 @@ const useTripsheet = () => {
         packageData.duty, packageData.vehType, packageData.customer,
         selectedCustomerData.customer, selectedCustomerData.duty, selectedCustomerData.vehType,
         selectedCustomerDatas.customer, selectedCustomerDatas.duty, selectedCustomerDatas.vehType,
-        totalKilometers, totalTime,apiUrl
+        totalKilometers, totalTime, apiUrl
     ]);
 
     const [smsguest, setSmsGuest] = useState(false);
@@ -1357,43 +1357,43 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [apiUrl,tripiddata]);
+    }, [apiUrl, tripiddata]);
 
-    {/* venkat */}
+
 
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
-        setTripiddata(tripid);
+            setTripiddata(tripid);
 
             try {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
-                console.log(response,'resssss');
+                console.log(response, 'resssss');
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
-                    console.log(imageUrl,'imgggggg');
+                    console.log(imageUrl, 'imgggggg');
                     setSignImageUrl(imageUrl);
                 }
-                
-                else{
+
+                else {
                     fetchData()
                     const timer = setTimeout(fetchData, 500);
                     setSignImageUrl("");
                     return () => clearTimeout(timer);
                 }
-            } catch(err) {
-                console.log(err,'error');
+            } catch (err) {
+                console.log(err, 'error');
             }
         };
         fetchData();
         return () => {
         };
-    }, [apiUrl,tripiddata]);
-{/* venkat */}
+    }, [apiUrl, tripiddata]);
+
 
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
+            // const tripid = localStorage.getItem('selectedTripid');
 
             try {
                 const tripid = localStorage.getItem('selectedTripid');
@@ -1416,7 +1416,7 @@ const useTripsheet = () => {
             }
         };
         fetchData();
-    }, [apiUrl,tripiddata]);
+    }, [apiUrl, tripiddata]);
 
     useEffect(() => {
         const fetchData = async () => {

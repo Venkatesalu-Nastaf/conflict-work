@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from './component/form/UserContext';
 import { DataProvider } from './component/Dashboard/Maindashboard/DataContext'
 import { DataProvider2 } from './component/Dashboard/MainDash/Sildebar/DataContext2'
+import { PermissionsProvider } from "./component/permissionContext/permissionContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -15,7 +16,9 @@ root.render(
       <DataProvider2>
         <DataProvider>
           <UserProvider>
-            <App />
+            <PermissionsProvider>
+              <App />
+            </PermissionsProvider>
           </UserProvider>
         </DataProvider>
       </DataProvider2>

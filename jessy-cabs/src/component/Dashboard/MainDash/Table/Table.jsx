@@ -1,5 +1,6 @@
-import { React, useState, useEffect } from "react";
-import axios from 'axios';
+import { React, useState, useEffect, useContext } from "react";
+import { PermissionsContext } from "../../../permissionContext/permissionContext";
+// import axios from 'axios';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -48,26 +49,33 @@ export default function BasicTable() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
 
-  const user_id = localStorage.getItem('useridno');
+  // const user_id = localStorage.getItem('useridno');
 
-  const [userPermissions, setUserPermissions] = useState({});
+  // const [userPermissions, setUserPermissions] = useState({});
 
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = 'Dashboard page';
-        const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-        setUserPermissions(response.data);
-      } catch {
-      }
-    };
+  // useEffect(() => {
+  //   const fetchPermissions = async () => {
+  //     try {
+  //       const currentPageName = 'Dashboard page';
+  //       const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+  //       setUserPermissions(response.data);
+  //     } catch {
+  //     }
+  //   };
 
-    fetchPermissions();
-  }, [user_id]);
+  //   fetchPermissions();
+  // }, [user_id]);
 
-  const checkPagePermission = () => {
+  const { userPermissions } = useContext(PermissionsContext);
+  console.log("usebook ", userPermissions)
+
+  const checkPagePermission = async () => {
+
     const currentPageName = 'Dashboard page';
-    const permissions = userPermissions || {};
+    // const permissions = userPermissions || {};
+
+    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+    console.log(permissions)
 
     if (permissions.page_name === currentPageName) {
       return {

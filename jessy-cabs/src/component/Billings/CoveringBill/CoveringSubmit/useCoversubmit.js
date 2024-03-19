@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
@@ -21,7 +22,7 @@ const columns = [
 
 const useCoversubmit = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [tripData] = useState('');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
@@ -39,24 +40,31 @@ const useCoversubmit = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    const { userPermissions } = useContext(PermissionsContext);
+    console.log("cover submit ", userPermissions)
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'CB Billing';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
 
-        fetchPermissions();
-    }, [user_id,apiUrl]);
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    const checkPagePermission = () => {
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'CB Billing';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
+
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
+
+    const checkPagePermission = async () => {
         const currentPageName = 'CB Billing';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -75,10 +83,11 @@ const useCoversubmit = () => {
         };
     };
 
-    const permissions = checkPagePermission();
+
 
     // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
+        const permissions = checkPagePermission();
         if (permissions.read) {
             // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
@@ -215,7 +224,7 @@ const useCoversubmit = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [customer, fromDate, toDate, servicestation,apiUrl]);
+    }, [customer, fromDate, toDate, servicestation, apiUrl]);
 
     return {
         rows,

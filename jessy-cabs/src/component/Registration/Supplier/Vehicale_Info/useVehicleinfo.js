@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
@@ -8,7 +9,7 @@ import { APIURL } from "../../../url";
 
 const useVehicleinfo = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [actionName] = useState('');
@@ -118,24 +119,32 @@ const useVehicleinfo = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    const { userPermissions } = useContext(PermissionsContext);
+    console.log("vehicleinfo ", userPermissions)
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Supplier Master';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
 
-        fetchPermissions();
-    }, [user_id, apiUrl]);
 
-    const checkPagePermission = () => {
+    // const [userPermissions, setUserPermissions] = useState({});
+
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'Supplier Master';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
+
+    //     fetchPermissions();
+    // }, [user_id, apiUrl]);
+
+    const checkPagePermission = async () => {
         const currentPageName = 'Supplier Master';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

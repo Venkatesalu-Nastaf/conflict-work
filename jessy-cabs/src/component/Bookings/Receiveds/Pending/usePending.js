@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
@@ -24,7 +25,7 @@ const columns = [
 const usePending = () => {
     const apiUrl = APIURL;
 
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [servicestation, setServiceStation] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
@@ -42,24 +43,32 @@ const usePending = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Booking';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'Booking';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
 
-        fetchPermissions();
-    }, [user_id,apiUrl]);
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
 
-    const checkPagePermission = () => {
+
+
+    const { userPermissions } = useContext(PermissionsContext);
+    console.log("usebending ", userPermissions)
+
+    const checkPagePermission = async () => {
         const currentPageName = 'Booking';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -172,7 +181,7 @@ const usePending = () => {
     };
 
     const handleInputChange = (event, newValue) => {
-        setServiceStation(newValue ? newValue.label : ''); 
+        setServiceStation(newValue ? newValue.label : '');
     };
 
     const reversedRows = [...rows].reverse();
@@ -207,7 +216,7 @@ const usePending = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-    }, [servicestation, fromDate, toDate,apiUrl]);
+    }, [servicestation, fromDate, toDate, apiUrl]);
 
 
     const handleShowAll = useCallback(async () => {

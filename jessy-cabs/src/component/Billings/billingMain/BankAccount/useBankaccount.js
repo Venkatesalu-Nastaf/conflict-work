@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 
 const useBankaccount = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
 
     const [showAddBankForm, setShowAddBankForm] = useState(false);
     const [totalcapital, setTotalCapital] = useState(0);
@@ -23,26 +24,34 @@ const useBankaccount = () => {
     const [warning, setWarning] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
 
+
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    const { userPermissions } = useContext(PermissionsContext);
+    console.log("usebanckaccount ", userPermissions)
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Payments';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
 
-        fetchPermissions();
-    }, [user_id, apiUrl]);
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    const checkPagePermission = () => {
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'Payments';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
+
+    //     fetchPermissions();
+    // }, [user_id, apiUrl]);
+
+    const checkPagePermission = async () => {
         const currentPageName = 'Payments';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        console.log("usebanckaccount", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

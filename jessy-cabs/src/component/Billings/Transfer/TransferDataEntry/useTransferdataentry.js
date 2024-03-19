@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import dayjs from "dayjs";
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
@@ -35,7 +36,7 @@ const columns = [
 
 const useTransferdataentry = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [totalKm, setTotalKM] = useState(0);
     const [error, setError] = useState(false);
@@ -62,24 +63,30 @@ const useTransferdataentry = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    const { userPermissions } = useContext(PermissionsContext);
+    console.log("transfer data entry ", userPermissions)
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'CB Billing';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
+    // const [userPermissions, setUserPermissions] = useState({});
 
-        fetchPermissions();
-    }, [user_id,apiUrl]);
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'CB Billing';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
 
-    const checkPagePermission = () => {
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
+
+    const checkPagePermission = async () => {
         const currentPageName = 'CB Billing';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -98,10 +105,11 @@ const useTransferdataentry = () => {
         };
     };
 
-    const permissions = checkPagePermission();
 
+    const permissions = checkPagePermission();
     // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
+
         if (permissions.read) {
             // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
@@ -524,7 +532,7 @@ const useTransferdataentry = () => {
             }
         }
 
-    }, [invoiceno, book, selectedCustomerDatas,apiUrl]);
+    }, [invoiceno, book, selectedCustomerDatas, apiUrl]);
 
     const handleShow = useCallback(async () => {
 
@@ -562,7 +570,7 @@ const useTransferdataentry = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData,apiUrl]);
+    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, apiUrl]);
 
     return {
         rows,

@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../permissionContext/permissionContext';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -10,7 +11,7 @@ import { APIURL } from "../../url";
 const useTripsheet = () => {
     const apiUrl = APIURL;
 
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
@@ -55,24 +56,30 @@ const useTripsheet = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Trip Sheet';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'Trip Sheet';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
 
-        fetchPermissions();
-    }, [user_id, apiUrl]);
+    //     fetchPermissions();
+    // }, [user_id, apiUrl]);
 
-    const checkPagePermission = () => {
+    const { userPermissions } = useContext(PermissionsContext);
+    console.log("tripsheet ", userPermissions)
+
+    const checkPagePermission = async () => {
         const currentPageName = 'Trip Sheet';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        console.log("tripsheet ", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -91,9 +98,10 @@ const useTripsheet = () => {
         };
     };
 
-    const permissions = checkPagePermission();
+
 
     const isFieldReadOnly = (fieldName) => {
+        const permissions = checkPagePermission();
         if (permissions.read) {
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
@@ -1368,10 +1376,10 @@ const useTripsheet = () => {
 
             try {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
-                console.log(response, 'resssss');
+                // console.log(response, 'resssss');
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
-                    console.log(imageUrl, 'imgggggg');
+                    // console.log(imageUrl, 'imgggggg');
                     setSignImageUrl(imageUrl);
                 }
 

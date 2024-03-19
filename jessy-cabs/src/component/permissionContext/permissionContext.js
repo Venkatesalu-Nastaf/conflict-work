@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import { APIURL } from '../url';
+import { APIURL } from "../url";
 
 export const PermissionsContext = createContext();
 
@@ -13,10 +13,10 @@ export const PermissionsProvider = ({ children }) => {
         const fetchPermissions = async () => {
             try {
                 if (user_id !== "undefined") {
-                    console.log("user_id ", user_id)
+                    // console.log("user_id ", user_id)
                     const response = await axios.get(`${APIURL}/user-permissions/${user_id}`);
                     const permissionsData = response.data;
-                    console.log("per ", permissionsData)
+                    // console.log("per ", permissionsData)
                     setUserPermissions(permissionsData);
                 }
             } catch (error) {

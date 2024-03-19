@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from "axios";
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
@@ -23,7 +24,7 @@ const columns = [
 
 const useDispatched = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [department, setdepartment] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
@@ -41,24 +42,31 @@ const useDispatched = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    const { userPermissions } = useContext(PermissionsContext);
+    console.log("useDispatched ", userPermissions)
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Booking';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
 
-        fetchPermissions();
-    }, [user_id,apiUrl]);
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    const checkPagePermission = () => {
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'Booking';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
+
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
+
+    const checkPagePermission = async () => {
         const currentPageName = 'Booking';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -202,7 +210,7 @@ const useDispatched = () => {
             setErrorMessage("Error retrieving data");
         }
 
-    }, [department, fromDate, toDate,apiUrl]);
+    }, [department, fromDate, toDate, apiUrl]);
 
     const handleShowAll = useCallback(async () => {
         try {

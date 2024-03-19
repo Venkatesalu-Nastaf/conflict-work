@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
@@ -7,7 +8,7 @@ import jsPDF from 'jspdf';
 
 const useDrivercreation = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [showPasswords, setShowPasswords] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
@@ -25,7 +26,7 @@ const useDrivercreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
-    const [userPermissions, setUserPermissions] = useState({});
+    // const [userPermissions, setUserPermissions] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     //venkat 
     const [Deleted, setDeleted] = useState(false);
@@ -33,23 +34,30 @@ const useDrivercreation = () => {
     const [selectAll, setSelectAll] = useState(false);
     // venkat
 
+    const { userPermissions } = useContext(PermissionsContext);
+    console.log("driver ", userPermissions)
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Driver Master';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
 
-        fetchPermissions();
-    }, [user_id, apiUrl]);
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'Driver Master';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
 
-    const checkPagePermission = () => {
+    //     fetchPermissions();
+    // }, [user_id, apiUrl]);
+
+    const checkPagePermission = async () => {
         const currentPageName = 'Driver Master';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        console.log("driver ", permissions)
+
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,

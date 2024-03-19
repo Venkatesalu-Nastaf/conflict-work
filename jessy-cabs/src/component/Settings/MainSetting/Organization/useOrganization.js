@@ -1,11 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import { useData } from '../../../Dashboard/MainDash/Sildebar/DataContext2';
 import { APIURL } from "../../../url";
 
 const useOrganization = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -18,25 +19,33 @@ const useOrganization = () => {
     const [warningMessage] = useState({});
     const [info, setInfo] = useState(false);
     const [infoMessage, setInfoMessage] = useState({});
-    const [userPermissions, setUserPermissions] = useState({});
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'User Creation';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [user_id,apiUrl]);
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'User Creation';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
 
     const { setSharedData } = useData();
 
-    const checkPagePermission = () => {
+    const { userPermissions } = useContext(PermissionsContext);
+    console.log("orgaisation ", userPermissions)
+
+
+
+    const checkPagePermission = async () => {
         const currentPageName = 'User Creation';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        console.log("org ", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -54,9 +63,10 @@ const useOrganization = () => {
         };
     };
 
-    const permissions = checkPagePermission();
+
 
     const isFieldReadOnly = (fieldName) => {
+        const permissions = checkPagePermission();
         if (permissions.read) {
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
@@ -282,7 +292,7 @@ const useOrganization = () => {
                 })
         };
         handleImageView();
-    }, [organizationname, selectedImage,apiUrl]);
+    }, [organizationname, selectedImage, apiUrl]);
 
     return {
         selectedCustomerData,

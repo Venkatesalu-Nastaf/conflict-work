@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
+import { PermissionsContext } from "../../../permissionContext/permissionContext.js";
 import axios from "axios";
 import dayjs from "dayjs";
 import { VehicleModel } from "./BookingChart";
@@ -7,7 +8,7 @@ import { APIURL } from "../../../url.js";
 const useBookingchart = () => {
   const apiUrl = APIURL;
 
-  const user_id = localStorage.getItem("useridno");
+  // const user_id = localStorage.getItem("useridno");
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [error, setError] = useState(false);
@@ -21,25 +22,31 @@ const useBookingchart = () => {
 
   // for page permission
 
-  const [userPermissions, setUserPermissions] = useState({});
+  // const [userPermissions, setUserPermissions] = useState({});
 
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = "Booking";
-        const response = await axios.get(
-          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-        );
-        setUserPermissions(response.data);
-      } catch {}
-    };
+  // useEffect(() => {
+  //   const fetchPermissions = async () => {
+  //     try {
+  //       const currentPageName = "Booking";
+  //       const response = await axios.get(
+  //         `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
+  //       );
+  //       setUserPermissions(response.data);
+  //     } catch {}
+  //   };
 
-    fetchPermissions();
-  }, [user_id,apiUrl]);
+  //   fetchPermissions();
+  // }, [user_id,apiUrl]);
 
-  const checkPagePermission = () => {
+  const { userPermissions } = useContext(PermissionsContext);
+  // console.log("usebook ", userPermissions)
+
+  const checkPagePermission = async () => {
     const currentPageName = "Booking";
-    const permissions = userPermissions || {};
+    // const permissions = userPermissions || {};
+
+    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+    console.log("chart", permissions)
 
     if (permissions.page_name === currentPageName) {
       return {

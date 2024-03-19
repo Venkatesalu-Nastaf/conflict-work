@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
+import { PermissionsContext } from "../../../permissionContext/permissionContext.js"
 import axios from "axios";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
@@ -61,7 +62,7 @@ const columns = [
 
 const useBooking = () => {
   const apiUrl = APIURL;
-  const user_id = localStorage.getItem("useridno");
+  // const user_id = localStorage.getItem("useridno");
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [selectedCustomerId, setSelectedCustomerId] = useState({});
   const [actionName] = useState("");
@@ -95,39 +96,15 @@ const useBooking = () => {
   };
 
   // for page permission
+  const { userPermissions } = useContext(PermissionsContext);
+  // console.log("usebook ", userPermissions)
 
-  const [userPermissions, setUserPermissions] = useState({});
-
-  // useEffect(() => {
-  //   const fetchPermissions = async () => {
-  //     try {
-  //       const currentPageName = "Booking";
-  //       const response = await axios.get(
-  //         `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-  //       );
-  //       setUserPermissions(response.data);
-  //     } catch {}
-  //   };
-
-  //   fetchPermissions();
-  // }, [user_id]);
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = "Booking";
-        const response = await axios.get(
-          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-        );
-        setUserPermissions(response.data);
-      } catch {}
-    };
-
-    fetchPermissions();
-  }, [user_id, apiUrl]); // Include apiUrl in the dependency array
-
-  const checkPagePermission = () => {
+  const checkPagePermission = async () => {
     const currentPageName = "Booking";
-    const permissions = userPermissions || {};
+
+    // Find the permission for the current page
+    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+    // console.log(permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -150,6 +127,7 @@ const useBooking = () => {
 
   // Function to determine if a field should be read-only based on permissions
   const isFieldReadOnly = (fieldName) => {
+    // const permissions = checkPagePermission();
     if (permissions.read) {
       // If user has read permission, check for other specific permissions
       if (fieldName === "delete" && !permissions.delete) {
@@ -624,7 +602,7 @@ const useBooking = () => {
       formData.append("file", file);
       await axios
         .post(`${apiUrl}/bookingpdf/${booking_id}`, formData)
-        .then((res) => {})
+        .then((res) => { })
         .catch();
     } else {
       return;
@@ -636,7 +614,7 @@ const useBooking = () => {
   const [lastBookingNo, setLastBookingNo] = useState("");
 
   const handleAdd = async () => {
-    const permissions = checkPagePermission();
+    // const permissions = checkPagePermission();
 
     if (permissions.read && permissions.new) {
       const customer = book.customer;
@@ -688,7 +666,7 @@ const useBooking = () => {
 
   const handleEdit = async (userid) => {
     try {
-      const permissions = checkPagePermission();
+      // const permissions = checkPagePermission();
 
       if (permissions.read && permissions.modify) {
         const selectedCustomer = rows.find(
@@ -724,10 +702,9 @@ const useBooking = () => {
           mobile: selectedCustomerDatas.phoneno,
         };
         await axios.put(
-          `${apiUrl}/booking/${
-            book.bookingno ||
-            selectedCustomerData.bookingno ||
-            formData.bookingno
+          `${apiUrl}/booking/${book.bookingno ||
+          selectedCustomerData.bookingno ||
+          formData.bookingno
           }`,
           updatedCustomer
         );
@@ -759,11 +736,10 @@ const useBooking = () => {
         setRows([]);
         setRow([]);
       } else if (actionName === "Delete") {
-        const permissions = checkPagePermission();
+        // const permissions = checkPagePermission();
         if (permissions.read && permissions.delete) {
           await axios.delete(
-            `${apiUrl}/booking/${
-              book.bookingno || selectedCustomerData.bookingno
+            `${apiUrl}/booking/${book.bookingno || selectedCustomerData.bookingno
             }`
           );
           setSelectedCustomerData(null);
@@ -779,7 +755,7 @@ const useBooking = () => {
           setInfoMessage("You do not have permission.");
         }
       } else if (actionName === "Modify") {
-        const permissions = checkPagePermission();
+        // const permissions = checkPagePermission();
         if (permissions.read && permissions.modify) {
           const selectedCustomer = rows.find(
             (row) =>
@@ -816,10 +792,9 @@ const useBooking = () => {
             mobile: selectedCustomerDatas.phoneno,
           };
           await axios.put(
-            `${apiUrl}/booking/${
-              book.bookingno ||
-              selectedCustomerData.bookingno ||
-              formData.bookingno
+            `${apiUrl}/booking/${book.bookingno ||
+            selectedCustomerData.bookingno ||
+            formData.bookingno
             }`,
             updatedCustomer
           );
@@ -931,7 +906,7 @@ const useBooking = () => {
         setEnterPressCount(0);
       }
     },
-    [handleChange, rows, enterPressCount,apiUrl]
+    [handleChange, rows, enterPressCount, apiUrl]
   );
 
   const handleRowClick = useCallback(
@@ -994,7 +969,7 @@ const useBooking = () => {
   const reversedRows = [...row].reverse();
 
   const handleShowAll = async () => {
-    const permissions = checkPagePermission();
+    // const permissions = checkPagePermission();
 
     if (permissions.read && permissions.read) {
       try {
@@ -1025,7 +1000,7 @@ const useBooking = () => {
     }
   };
   const handleenterSearch = async (e) => {
-    const permissions = checkPagePermission();
+    // const permissions = checkPagePermission();
     // e.preventDefault();
     if (e.key === "Enter") {
       if (permissions.read && permissions.read) {
@@ -1181,8 +1156,8 @@ const useBooking = () => {
       const data = await response.json();
       setAttachedImage(data.files);
       setpopupOpenmail(true);
-    } catch {}
-  }, [book.bookingno, selectedCustomerData.bookingno,apiUrl]);
+    } catch { }
+  }, [book.bookingno, selectedCustomerData.bookingno, apiUrl]);
 
   const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
 
@@ -1200,7 +1175,7 @@ const useBooking = () => {
   const handleContextMenu = () => {
     axios
       .delete(`${apiUrl}/booking_doc/` + imagedata)
-      .then((res) => {})
+      .then((res) => { })
       .catch((err) => console.log(err));
     setDialogdeleteOpen(false);
     setDialogOpen(false);

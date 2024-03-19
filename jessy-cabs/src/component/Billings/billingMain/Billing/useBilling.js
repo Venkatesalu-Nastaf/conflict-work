@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from "../../../permissionContext/permissionContext.js"
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import { fetchBankOptions } from './BillingData';
@@ -7,7 +8,7 @@ import { APIURL } from "../../../url.js";
 
 const useBilling = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [bankOptions, setBankOptions] = useState([]);
     const [formData, setFormData] = useState({});
     const location = useLocation();
@@ -30,26 +31,51 @@ const useBilling = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
 
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("usebilling ", userPermissions)
+
+    // const [userPermissions, setUserPermissions] = useState({});
+
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'CB Billing';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
+
+    //     fetchPermissions();
+    // }, [user_id, apiUrl]);
+
+    const [permissions, setPermissions] = useState(null); // State variable to store permissions
+
+    // Function to fetch and set permissions when component mounts
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'CB Billing';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                setPermissions(permissions);
+                console.log("usebilling find", permissions)
+            } catch (error) {
+                console.error("Error fetching permissions:", error);
             }
         };
 
         fetchPermissions();
-    }, [user_id,apiUrl]);
+    }, [userPermissions]);
 
-    const checkPagePermission = () => {
+    const checkPagePermission = async () => {
         const currentPageName = 'CB Billing';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
 
-        if (permissions.page_name === currentPageName) {
+        // const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log(permissions)
+
+        if (permissions?.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
                 new: permissions.new_permission === 1,
@@ -66,10 +92,11 @@ const useBilling = () => {
         };
     };
 
-    const permissions = checkPagePermission();
+
 
     // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
+        const permissions = checkPagePermission();
         if (permissions.read) {
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
@@ -122,7 +149,7 @@ const useBilling = () => {
     const handleEInvoiceClick = (row) => {
         const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.modify) {
+        if (permissions.read_permission && permissions.modify_permission) {
             const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
             const customer = book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer;
 

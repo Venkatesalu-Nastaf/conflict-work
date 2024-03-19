@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import axios from "axios";
@@ -7,7 +8,7 @@ import { APIURL } from "../../../url";
 
 const useAccountinfo = () => {
   const apiUrl = APIURL;
-  const user_id = localStorage.getItem('useridno');
+  // const user_id = localStorage.getItem('useridno');
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
@@ -24,24 +25,33 @@ const useAccountinfo = () => {
 
   // for page permission
 
-  const [userPermissions, setUserPermissions] = useState({});
+  const { userPermissions } = useContext(PermissionsContext);
+  console.log("useaccount ", userPermissions)
 
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = 'Supplier Master';
-        const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-        setUserPermissions(response.data);
-      } catch {
-      }
-    };
 
-    fetchPermissions();
-  }, [user_id,apiUrl]);
 
-  const checkPagePermission = () => {
+  // const [userPermissions, setUserPermissions] = useState({});
+
+  // useEffect(() => {
+  //   const fetchPermissions = async () => {
+  //     try {
+  //       const currentPageName = 'Supplier Master';
+  //       const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+  //       setUserPermissions(response.data);
+  //     } catch {
+  //     }
+  //   };
+
+  //   fetchPermissions();
+  // }, [user_id,apiUrl]);
+
+  const checkPagePermission = async () => {
     const currentPageName = 'Supplier Master';
-    const permissions = userPermissions || {};
+    // const permissions = userPermissions || {};
+
+
+    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+    console.log(permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -325,7 +335,7 @@ const useAccountinfo = () => {
       }
     }
     handleList();
-  }, [permissions,apiUrl]);
+  }, [permissions, apiUrl]);
 
   const handleClick = async (event, actionName, accountNo) => {
     event.preventDefault();

@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
+import { PermissionsContext } from "../../../permissionContext/permissionContext";
 import axios from "axios";
 import dayjs from "dayjs";
 import { APIURL } from "../../../url";
@@ -21,7 +22,7 @@ const columns = [
 
 const useBookingcopy = () => {
   const apiUrl = APIURL;
-  const user_id = localStorage.getItem("useridno");
+  // const user_id = localStorage.getItem("useridno");
   const [rows, setRows] = useState([]);
   const [bookingno, setBookingNo] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
@@ -36,26 +37,16 @@ const useBookingcopy = () => {
   const [infoMessage] = useState({});
 
   // for page permission
+  const { userPermissions } = useContext(PermissionsContext);
+  console.log("useBookCopy ", userPermissions)
 
-  const [userPermissions, setUserPermissions] = useState({});
 
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = "Booking";
-        const response = await axios.get(
-          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-        );
-        setUserPermissions(response.data);
-      } catch {}
-    };
-
-    fetchPermissions();
-  }, [user_id, apiUrl]);
-
-  const checkPagePermission = () => {
+  const checkPagePermission = async () => {
     const currentPageName = "Booking";
-    const permissions = userPermissions || {};
+
+    // Find the permission for the current page
+    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+    console.log(permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -93,39 +84,15 @@ const useBookingcopy = () => {
     setInfo(false);
     setWarning(false);
   };
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [error]);
 
   useEffect(() => {
-    if (success) {
+    if (error || warning || success || info) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [success]);
-  useEffect(() => {
-    if (warning) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [warning]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [info]);
+  }, [error, warning, success, info]);
 
   const handleInputChange = (event) => {
     setBookingNo(event.target.value);

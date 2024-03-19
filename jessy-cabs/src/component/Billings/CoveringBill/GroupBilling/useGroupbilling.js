@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import dayjs from "dayjs";
 import ReactDOMServer from 'react-dom/server';
@@ -31,7 +32,7 @@ const columns = [
 
 const useGroupbilling = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
     const [tripData, setTripData] = useState("");
@@ -53,25 +54,32 @@ const useGroupbilling = () => {
     const [warningMessage] = useState({});
 
     // for page permission
+    const { userPermissions } = useContext(PermissionsContext);
+    console.log("gropbilling ", userPermissions)
 
-    const [userPermissions, setUserPermissions] = useState({});
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'CB Billing';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
 
-        fetchPermissions();
-    }, [user_id,apiUrl]);
 
-    const checkPagePermission = () => {
+    // const [userPermissions, setUserPermissions] = useState({});
+
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'CB Billing';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
+
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
+
+    const checkPagePermission = async () => {
         const currentPageName = 'CB Billing';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+        const permissions = await userPermissions?.find(permission => permission.page_name === currentPageName);
+        console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -90,10 +98,11 @@ const useGroupbilling = () => {
         };
     };
 
-    const permissions = checkPagePermission();
+    // const permissions = checkPagePermission();
 
     // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
+        const permissions = checkPagePermission();
         if (permissions.read) {
             // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
@@ -236,7 +245,7 @@ const useGroupbilling = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum,apiUrl]);
+    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum, apiUrl]);
 
 
     const convertToCSV = (data) => {
@@ -288,7 +297,7 @@ const useGroupbilling = () => {
             }
         }
 
-    }, [invoiceno, book, selectedCustomerDatas,apiUrl]);
+    }, [invoiceno, book, selectedCustomerDatas, apiUrl]);
 
     return {
         rows,

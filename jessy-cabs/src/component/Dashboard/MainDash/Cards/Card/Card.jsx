@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import React, { useState, useContext } from "react";
+import { PermissionsContext } from "../../../../permissionContext/permissionContext";
+// import axios from 'axios';
 import "./Card.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import { MdCancel } from "@react-icons/all-files/md/MdCancel";
 import Chart from "react-apexcharts";
-import { APIURL } from "../../../../url";
+// import { APIURL } from "../../../../url";
 
 // parent Card
-const apiUrl = APIURL;
+// const apiUrl = APIURL;
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
   return (
@@ -27,26 +28,34 @@ const Card = (props) => {
 
 function CompactCard({ param, setExpanded }) {
 
-  const user_id = localStorage.getItem('useridno');
+  // const user_id = localStorage.getItem('useridno');
 
-  const [userPermissions, setUserPermissions] = useState({});
+  const { userPermissions } = useContext(PermissionsContext);
+  console.log("usebook ", userPermissions)
 
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = 'Dashboard page';
-        const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-        setUserPermissions(response.data);
-      } catch {
-      }
-    };
 
-    fetchPermissions();
-  }, [user_id]);
 
-  const checkPagePermission = () => {
+  // const [userPermissions, setUserPermissions] = useState({});
+
+  // useEffect(() => {
+  //   const fetchPermissions = async () => {
+  //     try {
+  //       const currentPageName = 'Dashboard page';
+  //       const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+  //       setUserPermissions(response.data);
+  //     } catch {
+  //     }
+  //   };
+
+  //   fetchPermissions();
+  // }, [user_id]);
+
+  const checkPagePermission = async () => {
     const currentPageName = 'Dashboard page';
-    const permissions = userPermissions || {};
+    // const permissions = userPermissions || {};
+
+    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+    console.log(permissions)
 
     if (permissions.page_name === currentPageName) {
       return {

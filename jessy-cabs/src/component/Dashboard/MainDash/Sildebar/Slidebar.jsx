@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { PermissionsContext } from "../../../permissionContext/permissionContext";
 import { useData } from "../../MainDash/Sildebar/DataContext2";
 import axios from "axios";
 import "./Sidebar.css";
@@ -50,6 +51,12 @@ const MenuItem = ({
 };
 
 const Sidebar = () => {
+
+
+  const { userPermissions } = useContext(PermissionsContext)
+  const permissions = userPermissions;
+
+
   const apiUrl = APIURL;
 
   const location = useLocation();
@@ -63,8 +70,8 @@ const Sidebar = () => {
     "@keyframes ripple": {},
   }));
 
-  const user_id = localStorage.getItem("useridno");
-  const [permissions, setPermissions] = useState({});
+  // const user_id = localStorage.getItem("useridno");
+  // const [permissions, setPermissions] = useState({});
 
   //--------------------------to show logo
 
@@ -131,21 +138,19 @@ const Sidebar = () => {
   const handleMenuItemClick = async (menuItemKey, name, alt) => {
     const currentPageName = name;
     localStorage.setItem("selectedMenuItem", menuItemKey);
-
     try {
-      const response = await axios.get(
-        `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-      );
-      const permissions = response.data;
-      setPermissions(permissions);
+      // Find the permission for the current page
+      const permission = await permissions.find(permission => permission.page_name === currentPageName);
+      console.log(permission)
 
-      if (permissions.read_permission === 1) {
+      if (permission.read_permission === 1) {
         navigate(alt);
       } else {
         setInfo(true);
         setInfoMessage("You do not have permission to access this page.");
       }
-    } catch { }
+    } catch {
+    }
   };
 
   useEffect(() => {

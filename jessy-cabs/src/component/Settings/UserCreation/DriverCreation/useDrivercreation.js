@@ -35,7 +35,7 @@ const useDrivercreation = () => {
     // venkat
 
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("driver ", userPermissions)
+    // console.log("driver ", userPermissions)
 
 
     // useEffect(() => {
@@ -56,7 +56,7 @@ const useDrivercreation = () => {
         // const permissions = userPermissions || {};
 
         const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        console.log("driver ", permissions)
+        // console.log("driver ", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

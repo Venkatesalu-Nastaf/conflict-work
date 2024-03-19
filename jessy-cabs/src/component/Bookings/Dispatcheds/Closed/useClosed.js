@@ -48,7 +48,7 @@ const useClosed = () => {
   // for page permission
 
   const { userPermissions } = useContext(PermissionsContext);
-  console.log("useclosed ", userPermissions)
+  // console.log("useclosed ", userPermissions)
 
   // const [userPermissions, setUserPermissions] = useState({});
 
@@ -70,7 +70,7 @@ const useClosed = () => {
     const currentPageName = "Booking";
     // const permissions = userPermissions || {};
     const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    console.log("useclosed ", permissions)
+    // console.log("useclosed ", permissions)
 
     if (permissions.page_name === currentPageName) {
       return {

@@ -41,7 +41,7 @@ const useCoversubmit = () => {
     // for page permission
 
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("cover submit ", userPermissions)
+    // console.log("cover submit ", userPermissions)
 
 
     // const [userPermissions, setUserPermissions] = useState({});
@@ -64,7 +64,7 @@ const useCoversubmit = () => {
         // const permissions = userPermissions || {};
 
         const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        console.log(permissions)
+        // console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

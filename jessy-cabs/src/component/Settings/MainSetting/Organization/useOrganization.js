@@ -36,7 +36,7 @@ const useOrganization = () => {
     const { setSharedData } = useData();
 
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("orgaisation ", userPermissions)
+    // console.log("orgaisation ", userPermissions)
 
 
 
@@ -45,7 +45,7 @@ const useOrganization = () => {
         // const permissions = userPermissions || {};
 
         const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        console.log("org ", permissions)
+        // console.log("org ", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from "../../../permissionContext/permissionContext"
 import axios from 'axios';
 import dayjs from "dayjs";
 import { APIURL } from "../../../url";
@@ -18,7 +19,7 @@ const columns = [
 
 const useMailagedetails = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [initialOdometer, setInitialOdometer] = useState(0);
     const [finalOdometer, setFinalOdometer] = useState(0);
     const [fuelConsumption, setFuelConsumption] = useState(0);
@@ -40,24 +41,33 @@ const useMailagedetails = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'User Creation';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'User Creation';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
 
-        fetchPermissions();
-    }, [user_id,apiUrl]);
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
 
-    const checkPagePermission = () => {
+
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("mailage ", userPermissions)
+
+
+
+    const checkPagePermission = async () => {
         const currentPageName = 'User Creation';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("mailage ", permissions)
+
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -277,7 +287,7 @@ const useMailagedetails = () => {
         }
 
         handlelist();
-    }, [permissions,apiUrl]);
+    }, [permissions, apiUrl]);
 
     const handleClick = async (event, actionName) => {
         event.preventDefault();
@@ -341,7 +351,7 @@ const useMailagedetails = () => {
                         setSuccessMessage("Successfully updated");
                         handleCancel();
                         setRows([]);
-                    } catch  {                   
+                    } catch {
                     }
                 } else {
                     setInfo(true);

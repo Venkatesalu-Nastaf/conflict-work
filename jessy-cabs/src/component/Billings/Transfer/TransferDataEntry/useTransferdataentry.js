@@ -64,7 +64,7 @@ const useTransferdataentry = () => {
     // for page permission
 
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("transfer data entry ", userPermissions)
+    // console.log("transfer data entry ", userPermissions)
 
     // const [userPermissions, setUserPermissions] = useState({});
 
@@ -86,7 +86,7 @@ const useTransferdataentry = () => {
         // const permissions = userPermissions || {};
 
         const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        console.log(permissions)
+        // console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import dayjs from "dayjs";
 import { APIURL } from "../../../url";
@@ -17,7 +18,7 @@ const columns = [
 const useRatevalidity = () => {
     const apiUrl = APIURL;
 
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -35,23 +36,30 @@ const useRatevalidity = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Rate Type';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [user_id,apiUrl]);
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'Rate Type';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
 
-    const checkPagePermission = () => {
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("ratevalidity ", userPermissions)
+
+
+    const checkPagePermission = async () => {
         const currentPageName = 'Rate Type';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("ratevalidity ", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -258,7 +266,7 @@ const useRatevalidity = () => {
         }
 
         handlelist();
-    }, [permissions,apiUrl]);
+    }, [permissions, apiUrl]);
 
     const handleClick = async (event, actionName, driverid) => {
         event.preventDefault();

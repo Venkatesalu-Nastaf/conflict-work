@@ -72,14 +72,14 @@ const useTripsheet = () => {
     // }, [user_id, apiUrl]);
 
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("tripsheet ", userPermissions)
+    // console.log("tripsheet ", userPermissions)
 
     const checkPagePermission = async () => {
         const currentPageName = 'Trip Sheet';
         // const permissions = userPermissions || {};
 
         const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        console.log("tripsheet ", permissions)
+        // console.log("tripsheet ", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

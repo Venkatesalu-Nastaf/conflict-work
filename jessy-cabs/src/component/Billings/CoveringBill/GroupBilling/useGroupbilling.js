@@ -55,7 +55,7 @@ const useGroupbilling = () => {
 
     // for page permission
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("gropbilling ", userPermissions)
+    // console.log("gropbilling ", userPermissions)
 
 
 
@@ -79,7 +79,7 @@ const useGroupbilling = () => {
         const currentPageName = 'CB Billing';
         // const permissions = userPermissions || {};
         const permissions = await userPermissions?.find(permission => permission.page_name === currentPageName);
-        console.log(permissions)
+        // console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

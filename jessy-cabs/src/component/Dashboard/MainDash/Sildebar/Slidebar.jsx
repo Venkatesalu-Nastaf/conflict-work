@@ -141,7 +141,7 @@ const Sidebar = () => {
     try {
       // Find the permission for the current page
       const permission = await permissions.find(permission => permission.page_name === currentPageName);
-      console.log(permission)
+      // console.log(permission)
 
       if (permission.read_permission === 1) {
         navigate(alt);

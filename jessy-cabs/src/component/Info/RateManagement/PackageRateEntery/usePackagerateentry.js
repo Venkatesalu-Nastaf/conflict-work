@@ -1,4 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+
+
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 
@@ -24,7 +27,7 @@ const columns = [
 
 const usePackagerateentry = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -41,24 +44,32 @@ const usePackagerateentry = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("package ", userPermissions)
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Rate Type';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
 
-        fetchPermissions();
-    }, [user_id,apiUrl]);
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    const checkPagePermission = () => {
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'Rate Type';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
+
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
+
+    const checkPagePermission = async () => {
         const currentPageName = 'Rate Type';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};\
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("package ", permissions)
+
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -256,7 +267,7 @@ const usePackagerateentry = () => {
             }
         }
         handleList();
-    }, [permissions,apiUrl]);
+    }, [permissions, apiUrl]);
 
     const handleEdit = async () => {
         try {

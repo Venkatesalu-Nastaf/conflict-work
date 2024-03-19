@@ -62,7 +62,7 @@ const usePermission = () => {
     // for page permission
 
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("usebook ", userPermissions)
+    // console.log("usebook ", userPermissions)
 
     // const [userPermissions, setUserPermissions] = useState({});
 
@@ -83,7 +83,7 @@ const usePermission = () => {
         const currentPageName = 'Permission';
         // const permissions = userPermissions || {};
         const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        console.log("org ", permissions)
+        // console.log("org ", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

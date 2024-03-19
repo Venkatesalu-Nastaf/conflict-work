@@ -38,7 +38,7 @@ const useBookingcopy = () => {
 
   // for page permission
   const { userPermissions } = useContext(PermissionsContext);
-  console.log("useBookCopy ", userPermissions)
+  // console.log("useBookCopy ", userPermissions)
 
 
   const checkPagePermission = async () => {
@@ -46,7 +46,7 @@ const useBookingcopy = () => {
 
     // Find the permission for the current page
     const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    console.log(permissions)
+    // console.log(permissions)
 
     if (permissions.page_name === currentPageName) {
       return {

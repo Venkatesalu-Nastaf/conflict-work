@@ -61,14 +61,14 @@ const usePending = () => {
 
 
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("usebending ", userPermissions)
+    // console.log("usebending ", userPermissions)
 
     const checkPagePermission = async () => {
         const currentPageName = 'Booking';
         // const permissions = userPermissions || {};
 
         const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        console.log(permissions)
+        // console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

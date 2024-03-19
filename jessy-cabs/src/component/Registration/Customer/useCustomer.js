@@ -58,7 +58,7 @@ const useCustomer = () => {
 
 
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("useCusetomer ", userPermissions)
+    // console.log("useCusetomer ", userPermissions)
 
 
     const checkPagePermission = async () => {
@@ -67,7 +67,7 @@ const useCustomer = () => {
 
 
         const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        console.log(permissions)
+        // console.log(permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

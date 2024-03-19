@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
@@ -30,7 +31,7 @@ const columns = [
 
 const useVehiclestatement = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [servicestation, setServiceStation] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
@@ -48,25 +49,32 @@ const useVehiclestatement = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Booking';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'Booking';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch (error) {
+    //             console.error('Error fetching user permissions:', error);
+    //         }
+    //     };
 
-        fetchPermissions();
-    }, [user_id,apiUrl]);
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
 
-    const checkPagePermission = () => {
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("usebook ", userPermissions)
+
+
+    const checkPagePermission = async () => {
         const currentPageName = 'Booking';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -179,7 +187,7 @@ const useVehiclestatement = () => {
     };
 
     const handleInputChange = (event, newValue) => {
-        setServiceStation(newValue ? newValue.label : ''); 
+        setServiceStation(newValue ? newValue.label : '');
     };
 
     const handleShow = useCallback(async () => {
@@ -211,7 +219,7 @@ const useVehiclestatement = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [servicestation, fromDate, toDate,apiUrl]);
+    }, [servicestation, fromDate, toDate, apiUrl]);
 
     const handleShowAll = useCallback(async () => {
 

@@ -26,7 +26,7 @@ const useAccountinfo = () => {
   // for page permission
 
   const { userPermissions } = useContext(PermissionsContext);
-  console.log("useaccount ", userPermissions)
+  // console.log("useaccount ", userPermissions)
 
 
 
@@ -51,7 +51,7 @@ const useAccountinfo = () => {
 
 
     const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    console.log(permissions)
+    // console.log(permissions)
 
     if (permissions.page_name === currentPageName) {
       return {

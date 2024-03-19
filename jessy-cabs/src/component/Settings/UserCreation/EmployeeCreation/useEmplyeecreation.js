@@ -28,7 +28,7 @@ const useEmplyeecreation = () => {
     // for page permission
 
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("employee ", userPermissions)
+    // console.log("employee ", userPermissions)
 
     // const [userPermissions, setUserPermissions] = useState({});
 
@@ -49,7 +49,7 @@ const useEmplyeecreation = () => {
         // const permissions = userPermissions || {};
 
         const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        console.log("employee ", permissions)
+        // console.log("employee ", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

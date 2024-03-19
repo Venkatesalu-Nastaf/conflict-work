@@ -31,7 +31,7 @@ function CompactCard({ param, setExpanded }) {
   // const user_id = localStorage.getItem('useridno');
 
   const { userPermissions } = useContext(PermissionsContext);
-  console.log("usebook ", userPermissions)
+  // console.log("usebook ", userPermissions)
 
 
 
@@ -55,7 +55,7 @@ function CompactCard({ param, setExpanded }) {
     // const permissions = userPermissions || {};
 
     const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    console.log(permissions)
+    // console.log(permissions)
 
     if (permissions.page_name === currentPageName) {
       return {

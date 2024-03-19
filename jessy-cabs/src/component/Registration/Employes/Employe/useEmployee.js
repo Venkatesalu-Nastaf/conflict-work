@@ -77,7 +77,7 @@ const useEmployee = () => {
 
     // for page permission
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("Employee ", userPermissions);
+    // console.log("Employee ", userPermissions);
 
 
 
@@ -128,7 +128,7 @@ const useEmployee = () => {
         return async () => {
             const currentPageName = 'Employee PayRoll';
             const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-            console.log(permissions)
+            // console.log(permissions)
 
             if (permissions.page_name === currentPageName) {
                 return {

@@ -42,7 +42,7 @@ const useTaxsettings = () => {
     // for page permission
 
     const { userPermissions } = useContext(PermissionsContext);
-    console.log("taxsetting ", userPermissions)
+    // console.log("taxsetting ", userPermissions)
 
     // const [userPermissions, setUserPermissions] = useState({});
 
@@ -64,7 +64,7 @@ const useTaxsettings = () => {
         // const permissions = userPermissions || {};
 
         const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        console.log("taxset ", permissions)
+        // console.log("taxset ", permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

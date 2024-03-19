@@ -28,7 +28,7 @@ const useTransferlist = () => {
 
 
   const { userPermissions } = useContext(PermissionsContext);
-  console.log("transferlist ", userPermissions)
+  // console.log("transferlist ", userPermissions)
 
 
   // const [userPermissions, setUserPermissions] = useState({});
@@ -53,7 +53,7 @@ const useTransferlist = () => {
 
 
     const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    console.log(permissions)
+    // console.log(permissions)
 
     if (permissions.page_name === currentPageName) {
       return {

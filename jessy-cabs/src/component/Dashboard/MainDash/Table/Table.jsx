@@ -67,7 +67,7 @@ export default function BasicTable() {
   // }, [user_id]);
 
   const { userPermissions } = useContext(PermissionsContext);
-  console.log("usebook ", userPermissions)
+  // console.log("usebook ", userPermissions)
 
   const checkPagePermission = async () => {
 
@@ -75,7 +75,7 @@ export default function BasicTable() {
     // const permissions = userPermissions || {};
 
     const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    console.log(permissions)
+    // console.log(permissions)
 
     if (permissions.page_name === currentPageName) {
       return {

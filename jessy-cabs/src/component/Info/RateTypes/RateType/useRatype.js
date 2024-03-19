@@ -1,4 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+
+
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
@@ -17,7 +20,7 @@ const columns = [
 
 const useRatype = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -37,23 +40,32 @@ const useRatype = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    // const [userPermissions, setUserPermissions] = useState({});
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Rate Type';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [user_id,apiUrl]);
+    // useEffect(() => {
+    //     const fetchPermissions = async () => {
+    //         try {
+    //             const currentPageName = 'Rate Type';
+    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             setUserPermissions(response.data);
+    //         } catch {
+    //         }
+    //     };
+    //     fetchPermissions();
+    // }, [user_id,apiUrl]);
 
-    const checkPagePermission = () => {
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("ratetype ", userPermissions)
+
+
+
+    const checkPagePermission = async () => {
         const currentPageName = 'Rate Type';
-        const permissions = userPermissions || {};
+        // const permissions = userPermissions || {};
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("ratetype ", permissions)
+
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -275,7 +287,7 @@ const useRatype = () => {
         }
 
         handlelist();
-    }, [permissions,apiUrl]);
+    }, [permissions, apiUrl]);
 
     const handleEdit = async (driverid) => {
         const permissions = checkPagePermission();

@@ -21,30 +21,40 @@ const useStationCreation = () => {
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
-    // const [userPermissions, setUserPermissions] = useState({});
 
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'Station Creation';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch (error) {
-    //         }
-    //     };
+    //--------------------------------------
 
-    //     fetchPermissions();
-    // }, [user_id,apiUrl]);
+    const [userPermissionss, setUserPermissions] = useState({});
 
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("usebook ", userPermissions)
+    // console.log("ratetype ", userPermissions)
+
+    //----------------------------------------
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'Station Creation';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
+
+    //---------------------------------------
 
 
-    const checkPagePermission = async () => {
+    const checkPagePermission = () => {
         const currentPageName = 'Station Creation';
-        // const permissions = userPermissions || {};
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("org ", permissions)
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -54,7 +64,6 @@ const useStationCreation = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -62,6 +71,8 @@ const useStationCreation = () => {
             delete: false,
         };
     };
+
+
 
     const permissions = checkPagePermission();
 

@@ -34,29 +34,39 @@ const useDrivercreation = () => {
     const [selectAll, setSelectAll] = useState(false);
     // venkat
 
+
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("driver ", userPermissions)
+    // console.log("ratetype ", userPermissions)
+
+    //----------------------------------------
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'Driver Master';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
+
+    //---------------------------------------
 
 
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'Driver Master';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
-
-    //     fetchPermissions();
-    // }, [user_id, apiUrl]);
-
-    const checkPagePermission = async () => {
+    const checkPagePermission = () => {
         const currentPageName = 'Driver Master';
-        // const permissions = userPermissions || {};
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("driver ", permissions)
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -73,6 +83,9 @@ const useDrivercreation = () => {
             delete: false,
         };
     };
+
+
+
 
     // venkat
 

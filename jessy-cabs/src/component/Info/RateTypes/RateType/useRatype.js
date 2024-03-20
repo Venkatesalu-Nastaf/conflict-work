@@ -1,7 +1,7 @@
 
-
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
+import { useContext } from 'react';
+import { PermissionsContext } from "../../../permissionContext/permissionContext"
 import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
@@ -40,31 +40,34 @@ const useRatype = () => {
 
     // for page permission
 
-    // const [userPermissions, setUserPermissions] = useState({});
-
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'Rate Type';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
-    //     fetchPermissions();
-    // }, [user_id,apiUrl]);
+    const [userPermissionss, setUserPermissions] = useState({});
 
     const { userPermissions } = useContext(PermissionsContext);
     // console.log("ratetype ", userPermissions)
 
 
 
-    const checkPagePermission = async () => {
-        const currentPageName = 'Rate Type';
-        // const permissions = userPermissions || {};
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'Rate Type';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
 
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("ratetype ", permissions)
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
+
+    const checkPagePermission = () => {
+        const currentPageName = 'Rate Type';
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {

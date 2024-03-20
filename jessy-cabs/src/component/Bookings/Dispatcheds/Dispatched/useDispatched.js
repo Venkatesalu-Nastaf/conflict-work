@@ -40,33 +40,40 @@ const useDispatched = () => {
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
-    // for page permission
+    // for page permission    const currentPageName = 'Booking';
+
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
 
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("useDispatched ", userPermissions)
+    // console.log("ratetype ", userPermissions)
 
+    //----------------------------------------
 
-    // const [userPermissions, setUserPermissions] = useState({});
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = "Booking";
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
 
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'Booking';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
 
-    //     fetchPermissions();
-    // }, [user_id,apiUrl]);
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
 
-    const checkPagePermission = async () => {
-        const currentPageName = 'Booking';
-        // const permissions = userPermissions || {};
+    //---------------------------------------
 
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log(permissions)
+    const checkPagePermission = () => {
+        const currentPageName = "Booking";
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -76,7 +83,6 @@ const useDispatched = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -84,6 +90,9 @@ const useDispatched = () => {
             delete: false,
         };
     };
+
+
+    //------------------------------
 
     const permissions = checkPagePermission();
 

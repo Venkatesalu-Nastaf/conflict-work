@@ -25,33 +25,38 @@ const useAccountinfo = () => {
 
   // for page permission
 
+  //--------------------------------------
+
+  const [userPermissionss, setUserPermissions] = useState({});
+
   const { userPermissions } = useContext(PermissionsContext);
-  // console.log("useaccount ", userPermissions)
+  // console.log("ratetype ", userPermissions)
 
+  //----------------------------------------
 
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'Supplier Master';
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
 
-  // const [userPermissions, setUserPermissions] = useState({});
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
 
-  // useEffect(() => {
-  //   const fetchPermissions = async () => {
-  //     try {
-  //       const currentPageName = 'Supplier Master';
-  //       const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-  //       setUserPermissions(response.data);
-  //     } catch {
-  //     }
-  //   };
+      } catch {
+      }
+    };
+    fetchPermissions();
+  }, [userPermissions]);
 
-  //   fetchPermissions();
-  // }, [user_id,apiUrl]);
+  //---------------------------------------
 
-  const checkPagePermission = async () => {
+  const checkPagePermission = () => {
     const currentPageName = 'Supplier Master';
-    // const permissions = userPermissions || {};
-
-
-    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    // console.log(permissions)
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -61,7 +66,6 @@ const useAccountinfo = () => {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -70,6 +74,7 @@ const useAccountinfo = () => {
     };
   };
 
+  //------------------------------
   const permissions = checkPagePermission();
 
   const isFieldReadOnly = (fieldName) => {

@@ -36,17 +36,42 @@ const useBookingcopy = () => {
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
 
-  // for page permission
+  // for page permission   const currentPageName = "Booking";
+
+
+
+  //--------------------------------------
+
+  const [userPermissionss, setUserPermissions] = useState({});
+
   const { userPermissions } = useContext(PermissionsContext);
-  // console.log("useBookCopy ", userPermissions)
+  // console.log("ratetype ", userPermissions)
 
+  //----------------------------------------
 
-  const checkPagePermission = async () => {
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = "Booking";
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
+
+      } catch {
+      }
+    };
+    fetchPermissions();
+  }, [userPermissions]);
+
+  //---------------------------------------
+
+  const checkPagePermission = () => {
     const currentPageName = "Booking";
-
-    // Find the permission for the current page
-    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    // console.log(permissions)
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -56,7 +81,6 @@ const useBookingcopy = () => {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -64,6 +88,9 @@ const useBookingcopy = () => {
       delete: false,
     };
   };
+
+
+  //------------------------------
 
   const permissions = checkPagePermission();
 

@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback, useContext, useMemo } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import dayjs from "dayjs";
@@ -76,10 +76,6 @@ const useEmployee = () => {
     // TABLE END
 
     // for page permission
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("Employee ", userPermissions);
-
-
 
     // const [userPermissions, setUserPermissions] = useState({});
 
@@ -87,21 +83,18 @@ const useEmployee = () => {
     //     const fetchPermissions = async () => {
     //         try {
     //             const currentPageName = 'Employee PayRoll';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
+    //             const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
     //             setUserPermissions(response.data);
     //         } catch {
     //         }
     //     };
 
     //     fetchPermissions();
-    // }, [user_id,apiUrl]);
+    // }, [user_id, apiUrl]);
 
-    // const checkPagePermission = async () => {
+    // const checkPagePermission = () => {
     //     const currentPageName = 'Employee PayRoll';
-    //     // const permissions = userPermissions || {};
-
-    //     const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    //     console.log(permissions)
+    //     const permissions = userPermissions || {};
 
     //     if (permissions.page_name === currentPageName) {
     //         return {
@@ -121,34 +114,58 @@ const useEmployee = () => {
     // };
 
 
-    /////------------------
 
-    // Memoize the checkPagePermission function
-    const checkPagePermission = useMemo(() => {
-        return async () => {
-            const currentPageName = 'Employee PayRoll';
-            const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-            // console.log(permissions)
+    //--------------------------------------
 
-            if (permissions.page_name === currentPageName) {
-                return {
-                    read: permissions.read_permission === 1,
-                    new: permissions.new_permission === 1,
-                    modify: permissions.modify_permission === 1,
-                    delete: permissions.delete_permission === 1,
-                };
+    const [userPermissionss, setUserPermissions] = useState({});
+
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("ratetype ", userPermissions)
+
+    //----------------------------------------
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'Employee PayRoll';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
+            } catch {
             }
-
-            return {
-                read: false,
-                new: false,
-                modify: false,
-                delete: false,
-            };
         };
+        fetchPermissions();
     }, [userPermissions]);
 
-    ////--------------------
+    //---------------------------------------
+
+    const checkPagePermission = () => {
+        const currentPageName = 'Employee PayRoll';
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
+
+        if (permissions.page_name === currentPageName) {
+            return {
+                read: permissions.read_permission === 1,
+                new: permissions.new_permission === 1,
+                modify: permissions.modify_permission === 1,
+                delete: permissions.delete_permission === 1,
+            };
+        }
+        return {
+            read: false,
+            new: false,
+            modify: false,
+            delete: false,
+        };
+    };
+
+
+    //------------------------------
 
     const permissions = checkPagePermission();
 

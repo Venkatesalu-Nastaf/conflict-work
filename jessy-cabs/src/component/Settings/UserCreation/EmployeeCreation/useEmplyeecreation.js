@@ -27,29 +27,36 @@ const useEmplyeecreation = () => {
 
     // for page permission
 
+
+    const [userPermissionss, setUserPermissions] = useState({});
+
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("employee ", userPermissions)
+    // console.log("ratetype ", userPermissions)
 
-    // const [userPermissions, setUserPermissions] = useState({});
 
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'User Creation';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
-    //     fetchPermissions();
-    // }, [user_id, apiUrl]);
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'User Creation';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
 
-    const checkPagePermission = async () => {
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
+
+
+
+    const checkPagePermission = () => {
         const currentPageName = 'User Creation';
-        // const permissions = userPermissions || {};
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("employee ", permissions)
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -59,7 +66,6 @@ const useEmplyeecreation = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -67,6 +73,7 @@ const useEmplyeecreation = () => {
             delete: false,
         };
     };
+
 
     const permissions = checkPagePermission();
 

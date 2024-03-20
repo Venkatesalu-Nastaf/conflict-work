@@ -22,29 +22,40 @@ const useDivision = () => {
 
     // for page permission
 
-    // const [userPermissions, setUserPermissions] = useState({});
 
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'Rate Type';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
+    //--------------------------------------
 
-    //     fetchPermissions();
-    // }, [user_id,apiUrl]);
+    const [userPermissionss, setUserPermissions] = useState({});
 
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("dicition ", userPermissions)
+    // console.log("ratetype ", userPermissions)
 
-    const checkPagePermission = async () => {
+    //----------------------------------------
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'Rate Type';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
+
+    //---------------------------------------
+
+
+    const checkPagePermission = () => {
         const currentPageName = 'Rate Type';
-        // const permissions = userPermissions || {};
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("divition ", permissions)
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -61,6 +72,8 @@ const useDivision = () => {
             delete: false,
         };
     };
+
+
 
     const permissions = checkPagePermission();
 

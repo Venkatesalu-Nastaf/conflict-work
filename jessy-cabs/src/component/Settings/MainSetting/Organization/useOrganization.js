@@ -19,33 +19,41 @@ const useOrganization = () => {
     const [warningMessage] = useState({});
     const [info, setInfo] = useState(false);
     const [infoMessage, setInfoMessage] = useState({});
-    // const [userPermissions, setUserPermissions] = useState({});
-
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'User Creation';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
-    //     fetchPermissions();
-    // }, [user_id,apiUrl]);
-
     const { setSharedData } = useData();
 
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
+
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("orgaisation ", userPermissions)
+    // console.log("ratetype ", userPermissions)
+
+    //----------------------------------------
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'User Creation';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
+
+    //---------------------------------------
 
 
-
-    const checkPagePermission = async () => {
+    const checkPagePermission = () => {
         const currentPageName = 'User Creation';
-        // const permissions = userPermissions || {};
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("org ", permissions)
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -62,6 +70,8 @@ const useOrganization = () => {
             delete: false,
         };
     };
+
+
 
 
 

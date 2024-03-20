@@ -49,33 +49,42 @@ export default function BasicTable() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
 
-  // const user_id = localStorage.getItem('useridno');
 
-  // const [userPermissions, setUserPermissions] = useState({});
+  //permission  const currentPageName = 'Dashboard page';
 
-  // useEffect(() => {
-  //   const fetchPermissions = async () => {
-  //     try {
-  //       const currentPageName = 'Dashboard page';
-  //       const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-  //       setUserPermissions(response.data);
-  //     } catch {
-  //     }
-  //   };
 
-  //   fetchPermissions();
-  // }, [user_id]);
+  //--------------------------------------
+
+  const [userPermissionss, setUserPermissions] = useState({});
 
   const { userPermissions } = useContext(PermissionsContext);
-  // console.log("usebook ", userPermissions)
+  // console.log("ratetype ", userPermissions)
 
-  const checkPagePermission = async () => {
+  //----------------------------------------
 
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'Dashboard page';
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
+
+      } catch {
+      }
+    };
+    fetchPermissions();
+  }, [userPermissions]);
+
+  //---------------------------------------
+
+  const checkPagePermission = () => {
     const currentPageName = 'Dashboard page';
-    // const permissions = userPermissions || {};
-
-    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    // console.log(permissions)
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -85,7 +94,6 @@ export default function BasicTable() {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -93,6 +101,9 @@ export default function BasicTable() {
       delete: false,
     };
   };
+
+
+  //------------------------------
 
   const permissions = checkPagePermission();
   useEffect(() => {

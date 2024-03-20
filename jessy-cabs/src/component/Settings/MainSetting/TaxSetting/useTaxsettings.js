@@ -41,30 +41,38 @@ const useTaxsettings = () => {
 
     // for page permission
 
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
+
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("taxsetting ", userPermissions)
+    // console.log("ratetype ", userPermissions)
 
-    // const [userPermissions, setUserPermissions] = useState({});
+    //----------------------------------------
 
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'Tax settings';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'Tax settings';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
 
-    //     fetchPermissions();
-    // }, [user_id,apiUrl]);
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
 
-    const checkPagePermission = async () => {
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
+
+    //---------------------------------------
+
+    const checkPagePermission = () => {
         const currentPageName = 'Tax settings';
-        // const permissions = userPermissions || {};
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("taxset ", permissions)
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -74,7 +82,6 @@ const useTaxsettings = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -83,6 +90,8 @@ const useTaxsettings = () => {
         };
     };
 
+
+    //------------------------------
     const permissions = checkPagePermission();
 
     const isFieldReadOnly = (fieldName) => {

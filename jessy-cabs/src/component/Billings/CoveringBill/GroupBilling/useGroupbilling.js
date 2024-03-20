@@ -54,32 +54,39 @@ const useGroupbilling = () => {
     const [warningMessage] = useState({});
 
     // for page permission
+
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
+
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("gropbilling ", userPermissions)
+    // console.log("ratetype ", userPermissions)
 
+    //----------------------------------------
 
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'CB Billing';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
 
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
 
-    // const [userPermissions, setUserPermissions] = useState({});
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
 
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'CB Billing';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
+    //---------------------------------------
 
-    //     fetchPermissions();
-    // }, [user_id,apiUrl]);
-
-    const checkPagePermission = async () => {
+    const checkPagePermission = () => {
         const currentPageName = 'CB Billing';
-        // const permissions = userPermissions || {};
-        const permissions = await userPermissions?.find(permission => permission.page_name === currentPageName);
-        // console.log(permissions)
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -89,7 +96,6 @@ const useGroupbilling = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -98,11 +104,13 @@ const useGroupbilling = () => {
         };
     };
 
-    // const permissions = checkPagePermission();
+
+    //------------------------------
+    const permissions = checkPagePermission();
 
     // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
-        const permissions = checkPagePermission();
+        // const permissions = checkPagePermission();
         if (permissions.read) {
             // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {

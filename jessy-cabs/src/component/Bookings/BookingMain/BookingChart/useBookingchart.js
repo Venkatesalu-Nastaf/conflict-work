@@ -21,32 +21,40 @@ const useBookingchart = () => {
   const [infoMessage] = useState({});
 
   // for page permission
+  // const currentPageName = "Booking";
 
-  // const [userPermissions, setUserPermissions] = useState({});
+  //--------------------------------------
 
-  // useEffect(() => {
-  //   const fetchPermissions = async () => {
-  //     try {
-  //       const currentPageName = "Booking";
-  //       const response = await axios.get(
-  //         `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-  //       );
-  //       setUserPermissions(response.data);
-  //     } catch {}
-  //   };
-
-  //   fetchPermissions();
-  // }, [user_id,apiUrl]);
+  const [userPermissionss, setUserPermissions] = useState({});
 
   const { userPermissions } = useContext(PermissionsContext);
-  // console.log("usebook ", userPermissions)
+  // console.log("ratetype ", userPermissions)
 
-  const checkPagePermission = async () => {
+  //----------------------------------------
+
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = "Booking";
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
+
+      } catch {
+      }
+    };
+    fetchPermissions();
+  }, [userPermissions]);
+
+  //---------------------------------------
+
+  const checkPagePermission = () => {
     const currentPageName = "Booking";
-    // const permissions = userPermissions || {};
-
-    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    console.log("chart", permissions)
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -56,7 +64,6 @@ const useBookingchart = () => {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -64,6 +71,9 @@ const useBookingchart = () => {
       delete: false,
     };
   };
+
+
+  //------------------------------
 
   const permissions = checkPagePermission();
 

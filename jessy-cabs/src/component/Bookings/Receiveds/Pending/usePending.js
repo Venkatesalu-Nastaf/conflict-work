@@ -41,34 +41,41 @@ const usePending = () => {
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
-    // for page permission
-
-    // const [userPermissions, setUserPermissions] = useState({});
-
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'Booking';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
-
-    //     fetchPermissions();
-    // }, [user_id,apiUrl]);
+    // for page permission const currentPageName = 'Booking';
 
 
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
 
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("usebending ", userPermissions)
+    // console.log("ratetype ", userPermissions)
 
-    const checkPagePermission = async () => {
+    //----------------------------------------
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'Booking';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
+
+    //---------------------------------------
+
+    const checkPagePermission = () => {
         const currentPageName = 'Booking';
-        // const permissions = userPermissions || {};
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log(permissions)
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -78,7 +85,6 @@ const usePending = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -86,6 +92,9 @@ const usePending = () => {
             delete: false,
         };
     };
+
+
+    //------------------------------
 
     const permissions = checkPagePermission();
 

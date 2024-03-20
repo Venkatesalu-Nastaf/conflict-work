@@ -26,34 +26,38 @@ const useTransferlist = () => {
 
   // for page permission
 
+  //--------------------------------------
+
+  const [userPermissionss, setUserPermissions] = useState({});
 
   const { userPermissions } = useContext(PermissionsContext);
-  // console.log("transferlist ", userPermissions)
+  // console.log("ratetype ", userPermissions)
 
+  //----------------------------------------
 
-  // const [userPermissions, setUserPermissions] = useState({});
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const currentPageName = 'CB Billing';
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
 
-  // useEffect(() => {
-  //   const fetchPermissions = async () => {
-  //     try {
-  //       const currentPageName = "CB Billing";
-  //       const response = await axios.get(
-  //         `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-  //       );
-  //       setUserPermissions(response.data);
-  //     } catch {}
-  //   };
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
 
-  //   fetchPermissions();
-  // }, [user_id,apiUrl]);
+      } catch {
+      }
+    };
+    fetchPermissions();
+  }, [userPermissions]);
 
-  const checkPagePermission = async () => {
+  //---------------------------------------
+
+  const checkPagePermission = () => {
     const currentPageName = "CB Billing";
-    // const permissions = userPermissions || {};
-
-
-    const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-    // console.log(permissions)
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -63,7 +67,6 @@ const useTransferlist = () => {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -72,6 +75,7 @@ const useTransferlist = () => {
     };
   };
 
+  //------------------------------
 
   const permissions = checkPagePermission();
   // Function to determine if a field should be read-only based on permissions

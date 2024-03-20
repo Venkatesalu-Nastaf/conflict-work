@@ -5,6 +5,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../url";
+import { useData } from '../../Dashboard/Maindashboard/DataContext';
 
 
 // TABLE START
@@ -41,33 +42,39 @@ const useCustomer = () => {
     const [isEditMode, setIsEditMode] = useState(false);
 
     // for page permission
-    // const [userPermissions, setUserPermissions] = useState({});
 
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'Customer Master';
-    //             const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
+    //--------------------------------------
 
-    //     fetchPermissions();
-    // }, [user_id,apiUrl]);
-
+    const [userPermissionss, setUserPermissions] = useState({});
 
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("useCusetomer ", userPermissions)
+    // console.log("ratetype ", userPermissions)
 
+    //----------------------------------------
 
-    const checkPagePermission = async () => {
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            try {
+                const currentPageName = 'Customer Master';
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
+            } catch {
+            }
+        };
+        fetchPermissions();
+    }, [userPermissions]);
+
+    //---------------------------------------
+
+    const checkPagePermission = () => {
         const currentPageName = 'Customer Master';
-        // const permissions = userPermissions || {};
-
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log(permissions)
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -77,7 +84,6 @@ const useCustomer = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -85,6 +91,25 @@ const useCustomer = () => {
             delete: false,
         };
     };
+
+    //---------------------------------------
+
+    const { setOrganizationName } = useData()
+    // Fetching the Customers Table for getting the customer details
+    useEffect(() => {
+        const organizationNames = async () => {
+            try {
+                const response = await axios.get(`${apiUrl} / customers`);
+                const organisationData = response.data;
+                const names = organisationData.map(res => res.customer);
+                setOrganizationName(names);
+            } catch (error) {
+                console.error('Error fetching organization names:', error);
+            }
+        };
+        organizationNames();
+    }, [rows, apiUrl, setOrganizationName])
+
 
     const permissions = checkPagePermission();
 

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useContext } from 'react';
 import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import { APIURL } from "../../../url";
+import { useData } from '../../../Dashboard/Maindashboard/DataContext';
 
 // Table START
 const columns = [
@@ -41,7 +42,7 @@ const usePackagerateentry = () => {
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
-
+    const {setOrganizationName} = useData()
     // for page permission
 
     //--------------------------------------
@@ -72,6 +73,20 @@ const usePackagerateentry = () => {
 
     //---------------------------------------
 
+        // Fetching the Customers Table for getting the customer details
+        useEffect(() => {
+            const organizationNames = async () => {
+                try {
+                    const response = await axios.get(`${apiUrl}/customers`);
+                    const organisationData = response.data;
+                    const names = organisationData.map(res => res.customer);
+                    setOrganizationName(names);
+                } catch (error) {
+                    console.error('Error fetching organization names:', error);
+                }
+            };
+            organizationNames();
+        }, [apiUrl,setOrganizationName])
 
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';

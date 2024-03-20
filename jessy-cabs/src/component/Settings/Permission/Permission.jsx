@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import usePermission from "./usePermission";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import Checkbox from '@mui/material/Checkbox';
 
 const Permission = () => {
   const {
@@ -34,7 +35,7 @@ const Permission = () => {
     handleSavePermissions,
     handleCancel,
     permissionsData,
-    handlePermissionChange,
+    handlePermissionChange, handleHeaderCheckboxChange, isActionChecked
   } = usePermission();
 
   useEffect(() => {
@@ -132,13 +133,43 @@ const Permission = () => {
               <div className="table-container Scroll-Style">
                 <table className="responsive-table ">
                   <thead>
-                    <tr>
+                    {/* <tr>
                       <th>ID</th>
                       <th>Form Name</th>
                       <th>Read</th>
                       <th>New</th>
                       <th>Modify</th>
                       <th>Delete</th>
+                    </tr> */}
+
+                    <tr>
+                      <th>ID</th>
+                      <th>Form Name</th>
+                      <th>Read
+                        <Checkbox
+                          checked={isActionChecked('read')}
+                          onChange={(e) => handleHeaderCheckboxChange('read', e.target.checked)}
+                        />
+                      </th>
+
+                      <th>New
+                        <Checkbox
+                          checked={isActionChecked('new')}
+                          onChange={(e) => handleHeaderCheckboxChange('new', e.target.checked)}
+                        />
+                      </th>
+                      <th>Modify
+                        <Checkbox
+                          checked={isActionChecked('modify')}
+                          onChange={(e) => handleHeaderCheckboxChange('modify', e.target.checked)}
+                        />
+                      </th>
+                      <th>Delete
+                        <Checkbox
+                          checked={isActionChecked('delete')}
+                          onChange={(e) => handleHeaderCheckboxChange('delete', e.target.checked)}
+                        />
+                      </th>
                     </tr>
                   </thead>
                   <tbody>

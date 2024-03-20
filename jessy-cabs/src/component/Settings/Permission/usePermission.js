@@ -328,37 +328,13 @@ const usePermission = () => {
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || warning || success || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, warning, success, info]);
 
     const user_id = localStorage.getItem('useridno');
 
@@ -369,7 +345,7 @@ const usePermission = () => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Permission';
-                const response = await axios.get(`${APIURL}/${user_id}/${currentPageName}`);
+                const response = await axios.get(`${APIURL}/user-permi/${user_id}/${currentPageName}`);
                 setUserPermissions(response.data);
             } catch {
             }
@@ -471,6 +447,18 @@ const usePermission = () => {
         );
     };
 
+    const handleHeaderCheckboxChange = (action, checked) => {
+        const updatedPermissions = permissionsData.map(permission => ({
+            ...permission,
+            [action]: checked,
+        }));
+        setPermissionsData(updatedPermissions);
+    };
+
+
+
+    const isActionChecked = (action) => permissionsData.every(permission => permission[action]);
+
     const handleChange = useCallback(async (event) => {
         const { name, value } = event.target;
         setUserId((prevUserId) => ({
@@ -499,10 +487,10 @@ const usePermission = () => {
         }
 
         const permissions = checkPagePermission();
-
+        // console.log("kkkk ", permissions.read && permissions.new && permissions.modify)
         if (permissions.read && permissions.new && permissions.modify) {
             try {
-                await axios.post(`${APIURL}/save-permi`, {
+                await axios.post(`${APIURL}/save-permissions`, {
                     userId: userId.userid,
                     permissions: permissionsData,
                     page_name: permissionsData.name
@@ -522,7 +510,8 @@ const usePermission = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             const permissions = checkPagePermission();
-
+            // console.log("mmmmmmmm", permissions)
+            // console.log("mm2222", permissions.read && permissions.read)
             if (permissions.read && permissions.read) {
                 try {
                     const response = await axios.get(`${APIURL}/userdataid/${event.target.value}`);
@@ -587,7 +576,7 @@ const usePermission = () => {
         handleSavePermissions,
         handleCancel,
         permissionsData,
-        handlePermissionChange,
+        handlePermissionChange, handleHeaderCheckboxChange, isActionChecked
     };
 };
 

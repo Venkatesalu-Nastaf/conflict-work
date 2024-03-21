@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
+import { PermissionsContext } from "../../../permissionContext/permissionContext.js";
 import axios from "axios";
 import dayjs from "dayjs";
 import { VehicleModel } from "./BookingChart";
@@ -7,7 +8,7 @@ import { APIURL } from "../../../url.js";
 const useBookingchart = () => {
   const apiUrl = APIURL;
 
-  const user_id = localStorage.getItem("useridno");
+  // const user_id = localStorage.getItem("useridno");
   const [fromDate, setFromDate] = useState(dayjs());
   const [toDate, setToDate] = useState(dayjs());
   const [error, setError] = useState(false);
@@ -20,26 +21,40 @@ const useBookingchart = () => {
   const [infoMessage] = useState({});
 
   // for page permission
+  // const currentPageName = "Booking";
 
-  const [userPermissions, setUserPermissions] = useState({});
+  //--------------------------------------
+
+  const [userPermissionss, setUserPermissions] = useState({});
+
+  const { userPermissions } = useContext(PermissionsContext);
+  // console.log("ratetype ", userPermissions)
+
+  //----------------------------------------
 
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
         const currentPageName = "Booking";
-        const response = await axios.get(
-          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-        );
-        setUserPermissions(response.data);
-      } catch {}
-    };
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
 
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
+
+      } catch {
+      }
+    };
     fetchPermissions();
-  }, [user_id,apiUrl]);
+  }, [userPermissions]);
+
+  //---------------------------------------
 
   const checkPagePermission = () => {
     const currentPageName = "Booking";
-    const permissions = userPermissions || {};
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -49,7 +64,6 @@ const useBookingchart = () => {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -57,6 +71,9 @@ const useBookingchart = () => {
       delete: false,
     };
   };
+
+
+  //------------------------------
 
   const permissions = checkPagePermission();
 

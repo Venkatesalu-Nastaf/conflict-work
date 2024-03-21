@@ -109,7 +109,7 @@ const useUserinfo = () => {
                 .then(res => {
                     if (res.status === 200) {
                         setSelectedImage(res.data[0]?.filename);
-                        console.log("image fetch name :", res.data[0]?.filename)
+                        // console.log("image fetch name :", res.data[0]?.filename)
                     } else {
                         const timer = setTimeout(handleImageView, 100);
                         return () => clearTimeout(timer);

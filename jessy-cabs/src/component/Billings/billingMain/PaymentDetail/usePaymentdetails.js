@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
+import { PermissionsContext } from "../../../permissionContext/permissionContext";
 import axios from "axios";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
@@ -19,7 +20,7 @@ const columns = [
 
 const usePaymentdetails = () => {
   const apiUrl = APIURL;
-  const user_id = localStorage.getItem("useridno");
+  // const user_id = localStorage.getItem("useridno");
 
   // const [tableData, setTableData] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -42,25 +43,38 @@ const usePaymentdetails = () => {
 
   // for page permission
 
-  const [userPermissions, setUserPermissions] = useState({});
+  //--------------------------------------
+
+  const [userPermissionss, setUserPermissions] = useState({});
+
+  const { userPermissions } = useContext(PermissionsContext);
+  // console.log("ratetype ", userPermissions)
+
+  //----------------------------------------
 
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
         const currentPageName = "Payments";
-        const response = await axios.get(
-          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-        );
-        setUserPermissions(response.data);
-      } catch {}
-    };
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
 
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
+
+      } catch {
+      }
+    };
     fetchPermissions();
-  }, [user_id,apiUrl]);
+  }, [userPermissions]);
+
+  //---------------------------------------
 
   const checkPagePermission = () => {
     const currentPageName = "Payments";
-    const permissions = userPermissions || {};
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -70,7 +84,6 @@ const usePaymentdetails = () => {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -78,6 +91,9 @@ const usePaymentdetails = () => {
       delete: false,
     };
   };
+
+
+  //------------------------------
 
   const permissions = checkPagePermission();
 
@@ -211,7 +227,7 @@ const usePaymentdetails = () => {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
-  }, [billingno, customer, fromDate, toDate,apiUrl]);
+  }, [billingno, customer, fromDate, toDate, apiUrl]);
 
   useEffect(() => {
     Organization()
@@ -269,57 +285,32 @@ const usePaymentdetails = () => {
   }, [rows]);
 
   const handleButtonClickTripsheet = (selectedRow) => {
-    const billingPageUrl = `/home/billing/billing?tripid=${
-      selectedRow.tripid || ""
-    }&billingno=${selectedRow.billingno || ""}&Billingdate=${
-      selectedRow.Billingdate || ""
-    }&totalkm1=${selectedRow.totalkm1 || ""}&totaltime=${
-      selectedRow.totaltime || ""
-    }&customer=${selectedRow.customer || ""}&supplier=${
-      selectedRow.supplier || ""
-    }&startdate=${selectedRow.startdate || ""}&totaldays=${
-      selectedRow.totaldays || ""
-    }&guestname=${selectedRow.guestname || ""}&rateType=${
-      selectedRow.rateType || ""
-    }&vehRegNo=${selectedRow.vehRegNo || ""}&vehType=${
-      selectedRow.vehType || ""
-    }&duty=${selectedRow.duty || ""}&MinCharges=${
-      selectedRow.MinCharges || ""
-    }&minchargeamount=${selectedRow.minchargeamount || ""}&ChargesForExtra=${
-      selectedRow.ChargesForExtra || ""
-    }&ChargesForExtraamount=${
-      selectedRow.ChargesForExtraamount || ""
-    }&cfeamount=${selectedRow.cfeamount || ""}&ChargesForExtraHRS=${
-      selectedRow.ChargesForExtraHRS || ""
-    }&ChargesForExtraHRSamount=${
-      selectedRow.ChargesForExtraHRSamount || ""
-    }&cfehamount=${selectedRow.cfehamount || ""}&NightHalt=${
-      selectedRow.NightHalt || ""
-    }&NightHaltamount=${selectedRow.NightHaltamount || ""}&nhamount=${
-      selectedRow.nhamount || ""
-    }&driverbata=${selectedRow.driverbata || ""}&driverbataamount=${
-      selectedRow.driverbataamount || ""
-    }&dbamount=${selectedRow.dbamount || ""}&OtherCharges=${
-      selectedRow.OtherCharges || ""
-    }&OtherChargesamount=${
-      selectedRow.OtherChargesamount || ""
-    }&permitothertax=${selectedRow.permitothertax || ""}&parkingtollcharges=${
-      selectedRow.parkingtollcharges || ""
-    }&MinKilometers=${selectedRow.MinKilometers || ""}&MinHours=${
-      selectedRow.MinHours || ""
-    }&GrossAmount=${selectedRow.GrossAmount || ""}&AfterTaxAmount=${
-      selectedRow.AfterTaxAmount || ""
-    }&DiscountAmount=${selectedRow.DiscountAmount || ""}&DiscountAmount2=${
-      selectedRow.DiscountAmount2 || ""
-    }&AdvanceReceived=${selectedRow.AdvanceReceived || ""}&RoundedOff=${
-      selectedRow.RoundedOff || ""
-    }&BalanceReceivable=${selectedRow.BalanceReceivable || ""}&NetAmount=${
-      selectedRow.NetAmount || ""
-    }&Totalamount=${selectedRow.Totalamount || ""}&paidamount=${
-      selectedRow.paidamount || ""
-    }&pendingamount=${selectedRow.pendingamount || ""}&BankAccount=${
-      selectedRow.BankAccount || ""
-    }`;
+    const billingPageUrl = `/home/billing/billing?tripid=${selectedRow.tripid || ""
+      }&billingno=${selectedRow.billingno || ""}&Billingdate=${selectedRow.Billingdate || ""
+      }&totalkm1=${selectedRow.totalkm1 || ""}&totaltime=${selectedRow.totaltime || ""
+      }&customer=${selectedRow.customer || ""}&supplier=${selectedRow.supplier || ""
+      }&startdate=${selectedRow.startdate || ""}&totaldays=${selectedRow.totaldays || ""
+      }&guestname=${selectedRow.guestname || ""}&rateType=${selectedRow.rateType || ""
+      }&vehRegNo=${selectedRow.vehRegNo || ""}&vehType=${selectedRow.vehType || ""
+      }&duty=${selectedRow.duty || ""}&MinCharges=${selectedRow.MinCharges || ""
+      }&minchargeamount=${selectedRow.minchargeamount || ""}&ChargesForExtra=${selectedRow.ChargesForExtra || ""
+      }&ChargesForExtraamount=${selectedRow.ChargesForExtraamount || ""
+      }&cfeamount=${selectedRow.cfeamount || ""}&ChargesForExtraHRS=${selectedRow.ChargesForExtraHRS || ""
+      }&ChargesForExtraHRSamount=${selectedRow.ChargesForExtraHRSamount || ""
+      }&cfehamount=${selectedRow.cfehamount || ""}&NightHalt=${selectedRow.NightHalt || ""
+      }&NightHaltamount=${selectedRow.NightHaltamount || ""}&nhamount=${selectedRow.nhamount || ""
+      }&driverbata=${selectedRow.driverbata || ""}&driverbataamount=${selectedRow.driverbataamount || ""
+      }&dbamount=${selectedRow.dbamount || ""}&OtherCharges=${selectedRow.OtherCharges || ""
+      }&OtherChargesamount=${selectedRow.OtherChargesamount || ""
+      }&permitothertax=${selectedRow.permitothertax || ""}&parkingtollcharges=${selectedRow.parkingtollcharges || ""
+      }&MinKilometers=${selectedRow.MinKilometers || ""}&MinHours=${selectedRow.MinHours || ""
+      }&GrossAmount=${selectedRow.GrossAmount || ""}&AfterTaxAmount=${selectedRow.AfterTaxAmount || ""
+      }&DiscountAmount=${selectedRow.DiscountAmount || ""}&DiscountAmount2=${selectedRow.DiscountAmount2 || ""
+      }&AdvanceReceived=${selectedRow.AdvanceReceived || ""}&RoundedOff=${selectedRow.RoundedOff || ""
+      }&BalanceReceivable=${selectedRow.BalanceReceivable || ""}&NetAmount=${selectedRow.NetAmount || ""
+      }&Totalamount=${selectedRow.Totalamount || ""}&paidamount=${selectedRow.paidamount || ""
+      }&pendingamount=${selectedRow.pendingamount || ""}&BankAccount=${selectedRow.BankAccount || ""
+      }`;
     window.location.href = billingPageUrl;
   };
 

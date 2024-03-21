@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
+import { PermissionsContext } from "../../../permissionContext/permissionContext";
 import axios from "axios";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
@@ -8,7 +9,7 @@ import { APIURL } from "../../../url";
 
 const useTransferlist = () => {
   const apiUrl = APIURL;
-  const user_id = localStorage.getItem("useridno");
+  // const user_id = localStorage.getItem("useridno");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [rows, setRows] = useState([]);
   const [error, setError] = useState(false);
@@ -25,25 +26,38 @@ const useTransferlist = () => {
 
   // for page permission
 
-  const [userPermissions, setUserPermissions] = useState({});
+  //--------------------------------------
+
+  const [userPermissionss, setUserPermissions] = useState({});
+
+  const { userPermissions } = useContext(PermissionsContext);
+  // console.log("ratetype ", userPermissions)
+
+  //----------------------------------------
 
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
-        const currentPageName = "CB Billing";
-        const response = await axios.get(
-          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-        );
-        setUserPermissions(response.data);
-      } catch {}
-    };
+        const currentPageName = 'CB Billing';
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
 
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
+
+      } catch {
+      }
+    };
     fetchPermissions();
-  }, [user_id,apiUrl]);
+  }, [userPermissions]);
+
+  //---------------------------------------
 
   const checkPagePermission = () => {
     const currentPageName = "CB Billing";
-    const permissions = userPermissions || {};
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -53,7 +67,6 @@ const useTransferlist = () => {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -62,10 +75,12 @@ const useTransferlist = () => {
     };
   };
 
-  const permissions = checkPagePermission();
+  //------------------------------
 
+  const permissions = checkPagePermission();
   // Function to determine if a field should be read-only based on permissions
   const isFieldReadOnly = (fieldName) => {
+
     if (permissions.read) {
       // If user has read permission, check for other specific permissions
       if (fieldName === "delete" && !permissions.delete) {
@@ -171,7 +186,7 @@ const useTransferlist = () => {
         } else {
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const handleShow = useCallback(async () => {
@@ -205,7 +220,7 @@ const useTransferlist = () => {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
-  }, [customer, fromDate, toDate, servicestation,apiUrl]);
+  }, [customer, fromDate, toDate, servicestation, apiUrl]);
 
   const columns = [
     { field: "id", headerName: "Sno", width: 70 },

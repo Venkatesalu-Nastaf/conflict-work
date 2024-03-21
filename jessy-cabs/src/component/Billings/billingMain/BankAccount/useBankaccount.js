@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 
 const useBankaccount = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
 
     const [showAddBankForm, setShowAddBankForm] = useState(false);
     const [totalcapital, setTotalCapital] = useState(0);
@@ -23,26 +24,41 @@ const useBankaccount = () => {
     const [warning, setWarning] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
 
+
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
+
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("ratetype ", userPermissions)
+
+    //----------------------------------------
 
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Payments';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
             } catch {
             }
         };
-
         fetchPermissions();
-    }, [user_id, apiUrl]);
+    }, [userPermissions]);
+
+    //---------------------------------------
 
     const checkPagePermission = () => {
         const currentPageName = 'Payments';
-        const permissions = userPermissions || {};
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -52,7 +68,6 @@ const useBankaccount = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -61,6 +76,8 @@ const useBankaccount = () => {
         };
     };
 
+
+    //------------------------------
     const permissions = checkPagePermission();
 
     // Function to determine if a field should be read-only based on permissions

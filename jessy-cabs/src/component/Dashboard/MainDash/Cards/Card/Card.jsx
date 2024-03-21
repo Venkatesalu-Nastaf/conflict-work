@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import React, { useState, useContext, useEffect } from "react";
+import { PermissionsContext } from "../../../../permissionContext/permissionContext";
+// import axios from 'axios';
 import "./Card.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import { MdCancel } from "@react-icons/all-files/md/MdCancel";
 import Chart from "react-apexcharts";
-import { APIURL } from "../../../../url";
+// import { APIURL } from "../../../../url";
 
 // parent Card
-const apiUrl = APIURL;
+// const apiUrl = APIURL;
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
   return (
@@ -27,26 +28,42 @@ const Card = (props) => {
 
 function CompactCard({ param, setExpanded }) {
 
-  const user_id = localStorage.getItem('useridno');
+  // const user_id = localStorage.getItem('useridno');
 
-  const [userPermissions, setUserPermissions] = useState({});
+  //permission  const currentPageName = 'Dashboard page';
+
+  //--------------------------------------
+
+  const [userPermissionss, setUserPermissions] = useState({});
+
+  const { userPermissions } = useContext(PermissionsContext);
+  // console.log("ratetype ", userPermissions)
+
+  //----------------------------------------
 
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
         const currentPageName = 'Dashboard page';
-        const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-        setUserPermissions(response.data);
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
+
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
+
       } catch {
       }
     };
-
     fetchPermissions();
-  }, [user_id]);
+  }, [userPermissions]);
+
+  //---------------------------------------
 
   const checkPagePermission = () => {
     const currentPageName = 'Dashboard page';
-    const permissions = userPermissions || {};
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -56,7 +73,6 @@ function CompactCard({ param, setExpanded }) {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -64,6 +80,9 @@ function CompactCard({ param, setExpanded }) {
       delete: false,
     };
   };
+
+
+  //------------------------------
 
   const permissions = checkPagePermission();
 

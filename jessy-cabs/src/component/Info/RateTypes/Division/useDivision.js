@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 
 const useDivision = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -21,24 +22,41 @@ const useDivision = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
+
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("ratetype ", userPermissions)
+
+    //----------------------------------------
 
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Rate Type';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
             } catch {
             }
         };
-
         fetchPermissions();
-    }, [user_id,apiUrl]);
+    }, [userPermissions]);
+
+    //---------------------------------------
+
 
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';
-        const permissions = userPermissions || {};
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
+
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -54,6 +72,8 @@ const useDivision = () => {
             delete: false,
         };
     };
+
+
 
     const permissions = checkPagePermission();
 
@@ -234,7 +254,7 @@ const useDivision = () => {
         }
 
         handlelist();
-    }, [permissions,apiUrl]);
+    }, [permissions, apiUrl]);
 
     const handleClick = async (event, actionName, driverid) => {
         event.preventDefault();

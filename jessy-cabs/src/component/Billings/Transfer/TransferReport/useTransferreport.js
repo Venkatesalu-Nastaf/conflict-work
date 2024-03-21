@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { PermissionsContext } from "../../../permissionContext/permissionContext";
 import dayjs from "dayjs";
-import axios from "axios";
+// import axios from "axios";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
@@ -8,7 +9,7 @@ import { APIURL } from "../../../url";
 
 const useTransferreport = () => {
   const apiUrl = APIURL;
-  const user_id = localStorage.getItem("useridno");
+  // const user_id = localStorage.getItem("useridno");
   const [pbpopupOpen, setpbPopupOpen] = useState(false);
   const [npopupOpen, setnPopupOpen] = useState(false);
   const [lxpopupOpen, setlxPopupOpen] = useState(false);
@@ -29,25 +30,38 @@ const useTransferreport = () => {
 
   // for page permission
 
-  const [userPermissions, setUserPermissions] = useState({});
+  //--------------------------------------
+
+  const [userPermissionss, setUserPermissions] = useState({});
+
+  const { userPermissions } = useContext(PermissionsContext);
+  // console.log("ratetype ", userPermissions)
+
+  //----------------------------------------
 
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
-        const currentPageName = "CB Billing";
-        const response = await axios.get(
-          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-        );
-        setUserPermissions(response.data);
-      } catch (error) {}
-    };
+        const currentPageName = 'CB Billing';
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
 
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
+
+      } catch {
+      }
+    };
     fetchPermissions();
-  }, [user_id, apiUrl]);
+  }, [userPermissions]);
+
+  //---------------------------------------
 
   const checkPagePermission = () => {
     const currentPageName = "CB Billing";
-    const permissions = userPermissions || {};
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -57,7 +71,6 @@ const useTransferreport = () => {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -65,6 +78,9 @@ const useTransferreport = () => {
       delete: false,
     };
   };
+
+
+  //------------------------------
 
   const permissions = checkPagePermission();
 
@@ -241,7 +257,7 @@ const useTransferreport = () => {
           setRows(tripsheetNumbers);
         } else {
         }
-      } catch {}
+      } catch { }
     };
     fetchData();
   }, [apiUrl]);
@@ -300,7 +316,7 @@ const useTransferreport = () => {
             setSumTotalAndRounded(sumTotalAndRounded);
           } else {
           }
-        } catch {}
+        } catch { }
       }
     };
     fetchData();
@@ -319,7 +335,7 @@ const useTransferreport = () => {
         }
         const customerData = await response.json();
         setCustomerData(customerData);
-      } catch {}
+      } catch { }
     };
     fetchData();
   }, [apiUrl]);
@@ -338,7 +354,7 @@ const useTransferreport = () => {
         } else {
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const [routedData, setRoutedData] = useState("");
@@ -373,7 +389,7 @@ const useTransferreport = () => {
           const routedData = await response.json();
           setRoutedData(routedData);
         }
-      } catch {}
+      } catch { }
     };
 
     fetchData4();
@@ -399,7 +415,7 @@ const useTransferreport = () => {
           (path) => `${apiUrl}/images/${path}`
         );
         setAttachedImage(attachedImageUrls);
-      } catch {}
+      } catch { }
     };
     fetchData();
   }, [apiUrl]);
@@ -430,7 +446,7 @@ const useTransferreport = () => {
           const timer = setTimeout(fetchData, 2000);
           return () => clearTimeout(timer);
         }
-      } catch {}
+      } catch { }
     };
     fetchData();
   }, [apiUrl]);
@@ -456,7 +472,7 @@ const useTransferreport = () => {
           const timer = setTimeout(fetchData, 2000);
           return () => clearTimeout(timer);
         }
-      } catch {}
+      } catch { }
     };
 
     fetchData();

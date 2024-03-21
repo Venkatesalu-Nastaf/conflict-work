@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import dayjs from "dayjs";
 import { APIURL } from "../../../url";
@@ -20,7 +21,7 @@ const columns = [
 
 const useTaxsettings = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -36,25 +37,42 @@ const useTaxsettings = () => {
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
 
+
+
     // for page permission
-    const [userPermissions, setUserPermissions] = useState({});
+
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
+
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("ratetype ", userPermissions)
+
+    //----------------------------------------
 
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Tax settings';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
             } catch {
             }
         };
-
         fetchPermissions();
-    }, [user_id,apiUrl]);
+    }, [userPermissions]);
+
+    //---------------------------------------
 
     const checkPagePermission = () => {
         const currentPageName = 'Tax settings';
-        const permissions = userPermissions || {};
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -64,7 +82,6 @@ const useTaxsettings = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -73,6 +90,8 @@ const useTaxsettings = () => {
         };
     };
 
+
+    //------------------------------
     const permissions = checkPagePermission();
 
     const isFieldReadOnly = (fieldName) => {
@@ -273,7 +292,7 @@ const useTaxsettings = () => {
         }
 
         handlelist();
-    }, [permissions,apiUrl]);
+    }, [permissions, apiUrl]);
 
     const handleClick = async (event, actionName, STax) => {
         event.preventDefault();

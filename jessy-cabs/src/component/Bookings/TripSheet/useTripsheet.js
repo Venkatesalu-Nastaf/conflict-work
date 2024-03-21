@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../permissionContext/permissionContext';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -10,7 +11,7 @@ import { APIURL } from "../../url";
 const useTripsheet = () => {
     const apiUrl = APIURL;
 
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
@@ -47,32 +48,47 @@ const useTripsheet = () => {
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    {/* venkat */}
 
-    const [tripiddata,setTripiddata] = useState("");
-    const [sign,setSign] = useState(false)
-{/* venkat */}
 
-    // for page permission
+    const [tripiddata, setTripiddata] = useState("");
+    const [sign, setSign] = useState(false)
 
-    const [userPermissions, setUserPermissions] = useState({});
+
+    // for page permission   const currentPageName = 'Trip Sheet';
+
+
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
+
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("ratetype ", userPermissions)
+
+    //----------------------------------------
 
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Trip Sheet';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
             } catch {
             }
         };
-
         fetchPermissions();
-    }, [user_id ,apiUrl]);
+    }, [userPermissions]);
+
+    //---------------------------------------
 
     const checkPagePermission = () => {
         const currentPageName = 'Trip Sheet';
-        const permissions = userPermissions || {};
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -82,7 +98,6 @@ const useTripsheet = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -91,9 +106,11 @@ const useTripsheet = () => {
         };
     };
 
-    const permissions = checkPagePermission();
+
+    //------------------------------
 
     const isFieldReadOnly = (fieldName) => {
+        const permissions = checkPagePermission();
         if (permissions.read) {
             if (fieldName === "delete" && !permissions.delete) {
                 return true;
@@ -156,18 +173,18 @@ const useTripsheet = () => {
         } catch {
         }
     };
-{/* venkat */}
 
-    const SignPage = (event)=>{
+
+    const SignPage = (event) => {
         event.preventDefault();
-    
-        navigator.clipboard.writeText(link); 
+
+        navigator.clipboard.writeText(link);
         setSign(true)
-        setTimeout(()=>{
-             setSign(false)
-        },2000)
-       }
-{/* venkat */}
+        setTimeout(() => {
+            setSign(false)
+        }, 2000)
+    }
+
 
     const handlePopupClose = () => {
         setPopupOpen(false);
@@ -609,7 +626,7 @@ const useTripsheet = () => {
         setIsEditMode(false);
     };
 
-    {/* venkat */}
+
 
     const handleETripsheetClick = (row) => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
@@ -625,7 +642,7 @@ const useTripsheet = () => {
             setPopupOpen(true);
         }
     };
-    {/* venkat */}
+
 
 
     const handleDelete = async () => {
@@ -1221,7 +1238,7 @@ const useTripsheet = () => {
             setEnterPressCount(0);
         }
 
-    }, [handleChange, rows, enterPressCount,apiUrl]);
+    }, [handleChange, rows, enterPressCount, apiUrl]);
 
     const handleRowClick = useCallback((params) => {
         setSelectedCustomerDatas(params);
@@ -1255,7 +1272,7 @@ const useTripsheet = () => {
         packageData.duty, packageData.vehType, packageData.customer,
         selectedCustomerData.customer, selectedCustomerData.duty, selectedCustomerData.vehType,
         selectedCustomerDatas.customer, selectedCustomerDatas.duty, selectedCustomerDatas.vehType,
-        totalKilometers, totalTime,apiUrl
+        totalKilometers, totalTime, apiUrl
     ]);
 
     const [smsguest, setSmsGuest] = useState(false);
@@ -1357,43 +1374,43 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [apiUrl,tripiddata]);
+    }, [apiUrl, tripiddata]);
 
-    {/* venkat */}
+
 
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
-        setTripiddata(tripid);
+            setTripiddata(tripid);
 
             try {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
-                console.log(response,'resssss');
+                // console.log(response, 'resssss');
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
-                    console.log(imageUrl,'imgggggg');
+                    // console.log(imageUrl, 'imgggggg');
                     setSignImageUrl(imageUrl);
                 }
-                
-                else{
+
+                else {
                     fetchData()
                     const timer = setTimeout(fetchData, 500);
                     setSignImageUrl("");
                     return () => clearTimeout(timer);
                 }
-            } catch(err) {
-                console.log(err,'error');
+            } catch (err) {
+                console.log(err, 'error');
             }
         };
         fetchData();
         return () => {
         };
-    }, [apiUrl,tripiddata]);
-{/* venkat */}
+    }, [apiUrl, tripiddata]);
+
 
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
+            // const tripid = localStorage.getItem('selectedTripid');
 
             try {
                 const tripid = localStorage.getItem('selectedTripid');
@@ -1416,7 +1433,7 @@ const useTripsheet = () => {
             }
         };
         fetchData();
-    }, [apiUrl,tripiddata]);
+    }, [apiUrl, tripiddata]);
 
     useEffect(() => {
         const fetchData = async () => {

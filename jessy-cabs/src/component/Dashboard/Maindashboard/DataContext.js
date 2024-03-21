@@ -9,9 +9,10 @@ export const useData = () => {
 
 export const DataProvider = ({ children }) => {
     const [sharedData, setSharedData] = useState('');
+    const [organizationName, setOrganizationName] = useState([])
 
     return (
-        <DataContext.Provider value={{ sharedData, setSharedData }}>
+        <DataContext.Provider value={{ sharedData, setSharedData, organizationName, setOrganizationName }}>
             {children}
         </DataContext.Provider>
     );

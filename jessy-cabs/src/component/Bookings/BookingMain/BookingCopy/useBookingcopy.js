@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
+import { PermissionsContext } from "../../../permissionContext/permissionContext";
 import axios from "axios";
 import dayjs from "dayjs";
 import { APIURL } from "../../../url";
@@ -21,7 +22,7 @@ const columns = [
 
 const useBookingcopy = () => {
   const apiUrl = APIURL;
-  const user_id = localStorage.getItem("useridno");
+  // const user_id = localStorage.getItem("useridno");
   const [rows, setRows] = useState([]);
   const [bookingno, setBookingNo] = useState("");
   const [fromDate, setFromDate] = useState(dayjs());
@@ -35,27 +36,42 @@ const useBookingcopy = () => {
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
 
-  // for page permission
+  // for page permission   const currentPageName = "Booking";
 
-  const [userPermissions, setUserPermissions] = useState({});
+
+
+  //--------------------------------------
+
+  const [userPermissionss, setUserPermissions] = useState({});
+
+  const { userPermissions } = useContext(PermissionsContext);
+  // console.log("ratetype ", userPermissions)
+
+  //----------------------------------------
 
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
         const currentPageName = "Booking";
-        const response = await axios.get(
-          `${apiUrl}/user-permissions/${user_id}/${currentPageName}`
-        );
-        setUserPermissions(response.data);
-      } catch {}
-    };
+        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+        // setPermi(response.data);
 
+        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+        // console.log("org ", permissions)
+        setUserPermissions(permissions);
+
+      } catch {
+      }
+    };
     fetchPermissions();
-  }, [user_id, apiUrl]);
+  }, [userPermissions]);
+
+  //---------------------------------------
 
   const checkPagePermission = () => {
     const currentPageName = "Booking";
-    const permissions = userPermissions || {};
+    const permissions = userPermissionss || {};
+    // console.log('aaaaaaaa', permissions)
 
     if (permissions.page_name === currentPageName) {
       return {
@@ -65,7 +81,6 @@ const useBookingcopy = () => {
         delete: permissions.delete_permission === 1,
       };
     }
-
     return {
       read: false,
       new: false,
@@ -73,6 +88,9 @@ const useBookingcopy = () => {
       delete: false,
     };
   };
+
+
+  //------------------------------
 
   const permissions = checkPagePermission();
 
@@ -93,39 +111,15 @@ const useBookingcopy = () => {
     setInfo(false);
     setWarning(false);
   };
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [error]);
 
   useEffect(() => {
-    if (success) {
+    if (error || warning || success || info) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [success]);
-  useEffect(() => {
-    if (warning) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [warning]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [info]);
+  }, [error, warning, success, info]);
 
   const handleInputChange = (event) => {
     setBookingNo(event.target.value);

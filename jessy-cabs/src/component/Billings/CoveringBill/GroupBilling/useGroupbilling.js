@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import dayjs from "dayjs";
 import ReactDOMServer from 'react-dom/server';
@@ -31,7 +32,7 @@ const columns = [
 
 const useGroupbilling = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
     const [tripData, setTripData] = useState("");
@@ -54,24 +55,38 @@ const useGroupbilling = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
+
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("ratetype ", userPermissions)
+
+    //----------------------------------------
 
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'CB Billing';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
             } catch {
             }
         };
-
         fetchPermissions();
-    }, [user_id,apiUrl]);
+    }, [userPermissions]);
+
+    //---------------------------------------
 
     const checkPagePermission = () => {
         const currentPageName = 'CB Billing';
-        const permissions = userPermissions || {};
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -81,7 +96,6 @@ const useGroupbilling = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -90,10 +104,13 @@ const useGroupbilling = () => {
         };
     };
 
+
+    //------------------------------
     const permissions = checkPagePermission();
 
     // Function to determine if a field should be read-only based on permissions
     const isFieldReadOnly = (fieldName) => {
+        // const permissions = checkPagePermission();
         if (permissions.read) {
             // If user has read permission, check for other specific permissions
             if (fieldName === "delete" && !permissions.delete) {
@@ -236,7 +253,7 @@ const useGroupbilling = () => {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum,apiUrl]);
+    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum, apiUrl]);
 
 
     const convertToCSV = (data) => {
@@ -288,7 +305,7 @@ const useGroupbilling = () => {
             }
         }
 
-    }, [invoiceno, book, selectedCustomerDatas,apiUrl]);
+    }, [invoiceno, book, selectedCustomerDatas, apiUrl]);
 
     return {
         rows,

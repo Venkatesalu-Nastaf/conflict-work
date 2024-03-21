@@ -27,6 +27,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 import usePackagerateentry from './usePackagerateentry.js';
+import { useData } from '../../../Dashboard/Maindashboard/DataContext.js';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -74,6 +75,8 @@ const PackageRateEntery = () => {
     isEditMode,
     handleEdit,
   } = usePackagerateentry();
+
+  const { organizationName } = useData()
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -123,13 +126,14 @@ const PackageRateEntery = () => {
                     sx={{ width: "20ch" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "pricetag")}
                     value={PriceTag.find((option) => option.optionvalue)?.label || selectedCustomerData?.pricetag || ''}
-                    options={PriceTag.map((option) => ({
-                      label: option.option,
-                    }))}
+                    // options={PriceTag.map((option) => ({
+                    //   label: option.option,
+                    // }))}
+                    options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
                     getOptionLabel={(option) => option.label || selectedCustomerData?.pricetag || ''}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="PriceTag" name="pricetag" inputRef={params.inputRef} />
+                        <TextField {...params} label="Organization Name" name="pricetag" inputRef={params.inputRef} />
                       )
                     }
                     }

@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { PermissionsContext } from '../../../permissionContext/permissionContext';
 import axios from 'axios';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
@@ -8,7 +9,7 @@ import { APIURL } from "../../../url";
 
 const useVehicleinfo = () => {
     const apiUrl = APIURL;
-    const user_id = localStorage.getItem('useridno');
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [actionName] = useState('');
@@ -118,24 +119,39 @@ const useVehicleinfo = () => {
 
     // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
+
+    //--------------------------------------
+
+    const [userPermissionss, setUserPermissions] = useState({});
+
+    const { userPermissions } = useContext(PermissionsContext);
+    // console.log("ratetype ", userPermissions)
+
+    //----------------------------------------
 
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Supplier Master';
-                const response = await axios.get(`${apiUrl}/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
+                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
+                // setPermi(response.data);
+
+                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
+                // console.log("org ", permissions)
+                setUserPermissions(permissions);
+
             } catch {
             }
         };
-
         fetchPermissions();
-    }, [user_id, apiUrl]);
+    }, [userPermissions]);
+
+    //---------------------------------------
 
     const checkPagePermission = () => {
         const currentPageName = 'Supplier Master';
-        const permissions = userPermissions || {};
+        const permissions = userPermissionss || {};
+        // console.log('aaaaaaaa', permissions)
 
         if (permissions.page_name === currentPageName) {
             return {
@@ -145,7 +161,6 @@ const useVehicleinfo = () => {
                 delete: permissions.delete_permission === 1,
             };
         }
-
         return {
             read: false,
             new: false,
@@ -153,6 +168,9 @@ const useVehicleinfo = () => {
             delete: false,
         };
     };
+
+
+    //------------------------------
 
     const permissions = checkPagePermission();
 
@@ -182,12 +200,105 @@ const useVehicleinfo = () => {
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
         saveAs(blob, "VehicleStatement Reports.csv");
     };
+    // const handlePdfDownload = () => {
+    //     console.log(rows,'rrrrrr');
+    //     const pdf = new jsPDF('Landscape');
+    //     pdf.setFontSize(12);
+    //     pdf.setFont('helvetica', 'normal');
+    //     pdf.text("VehicleStatement Reports", 10, 10);
+    // pdf.save("VehicleStatementReports.pdf");
+
+    // }
+
+
     const handlePdfDownload = () => {
-        const pdf = new jsPDF('Landscape');
-        pdf.setFontSize(12);
-        pdf.setFont('helvetica', 'normal');
-        pdf.text("VehicleStatement Reports", 10, 10);
-    }
+        const pdf = new jsPDF('p', 'pt', 'letter');
+        pdf.setFontSize(16); // Increase font size for the title
+        const title = "Vehicle Statement Reports";
+        const titleWidth = pdf.getStringUnitWidth(title) * 16; // Calculate title width
+        const centerX = (pdf.internal.pageSize.width - titleWidth) / 2; // Calculate center position for title
+        pdf.text(title, centerX, 40); // Center the title
+        pdf.setFontSize(12); // Reset font size for the data
+
+        // Define the starting position for the data
+        let yPos = 70;
+        const labelWidth = 200; // Adjust as needed
+        const valueWidth = 300; // Adjust as needed
+        const lineHeight = 20; // Adjust as needed
+        let totalPages = 1; // Initial number of pages
+
+        // Iterate through the data and print labels and values
+        rows.forEach((rowData) => {
+            // Check if the current row will fit on the current page
+            if (yPos + lineHeight > pdf.internal.pageSize.height - 40) {
+                // Add a new page if the row won't fit
+                pdf.addPage();
+                yPos = 70; // Reset yPos for the new page
+                totalPages++; // Increment total pages
+            }
+
+            // For each row, iterate through the properties of selectedCustomerData
+            Object.entries(selectedCustomerData).forEach(([label, value]) => {
+                // Skip if the label is 'id' or undefined value
+                if (label === 'id' || rowData[label] === undefined) return;
+
+                // Format label and value into a string
+                // const text = `${label}: ${rowData[label]}`;
+
+                // Check if the label is 'active'
+                if (label === 'active') {
+                    // Draw a line below the label 'active'
+                    pdf.setDrawColor(0); // Set border color to black
+                    pdf.setLineWidth(0.5); // Set border width
+                    pdf.line(40, yPos + 15, 40 + labelWidth + valueWidth, yPos + 15);// Draw line
+                }
+
+                // Check if the text exceeds the remaining space on the page
+                if (yPos + lineHeight > pdf.internal.pageSize.height - 40) {
+                    // Add a new page if the text exceeds the remaining space
+                    pdf.addPage();
+                    yPos = 70; // Reset yPos for the new page
+                    totalPages++; // Increment total pages
+                }
+
+                // Print label
+                pdf.text(label, 40, yPos);
+
+                // Print value next to the label
+                pdf.text(rowData[label], 40 + labelWidth, yPos);
+
+                // Move to the next line
+                yPos += lineHeight;
+            });
+
+            // Add some space between rows
+            yPos += lineHeight;
+        });
+
+        // Save the PDF file with the calculated number of pages
+        pdf.save(`VehicleStatementReports (${totalPages} pages).pdf`);
+    };
+
+
+
+
+    // const handlePdfDownload = () => {
+    //     // Convert Excel data to CSV format
+    //     const csvData = convertToCSV(rows);
+
+    //     // Generate PDF from CSV data
+    //     const pdf = new jsPDF('p', 'pt', 'letter');
+    //     pdf.setFontSize(12);
+    //     pdf.text("Vehicle Statement Reports", 40, 40);
+
+    //     // Parse CSV data to fit the details properly in the PDF
+    //     const splitText = pdf.splitTextToSize(csvData, 500);
+    //     pdf.text(splitText, 40, 60);
+
+    //     // Save the PDF file
+    //     pdf.save("VehicleStatementReports.pdf");
+    // };
+
     useEffect(() => {
         if (error) {
             const timer = setTimeout(() => {
@@ -487,7 +598,7 @@ const useVehicleinfo = () => {
 
 
     const handlecheckbox = (fileName) => {
-        console.log(fileName,';;;;;;');
+        console.log(fileName, ';;;;;;');
 
         if (deletefile.includes(fileName)) {
             setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
@@ -497,6 +608,79 @@ const useVehicleinfo = () => {
             // setCheckbox(prevDeleteFile => [...prevDeleteFile, fileName]);
         }
     };
+    const handleDocumentDownload = async () => {
+        try {
+            // Filter selected files
+            const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
+
+            // Download each file
+            for (const file of selectedFiles) {
+                const response = await axios.get(`${apiUrl}/public/vehicle_doc/` + file.fileName, {
+                    responseType: 'blob', // Important to get a binary response
+                });
+
+                // Convert image blob to base64 data URL
+                const reader = new FileReader();
+                reader.readAsDataURL(response.data);
+                reader.onloadend = () => {
+                    const imageDataUrl = reader.result;
+
+                    // Create PDF document
+                    const pdf = new jsPDF();
+                    const imgWidth = pdf.internal.pageSize.getWidth();
+                    const imgHeight = pdf.internal.pageSize.getHeight();
+                    pdf.addImage(imageDataUrl, 'JPEG', 0, 0, imgWidth, imgHeight);
+
+                    // Save PDF file
+                    pdf.save(file.fileName + '.pdf');
+                };
+            }
+        } catch (error) {
+            console.error('Error downloading files:', error);
+            // Handle error if needed
+        }
+    };
+    // in this code file save in downloads
+
+    // const handleDocumentDownload = async () => {
+    //     try {
+    //         // Filter selected files
+    //         const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
+
+    //         // Download each file
+    //         for (const file of selectedFiles) {
+    //             const response = await axios.get(`${apiUrl}/public/vehicle_doc/` + file.fileName, {
+    //                 responseType: 'blob', // Important to get a binary response
+    //             });
+
+    //             // Save the file to the downloads directory
+    //             saveAs(response.data, file.fileName);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error downloading files:', error);
+    //         // Handle error if needed
+    //     }
+    // };
+
+
+
+    // in this code browser print
+
+    // const handleDocumentDownload = () => {
+    //     // Filter selected files
+    //     const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
+
+    //     // Open each file URL in a new tab
+    //     selectedFiles.forEach((file, index) => {
+    //         const url = `${apiUrl}/public/vehicle_doc/${file.fileName}`;
+    //         console.log(url);
+    //         window.open(url, '_blank');
+
+
+    //     });
+    // };
+
+
 
     const handleEdit = async (vehicleId) => {
         try {
@@ -642,37 +826,37 @@ const useVehicleinfo = () => {
 
     const [imagedata, setImagedata] = useState(null);
 
-//     const handleimagedelete = (imageName) => {
-//         console.log(deletefile, 'fileeee');
+    //     const handleimagedelete = (imageName) => {
+    //         console.log(deletefile, 'fileeee');
 
-//         if (deletefile.length > 0) {
-//             setImagedata(prevDeleteFile => [...prevDeleteFile, imageName]);
+    //         if (deletefile.length > 0) {
+    //             setImagedata(prevDeleteFile => [...prevDeleteFile, imageName]);
 
-//             setDialogdeleteOpen(true);
-//             setDeleteFile([]);
-//         }
-// }
+    //             setDialogdeleteOpen(true);
+    //             setDeleteFile([]);
+    //         }
+    // }
 
 
-const handleimagedelete = (imageName) => {
-    console.log(deletefile, 'fileeee');
+    const handleimagedelete = (imageName) => {
+        console.log(deletefile, 'fileeee');
 
-    if (deletefile.length > 0) {
-        setImagedata(prevDeleteFile => {
-            if (!prevDeleteFile || !Array.isArray(prevDeleteFile)) {
-                return [imageName]; // Initialize as array if not already
-            }
-            return [...prevDeleteFile, imageName]; // Spread if already an array
-        });
+        if (deletefile.length > 0) {
+            setImagedata(prevDeleteFile => {
+                if (!prevDeleteFile || !Array.isArray(prevDeleteFile)) {
+                    return [imageName]; // Initialize as array if not already
+                }
+                return [...prevDeleteFile, imageName]; // Spread if already an array
+            });
 
-        setDialogdeleteOpen(true);
-        setDeleteFile([]);
-    }
-};
+            setDialogdeleteOpen(true);
+            setDeleteFile([]);
+        }
+    };
 
     const handleContextMenu = () => {
         try {
-            console.log(imagedata,'---------');
+            console.log(imagedata, '---------');
 
             axios.delete(`${apiUrl}/vehicle_documents/` + imagedata)
                 .then(() => {
@@ -742,7 +926,8 @@ const handleimagedelete = (imageName) => {
         setDeleteFile,
         setSelectAll,
         selectAll,
-        handleSelectAll
+        handleSelectAll,
+        handleDocumentDownload
     };
 };
 

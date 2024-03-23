@@ -42,7 +42,7 @@ const usePackagerateentry = () => {
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
-    const {setOrganizationName} = useData()
+    const { setOrganizationName } = useData()
     // for page permission
 
     //--------------------------------------
@@ -73,20 +73,36 @@ const usePackagerateentry = () => {
 
     //---------------------------------------
 
-        // Fetching the Customers Table for getting the customer details
-        useEffect(() => {
-            const organizationNames = async () => {
-                try {
-                    const response = await axios.get(`${apiUrl}/customers`);
-                    const organisationData = response.data;
-                    const names = organisationData.map(res => res.customer);
-                    setOrganizationName(names);
-                } catch (error) {
-                    console.error('Error fetching organization names:', error);
-                }
-            };
-            organizationNames();
-        }, [apiUrl,setOrganizationName])
+    // Fetching the Customers Table for getting the customer details
+    // useEffect(() => {
+    //     const organizationNames = async () => {
+    //         try {
+    //             const response = await axios.get(`${apiUrl}/customers`);
+    //             const organisationData = response.data;
+    //             const names = organisationData.map(res => res.customer);
+    //             setOrganizationName(names);
+    //         } catch (error) {
+    //             console.error('Error fetching organization names:', error);
+    //         }
+    //     };
+    //     organizationNames();
+    // }, [apiUrl,setOrganizationName])
+    useEffect(() => {
+        const fetchOrganizationnames = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/ratetype`);
+                console.log(response.data, "_____________________");
+                const data = response.data
+                const names = data.map(res => res.ratename)
+                setOrganizationName(names)
+
+            }
+            catch(error) {
+              console.log(error,"error");
+            }
+        };
+        fetchOrganizationnames()
+    }, [apiUrl, setOrganizationName])
 
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';

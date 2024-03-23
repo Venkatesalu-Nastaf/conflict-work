@@ -139,7 +139,7 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-                <div className="input">
+                {/* <div className="input">
                   <TextField
                     size="small"
                     id="id"
@@ -151,25 +151,8 @@ const PackageRateEntery = () => {
                     onChange={handleChange}
                     variant="standard"
                   />
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
-                  <div className="icone">
-                    <RateReviewIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="id"
-                    sx={{ width: "300px" }}
-                    label="Validity"
-                    name="Validity"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.Validity || book.Validity}
-                    onChange={handleChange}
-                    variant="standard"
-                  />
-                </div>
+                </div> */}
+
                 <div className="input" style={{ width: "300px" }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
@@ -194,6 +177,29 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
+
+                <div className="input" style={{ width: "300px" }}>
+                  <div className="icone">
+                    <RateReviewIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="id"
+                    sx={{ width: "300px" }}
+                    label="Validity"
+                    name="Validity"
+                    autoComplete="new-password"
+                    value={selectedCustomerData?.Validity || book.Validity}
+                    onChange={handleChange}
+                    variant="standard"
+                  />
+                </div>
+
+              </div>
+
+              <div className="input-field">
+
+
               </div>
             </div>
           </div>

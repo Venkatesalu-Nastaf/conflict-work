@@ -167,7 +167,7 @@ export default function BasicTable() {
                     key={trip.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">{trip.driverName}</TableCell>
+                    <TableCell component="th" scope="row">{trip.driverName ? trip.driverName : 'Not Assigned'}</TableCell>
                     <TableCell align="left">TS{trip.tripid}</TableCell>
                     {/* <TableCell align="left">{trip.startdate}</TableCell> */}
                     <TableCell align="left">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
@@ -185,7 +185,7 @@ export default function BasicTable() {
                         </DialogActions>
                       </div>
                       <DialogContent>
-                        <Tripdetails />
+                        {/*  <Tripdetails /> */}
                         {selectedTrip && <Tripdetails tripData={selectedTrip} />}
                       </DialogContent>
                     </Dialog>

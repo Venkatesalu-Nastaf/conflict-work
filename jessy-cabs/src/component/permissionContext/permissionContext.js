@@ -6,6 +6,8 @@ export const PermissionsContext = createContext();
 
 export const PermissionsProvider = ({ children }) => {
     const [userPermissions, setUserPermissions] = useState({});
+
+
     const user_id = localStorage.getItem('useridno');
     // console.log("user id", user_id)
 
@@ -17,12 +19,15 @@ export const PermissionsProvider = ({ children }) => {
                     const response = await axios.get(`${APIURL}/user-permissions/${user_id}`);
                     const permissionsData = response.data;
                     // console.log("per ", permissionsData)
+                    // console.log("permiss ", permissionsData.page_name)
+
                     setUserPermissions(permissionsData);
                 }
             } catch (error) {
                 console.error("Error fetching permissions:", error);
             }
         };
+
 
         fetchPermissions();
     }, [user_id]);

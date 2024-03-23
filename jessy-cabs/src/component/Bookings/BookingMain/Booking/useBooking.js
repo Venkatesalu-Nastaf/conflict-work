@@ -89,6 +89,7 @@ const useBooking = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupOpenmail, setpopupOpenmail] = useState(false);
+  const [edit,setEdit] = useState(false)
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -639,12 +640,10 @@ const useBooking = () => {
   //--------------------------------------------------------------
 
   const [lastBookingNo, setLastBookingNo] = useState("");
-
   const handleAdd = async () => {
     // const permissions = checkPagePermission();
-
     if (permissions.read && permissions.new) {
-      const customer = book.customer;
+      const customer = book.status;
       if (!customer) {
         setError(true);
         setErrorMessage("fill mantatory fields");
@@ -680,6 +679,7 @@ const useBooking = () => {
         setSuccessMessage("Successfully Added");
         handlecheck();
         handleSendSMS();
+        setEdit(false)
       } catch (error) {
         console.error("An error occurred:", error);
         setError(true);
@@ -735,6 +735,7 @@ const useBooking = () => {
           }`,
           updatedCustomer
         );
+        setEdit(false)
         handleCancel();
         addPdf();
         setRow([]);
@@ -869,7 +870,7 @@ const useBooking = () => {
     { icon: <DeleteIcon />, name: "Delete" },
     { icon: <ModeEditIcon />, name: "Modify" },
     { icon: <ContentCopyIcon />, name: "Copy This" },
-    { icon: <BookmarkAddedIcon />, name: "Add" },
+    edit ? "" : { icon: <BookmarkAddedIcon />, name: "Add" }
   ];
 
   const handleKeyDown = useCallback(async (event) => {
@@ -945,6 +946,7 @@ const useBooking = () => {
   );
 
   const handletableClick = useCallback((params) => {
+    setEdit(true)
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
@@ -1284,6 +1286,8 @@ const useBooking = () => {
     setErrorMessage,
     setError,
     handleenterSearch,
+    edit,
+    setEdit
   };
 };
 

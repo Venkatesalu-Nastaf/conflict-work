@@ -14,8 +14,8 @@ const columns = [
     { field: "driverid", headerName: "Driver ID", width: 130 },
     { field: "ratename", headerName: "Rate Type", width: 130 },
     { field: "active", headerName: "Active", width: 130 },
-    { field: "starttime", headerName: "Start Time", width: 130 },
-    { field: "closetime", headerName: "Close Time", width: 130 },
+    { field: "starttime", headerName: "Start Date", width: 130 },
+    { field: "closetime", headerName: "Close Date", width: 130 },
 ];
 
 const useRatype = () => {

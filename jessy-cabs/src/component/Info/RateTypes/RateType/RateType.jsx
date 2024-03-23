@@ -137,7 +137,7 @@ const RateType = () => {
                                         }
                                     />
                                 </div>
-                                <div className="input">
+                                <div className="input" style={{width:250}}>
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>

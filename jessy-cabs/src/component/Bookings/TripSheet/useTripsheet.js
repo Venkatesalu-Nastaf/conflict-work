@@ -9,10 +9,12 @@ import {
 import { APIURL } from "../../url";
 
 const useTripsheet = () => {
+
+    // console.log("this ic check")
     const apiUrl = APIURL;
 
     // const user_id = localStorage.getItem('useridno');
-    const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
         driverName: '',
@@ -28,7 +30,9 @@ const useTripsheet = () => {
     const [shedintime, setshedintime] = useState('');
     const [starttime2, setStartTime2] = useState('');
     const [closetime2, setCloseTime2] = useState('');
-    const [formData, setFormData] = useState({});
+
+    const [formData, setFormData] = useState({});  ////-------------
+
     const location = useLocation();
     const [error, setError] = useState(false);
     const [shedKilometers, setShedKilometers] = useState('');
@@ -76,6 +80,8 @@ const useTripsheet = () => {
                 const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
                 // console.log("org ", permissions)
                 setUserPermissions(permissions);
+                // console.log("org ", 'permissions')
+
 
             } catch {
             }
@@ -108,8 +114,12 @@ const useTripsheet = () => {
 
 
     //------------------------------
+    // let c = 0;
+
+
 
     const isFieldReadOnly = (fieldName) => {
+        // console.log(c++)
         const permissions = checkPagePermission();
         if (permissions.read) {
             if (fieldName === "delete" && !permissions.delete) {
@@ -323,37 +333,38 @@ const useTripsheet = () => {
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, success, warning, info]);
+
+    // useEffect(() => {
+    //     if (success) {
+    //         const timer = setTimeout(() => {
+    //             hidePopup();
+    //         }, 3000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [success]);
+    // useEffect(() => {
+    //     if (warning) {
+    //         const timer = setTimeout(() => {
+    //             hidePopup();
+    //         }, 3000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [warning]);
+    // useEffect(() => {
+    //     if (info) {
+    //         const timer = setTimeout(() => {
+    //             hidePopup();
+    //         }, 3000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [info]);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -1364,11 +1375,12 @@ const useTripsheet = () => {
                 if (response.status === 200) {
                     const routeData = await response.json();
                     setRouteData(routeData);
-                } else {
-                    setRouteData("")
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
                 }
+                //  else {
+                //     setRouteData("")
+                //     const timer = setTimeout(fetchData, 2000);
+                //     return () => clearTimeout(timer);
+                // }
             } catch {
             }
         };
@@ -1392,12 +1404,12 @@ const useTripsheet = () => {
                     setSignImageUrl(imageUrl);
                 }
 
-                else {
-                    fetchData()
-                    const timer = setTimeout(fetchData, 500);
-                    setSignImageUrl("");
-                    return () => clearTimeout(timer);
-                }
+                // else {
+                //     fetchData()
+                //     const timer = setTimeout(fetchData, 500);
+                //     setSignImageUrl("");
+                //     return () => clearTimeout(timer);
+                // }
             } catch (err) {
                 console.log(err, 'error');
             }
@@ -1423,12 +1435,15 @@ const useTripsheet = () => {
                     const responseData = await response.blob();
                     const imageUrl = URL.createObjectURL(responseData);
                     setGMapImageUrl(imageUrl);
-                } else {
-                    setGMapImageUrl("")
-
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
                 }
+
+                // else {
+                //     setGMapImageUrl("")
+
+                //     const timer = setTimeout(fetchData, 2000);
+                //     return () => clearTimeout(timer);
+                // }
+
             } catch {
             }
         };
@@ -1447,10 +1462,12 @@ const useTripsheet = () => {
                     const data = await response.json();
                     const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
                     setAttachedImage(attachedImageUrls);
-                } else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
                 }
+
+                // else {
+                //     const timer = setTimeout(fetchData, 2000);
+                //     return () => clearTimeout(timer);
+                // }
             } catch {
             }
         };
@@ -1503,10 +1520,12 @@ const useTripsheet = () => {
                     if (userDataArray.length > 0) {
                         setorganizationData(userDataArray[0]);
                     }
-                } else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
                 }
+
+                // else {
+                //     const timer = setTimeout(fetchData, 2000);
+                //     return () => clearTimeout(timer);
+                // }
             } catch {
             }
         };

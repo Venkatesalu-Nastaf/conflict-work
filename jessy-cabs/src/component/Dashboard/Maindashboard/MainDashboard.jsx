@@ -13,7 +13,7 @@ import { ThemesProvider } from "../../UserSettings/Themes/ThemesContext";
 import { useUser } from "../../form/UserContext";
 import Button from "@mui/material/Button";
 import { useData } from "./DataContext"; //- data contaxt
-import axios from "axios";
+// import axios from "axios";
 
 //dialog box
 import Dialog from "@material-ui/core/Dialog";
@@ -32,6 +32,12 @@ const MainDashboard = () => {
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+
+
+  useEffect(() => {
+    // console.log("1234555", sharedData)
+    setSelectedImage(sharedData)
+  }, [sharedData])
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -161,20 +167,21 @@ const MainDashboard = () => {
   localStorage.setItem("usercompany", usercompany);
 
   // to show icon image
-  useEffect(() => {
-    const handleImageView = () => {
-      const userid = localStorage.getItem("useridno");
-      axios.get(`${apiUrl}/userprofileview/${userid}`).then((res) => {
-        if (res.status === 200) {
-          setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
-        } else {
-          const timer = setTimeout(handleImageView, 100);
-          return () => clearTimeout(timer);
-        }
-      });
-    };
-    handleImageView();
-  }, [sharedData, selectedImage, apiUrl]);
+
+  // useEffect(() => {
+  //   const handleImageView = () => {
+  //     const userid = localStorage.getItem("useridno");
+  //     axios.get(`${apiUrl}/userprofileview/${userid}`).then((res) => {
+  //       if (res.status === 200) {
+  //         setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
+  //       } else {
+  //         const timer = setTimeout(handleImageView, 100);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     });
+  //   };
+  //   handleImageView();
+  // }, [sharedData, selectedImage, apiUrl]);
 
   return (
     <section

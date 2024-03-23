@@ -99,8 +99,8 @@ const useCustomer = () => {
     useEffect(() => {
         const organizationNames = async () => {
             try {
-                const response = await axios.get(`${apiUrl} / customers`);
-                const organisationData = response.data;
+                const response = await axios.get(`${apiUrl}/customers`);
+                const organisationData = response?.data;
                 const names = organisationData.map(res => res.customer);
                 setOrganizationName(names);
             } catch (error) {
@@ -402,7 +402,7 @@ const useCustomer = () => {
             if (actionName === 'List') {
                 const permissions = checkPagePermission();
 
-                if (permissions.read && permissions.read) {
+                if (permissions?.read && permissions?.read) {
                     const response = await axios.get(`${apiUrl}/customers`);
                     const data = response.data;
                     if (data.length > 0) {
@@ -428,7 +428,7 @@ const useCustomer = () => {
             } else if (actionName === 'Delete') {
                 const permissions = checkPagePermission();
 
-                if (permissions.read && permissions.delete) {
+                if (permissions?.read && permissions?.delete) {
                     await axios.delete(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`);
                     setSelectedCustomerData(null);
                     handleCancel();

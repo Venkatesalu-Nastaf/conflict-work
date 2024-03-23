@@ -54,6 +54,7 @@ const Organization = () => {
         }
     }, [actionName, handleClick]);
 
+
     return (
         <div className="organisation-form Scroll-Style-hide">
             <form>
@@ -69,7 +70,7 @@ const Organization = () => {
                                             src={`${apiUrl}/public/org_logo/${selectedImage}`}
 
                                         >
-                                            {console.log("image log", selectedImage)}
+                                            {/* {console.log("image log", selectedImage)} */}
 
                                             {selectedImage ? null : (
                                                 <div style={{ 'fontSize': "55px" }}>

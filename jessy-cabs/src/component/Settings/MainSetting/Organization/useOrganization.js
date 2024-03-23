@@ -19,9 +19,19 @@ const useOrganization = () => {
     const [warningMessage] = useState({});
     const [info, setInfo] = useState(false);
     const [infoMessage, setInfoMessage] = useState({});
-    const { setSharedData } = useData();
+    const { setSharedData, sharedData } = useData();
+
+
+
+
+    useEffect(() => {
+        console.log("1234555", sharedData)
+        setSelectedImage(sharedData)
+    }, [sharedData])
+
 
     //--------------------------------------
+
 
     const [userPermissionss, setUserPermissions] = useState({});
 
@@ -208,12 +218,21 @@ const useOrganization = () => {
         }));
     };
 
+
+
     useEffect(() => {
         const fetchData = async () => {
-            const encoded = localStorage.getItem('usercompany');
-            localStorage.setItem('usercompanyname', encoded);
-            const storedcomanyname = localStorage.getItem('usercompanyname');
-            const organizationname = decodeURIComponent(storedcomanyname);
+            // const encoded = localStorage.getItem('usercompany');
+            // localStorage.setItem('usercompanyname', encoded);
+            // const storedcomanyname = localStorage.getItem('usercompanyname');
+
+            // const organizationname = decodeURIComponent(storedcomanyname);
+            // console.log(encoded, storedcomanyname, organizationname, "data 2local storage", storedcomanyname)
+
+
+            const organizationname = localStorage.getItem('usercompany');
+            // console.log(organizationname, "orggggg")
+
             try {
                 const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
                 if (!response.ok) {
@@ -221,6 +240,7 @@ const useOrganization = () => {
                 }
                 const userDataArray = await response.json();
                 if (userDataArray.length > 0) {
+                    console.log(userDataArray, "data fetch")
                     setSelectedCustomerData(userDataArray[0]);
                 } else {
 
@@ -230,7 +250,7 @@ const useOrganization = () => {
             }
         };
         fetchData();
-    }, [apiUrl]);
+    }, [apiUrl, sharedData]);
 
 
     const hidePopup = () => {
@@ -273,36 +293,31 @@ const useOrganization = () => {
         input.click();
     };
 
-    const organizationname = localStorage.getItem('usercompany');
+
+
     const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
 
-        setSharedData(file.name);
-        setSelectedImage(file)
+        try {
+            const organizationname = localStorage.getItem('usercompany');
+            const file = event.target.files[0];
+            if (!file) return;
+            console.log("organisa", organizationname)
+            setSharedData(file.name);
+            // setSelectedImage(file)
 
-        if (file) {
-            const formData = new FormData();
-            formData.append('image', file);
-            axios.put(`${apiUrl}/logo-upload/${organizationname}`, formData)
+            if (file && organizationname !== "undefined") {
+                // console.log("0", organizationname)
+                const formData = new FormData();
+                formData.append('image', file);
+                axios.put(`${apiUrl}/logo-upload/${organizationname}`, formData)
+            }
+        } catch (err) {
+            // console.log(err)
         }
+
     };
 
-    useEffect(() => {
-        const handleImageView = () => {
-
-            axios.get(`${apiUrl}/logo-view/${organizationname}`)
-                .then(res => {
-                    if (res.status === 200) {
-                        setSelectedImage(res.data[0]?.fileName);
-                    } else {
-                        const timer = setTimeout(handleImageView, 100);
-                        return () => clearTimeout(timer);
-                    }
-                })
-        };
-        handleImageView();
-    }, [organizationname, selectedImage, apiUrl]);
+    //--------------------------------------------
 
     return {
         selectedCustomerData,

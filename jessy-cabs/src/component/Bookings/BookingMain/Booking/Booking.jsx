@@ -172,7 +172,6 @@ const Booking = () => {
     setErrorMessage,
     setError,
     edit,
-    setEdit
   } = useBooking();
 
   useEffect(() => {

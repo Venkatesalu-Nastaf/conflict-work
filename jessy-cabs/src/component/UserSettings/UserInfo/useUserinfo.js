@@ -21,6 +21,11 @@ const useUserinfo = () => {
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
+    useEffect(() => {
+        // console.log("1234555", sharedData)
+        setSelectedImage(sharedData)
+    }, [sharedData])
+
     const storeUserId = localStorage.getItem('useridno'); //for getting userid 
 
     const [book, setBook] = useState({
@@ -102,22 +107,22 @@ const useUserinfo = () => {
         }
     };
 
-    useEffect(() => {
-        const handleImageView = () => {
-            const userid = localStorage.getItem('useridno');
-            axios.get(`${apiUrl}/userprofileview/${userid}`)
-                .then(res => {
-                    if (res.status === 200) {
-                        setSelectedImage(res.data[0]?.filename);
-                        // console.log("image fetch name :", res.data[0]?.filename)
-                    } else {
-                        const timer = setTimeout(handleImageView, 100);
-                        return () => clearTimeout(timer);
-                    }
-                })
-        };
-        handleImageView();
-    }, [selectedImage, apiUrl]);
+    // useEffect(() => {
+    //     const handleImageView = () => {
+    //         const userid = localStorage.getItem('useridno');
+    //         axios.get(`${apiUrl}/userprofileview/${userid}`)
+    //             .then(res => {
+    //                 if (res.status === 200) {
+    //                     setSelectedImage(res.data[0]?.filename);
+    //                     // console.log("image fetch name :", res.data[0]?.filename)
+    //                 } else {
+    //                     const timer = setTimeout(handleImageView, 100);
+    //                     return () => clearTimeout(timer);
+    //                 }
+    //             })
+    //     };
+    //     handleImageView();
+    // }, [selectedImage, apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -151,39 +156,39 @@ const useUserinfo = () => {
         setInfo(false);
         setWarning(false);
     };
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
+    // useEffect(() => {
+    //     if (error) {
+    //         const timer = setTimeout(() => {
+    //             hidePopup();
+    //         }, 3000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [error]);
 
     useEffect(() => {
-        if (success) {
+        if (success || warning || info || error) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [success, warning, error, info]);
+    // useEffect(() => {
+    //     if (warning) {
+    //         const timer = setTimeout(() => {
+    //             hidePopup();
+    //         }, 3000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [warning]);
+    // useEffect(() => {
+    //     if (info) {
+    //         const timer = setTimeout(() => {
+    //             hidePopup();
+    //         }, 3000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [info]);
 
     const toggleEditMode = () => {
         setEditMode((prevEditMode) => !prevEditMode);

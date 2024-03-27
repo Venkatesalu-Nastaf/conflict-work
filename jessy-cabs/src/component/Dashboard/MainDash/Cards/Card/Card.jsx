@@ -130,7 +130,7 @@ function CompactCard({ param, setExpanded }) {
             <CircularProgressbar
               value={param.barValue}
               // text={`${param.barValue}%`}
-              text={param.title === 'Sales' ? '' : `${param.barValue}%`}
+              text={param.title === 'Billing' ? '' : `${param.barValue}%`}
             />
             <span>{param.title}</span>
           </div>

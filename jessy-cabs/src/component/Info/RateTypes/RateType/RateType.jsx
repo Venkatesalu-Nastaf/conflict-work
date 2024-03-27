@@ -137,14 +137,14 @@ const RateType = () => {
                                         }
                                     />
                                 </div>
-                                <div className="input">
+                                <div className="input" style={{width:250}}>
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
                                     <TextField
                                         size="small"
                                         id="id"
-                                        label="Rate Name"
+                                        label="Organization Name"
                                         name="ratename"
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ratename || book.ratename}
@@ -194,9 +194,9 @@ const RateType = () => {
                                     </FormControl>
                                 </div>
                                 <div className="input times">
-                                    <label>Start Time</label>
+                                    <label>Start Date</label>
                                     <input
-                                        type="time"
+                                        type="date"
                                         value={formData.starttime || selectedCustomerData.starttime || book.starttime}
                                         onChange={(event) => {
                                             setBook({ ...book, starttime: event.target.value });
@@ -206,9 +206,9 @@ const RateType = () => {
                                     />
                                 </div>
                                 <div className="input times">
-                                    <label>Close Time</label>
+                                    <label>Close Date</label>
                                     <input
-                                        type="time"
+                                        type="date"
                                         value={formData.closetime || selectedCustomerData.closetime || book.closetime}
                                         onChange={(event) => {
                                             setBook({ ...book, closetime: event.target.value });

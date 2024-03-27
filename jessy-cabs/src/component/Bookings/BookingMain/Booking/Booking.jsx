@@ -171,6 +171,7 @@ const Booking = () => {
     handleprevent,
     setErrorMessage,
     setError,
+    edit,
   } = useBooking();
 
   useEffect(() => {
@@ -1212,7 +1213,7 @@ const Booking = () => {
             </div>
           </div>
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+        {/* <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
@@ -1229,7 +1230,27 @@ const Booking = () => {
               />
             ))}
           </StyledSpeedDial>
-        </Box>
+        </Box> */}
+         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+      <StyledSpeedDial
+        ariaLabel="SpeedDial playground example"
+        icon={<SpeedDialIcon />}
+        direction="left"
+      >
+        {actions.map((action) => (
+          action.icon ? (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+              onClick={(event) =>
+                handleClick(event, action.name, selectedCustomerId)
+              }
+            />
+          ) : null
+        ))}
+      </StyledSpeedDial>
+    </Box>
         <div className="vehicle-confirm">
           <div className="input-field">
             <div className="input">
@@ -1407,6 +1428,18 @@ const Booking = () => {
                   </Button>
                 )}
               </div>
+            </div>
+            <div>
+              {
+                edit?
+              <Button
+              variant="contained"
+               onClick={handleAdd}
+               disabled={isFieldReadOnly("new")}
+               >
+                Add New</Button>:<></>
+                
+}
             </div>
           </div>
           <Dialog open={popupOpen} onClose={handlePopupClose}>

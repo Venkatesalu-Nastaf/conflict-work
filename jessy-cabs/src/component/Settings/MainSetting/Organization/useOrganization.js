@@ -25,7 +25,7 @@ const useOrganization = () => {
 
 
     useEffect(() => {
-        console.log("1234555", sharedData)
+        // console.log("1234555", sharedData)
         setSelectedImage(sharedData)
     }, [sharedData])
 
@@ -233,24 +233,43 @@ const useOrganization = () => {
             const organizationname = localStorage.getItem('usercompany');
             // console.log(organizationname, "orggggg")
 
+            // try {
+            //     const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+            //     if (!response.ok) {
+            //         throw new Error(`HTTP error! Status: ${response.status}`);
+            //     }
+            //     const userDataArray = await response.json();
+            //     if (userDataArray.length > 0) {
+            //         console.log(userDataArray, "data fetch")
+            //         setSelectedCustomerData(userDataArray[0]);
+            //     } else {
+
+            //     }
+            // } 
+
             try {
                 const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const userDataArray = await response.json();
-                if (userDataArray.length > 0) {
-                    console.log(userDataArray, "data fetch")
-                    setSelectedCustomerData(userDataArray[0]);
-                } else {
+                if (response.status === 200) {
 
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setSelectedCustomerData(userDataArray[0]);
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }
+                } else {
+                    const timer = setTimeout(fetchData, 50);
+                    return () => clearTimeout(timer);
                 }
-            } catch {
+            }
+
+            catch {
 
             }
         };
         fetchData();
-    }, [apiUrl, sharedData]);
+    }, [apiUrl, selectedCustomerData]);
 
 
     const hidePopup = () => {

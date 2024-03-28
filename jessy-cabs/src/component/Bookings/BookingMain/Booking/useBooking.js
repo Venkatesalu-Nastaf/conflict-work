@@ -26,7 +26,7 @@ const columns = [
   { field: "bookingtime", headerName: "Booking Time", width: 130 },
   { field: "status", headerName: "Status", width: 120 },
   { field: "tripid", headerName: "Trip ID", width: 130 },
-  { field: "customer", headerName: "Customer", width: 90 },
+  { field: "customer", headerName: "Customer", width: 190 },
   { field: "orderedby", headerName: "Ordered-By", width: 160 },
   { field: "mobile", headerName: "Mobile No", width: 130 },
   { field: "guestname", headerName: "Guest-Name", width: 130 },
@@ -652,16 +652,39 @@ const useBooking = () => {
 
   const [lastBookingNo, setLastBookingNo] = useState("");
   const handleAdd = async () => {
-    // const permissions = checkPagePermission();
+    const permissions = checkPagePermission();
+  
     if (permissions.read && permissions.new) {
+   
+    //   if (!selectedCustomerData.guestmobileno ||
+    //     !formData.guestmobileno ||
+    //     !selectedCustomerDatas.guestmobileno ||
+    //     !book.guestmobileno) {
+    //     setError(true);
+    //     setErrorMessage("Enter Guest Mobile Number");
+    //     setGuestSms(false);
+    //     return;
+    // }
+//    if (!selectedCustomerData.bookingdate || !formData.bookingdate) {
+//     setError(true);
+//     setErrorMessage("Enter Starting Date");
+//     return;
+// }
+//    if (!selectedCustomerData.address1 || !selectedCustomerData.streetno || !selectedCustomerData.city) {
+//     setError(true);
+//     setErrorMessage("Enter Address Details");
+//     return;
+// }
       const customer = book.status;
       if (customer === "") {
         setError(true);
         setErrorMessage("Fill mandatory fields");
         return;
       }
+
       try {
 
+    
         const selectedBookingDate =
           selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
 
@@ -669,7 +692,10 @@ const useBooking = () => {
         // Create a new object without the 'id' field from selectedCustomerData
         const { id, ...restSelectedCustomerData } = selectedCustomerData;
         let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
-
+         console.log(formData,"formdata");
+         console.log(selectedCustomerData,"scdata");
+         console.log(selectedCustomerDatas,'scdatas');
+         console.log(book,"book");
         const updatedBook = {
 
           // ...book,
@@ -745,6 +771,8 @@ const useBooking = () => {
 
 
   const handleEdit = async (userid) => {
+    setSendEmail(false);
+    setGuestSms(false)
     try {
 
       if (permissions.read && permissions.modify) {
@@ -753,33 +781,88 @@ const useBooking = () => {
             row.bookingno === selectedCustomerData.bookingno ||
             formData.bookingno
         );
+        // const updatedCustomer = {
+        //   ...formData,
+        //   ...selectedCustomer,
+        //   ...selectedCustomerData,
+        //   bookingtime: bookingtime || selectedCustomerData.bookingtime,
+        //   starttime:
+        //     starttime ||
+        //     book.starttime ||
+        //     selectedCustomerData.starttime ||
+        //     formData.starttime,
+        //   reporttime:
+        //     reporttime ||
+        //     book.reporttime ||
+        //     selectedCustomerData.reporttime ||
+        //     formData.reporttime,
+        //   triptime:
+        //     triptime ||
+        //     book.triptime ||
+        //     selectedCustomerData.triptime ||
+        //     formData.triptime,
+        //   username: storedUsername,
+        //   bookingdate:
+        //     selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
+        //   orderbyemail: selectedCustomerDatas.orderbyemail,
+        //   orderedby: selectedCustomerDatas.orderedby,
+        //   mobile: selectedCustomerDatas.mobile,
+        //   registerno: selectedCustomerDatas.registerno
+        // };
+
+        const selectedBookingDate =
+          selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
+
+        const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
+        const { id, ...restSelectedCustomerData } = selectedCustomerData;
+        let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
         const updatedCustomer = {
-          ...formData,
-          ...selectedCustomer,
-          ...selectedCustomerData,
-          bookingtime: bookingtime || selectedCustomerData.bookingtime,
-          starttime:
-            starttime ||
-            book.starttime ||
-            selectedCustomerData.starttime ||
-            formData.starttime,
-          reporttime:
-            reporttime ||
-            book.reporttime ||
-            selectedCustomerData.reporttime ||
-            formData.reporttime,
-          triptime:
-            triptime ||
-            book.triptime ||
-            selectedCustomerData.triptime ||
-            formData.triptime,
+           ...selectedCustomer,
+          // ...book,
+          // ...formData,
+          // ...selectedCustomerData,
+          // ...restSelectedCustomerData, // Use the modified object without 'id'
+          // ...selectedCustomerDatas,
+          // ...restSelectedCustomerDatas,
+          bookingtime: bookingtime || getCurrentTime(),
+          bookingdate: selectedBookingDate,
+          starttime: restSelectedCustomerData.starttime,
+          status: book.status,
+          mobile: selectedCustomerDatas.phoneno || selectedCustomerData.mobile,
+          guestname: selectedCustomerData.guestname || formData.guestname || book.guestname || formValues.guestname,
+          guestmobileno: formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno,
+          email: formData.email || selectedCustomerData.email || formValues.email || book.email,
+          employeeno: formData.employeeno || selectedCustomerData.employeeno || book.employeeno,
+          address1: formData.address1 || selectedCustomerData.address1 || book.address1,
+          streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
+          city: formData.city || selectedCustomerData.city || book.city,
+          report: formData.report || selectedCustomerData.report || book.report,
+          vehType: formData.vehType || selectedCustomerData.vehType || book.vehType,
+          paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
+          startdate: bookingstartdate,
+          duty: formData.duty || selectedCustomerData.duty || book.duty,
+          pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
+          customercode: formData.customercode || selectedCustomerData.customercode || book.customercode,
+          useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
+          registerno: formData.registerno || selectedCustomerData.registerno || book.registerno,
+          flightno: formData.flightno || selectedCustomerData.flightno || book.flightno,
+          orderbyemail: formData.orderbyemail || selectedCustomerData.orderbyemail || selectedCustomerDatas.customeremail || book.orderbyemail,
+          remarks: formData.remarks || selectedCustomerData.remarks || book.remarks,
+          servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation,
+          advance: formData.advance || selectedCustomerData.advance || book.advance,
+          hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
+          travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
+          vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo,
+          vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule,
+          driverName: formData.driverName || selectedCustomerData.driverName || book.driverName,
+          mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo,
+          travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
+          reporttime: restSelectedCustomerData.reporttime,
+          triptime: triptime,
           username: storedUsername,
-          bookingdate:
-            selectedCustomerData.bookingdate || formData.bookingdate || dayjs(),
-          orderbyemail: selectedCustomerDatas.orderbyemail,
-          orderedby: selectedCustomerDatas.orderedby,
-          mobile: selectedCustomerDatas.mobile,
-          registerno: selectedCustomerDatas.registerno
+
+          orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
+          customer: restSelectedCustomerData.customer
         };
 
         await axios.put(
@@ -796,8 +879,9 @@ const useBooking = () => {
         setRow([]);
         setRows([]);
         handlecheck();
-        handleSendSMS();
+        // handleSendSMS();
         setSuccess(true);
+   
         setSuccessMessage("Successfully Updated");
       } else {
         setInfo(true);
@@ -837,63 +921,66 @@ const useBooking = () => {
           setInfoMessage("You do not have permission.");
         }
       } else if (actionName === "Modify") {
+        setGuestSms(false)
+        setSendEmail(false)
+        handleEdit()
         // const permissions = checkPagePermission();
-        if (permissions.read && permissions.modify) {
-          const selectedCustomer = rows.find(
-            (row) =>
-              row.bookingno === selectedCustomerData.bookingno ||
-              formData.bookingno
-          );
-          const updatedCustomer = {
-            ...book,
-            ...formData,
-            ...selectedCustomer,
-            ...selectedCustomerData,
-            ...selectedCustomerDatas,
-            bookingtime: bookingtime || selectedCustomerData.bookingtime,
-            starttime:
-              starttime ||
-              book.starttime ||
-              selectedCustomerData.starttime ||
-              formData.starttime,
-            reporttime:
-              reporttime ||
-              book.reporttime ||
-              selectedCustomerData.reporttime ||
-              formData.reporttime,
-            triptime:
-              triptime ||
-              book.triptime ||
-              selectedCustomerData.triptime ||
-              formData.triptime,
-            username: storedUsername,
-            bookingdate:
-              selectedCustomerData.bookingdate ||
-              formData.bookingdate ||
-              dayjs(),
-            orderbyemail: selectedCustomerDatas.orderbyemail,
-            orderedby: selectedCustomerDatas.name,
-            mobile: selectedCustomerDatas.phoneno,
-          };
-          await axios.put(
-            `${apiUrl}/booking/${book.bookingno ||
-            selectedCustomerData.bookingno ||
-            formData.bookingno
-            }`,
-            updatedCustomer
-          );
-          handleCancel();
-          addPdf();
-          setRow([]);
-          setRows([]);
-          handlecheck();
-          handleSendSMS();
-          setSuccess(true);
-          setSuccessMessage("Successfully Updated");
-        } else {
-          setInfo(true);
-          setInfoMessage("You do not have permission.");
-        }
+        // if (permissions.read && permissions.modify) {
+        //   const selectedCustomer = rows.find(
+        //     (row) =>
+        //       row.bookingno === selectedCustomerData.bookingno ||
+        //       formData.bookingno
+        //   );
+        //   const updatedCustomer = {
+        //     ...book,
+        //     ...formData,
+        //     ...selectedCustomer,
+        //     ...selectedCustomerData,
+        //     ...selectedCustomerDatas,
+        //     bookingtime: bookingtime || selectedCustomerData.bookingtime,
+        //     starttime:
+        //       starttime ||
+        //       book.starttime ||
+        //       selectedCustomerData.starttime ||
+        //       formData.starttime,
+        //     reporttime:
+        //       reporttime ||
+        //       book.reporttime ||
+        //       selectedCustomerData.reporttime ||
+        //       formData.reporttime,
+        //     triptime:
+        //       triptime ||
+        //       book.triptime ||
+        //       selectedCustomerData.triptime ||
+        //       formData.triptime,
+        //     username: storedUsername,
+        //     bookingdate:
+        //       selectedCustomerData.bookingdate ||
+        //       formData.bookingdate ||
+        //       dayjs(),
+        //     orderbyemail: selectedCustomerDatas.orderbyemail,
+        //     orderedby: selectedCustomerDatas.name,
+        //     mobile: selectedCustomerDatas.phoneno,
+        //   };
+        //   await axios.put(
+        //     `${apiUrl}/booking/${book.bookingno ||
+        //     selectedCustomerData.bookingno ||
+        //     formData.bookingno
+        //     }`,
+        //     updatedCustomer
+        //   );
+        //   handleCancel();
+        //   addPdf();
+        //   setRow([]);
+        //   setRows([]);
+        //   handlecheck();
+        //   handleSendSMS();
+        //   setSuccess(true);
+        //   setSuccessMessage("Successfully Updated");
+        // } else {
+        //   setInfo(true);
+        //   setInfoMessage("You do not have permission.");
+        // }
       } else if (actionName === "Copy This") {
         handleClickShow();
       } else if (actionName === "Add") {
@@ -1007,7 +1094,7 @@ const useBooking = () => {
     setIsEditMode(true);
   }, []);
 
-  const [sendEmail, setSendEmail] = useState(false);
+  const [sendEmail, setSendEmail] = useState(true);
   const handlecheck = async () => {
     // if (sendEmail || formData.sendemail || book.sendemail) {
     if (sendEmail) {
@@ -1114,7 +1201,7 @@ const useBooking = () => {
   }, [user]);
   const storedUsername = localStorage.getItem("username");
 
-  const [guestsms, setGuestSms] = useState(false);
+  const [guestsms, setGuestSms] = useState(true);
 
   const handleSendSMS = async (trip) => {
     const bookingno = trip

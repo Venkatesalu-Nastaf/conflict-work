@@ -148,3 +148,27 @@
   cursor: pointer;
   color: #000;
 }
+
+.cards-container .card-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  /* justify-content: flex-end; */
+  margin: 20px;
+}
+
+.cards-container .card-filter label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.cards-container .card-filter select {
+  width: 200px;
+  font-weight: 600;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}

@@ -29,11 +29,11 @@ const Login = () => {
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
   const [warning, setWarning] = useState(false);
-  const { loginUser } = useUser();
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
+  const { loginUser, setUserdashboard,userdasboard } = useUser();
 
   const hidePopup = () => {
     setSuccess(false);
@@ -89,6 +89,7 @@ const Login = () => {
     try {
       const response = await axios.post(`${apiUrl}/login`, input);
       if (response.status === 200) {
+        setUserdashboard(true)
         loginUser(input.username);
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");

@@ -17,6 +17,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { APIURL } from "../../../url";
+import { useData } from "../../Maindashboard/DataContext";
 
 // ICON
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -45,9 +46,14 @@ const makeStyle = (status) => {
 }
 
 export default function BasicTable() {
-  const [filteredData, setFilteredData] = useState([]);
+  // const [filteredData, setFilteredData] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
+
+  const {  filteredData,setFilteredData } = useData();
+  console.log(filteredData,"data1")
+  const data1=filteredData;
+  console.log(data1,"data filter tbale")
 
 
   //permission  const currentPageName = 'Dashboard page';
@@ -136,6 +142,7 @@ export default function BasicTable() {
   };
 
   const handleButtonClickTripsheet = (trip) => {
+    console.log("sssssssssssssss");
     setSelectedTrip(trip);
     setPopupOpen(true);
   };
@@ -171,7 +178,7 @@ export default function BasicTable() {
                     <TableCell align="left">TS{trip.tripid}</TableCell>
                     {/* <TableCell align="left">{trip.startdate}</TableCell> */}
                     <TableCell align="left">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
-                    <TableCell align="left"><span className="status" style={makeStyle(trip.apps)}>{trip.apps}</span></TableCell>
+                    <TableCell align="left"><span className="status" style={makeStyle(trip.apps)}>{trip.apps?trip.apps:"Not Mentioned"}</span></TableCell>
                     <TableCell align="left" className="Details">
                       <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>
                     </TableCell>

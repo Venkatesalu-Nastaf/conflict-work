@@ -28,6 +28,7 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 import usePackagerateentry from './usePackagerateentry.js';
 import { useData } from '../../../Dashboard/Maindashboard/DataContext.js';
+import dayjs from 'dayjs';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -74,6 +75,8 @@ const PackageRateEntery = () => {
     columns,
     isEditMode,
     handleEdit,
+    datevalidity
+
   } = usePackagerateentry();
 
   const { organizationName } = useData()
@@ -83,6 +86,10 @@ const PackageRateEntery = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+ 
+  const startdate= dayjs(datevalidity?.startdate).format(" MMMM YYYY");
+  const enddate=dayjs(datevalidity?.enddate).format(" MMMM YYYY");
+
 
   return (
     <div className="PackageRateEntery-form Scroll-Style-hide">
@@ -189,7 +196,8 @@ const PackageRateEntery = () => {
                     label="Validity"
                     name="Validity"
                     autoComplete="new-password"
-                    value={selectedCustomerData?.Validity || book.Validity}
+                    // value={selectedCustomerData?.Validity || book.Validity}
+                   value={datevalidity?`${startdate}--${enddate}`:''}
                     onChange={handleChange}
                     variant="standard"
                   />

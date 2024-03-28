@@ -42,7 +42,11 @@ const usePackagerateentry = () => {
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
+    
+    const [validitydata,setValiditydata]=useState([])
+    const[datevalidity,setDatevalidity]=useState()
     const { setOrganizationName } = useData()
+    
     // for page permission
 
     //--------------------------------------
@@ -94,6 +98,11 @@ const usePackagerateentry = () => {
                 console.log(response.data, "_____________________");
                 const data = response.data
                 const names = data.map(res => res.ratename)
+                setValiditydata(data)
+                
+                
+
+              
                 setOrganizationName(names)
 
             }
@@ -102,7 +111,9 @@ const usePackagerateentry = () => {
             }
         };
         fetchOrganizationnames()
-    }, [apiUrl, setOrganizationName])
+    }, [apiUrl, setOrganizationName,validitydata])
+
+
 
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';
@@ -227,6 +238,7 @@ const usePackagerateentry = () => {
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
+       
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
@@ -235,7 +247,30 @@ const usePackagerateentry = () => {
             ...prevData,
             [name]: selectedOption,
         }));
+
+        if(name === "pricetag"){
+           getStartEndTimesByRateName(selectedOption)
+    
+        }
     };
+
+    function getStartEndTimesByRateName(rateName) {
+        const filteredData = validitydata?.filter(item => item.ratename === rateName);
+        const datas=filteredData?.map(item => ({
+          startdate: item.starttime,
+          enddate: item.closetime
+        }));
+       
+        setDatevalidity(datas[0])
+      }
+    
+
+
+
+    
+      
+     
+      
 
     const handleCancel = () => {
         setBook((prevBook) => ({
@@ -421,6 +456,7 @@ const usePackagerateentry = () => {
         columns,
         isEditMode,
         handleEdit,
+        datevalidity
     };
 };
 

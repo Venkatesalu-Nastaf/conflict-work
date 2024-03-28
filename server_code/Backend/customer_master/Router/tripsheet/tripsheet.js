@@ -193,4 +193,40 @@ router.get('/get-gmapdata/:tripid', (req, res) => {
     });
 });
 
+
+//ayyanar 4hr and 8hr pack fetch
+
+router.get(`/t4hr-pack`, (req, res) => {
+
+    const total_km = parseInt(req.query.totkm);
+    const tothr = req.query.totalHours;
+    let hr;
+    // console.log(tothr, total_km)
+    if (total_km <= 49 && tothr <= 6) {
+        hr = 4;
+        // console.log(hr, tothr, total_km)
+        db.query("select * from ratemanagement where Hours=?", [hr], (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+            }
+            return res.status(200).json(result[0]);
+        })
+    }
+    else if (total_km > 49 || tothr > 6) {
+        hr = 8;
+        // console.log(hr, tothr, total_km)
+        db.query("select * from ratemanagement where Hours=?", [hr], (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+            }
+            return res.status(200).json(result[0]);
+        })
+    }
+    else {
+        res.json("wrong data")
+    }
+})
+
+
+
 module.exports = router;

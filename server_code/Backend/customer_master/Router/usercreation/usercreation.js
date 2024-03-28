@@ -17,31 +17,33 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
   }
-
 })
 
 const upload = multer({
   storage: storage
 })
 
+// add user creation database ----------------------------
 
-
-
-
-// user creation database
-// add user creation database
-router.post('/usercreation', (req, res) => {
-  const bookData = req.body;
-  db.query('INSERT INTO usercreation SET ?', bookData, (err, result) => {
+router.post('/usercreation-add', (req, res) => {
+  // const bookData = req.body;
+  const { userid, username, stationname, designation, organizationname, userpassword, active } = req.body;
+  console.log(organizationname)
+  db.query(`INSERT INTO usercreation (userid, username, stationname, designation,organizationname, userpassword, active)
+VALUES (?,?,?,?,?,?,?)`, [userid, username, stationname, designation, organizationname, userpassword, active], (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to insert data into MySQL" });
     }
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
+
+//--------------------------------------------------------
+
 // delete user creation data
-router.delete('/usercreation/:userid', (req, res) => {
+router.delete('/usercreation-delete/:userid', (req, res) => {
   const userid = req.params.userid;
+  // console.log("delete ", userid)
   db.query('DELETE FROM usercreation WHERE userid = ?', userid, (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to delete data from MySQL" });
@@ -52,11 +54,17 @@ router.delete('/usercreation/:userid', (req, res) => {
     return res.status(200).json({ message: "Data deleted successfully" });
   });
 });
-// update user creation details
-router.put('/usercreation/:userid', (req, res) => {
-  const userid = req.params.userid;
+
+
+// update user creation ---------------------------------------------------
+
+router.put('/usercreation-edit/:userid', (req, res) => {
+  // const userid = req.params.userid;
   const updatedCustomerData = req.body;
-  db.query('UPDATE usercreation SET ? WHERE userid = ?', [updatedCustomerData, userid], (err, result) => {
+  // console.log('edit', updatedCustomerData)
+  const { userid, username, stationname, designation, organizationname, userpassword, active } = req.body;
+  // console.log("data ", username, organizationname)
+  db.query('UPDATE usercreation SET  username=?, stationname=?, designation=?,organizationname=?, userpassword=?, active=? WHERE userid = ?', [username, stationname, designation, organizationname, userpassword, active, userid], (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to update data in MySQL" });
     }
@@ -66,6 +74,8 @@ router.put('/usercreation/:userid', (req, res) => {
     return res.status(200).json({ message: "Data updated successfully" });
   });
 });
+
+//  -----------------------------------------------
 
 router.get('/usercreation', (req, res) => {
   const filterValue = req.query.filter; // Assuming you want to filter based on a query parameter 'filter'
@@ -83,6 +93,8 @@ router.get('/usercreation', (req, res) => {
     return res.status(200).json(results);
   });
 });
+
+//------------------------------
 
 router.get('/usercreationgetdata/:value', (req, res) => {
   const { value } = req.query;
@@ -119,7 +131,7 @@ router.get('/usercreationgetdata/:value', (req, res) => {
 
 
 
-router.put('/userprofileupload/:id',upload.single('image') , (req, res) => {
+router.put('/userprofileupload/:id', upload.single('image'), (req, res) => {
   const userId = req.params.id;
   const fileName = req.file.filename;
 
@@ -135,7 +147,7 @@ router.put('/userprofileupload/:id',upload.single('image') , (req, res) => {
 
       // to unlink image file
       const oldFileName = rows[0].filename;
-     
+
       if (oldFileName) {
         const oldImagePath = path.join("./customer_master/public/user_profile", oldFileName);
         try {
@@ -152,7 +164,7 @@ router.put('/userprofileupload/:id',upload.single('image') , (req, res) => {
         return res.status(200).json({ Status: "success" });
       });
     }
-     else {
+    else {
       // Profile doesn't exist, insert a new record
       const insertQuery = `INSERT INTO user_profile (userid, filename) VALUES (?, ?)`;
       db.query(insertQuery, [userId, fileName], (err, result) => {
@@ -172,7 +184,7 @@ router.get('/userprofileview/:id', (req, res) => {
   const sql = 'select * from user_profile where userid=?';
   db.query(sql, [userid], (err, result) => {
     if (err) return res.json({ Message: "error" })
-  
+
     return res.json(result);
   })
 })

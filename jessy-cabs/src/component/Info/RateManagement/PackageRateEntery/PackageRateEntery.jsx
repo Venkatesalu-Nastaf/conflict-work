@@ -266,7 +266,7 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "100px" }}>
+            {/* <div className="input" style={{ width: "100px" }}>
               <TextField
                 type='number'
                 size="small"
@@ -277,7 +277,7 @@ const PackageRateEntery = () => {
                 value={selectedCustomerData?.PerHour || book.PerHour}
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
             <div className="input" style={{ width: "100px" }}>
               <TextField
                 type='number'
@@ -328,7 +328,21 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "110px" }}>
+
+            <div className="input" style={{ width: "100px" }}>
+              <TextField
+                type='number'
+                size="small"
+                id="id"
+                label="ChKMS"
+                name="ChKMS"
+                autoComplete="new-password"
+                value={selectedCustomerData?.ChKMS || book.ChKMS}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* <div className="input" style={{ width: "110px" }}>
               <TextField
                 type='number'
                 size="small"
@@ -339,8 +353,8 @@ const PackageRateEntery = () => {
                 value={selectedCustomerData?.UptoHours || book.UptoHours}
                 onChange={handleChange}
               />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
+            </div> */}
+            {/* <div className="input" style={{ width: "100px" }}>
               <TextField
                 type='number'
                 size="small"
@@ -351,7 +365,7 @@ const PackageRateEntery = () => {
                 value={selectedCustomerData?.AKMS || book.AKMS}
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
             <div className="input" style={{ width: "100px" }}>
               <TextField
                 type='number'
@@ -376,18 +390,7 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="ChKMS"
-                name="ChKMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.ChKMS || book.ChKMS}
-                onChange={handleChange}
-              />
-            </div>
+
 
             <div className="input" style={{ width: "100px" }}>
               {isEditMode ? (

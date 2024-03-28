@@ -1019,6 +1019,7 @@ const Booking = () => {
                     <Checkbox
                       size="small"
                       checked={guestsms}
+                      defaultChecked
                       onChange={(event) => setGuestSms(event.target.checked)}
                     />
                   }

@@ -52,37 +52,21 @@ const useTripsheet = () => {
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-
-
     const [tripiddata, setTripiddata] = useState("");
     const [sign, setSign] = useState(false)
 
-
     // for page permission   const currentPageName = 'Trip Sheet';
-
-
     //--------------------------------------
 
     const [userPermissionss, setUserPermissions] = useState({});
-
     const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
 
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
                 const currentPageName = 'Trip Sheet';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
                 const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
                 setUserPermissions(permissions);
-                // console.log("org ", 'permissions')
-
-
             } catch {
             }
         };
@@ -91,11 +75,9 @@ const useTripsheet = () => {
 
     //---------------------------------------
 
-    const checkPagePermission = () => {
+    const checkPagePermission = useCallback(() => {
         const currentPageName = 'Trip Sheet';
         const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -110,13 +92,8 @@ const useTripsheet = () => {
             modify: false,
             delete: false,
         };
-    };
-
-
-    //------------------------------
-    // let c = 0;
-
-
+    }, [userPermissionss])
+    ///---------------------------------------------------------------------------
 
     const isFieldReadOnly = (fieldName) => {
         // console.log(c++)
@@ -187,7 +164,6 @@ const useTripsheet = () => {
 
     const SignPage = (event) => {
         event.preventDefault();
-
         navigator.clipboard.writeText(link);
         setSign(true)
         setTimeout(() => {
@@ -341,30 +317,6 @@ const useTripsheet = () => {
         }
     }, [error, success, warning, info]);
 
-    // useEffect(() => {
-    //     if (success) {
-    //         const timer = setTimeout(() => {
-    //             hidePopup();
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [success]);
-    // useEffect(() => {
-    //     if (warning) {
-    //         const timer = setTimeout(() => {
-    //             hidePopup();
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [warning]);
-    // useEffect(() => {
-    //     if (info) {
-    //         const timer = setTimeout(() => {
-    //             hidePopup();
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [info]);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -530,6 +482,7 @@ const useTripsheet = () => {
             mobile: '',
             guestname: '',
             guestmobileno: '',
+            additionaltime: '',
             email: '',
             address1: '',
             streetno: '',
@@ -627,6 +580,7 @@ const useTripsheet = () => {
             manualbillss: '',
             reload: '',
             locks: '',
+
         }));
         setSelectedCustomerDatas({});
         setSelectedCustomerData({});
@@ -635,6 +589,7 @@ const useTripsheet = () => {
         setPackageData({});
         setPackageDetails({});
         setIsEditMode(false);
+        calcCancel();
     };
 
 
@@ -744,6 +699,12 @@ const useTripsheet = () => {
                     }
                     await axios.put(`${apiUrl}/tripsheet/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
                     handleCancel();
+                    setShedKilometers("")
+                    setAdditionalTime("")
+                    // book()
+                    // book.additionaltime = "";
+                    // additionalTime.additionaltime = "";
+
                     setRow([]);
                     setRows([]);
                     handleDriverSendSMS();
@@ -1032,7 +993,7 @@ const useTripsheet = () => {
         const closeKm = formData.shedin || book.shedin || selectedCustomerData.shedin || '';
 
         if (startKm !== undefined && closeKm !== undefined) {
-            let totalKm = closeKm - startKm;
+            let totalKm = parseInt(closeKm) - parseInt(startKm);
             const shedKmValue = parseInt(shedKilometers.shedkm) || parseInt(formData.shedkm) || parseInt(selectedCustomerData.shedkm) || parseInt(book.shedkm);
             if (!isNaN(shedKmValue)) {
                 totalKm += shedKmValue;
@@ -1376,11 +1337,11 @@ const useTripsheet = () => {
                     const routeData = await response.json();
                     setRouteData(routeData);
                 }
-                //  else {
-                //     setRouteData("")
-                //     const timer = setTimeout(fetchData, 2000);
-                //     return () => clearTimeout(timer);
-                // }
+                else {
+                    setRouteData("")
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
+                }
             } catch {
             }
         };
@@ -1404,12 +1365,12 @@ const useTripsheet = () => {
                     setSignImageUrl(imageUrl);
                 }
 
-                // else {
-                //     fetchData()
-                //     const timer = setTimeout(fetchData, 500);
-                //     setSignImageUrl("");
-                //     return () => clearTimeout(timer);
-                // }
+                else {
+                    // fetchData()
+                    const timer = setTimeout(fetchData, 500);
+                    setSignImageUrl("");
+                    return () => clearTimeout(timer);
+                }
             } catch (err) {
                 console.log(err, 'error');
             }
@@ -1437,12 +1398,12 @@ const useTripsheet = () => {
                     setGMapImageUrl(imageUrl);
                 }
 
-                // else {
-                //     setGMapImageUrl("")
+                else {
+                    setGMapImageUrl("")
 
-                //     const timer = setTimeout(fetchData, 2000);
-                //     return () => clearTimeout(timer);
-                // }
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
+                }
 
             } catch {
             }
@@ -1464,10 +1425,10 @@ const useTripsheet = () => {
                     setAttachedImage(attachedImageUrls);
                 }
 
-                // else {
-                //     const timer = setTimeout(fetchData, 2000);
-                //     return () => clearTimeout(timer);
-                // }
+                else {
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
+                }
             } catch {
             }
         };
@@ -1522,10 +1483,10 @@ const useTripsheet = () => {
                     }
                 }
 
-                // else {
-                //     const timer = setTimeout(fetchData, 2000);
-                //     return () => clearTimeout(timer);
-                // }
+                else {
+                    const timer = setTimeout(fetchData, 2000);
+                    return () => clearTimeout(timer);
+                }
             } catch {
             }
         };
@@ -1534,8 +1495,228 @@ const useTripsheet = () => {
     }, [apiUrl]);
 
 
+
+    // ayyanar bill calc------------------------------------------------------------------
+
+    // convert time into minutes     
+    // function convertTimeToNumber(timeString) {
+
+    //     const [hours, minutes] = timeString.split('h').map(str => parseInt(str));  // Split the time string into hours and minutes
+
+    //     // Calculate the total minutes
+    //     const totalMinutes = (hours * 60) + (minutes || 0); // if no minutes provided, consider it as 0
+
+    //     return totalMinutes;
+    // }
+
+    //-----------------------------------------------extra amounts 
+
+    let v_permit_vendor = formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || 0;
+    let permit = formData.permit || selectedCustomerData.permit || book.permit || 0;
+    let parking = formData.parking || selectedCustomerData.parking || book.parking || 0;
+    let toll = formData.toll || selectedCustomerData.toll || book.toll || 0;
+    let vender_toll = formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || 0;
+    let customer_advance = formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || 0;
+
+    //--------------------------------------------------------------------------
+    // convert time into hours  
+    function convertTimeToNumber(timeString) {
+        // Split the time string into hours and minutes
+        const [hours, minutes] = timeString.split('h').map(str => parseInt(str));
+
+        // Calculate the total hours
+        const totalHours = hours + (minutes || 0) / 60; // if no minutes provided, consider it as 0
+
+        return totalHours;
+    }
+
+    //--------------------------------------------
+
+    const [calcPackage, setcalcPackage] = useState()
+    const [extraHR, setExtraHR] = useState(0)
+    const [extraKM, setExtraKM] = useState(0)
+    const [package_amount, setpackage_amount] = useState()
+    const [extrakm_amount, setextrakm_amount] = useState()
+    const [extrahr_amount, setextrahr_amount] = useState()
+    const [ex_kmAmount, setEx_kmAmount] = useState(0)
+    const [ex_hrAmount, setEx_HrAmount] = useState(0)
+
+    // nighht value --------------------
+    const [nightBta, setNightBeta] = useState(0)
+    const [nightCount, setNightCount] = useState(1)
+    const [night_totalAmount, setnight_totalAmount] = useState(0)
+
+    const nightAbount_calc = (e) => {
+        setNightBeta(e.target.value)
+    }
+
+    const nightCount_calc = (e) => {
+        setNightCount(e.target.value)
+    }
+
+    useEffect(() => {
+        const calcdata = () => {
+            let nightTotalAmounts = nightBta * nightCount
+            setnight_totalAmount(nightTotalAmounts)
+        }
+        calcdata();
+    }, [nightBta, nightCount])
+
+
+    //driver convinence --------------------------
+    const [driverBeta, setdriverBeta] = useState(0)
+    const [driverbeta_Count, setdriverbeta_Count] = useState(1)
+    const [driverBeta_amount, setdriverBeta_amount] = useState(0)
+
+    const driverBeta_calc = (e) => {
+        setdriverBeta(e.target.value)
+    }
+
+    const driverbeta_Count_calc = (e) => {
+        setdriverbeta_Count(e.target.value)
+    }
+
+    useEffect(() => {
+        const calcdata = () => {
+            let driverbetaAmount = Number(driverBeta) * Number(driverbeta_Count)
+            setdriverBeta_amount(driverbetaAmount)
+        }
+        calcdata();
+    }, [driverBeta, driverbeta_Count])
+
+
+    //------------total amount calculations 
+
+    let [totalcalcAmount, setTotalcalcAmount] = useState()
+    useEffect(() => {
+        const totalAmountCalc = () => {
+            const total = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll) + Number(customer_advance);
+            setTotalcalcAmount(total);
+            console.log("customer_advance", customer_advance)
+
+        }
+        totalAmountCalc()
+    }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll, v_permit_vendor, vender_toll])
+
+
+    // extra Amount calculation--------------------------
+    useEffect(() => {
+        const extraClac = () => {
+            let extraAbout_hr = Number(extraHR) * Number(extrahr_amount)
+            setEx_HrAmount(extraAbout_hr)
+        }
+        extraClac();
+    }, [extraHR, extrahr_amount])
+
+    useEffect(() => {
+        const extraClac = () => {
+            let extraAbout_km = Number(extraKM) * Number(extrakm_amount)
+            setEx_kmAmount(extraAbout_km)
+        }
+        extraClac();
+    }, [extraKM, extrakm_amount])
+
+    //----------------------------------------------------
+    // cncel
+    const calcCancel = () => {
+        totalHours = "";
+        totkm = "";
+        totalcalcAmount = ""
+        setdriverBeta('');
+        setdriverbeta_Count('');
+        setdriverBeta_amount('');
+        setnight_totalAmount('');
+        setcalcPackage()
+        setExtraHR(0)
+        setExtraKM(0)
+        setpackage_amount()
+        setextrakm_amount()
+        setextrahr_amount()
+        setEx_kmAmount()
+        setEx_HrAmount()
+        setNightBeta(0)
+        setNightCount(1)
+
+
+    }
+
+
+    // calc function
+
+    let data, hrs, kms, totkm, tothr, totalHours;
+    const handleCalc = async () => {
+        try {
+
+            totkm = await formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '';
+            tothr = await formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || '';
+            totalHours = await convertTimeToNumber(tothr);
+            const response = await axios.get(`${apiUrl}/t4hr-pack`, {
+                params: {
+                    totkm: totkm,
+                    totalHours: totalHours
+                }
+            });
+            data = response.data;
+            hrs = data.Hours
+            kms = data.KMS
+            setextrakm_amount(data.extraKMS)
+            setextrahr_amount(data.extraHours)
+
+            if (Number(hrs) === 8) {
+                setcalcPackage("8hr & 80km")
+                setpackage_amount(data.Rate);
+
+                if (Number(totalHours) > 8) {
+                    let time = Math.ceil(totalHours - hrs)
+                    setExtraHR(time)
+                }
+                else {
+                    setExtraHR(0)
+                }
+
+                if (totkm > 80) {
+                    const km = Math.ceil(totkm - kms);
+                    setExtraKM(km)
+
+                } else {
+                    setExtraKM(0)
+                }
+
+            } else if (Number(hrs) === 4) {
+
+                setcalcPackage("4hr & 40km");
+                setpackage_amount(data.Rate)
+
+                if (totalHours > 4) {
+                    let time = Math.ceil(totalHours - hrs)
+                    setExtraHR(time)
+                }
+                else {
+                    setExtraHR(0)
+                }
+
+                if (totkm > 40) {
+                    const km = Math.ceil(totkm - kms);
+                    setExtraKM(km)
+                } else {
+                    setExtraKM(0)
+                }
+            }
+        }
+        catch (err) {
+            console.log("pack fetch ", err)
+        }
+    }
+
+
+
+    //---------------------------------------
+
+
     return {
-        selectedCustomerData,
+        selectedCustomerData, ex_kmAmount, ex_hrAmount,
+        nightAbount_calc,
+        nightCount_calc, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount, totalcalcAmount,
         selectedCustomerId,
         rows,
         error,
@@ -1623,7 +1804,10 @@ const useTripsheet = () => {
         isEditMode,
         handleEdit,
         SignPage,
-        sign
+        sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
+
+
+
     };
 };
 

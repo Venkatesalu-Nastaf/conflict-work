@@ -18,7 +18,7 @@ export const PermissionsProvider = ({ children }) => {
                     // console.log("user_id ", user_id)
                     const response = await axios.get(`${APIURL}/user-permissions/${user_id}`);
                     const permissionsData = response.data;
-                    console.log("per ", permissionsData)
+                    console.log("per123 ", permissionsData)
                     // console.log("permiss ", permissionsData.page_name)
 
                     setUserPermissions(permissionsData);

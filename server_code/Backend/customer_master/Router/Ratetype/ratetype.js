@@ -21,7 +21,7 @@ router.post('/ratetype', (req, res) => {
     if (err) {
       return res.status(500).json({ error: "Failed to insert data into MySQL" });
     }
-    console.log(result,"ratetype insert succesfuly")
+   
     return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
@@ -57,8 +57,6 @@ router.put('/ratetype/:driverid', (req, res) => {
   const driverid = req.params.driverid;
   // const updatedCustomerData = req.body;
    const {stations,ratename,validity,active,starttime,closetime}=req.body
-  
-  console.log(stations,ratename,validity,active,starttime,closetime,"update ratetypr")
  
   db.query('UPDATE ratetype SET stations=?,ratename=?,validity=?,active=?,starttime=?,closetime=? WHERE driverid = ?', [stations,ratename,validity,active,starttime,closetime, driverid], (err, result) => {
     if (err) {

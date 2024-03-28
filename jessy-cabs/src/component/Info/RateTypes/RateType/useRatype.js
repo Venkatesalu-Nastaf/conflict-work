@@ -6,6 +6,7 @@ import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../../url";
+import dayjs from "dayjs";
 
 // TABLE
 
@@ -14,8 +15,8 @@ const columns = [
     { field: "driverid", headerName: "Driver ID", width: 130 },
     { field: "ratename", headerName: "Rate Type", width: 130 },
     { field: "active", headerName: "Active", width: 130 },
-    { field: "starttime", headerName: "Start Date", width: 130 },
-    { field: "closetime", headerName: "Close Date", width: 130 },
+    { field: "starttime", headerName: "Start Date", width: 230 },
+    { field: "closetime", headerName: "Close Date", width: 230 },
 ];
 
 const useRatype = () => {
@@ -26,8 +27,8 @@ const useRatype = () => {
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
-    const [starttime, setStartTime] = useState('');
-    const [closetime, setCloseTime] = useState('');
+    // const [starttime, setStartTime] = useState('');
+    // const [closetime, setCloseTime] = useState('');
     const [formData] = useState({});
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -47,6 +48,25 @@ const useRatype = () => {
 
 
 
+
+    const handleDateChange = (date, name) => {
+        const formattedDate = dayjs(date).format("YYYY-MM-DD");
+        const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
+       
+        setBook((prevBook) => ({
+          ...prevBook,
+          [name]: parsedDate,
+        }));
+      
+        setSelectedCustomerData((prevValues) => ({
+          ...prevValues,
+          [name]: parsedDate,
+        }));
+       
+        
+
+      };
+     
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
@@ -252,10 +272,15 @@ const useRatype = () => {
             }
             try {
                 const updatedBook = {
-                    ...book,
-                    starttime: starttime,
-                    closetime: closetime,
+                    stations:book.stations|| selectedCustomerData.stations,
+                    ratename:book.ratename||selectedCustomerData.ratename,
+                    validity:book.validity||selectedCustomerData.validity,
+                    active: book.active||selectedCustomerData.active,
+                    starttime:book.starttime||selectedCustomerData.starttime,
+                    closetime:book.closetime||selectedCustomerData.closetime
+                   
                 };
+             
                 await axios.post(`${apiUrl}/ratetype`, updatedBook);
                 handleCancel();
                 setRows([]);
@@ -279,9 +304,10 @@ const useRatype = () => {
 
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
-                        ...row,
+                       ...row,
                         id: index + 1,
                     }));
+                    console.log(rowsWithUniqueId,"uniq")
                     setRows(rowsWithUniqueId);
                 } else {
                     setRows([]);
@@ -297,7 +323,15 @@ const useRatype = () => {
 
         if (permissions.read && permissions.modify) {
             const selectedCustomer = rows.find((row) => row.driverid === driverid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            
+            const updatedCustomer = { driverid:selectedCustomer, 
+                stations:selectedCustomerData.stations,
+                ratename:selectedCustomerData.ratename,
+                validity:selectedCustomerData.validity,
+                active: selectedCustomerData.active,
+                starttime:selectedCustomerData.starttime,
+                closetime:selectedCustomerData.closetime};
+            console.log(updatedCustomer,"rate")
             await axios.put(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
@@ -323,6 +357,7 @@ const useRatype = () => {
                             ...row,
                             id: index + 1,
                         }));
+                       
                         setRows(rowsWithUniqueId);
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
@@ -380,6 +415,7 @@ const useRatype = () => {
             handleClick(null, 'List');
         }
     });
+   
 
     return {
         selectedCustomerData,
@@ -404,13 +440,12 @@ const useRatype = () => {
         handleAutocompleteChange,
         formData,
         setBook,
-        setStartTime,
-        setCloseTime,
         handleExcelDownload,
         handlePdfDownload,
         columns,
         isEditMode,
         handleEdit,
+        handleDateChange 
     };
 };
 

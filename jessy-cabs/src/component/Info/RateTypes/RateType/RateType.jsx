@@ -33,6 +33,12 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, } from "@mui/material";
 import useRatype from './useRatype.js';
 
+import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
     "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -75,15 +81,14 @@ const RateType = () => {
         handleAdd,
         hidePopup,
         handleAutocompleteChange,
-        formData,
-        setBook,
-        setStartTime,
-        setCloseTime,
+        // formData,
+        // setBook,
         handleExcelDownload,
         handlePdfDownload,
         columns,
         isEditMode,
         handleEdit,
+        handleDateChange,
     } = useRatype();
 
     useEffect(() => {
@@ -91,6 +96,7 @@ const RateType = () => {
             handleClick(null, 'List');
         }
     }, [actionName, handleClick]);
+
 
     return (
         <div className="ratetype-form Scroll-Style-hide">
@@ -137,7 +143,7 @@ const RateType = () => {
                                         }
                                     />
                                 </div>
-                                <div className="input" style={{width:250}}>
+                                <div className="input" style={{ width: 250 }}>
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
@@ -193,29 +199,57 @@ const RateType = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-                                <div className="input times">
-                                    <label>Start Date</label>
-                                    <input
-                                        type="date"
-                                        value={formData.starttime || selectedCustomerData.starttime || book.starttime}
-                                        onChange={(event) => {
-                                            setBook({ ...book, starttime: event.target.value });
-                                            setStartTime(event.target.value);
-                                        }}
-                                        name="starttime"
-                                    />
+
+
+                                <div className="input">
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoItem label="startDate">
+                                            <DatePicker
+                                                value={
+                                                    selectedCustomerData.starttime
+                                                        ? dayjs(selectedCustomerData.starttime)
+                                                        : null || book.starttime
+                                                            ? dayjs(book.starttime)
+                                                            : dayjs()
+                                                }
+                                                format="DD/MM/YYYY"
+                                                onChange={(date) => handleDateChange(date, "starttime")}
+                                            >
+                                                {({ inputProps, inputRef }) => (
+                                                    <TextField
+                                                        {...inputProps}
+                                                        inputRef={inputRef}
+                                                        value={selectedCustomerData?.starttime}
+                                                    />
+                                                )}
+                                            </DatePicker>
+                                        </DemoItem>
+                                    </LocalizationProvider>
                                 </div>
-                                <div className="input times">
-                                    <label>Close Date</label>
-                                    <input
-                                        type="date"
-                                        value={formData.closetime || selectedCustomerData.closetime || book.closetime}
-                                        onChange={(event) => {
-                                            setBook({ ...book, closetime: event.target.value });
-                                            setCloseTime(event.target.value);
-                                        }}
-                                        name="closetime"
-                                    />
+                                <div className="input">
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoItem label="startDate">
+                                            <DatePicker
+                                                value={
+                                                    selectedCustomerData.closetime
+                                                        ? dayjs(selectedCustomerData.closetime)
+                                                        : null || book.closetime
+                                                            ? dayjs(book.closetime)
+                                                            : dayjs()
+                                                }
+                                                format="DD/MM/YYYY"
+                                                onChange={(date) => handleDateChange(date, "closetime")}
+                                            >
+                                                {({ inputProps, inputRef }) => (
+                                                    <TextField
+                                                        {...inputProps}
+                                                        inputRef={inputRef}
+                                                        value={selectedCustomerData?.closetime}
+                                                    />
+                                                )}
+                                            </DatePicker>
+                                        </DemoItem>
+                                    </LocalizationProvider>
                                 </div>
                             </div>
                             <div className="input-field">

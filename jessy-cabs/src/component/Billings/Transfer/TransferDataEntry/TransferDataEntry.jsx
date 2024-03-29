@@ -257,6 +257,9 @@ const TransferDataEntry = () => {
           </div>
           <div className='amount-calculator'>
             <div className="total-inputs" style={{ marginTop: '25px' }}>
+              <Button variant="contained" onClick={handleBillRemove} >Add To List</Button>
+            </div>
+            <div className="total-inputs" style={{ marginTop: '25px' }}>
               <Button variant="outlined" onClick={handleBillRemove} >Remove Selected</Button>
             </div>
             <div className='total-inputs' >
@@ -308,13 +311,13 @@ const TransferDataEntry = () => {
               <p>{warningMessage}</p>
             </div>
           }
-           {info &&
-              <div className='alert-popup Info' >
-                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                <p>{infoMessage}</p>
-              </div>
-            }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
+            </div>
+          }
         </div>
       </form>
     </div>

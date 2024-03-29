@@ -1236,6 +1236,11 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div>
+              <div className="input">
+                <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
+                  calculate
+                </Button>
+              </div>
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "250px" }}>
@@ -1289,9 +1294,7 @@ const TripSheet = () => {
 
               </div>
 
-              <Button style={{ marginLeft: "10px" }} variant="outlined" onClick={handleCalc} >
-                Calc
-              </Button>
+
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "400px" }}>

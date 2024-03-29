@@ -3,18 +3,29 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const db = require('../../../db');
 
+
 // trip sheet database:
-// add tripsheet database
+
+// add tripsheet database--------------------------------------------
 router.post('/tripsheet', (req, res) => {
     const bookData = req.body;
+    const { tripid } = req.body
+    // console.log(req.body)
+    console.log(tripid)
     db.query('INSERT INTO tripsheet SET ?', bookData, (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
+        // console.log("hello ", result.affectedRows)
+        // console.log("hello ", result)
+        if (result.affectedRows > 0) {
+            db.query(`delete from booking where tripid = ${tripid}`)
+        }
         return res.status(200).json({ message: "Data inserted successfully" });
     });
 });
-// delete tripsheet data
+
+// delete tripsheet data---------------------------------------------------
 router.delete('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     db.query('DELETE FROM tripsheet WHERE tripid = ?', tripid, (err, result) => {
@@ -27,7 +38,8 @@ router.delete('/tripsheet/:tripid', (req, res) => {
         return res.status(200).json({ message: "Data deleted successfully" });
     });
 });
-// update tripsheet details
+
+// update tripsheet details------------------------------------------------
 router.put('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     const updatedCustomerData = req.body;
@@ -41,7 +53,8 @@ router.put('/tripsheet/:tripid', (req, res) => {
         return res.status(200).json({ message: "Data updated successfully" });
     });
 });
-// collect data from tripsheet database
+
+// collect data from tripsheet database------------------------------------
 router.get('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     db.query('SELECT * FROM tripsheet WHERE tripid = ? AND status != "CBilled"', tripid, (err, result) => {
@@ -55,7 +68,8 @@ router.get('/tripsheet/:tripid', (req, res) => {
         return res.status(200).json(bookingDetails);
     });
 });
-// collect data from vehicleInfo database
+
+// collect data from vehicleInfo database------------------------------------
 router.get('/vehicleinfo/:vehRegNo', (req, res) => {
     const vehRegNo = req.params.vehRegNo;
     // Modify the query to use the LIKE operator for partial matching
@@ -70,7 +84,8 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
         return res.status(200).json(vehicleDetails);
     });
 });
-//send email from tripsheet page
+
+//send email from tripsheet page-----------------------------------
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
         const { guestname, guestmobileno, email, hireTypes, department, vehType, vehRegNo, driverName, mobileNo, useage, pickup } = req.body;

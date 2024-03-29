@@ -75,12 +75,13 @@ const useEmplyeecreation = () => {
     // TABLE START
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
+        { field: "userid", headerName: "User Id", width: 110 },
         { field: "username", headerName: "User_Name", width: 130 },
         { field: "userpassword", headerName: "Password", width: 130 },
-        { field: "active", headerName: "Active", width: 160 },
+        { field: "active", headerName: "Active", width: 100 },
         { field: "stationname", headerName: "Station", width: 130 },
         // { field: "viewfor", headerName: "Access", width: 130 },
-        { field: "designation", headerName: "Designation", width: 130 },
+        { field: "designation", headerName: "Designation", width: 150 },
         { field: "organizationname", headerName: "Organization", width: 130 }
     ];
 

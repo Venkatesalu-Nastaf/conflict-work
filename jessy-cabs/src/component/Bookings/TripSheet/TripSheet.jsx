@@ -148,6 +148,9 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
+
+
+
 const maplogcolumns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "tripid", headerName: "TripSheet No", width: 130 },
@@ -158,6 +161,7 @@ const maplogcolumns = [
 ];
 
 const TripSheet = () => {
+
 
   const {
     selectedCustomerData,
@@ -261,8 +265,14 @@ const TripSheet = () => {
     }
   }, [actionName, handleClick]);
 
+  // ayyanar.action
 
-  // console.log("data ", calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount)
+  // Filter the actions array based on the editMode variable
+  const filteredActions = isEditMode ? actions.filter(action => action.name !== "Add") : actions;
+
+
+
+
 
   return (
     <div className="form-container">
@@ -1278,7 +1288,7 @@ const TripSheet = () => {
                 </Button>
 
               </div>
-              {/* // ayyanar calc */}
+
               <Button style={{ marginLeft: "10px" }} variant="outlined" onClick={handleCalc} >
                 Calc
               </Button>
@@ -1311,6 +1321,7 @@ const TripSheet = () => {
                   </Button>
                 </DialogActions>
               </Dialog>
+              {/* // ayyanar calc */}
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
                   <Button variant="contained" onClick={handleEdit}>Edit</Button>
@@ -1354,7 +1365,7 @@ const TripSheet = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {actions.map((action) => (
+              {filteredActions.map((action) => (
                 <SpeedDialAction
                   key={action.name}
                   icon={action.icon}

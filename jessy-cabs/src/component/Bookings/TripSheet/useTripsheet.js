@@ -318,8 +318,12 @@ const useTripsheet = () => {
     }, [error, success, warning, info]);
 
 
+    //ayyanar
+    // const [passDataEdit, setPassDataEdit] = useState(false)
     useEffect(() => {
         const params = new URLSearchParams(location.search);
+        console.log("params111 ", params.size);
+
         const statusValue = params.get('status') || 'Opened';
         // const bookingsmsValue = params.get('smsguest') || 'smsguest';
         // const sendemailValue = params.get('booker') || 'booker';
@@ -348,6 +352,10 @@ const useTripsheet = () => {
         setTripSheetData(formData);
         setBook(formData);
         setFormData(formData);
+
+        if (params.size > 0) {
+            setIsEditMode(true)
+        }
     }, [location]);
 
     useEffect(() => {
@@ -728,12 +736,19 @@ const useTripsheet = () => {
 
     const handleAdd = async () => {
         const permissions = checkPagePermission();
-
         if (permissions.read && permissions.new) {
-            const customer = book.customer;
-            if (!customer) {
+            const customer = book.customer || "";
+            const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
+            const vehType = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
+            const driverName = formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '';
+            const mobileNo = formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
+
+            console.log("customer :/n", customer, "vehRegNo :/n", vehRegNo, "vehType :/n", vehType, "driverName :/n", driverName, "mobileNo :/n", mobileNo, "101010")
+
+            // if (customer === "" || vehRegNo === "" || vehType === "" || driverName === "" || mobileNo === "") {
+            if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo) {
                 setError(true);
-                setErrorMessage("fill mantatory fields");
+                setErrorMessage("Please fill all mandatory fields");
                 return;
             }
             try {
@@ -831,6 +846,7 @@ const useTripsheet = () => {
         }));
     };
 
+    // spped daial
     const handleClick = async (event, actionName) => {
         event.preventDefault();
         try {
@@ -847,7 +863,10 @@ const useTripsheet = () => {
             } else if (actionName === 'Edit') {
                 handleEdit();
             } else if (actionName === 'Add') {
-                handleAdd();
+                if (!isEditMode) {
+                    handleAdd();
+                }
+
             }
         } catch {
             setError(true);

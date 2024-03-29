@@ -388,7 +388,7 @@ const useBooking = () => {
       report: "",
       vehType: "",
       paymenttype: "",
-      startdate: "",
+      // startdate: "",
       starttime: "",
       reporttime: "",
       duty: "",
@@ -651,30 +651,60 @@ const useBooking = () => {
   //--------------------------------------------------------------
 
   const [lastBookingNo, setLastBookingNo] = useState("");
+  const reportdate = dayjs(book.startdate)
   const handleAdd = async () => {
     const permissions = checkPagePermission();
-  
+
     if (permissions.read && permissions.new) {
-   
-    //   if (!selectedCustomerData.guestmobileno ||
-    //     !formData.guestmobileno ||
-    //     !selectedCustomerDatas.guestmobileno ||
-    //     !book.guestmobileno) {
-    //     setError(true);
-    //     setErrorMessage("Enter Guest Mobile Number");
-    //     setGuestSms(false);
-    //     return;
-    // }
-//    if (!selectedCustomerData.bookingdate || !formData.bookingdate) {
-//     setError(true);
-//     setErrorMessage("Enter Starting Date");
-//     return;
-// }
-//    if (!selectedCustomerData.address1 || !selectedCustomerData.streetno || !selectedCustomerData.city) {
-//     setError(true);
-//     setErrorMessage("Enter Address Details");
-//     return;
-// }
+
+      if (!selectedCustomerData.guestmobileno) {
+        setError(true);
+        setErrorMessage("Enter Guest Mobile Number");
+        setGuestSms(false);
+        return;
+      }
+
+      if (!reportdate) {
+        setError(true);
+        setErrorMessage("Enter Report Date");
+        return;
+      }
+
+      if (!selectedCustomerData.customer) {
+        setError(true)
+        setErrorMessage("Enter Customer Name")
+        return
+      }
+      if (!selectedCustomerData.email) {
+        setError(true)
+        setErrorMessage("Enter Email Field")
+        return
+      }
+      if (!selectedCustomerData.vehType) {
+        setError(true)
+        setErrorMessage("Enter VehicleType")
+        return
+      }
+      if (!selectedCustomerData.starttime) {
+        setError(true)
+        setErrorMessage("Enter starting Time")
+        return
+      }
+      if (!selectedCustomerData.reporttime) {
+        setError(true)
+        setErrorMessage("Enter Report Time")
+        return
+      }
+      if (!selectedCustomerData.guestname) {
+        setError(true)
+        setErrorMessage("Enter GuestName")
+        return
+      }
+      if (!selectedCustomerData.address1 || !selectedCustomerData.streetno || !selectedCustomerData.city) {
+        setError(true);
+        setErrorMessage("Enter Address Details");
+        return;
+      }
       const customer = book.status;
       if (customer === "") {
         setError(true);
@@ -684,7 +714,7 @@ const useBooking = () => {
 
       try {
 
-    
+
         const selectedBookingDate =
           selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
 
@@ -692,10 +722,12 @@ const useBooking = () => {
         // Create a new object without the 'id' field from selectedCustomerData
         const { id, ...restSelectedCustomerData } = selectedCustomerData;
         let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
-         console.log(formData,"formdata");
-         console.log(selectedCustomerData,"scdata");
-         console.log(selectedCustomerDatas,'scdatas');
-         console.log(book,"book");
+
+        //  console.log(formData,"formdata");
+        //  console.log(selectedCustomerData,"scdata");
+        //  console.log(selectedCustomerDatas,'scdatas');
+        //  console.log(book,"book");
+
         const updatedBook = {
 
           // ...book,
@@ -747,6 +779,7 @@ const useBooking = () => {
         await axios.post(`${apiUrl}/booking`, updatedBook);
         const response = await axios.get(`${apiUrl}/last-booking-no`);
         const lastBookingno = response.data.bookingno;
+        setGuestSms(true)
         setLastBookingNo(lastBookingno);
         setPopupOpen(true);
         handleCancel();
@@ -776,6 +809,7 @@ const useBooking = () => {
     try {
 
       if (permissions.read && permissions.modify) {
+        setEdit(false)
         const selectedCustomer = rows.find(
           (row) =>
             row.bookingno === selectedCustomerData.bookingno ||
@@ -817,7 +851,7 @@ const useBooking = () => {
         const { id, ...restSelectedCustomerData } = selectedCustomerData;
         let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
         const updatedCustomer = {
-           ...selectedCustomer,
+          ...selectedCustomer,
           // ...book,
           // ...formData,
           // ...selectedCustomerData,
@@ -874,14 +908,15 @@ const useBooking = () => {
         )
 
         setEdit(false)
+
         handleCancel();
         addPdf();
         setRow([]);
         setRows([]);
-        handlecheck();
+        // handlecheck();
         // handleSendSMS();
         setSuccess(true);
-   
+
         setSuccessMessage("Successfully Updated");
       } else {
         setInfo(true);
@@ -892,6 +927,8 @@ const useBooking = () => {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
+    setSendEmail(true)
+    setGuestSms(true)
   };
 
   const handleClick = async (event, actionName) => {
@@ -1205,7 +1242,7 @@ const useBooking = () => {
 
   const handleSendSMS = async (trip) => {
     const bookingno = trip
-    
+
     // if (guestsms || formData.guestsms || book.guestsms) {
     if (guestsms) {
       try {
@@ -1222,7 +1259,7 @@ const useBooking = () => {
             book.guestmobileno ||
             formData.guestmobileno ||
             "",
-            tripid: bookingno,
+          tripid: bookingno,
           email:
             formValues.email ||
             selectedCustomerData.email ||
@@ -1416,7 +1453,9 @@ const useBooking = () => {
     setError,
     handleenterSearch,
     edit,
-    setEdit
+    setEdit,
+    reporttime,
+    starttime
   };
 };
 

@@ -1060,6 +1060,7 @@ const Booking = () => {
                     <Checkbox
                       size="small"
                       checked={sendEmail}
+                      defaultChecked
                       onChange={(event) => setSendEmail(event.target.checked)}
                     />
                   }

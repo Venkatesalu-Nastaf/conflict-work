@@ -306,12 +306,15 @@ router.get('/table-for-booking', (req, res) => {
         const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
         query += ` AND (${likeConditions})`;
-        params = columnsToSearch.map(() => `%${searchText}%`);
+        params = columnsToSearch.map(() => `${searchText}%`);
     }
 
-    if (fromDate && moment(fromDate, 'YYYY/MM/DD', true).isValid() && toDate && moment(toDate, 'YYYY/MM/DD', true).isValid()) {
-        const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD HH:mm:ss');
-        const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD HH:mm:ss');
+    // if (fromDate && moment(fromDate, 'YYYY/MM/DD', true).isValid() && toDate && moment(toDate, 'YYYY/MM/DD', true).isValid())
+    if (fromDate && toDate) {
+        // const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
+        // const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
+        const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+        const formattedToDate = moment(toDate).format('YYYY-MM-DD');
 
         query += ' AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
         params.push(formattedFromDate, formattedToDate);

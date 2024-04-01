@@ -204,37 +204,37 @@ const useBooking = () => {
   };
 
   useEffect(() => {
-    if (error) {
+    if (error || warning || info || success) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [error]);
-  useEffect(() => {
-    if (warning) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [warning]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [info]);
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
+  }, [error, warning, info, success]);
+  // useEffect(() => {
+  //   if (warning) {
+  //     const timer = setTimeout(() => {
+  //       hidePopup();
+  //     }, 3000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [warning]);
+  // useEffect(() => {
+  //   if (info) {
+  //     const timer = setTimeout(() => {
+  //       hidePopup();
+  //     }, 3000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [info]);
+  // useEffect(() => {
+  //   if (success) {
+  //     const timer = setTimeout(() => {
+  //       hidePopup();
+  //     }, 3000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [success]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -722,11 +722,6 @@ const useBooking = () => {
         // Create a new object without the 'id' field from selectedCustomerData
         const { id, ...restSelectedCustomerData } = selectedCustomerData;
         let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
-
-        //  console.log(formData,"formdata");
-        //  console.log(selectedCustomerData,"scdata");
-        //  console.log(selectedCustomerDatas,'scdatas');
-        //  console.log(book,"book");
 
         const updatedBook = {
 

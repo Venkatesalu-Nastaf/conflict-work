@@ -322,19 +322,20 @@ const useTripsheet = () => {
     // const [passDataEdit, setPassDataEdit] = useState(false)
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        console.log("params111 ", params.size);
-
+        // console.log("params111 ", params.size);
+        // const appValue = "Accept"
         const statusValue = params.get('status') || 'Opened';
+
         // const bookingsmsValue = params.get('smsguest') || 'smsguest';
         // const sendemailValue = params.get('booker') || 'booker';
         // const emailcheckValue = params.get('emailcheck') || 'emailcheck';
         // const DriverSMSValue = params.get('DriverSMS') || 'DriverSMS';
         // const gpsValue = params.get('gps') || 'gps';
-        const appsValue = params.get('apps') || 'Waiting';
+
         const formData = {};
 
         const parameterKeys = [
-            'tripid', 'bookingno', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'caramount', 'minkm', 'minhrs', 'package', 'amount', 'exkm', 'amount1', 'exHrs', 'amount2', 'night', 'amount3', 'driverconvenience', 'amount4', 'exkmTkm', 'exHrsTHrs', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
+            'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'caramount', 'minkm', 'minhrs', 'package', 'amount', 'exkm', 'amount1', 'exHrs', 'amount2', 'night', 'amount3', 'driverconvenience', 'amount4', 'exkmTkm', 'exHrsTHrs', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -342,6 +343,21 @@ const useTripsheet = () => {
                 formData[key] = value;
             }
         });
+
+        let appsValue;
+
+        // Check if dispatchcheck is true
+        if (formData['dispatchcheck'] === 'true') {
+            setIsEditMode(true);
+            appsValue = "Be_Closed"
+        } else {
+            setIsEditMode(false);
+            appsValue = params.get('apps') || 'Waiting';
+        }
+
+        // Remove dispatchcheck from formData
+        delete formData['dispatchcheck'];
+
         formData['status'] = statusValue;
         // formData['smsguest'] = bookingsmsValue;
         // formData['booker'] = sendemailValue;
@@ -353,9 +369,6 @@ const useTripsheet = () => {
         setBook(formData);
         setFormData(formData);
 
-        if (params.size > 0) {
-            setIsEditMode(true)
-        }
     }, [location]);
 
     useEffect(() => {

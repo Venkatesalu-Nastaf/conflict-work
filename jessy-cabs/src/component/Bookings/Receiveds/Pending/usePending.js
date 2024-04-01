@@ -115,38 +115,38 @@ const usePending = () => {
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
+    }, [error, success, warning, info]);
 
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    // useEffect(() => {
+    //     if (success) {s
+    //         const timer = setTimeout(() => {
+    //             hidePopup();
+    //         }, 3000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [success]);
+    // useEffect(() => {
+    //     if (warning) {
+    //         const timer = setTimeout(() => {
+    //             hidePopup();
+    //         }, 3000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [warning]);
+    // useEffect(() => {
+    //     if (info) {
+    //         const timer = setTimeout(() => {
+    //             hidePopup();
+    //         }, 3000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [info]);
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");

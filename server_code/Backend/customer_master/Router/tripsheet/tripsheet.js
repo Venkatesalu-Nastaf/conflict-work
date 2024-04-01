@@ -18,9 +18,9 @@ router.post('/tripsheet', (req, res) => {
         }
         // console.log("hello ", result.affectedRows)
         // console.log("hello ", result)
-        if (result.affectedRows > 0) {
-            db.query(`delete from booking where tripid = ${tripid}`)
-        }
+        // if (result.affectedRows > 0) {
+        //     db.query(`delete from booking where tripid = ${tripid}`)
+        // }
         return res.status(200).json({ message: "Data inserted successfully" });
     });
 });

@@ -1327,7 +1327,7 @@ const TripSheet = () => {
               {/* // ayyanar calc */}
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
-                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  <Button variant="contained" onClick={handleEdit}>Confirm</Button>
                 ) : (
                   <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
                 )}

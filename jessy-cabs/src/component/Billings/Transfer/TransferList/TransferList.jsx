@@ -21,6 +21,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferlist from './useTransferlist';
+import { useData } from '../../../Dashboard/Maindashboard/DataContext';
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
@@ -56,7 +57,7 @@ const TransferList = () => {
         handleButtonClickTripsheet,
 
     } = useTransferlist();
-
+    const {organizationName} = useData()
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
@@ -81,7 +82,7 @@ const TransferList = () => {
                                         freeSolo
                                         size="small"
                                         value={customer}
-                                        options={bankOptions}
+                                        options={organizationName}
                                         onChange={(event, value) => setCustomer(value)}
                                         renderInput={(params) => {
                                             return (
@@ -167,7 +168,7 @@ const TransferList = () => {
                         <DataGrid
                             rows={rows}
                             columns={columns}
-                            onRowClick={(event) => handleButtonClickTripsheet(event.row)}
+                            onRowClick={handleButtonClickTripsheet}
                             pageSize={5}
                             checkboxSelection
                             getRowId={(row) => row.id}

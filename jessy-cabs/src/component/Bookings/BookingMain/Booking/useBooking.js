@@ -101,7 +101,10 @@ const useBooking = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupOpenmail, setpopupOpenmail] = useState(false);
   const [edit, setEdit] = useState(false)
-
+  const [guestsms, setGuestSms] = useState(true);
+  const [sendEmail, setSendEmail] = useState(true);
+  const[sendguestsms,setSendGuestsms]=useState(false);
+  const[sendmailguestsms,setSendmailGuestsms]=useState(false);
   const handlePopupClose = () => {
     setPopupOpen(false);
     setpopupOpenmail(false);
@@ -650,6 +653,130 @@ const useBooking = () => {
 
   //--------------------------------------------------------------
 
+  const handleSendSMS = async (trip) => {
+    const bookingno = trip
+
+    // if (guestsms || formData.guestsms || book.guestsms) {
+    if (guestsms || sendguestsms) {
+      try {
+        const dataToSend = {
+          guestname:
+            formValues.guestname ||
+            selectedCustomerData.guestname ||
+            book.guestname ||
+            formData.guestname ||
+            "",
+          guestmobileno:
+            formValues.guestmobileno ||
+            selectedCustomerData.guestmobileno ||
+            book.guestmobileno ||
+            formData.guestmobileno ||
+            "",
+          tripid: bookingno,
+          email:
+            formValues.email ||
+            selectedCustomerData.email ||
+            book.email ||
+            formData.pickup ||
+            "",
+          pickup:
+            formValues.pickup ||
+            selectedCustomerData.pickup ||
+            book.pickup ||
+            formData.pickup ||
+            "",
+          useage:
+            formValues.useage ||
+            selectedCustomerData.useage ||
+            book.useage ||
+            formData.useage ||
+            "",
+          reporttime:
+            formValues.reporttime ||
+            formData.reporttime ||
+            selectedCustomerData.reporttime ||
+            book.reporttime ||
+            "",
+          startdate:
+            formValues.startdate ||
+            formData.startdate ||
+            selectedCustomerData.startdate ||
+            book.startdate ||
+            "",
+          address1:
+            formValues.address1 ||
+            formData.address1 ||
+            selectedCustomerData.address1 ||
+            book.address1 ||
+            "",
+          streetno:
+            formValues.streetno ||
+            formData.streetno ||
+            selectedCustomerData.streetno ||
+            book.streetno ||
+            "",
+          city:
+            formValues.city ||
+            formData.city ||
+            selectedCustomerData.city ||
+            book.city ||
+            "",
+        };
+
+        const response = await fetch(`${apiUrl}/send-sms`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        });
+
+        if (response.ok) {
+          setSuccess(true);
+          setSuccessMessage("SMS sent correctly");
+        } else {
+          setError(true);
+          setErrorMessage("Failed to send SMS");
+        }
+      } catch {
+        setError(true);
+        setErrorMessage("Error sending SMS");
+      }
+    }
+  };
+  const handlecheck = async () => {
+    // if (sendEmail || formData.sendemail || book.sendemail) {
+    if (sendEmail || sendmailguestsms) {
+      try {
+        const dataToSend = {
+          guestname:
+            formValues.guestname ||
+            selectedCustomerData.guestname ||
+            book.guestname ||
+            formData.guestname,
+          guestmobileno:
+            formValues.guestmobileno ||
+            selectedCustomerData.guestmobileno ||
+            book.guestmobileno ||
+            formData.guestmobileno,
+          email: formValues.email || selectedCustomerData.email || book.email,
+          pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
+          useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage
+        };
+        await axios.post(`${apiUrl}/send-email`, dataToSend);
+        setSuccess(true);
+        setSuccessMessage("Mail Sent Successfully");
+      } catch (error) {
+        setError(true);
+        setErrorMessage("An error occured while sending mail", error);
+      }
+    } else {
+      setError(true);
+      setErrorMessage("Send mail checkbox is not checked. Email not sent.");
+    }
+  };
+
+
   const [lastBookingNo, setLastBookingNo] = useState("");
   const reportdate = dayjs(book.startdate)
   const handleAdd = async () => {
@@ -771,10 +898,12 @@ const useBooking = () => {
           orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
           customer: restSelectedCustomerData.customer
         };
+        setSendGuestsms(true)
+        setSendmailGuestsms(true)
         await axios.post(`${apiUrl}/booking`, updatedBook);
         const response = await axios.get(`${apiUrl}/last-booking-no`);
         const lastBookingno = response.data.bookingno;
-        setGuestSms(true)
+        // setGuestSms(true)
         setLastBookingNo(lastBookingno);
         setPopupOpen(true);
         handleCancel();
@@ -922,8 +1051,8 @@ const useBooking = () => {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
-    setSendEmail(true)
-    setGuestSms(true)
+    // setSendEmail(true)
+    // setGuestSms(true)
   };
 
   const handleClick = async (event, actionName) => {
@@ -1119,45 +1248,14 @@ const useBooking = () => {
   );
 
   const handletableClick = useCallback((params) => {
+    setGuestSms(false)
+    setSendEmail(false)
     setEdit(true)
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.customerId);
     setIsEditMode(true);
   }, []);
-
-  const [sendEmail, setSendEmail] = useState(true);
-  const handlecheck = async () => {
-    // if (sendEmail || formData.sendemail || book.sendemail) {
-    if (sendEmail) {
-      try {
-        const dataToSend = {
-          guestname:
-            formValues.guestname ||
-            selectedCustomerData.guestname ||
-            book.guestname ||
-            formData.guestname,
-          guestmobileno:
-            formValues.guestmobileno ||
-            selectedCustomerData.guestmobileno ||
-            book.guestmobileno ||
-            formData.guestmobileno,
-          email: formValues.email || selectedCustomerData.email || book.email,
-          pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
-          useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage
-        };
-        await axios.post(`${apiUrl}/send-email`, dataToSend);
-        setSuccess(true);
-        setSuccessMessage("Mail Sent Successfully");
-      } catch (error) {
-        setError(true);
-        setErrorMessage("An error occured while sending mail", error);
-      }
-    } else {
-      setError(true);
-      setErrorMessage("Send mail checkbox is not checked. Email not sent.");
-    }
-  };
 
   const reversedRows = [...row].reverse();
 
@@ -1233,99 +1331,7 @@ const useBooking = () => {
   }, [user]);
   const storedUsername = localStorage.getItem("username");
 
-  const [guestsms, setGuestSms] = useState(true);
 
-  const handleSendSMS = async (trip) => {
-    const bookingno = trip
-
-    // if (guestsms || formData.guestsms || book.guestsms) {
-    if (guestsms) {
-      try {
-        const dataToSend = {
-          guestname:
-            formValues.guestname ||
-            selectedCustomerData.guestname ||
-            book.guestname ||
-            formData.guestname ||
-            "",
-          guestmobileno:
-            formValues.guestmobileno ||
-            selectedCustomerData.guestmobileno ||
-            book.guestmobileno ||
-            formData.guestmobileno ||
-            "",
-          tripid: bookingno,
-          email:
-            formValues.email ||
-            selectedCustomerData.email ||
-            book.email ||
-            formData.pickup ||
-            "",
-          pickup:
-            formValues.pickup ||
-            selectedCustomerData.pickup ||
-            book.pickup ||
-            formData.pickup ||
-            "",
-          useage:
-            formValues.useage ||
-            selectedCustomerData.useage ||
-            book.useage ||
-            formData.useage ||
-            "",
-          reporttime:
-            formValues.reporttime ||
-            formData.reporttime ||
-            selectedCustomerData.reporttime ||
-            book.reporttime ||
-            "",
-          startdate:
-            formValues.startdate ||
-            formData.startdate ||
-            selectedCustomerData.startdate ||
-            book.startdate ||
-            "",
-          address1:
-            formValues.address1 ||
-            formData.address1 ||
-            selectedCustomerData.address1 ||
-            book.address1 ||
-            "",
-          streetno:
-            formValues.streetno ||
-            formData.streetno ||
-            selectedCustomerData.streetno ||
-            book.streetno ||
-            "",
-          city:
-            formValues.city ||
-            formData.city ||
-            selectedCustomerData.city ||
-            book.city ||
-            "",
-        };
-
-        const response = await fetch(`${apiUrl}/send-sms`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataToSend),
-        });
-
-        if (response.ok) {
-          setSuccess(true);
-          setSuccessMessage("SMS sent correctly");
-        } else {
-          setError(true);
-          setErrorMessage("Failed to send SMS");
-        }
-      } catch {
-        setError(true);
-        setErrorMessage("Error sending SMS");
-      }
-    }
-  };
 
   const [attachedImage, setAttachedImage] = useState("");
 

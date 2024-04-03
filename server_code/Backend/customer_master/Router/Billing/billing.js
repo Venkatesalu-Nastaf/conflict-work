@@ -118,34 +118,37 @@ router.get('/routedata/:tripid', (req, res) => {
 
 //cover billing
 router.get('/Group-Billing', (req, res) => {
-  const { invoiceno, customer, fromDate, toDate, servicestation } = req.query;
+  const {  customer, fromDate, toDate  } = req.query;
 
-  let query = 'SELECT * FROM tripsheet WHERE  status IN ("Closed", "CBilled")';
-  let params = [];
+  let query = 'SELECT * FROM tripsheet WHERE  apps="Be_Closed" and customer=?  AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+  // let query = 'SELECT * FROM tripsheet WHERE apps="Be_Closed" AND customer=? AND startdate=? AND closedate=?';
 
-  if (invoiceno) {
-    query += ' AND invoiceno = ?';
-    params.push(invoiceno);
-  }
 
-  if (customer) {
-    const decodedCustomer = decodeURIComponent(customer);
-    query += ' AND customer = ?';
-    params.push(decodedCustomer);
-  }
+  // let params = [];
 
-  if (fromDate && toDate) {
-    query += ' AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
-    params.push(fromDate);
-    params.push(toDate);
-  }
+  // if (invoiceno) {
+  //   query += ' AND invoiceno = ?';
+  //   params.push(invoiceno);
+  // }
 
-  if (servicestation) {
-    query += ' AND department = ?';
-    params.push(servicestation);
-  }
+  // if (customer) {
+  //   const decodedCustomer = decodeURIComponent(customer);
+  //   query += ' AND customer = ?';
+  //   params.push(decodedCustomer);
+  // }
 
-  db.query(query, params, (err, result) => {
+  // if (fromDate && toDate) {
+  //   query += ' AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+  //   params.push(fromDate);
+  //   params.push(toDate);
+  // }
+
+  // if (servicestation) {
+  //   query += ' AND department = ?';
+  //   params.push(servicestation);
+  // }
+
+  db.query(query, [customer, fromDate, toDate ], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }

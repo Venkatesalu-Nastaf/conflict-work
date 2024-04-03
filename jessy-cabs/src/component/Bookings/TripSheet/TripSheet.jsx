@@ -164,8 +164,8 @@ const TripSheet = () => {
 
 
   const {
-    selectedCustomerData,
-    selectedCustomerId,
+    selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
+    selectedCustomerId, setNightBeta, setNightCount,
     rows,
     actionName,
     error,
@@ -254,7 +254,7 @@ const TripSheet = () => {
     handleEdit,
     SignPage,
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
-    ex_kmAmount, ex_hrAmount, nightAbount_calc, nightCount_calc, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
+    ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
     totalcalcAmount,
 
   } = useTripsheet();
@@ -271,7 +271,8 @@ const TripSheet = () => {
   const filteredActions = isEditMode ? actions.filter(action => action.name !== "Add") : actions;
 
 
-
+  console.log("oooo", nightBta, nightCount, driverBeta, driverbeta_Count)
+  console.log("ooootrue", calcPackage, extraHR, extraKM)
 
 
   return (
@@ -1326,8 +1327,10 @@ const TripSheet = () => {
               </Dialog>
               {/* // ayyanar calc */}
               <div className="input" style={{ width: "160px" }}>
-                {isEditMode ? (
-                  <Button variant="contained" onClick={handleEdit}>Confirm</Button>
+                {isEditMode ? (<>
+                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button>
+                </>
                 ) : (
                   <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
                 )}
@@ -2073,7 +2076,7 @@ const TripSheet = () => {
                       <TextField
                         name="pack"
                         // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
-                        value={calcPackage || ''}
+                        value={calcPackage || formData.calcPackage || ''}
                         // onChange={handleChange}
 
                         label="Pack"
@@ -2091,7 +2094,7 @@ const TripSheet = () => {
                       <TextField
                         name="amount5"
                         // value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate || ''}
-                        value={package_amount || ''}
+                        value={package_amount || formData.calcPackage || ''}
                         // onChange={handleChange}
                         size="small"
                         label="Amount"
@@ -2110,7 +2113,7 @@ const TripSheet = () => {
                         name="exkm1"
                         // value={book.exkm1 || packageDetails[0]?.extraKMS || ''}
                         // onChange={handleChange} 
-                        value={extraKM || 0}
+                        value={extraKM || formData.calcPackage || 0}
                         label="Ex.Km"
                         id="ex-km"
                         autoComplete="password"
@@ -2125,7 +2128,7 @@ const TripSheet = () => {
                       <TextField size="small"
                         name='exkmTkm2'
                         // value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2 || ''}
-                        value={extrakm_amount || ''}
+                        value={extrakm_amount || formData.calcPackage || ''}
                         // onChange={handleChange}
                         id="exkmTkm"
                         variant="standard"
@@ -2139,7 +2142,7 @@ const TripSheet = () => {
                       <TextField
                         name="amount6"
                         // value={book.amount6 || calculateExkmAmount2() || ''}
-                        value={ex_kmAmount || 0}
+                        value={ex_kmAmount || formData.calcPackage || 0}
                         size="small"
                         label="Amount"
                         autoComplete="password"
@@ -2157,7 +2160,7 @@ const TripSheet = () => {
                       <TextField
                         name="exHrs1"
                         // value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours || ''}
-                        value={extraHR || ''}
+                        value={extraHR || formData.calcPackage || ''}
                         // onChange={handleChange}
                         label="Ex.Hrs"
                         id="ex-Hrs"
@@ -2174,7 +2177,7 @@ const TripSheet = () => {
                         size="small"
                         name='exHrsTHrs2'
                         // value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2 || ''}  extrahr_amount
-                        value={extrahr_amount || ''}
+                        value={extrahr_amount || formData.calcPackage || ''}
                         // onChange={handleChange}
                         variant="standard"
                       />
@@ -2190,7 +2193,7 @@ const TripSheet = () => {
                         name="amount7"
                         // value={book.amount7 || calculateExHrsAmount2() || ''}
                         // onChange={caculate_extraHR}
-                        value={ex_hrAmount || 0}
+                        value={ex_hrAmount || formData.calcPackage || 0}
                         size="small"
                         label="Amount"
                         autoComplete="password"
@@ -2204,13 +2207,11 @@ const TripSheet = () => {
                       <div className="icone">
                         <FontAwesomeIcon icon={faCloudMoon} />
                       </div>
+                      {/* {console.log("www", nightBta)} */}
                       <TextField
                         name="night1"
-                        // value={formData.night1 || selectedCustomerData.night1 || book.night1 || packageDetails[0]?.NHalt || ''}
-                        // onChange={handleChange}
-
-                        onChange={nightAbount_calc}
-
+                        value={nightBta || ''}
+                        onChange={(e) => setNightBeta(e.target.value)}
                         label="Night"
                         id="night"
                         autoComplete="password"
@@ -2225,9 +2226,8 @@ const TripSheet = () => {
                       <TextField
                         size="small"
                         name='nightThrs2'
-                        // value={formData.nightThrs2 || selectedCustomerData.nightThrs2 || book.nightThrs2 || ''}
-                        // onChange={handleChange}
-                        onChange={nightCount_calc}
+                        value={nightCount || ''}
+                        onChange={(e) => setNightCount(e.target.value)}
                         variant="standard"
                         autoComplete="password"
                       />
@@ -2238,9 +2238,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount8"
-                        // value={formData.amount8 || selectedCustomerData.amount8 || book.amount8 || calculateNightAmount2() || ''}
-                        // onChange={handleChange}
-                        value={night_totalAmount}
+                        value={night_totalAmount || 0}
                         size="small"
                         autoComplete="password"
                         label="Amount"
@@ -2256,8 +2254,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="driverconvenience1"
-                        // value={formData.driverconvenience1 || selectedCustomerData.driverconvenience1 || book.driverconvenience1 || ''}
-                        // onChange={handleChange}
+                        value={driverBeta || formData.driverBeta || ''}
                         onChange={driverBeta_calc}
                         label="Driver Convenience"
                         autoComplete="password"
@@ -2273,8 +2270,7 @@ const TripSheet = () => {
                       <TextField
                         size="small"
                         name='dtc2'
-                        // value={formData.dtc2 || selectedCustomerData.dtc2 || book.dtc2 || ''}
-                        // onChange={handleChange}
+                        value={driverbeta_Count || formData.driverbeta_Count || ''}
                         onChange={driverbeta_Count_calc}
                         variant="standard"
                         autoComplete="password"
@@ -2286,9 +2282,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount9"
-                        // value={book.amount9 || calculatedriverconvienceAmount2() || ''}
-                        // onChange={handleChange}
-                        value={driverBeta_amount}
+                        value={driverBeta_amount || 0}
                         size="small"
                         label="Amount"
                         id="amount"
@@ -2300,8 +2294,7 @@ const TripSheet = () => {
 
                   <TextField
                     name="amount9"
-                    value={totalcalcAmount}
-                    // onChange={handleChange}
+                    value={totalcalcAmount || 0}
                     size="small"
                     label="Total Amount"
                     id="amount"

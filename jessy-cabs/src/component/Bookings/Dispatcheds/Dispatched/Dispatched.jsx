@@ -7,6 +7,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Dialog from '@material-ui/core/Dialog';
 import MenuItem from '@mui/material/MenuItem';
 import { Department } from "./DispatchedData.js";
+import { Status } from "./DispatchedData.js";
 import Autocomplete from "@mui/material/Autocomplete";
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -28,6 +29,7 @@ import useDispatched from './useDispatched.js';
 const Dispatched = () => {
 
   const {
+    statusvalue, handlestatusChange,
     fromDate,
     setFromDate,
     toDate,
@@ -98,6 +100,44 @@ const Dispatched = () => {
                 </div>
               </div>
               <div className="input-field">
+
+                {/* // status */}
+                <div className="input" style={{ width: "300px" }}>
+                  {/* <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={statusvalue}
+                    options={Status.map((option) => ({
+                      label: option.option,
+                    }))}
+                    onChange={(event, value) => handlestatusChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Status" inputRef={params.inputRef} />
+                      );
+                    }}
+                  /> */}
+
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={statusvalue}
+                    options={Status.map((option) => ({
+                      label: option.option,
+                    }))}
+                    onChange={(event, value) => handlestatusChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Status" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+
+                </div>
                 <div className="input" style={{ width: "300px" }}>
                   <Autocomplete
                     fullWidth
@@ -116,6 +156,7 @@ const Dispatched = () => {
                     }}
                   />
                 </div>
+
                 <div className="input" style={{ width: '170px' }}>
                   <Button variant="contained" onClick={handleButtontripsheet}>
                     New TripSheet

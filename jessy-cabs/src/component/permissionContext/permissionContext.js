@@ -7,20 +7,15 @@ export const PermissionsContext = createContext();
 export const PermissionsProvider = ({ children }) => {
     const [userPermissions, setUserPermissions] = useState({});
 
-
     const user_id = localStorage.getItem('useridno');
-    // console.log("user id", user_id)
 
     useEffect(() => {
         const fetchPermissions = async () => {
             try {
                 if (user_id !== "undefined") {
-                    // console.log("user_id ", user_id)
                     const response = await axios.get(`${APIURL}/user-permissions/${user_id}`);
                     const permissionsData = response.data;
                     console.log("per123 ", permissionsData)
-                    // console.log("permiss ", permissionsData.page_name)
-
                     setUserPermissions(permissionsData);
                 }
             } catch (error) {

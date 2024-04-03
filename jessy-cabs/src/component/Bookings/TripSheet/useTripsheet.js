@@ -9,11 +9,7 @@ import {
 import { APIURL } from "../../url";
 
 const useTripsheet = () => {
-
-    // console.log("this ic check")
     const apiUrl = APIURL;
-
-    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
@@ -118,7 +114,6 @@ const useTripsheet = () => {
 
 
     const isFieldReadOnly = (fieldName) => {
-        // console.log(c++)
         const permissions = checkPagePermission();
         if (permissions.read) {
             if (fieldName === "delete" && !permissions.delete) {
@@ -340,12 +335,10 @@ const useTripsheet = () => {
     }, [error, success, warning, info]);
 
 
-    //ayyanar
-    // const [passDataEdit, setPassDataEdit] = useState(false)
+    // data getting from dispatch --------------------------
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        // console.log("params111 ", params.size);
-        // const appValue = "Accept"
         const statusValue = params.get('status') || 'Opened';
 
         // const bookingsmsValue = params.get('smsguest') || 'smsguest';
@@ -370,10 +363,7 @@ const useTripsheet = () => {
         const driverbeta_Count = params.get('driverbeta_Count');
         const driverBeta_amount = params.get('driverBeta_amount');
         const totalcalcAmount = params.get('totalcalcAmount');
-
-        console.log("bbbb_driverbeta", driverBeta)
-        // console.log("bbbb", extrakm_amount)
-        // console.log("bbbb", totalcalcAmount)
+        //----------------------
 
         const formData = {};
 
@@ -387,18 +377,13 @@ const useTripsheet = () => {
             }
         });
 
-        // console.log("formdata", formData)
-
         let appsValue = params.get('apps') || 'Waiting';
 
         // Check if dispatchcheck is true
         if (formData['dispatchcheck'] === 'true') {
             setIsEditMode(true);
-
-            // appsValue = "Be_Closed"
         } else {
             setIsEditMode(false);
-            // appsValue = params.get('apps') || 'Opened';
         }
 
         // Remove dispatchcheck from formData
@@ -730,9 +715,6 @@ const useTripsheet = () => {
     }
 
 
-    console.log("1222", book.apps || formData.apps || selectedCustomerData.apps,)
-
-
     const handleEdit = async () => {
         try {
 
@@ -916,9 +898,6 @@ const useTripsheet = () => {
             const driverName = formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '';
             const mobileNo = formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
 
-            // console.log("customer :/n", customer, "vehRegNo :/n", vehRegNo, "vehType :/n", vehType, "driverName :/n", driverName, "mobileNo :/n", mobileNo, "101010")
-
-            // if (customer === "" || vehRegNo === "" || vehType === "" || driverName === "" || mobileNo === "") {
             if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo) {
                 setError(true);
                 setErrorMessage("Please fill all mandatory fields");
@@ -1352,12 +1331,8 @@ const useTripsheet = () => {
             try {
                 const response = await axios.get(`${apiUrl}/tripsheet/${event.target.value}`);
                 const bookingDetails = response.data;
-
-                // console.log("pppp", bookingDetails.extraHR)
-                // console.log("pppp", bookingDetails.extraKM)
                 if (response.status === 200 && bookingDetails) {
-                    // console.log(bookingDetails.driverBeta)
-                    console.log("pppp", bookingDetails.driverBeta, bookingDetails.driverbeta_Count)
+
                     setSelectedCustomerData(bookingDetails);
                     setSelectedCustomerId(bookingDetails.tripid);
                     //--------------calc---------
@@ -1377,7 +1352,6 @@ const useTripsheet = () => {
                     setdriverbeta_Count(bookingDetails.driverbeta_Count);
                     setdriverBeta_amount(bookingDetails.driverBeta_amount);
                     setTotalcalcAmount(bookingDetails.totalcalcAmount);
-                    // setdriverBeta, setdriverbeta_Count, setNightBeta, setNightCount
 
                     //---------------------------
                     setSuccess(true);
@@ -1399,8 +1373,6 @@ const useTripsheet = () => {
         }
     }, [apiUrl]);
 
-    console.log("ggggmm", driverBeta)
-
     const [enterPressCount, setEnterPressCount] = useState(0);
 
     const handleKeyEnter = useCallback(async (event) => {
@@ -1411,7 +1383,6 @@ const useTripsheet = () => {
                 try {
                     const response = await axios.get(`${apiUrl}/vehicleinfo/${event.target.value}`);
                     const vehicleData = response.data;
-                    // console.log("pppp", vehicleData)
                     setRows([vehicleData]);
                 } catch {
                 }
@@ -1579,15 +1550,12 @@ const useTripsheet = () => {
 
             try {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
-                // console.log(response, 'resssss');
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
-                    // console.log(imageUrl, 'imgggggg');
                     setSignImageUrl(imageUrl);
                 }
 
                 else {
-                    // fetchData()
                     const timer = setTimeout(fetchData, 500);
                     setSignImageUrl("");
                     return () => clearTimeout(timer);
@@ -1747,25 +1715,9 @@ const useTripsheet = () => {
 
         // Calculate the total hours
         const totalHours = hours + (minutes || 0) / 60; // if no minutes provided, consider it as 0
-
         return totalHours;
     }
 
-
-
-
-    // console.log("bbbb", nightBta)
-
-    //  nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
-
-    // const nightAbount_calc = (e) => {
-    //     setNightBeta(e.target.value)
-    // }
-
-
-    // const nightCount_calc = (e) => {
-    //     setNightCount(e.target.value)
-    // }
 
     useEffect(() => {
         const calcdata = () => {
@@ -1811,8 +1763,6 @@ const useTripsheet = () => {
         const totalAmountCalc = () => {
             const total = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll) + Number(customer_advance);
             setTotalcalcAmount(total);
-            // console.log("customer_advance", customer_advance)
-
         }
         totalAmountCalc()
     }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll, v_permit_vendor, vender_toll])

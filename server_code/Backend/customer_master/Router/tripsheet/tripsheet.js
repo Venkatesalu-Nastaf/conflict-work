@@ -8,9 +8,6 @@ const db = require('../../../db');
 
 // add tripsheet database-------------------------------------------- 
 router.post('/tripsheet-add', (req, res) => {
-    // const bookData = req.body;
-    // const { tripid } = req.body
-
     const {
         tripid,
         bookingno,
@@ -237,11 +234,6 @@ router.post('/tripsheet-add', (req, res) => {
         if (err) {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
-        // console.log("hello ", result.affectedRows)
-        // console.log("hello ", result)
-        // if (result.affectedRows > 0) {
-        //     db.query(`delete from booking where tripid = ${tripid}`)
-        // }
         return res.status(200).json({ message: "Data inserted successfully" });
     });
 });
@@ -263,8 +255,6 @@ router.delete('/tripsheet/:tripid', (req, res) => {
 // update tripsheet details------------------------------------------------
 router.put('/tripsheet-edit/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    // console.log(req.body)
-    // const updatedCustomerData = req.body;s
     const {
 
         bookingno,
@@ -485,7 +475,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         manualbillss,
     };
 
-    // console.log(tripid, "--------", updatedCustomerData)
+
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -501,7 +491,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
 router.put('/tripsheet-confirm/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     const updatedCustomerData = req.body;
-    // console.log(tripid, "--------", updatedCustomerData)
+
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -682,10 +672,8 @@ router.get(`/t4hr-pack`, (req, res) => {
     const total_km = parseInt(req.query.totkm);
     const tothr = req.query.totalHours;
     let hr;
-    // console.log(tothr, total_km)
     if (total_km <= 49 && tothr <= 6) {
         hr = 4;
-        // console.log(hr, tothr, total_km)
         db.query("select * from ratemanagement where Hours=?", [hr], (err, result) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
@@ -695,7 +683,6 @@ router.get(`/t4hr-pack`, (req, res) => {
     }
     else if (total_km > 49 || tothr > 6) {
         hr = 8;
-        // console.log(hr, tothr, total_km)
         db.query("select * from ratemanagement where Hours=?", [hr], (err, result) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to fetch data from MySQL' });

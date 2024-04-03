@@ -70,76 +70,15 @@ const Sidebar = () => {
     "@keyframes ripple": {},
   }));
 
-  // const user_id = localStorage.getItem("useridno");
-  // const [permissions, setPermissions] = useState({});
-
-  //--------------------------to show logo
-
-
-
+  //--------------------------to show logo-----------
 
   const { sharedData } = useData();
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedprofileImage, setSelectedprofileImage] = useState(null);
 
   useEffect(() => {
-    console.log("1234555slide bar", sharedData)
     setSelectedImage(sharedData)
   }, [sharedData])
-
-  // useEffect(() => {
-  //   const handleImageView = async () => {
-  //     const organizationname = localStorage.getItem("usercompany");
-
-  //     if (organizationname) {
-  //       await axios.get(`${apiUrl}/log-imageview/${organizationname}`)
-  //         .then((res) => {
-  //           if (res.status === 200) {
-  //             setSelectedImage(res.data[0]?.fileName);
-  //             // const image = res.data[0]?.fileName
-  //             // localStorage.setItem("selectedlogo", selectedImage);
-  //             console.log("sliderlogo ", res.data[0]?.fileName)
-  //           }
-  //           else {
-  //             const timer = setTimeout(handleImageView, 2000);
-  //             return () => clearTimeout(timer);
-  //           }
-  //         })
-
-  //         .catch((error) => {
-  //           console.error("Error fetching image data:", error);
-  //         });
-  //     }
-
-  //   };
-  //   // handleImageView();
-  //   handleImageView();
-  // }, [sharedData, selectedImage, apiUrl]);
-
-
-  // useEffect(() => {
-  //   const handleImageView = async () => {
-  //     try {
-  //       const organizationname = localStorage.getItem("usercompany");
-  //       if (organizationname) {
-  //         const res = await axios.get(`${apiUrl}/log-imageview/${organizationname}`);
-  //         if (res.status === 200) {
-  //           setSelectedImage(res.data[0]?.fileName);
-  //           console.log("sliderlogo ", res.data[0]?.fileName);
-  //         } else {
-  //           const timer = setTimeout(handleImageView, 2000);
-  //           return () => clearTimeout(timer);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching image data:", error);
-  //     }
-  //   };
-  //   handleImageView();
-  // }, [apiUrl, sharedData, selectedImage,]);
-
-
-
 
   //------------------------------------------
 

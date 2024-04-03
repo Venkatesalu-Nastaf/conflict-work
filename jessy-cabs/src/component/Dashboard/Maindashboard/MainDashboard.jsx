@@ -25,7 +25,7 @@ import { APIURL } from "../../url";
 
 const MainDashboard = () => {
   const apiUrl = APIURL;
-  const { sharedData, setFilteredData, filteredData } = useData();
+  const { sharedData, setFilteredData } = useData();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const { selectedTheme } = useThemes();
@@ -33,20 +33,19 @@ const MainDashboard = () => {
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const { user,setUserdashboard,userdashboard } = useUser();
+  const { user, setUserdashboard, userdashboard } = useUser();
 
 
   const data1 = localStorage.getItem("useridno")
   const data2 = localStorage.getItem("usercompany")
   const data4 = localStorage.getItem("username");
   const data5 = localStorage.getItem("profileimages")
-  console.log(data5, "2222 pr")
   const data6 = localStorage.getItem("organizationimages")
-  console.log(data6, "2222 prorgan")
+
 
 
   useEffect(() => {
-    // console.log("1234555", sharedData)
+
     setSelectedImage(sharedData)
   }, [sharedData])
 
@@ -224,11 +223,7 @@ const MainDashboard = () => {
 
   useEffect(() => {
     if (data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null && selectedImage !== null) {
-      console.log(data1, data4, data5, data2, data6, "hello")
-
-
       setTimeout(() => {
-        console.log(userdashboard, "hello time")
         setUserdashboard(false)
       }, 3000);
 

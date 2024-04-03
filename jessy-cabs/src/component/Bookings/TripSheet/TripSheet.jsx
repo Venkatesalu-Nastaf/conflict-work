@@ -271,10 +271,6 @@ const TripSheet = () => {
   const filteredActions = isEditMode ? actions.filter(action => action.name !== "Add") : actions;
 
 
-  console.log("oooo", nightBta, nightCount, driverBeta, driverbeta_Count)
-  console.log("ooootrue", calcPackage, extraHR, extraKM)
-
-
   return (
     <div className="form-container">
       <div className="Tripsheet-form">
@@ -1143,7 +1139,7 @@ const TripSheet = () => {
                   size='small'
                   autoComplete="password"
                 />
-                {/* {console.log("checkkm", shedKilometers.shedkm)} */}
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -1177,7 +1173,7 @@ const TripSheet = () => {
                   variant="standard"
                   autoComplete="password"
                 />
-                {/* {console.log("time123 ,", formData.additionaltime, book.additionaltime, selectedCustomerData.additionaltime, additionalTime.additionaltime)} */}
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -2207,7 +2203,7 @@ const TripSheet = () => {
                       <div className="icone">
                         <FontAwesomeIcon icon={faCloudMoon} />
                       </div>
-                      {/* {console.log("www", nightBta)} */}
+
                       <TextField
                         name="night1"
                         value={nightBta || ''}

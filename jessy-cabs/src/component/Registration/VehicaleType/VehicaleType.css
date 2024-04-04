@@ -1,0 +1,139 @@
+.css-13xfq8m-MuiTabPanel-root {
+    display: flex;
+    padding: 0px !important;
+  }
+  
+  .detail-container-main-VehicaleType {
+    width: 100%;
+    display: flex;
+    background-color: var(--glass);
+    border-radius: 15px;
+    border: solid 2px #ccc;
+    margin: 5px;
+  }
+  .VehicaleType-container-right {
+      margin: 20px;
+      width: 35%;
+    }
+  .VehicaleType-update-main {
+    border-radius: 10px;
+    border: 2px solid #ccc;
+  }
+  
+  .VehicaleType-update {
+    background-color: #fff;
+    border-radius: 10px;
+    position: relative;
+  }
+  
+  .VehicaleType-update table #update-header {
+    background-color: #ccc !important;
+    font-size: 13px;
+    position: sticky;
+    top: 0;
+  }
+  
+  .VehicaleType-update table tbody #update-row {
+    font-size: 13px;
+  }
+  
+  .VehicaleType-update .list-update {
+    overflow: scroll;
+    height: 90%;
+  }
+  
+  .VehicaleType-update .list-update::-webkit-scrollbar-thumb {
+    background-color: #457cdc;
+    width: 50px;
+    cursor: pointer;
+    border-radius: 20px;
+  }
+  
+  .container-VehicaleType {
+    padding: 15px;
+    margin-bottom: 10px;
+    padding-bottom: 25px;
+  }
+  .form-container .Title-Name {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  .form-container .VehicaleType-form {
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: #000;
+    background-color: var(--glass);
+  }
+  
+  .form-container {
+    display: flex;
+    border-radius: 10px;
+  }
+  
+  .form-container .container-main::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    overflow-x: hidden;
+  }
+  
+  .table-VehicaleTypeCopy-VehicaleType {
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    background-color: var(--glass);
+  }
+  
+  .form-container .container-main::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    outline: 1px solid transparent;
+  }
+  
+  .form-container .container-main {
+    border: 2px solid #ccc;
+    overflow: scroll;
+    height: 77vh;
+    width: 81vw;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    border-radius: 20px;
+    color: #000;
+    background-color: var(--glass);
+  }
+  
+  .VehicaleType-form .Title-Name {
+    position: relative;
+  }
+  
+  .copy-title-btn-RateType {
+    width: 100%;
+    margin-top: 30px;
+    background-color: var(--glass);
+    padding: 20px 20px;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+  }
+  
+  .VehicaleType-form .Title-Name::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    border-radius: 20px;
+    height: 3px;
+    background-color: #457cdc;
+    /* Adjust color as needed */
+  }
+  .VehicaleType-search-container {
+    /* width: 100%; */
+    margin-top: 30px;
+    /* background-color: var(--glass); */
+    padding: 10px 20px 35px;
+    /* border: 2px solid #ccc; */
+    border-radius: 15px;
+  }

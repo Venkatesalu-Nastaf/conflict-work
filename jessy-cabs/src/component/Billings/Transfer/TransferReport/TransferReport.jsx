@@ -4,7 +4,7 @@ import "./TransferReport.css";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import { Autocomplete } from "@mui/material";
+import { Autocomplete, Checkbox, FormControl, FormControlLabel, FormLabel } from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
 import { Menu, TextField } from "@mui/material";
 import Mapinvoice from './Mapinvoice/Mapinvoice';
@@ -38,7 +38,32 @@ import useTransferreport from './useTransferreport';
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "vcode", headerName: "VCode", width: 130 },
-  { field: "guestname", headerName: "User Name", width: 130 },
+  { field: "guestname", headerName: "Guest Name", width: 130 },
+  { field: "tripno", headerName: "Trip No", width: 130 },
+  { field: "Status", headerName: "Status", width: 130 },
+  { field: "view", headerName: "View", width: 130 },
+];
+
+export const PDFbill = [
+  {
+    Option: "Old PDF",
+    optionvalue: "oldpdf",
+  },
+  {
+    Option: "New PDF",
+    optionvalue: "newpdf",
+  },
+];
+
+export const MISformat = [
+  {
+    Option: "Old MIS",
+    optionvalue: "oldmis",
+  },
+  {
+    Option: "New MIS",
+    optionvalue: "newmis",
+  },
 ];
 
 const TransferReport = () => {
@@ -132,22 +157,44 @@ const TransferReport = () => {
                   <div className="icone">
                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                   </div>
-                  <TextField
+                  {/* <TextField
                     size="small"
                     id="id"
                     label="MIS Format"
                     name="misformat"
                     autoComplete='off'
+                  /> */}
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    options={MISformat.map((option) => ({
+                      label: option.Option,
+                    }))}
+                    onChange={(event, value) => setCustomer(value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="MIS Format" inputRef={params.inputRef} />
+                      );
+                    }}
                   />
+
                 </div>
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
-                      <DatePicker
+                      {/* <DatePicker
                         label="Date"
                         name="date"
                         value={date}
                         format="DD/MM/YYYY"
+                      /> */}
+                      <DatePicker
+                        label="Month"
+                        name="month"
+                        value={date}
+                        format="MMMM YYYY"
                       />
                     </DemoContainer>
                   </LocalizationProvider>
@@ -226,7 +273,7 @@ const TransferReport = () => {
                     size="small"
                     value={servicestation || (tripData.length > 0 ? tripData[0].department : '') || ''}
                     options={Stations.map((option) => ({
-                      label: option.optionvalue,
+                      label: option.Option,
                     }))}
                     onChange={(event, value) => handleserviceInputChange(event, value)}
                     renderInput={(params) => {
@@ -238,17 +285,96 @@ const TransferReport = () => {
                 </div>
               </div>
               <div className="input-field">
-                <div className="input" style={{ width: "100px" }}>
+                <div className="input" style={{ width: "230px" }}>
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faNewspaper} size="xl" />
+                  </div>
+                  {/* <TextField
+                    size="small"
+                    id="id"
+                    label="MIS Format"
+                    name="misformat"
+                    autoComplete='off'
+                  /> */}
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    options={PDFbill.map((option) => ({
+                      label: option.Option,
+                    }))}
+                    onChange={(event, value) => setCustomer(value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="PDF Bill" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
+                {/* <div className="input" style={{ width: "100px" }}>
                   <Button variant="contained" onClick={() => handleEInvoiceClick()} disabled={isFieldReadOnly("new")}>PDF Bill</Button>
-                </div>
+                </div> */}
                 <div className="input" style={{ width: "180px" }}>
-                  <Button variant="outlined" disabled={isFieldReadOnly("new")} onClick={handleETripsheetClick} >Booking Mail</Button>
+                  <FormControlLabel
+                    value="bookingmail"
+                    control={
+                      <Checkbox
+                        size="small"
+                      />
+                    }
+                    label="Booking Mail"
+                  />
+                  {/* <Button variant="outlined" disabled={isFieldReadOnly("new")} onClick={handleETripsheetClick} >Booking Mail</Button> */}
                 </div>
-                <div className="input" style={{ width: "180px" }}>
+                {/* <div className="input" style={{ width: "180px" }}>
                   <Button variant="contained" onClick={() => handleMapInvoiceClick()} disabled={isFieldReadOnly("new")}>Image With Invoice Normal</Button>
                 </div>
                 <div className="input" style={{ width: "180px" }}>
                   <Button variant="contained" onClick={() => handleLuxuryInvoiceClick()} disabled={isFieldReadOnly("new")}>Image With Invoice Luxury</Button>
+                </div> */}
+                <div className="input">
+                  <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      Invoice With
+                    </FormLabel>
+                    <FormControlLabel
+                      value="Normal"
+                      control={
+                        <Checkbox
+                          size="small"
+                        />
+                      }
+                      label="Normal"
+                    />
+                    <FormControlLabel
+                      value="Luxury"
+                      control={
+                        <Checkbox
+                          size="small"
+                        />
+                      }
+                      label="Luxury"
+                    />
+                  </FormControl>
+                </div>
+                <div className="input">
+                  <div className="Download-btn">
+                    <PopupState variant="popover" popupId="demo-popup-menu">
+                      {(popupState) => (
+                        <React.Fragment>
+                          <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                            Download
+                          </Button>
+                          <Menu {...bindMenu(popupState)}>
+                            <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                            <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                            <MenuItem onClick={handlePdfDownload}>Both</MenuItem>
+                          </Menu>
+                        </React.Fragment>
+                      )}
+                    </PopupState>
+                  </div>
                 </div>
               </div>
             </div>
@@ -312,19 +438,26 @@ const TransferReport = () => {
           </div>
         </div>
         <div className="Download-btn">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
+          <div className="input-field">
+            <div className="input" >
+              <PopupState variant="popover" popupId="demo-popup-menu">
+                {(popupState) => (
+                  <React.Fragment>
+                    <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                      Download ZIP
+                    </Button>
+                    <Menu {...bindMenu(popupState)}>
+                      {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
+                      <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </PopupState>
+            </div>
+            <div className="input" style={{ width: "150px" }}>
+              <Button variant="outlined">Remove</Button>
+            </div>
+          </div>
         </div>
         <div className="billing-tables-TransferReport">
           <div className="table-bookingCopy-TransferReport">
@@ -339,7 +472,7 @@ const TransferReport = () => {
             </div>
           </div>
           <div className="tripsheet-table-transferReport">
-            <div className="TransferReport-Box">
+            {/* <div className="TransferReport-Box">
               <div className="booking-update">
                 <div className="Scroll-Style" style={{ overflow: 'scroll', height: 300, width: "100%" }}>
                   <table>
@@ -364,15 +497,8 @@ const TransferReport = () => {
                   </table>
                 </div>
               </div>
-            </div>
-            <div className="input-field">
-              <div className="input" style={{ width: "150px" }}>
-                <Button variant="outlined">Select</Button>
-              </div>
-              <div className="input" style={{ width: "150px" }}>
-                <Button variant="contained">Unselect</Button>
-              </div>
-            </div>
+            </div> */}
+
           </div>
           {error &&
             <div className='alert-popup Error'>

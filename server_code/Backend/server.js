@@ -37,6 +37,7 @@ app.get('/', (req, res) => {
 const customerRoutes = require('./customer_master/Router/customer/Customer');
 const accountinfoRoutes = require('./customer_master/Router/supplier/accountinginfo');
 const vehicleinfoRouter = require('./customer_master/Router/vehicle Info/vehicleinfo');
+const vehicletypeRouter=require('./customer_master/Router/vehicletype/vehicletype')
 const bookingRouter = require('./customer_master/Router/Booking/booking');
 const bookingcopyRouter = require('./customer_master/Router/Booking/bookingcopy');
 const bookingchartRouter = require('./customer_master/Router/Booking/bookingchart');
@@ -78,6 +79,8 @@ app.use('/', customerRoutes);// Customer Page Database
 app.use('/', accountinfoRoutes); // account_info page database:-
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', vehicleinfoRouter); // vehicle_info page database
+// -----------------------------------------------------------------------------------------------------------
+app.use('/', vehicletypeRouter); // vehicle_info page database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', bookingRouter); // Booking page database:-
 // -----------------------------------------------------------------------------------------------------------

@@ -2,12 +2,11 @@ import React from "react";
 import "./VehicaleType.css";
 import Box from "@mui/material/Box";
 
-import Menu from "@mui/material/Menu";
+
 import Button from "@mui/material/Button";
-import { DataGrid } from "@mui/x-data-grid";
-import MenuItem from "@mui/material/MenuItem";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import {
   Autocomplete,
   FormControl,
@@ -17,22 +16,30 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
-import { AiOutlineFileSearch } from "react-icons/ai";
-import { AiFillAlert } from "react-icons/ai";
 import { AiFillTags } from "react-icons/ai";
 import { FaCar } from "react-icons/fa";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
+
+import ClearIcon from "@mui/icons-material/Clear";
 
 // ICONS
-import BadgeIcon from "@mui/icons-material/Badge";
+
 import EmailIcon from "@mui/icons-material/Email";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
-import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import useVehicletype from "./usevehicletype";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+
+const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+  position: "absolute",
+  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+    top: theme.spacing(2),
+    left: theme.spacing(2),
+  },
+}));
 
 export const VehicaleTypes = [
   {
@@ -45,25 +52,37 @@ export const VehicaleTypes = [
   },
 ];
 export const GroupTypes = [
-    {
-      Option: "Luxzury",
-      // optionvalue: "a/c",
-    },
-    {
-      Option: "Normal",
-      // optionvalue: "non_a/c",
-    },
-  ];
+  {
+    Option: "Luxzury",
+    // optionvalue: "a/c",
+  },
+  {
+    Option: "Normal",
+    // optionvalue: "non_a/c",
+  },
+];
 
 const VehicaleType = () => {
-    const{
-        rows,
-        handleKeyEnter,
-        vechiclebook,
-        handleChange,
-        handleAdd
-    }=useVehicletype()
-    console.log(rows,"datarows")
+  const {
+    rows,
+    handleKeyEnter,
+    vechiclebook,
+    handleChange,
+    handleAdd,
+    handleUpdate,
+    handleRowClick,
+    edit,
+    actions,
+    handleClick,
+    hidePopup,
+
+    setVechiclebook,
+    successMessage,
+    success,
+    errorMessage,
+    error,
+  } = useVehicletype()
+
   return (
     <>
       <div className="VehicaleType-form Scroll-Style-hide">
@@ -73,7 +92,7 @@ const VehicaleType = () => {
               <div className="input-field">
                 <div className="input" style={{ width: "215px" }}>
                   <div className="icone">
-                  <AiFillTags />
+                    <AiFillTags />
 
                   </div>
                   {/* <TextField
@@ -82,39 +101,39 @@ const VehicaleType = () => {
                     label="ID"
                     name="ID"
                   /> */}
-                   <TextField
-                  name="vehicleid"
-                  label="vehicleid"
-                  id="vehicleid"
-                  
-                  value={
-                    vechiclebook.vehicleid||
-                    ""
-                  }
-                  onChange={handleChange}
-                //   onKeyDown={handleKeyDown}
-                  variant="standard"
-                  autoFocus
-                />
+                  <TextField
+                    name="vehicleid"
+                    label="vehicleid"
+                    id="vehicleid"
+
+                    value={
+                      vechiclebook.vehicleid ||
+                      ""
+                    }
+                    onChange={handleChange}
+                    //   onKeyDown={handleKeyDown}
+                    variant="standard"
+                    autoFocus
+                  />
                 </div>
                 <div className="input" style={{ width: "300px" }}>
                   <div className="icone">
-                  <FaCar />
+                    <FaCar />
 
                   </div>
                   <TextField
-                  name="vehiclename"
-                  autoComplete="new-password"
-                  value={
-                    vechiclebook.vehiclename ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  onKeyDown={handleKeyEnter}
-                  label="vehiclename"
-                  id="standard-size-normal"
-                  variant="standard"
-                />
+                    name="vehiclename"
+
+                    value={
+                      vechiclebook.vehiclename ||
+                      ""
+                    }
+                    onChange={handleChange}
+                    onKeyDown={handleKeyEnter}
+                    label="vehiclename"
+                    id="standard-size-normal"
+                    variant="standard"
+                  />
                 </div>
               </div>
               <div className="input-field">
@@ -122,58 +141,50 @@ const VehicaleType = () => {
                   <div className="icone">
                     <EmailIcon color="action" />
                   </div>
-                  {/* <TextField
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
                     size="small"
-                    id="groups"
-                    label="Groups"
-                    name="Groups"
-                    autoComplete="new-password"
-                    value={
-                        vechiclebook.Groups ||
-                        ""
-                      }
-                      onChange={handleChange}
-                  /> */}
-                  <Autocomplete
-                      fullWidth
-                      id="free-solo-demo"
-                      freeSolo
-                      size="small"
-                    //   value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || ''}
-                    //   options={luxuryoptions}
-                      options={GroupTypes.map((option) => ({
-                        label: option.Option,
-                      }))}
-                      onChange={handleChange}
-                      renderInput={(params) => {
-                        return (
-                          <TextField {...params} label="Groups" inputRef={params.inputRef} />
-                        );
-                      }}
-                    />
-
-                  
-                </div>
-                <div className="input radio">
-                  <Autocomplete
-                     fullWidth
-                     id="free-solo-demo"
-                     freeSolo
-                     size="small"
-                    // id="combo-box-demo"
-                    options={VehicaleTypes.map((option) => ({
-                      label: option.Option,
+                    value={vechiclebook?.Groups || ''}
+                    options={GroupTypes?.map((option) => ({
+                      label: option?.Option,
                     }))}
-                    // sx={{ width: 300 }}
-                    onChange={handleChange}
-                    
-                    renderInput={(params) => (
-                      <TextField {...params} label="Vehicale Type" />
-                    )}
+                    onChange={(event, value) => setVechiclebook((prevBook) => ({
+                      ...prevBook,
+                      "Groups": value?.label,
+                    }))}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                      );
+                    }}
                   />
                 </div>
                 <div className="input radio">
-                  {/* <FormControl>
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={vechiclebook?.vehicletype || ''}
+                    options={VehicaleTypes?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    onChange={(event, value) => setVechiclebook((prevBook) => ({
+                      ...prevBook,
+                      "vehicletype": value?.label,
+                    }))}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="vehicle Type" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
+                <div className="input radio">
+
+                  <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
                       Active
                     </FormLabel>
@@ -181,48 +192,25 @@ const VehicaleType = () => {
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="Active"
-                      autoComplete="new-password"
+
+                      value={
+                        vechiclebook.Active ||
+                        ""
+                      }
+                      onChange={handleChange}
                     >
                       <FormControlLabel
-                        value="Yes"
+                        value="yes"
                         control={<Radio />}
-                        label="Yes"
+                        label="yes"
                       />
                       <FormControlLabel
-                        value="No"
+                        value="no"
                         control={<Radio />}
-                        label="No"
+                        label="no"
                       />
                     </RadioGroup>
-                  </FormControl> */}
-
-<FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                  Active
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="Active"
-                    autoComplete="new-password"
-                    value={
-                      vechiclebook.Active||
-                      ""
-                    }
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="no"
-                    />
-                  </RadioGroup>
-                </FormControl>
+                  </FormControl>
                 </div>
               </div>
               <div className="input-field">
@@ -235,10 +223,10 @@ const VehicaleType = () => {
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="Luxzuryvehicle"
-                      autoComplete="new-password"
+
 
                       value={
-                        vechiclebook.Luxzuryvehicle||
+                        vechiclebook.Luxzuryvehicle ||
                         ""
                       }
                       onChange={handleChange}
@@ -262,15 +250,34 @@ const VehicaleType = () => {
                   </div>
                   <TextField
                     size="small"
-                    id="Segement"
-                    label="Segement"
-                    name="Segement"
+                    id="Segment"
+                    label="Segment"
+                    name="Segment"
                     value={
-                        vechiclebook.Segment||
-                        ""
-                      }
-                      onChange={handleChange}
+                      vechiclebook.Segment ||
+                      ""
+                    }
+                    onChange={handleChange}
                   />
+                </div>
+                <div className="input">
+                  {
+                    edit ?
+                      <Button
+                        variant="contained"
+                        onClick={handleUpdate}
+                      //  disabled={isFieldReadOnly("new")}
+                      >
+                        Edit</Button>
+                      :
+
+                      <Button
+                        variant="contained"
+                        onClick={handleAdd}
+                      //  disabled={isFieldReadOnly("new")}
+                      >
+                        Add</Button>
+                  }
                 </div>
               </div>
             </div>
@@ -292,26 +299,27 @@ const VehicaleType = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        
-                      {rows?.length === 0 ? (
-                        <tr>
-                          <td colSpan={6}>No data available.</td>
-                        </tr>
-                      ) : (
-                        rows?.map((row) => (
-                          <tr
-                            id="update-row"
-                            key={row.id}
-                            // onClick={() => handleRowClick(row)}
-                          >
-                            <td>{row.vehicleid}</td>
-                            <td>{row.vehiclename}</td>
-                            <td>{row.vehicletype}</td>
-                            <td>{row.Active}</td>
-                            <td>{row.Groups}</td>
+
+                        {rows?.length === 0 ? (
+                          <tr>
+                            <td colSpan={6}>No data available.</td>
                           </tr>
-                        ))
-                      )}
+                        ) : (
+                          rows?.map((row) => (
+                            <tr
+                              id="update-row"
+                              key={row.id}
+                              onClick={() => handleRowClick(row)}
+
+                            >
+                              <td>{row.vehicleid}</td>
+                              <td>{row.vehiclename}</td>
+                              <td>{row.vehicletype}</td>
+                              <td>{row.Active}</td>
+                              <td>{row.Groups}</td>
+                            </tr>
+                          ))
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -320,52 +328,53 @@ const VehicaleType = () => {
             </div>
           </div>
 
-          <Button
-              variant="contained"
-               onClick={handleAdd}
-              //  disabled={isFieldReadOnly("new")}
-               >
-                Add New</Button>
 
-          {/* <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
               direction="left"
             >
               {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                  onClick={(event) =>
-                    handleClick(event, action.name, selectedCustomerId)
-                  }
-                />
+                action.icon ? (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                    onClick={(event) =>
+                      handleClick(event, action.name)
+                    }
+                  />
+                ) : null
               ))}
             </StyledSpeedDial>
-          </Box> */}
-          {/* <div className="VehicaleType-search-container">
-            <div className="input-field" style={{ justifyContent: "center" }}>
-              <div className="input" style={{ width: "230px" }}>
-                <div className="icone">
-                  <AiOutlineFileSearch
-                    color="action"
-                    style={{ fontSize: "27px" }}
-                  />
-                </div>
-                <TextField
-                  size="small"
-                  id="id"
-                  label="Search"
-                  name="searchText"
-                />
+          </Box>
+          {error && (
+            <div className="alert-popup Error">
+              <div className="popup-icon">
+                {" "}
+                <ClearIcon style={{ color: "#fff" }} />{" "}
               </div>
-              <div className="input" style={{ width: "140px" }}>
-                <Button variant="contained">Search</Button>
-              </div>
+              <span className="cancel-btn" onClick={hidePopup}>
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              </span>
+              <p>{errorMessage}</p>
             </div>
-          </div> */}
+          )}
+
+          {success && (
+            <div className="alert-popup Success">
+              <div className="popup-icon">
+                {" "}
+                <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+              </div>
+              <span className="cancel-btn" onClick={hidePopup}>
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              </span>
+              <p>{successMessage}</p>
+            </div>
+          )}
+
         </form>
       </div>
     </>

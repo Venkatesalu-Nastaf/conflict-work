@@ -51,7 +51,8 @@ const useTransferdataentry = () => {
     const [invoiceno, setInvoiceno] = useState("");
     const [groupId, setGroupId] = useState("")
     const [fromDate, setFromDate] = useState(dayjs());
-    const [Billingdate] = useState(dayjs());
+    const [endDate,setEndDate]= useState(dayjs());
+    const [Billingdate,setBillingdate] = useState(dayjs());
     const [date] = useState(dayjs());
     const [totalAmount, setTotalAmount] = useState(0);
     const [bankOptions, setBankOptions] = useState([]);
@@ -319,6 +320,9 @@ const useTransferdataentry = () => {
         setInvoiceno(formData.Invoice_no)
         setGroupId(formData.Groupid)
         setCustomer(formData.Organization_name)
+        setFromDate(formData.FromDate)
+        setEndDate(formData.EndDate)
+        setBillingdate(formData.Billdate)
     }, [location, formDataTransfer])
     useEffect(() => {
         const fetchData = async () => {
@@ -461,9 +465,10 @@ const useTransferdataentry = () => {
             })
             .filter((tripid) => tripid !== null);
         setRowselect(selectedTripIds)
+   
+     
         const tripsheetid = selectedTripIds;
         setRowSelectionModel(tripsheetid);
-
         localStorage.setItem('selectedtripsheetid', tripsheetid);
         const selectedRowCount = selectedTripIds.length;
 
@@ -472,17 +477,17 @@ const useTransferdataentry = () => {
     const handleClickGenerateBill = () => {
         handleAdd();
         handleButtonClickTripsheet();
-        handleBillGenerate();
+        // handleBillGenerate();
     };
 
-    const handleButtonClickTripsheet = (row) => {
+    const handleButtonClickTripsheet = () => {
         const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
         const customername = customerdata;
         localStorage.setItem('selectedcustomer', customername);
         const storedCustomer = localStorage.getItem('selectedcustomer');
         const decodedCustomer = decodeURIComponent(storedCustomer);
         localStorage.setItem('selectedcustomerdata', decodedCustomer);
-        const billingPageUrl = `/home/billing/transfer?tab=TransferReport`;
+        const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&BillDate=${Billingdate}`;
         window.location.href = billingPageUrl;
     }
 

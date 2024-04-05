@@ -39,18 +39,18 @@ const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "vcode", headerName: "VCode", width: 130 },
   { field: "guestname", headerName: "Guest Name", width: 130 },
-  { field: "tripno", headerName: "Trip No", width: 130 },
-  { field: "Status", headerName: "Status", width: 130 },
+  { field: "tripid", headerName: "Trip No", width: 130 },
+  { field: "status", headerName: "Status", width: 130 },
   { field: "view", headerName: "View", width: 130 },
 ];
 
 export const PDFbill = [
   {
-    Option: "Old PDF",
+    Option: "PDF 1",
     optionvalue: "oldpdf",
   },
   {
-    Option: "New PDF",
+    Option: "PDF 2",
     optionvalue: "newpdf",
   },
 ];
@@ -69,6 +69,11 @@ export const MISformat = [
 const TransferReport = () => {
 
   const {
+    invoiceno,
+    grouptTripid,
+    fromDate,
+    endDate,
+    invoiceDate,
     rows,
     actionName,
     error,
@@ -113,7 +118,6 @@ const TransferReport = () => {
     organizationgstnumber,
 
   } = useTransferreport();
-
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -134,10 +138,11 @@ const TransferReport = () => {
                   <TextField
                     size="small"
                     id="id"
-                    label="Reference No"
+                    label="GroupTrip Id"
                     name="referenceno"
                     autoComplete='off'
                     disabled={isFieldReadOnly("read")}
+                    value={grouptTripid}
                   />
                 </div>
                 <div className="input" style={{ width: "230px" }}>
@@ -148,7 +153,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="Invoice No"
-                    value={routedData[0]?.invoiceno || ''}
+                    value={invoiceno}
                     name="invoiceno"
                     autoComplete='off'
                   />
@@ -210,7 +215,7 @@ const TransferReport = () => {
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={customer || (tripData.length > 0 ? tripData[0].customer : '')}
+                    value={customer}
                     options={bankOptions}
                     onChange={(event, value) => setCustomer(value)}
                     renderInput={(params) => {
@@ -235,7 +240,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="Invoice Date"
-                    value={(routedData[0]?.Billingdate) || ''}
+                    value={invoiceDate}
                     name="Billdate"
                     autoComplete='off'
                   />
@@ -247,7 +252,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="From Date"
-                    value={(routedData[0]?.fromdate) || ''}
+                    value={fromDate}
                     name="fromdate"
                     autoComplete='off'
                   />
@@ -257,7 +262,7 @@ const TransferReport = () => {
                     size="small"
                     id="id"
                     label="To Date"
-                    value={(routedData[0]?.todate) || ''}
+                    value={endDate}
                     name="todate"
                     autoComplete='off'
                   />

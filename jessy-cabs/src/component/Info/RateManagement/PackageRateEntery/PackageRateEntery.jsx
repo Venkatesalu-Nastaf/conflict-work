@@ -86,9 +86,9 @@ const PackageRateEntery = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
- 
-  const startdate= dayjs(datevalidity?.startdate).format(" MMMM YYYY");
-  const enddate=dayjs(datevalidity?.enddate).format(" MMMM YYYY");
+
+  const startdate = dayjs(datevalidity?.startdate).format(" MMMM YYYY");
+  const enddate = dayjs(datevalidity?.enddate).format(" MMMM YYYY");
 
 
   return (
@@ -146,7 +146,7 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-                {/* <div className="input">
+                <div className="input">
                   <TextField
                     size="small"
                     id="id"
@@ -158,7 +158,7 @@ const PackageRateEntery = () => {
                     onChange={handleChange}
                     variant="standard"
                   />
-                </div> */}
+                </div>
 
                 <div className="input" style={{ width: "300px" }}>
                   <div className="icone">
@@ -197,7 +197,7 @@ const PackageRateEntery = () => {
                     name="Validity"
                     autoComplete="new-password"
                     // value={selectedCustomerData?.Validity || book.Validity}
-                   value={datevalidity?`${startdate}--${enddate}`:''}
+                    value={datevalidity ? `${startdate}--${enddate}` : ''}
                     onChange={handleChange}
                     variant="standard"
                   />

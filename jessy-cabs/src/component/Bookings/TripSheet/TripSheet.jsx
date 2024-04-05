@@ -165,7 +165,7 @@ const TripSheet = () => {
 
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
-    selectedCustomerId, setNightBeta, setNightCount,
+    selectedCustomerId, setNightBeta, setNightCount, request, setRequest, calcCheck,
     rows,
     actionName,
     error,
@@ -913,13 +913,15 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   size="small"
-                  name="request"
-                  value={formData.request || selectedCustomerData.request || book.request || ''}
-                  onChange={handleChange}
+                  name="Request"
+                  value={request || ''}
+                  // onChange={handleChange}
+                  onChange={(e) => { setRequest(e.target.value) }}
                   label="Request"
                   id="request"
                   autoComplete="password"
                 />
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -1325,7 +1327,8 @@ const TripSheet = () => {
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (<>
                   <Button variant="contained" onClick={handleEdit}>Edit</Button>
-                  <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button>
+                  {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
+
                 </>
                 ) : (
                   <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>

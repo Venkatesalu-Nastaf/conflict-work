@@ -57,7 +57,6 @@ const Pending = () => {
     popupOpen,
     handlePopupClose,
     selectedRow,
-    handleBookingClick,
     handleTripsheetClick,
     columns
   } = usePending();
@@ -188,7 +187,6 @@ const Pending = () => {
               <DialogContent>
                 {selectedRow && (
                   <div>
-                    <Button onClick={handleBookingClick}>Booking</Button>
                     <Button onClick={handleTripsheetClick}>Tripsheet</Button>
                   </div>
                 )}

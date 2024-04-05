@@ -9,20 +9,21 @@ import { useData } from '../../../Dashboard/Maindashboard/DataContext';
 // Table START
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
-    { field: "vehicleType", headerName: "Vehicle Type", width: 130 },
-    { field: "duty", headerName: "Duty", width: 130 },
-    { field: "Hours", headerName: "Hours", width: 130 },
-    { field: "KMS", headerName: "KMS", width: 130 },
-    { field: "Rate", headerName: "Rate", width: 130 },
-    { field: "PerHour", headerName: "PerHours", width: 130 },
-    { field: "PerKMS", headerName: "PerKMS", width: 130 },
-    { field: "extraHours", headerName: "ExtraHours", width: 130 },
-    { field: "extraKMS", headerName: "ExtraKMS", width: 130 },
-    { field: "UptoHours", headerName: "ChTime", width: 130 },
-    { field: "AKMS", headerName: "AllowKMS", width: 130 },
-    { field: "ChKMS", headerName: "ChKMS", width: 130 },
-    { field: "Bata", headerName: "Bata", width: 130 },
-    { field: "NHalt", headerName: "NightHalt", width: 130 },
+    { field: "vehicleType", headerName: "Vehicle Type", width: 180 },
+    { field: "duty", headerName: "Duty", width: 110 },
+    { field: "package", headerName: "Package", width: 110 },
+    { field: "Hours", headerName: "Hours", width: 80 },
+    { field: "KMS", headerName: "KMS", width: 80 },
+    { field: "Rate", headerName: "Rate", width: 80 },
+    { field: "extraHours", headerName: "ExtraHours", width: 100 },
+    { field: "extraKMS", headerName: "ExtraKMS", width: 100 },
+    { field: "PerHour", headerName: "PerHours", width: 110 },
+    { field: "PerKMS", headerName: "PerKMS", width: 100 },
+    { field: "chtime", headerName: "ChTime", width: 100 },
+    // { field: "AKMS", headerName: "AllowKMS", width: 130 },
+    { field: "ChKMS", headerName: "ChKMS", width: 100 },
+    { field: "Bata", headerName: "Bata", width: 100 },
+    { field: "NHalt", headerName: "NightHalt", width: 100 },
 ];
 // TABLE END
 
@@ -42,11 +43,11 @@ const usePackagerateentry = () => {
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
-    
-    const [validitydata,setValiditydata]=useState([])
-    const[datevalidity,setDatevalidity]=useState()
+
+    const [validitydata, setValiditydata] = useState([])
+    const [datevalidity, setDatevalidity] = useState()
     const { setOrganizationName } = useData()
-    
+
     // for page permission
 
     //--------------------------------------
@@ -95,31 +96,28 @@ const usePackagerateentry = () => {
         const fetchOrganizationnames = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/ratetype`);
-                console.log(response.data, "_____________________");
                 const data = response.data
                 const names = data.map(res => res.ratename)
                 setValiditydata(data)
-                
-                
 
-              
+
+
+
                 setOrganizationName(names)
 
             }
-            catch(error) {
-              console.log(error,"error");
+            catch (error) {
+                console.log(error, "error");
             }
         };
         fetchOrganizationnames()
-    }, [apiUrl, setOrganizationName,validitydata])
+    }, [apiUrl, setOrganizationName, validitydata])
 
 
 
     const checkPagePermission = () => {
         const currentPageName = 'Rate Type';
         const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
         if (permissions.page_name === currentPageName) {
             return {
                 read: permissions.read_permission === 1,
@@ -238,7 +236,7 @@ const usePackagerateentry = () => {
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
-       
+
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
@@ -248,29 +246,29 @@ const usePackagerateentry = () => {
             [name]: selectedOption,
         }));
 
-        if(name === "pricetag"){
-           getStartEndTimesByRateName(selectedOption)
-    
+        if (name === "pricetag") {
+            getStartEndTimesByRateName(selectedOption)
+
         }
     };
 
     function getStartEndTimesByRateName(rateName) {
         const filteredData = validitydata?.filter(item => item.ratename === rateName);
-        const datas=filteredData?.map(item => ({
-          startdate: item.starttime,
-          enddate: item.closetime
+        const datas = filteredData?.map(item => ({
+            startdate: item.starttime,
+            enddate: item.closetime
         }));
-       
+
         setDatevalidity(datas[0])
-      }
-    
+    }
 
 
 
-    
-      
-     
-      
+
+
+
+
+
 
     const handleCancel = () => {
         setBook((prevBook) => ({

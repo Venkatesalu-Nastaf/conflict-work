@@ -28,6 +28,7 @@ const useTripsheet = () => {
     const [closetime2, setCloseTime2] = useState('');
 
     const [formData, setFormData] = useState({});  ////-------------
+    const [calcCheck, setCalcCheck] = useState(false);
 
     const location = useLocation();
     const [error, setError] = useState(false);
@@ -53,22 +54,22 @@ const useTripsheet = () => {
 
     //-------------------------calc-------------------
 
-    let [calcPackage, setcalcPackage] = useState()
-    let [extraHR, setExtraHR] = useState()
-    let [extraKM, setExtraKM] = useState()
-    let [package_amount, setpackage_amount] = useState()
-    let [extrakm_amount, setextrakm_amount] = useState()
-    let [extrahr_amount, setextrahr_amount] = useState()
-    let [ex_kmAmount, setEx_kmAmount] = useState()
-    let [ex_hrAmount, setEx_HrAmount] = useState()
+    let [calcPackage, setcalcPackage] = useState('')
+    let [extraHR, setExtraHR] = useState('')
+    let [extraKM, setExtraKM] = useState('')
+    let [package_amount, setpackage_amount] = useState('')
+    let [extrakm_amount, setextrakm_amount] = useState('')
+    let [extrahr_amount, setextrahr_amount] = useState('')
+    let [ex_kmAmount, setEx_kmAmount] = useState('')
+    let [ex_hrAmount, setEx_HrAmount] = useState('')
     // nighht value --------------------
-    let [nightBta, setNightBeta] = useState()
-    let [nightCount, setNightCount] = useState()
-    let [night_totalAmount, setnight_totalAmount] = useState()
+    let [nightBta, setNightBeta] = useState('')
+    let [nightCount, setNightCount] = useState('')
+    let [night_totalAmount, setnight_totalAmount] = useState('')
 
     //driver convinence --------------------------
-    let [driverBeta, setdriverBeta] = useState()
-    let [driverbeta_Count, setdriverbeta_Count] = useState()
+    let [driverBeta, setdriverBeta] = useState('')
+    let [driverbeta_Count, setdriverbeta_Count] = useState('')
     let [driverBeta_amount, setdriverBeta_amount] = useState(0)
     //--------------------------------------------------------------
 
@@ -335,17 +336,15 @@ const useTripsheet = () => {
     }, [error, success, warning, info]);
 
 
-    // data getting from dispatch --------------------------
+    // data getting from dispatch --------------------------ayyanar
+    const [request, setRequest] = useState("");
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const statusValue = params.get('status') || 'Opened';
+        const request = params.get('request') || "";
+        setRequest(request);
 
-        // const bookingsmsValue = params.get('smsguest') || 'smsguest';
-        // const sendemailValue = params.get('booker') || 'booker';
-        // const emailcheckValue = params.get('emailcheck') || 'emailcheck';
-        // const DriverSMSValue = params.get('DriverSMS') || 'DriverSMS';
-        // const gpsValue = params.get('gps') || 'gps';
 
         //calc---------------
         const calcPackage = params.get('calcPackage');
@@ -368,7 +367,7 @@ const useTripsheet = () => {
         const formData = {};
 
         const parameterKeys = [
-            'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
+            'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -463,6 +462,7 @@ const useTripsheet = () => {
         closetime: '',
         shedintime: '',
         advancepaidtovendor: '',
+
         customercode: '',
         shedkm: '',
         shedin: '',
@@ -661,6 +661,8 @@ const useTripsheet = () => {
         setPackageDetails({});
         setIsEditMode(false);
         calcCancel();
+        setRequest("");
+        setCalcCheck(false);
 
     };
 
@@ -765,7 +767,7 @@ const useTripsheet = () => {
                         pack: packageDetails[0]?.package,
                         minhrs: packageDetails[0]?.Hours,
                         minkm: packageDetails[0]?.KMS,
-                        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+                        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, request,
                     };
                     for (const key in updatedCustomer) {
                         if (key === '0') {
@@ -938,6 +940,7 @@ const useTripsheet = () => {
                     minhrs: packageDetails[0]?.Hours,
                     minkm: packageDetails[0]?.KMS,
                     calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+                    request,
                 };
                 await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
                 handleCancel();
@@ -1202,6 +1205,7 @@ const useTripsheet = () => {
         address1: '',
         orderedby: '',
         employeeno: '',
+        request: '',
         customercode: '',
         guestname: '',
         tripid: '',
@@ -1335,6 +1339,7 @@ const useTripsheet = () => {
 
                     setSelectedCustomerData(bookingDetails);
                     setSelectedCustomerId(bookingDetails.tripid);
+
                     //--------------calc---------
 
                     setcalcPackage(bookingDetails.calcPackage);
@@ -1354,6 +1359,8 @@ const useTripsheet = () => {
                     setTotalcalcAmount(bookingDetails.totalcalcAmount);
 
                     //---------------------------
+                    setRequest(bookingDetails.request)
+                    //----------
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
                     setIsEditMode(true);
@@ -1763,6 +1770,7 @@ const useTripsheet = () => {
         const totalAmountCalc = () => {
             const total = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll) + Number(customer_advance);
             setTotalcalcAmount(total);
+
         }
         totalAmountCalc()
     }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll, v_permit_vendor, vender_toll])
@@ -1813,65 +1821,78 @@ const useTripsheet = () => {
 
     // calc function
 
-    let data, hrs, kms, totkm, tothr, totalHours;
+    let data, hrs, kms, totkm, tothr, totalHours, duty, vehiletype;
     const handleCalc = async () => {
         try {
 
-            totkm = await formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '';
-            tothr = await formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || '';
-            totalHours = await convertTimeToNumber(tothr);
-            const response = await axios.get(`${apiUrl}/t4hr-pack`, {
-                params: {
-                    totkm: totkm,
-                    totalHours: totalHours
+            duty = formData.duty || selectedCustomerData.duty || book.duty;
+            vehiletype = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
+            totkm = await (formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
+            tothr = await (formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || '');
+
+            if (totkm && tothr) {
+                totalHours = await convertTimeToNumber(tothr);
+                const response = await axios.get(`${apiUrl}/t4hr-pack`, {
+                    params: {
+                        totkm: totkm,
+                        totalHours: totalHours,
+                        duty: duty,
+                        vehiletype: vehiletype,
+                    }
+                });
+                data = response.data;
+                hrs = data.Hours
+                kms = data.KMS
+                setextrakm_amount(data.extraKMS)
+                setextrahr_amount(data.extraHours)
+
+                if (Number(hrs) === 8) {
+                    setcalcPackage("8hr & 80km")
+                    setpackage_amount(data.Rate);
+
+                    if (Number(totalHours) > 8) {
+                        let time = Math.ceil(totalHours - hrs)
+                        setExtraHR(time)
+                    }
+                    else {
+                        setExtraHR(0)
+                    }
+
+                    if (totkm > 80) {
+                        const km = Math.ceil(totkm - kms);
+                        setExtraKM(km)
+
+                    } else {
+                        setExtraKM(0)
+                    }
+
+                } else if (Number(hrs) === 4) {
+
+                    setcalcPackage("4hr & 40km");
+                    setpackage_amount(data.Rate)
+
+                    if (totalHours > 4) {
+                        let time = Number(Math.ceil(totalHours - hrs));
+                        setExtraHR(time)
+                    }
+                    else {
+                        setExtraHR(0)
+                    }
+
+                    if (totkm > 40) {
+                        const km = Number(Math.ceil(totkm - kms));
+                        setExtraKM(km)
+                    } else {
+                        setExtraKM(0)
+                    }
                 }
-            });
-            data = response.data;
-            hrs = data.Hours
-            kms = data.KMS
-            setextrakm_amount(data.extraKMS)
-            setextrahr_amount(data.extraHours)
+                setCalcCheck(true)
 
-            if (Number(hrs) === 8) {
-                setcalcPackage("8hr & 80km")
-                setpackage_amount(data.Rate);
-
-                if (Number(totalHours) > 8) {
-                    let time = Math.ceil(totalHours - hrs)
-                    setExtraHR(time)
-                }
-                else {
-                    setExtraHR(0)
-                }
-
-                if (totkm > 80) {
-                    const km = Math.ceil(totkm - kms);
-                    setExtraKM(km)
-
-                } else {
-                    setExtraKM(0)
-                }
-
-            } else if (Number(hrs) === 4) {
-
-                setcalcPackage("4hr & 40km");
-                setpackage_amount(data.Rate)
-
-                if (totalHours > 4) {
-                    let time = Math.ceil(totalHours - hrs)
-                    setExtraHR(time)
-                }
-                else {
-                    setExtraHR(0)
-                }
-
-                if (totkm > 40) {
-                    const km = Math.ceil(totkm - kms);
-                    setExtraKM(km)
-                } else {
-                    setExtraKM(0)
-                }
+            } else {
+                setError(true);
+                setErrorMessage("Check Hour & KM  ")
             }
+
         }
         catch (err) {
             console.log("pack fetch ", err)
@@ -1974,7 +1995,7 @@ const useTripsheet = () => {
         handleEdit,
         SignPage,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
-        setNightBeta, setNightCount,
+        setNightBeta, setNightCount, request, setRequest, calcCheck,
 
 
 

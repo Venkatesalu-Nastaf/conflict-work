@@ -113,7 +113,7 @@ const Booking = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
+
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -1177,7 +1177,7 @@ const Booking = () => {
                   <Button
                     color="primary"
                     variant="contained"
-                    disabled={isFieldReadOnly("new")}
+                 
                     component="label"
                   >
                     Attach File
@@ -1192,7 +1192,7 @@ const Booking = () => {
                   <Button
                     color="primary"
                     variant="contained"
-                    disabled={isFieldReadOnly("new")}
+             
                     onClick={() => {
                       setError(true);
                       setErrorMessage("Please Enter Booking No");
@@ -1206,7 +1206,7 @@ const Booking = () => {
                 <Button
                   variant="outlined"
                   onClick={handleButtonClick}
-                  disabled={isFieldReadOnly("new")}
+            
                 >
                   View
                 </Button>
@@ -1424,7 +1424,7 @@ const Booking = () => {
                   <Button
                     variant="contained"
                     onClick={handleAdd}
-                    disabled={isFieldReadOnly("new")}
+             
                   >
                     Add
                   </Button>
@@ -1437,7 +1437,7 @@ const Booking = () => {
               <Button
               variant="contained"
                onClick={handleAdd}
-               disabled={isFieldReadOnly("new")}
+             
                >
                 Add New</Button>:<></>
                 

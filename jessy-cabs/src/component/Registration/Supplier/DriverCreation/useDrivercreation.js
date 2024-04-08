@@ -5,6 +5,13 @@ import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
 // import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
+import dayjs from "dayjs";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 const useDrivercreation = () => {
     const apiUrl = APIURL;
@@ -15,9 +22,9 @@ const useDrivercreation = () => {
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [passwordsMatch, setPasswordsMatch] = useState(false);
+    // const [password, setPassword] = useState('');
+    // const [confirmPassword, setConfirmPassword] = useState('');
+    // const [passwordsMatch, setPasswordsMatch] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
@@ -28,10 +35,14 @@ const useDrivercreation = () => {
     const [infoMessage, setInfoMessage] = useState({});
     // const [userPermissions, setUserPermissions] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
+    const[searchText,setSearchText]=useState("")
+    const [fromDate,setFromDate]=useState(dayjs())
+    const [toDate,setToDate]=useState(dayjs())
     //venkat 
     const [Deleted, setDeleted] = useState(false);
     const [checkbox, setCheckbox] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
+    const [edit, setEdit] = useState(false)
     // venkat
 
 
@@ -42,6 +53,15 @@ const useDrivercreation = () => {
     // console.log("ratetype ", userPermissions)
 
     //----------------------------------------
+
+    const actions = [
+        { icon: <ChecklistIcon />, name: "List" },
+        { icon: <CancelPresentationIcon />, name: "Cancel" },
+        { icon: <DeleteIcon />, name: "Delete" },
+        { icon: <ModeEditIcon />, name: "Edit" },
+        edit ? "" : { icon: <BookmarkAddedIcon />, name: "Add" }
+        
+    ];
 
     useEffect(() => {
         const fetchPermissions = async () => {
@@ -134,39 +154,46 @@ const useDrivercreation = () => {
                 </Button>
             ),
         },
+        { field: "driverid", headerName: "Driver_ID", width: 100 },
+        { field: "drivername", headerName: "Driver_Name", width: 130 },
         { field: "username", headerName: "User_Name", width: 130 },
         { field: "userpassword", headerName: "Password", width: 130 },
+        { field: "stations", headerName: "Stations", width: 130 },
+        { field: "Mobileno", headerName: "Mobileno", width: 130 },
+        {
+            field: "joiningdate", headerName: "Joining Date", width: 130,
+            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+
+        },
         // { field: "viewfor", headerName: "Access", width: 130 },
         // { field: "designation", headerName: "Designation", width: 130 },
         // { field: "stationname", headerName: "Station", width: 130 },
         { field: "licenseno", headerName: "License No", width: 130 },
         { field: "badgeno", headerName: "Badge No", width: 130 },
         { field: "aadharno", headerName: "Aadhar Card No", width: 130 },
-        { field: "licenseexpdate", headerName: "License Exp Date", width: 130 },
+        {
+            field: "licenseexpdate", headerName: "License Exp Date", width: 130,
+            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+        },
         { field: "badgeexpdate", headerName: "Badge Exp Date", width: 130 },
         { field: "active", headerName: "Active", width: 160 },
     ];
 
     const [book, setBook] = useState({
-        userid: '',
+        
+        drivername: '',
         username: '',
-        stationname: '',
-        designation: '',
+        stations: '',
+        Mobileno: '',
         userpassword: '',
-        userconfirmpassword: '',
-        active: '',
-        viewfor: '',
+        joiningdate: dayjs(),
+        active: "yes",
         address1: '',
         licenseno: '',
-        basicsalary: '',
         licenseexpdate: '',
-        streetno: '',
-        esino: '',
+        city: '',
         badgeno: '',
         badgeexpdate: '',
-        city: '',
-        pfno: '',
-        durationofyears: '',
         aadharno: '',
     });
 
@@ -193,12 +220,28 @@ const useDrivercreation = () => {
                 ...prevData,
                 [name]: value,
             }));
-            if (name === 'userpassword') {
-                setPassword(value);
-            } else if (name === 'userconfirmpassword') {
-                setConfirmPassword(value);
-            }
+            // if (name === 'userpassword') {
+            //     setPassword(value);
+            // }
+            // else if (name === 'userconfirmpassword') {
+            //     setConfirmPassword(value);
+            // }
         }
+    };
+
+    const handleDateChange = (date, name) => {
+        const formattedDate = dayjs(date).format("YYYY-MM-DD");
+        const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
+        console.log(formattedDate, "driver", parsedDate)
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: parsedDate,
+        }));
+
+        setSelectedCustomerData((prevValues) => ({
+            ...prevValues,
+            [name]: parsedDate,
+        }));
     };
 
     const handleAutocompleteChange = (event, value, name) => {
@@ -215,32 +258,26 @@ const useDrivercreation = () => {
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
-            userid: '',
+            drivername: '',
             username: '',
-            stationname: '',
-            designation: '',
+            stations: '',
+            Mobileno: '',
             userpassword: '',
-            userconfirmpassword: '',
-            active: '',
-            viewfor: '',
+            joiningdate: dayjs(),
+            active: "yes",
             address1: '',
             licenseno: '',
-            basicsalary: '',
             licenseexpdate: '',
-            streetno: '',
-            esino: '',
             badgeno: '',
             badgeexpdate: '',
             city: '',
-            pfno: '',
-            durationofyears: '',
             aadharno: '',
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
 
-    const user__id = selectedCustomerData?.userid || book.userid;
+    const user__id = selectedCustomerData?.driverid || book.driverid;
     const [file, setFile] = useState(null);
 
     // adhar
@@ -303,13 +340,13 @@ const useDrivercreation = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleButtonClick = (params) => {
-        const { userid } = params.row;
-        if (!userid) {
+        const { driverid } = params.row;
+        if (!driverid) {
             setError(true);
-            setErrorMessage("PLease Enter Booking No");
+            setErrorMessage("PLease Enter driverid No");
             return;
         }
-        showPdf(userid);
+        showPdf(driverid);
     };
 
     const handleCloseDialog = () => {
@@ -317,73 +354,210 @@ const useDrivercreation = () => {
     };
 
     const handleAdd = async () => {
-        const stationname = book.stationname;
-        if (password === confirmPassword) {
-            setPasswordsMatch(false);
-            if (!stationname) {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-                return;
-            }
-            const permissions = checkPagePermission();
+        // const stationname = book.stations;
+        console.log(book, "jjjjjj")
+        const permissions = checkPagePermission();
 
-            if (permissions.read && permissions.new) {
-                try {
-                    await axios.post(`${apiUrl}/drivercreation`, book);
-                    handleCancel();
-                    addPdf();
-                    licenceSubmit();
-                    setRows([]);
-                    validatePasswordMatch();
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Added");
-                } catch (error) {
-                    setError(true)
-                    setErrorMessage("Check your Network Connection");
-                }
-            } else {
-                setInfo(true);
-                setInfoMessage("You do not have permission.");
+        if (permissions.read && permissions.new) {
+            if (!book.stations && !book.drivername) {
+                setError(true)
+                setErrorMessage("All fields are mandatory");
+                return
             }
-        } else {
-            setPasswordsMatch(true);
+            if (!book.password && !book.address1) {
+                setError(true)
+                setErrorMessage("All fields are mandatory");
+                return
+            }
+
+            if (!book.Mobileno && !book.licenseno) {
+                setError(true)
+                setErrorMessage("All fields are mandatory");
+                return
+            }
+
+            if (!book.city ) {
+
+                setError(true)
+                setErrorMessage("All fields are mandatory");
+                return
+
+            }
+            if(!book.licenseexpdate ){
+                setError(true)
+                setErrorMessage("All fields are mandatory");
+                return
+
+
+            }
+            console.log(book,"data")
+            // const data={...book}
+            try {
+                // const data = {
+                //     drivername: book.drivername,
+                //     username: book.username,
+                //     stations: book.stations,
+                //     Mobileno: book.Mobileno,
+                //     userpassword: book.userpassword,
+                //     joiningdate: book.joiningdate|| dayjs(),
+                //     active: book.active||'yes',
+                //     address1: book.address1,
+                //     licenseno: book.licenseno,
+                //     licenseexpdate:book.licenseexpdate ,
+                //     city: book.city,
+                //     badgeno: book.badgeno,
+                //     badgeexpdate: book.badgeexpdate,
+                //     aadharno: book.aadharno,
+                // }
+                const data={...book}
+                console.log(data, "bookadd")
+                await axios.post(`${apiUrl}/drivercreation`, data);
+                handleCancel();
+                addPdf();
+                licenceSubmit();
+                setRows([]);
+                // validatePasswordMatch();
+                setSuccess(true);
+                setSuccessMessage("Successfully Added");
+            } catch (error) {
+                setError(true)
+                setErrorMessage("Check your Network Connection");
+            }
+
         }
+
+
+        else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+        }
+
+
     };
 
-    useEffect(() => {
-        const handlelist = async () => {
-            if (permissions.read) {
-                const response = await axios.get(`${apiUrl}/drivercreation`);
-                const data = response.data;
+    // useEffect(() => {
+    //     const handlelist = async () => {
+    //         if (permissions.read) {
+    //             const response = await axios.get(`${apiUrl}/drivercreation`);
+    //             const data = response.data;
 
-                if (data.length > 0) {
-                    const rowsWithUniqueId = data.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setRows(rowsWithUniqueId);
-                } else {
-                    setRows([]);
-                }
-            }
+    //             if (data.length > 0) {
+    //                 const rowsWithUniqueId = data.map((row, index) => ({
+    //                     ...row,
+    //                     id: index + 1,
+    //                 }));
+    //                 setRows(rowsWithUniqueId);
+    //             } else {
+    //                 setRows([]);
+    //             }
+    //         }
+    //     }
+
+    //     handlelist();
+    // }, [permissions, apiUrl]);
+    
+  const handleShowAll = async () => {
+    // const permissions = checkPagePermission();
+
+    if (permissions.read && permissions.read) {
+      try {
+        const response = await fetch(
+          `${apiUrl}/searchfordriver?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
+        );
+        const data = await response.json();
+        if (data.length > 0) {
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
+          setSuccess(true);
+          setSuccessMessage("successfully listed");
+        } else {
+          setRows([]);
+          setError(true);
+          setErrorMessage("no data found");
         }
+      } catch {
+        setError(true);
+        setErrorMessage("sorry");
+      }
+    } else {
+      setInfo(true);
+      setInfoMessage("You do not have permission.");
+    }
+  };
 
-        handlelist();
-    }, [permissions, apiUrl]);
+    const handleenterSearch = async (e) => {
+        // const permissions = checkPagePermission();
+        // e.preventDefault();
+        if (e.key === "Enter") {
+          if (permissions.read && permissions.read) {
+            try {
+              const response = await fetch(
+                `${apiUrl}/searchfordriver?searchText=${searchText}`
+              );
+              const data = await response.json();
+              console.log(data,"search")
+              if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                  ...row,
+                  id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+                setSuccess(true);
+                setSuccessMessage("successfully listed");
+              } else {
+                setRows([]);
+                setError(true);
+                setErrorMessage("no data found");
+              }
+            } catch {
+              setError(true);
+              setErrorMessage("sorry");
+            }
+          } else {
+            setInfo(true);
+            setInfoMessage("You do not have permission.");
+          }
+        }
+      };
 
     const handleEdit = async (userid) => {
+        // console.log(userid,"jjjj")
+        setEdit(true)
         const permissions = checkPagePermission();
 
         if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.userid === userid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
+            console.log(rows,"jjjjjjjjrows")
+            // const selectedCustomer = rows.find((row) => row.driverid === selectedCustomerId);
+            // const{id,driverid,...restcustomerdata}=selectedCustomer
+            // const updatedCustomer = { ...restcustomerdata, ...selectedCustomerData };
+            const updatedriver={
+                drivername:selectedCustomerData.drivername,
+                username: selectedCustomerData.username,
+                stations: selectedCustomerData.stations,
+                Mobileno: selectedCustomerData.Mobileno,
+                userpassword: selectedCustomerData.userpassword,
+                joiningdate: selectedCustomerData.joiningdate,
+                active: selectedCustomerData.active,
+                address1: selectedCustomerData.address1,
+                licenseno: selectedCustomerData.licenseno,
+                licenseexpdate: selectedCustomerData.licenseexpdate,
+                badgeno: selectedCustomerData.badgeno,
+                badgeexpdate: selectedCustomerData.badgeexpdate,
+                city: selectedCustomerData.city,
+                aadharno: selectedCustomerData.aadharno,
+            }
+            // const updatedCustomer = { ...selectedCustomerData };
+            await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,updatedriver);
             setSuccess(true);
             setSuccessMessage('Successfully updated');
             handleCancel();
             addPdf();
             licenceSubmit();
             setRows([]);
+            setEdit(true)
         } else {
             setInfo(true);
             setInfoMessage('You do not have permission.');
@@ -391,6 +565,7 @@ const useDrivercreation = () => {
     };
 
     const handleClick = async (event, actionName, userid) => {
+       
         event.preventDefault();
 
         try {
@@ -423,7 +598,7 @@ const useDrivercreation = () => {
                 setRows([]);
             } else if (actionName === 'Delete') {
                 if (permissions.read && permissions.delete) {
-                    await axios.delete(`${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`);
+                    await axios.delete(`${apiUrl}/drivercreation/${selectedCustomerData?.driverid || userid}`);
                     setSelectedCustomerData(null);
                     setSuccess(true);
                     setSuccessMessage('Successfully Deleted');
@@ -434,10 +609,12 @@ const useDrivercreation = () => {
                     setInfoMessage('You do not have permission.');
                 }
             } else if (actionName === 'Edit') {
+              
                 if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.userid === userid);
-                    const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`${apiUrl}/drivercreation/${selectedCustomerData?.userid || userid}`, updatedCustomer);
+                    // const selectedCustomer = rows.find((row) => row.driverid === userid);
+                    // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                    // await axios.put(`${apiUrl}/drivercreation/${selectedCustomerData?.driverid || userid}`, updatedCustomer);
+                    handleEdit()
                     setSuccess(true);
                     setSuccessMessage('Successfully updated');
                     handleCancel();
@@ -461,7 +638,7 @@ const useDrivercreation = () => {
         setError(false);
         setInfo(false);
         setWarning(false);
-        setPasswordsMatch(false);
+       
     };
     useEffect(() => {
         if (error) {
@@ -495,14 +672,14 @@ const useDrivercreation = () => {
             return () => clearTimeout(timer);
         }
     }, [info]);
-    useEffect(() => {
-        if (passwordsMatch) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [passwordsMatch]);
+    // useEffect(() => {
+    //     if (passwordsMatch) {
+    //         const timer = setTimeout(() => {
+    //             hidePopup();
+    //         }, 3000);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [passwordsMatch]);
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
@@ -511,8 +688,11 @@ const useDrivercreation = () => {
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
-        setSelectedCustomerId(params.row.customerId);
+        // setSelectedCustomerId(params.row.customerId);
+        setSelectedCustomerId(params.row.driverid);
+      
         setIsEditMode(true);
+        setEdit(true)
     }, []);
 
     const handleClickShowPasswords = () => {
@@ -531,11 +711,11 @@ const useDrivercreation = () => {
         event.preventDefault();
     };
 
-    const validatePasswordMatch = () => {
-        const password = selectedCustomerData?.userpassword || book.userpassword;
-        const confirmPassword = selectedCustomerData?.userconfirmpassword || book.userconfirmpassword;
-        setPasswordsMatch(password !== confirmPassword);
-    };
+    // const validatePasswordMatch = () => {
+    //     const password = selectedCustomerData?.userpassword || book.userpassword;
+    //     const confirmPassword = selectedCustomerData?.userconfirmpassword || book.userconfirmpassword;
+    //     setPasswordsMatch(password !== confirmPassword);
+    // };
 
     const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
 
@@ -705,10 +885,11 @@ const useDrivercreation = () => {
         handleAdd,
         hidePopup,
         handleAutocompleteChange,
+        handleDateChange,
         showPasswords,
         handleClickShowPasswords,
         handleMouseDownPasswords,
-        passwordsMatch,
+        // passwordsMatch,
         columns,
         showPassword,
         handleClickShowPassword,
@@ -738,7 +919,8 @@ const useDrivercreation = () => {
         selectAll,
         setSelectAll,
         handleSelectAll,
-        handleDocumentDownload
+        handleDocumentDownload,
+        searchText,setSearchText,fromDate,setFromDate,toDate,setToDate,handleenterSearch,handleShowAll,edit,actions
         // venkat
     };
 };

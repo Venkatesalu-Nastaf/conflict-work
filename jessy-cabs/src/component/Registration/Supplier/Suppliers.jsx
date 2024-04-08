@@ -7,6 +7,7 @@ import TabContext from "@mui/lab/TabContext";
 import Accountinfo from './Account_Info/Accountinfo.jsx';
 import Vehicaleinfo from './Vehicale_Info/Vehicaleinfo.jsx';
 import VehicaleType from '../VehicaleType/VehicaleType.jsx';
+import DriverCreation from './DriverCreation/DriverCreation.jsx';
 
 const Suppliers = () => {
     const [value, setValue] = React.useState("accounting_info");
@@ -24,12 +25,14 @@ const Suppliers = () => {
                                 <Tab label="Accounting Info" value="accounting_info" />
                                 <Tab label="Vehicle Info" value="vehicle_info" />
                                 <Tab label="Vehicle TYPE" value="vehicle_type" />
+                                <Tab label="Driver Info" value="driverinfo" />
 
                             </TabList>
                         </Box>
                         <TabPanel value="accounting_info"><Accountinfo /></TabPanel>
                         <TabPanel value="vehicle_info"><Vehicaleinfo /></TabPanel>
                         <TabPanel value="vehicle_type"><VehicaleType /></TabPanel>
+                        <TabPanel value="driverinfo"><DriverCreation /></TabPanel>
                     </TabContext>
                 </Box>
             </div>

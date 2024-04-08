@@ -92,7 +92,6 @@ const Employe = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -398,7 +397,7 @@ const Employe = () => {
                     />
                   </Button>
                 ) : (
-                  <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                  <Button color="primary" variant="contained" onClick={() => {
                     setError(true);
                     setErrorMessage("Please Enter Booking No");
                   }}>
@@ -412,7 +411,7 @@ const Employe = () => {
                 {isEditMode ? (
                   <Button variant="contained" onClick={handleEdit}>Edit</Button>
                 ) : (
-                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                  <Button variant="contained" onClick={handleAdd} >Add</Button>
                 )}
               </div>
             </div>

@@ -38,7 +38,6 @@ const Pending = () => {
     warningMessage,
     infoMessage,
     handleClick,
-    isFieldReadOnly,
     hidePopup,
     fromDate,
     setFromDate,
@@ -57,7 +56,6 @@ const Pending = () => {
     popupOpen,
     handlePopupClose,
     selectedRow,
-    handleBookingClick,
     handleTripsheetClick,
     columns
   } = usePending();
@@ -94,10 +92,10 @@ const Pending = () => {
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: "130px" }} >
-                  <Button variant="outlined" onClick={handleShow} disabled={isFieldReadOnly("read")}>Show</Button>
+                  <Button variant="outlined" onClick={handleShow} >Show</Button>
                 </div>
                 <div className="input" style={{ width: "110px" }} >
-                  <Button variant="outlined" onClick={handleShowAll} disabled={isFieldReadOnly("read")}>Show All</Button>
+                  <Button variant="outlined" onClick={handleShowAll} >Show All</Button>
                 </div>
               </div>
               <div className="input-field">
@@ -188,7 +186,6 @@ const Pending = () => {
               <DialogContent>
                 {selectedRow && (
                   <div>
-                    <Button onClick={handleBookingClick}>Booking</Button>
                     <Button onClick={handleTripsheetClick}>Tripsheet</Button>
                   </div>
                 )}

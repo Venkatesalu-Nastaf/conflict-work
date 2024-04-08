@@ -40,7 +40,6 @@ const Closed = () => {
     setToDate,
     handleClick,
     handleShow,
-    isFieldReadOnly,
     handleShowAll,
     department,
     hidePopup,
@@ -86,10 +85,10 @@ const Closed = () => {
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ width: '130px' }}>
-                  <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("read")}>Show</Button>
+                  <Button variant="contained" onClick={handleShow} >Show</Button>
                 </div>
                 <div className="input" style={{ width: '120px' }}>
-                  <Button variant="outlined" onClick={handleShowAll} disabled={isFieldReadOnly("read")}>Show All</Button>
+                  <Button variant="outlined" onClick={handleShowAll} >Show All</Button>
                 </div>
               </div>
               <div className="input-field">

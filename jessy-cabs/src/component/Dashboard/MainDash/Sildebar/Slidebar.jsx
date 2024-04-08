@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
-import { PermissionsContext } from "../../../permissionContext/permissionContext";
+import React, { useState, useEffect } from "react";
 import { useData } from "../../MainDash/Sildebar/DataContext2";
 import axios from "axios";
 import "./Sidebar.css";
@@ -52,11 +51,6 @@ const MenuItem = ({
 
 const Sidebar = () => {
 
-
-  const { userPermissions } = useContext(PermissionsContext)
-  const permissions = userPermissions;
-
-
   const apiUrl = APIURL;
 
   const location = useLocation();
@@ -70,78 +64,19 @@ const Sidebar = () => {
     "@keyframes ripple": {},
   }));
 
-  // const user_id = localStorage.getItem("useridno");
-  // const [permissions, setPermissions] = useState({});
-
-  //--------------------------to show logo
-
-
-
+  //--------------------------to show logo-----------
 
   const { sharedData } = useData();
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedprofileImage, setSelectedprofileImage] = useState(null);
 
   useEffect(() => {
-    console.log("1234555slide bar", sharedData)
     setSelectedImage(sharedData)
   }, [sharedData])
 
-  // useEffect(() => {
-  //   const handleImageView = async () => {
-  //     const organizationname = localStorage.getItem("usercompany");
-
-  //     if (organizationname) {
-  //       await axios.get(`${apiUrl}/log-imageview/${organizationname}`)
-  //         .then((res) => {
-  //           if (res.status === 200) {
-  //             setSelectedImage(res.data[0]?.fileName);
-  //             // const image = res.data[0]?.fileName
-  //             // localStorage.setItem("selectedlogo", selectedImage);
-  //             console.log("sliderlogo ", res.data[0]?.fileName)
-  //           }
-  //           else {
-  //             const timer = setTimeout(handleImageView, 2000);
-  //             return () => clearTimeout(timer);
-  //           }
-  //         })
-
-  //         .catch((error) => {
-  //           console.error("Error fetching image data:", error);
-  //         });
-  //     }
-
-  //   };
-  //   // handleImageView();
-  //   handleImageView();
-  // }, [sharedData, selectedImage, apiUrl]);
 
 
-  // useEffect(() => {
-  //   const handleImageView = async () => {
-  //     try {
-  //       const organizationname = localStorage.getItem("usercompany");
-  //       if (organizationname) {
-  //         const res = await axios.get(`${apiUrl}/log-imageview/${organizationname}`);
-  //         if (res.status === 200) {
-  //           setSelectedImage(res.data[0]?.fileName);
-  //           console.log("sliderlogo ", res.data[0]?.fileName);
-  //         } else {
-  //           const timer = setTimeout(handleImageView, 2000);
-  //           return () => clearTimeout(timer);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching image data:", error);
-  //     }
-  //   };
-  //   handleImageView();
-  // }, [apiUrl, sharedData, selectedImage,]);
-
-
-
-
-  //------------------------------------------
+  //------------------popup------------------------
 
   const [info, setInfo] = useState(false);
   const [infoMessage, setInfoMessage] = useState({});
@@ -153,14 +88,15 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    if (info) {
+    if (info || success) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [info]);
-  //end
+  }, [info, success]);
+
+  //end-----------------------------------
 
   useEffect(() => {
     if (!localStorage.getItem("auth")) navigate("/");
@@ -171,18 +107,15 @@ const Sidebar = () => {
   };
 
   const handleMenuItemClick = async (menuItemKey, name, alt) => {
-    const currentPageName = name;
+    // const currentPageName = name;
     localStorage.setItem("selectedMenuItem", menuItemKey);
     try {
-      // Find the permission for the current page
-      const permission = await permissions.find(permission => permission.page_name === currentPageName);
-      // console.log(permission)
-
-      if (permission.read_permission === 1) {
+      const per = true;
+      if (per) {
         navigate(alt);
       } else {
         setInfo(true);
-        setInfoMessage("You do not have permission to access this page.");
+        setInfoMessage("Tthere is catch issue..");
       }
     } catch {
     }
@@ -206,15 +139,6 @@ const Sidebar = () => {
       left: "-60%",
     },
   };
-
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
 
   useEffect(() => {
     if (user && user.username) {
@@ -335,7 +259,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Booking"
-            to={permissions.read && "/home/bookings/booking"}
+            to={"/home/bookings/booking"}
             alt="/home/bookings/booking"
             value="/home/bookings"
             menuItemKey="/home/bookings"
@@ -346,7 +270,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Billing"
-            to={permissions.read && "/home/billing/billing"}
+            to={"/home/billing/billing"}
             alt="/home/billing/billing"
             value="/home/billing"
             menuItemKey="/home/billing"
@@ -357,7 +281,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Register"
-            to={permissions.read && "/home/registration/customer"}
+            to={"/home/registration/customer"}
             alt="/home/registration/customer"
             value="/home/registration"
             menuItemKey="/home/registration"
@@ -368,7 +292,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Settings"
-            to={permissions.read && "/home/settings/usercreation"}
+            to={"/home/settings/usercreation"}
             alt="/home/settings/usercreation"
             value="/home/settings"
             menuItemKey="/home/settings"
@@ -379,7 +303,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Info"
-            to={permissions.read && "/home/info/ratetype"}
+            to={"/home/info/ratetype"}
             alt="/home/info/ratetype"
             value="/home/info"
             menuItemKey="/home/info"

@@ -38,7 +38,6 @@ const BankAccount = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleAdd,
     hidePopup,
     totalcapital,
@@ -90,7 +89,7 @@ const BankAccount = () => {
         <div className="BankAccount-detail-container-main">
           <div className="BankAccount-first-container">
             <div className="input bankaddbtn">
-              <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick} disabled={isFieldReadOnly("new")}>
+              <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddBankClick} >
                 Add bank
               </Button>
             </div>

@@ -3,18 +3,250 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const db = require('../../../db');
 
+
 // trip sheet database:
-// add tripsheet database
-router.post('/tripsheet', (req, res) => {
-    const bookData = req.body;
-    db.query('INSERT INTO tripsheet SET ?', bookData, (err, result) => {
+
+// add tripsheet database-------------------------------------------- 
+router.post('/tripsheet-add', (req, res) => {
+
+    const {
+        tripid,
+        bookingno,
+        tripsheetdate,
+        status,
+        billingno,
+        apps,
+        customer,
+        orderedby,
+        mobile,
+        guestname,
+        guestmobileno,
+        email,
+        address1,
+        streetno,
+        city,
+        hireTypes,
+        department,
+        vehRegNo,
+        vehType,
+        driverName,
+        mobileNo,
+        driversmsexbetta,
+        gps,
+        duty,
+        pickup,
+        useage,
+        request,
+        startdate,
+        closedate,
+        totaldays,
+        employeeno,
+        reporttime,
+        starttime,
+        closetime,
+        additionaltime,
+        advancepaidtovendor,
+        customercode,
+        startkm,
+        closekm,
+        shedkm,
+        shedin,
+        shedout,
+        shedintime,
+        permit,
+        parking,
+        toll,
+        vpermettovendor,
+        vendortoll,
+        customeradvance,
+        email1,
+        remark,
+        smsguest,
+        documentnotes,
+        VendorTripNo,
+        vehicles,
+        duty1,
+        startdate1,
+        closedate1,
+        totaldays1,
+        locks,
+        starttime2,
+        closetime2,
+        totaltime,
+        startkm1,
+        closekm1,
+        totalkm1,
+        remark1,
+
+        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+        nightThrs,
+        dtc,
+        dtc2,
+        nightThrs2,
+        exkmTkm2,
+        exHrsTHrs2,
+        netamount,
+        vehcommission,
+        caramount1,
+        manualbills,
+        pack,
+        amount5,
+        exkm1,
+        amount6,
+        exHrs1,
+        amount7,
+        night1,
+        amount8,
+        driverconvenience1,
+        amount9,
+        rud,
+        netamount1,
+        discount,
+        ons,
+        manualbills1,
+        balance,
+        fcdate,
+        taxdate,
+        insdate,
+        stpermit,
+        maintenancetype,
+        kilometer,
+        selects,
+        documenttype,
+        on1,
+        smsgust,
+        emailcheck,
+        booker,
+        reload,
+        manualbillss, } = req.body;
+
+
+
+    const addCustomerData = {
+        tripid,
+        bookingno,
+        tripsheetdate,
+        status,
+        billingno,
+        apps,
+        customer,
+        orderedby,
+        mobile,
+        guestname,
+        guestmobileno,
+        email,
+        address1,
+        streetno,
+        city,
+        hireTypes,
+        department,
+        vehRegNo,
+        vehType,
+        driverName,
+        mobileNo,
+        driversmsexbetta,
+        gps,
+        duty,
+        pickup,
+        useage,
+        request,
+        startdate,
+        closedate,
+        totaldays,
+        employeeno,
+        reporttime,
+        starttime,
+        closetime,
+        additionaltime,
+        advancepaidtovendor,
+        customercode,
+        startkm,
+        closekm,
+        shedkm,
+        shedin,
+        shedout,
+        shedintime,
+        permit,
+        parking,
+        toll,
+        vpermettovendor,
+        vendortoll,
+        customeradvance,
+        email1,
+        remark,
+        smsguest,
+        documentnotes,
+        VendorTripNo,
+        vehicles,
+        duty1,
+        startdate1,
+        closedate1,
+        totaldays1,
+        locks,
+        starttime2,
+        closetime2,
+        totaltime,
+        startkm1,
+        closekm1,
+        totalkm1,
+        remark1,
+        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+        nightThrs,
+        dtc,
+        dtc2,
+        nightThrs2,
+        exkmTkm2,
+        exHrsTHrs2,
+        netamount,
+        vehcommission,
+        caramount1,
+        manualbills,
+        pack,
+        amount5,
+        exkm1,
+        amount6,
+        exHrs1,
+        amount7,
+        night1,
+        amount8,
+        driverconvenience1,
+        amount9,
+        rud,
+        netamount1,
+        discount,
+        ons,
+        manualbills1,
+        balance,
+        fcdate,
+        taxdate,
+        insdate,
+        stpermit,
+        maintenancetype,
+        kilometer,
+        selects,
+        documenttype,
+        on1,
+        smsgust,
+        emailcheck,
+        booker,
+        reload,
+        manualbillss,
+    };
+
+
+    db.query('INSERT INTO tripsheet SET ?', addCustomerData, (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        }
+
+        if (result.affectedRows > 0) {
+            db.query(`UPDATE booking SET status = "Opened" WHERE bookingno=${bookingno}; `)
         }
         return res.status(200).json({ message: "Data inserted successfully" });
     });
 });
-// delete tripsheet data
+
+// delete tripsheet data---------------------------------------------------
 router.delete('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     db.query('DELETE FROM tripsheet WHERE tripid = ?', tripid, (err, result) => {
@@ -27,10 +259,231 @@ router.delete('/tripsheet/:tripid', (req, res) => {
         return res.status(200).json({ message: "Data deleted successfully" });
     });
 });
-// update tripsheet details
-router.put('/tripsheet/:tripid', (req, res) => {
+
+// update tripsheet details------------------------------------------------
+router.put('/tripsheet-edit/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    const updatedCustomerData = req.body;
+    const {
+
+        bookingno,
+        tripsheetdate,
+        status,
+        billingno,
+        apps,
+        customer,
+        orderedby,
+        mobile,
+        guestname,
+        guestmobileno,
+        email,
+        address1,
+        streetno,
+        city,
+        hireTypes,
+        department,
+        vehRegNo,
+        vehType,
+        driverName,
+        mobileNo,
+        driversmsexbetta,
+        gps,
+        duty,
+        pickup,
+        useage,
+        request,
+        startdate,
+        closedate,
+        totaldays,
+        employeeno,
+        reporttime,
+        starttime,
+        closetime,
+        additionaltime,
+        advancepaidtovendor,
+        customercode,
+        startkm,
+        closekm,
+        shedkm,
+        shedin,
+        shedout,
+        shedintime,
+        permit,
+        parking,
+        toll,
+        vpermettovendor,
+        vendortoll,
+        customeradvance,
+        email1,
+        remark,
+        smsguest,
+        documentnotes,
+        VendorTripNo,
+        vehicles,
+        duty1,
+        startdate1,
+        closedate1,
+        totaldays1,
+        locks,
+        starttime2,
+        closetime2,
+        totaltime,
+        startkm1,
+        closekm1,
+        totalkm1,
+        remark1,
+        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+        nightThrs,
+        dtc,
+        dtc2,
+        nightThrs2,
+        exkmTkm2,
+        exHrsTHrs2,
+        netamount,
+        vehcommission,
+        caramount1,
+        manualbills,
+        pack,
+        amount5,
+        exkm1,
+        amount6,
+        exHrs1,
+        amount7,
+        night1,
+        amount8,
+        driverconvenience1,
+        amount9,
+        rud,
+        netamount1,
+        discount,
+        ons,
+        manualbills1,
+        balance,
+        fcdate,
+        taxdate,
+        insdate,
+        stpermit,
+        maintenancetype,
+        kilometer,
+        selects,
+        documenttype,
+        on1,
+        smsgust,
+        emailcheck,
+        booker,
+        reload,
+        manualbillss, } = req.body;
+
+    const updatedCustomerData = {
+        bookingno,
+        tripsheetdate,
+        status,
+        billingno,
+        apps,
+        customer,
+        orderedby,
+        mobile,
+        guestname,
+        guestmobileno,
+        email,
+        address1,
+        streetno,
+        city,
+        hireTypes,
+        department,
+        vehRegNo,
+        vehType,
+        driverName,
+        mobileNo,
+        driversmsexbetta,
+        gps,
+        duty,
+        pickup,
+        useage,
+        request,
+        startdate,
+        closedate,
+        totaldays,
+        employeeno,
+        reporttime,
+        starttime,
+        closetime,
+        additionaltime,
+        advancepaidtovendor,
+        customercode,
+        startkm,
+        closekm,
+        shedkm,
+        shedin,
+        shedout,
+        shedintime,
+        permit,
+        parking,
+        toll,
+        vpermettovendor,
+        vendortoll,
+        customeradvance,
+        email1,
+        remark,
+        smsguest,
+        documentnotes,
+        VendorTripNo,
+        vehicles,
+        duty1,
+        startdate1,
+        closedate1,
+        totaldays1,
+        locks,
+        starttime2,
+        closetime2,
+        totaltime,
+        startkm1,
+        closekm1,
+        totalkm1,
+        remark1,
+        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+        nightThrs,
+        dtc,
+        dtc2,
+        nightThrs2,
+        exkmTkm2,
+        exHrsTHrs2,
+        netamount,
+        vehcommission,
+        caramount1,
+        manualbills,
+        pack,
+        amount5,
+        exkm1,
+        amount6,
+        exHrs1,
+        amount7,
+        night1,
+        amount8,
+        driverconvenience1,
+        amount9,
+        rud,
+        netamount1,
+        discount,
+        ons,
+        manualbills1,
+        balance,
+        fcdate,
+        taxdate,
+        insdate,
+        stpermit,
+        maintenancetype,
+        kilometer,
+        selects,
+        documenttype,
+        on1,
+        smsgust,
+        emailcheck,
+        booker,
+        reload,
+        manualbillss,
+    };
+
+
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -41,7 +494,251 @@ router.put('/tripsheet/:tripid', (req, res) => {
         return res.status(200).json({ message: "Data updated successfully" });
     });
 });
-// collect data from tripsheet database
+
+// confirm tripsheet details------------------------------------------------
+router.put('/tripsheet-confirm/:tripid', (req, res) => {
+    // const tripid = req.params.tripid;
+    // const updatedCustomerData = req.body;
+    const tripid = req.params.tripid;
+    const {
+
+        bookingno,
+        tripsheetdate,
+        status,
+        billingno,
+        apps,
+        customer,
+        orderedby,
+        mobile,
+        guestname,
+        guestmobileno,
+        email,
+        address1,
+        streetno,
+        city,
+        hireTypes,
+        department,
+        vehRegNo,
+        vehType,
+        driverName,
+        mobileNo,
+        driversmsexbetta,
+        gps,
+        duty,
+        pickup,
+        useage,
+        request,
+        startdate,
+        closedate,
+        totaldays,
+        employeeno,
+        reporttime,
+        starttime,
+        closetime,
+        additionaltime,
+        advancepaidtovendor,
+        customercode,
+        startkm,
+        closekm,
+        shedkm,
+        shedin,
+        shedout,
+        shedintime,
+        permit,
+        parking,
+        toll,
+        vpermettovendor,
+        vendortoll,
+        customeradvance,
+        email1,
+        remark,
+        smsguest,
+        documentnotes,
+        VendorTripNo,
+        vehicles,
+        duty1,
+        startdate1,
+        closedate1,
+        totaldays1,
+        locks,
+        starttime2,
+        closetime2,
+        totaltime,
+        startkm1,
+        closekm1,
+        totalkm1,
+        remark1,
+        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+        nightThrs,
+        dtc,
+        dtc2,
+        nightThrs2,
+        exkmTkm2,
+        exHrsTHrs2,
+        netamount,
+        vehcommission,
+        caramount1,
+        manualbills,
+        pack,
+        amount5,
+        exkm1,
+        amount6,
+        exHrs1,
+        amount7,
+        night1,
+        amount8,
+        driverconvenience1,
+        amount9,
+        rud,
+        netamount1,
+        discount,
+        ons,
+        manualbills1,
+        balance,
+        fcdate,
+        taxdate,
+        insdate,
+        stpermit,
+        maintenancetype,
+        kilometer,
+        selects,
+        documenttype,
+        on1,
+        smsgust,
+        emailcheck,
+        booker,
+        reload,
+        manualbillss, } = req.body;
+
+    const updatedCustomerData = {
+        bookingno,
+        tripsheetdate,
+        status,
+        billingno,
+        apps,
+        customer,
+        orderedby,
+        mobile,
+        guestname,
+        guestmobileno,
+        email,
+        address1,
+        streetno,
+        city,
+        hireTypes,
+        department,
+        vehRegNo,
+        vehType,
+        driverName,
+        mobileNo,
+        driversmsexbetta,
+        gps,
+        duty,
+        pickup,
+        useage,
+        request,
+        startdate,
+        closedate,
+        totaldays,
+        employeeno,
+        reporttime,
+        starttime,
+        closetime,
+        additionaltime,
+        advancepaidtovendor,
+        customercode,
+        startkm,
+        closekm,
+        shedkm,
+        shedin,
+        shedout,
+        shedintime,
+        permit,
+        parking,
+        toll,
+        vpermettovendor,
+        vendortoll,
+        customeradvance,
+        email1,
+        remark,
+        smsguest,
+        documentnotes,
+        VendorTripNo,
+        vehicles,
+        duty1,
+        startdate1,
+        closedate1,
+        totaldays1,
+        locks,
+        starttime2,
+        closetime2,
+        totaltime,
+        startkm1,
+        closekm1,
+        totalkm1,
+        remark1,
+        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+        nightThrs,
+        dtc,
+        dtc2,
+        nightThrs2,
+        exkmTkm2,
+        exHrsTHrs2,
+        netamount,
+        vehcommission,
+        caramount1,
+        manualbills,
+        pack,
+        amount5,
+        exkm1,
+        amount6,
+        exHrs1,
+        amount7,
+        night1,
+        amount8,
+        driverconvenience1,
+        amount9,
+        rud,
+        netamount1,
+        discount,
+        ons,
+        manualbills1,
+        balance,
+        fcdate,
+        taxdate,
+        insdate,
+        stpermit,
+        maintenancetype,
+        kilometer,
+        selects,
+        documenttype,
+        on1,
+        smsgust,
+        emailcheck,
+        booker,
+        reload,
+        manualbillss,
+    };
+
+    db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to update data in MySQL" });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Customer not found" });
+        }
+        // for BE_closed
+        db.query(`UPDATE tripsheet SET apps='Be_Closed' WHERE tripid=${tripid}`, (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to update tripsheet details in MySQL' });
+            }
+            return res.status(200).json(result);
+        });
+        return res.status(200).json({ message: "Data updated successfully" });
+    });
+});
+
+// collect data from tripsheet database------------------------------------
 router.get('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
     db.query('SELECT * FROM tripsheet WHERE tripid = ? AND status != "CBilled"', tripid, (err, result) => {
@@ -55,7 +752,8 @@ router.get('/tripsheet/:tripid', (req, res) => {
         return res.status(200).json(bookingDetails);
     });
 });
-// collect data from vehicleInfo database
+
+// collect data from vehicleInfo database------------------------------------
 router.get('/vehicleinfo/:vehRegNo', (req, res) => {
     const vehRegNo = req.params.vehRegNo;
     // Modify the query to use the LIKE operator for partial matching
@@ -70,7 +768,8 @@ router.get('/vehicleinfo/:vehRegNo', (req, res) => {
         return res.status(200).json(vehicleDetails);
     });
 });
-//send email from tripsheet page
+
+//send email from tripsheet page-----------------------------------
 router.post('/send-tripsheet-email', async (req, res) => {
     try {
         const { guestname, guestmobileno, email, hireTypes, department, vehType, vehRegNo, driverName, mobileNo, useage, pickup } = req.body;
@@ -193,4 +892,38 @@ router.get('/get-gmapdata/:tripid', (req, res) => {
     });
 });
 
-module.exports = router;
+
+//ayyanar 4hr and 8hr pack fetch
+
+router.get(`/t4hr-pack`, (req, res) => {
+
+    const total_km = parseInt(req.query.totkm);
+    const { tothr, vehiletype, duty } = req.query.totalHours;
+    let hr;
+    if (total_km <= 49 && tothr <= 6) {
+        hr = 4;
+        db.query("select * from ratemanagement where Hours=?", [hr], (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+            }
+            return res.status(200).json(result[0]);
+        })
+    }
+    else if (total_km > 49 || tothr > 6) {
+        hr = 8;
+        db.query("select * from ratemanagement where Hours=?", [hr], (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
+            }
+            return res.status(200).json(result[0]);
+        })
+    }
+    else {
+        res.json("wrong data")
+    }
+})
+
+
+
+
+module.exports = router; 

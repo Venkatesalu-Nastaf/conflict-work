@@ -1,6 +1,5 @@
 
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
@@ -24,10 +23,9 @@ const useEmployee = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage, setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
     const [searchText, setSearchText] = useState('');
     const [isEditMode, setIsEditMode] = useState(false);
-
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleButtonClick = (params) => {
@@ -75,109 +73,6 @@ const useEmployee = () => {
     ];
     // TABLE END
 
-    // for page permission
-
-    // const [userPermissions, setUserPermissions] = useState({});
-
-    // useEffect(() => {
-    //     const fetchPermissions = async () => {
-    //         try {
-    //             const currentPageName = 'Employee PayRoll';
-    //             const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-    //             setUserPermissions(response.data);
-    //         } catch {
-    //         }
-    //     };
-
-    //     fetchPermissions();
-    // }, [user_id, apiUrl]);
-
-    // const checkPagePermission = () => {
-    //     const currentPageName = 'Employee PayRoll';
-    //     const permissions = userPermissions || {};
-
-    //     if (permissions.page_name === currentPageName) {
-    //         return {
-    //             read: permissions.read_permission === 1,
-    //             new: permissions.new_permission === 1,
-    //             modify: permissions.modify_permission === 1,
-    //             delete: permissions.delete_permission === 1,
-    //         };
-    //     }
-
-    //     return {
-    //         read: false,
-    //         new: false,
-    //         modify: false,
-    //         delete: false,
-    //     };
-    // };
-
-
-
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Employee PayRoll';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Employee PayRoll';
-        const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-
-    //------------------------------
-
-    const permissions = checkPagePermission();
-
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -232,38 +127,17 @@ const useEmployee = () => {
         setInfo(false);
         setWarning(false);
     };
+
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, success, warning, info]);
+
+
 
     const [book, setBook] = useState({
         empid: '',
@@ -397,47 +271,32 @@ const useEmployee = () => {
 
     //----------------------------------------------
     const handleAdd = async () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.new) {
-            const empname = book.empname;
-            if (!empname) {
-                setError(true);
-                setErrorMessage("Check your Employee ID");
-                return;
-            }
-            try {
-                await axios.post(`${apiUrl}/employees`, book);
-                handleCancel();
-                addPdf();
-                setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
-            } catch {
-
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        const empname = book.empname;
+        if (!empname) {
+            setError(true);
+            setErrorMessage("Check your Employee ID");
+            return;
+        }
+        try {
+            await axios.post(`${apiUrl}/employees`, book);
+            handleCancel();
+            addPdf();
+            setRows([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } catch {
         }
     };
 
     const handleEdit = async (userid) => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.empid === empid);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
-            setSuccess(true);
-            setSuccessMessage("Successfully updated");
-            handleCancel();
-            addPdf();
-            setRows([]);
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
-        }
+        const selectedCustomer = rows.find((row) => row.empid === empid);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
+        setSuccess(true);
+        setSuccessMessage("Successfully updated");
+        handleCancel();
+        addPdf();
+        setRows([]);
     };
 
 
@@ -445,82 +304,8 @@ const useEmployee = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.read) {
-                    const response = await axios.get(`${apiUrl}/employees`);
-                    const data = response.data;
-                    if (data.length > 0) {
-                        const rowsWithUniqueId = data.map((row, index) => ({
-                            ...row,
-                            id: index + 1,
-                        }));
-                        setRows(rowsWithUniqueId);
-                        setSuccess(true);
-                        setSuccessMessage("Successfully listed");
-                    } else {
-                        setRows([]);
-                        setError(true);
-                        setErrorMessage("No data found");
-                    }
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Cancel') {
-                handleCancel();
-                setRows([]);
-            } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`);
-                    setSelectedCustomerData(null);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Deleted");
-                    handleCancel();
-                    setRows([]);
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.empid === empid);
-                    const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully updated");
-                    handleCancel();
-                    addPdf();
-                    setRows([]);
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Add') {
-                handleAdd();
-            }
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-        }
-    };
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
-
-    const handleShowAll = async () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.read) {
-            try {
-                const response = await fetch(`${apiUrl}/table-for-employee?searchText=${searchText}`);
-                const data = await response.json();
+                const response = await axios.get(`${apiUrl}/employees`);
+                const data = response.data;
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,
@@ -528,19 +313,71 @@ const useEmployee = () => {
                     }));
                     setRows(rowsWithUniqueId);
                     setSuccess(true);
-                    setSuccessMessage("successfully listed")
+                    setSuccessMessage("Successfully listed");
                 } else {
                     setRows([]);
                     setError(true);
-                    setErrorMessage("no data found")
+                    setErrorMessage("No data found");
                 }
-            } catch {
-                setError(true);
-                setErrorMessage("sorry")
             }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+
+            else if (actionName === 'Cancel') {
+                handleCancel();
+                setRows([]);
+            }
+
+            else if (actionName === 'Delete') {
+                await axios.delete(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`);
+                setSelectedCustomerData(null);
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
+                handleCancel();
+                setRows([]);
+            }
+
+            else if (actionName === 'Edit') {
+                const selectedCustomer = rows.find((row) => row.empid === empid);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                handleCancel();
+                addPdf();
+                setRows([]);
+            }
+
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+        }
+    };
+
+    useEffect(() => {
+        if (actionName === 'List') {
+            handleClick(null, 'List');
+        }
+    });
+
+    const handleShowAll = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/table-for-employee?searchText=${searchText}`);
+            const data = await response.json();
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+                setSuccess(true);
+                setSuccessMessage("successfully listed")
+            } else {
+                setRows([]);
+                setError(true);
+                setErrorMessage("no data found")
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("sorry")
         }
     };
 
@@ -579,11 +416,11 @@ const useEmployee = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        infoMessage,
+        // infoMessage,
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
+
         handleRowClick,
         handleAdd,
         hidePopup,

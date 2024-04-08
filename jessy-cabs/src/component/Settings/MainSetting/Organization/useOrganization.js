@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useData } from '../../../Dashboard/MainDash/Sildebar/DataContext2';
 import { APIURL } from "../../../url";
@@ -18,83 +17,35 @@ const useOrganization = () => {
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
     const [info, setInfo] = useState(false);
-    const [infoMessage, setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
     const { setSharedData, sharedData } = useData();
 
-
-
-
+    // for logo-------------------
     useEffect(() => {
-        console.log("1234555", sharedData)
         setSelectedImage(sharedData)
     }, [sharedData])
 
+    //----------------------popup----
 
-    //--------------------------------------
-
-
-    const [userPermissionss, setUserPermissions] = useState({});
-
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
+    const hidePopup = () => {
+        setSuccess(false);
+        setWarning(false);
+        setInfo(false);
+        setError(false);
+        setErrorMessage('');
+    };
 
     useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'User Creation';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
+        if (error || info || warning || success) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
 
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-
-    const checkPagePermission = () => {
-        const currentPageName = 'User Creation';
-        const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
+            return () => clearTimeout(timer);
         }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
+    }, [error, warning, info, success]);
 
-
-
-
-
-    const isFieldReadOnly = (fieldName) => {
-        const permissions = checkPagePermission();
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
+    //-----------------------
 
     const [book, setBook] = useState({
         organizationname: '',
@@ -122,23 +73,6 @@ const useOrganization = () => {
         industrySpecificDetails: '',
     });
 
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
 
     const handleKeyDown = useCallback(async (event) => {
         if (event.key === 'Enter') {
@@ -158,51 +92,37 @@ const useOrganization = () => {
     }, [apiUrl]);
 
     const handleAdd = async () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.new) {
-            const name = selectedCustomerData?.organizationname || book.organizationname;
-            if (!name) {
-                setError(true);
-                setErrorMessage("fill mantatory fields");
-                return;
-            }
-            try {
-                await axios.post(`${apiUrl}/addcompany`, book);
-                setSuccess(true);
-                setSuccessMessage("Organization Added Successfully");
-            } catch {
-                setError(true);
-                setErrorMessage("Something went wrong");
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        const name = selectedCustomerData?.organizationname || book.organizationname;
+        if (!name) {
+            setError(true);
+            setErrorMessage("fill mantatory fields");
+            return;
+        }
+        try {
+            await axios.post(`${apiUrl}/addcompany`, book);
+            setSuccess(true);
+            setSuccessMessage("Organization Added Successfully");
+        } catch {
+            setError(true);
+            setErrorMessage("Something went wrong");
         }
     };
 
     const handleUpdate = async (organizationname) => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.modify) {
-            try {
-                const selectedCustomer = rows.find((row) => row.organizationname === organizationname);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
-                const encode = companyname;
-                const decode = decodeURIComponent(encode);
-                await axios.put(`${apiUrl}/companyupdate/${decode}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                setEditMode((prevEditMode) => !prevEditMode);
-            }
-            catch {
-                setError(true);
-                setErrorMessage("Something went wrong");
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        try {
+            const selectedCustomer = rows.find((row) => row.organizationname === organizationname);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
+            const encode = companyname;
+            const decode = decodeURIComponent(encode);
+            await axios.put(`${apiUrl}/companyupdate/${decode}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            setEditMode((prevEditMode) => !prevEditMode);
+        }
+        catch {
+            setError(true);
+            setErrorMessage("Something went wrong");
         }
     };
 
@@ -219,65 +139,34 @@ const useOrganization = () => {
     };
 
 
-
     useEffect(() => {
         const fetchData = async () => {
-            // const encoded = localStorage.getItem('usercompany');
-            // localStorage.setItem('usercompanyname', encoded);
-            // const storedcomanyname = localStorage.getItem('usercompanyname');
-
-            // const organizationname = decodeURIComponent(storedcomanyname);
-            // console.log(encoded, storedcomanyname, organizationname, "data 2local storage", storedcomanyname)
-
-
             const organizationname = localStorage.getItem('usercompany');
-            // console.log(organizationname, "orggggg")
 
             try {
                 const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const userDataArray = await response.json();
-                if (userDataArray.length > 0) {
-                    console.log(userDataArray, "data fetch")
-                    setSelectedCustomerData(userDataArray[0]);
+                if (response.status === 200) {
+
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setSelectedCustomerData(userDataArray[0]);
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }
                 } else {
-
+                    const timer = setTimeout(fetchData, 50);
+                    return () => clearTimeout(timer);
                 }
-            } catch {
-
+            }
+            catch {
             }
         };
         fetchData();
-    }, [apiUrl, sharedData]);
+    }, [apiUrl, selectedCustomerData]);
 
 
-    const hidePopup = () => {
-        setSuccess(false);
-        setWarning(false);
-        setInfo(false);
-        setError(false);
-        setErrorMessage('');
-    };
 
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
 
     const toggleEditMode = () => {
         setEditMode((prevEditMode) => !prevEditMode);
@@ -329,12 +218,11 @@ const useOrganization = () => {
         warningMessage,
         book,
         handleChange,
-        isFieldReadOnly,
         handleAdd,
         hidePopup,
         selectedImage,
         info,
-        infoMessage,
+        // infoMessage,
         editMode,
         handleFileChange,
         handleUpload,

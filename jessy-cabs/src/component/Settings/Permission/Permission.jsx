@@ -27,7 +27,6 @@ const Permission = () => {
     infoMessage,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     userData,
     hidePopup,
     userId,
@@ -75,7 +74,6 @@ const Permission = () => {
                   startIcon={<FontAwesomeIcon icon={faSave} size="lg" />}
                   variant="outlined"
                   onClick={handleSavePermissions}
-                  disabled={isFieldReadOnly("new")}
                 >
                   Save
                 </Button>

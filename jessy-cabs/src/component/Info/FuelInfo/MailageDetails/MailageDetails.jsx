@@ -74,7 +74,6 @@ const MailageDetails = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -259,14 +258,11 @@ const MailageDetails = () => {
                   </Button>
                 </div>
                 <div className="input" style={{ width: "70px" }}>
-                  {/* <Button color="primary" variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>
-                    Add
-                  </Button> */}
                   <div className="input" style={{ width: "160px" }}>
                     {isEditMode ? (
                       <Button variant="contained" onClick={handleEdit}>Edit</Button>
                     ) : (
-                      <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                      <Button variant="contained" onClick={handleAdd} >Add</Button>
                     )}
                   </div>
                 </div>

@@ -13,7 +13,9 @@ import { ThemesProvider } from "../../UserSettings/Themes/ThemesContext";
 import { useUser } from "../../form/UserContext";
 import Button from "@mui/material/Button";
 import { useData } from "./DataContext"; //- data contaxt
-import axios from "axios";
+import Logo from "../../../assets/img/logonas.png"
+
+// import axios from "axios";
 
 //dialog box
 import Dialog from "@material-ui/core/Dialog";
@@ -23,15 +25,29 @@ import { APIURL } from "../../url";
 
 const MainDashboard = () => {
   const apiUrl = APIURL;
-  const { sharedData } = useData();
+  const { sharedData, setFilteredData } = useData();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const { selectedTheme } = useThemes();
   const { setSelectedTheme } = useThemes();
-  const { user } = useUser();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const { user, setUserdashboard, userdashboard } = useUser();
+
+
+  const data1 = localStorage.getItem("useridno")
+  const data2 = localStorage.getItem("usercompany")
+  const data4 = localStorage.getItem("username");
+  const data5 = localStorage.getItem("profileimages")
+  const data6 = localStorage.getItem("organizationimages")
+
+
+
+  useEffect(() => {
+
+    setSelectedImage(sharedData)
+  }, [sharedData])
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -60,6 +76,10 @@ const MainDashboard = () => {
       localStorage.removeItem("selectedprofileImage");
       localStorage.removeItem("usercompany");
       localStorage.removeItem("selectedMenuItem");
+      localStorage.removeItem("profileimages")
+      localStorage.removeItem("organizationimages")
+      localStorage.removeItem("selectedusertheme")
+
       setExpanded(true);
       navigate("/");
     },
@@ -161,94 +181,142 @@ const MainDashboard = () => {
   localStorage.setItem("usercompany", usercompany);
 
   // to show icon image
+
+  // useEffect(() => {
+  //   const handleImageView = () => {
+  //     const userid = localStorage.getItem("useridno");
+  //     axios.get(`${apiUrl}/userprofileview/${userid}`).then((res) => {
+  //       if (res.status === 200) {
+  //         setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
+  //       } else {
+  //         const timer = setTimeout(handleImageView, 100);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     });
+  //   };
+  //   handleImageView();
+  // }, [sharedData, selectedImage, apiUrl]);
   useEffect(() => {
-    const handleImageView = () => {
-      const userid = localStorage.getItem("useridno");
-      axios.get(`${apiUrl}/userprofileview/${userid}`).then((res) => {
-        if (res.status === 200) {
-          setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/tripsheet`);
+        if (response.status === 200) {
+          if (response.ok) {
+            const data = await response.json();
+            if (data.length > 0) {
+              setFilteredData(data);
+            } else {
+              setFilteredData([]);
+            }
+          } else {
+          }
         } else {
-          const timer = setTimeout(handleImageView, 100);
+          const timer = setTimeout(fetchData, 2000);
           return () => clearTimeout(timer);
         }
-      });
+      } catch {
+      }
     };
-    handleImageView();
-  }, [sharedData, selectedImage, apiUrl]);
+
+    fetchData();
+  }, [apiUrl, setFilteredData]);
+
+  useEffect(() => {
+    if (data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null && selectedImage !== null) {
+      setTimeout(() => {
+        setUserdashboard(false)
+      }, 3000);
+
+    }
+  }, [data1, data2, data4, data5, setUserdashboard, data6, selectedImage, storedusertheme]);
+
 
   return (
-    <section
-      className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme
-        }`}
-    >
-      <div className="glass">
-        <Sidebar expanded={expanded} />
-        <div className="header-user">
-          <div className="avatar-item">
-            <StyledBadge
-              overlap="circular"
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              variant="dot"
-            >
-              <Avatar
-                alt="userimage"
-                src={`${apiUrl}/public/user_profile/${selectedImage}`}
-              />
-            </StyledBadge>
+    <>
+      {userdashboard ? (
+        <div className={userdashboard ? "loading-container" : ""}>
+          <div className="loading-spinners">
 
-            { }
+            <div className="logo-loading">
+              <img src={Logo} alt="logo" />
+            </div>
           </div>
-          <div className="user-name-item">
-            {storedUsername ? (
-              <div>
-                <p onClick={navigateToUserSettings}>{storedUsername}</p>
-                {success && (
-                  <div className="alert-popup Success">
-                    <div className="popup-icon">
-                      {" "}
-                      <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
-                    </div>
-                    <span className="cancel-btn" onClick={hidePopup}>
-                      <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-                    </span>
-                    <p>{success}</p>
+        </div>
+      ) :
+        <section
+          className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme
+            }`}
+        >
+          <div className="glass">
+            <Sidebar expanded={expanded} />
+            <div className="header-user">
+              <div className="avatar-item">
+                <StyledBadge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                  variant="dot"
+                >
+                  <Avatar
+                    alt="userimage"
+                    src={`${apiUrl}/public/user_profile/${selectedImage}`}
+                  />
+                </StyledBadge>
+
+                { }
+              </div>
+              <div className="user-name-item">
+                {storedUsername ? (
+                  <div>
+                    <p onClick={navigateToUserSettings}>{storedUsername}</p>
+                    {success && (
+                      <div className="alert-popup Success">
+                        <div className="popup-icon">
+                          {" "}
+                          <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+                        </div>
+                        <span className="cancel-btn" onClick={hidePopup}>
+                          <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                        </span>
+                        <p>{success}</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <p>User not logged in</p>
                   </div>
                 )}
               </div>
-            ) : (
-              <div>
-                <p>User not logged in</p>
+              <div className="logout-item">
+                <FiLogOut className="logout-icon" onClick={handleLogout} />
               </div>
-            )}
+            </div>
+            <Outlet />
           </div>
-          <div className="logout-item">
-            <FiLogOut className="logout-icon" onClick={handleLogout} />
-          </div>
-        </div>
-        <Outlet />
-      </div>
-      <Dialog open={popupOpen} onClose={handlePopupClose}>
-        <DialogContent>
-          <p>Do you want to logout</p>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleLogoutdialog}
-            variant="contained"
-            color="primary"
-          >
-            Yes
-          </Button>
-          <Button
-            onClick={handlePopupClose}
-            variant="contained"
-            color="primary"
-          >
-            NO
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </section>
+          <Dialog open={popupOpen} onClose={handlePopupClose}>
+            <DialogContent>
+              <p>Do you want to logout</p>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleLogoutdialog}
+                variant="contained"
+                color="primary"
+              >
+                Yes
+              </Button>
+              <Button
+                onClick={handlePopupClose}
+                variant="contained"
+                color="primary"
+              >
+                NO
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </section>
+      }
+    </>
   );
 };
 

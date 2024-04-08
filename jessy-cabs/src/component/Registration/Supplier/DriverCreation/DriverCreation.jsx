@@ -8,22 +8,24 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
-// import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
-// import { StationName, ViewFor } from "./DriverCreationData";
+import { StationName } from "./DriverCreationData";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
-
+import { AiOutlineFileSearch } from "react-icons/ai";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Checkbox from '@mui/material/Checkbox';
+import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
+
 
 
 // FONTAWESOME
 // import { faFileInvoice, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
+import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import { faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
@@ -35,27 +37,34 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 // ICONS
 import BadgeIcon from "@mui/icons-material/Badge";
 import ClearIcon from '@mui/icons-material/Clear';
-import DeleteIcon from "@mui/icons-material/Delete";
 // import ListAltIcon from "@mui/icons-material/ListAlt";
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
+
 import TaxiAlertIcon from '@mui/icons-material/TaxiAlert';
-import ChecklistIcon from "@mui/icons-material/Checklist";
+
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 // import RateReviewIcon from "@mui/icons-material/RateReview";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
-// import LocationCityIcon from "@mui/icons-material/LocationCity";
+
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 // import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+
 // import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import useDrivercreation from './useDrivercreation';
 import { APIURL } from "../../../url";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
+
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -68,13 +77,8 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
         left: theme.spacing(2),
     },
 }));
-const actions = [
-    { icon: <ChecklistIcon />, name: "List" },
-    { icon: <CancelPresentationIcon />, name: "Cancel" },
-    { icon: <DeleteIcon />, name: "Delete" },
-    { icon: <ModeEditIcon />, name: "Edit" },
-    { icon: <BookmarkAddedIcon />, name: "Add" },
-];
+
+
 
 const DriverCreation = () => {
     const apiUrl = APIURL;
@@ -94,15 +98,15 @@ const DriverCreation = () => {
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,
-        // handleAutocompleteChange,
+        handleAutocompleteChange,
+        handleDateChange,
         showPasswords,
         handleClickShowPasswords,
         handleMouseDownPasswords,
-        passwordsMatch,
+        // passwordsMatch,
         columns,
         // showPassword,
         // handleClickShowPassword,
@@ -125,7 +129,8 @@ const DriverCreation = () => {
         Deleted,
         selectAll,
         handleSelectAll,
-        handleDocumentDownload
+        handleDocumentDownload,
+        searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, actions
     } = useDrivercreation();
 
     useEffect(() => {
@@ -151,11 +156,26 @@ const DriverCreation = () => {
                                     margin="normal"
                                     size="small"
                                     id="id"
-                                    label="ID"
-                                    name="userid"
-                                    value={selectedCustomerData?.userid || book.userid}
+                                    label="driverID"
+                                    name="driverid"
+                                    value={selectedCustomerData.driverid || book.driverid || ''}
                                     onChange={handleChange}
-                                // variant="standard"
+                                    variant="standard"
+                                />
+                            </div>
+
+                            <div className="input">
+                                <div className="icone">
+                                    <FontAwesomeIcon icon={faImagePortrait} size="lg" />
+                                </div>
+                                <TextField
+                                    margin="normal"
+                                    size="small"
+                                    id="user-name"
+                                    label="Driver Name"
+                                    name="drivername"
+                                    value={selectedCustomerData?.drivername || book.drivername}
+                                    onChange={handleChange}
                                 />
                             </div>
                             <div className="input">
@@ -172,7 +192,7 @@ const DriverCreation = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            {/* <div className="input">
+                            <div className="input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                                 </div>
@@ -182,20 +202,20 @@ const DriverCreation = () => {
                                     id="free-solo-demo-stationname"
                                     freeSolo
                                     sx={{ width: "20ch" }}
-                                    value={StationName.find((option) => option.Option)?.label || selectedCustomerData?.stationname || ''}
-                                    onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
+                                    value={StationName.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
+                                    onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
                                     options={StationName.map((option) => ({
                                         label: option.Option,
                                     }))}
-                                    getOptionLabel={(option) => option.label || selectedCustomerData?.stationname || ''}
+                                    getOptionLabel={(option) => option.label || selectedCustomerData?.stations || ''}
                                     renderInput={(params) => {
                                         return (
-                                            <TextField {...params} label="Station Name" name="stationname" />
+                                            <TextField {...params} label="Station Name" name="stations" />
                                         )
                                     }
                                     }
                                 />
-                            </div> */}
+                            </div>
                             {/* <div className="input" style={{ width: "330px" }}>
                                 <div className="icone">
                                     <ListAltIcon color="action" />
@@ -340,7 +360,7 @@ const DriverCreation = () => {
                                 />
                             </div>
                             <div className="input" >
-                                <TextField
+                                {/* <TextField
                                     size="small"
                                     name="badgeexpdate"
                                     value={selectedCustomerData?.badgeexpdate || book.badgeexpdate}
@@ -348,11 +368,56 @@ const DriverCreation = () => {
                                     label="Badge Exp Date"
                                     id="badgeexpdate"
                                     sx={{ m: 1, width: "100ch" }}
+                                /> */}
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                    <DatePicker
+                                        label="Badge Expdate "
+                                        value={
+                                            selectedCustomerData.badgeexpdate
+                                                ? dayjs(selectedCustomerData.badgeexpdate)
+                                                : null || book.badgeexpdate
+                                                    ? dayjs(book.badgeexpdate)
+                                                    : null
+                                        }
+                                        format="DD/MM/YYYY"
+                                        onChange={(date) => handleDateChange(date, "badgeexpdate")}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField
+                                                {...inputProps}
+                                                inputRef={inputRef}
+                                                value={selectedCustomerData?.badgeexpdate}
+                                            />
+                                        )}
+                                    </DatePicker>
+
+                                </LocalizationProvider>
+                            </div>
+
+
+                            <div className="input">
+                                <div className="icone">
+                                    <AddIcCallTwoToneIcon color="action" />
+                                </div>
+                                <TextField
+                                    name="Mobileno"
+                                    autoComplete="new-password"
+                                    value={
+                                        selectedCustomerData.Mobileno ||
+                                        book.Mobileno ||
+                                        ""
+                                    }
+                                    onChange={handleChange}
+                                    label="Mobile No"
+                                    id="mobile"
+                                    variant="standard"
                                 />
                             </div>
                         </div>
+
                         <div className="input-field">
-                            <div className="input" style={{ width: "400px" }}>
+                            {/* <div className="input" style={{ width: "400px" }}>
                                 <div className="icone">
                                     <HomeTwoToneIcon color="action" />
                                 </div>
@@ -362,10 +427,27 @@ const DriverCreation = () => {
                                     value={selectedCustomerData?.streetno || book.streetno}
                                     onChange={handleChange}
                                     id="streetno"
+                                    label="S"
+                                    sx={{ m: 1, width: "200ch" }}
+                                    variant="standard"
+                                /> */}
+
+                            <div className="input" style={{ width: "400px" }}>
+                                <div className="icone">
+                                    <LocationCityIcon color="action" />
+                                </div>
+                                <TextField
+                                    size="small"
+                                    name="city"
+                                    value={selectedCustomerData?.city || book.city}
+                                    onChange={handleChange}
+                                    id="address3"
+                                    label="City"
                                     sx={{ m: 1, width: "200ch" }}
                                     variant="standard"
                                 />
                             </div>
+
                             {/* <div className="input">
                                 <div className="icone">
                                     <RateReviewIcon color="action" />
@@ -396,8 +478,8 @@ const DriverCreation = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-                                {selectedCustomerData?.userid || book.userid ? (
-                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
+                                {selectedCustomerData?.driverid || book.driverid ? (
+                                    <Button color="primary" variant="contained" component="label">
                                         aadhar card
                                         <input
                                             type="file"
@@ -406,13 +488,37 @@ const DriverCreation = () => {
                                         />
                                     </Button>
                                 ) : (
-                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                                    <Button color="primary" variant="contained" onClick={() => {
                                         setError(true);
                                         setErrorMessage("Please Enter Booking No");
                                     }}>
                                         aadhar card
                                     </Button>
                                 )}
+                            </div>
+                            <div className="input">
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        label="joining Date"
+                                        value={
+                                            selectedCustomerData.joiningdate
+                                                ? dayjs(selectedCustomerData.joiningdate)
+                                                : dayjs() || book.joiningdate
+                                                    ? dayjs(book.joiningdate)
+                                                    : dayjs()
+                                        }
+                                        format="DD/MM/YYYY"
+                                        onChange={(date) => handleDateChange(date, "joiningdate")}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField
+                                                {...inputProps}
+                                                inputRef={inputRef}
+                                                value={selectedCustomerData?.joiningdate}
+                                            />
+                                        )}
+                                    </DatePicker>
+                                </LocalizationProvider>
                             </div>
                         </div>
                         <div className="input-field">
@@ -457,8 +563,8 @@ const DriverCreation = () => {
                                     id="licenseno"
                                 />
                             </div>
-                            <div className="input" style={{ width: "170px" }}>
-                                <TextField
+                            <div className="input" style={{ width: "200px" }}>
+                                {/* <TextField
                                     size="small"
                                     name="licenseexpdate"
                                     value={selectedCustomerData?.licenseexpdate || book.licenseexpdate}
@@ -466,12 +572,37 @@ const DriverCreation = () => {
                                     label="License Exp Date"
                                     id="licenseexpdate"
                                     sx={{ m: 1, width: "140ch" }}
-                                />
+                                /> */}
+
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                    <DatePicker
+                                        label="License Exp Date "
+                                        value={
+                                            selectedCustomerData.licenseexpdate
+                                                ? dayjs(selectedCustomerData.licenseexpdate)
+                                                : null || book.licenseexpdate
+                                                    ? dayjs(book.licenseexpdate)
+                                                    : null
+                                        }
+                                        format="DD/MM/YYYY"
+                                        onChange={(date) => handleDateChange(date, "licenseexpdate")}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField
+                                                {...inputProps}
+                                                inputRef={inputRef}
+                                                value={selectedCustomerData?.licenseexpdate}
+                                            />
+                                        )}
+                                    </DatePicker>
+
+                                </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "160px" }}>
 
-                                {selectedCustomerData?.userid || book.userid ? (
-                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
+                                {selectedCustomerData?.driverid || book.driverid ? (
+                                    <Button color="primary" variant="contained" component="label">
                                         License
                                         <input
                                             type="file"
@@ -480,7 +611,7 @@ const DriverCreation = () => {
                                         />
                                     </Button>
                                 ) : (
-                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                                    <Button color="primary" variant="contained" onClick={() => {
                                         setError(true);
                                         setErrorMessage("Please Enter Booking No");
                                     }}>
@@ -532,7 +663,7 @@ const DriverCreation = () => {
                                 {isEditMode ? (
                                     <Button variant="contained" onClick={handleEdit}>Edit</Button>
                                 ) : (
-                                    <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                                    <Button variant="contained" onClick={handleAdd}>Add</Button>
                                 )}
                             </div>
                         </div>
@@ -565,13 +696,13 @@ const DriverCreation = () => {
                             <p>{infoMessage}</p>
                         </div>
                     }
-                    {passwordsMatch &&
+                    {/* {passwordsMatch &&
                         <div className='alert-popup Warning' >
                             <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
                             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
                             <p>Passwords do not match. Please try again.</p>
                         </div>
-                    }
+                    } */}
                     <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                         <StyledSpeedDial
                             ariaLabel="SpeedDial playground example"
@@ -579,15 +710,74 @@ const DriverCreation = () => {
                             direction="left"
                         >
                             {actions.map((action) => (
-                                <SpeedDialAction
-                                    key={action.name}
-                                    icon={action.icon}
-                                    tooltipTitle={action.name}
-                                    onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                                />
+                                action.icon ? (
+                                    <SpeedDialAction
+                                        key={action.name}
+                                        icon={action.icon}
+                                        tooltipTitle={action.name}
+                                        onClick={(event) =>
+                                            handleClick(event, action.name, selectedCustomerId)
+                                        }
+                                    />
+                                ) : null
                             ))}
                         </StyledSpeedDial>
                     </Box>
+
+                    <div className="detail-container-main">
+                        <div className="container-left">
+                            <div className="copy-title-btn-Booking">
+                                <div className="input-field" style={{ justifyContent: "center" }}>
+                                    <div className="input" style={{ width: "230px" }}>
+                                        <div className="icone">
+                                            <AiOutlineFileSearch
+                                                color="action"
+                                                style={{ fontSize: "27px" }}
+                                            />
+                                        </div>
+                                        <TextField
+                                            size="small"
+                                            id="id"
+                                            label="Search"
+                                            name="searchText"
+                                            value={searchText || ""}
+                                            onKeyDown={handleenterSearch}
+                                            onChange={(e) => setSearchText(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="input">
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DatePicker
+                                                label="From Date"
+                                                name="fromDate"
+                                                format="DD/MM/YYYY"
+                                                value={fromDate}
+                                                onChange={(date) => setFromDate(date)}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                    <div className="input">
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DatePicker
+                                                label="To Date"
+                                                name="toDate"
+                                                format="DD/MM/YYYY"
+                                                value={toDate}
+                                                onChange={(date) => setToDate(date)}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                    <div className="input" style={{ width: "140px" }}>
+                                        <Button variant="contained"
+                                            onClick={handleShowAll}
+                                        >
+                                            Search
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className="DriverCreation-table-container">
                         <div className="table-DriverCreations">
                             <DataGrid

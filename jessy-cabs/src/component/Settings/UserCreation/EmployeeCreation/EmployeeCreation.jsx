@@ -62,7 +62,7 @@ const actions = [
 const EmployeeCreation = () => {
 
   const {
-    selectedCustomerData,
+
     selectedCustomerId,
     rows,
     actionName,
@@ -77,7 +77,6 @@ const EmployeeCreation = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -85,10 +84,6 @@ const EmployeeCreation = () => {
     showPasswords,
     handleClickShowPasswords,
     handleMouseDownPasswords,
-    // handleMouseDownPassword,
-    // showPassword,
-    // handleClickShowPassword,
-    passwordsMatch,
     columns,
     isEditMode,
     handleEdit,
@@ -116,7 +111,7 @@ const EmployeeCreation = () => {
                   id="id"
                   label="ID"
                   name="userid"
-                  value={selectedCustomerData?.userid || book.userid}
+                  value={book.userid}
                   onChange={handleChange}
                   variant="standard"
                 />
@@ -131,7 +126,7 @@ const EmployeeCreation = () => {
                   id="user-name"
                   label="User Mail-Id"
                   name="username"
-                  value={selectedCustomerData?.username || book.username}
+                  value={book.username}
                   onChange={handleChange}
                 />
               </div>
@@ -146,11 +141,11 @@ const EmployeeCreation = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
-                  value={StationName.find((option) => option.Option)?.label || selectedCustomerData?.stationname || ''}
+                  value={StationName.find((option) => option.Option)?.label || book?.stationname || ''}
                   options={StationName.map((option) => ({
                     label: option.Option,
                   }))}
-                  getOptionLabel={(option) => option.label || selectedCustomerData?.stationname || ''}
+                  getOptionLabel={(option) => option.label || book?.stationname || ''}
                   renderInput={(params) => {
                     return (
                       <TextField {...params} label="Branch Name" name="stationname" />
@@ -166,27 +161,27 @@ const EmployeeCreation = () => {
                 <TextField
                   size="small"
                   name="designation"
-                  value={selectedCustomerData?.designation || book.designation}
+                  value={book.designation}
                   onChange={handleChange}
                   label="Designation"
                   id="designation"
                 // variant="standard"
                 />
               </div>
-              {/* <div className="input" style={{ width: "330px" }}>
+              <div className="input" style={{ width: "330px" }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   name="organizationname"
-                  value={selectedCustomerData?.organizationname || book.organizationname}
+                  value={book.organizationname}
                   onChange={handleChange}
                   label="Organization"
                   id="organizationname"
                   variant="standard"
                 />
-              </div> */}
+              </div>
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "240px" }}>
@@ -197,7 +192,7 @@ const EmployeeCreation = () => {
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <Input
                     name="userpassword"
-                    value={selectedCustomerData?.userpassword || book.userpassword}
+                    value={book.userpassword}
                     onChange={handleChange}
                     id="password"
                     type={showPasswords ? 'text' : 'password'}
@@ -223,7 +218,7 @@ const EmployeeCreation = () => {
                   <InputLabel htmlFor="confirm-password">Confirm Password</InputLabel>
                   <Input
                     name="userconfirmpassword"
-                    value={selectedCustomerData?.userconfirmpassword || book.userconfirmpassword}
+                    value={ book.userconfirmpassword}
                     onChange={handleChange}
                     id="confirm-password"
                     type={showPassword ? 'text' : 'password'}
@@ -251,7 +246,7 @@ const EmployeeCreation = () => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="active"
                     onChange={handleChange}
-                    value={selectedCustomerData?.active || book.active}
+                    value={book.active}
                   >
                     <FormControlLabel
                       value="yes"
@@ -270,7 +265,7 @@ const EmployeeCreation = () => {
                 {isEditMode ? (
                   <Button variant="contained" onClick={handleEdit}>Edit</Button>
                 ) : (
-                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                  <Button variant="contained" onClick={handleAdd} >Add</Button>
                 )}
               </div>
             </div>
@@ -303,13 +298,7 @@ const EmployeeCreation = () => {
               <p>{infoMessage}</p>
             </div>
           }
-          {passwordsMatch &&
-            <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>Passwords do not match. Please try again.</p>
-            </div>
-          }
+
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

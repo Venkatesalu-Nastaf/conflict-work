@@ -28,4 +28,6 @@ router.get('/pending-bookings', (req, res) => {
   });
 });
 
+// show all
+
 module.exports = router;  

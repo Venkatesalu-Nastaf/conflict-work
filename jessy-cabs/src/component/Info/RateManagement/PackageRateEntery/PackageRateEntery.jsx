@@ -28,6 +28,7 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 import usePackagerateentry from './usePackagerateentry.js';
 import { useData } from '../../../Dashboard/Maindashboard/DataContext.js';
+import dayjs from 'dayjs';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -66,7 +67,6 @@ const PackageRateEntery = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -74,6 +74,8 @@ const PackageRateEntery = () => {
     columns,
     isEditMode,
     handleEdit,
+    datevalidity
+
   } = usePackagerateentry();
 
   const { organizationName } = useData()
@@ -83,6 +85,10 @@ const PackageRateEntery = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+
+  const startdate = dayjs(datevalidity?.startdate).format(" MMMM YYYY");
+  const enddate = dayjs(datevalidity?.enddate).format(" MMMM YYYY");
+
 
   return (
     <div className="PackageRateEntery-form Scroll-Style-hide">
@@ -152,24 +158,7 @@ const PackageRateEntery = () => {
                     variant="standard"
                   />
                 </div>
-              </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
-                  <div className="icone">
-                    <RateReviewIcon color="action" />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="id"
-                    sx={{ width: "300px" }}
-                    label="Validity"
-                    name="Validity"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.Validity || book.Validity}
-                    onChange={handleChange}
-                    variant="standard"
-                  />
-                </div>
+
                 <div className="input" style={{ width: "300px" }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
@@ -194,6 +183,30 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
+
+                <div className="input" style={{ width: "300px" }}>
+                  <div className="icone">
+                    <RateReviewIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    id="id"
+                    sx={{ width: "300px" }}
+                    label="Validity"
+                    name="Validity"
+                    autoComplete="new-password"
+                    // value={selectedCustomerData?.Validity || book.Validity}
+                    value={datevalidity ? `${startdate}--${enddate}` : ''}
+                    onChange={handleChange}
+                    variant="standard"
+                  />
+                </div>
+
+              </div>
+
+              <div className="input-field">
+
+
               </div>
             </div>
           </div>
@@ -260,7 +273,7 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "100px" }}>
+            {/* <div className="input" style={{ width: "100px" }}>
               <TextField
                 type='number'
                 size="small"
@@ -271,7 +284,7 @@ const PackageRateEntery = () => {
                 value={selectedCustomerData?.PerHour || book.PerHour}
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
             <div className="input" style={{ width: "100px" }}>
               <TextField
                 type='number'
@@ -322,7 +335,21 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "110px" }}>
+
+            <div className="input" style={{ width: "100px" }}>
+              <TextField
+                type='number'
+                size="small"
+                id="id"
+                label="ChKMS"
+                name="ChKMS"
+                autoComplete="new-password"
+                value={selectedCustomerData?.ChKMS || book.ChKMS}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* <div className="input" style={{ width: "110px" }}>
               <TextField
                 type='number'
                 size="small"
@@ -333,8 +360,8 @@ const PackageRateEntery = () => {
                 value={selectedCustomerData?.UptoHours || book.UptoHours}
                 onChange={handleChange}
               />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
+            </div> */}
+            {/* <div className="input" style={{ width: "100px" }}>
               <TextField
                 type='number'
                 size="small"
@@ -345,7 +372,7 @@ const PackageRateEntery = () => {
                 value={selectedCustomerData?.AKMS || book.AKMS}
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
             <div className="input" style={{ width: "100px" }}>
               <TextField
                 type='number'
@@ -370,24 +397,13 @@ const PackageRateEntery = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="ChKMS"
-                name="ChKMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.ChKMS || book.ChKMS}
-                onChange={handleChange}
-              />
-            </div>
+
 
             <div className="input" style={{ width: "100px" }}>
               {isEditMode ? (
                 <Button variant="contained" onClick={handleEdit}>Edit</Button>
               ) : (
-                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Save</Button>
+                <Button variant="contained" onClick={handleAdd} >Save</Button>
               )}
             </div>
           </div>

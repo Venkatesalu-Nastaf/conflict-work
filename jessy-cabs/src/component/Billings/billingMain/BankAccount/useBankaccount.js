@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 
@@ -25,72 +24,12 @@ const useBankaccount = () => {
     const [deleteId, setDeleteId] = useState(null);
 
 
-    // for page permission
 
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Payments';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Payments';
-        const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
 
 
     //------------------------------
-    const permissions = checkPagePermission();
 
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
+
 
     const hidePopup = () => {
         setError(false);
@@ -100,37 +39,13 @@ const useBankaccount = () => {
     };
 
     useEffect(() => {
-        if (error) {
+        if (error || warning || info || success) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
+    }, [error, warning, info, success]);
 
     const handleAddBankClick = () => {
         setShowAddBankForm(true);
@@ -155,62 +70,52 @@ const useBankaccount = () => {
     };
 
     const handleAddBank = () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.new) {
-            const bankname = book.bankname;
-            const capital = book.capital;
-            if (!bankname || !capital) {
-                setError(true);
-                setErrorMessage('Please fill in all required fields.');
-                return;
-            }
-            const newBank = {
-                bankname,
-                bankname2: book.bankname,
-                capital,
-                netbalance: book.capital,
-                totalin: book.capital,
-                totalout: 0,
-            };
-            setBankDetails((prevBankDetails) => [...prevBankDetails, newBank]);
-            fetchData();
-            setEditingIndex(null);
-        } else {
-            // Display a warning or prevent the action
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        const bankname = book.bankname;
+        const capital = book.capital;
+        if (!bankname || !capital) {
+            setError(true);
+            setErrorMessage('Please fill in all required fields.');
+            return;
         }
+        const newBank = {
+            bankname,
+            bankname2: book.bankname,
+            capital,
+            netbalance: book.capital,
+            totalin: book.capital,
+            totalout: 0,
+        };
+        setBankDetails((prevBankDetails) => [...prevBankDetails, newBank]);
+        fetchData();
+        setEditingIndex(null);
+
     };
 
     const handleSaveEdit = async (index, id) => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.read) {
-            try {
-                if (index >= 0 && index < bankDetails.length) {
-                    const updatedBank = bankDetails[index];
-                    const updateData = {
-                        id: updatedBank.id,
-                        bankname2: book.bankname2 || updatedBank.bankname2,
-                        netbalance: book.netbalance || updatedBank.netbalance,
-                        totalin: book.netbalance || updatedBank.totalin,
-                        totalout: book.totalout || updatedBank.totalout,
-                    };
-                    await axios.put(`${apiUrl}/updatebankdetails/${updatedBank.id}`, updateData);
-                    setSuccess(true);
-                    setSuccessMessage('Successfully Updated');
-                    setEditingIndex(null);
-                } else {
-                }
-            } catch {
-                setError(true);
-                setErrorMessage('Error updating bank account. Please check your Network Connection.');
+
+
+        try {
+            if (index >= 0 && index < bankDetails.length) {
+                const updatedBank = bankDetails[index];
+                const updateData = {
+                    id: updatedBank.id,
+                    bankname2: book.bankname2 || updatedBank.bankname2,
+                    netbalance: book.netbalance || updatedBank.netbalance,
+                    totalin: book.netbalance || updatedBank.totalin,
+                    totalout: book.totalout || updatedBank.totalout,
+                };
+                await axios.put(`${apiUrl}/updatebankdetails/${updatedBank.id}`, updateData);
+                setSuccess(true);
+                setSuccessMessage('Successfully Updated');
+                setEditingIndex(null);
+            } else {
             }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        } catch {
+            setError(true);
+            setErrorMessage('Error updating bank account. Please check your Network Connection.');
         }
+
     };
 
     const handleChange = (event, index) => {
@@ -237,31 +142,25 @@ const useBankaccount = () => {
     };
 
     const handleAdd = async () => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.new) {
-            try {
-                const newBank = {
-                    bankname: book.bankname,
-                    capital: book.capital,
-                    AccountType: book.AccountType,
-                    bankname2: book.bankname,
-                    netbalance: book.capital,
-                    totalin: book.capital,
-                    totalout: 0,
-                };
-                await axios.post(`${apiUrl}/bankdetails`, newBank);
-                handleAddBank();
-                handleCancel();
-            } catch {
-                setError(true);
-                setErrorMessage('Error adding bank account. Please check your Network Connection.');
-            }
-        } else {
-            // Display a warning or prevent the action
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        try {
+            const newBank = {
+                bankname: book.bankname,
+                capital: book.capital,
+                AccountType: book.AccountType,
+                bankname2: book.bankname,
+                netbalance: book.capital,
+                totalin: book.capital,
+                totalout: 0,
+            };
+            await axios.post(`${apiUrl}/bankdetails`, newBank);
+            handleAddBank();
+            handleCancel();
+        } catch {
+            setError(true);
+            setErrorMessage('Error adding bank account. Please check your Network Connection.');
         }
+
     };
 
     const fetchData = useCallback(async () => {
@@ -323,19 +222,24 @@ const useBankaccount = () => {
     const handleEditBank = (index) => {
         setEditingIndex(index);
     };
+
+
     //calculate totalout amount
     useEffect(() => {
-        // const calculatedTotalOut = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalout, 10) || parseInt(book.totalout, 10) || 0), 0);
         const calculatedTotalOut = bankDetails.reduce((total, bankDetail) => (
             total + (parseInt(bankDetail.totalout, 10) || 0)
         ), 0) || parseInt(book.totalout, 10) || 0;
         setTotalOut(calculatedTotalOut);
     }, [bankDetails, book]);
+
+
     //calculate totalin amount
     useEffect(() => {
         const calculatedTotalIn = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalin, 10) || parseInt(book.totalin, 10) || 0), 0);
         setTotalIn(calculatedTotalIn);
     }, [bankDetails, book]);
+
+
     //calculate totalcapital amount
     useEffect(() => {
         // Make API request to fetch total capital amount
@@ -358,7 +262,6 @@ const useBankaccount = () => {
         infoMessage,
         book,
         handleChange,
-        isFieldReadOnly,
         handleAdd,
         hidePopup,
         totalcapital,

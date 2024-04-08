@@ -3,7 +3,7 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const db = require('../../../db');
 const multer = require('multer');
-const moment = require('moment'); 
+const moment = require('moment');
 const path = require('path');
 
 
@@ -15,13 +15,24 @@ const upload = multer({ dest: 'uploads/' });
 // Add Booking page database
 router.post('/booking', (req, res) => {
     const bookData = req.body;
+    console.log(bookData, "post.....");
     db.query('INSERT INTO booking SET ?', bookData, (err, result) => {
         if (err) {
+            console.error("Error inserting data into MySQL:", err);
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
-        return res.status(200).json({ message: "Data inserted successfully" });
+
+        // Check if the insertion was successful (affectedRows > 0)
+        if (result.affectedRows > 0) {
+            console.log("Data inserted successfully");
+            return res.status(200).json({ message: "Data inserted successfully" });
+        } else {
+            console.error("No rows affected during insertion");
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        }
     });
 });
+
 // collect details from Booking
 router.get('/booking/:bookingno', (req, res) => {
     const bookingno = req.params.bookingno;
@@ -135,8 +146,8 @@ router.post('/send-email', async (req, res) => {
             port: 465,
             secure: true,
             auth: {
-                user: 'akash02899@gmail.com',
-                pass: 'jojgadyyolbuxlyo',
+                user: 'foxfahad386@gmail.com', // Your email address
+                pass: 'vwmh mtxr qdnk tldd' // Your email password
             },
             tls: {
                 // Ignore SSL certificate errors
@@ -146,8 +157,8 @@ router.post('/send-email', async (req, res) => {
 
         // Email content for the owner
         const ownerMailOptions = {
-            from: 'akash02899@gmail.com',
-            to: 'akash02899@gmail.com', // Set the owner's email address
+            from: 'foxfahad386@gmail.com',
+            to: 'foxfahad386@gmail.com', // Set the owner's email address
             subject: `${guestname} sent you a feedback`,
             text: `Guest Name: ${guestname}\nEmail: ${email}\nContact No: ${guestmobileno}\nPickup: ${pickup}\nUsage: ${useage}`,
         };
@@ -157,7 +168,7 @@ router.post('/send-email', async (req, res) => {
 
         // Email content for the customer
         const customerMailOptions = {
-            from: 'akash02899@gmail.com',
+            from: 'foxfahad386@gmail.com',
             to: email,
             subject: 'Greetings from Jessy Cabs',
             text: `Hello ${guestname},\n\nThank you for reaching out. Your booking is Placed successfully\n\nRegards,\nJessy Cabs`,
@@ -183,8 +194,8 @@ router.post('/send-onbook-email', async (req, res) => {
             port: 465,
             secure: true,
             auth: {
-                user: 'akash02899@gmail.com',
-                pass: 'jojgadyyolbuxlyo',
+                user: 'foxfahad386@gmail.com',
+                pass: 'vwmh mtxr qdnk tldd',
             },
             tls: {
                 rejectUnauthorized: false
@@ -193,8 +204,8 @@ router.post('/send-onbook-email', async (req, res) => {
 
         // Email content for the owner
         const ownerMailOptions = {
-            from: 'akash02899@gmail.com',
-            to: 'akash02899@gmail.com', // Set the owner's email address
+            from: 'foxfahad386@gmail.com',
+            to: 'foxfahad386@gmail.com.com', // Set the owner's email address
             subject: `${guestname} sent you a booking request`,
             text: `Guest Name: ${guestname}\nEmail: ${email}\nGuest Mobile No: ${guestmobileno}\nStart Date: ${startdate}\nStart Time: ${starttime}\nPickup: ${pickup}\nUseage: ${useage}\nDuty: ${duty}\nVehicle Type: ${vehType}\nRemarks: ${remarks}`,
         };
@@ -204,7 +215,7 @@ router.post('/send-onbook-email', async (req, res) => {
 
         // Email content for the customer
         const customerMailOptions = {
-            from: 'akash02899@gmail.com',
+            from: 'foxfahad386@gmail.com',
             to: email,
             subject: 'Greetings from Jessy Cabs',
             html: `
@@ -295,12 +306,15 @@ router.get('/table-for-booking', (req, res) => {
         const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
         query += ` AND (${likeConditions})`;
-        params = columnsToSearch.map(() => `%${searchText}%`);
+        params = columnsToSearch.map(() => `${searchText}%`);
     }
 
-    if (fromDate && moment(fromDate, 'YYYY/MM/DD', true).isValid() && toDate && moment(toDate, 'YYYY/MM/DD', true).isValid()) {
-        const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD HH:mm:ss');
-        const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD HH:mm:ss');
+    // if (fromDate && moment(fromDate, 'YYYY/MM/DD', true).isValid() && toDate && moment(toDate, 'YYYY/MM/DD', true).isValid())
+    if (fromDate && toDate) {
+        // const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
+        // const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
+        const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+        const formattedToDate = moment(toDate).format('YYYY-MM-DD');
 
         query += ' AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
         params.push(formattedFromDate, formattedToDate);

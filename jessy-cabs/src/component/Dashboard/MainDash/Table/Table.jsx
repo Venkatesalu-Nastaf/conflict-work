@@ -1,5 +1,4 @@
 import { React, useState, useEffect, useContext } from "react";
-import { PermissionsContext } from "../../../permissionContext/permissionContext";
 // import axios from 'axios';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -17,6 +16,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { APIURL } from "../../../url";
+import { useData } from "../../Maindashboard/DataContext";
 
 // ICON
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -45,67 +45,14 @@ const makeStyle = (status) => {
 }
 
 export default function BasicTable() {
-  const [filteredData, setFilteredData] = useState([]);
+
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
 
-
-  //permission  const currentPageName = 'Dashboard page';
-
-
-  //--------------------------------------
-
-  const [userPermissionss, setUserPermissions] = useState({});
-
-  const { userPermissions } = useContext(PermissionsContext);
-  // console.log("ratetype ", userPermissions)
-
-  //----------------------------------------
-
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = 'Dashboard page';
-        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-        // setPermi(response.data);
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("org ", permissions)
-        setUserPermissions(permissions);
-
-      } catch {
-      }
-    };
-    fetchPermissions();
-  }, [userPermissions]);
-
-  //---------------------------------------
-
-  const checkPagePermission = () => {
-    const currentPageName = 'Dashboard page';
-    const permissions = userPermissionss || {};
-    // console.log('aaaaaaaa', permissions)
-
-    if (permissions.page_name === currentPageName) {
-      return {
-        read: permissions.read_permission === 1,
-        new: permissions.new_permission === 1,
-        modify: permissions.modify_permission === 1,
-        delete: permissions.delete_permission === 1,
-      };
-    }
-    return {
-      read: false,
-      new: false,
-      modify: false,
-      delete: false,
-    };
-  };
+  const { filteredData, setFilteredData } = useData();
+  const data1 = filteredData;
 
 
-  //------------------------------
-
-  const permissions = checkPagePermission();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -160,7 +107,7 @@ export default function BasicTable() {
             </TableRow>
           </TableHead>
           <TableBody style={{ color: "white" }}>
-            {permissions.read && (
+            {(
               filteredData && filteredData.length > 0 ? (
                 filteredData.slice().reverse().map((trip) => (
                   <TableRow
@@ -171,7 +118,7 @@ export default function BasicTable() {
                     <TableCell align="left">TS{trip.tripid}</TableCell>
                     {/* <TableCell align="left">{trip.startdate}</TableCell> */}
                     <TableCell align="left">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
-                    <TableCell align="left"><span className="status" style={makeStyle(trip.apps)}>{trip.apps}</span></TableCell>
+                    <TableCell align="left"><span className="status" style={makeStyle(trip.apps)}>{trip.apps ? trip.apps : "Not Mentioned"}</span></TableCell>
                     <TableCell align="left" className="Details">
                       <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>
                     </TableCell>

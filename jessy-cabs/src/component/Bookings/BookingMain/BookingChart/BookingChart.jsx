@@ -26,7 +26,6 @@ const BookingChart = () => {
     warningMessage,
     infoMessage,
     handleClick,
-    isFieldReadOnly,
     hidePopup,
     fromDate,
     setFromDate,
@@ -73,7 +72,7 @@ const BookingChart = () => {
                   <Button
                     variant="contained"
                     onClick={() => showBookedStatusAll(fromDate, toDate)}
-                    disabled={isFieldReadOnly("read")}
+
                   >
                     Show Booked Status All
                   </Button>

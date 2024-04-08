@@ -35,7 +35,6 @@ const CoveringSubmit = () => {
         errorMessage,
         warningMessage,
         handleClick,
-        isFieldReadOnly,
         hidePopup,
         customer,
         tripData,
@@ -151,7 +150,7 @@ const CoveringSubmit = () => {
                                     />
                                 </div>
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("read")}>Search</Button>
+                                    <Button variant="contained" onClick={handleShow} >Search</Button>
                                 </div>
                             </div>
                         </div>

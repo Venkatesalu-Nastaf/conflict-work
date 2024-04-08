@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from "react";
-import { PermissionsContext } from "../../../permissionContext/permissionContext";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
@@ -41,73 +40,6 @@ const usePaymentdetails = () => {
   const [bankOptions, setBankOptions] = useState([]);
   const [infoMessage] = useState({});
 
-  // for page permission
-
-  //--------------------------------------
-
-  const [userPermissionss, setUserPermissions] = useState({});
-
-  const { userPermissions } = useContext(PermissionsContext);
-  // console.log("ratetype ", userPermissions)
-
-  //----------------------------------------
-
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = "Payments";
-        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-        // setPermi(response.data);
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("org ", permissions)
-        setUserPermissions(permissions);
-
-      } catch {
-      }
-    };
-    fetchPermissions();
-  }, [userPermissions]);
-
-  //---------------------------------------
-
-  const checkPagePermission = () => {
-    const currentPageName = "Payments";
-    const permissions = userPermissionss || {};
-    // console.log('aaaaaaaa', permissions)
-
-    if (permissions.page_name === currentPageName) {
-      return {
-        read: permissions.read_permission === 1,
-        new: permissions.new_permission === 1,
-        modify: permissions.modify_permission === 1,
-        delete: permissions.delete_permission === 1,
-      };
-    }
-    return {
-      read: false,
-      new: false,
-      modify: false,
-      delete: false,
-    };
-  };
-
-
-  //------------------------------
-
-  const permissions = checkPagePermission();
-
-  // Function to determine if a field should be read-only based on permissions
-  const isFieldReadOnly = (fieldName) => {
-    if (permissions.read) {
-      // If user has read permission, check for other specific permissions
-      if (fieldName === "delete" && !permissions.delete) {
-        return true;
-      }
-      return false;
-    }
-    return true;
-  };
 
   const convertToCSV = (data) => {
     const header = columns.map((column) => column.headerName).join(",");
@@ -153,44 +85,24 @@ const usePaymentdetails = () => {
     saveAs(pdfBlob, "Customer_Details.pdf");
   };
 
+  // for POPUP-----------------------
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
     setInfo(false);
     setWarning(false);
   };
+
   useEffect(() => {
-    if (error) {
+    if (error || success || warning || info) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [error]);
-  useEffect(() => {
-    if (warning) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [warning]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [info]);
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
+  }, [error, success, warning, info]);
+
+  //------------------------------------------------
 
   const handleInputChange = (event) => {
     if (event.target.name === "customer") {
@@ -325,7 +237,6 @@ const usePaymentdetails = () => {
     errorMessage,
     warningMessage,
     infoMessage,
-    isFieldReadOnly,
     hidePopup,
     billingno,
     handleInputChange,

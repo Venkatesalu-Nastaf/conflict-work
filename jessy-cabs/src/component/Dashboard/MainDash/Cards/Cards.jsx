@@ -132,7 +132,7 @@ const Cards = () => {
 
   const cardData = [
     {
-      title: "Sales",
+      title: "Billing",
       color: {
         backGround: "linear-gradient(rgb(33, 152, 171) 35%, rgb(143, 228, 241) 92%)",
         boxShadow: "0px 0px 0px 0px #e0c6f5",

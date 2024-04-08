@@ -37,7 +37,6 @@ const Organization = () => {
         infoMessage,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleAdd,
         hidePopup,
         selectedImage,
@@ -178,7 +177,7 @@ const Organization = () => {
                                     </div>
                                 ) : (
                                     <div className="user-photo-edit">
-                                        <IconButton color="primary" onClick={toggleEditMode} disabled={isFieldReadOnly("modify")} size='small' variant="outlined" component="label">
+                                        <IconButton color="primary" onClick={toggleEditMode} size='small' variant="outlined" component="label">
                                             <ModeEditIcon />
                                         </IconButton>
                                     </div>
@@ -475,13 +474,13 @@ const Organization = () => {
                     </div>
                     <div className="input-field" style={{ justifyContent: "center" }}>
                         <div className="input" style={{ width: "150px" }}>
-                            <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>
+                            <Button variant="contained" onClick={handleAdd} >
                                 Save
                             </Button>
 
                         </div>
                         <div className="input" style={{ width: "150px" }}>
-                            <Button variant="outlined" onClick={handleUpdate} disabled={isFieldReadOnly("modify")} >
+                            <Button variant="outlined" onClick={handleUpdate}  >
                                 Update
                             </Button>
                         </div>

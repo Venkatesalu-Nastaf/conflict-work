@@ -5,7 +5,7 @@ import ReactDOMServer from 'react-dom/server';
 import Coverpdf from './coverpdf/Coverpdf';
 import { saveAs } from 'file-saver';
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
-
+import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -30,9 +30,8 @@ const columns = [
 ];
 
 const useGroupbilling = () => {
-
-    const user_id = localStorage.getItem('useridno');
-
+    const apiUrl = APIURL;
+    // const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
     const [tripData, setTripData] = useState("");
@@ -53,58 +52,7 @@ const useGroupbilling = () => {
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
 
-    // for page permission
-
-    const [userPermissions, setUserPermissions] = useState({});
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
-
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = () => {
-        const currentPageName = 'CB Billing';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
+    // popup------------------------------
     const hidePopup = () => {
         setError(false);
         setSuccess(false);
@@ -112,31 +60,15 @@ const useGroupbilling = () => {
     };
 
     useEffect(() => {
-        if (warning) {
+        if (error || success || warning) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [warning]);
+    }, [error, success, warning]);
 
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
+    //------------------------------
 
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
@@ -188,7 +120,6 @@ const useGroupbilling = () => {
         return data.reduce((sum, item) => {
             const netAmountValue = parseFloat(item.netamount, 10);
             if (isNaN(netAmountValue) || !isFinite(netAmountValue)) {
-                console.error(`Invalid netamount value: ${item.netamount}`);
                 return sum;
             }
             return sum + netAmountValue;
@@ -202,7 +133,7 @@ const useGroupbilling = () => {
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
             const servicestationValue = servicestation || selectedCustomerDatas?.station || (tripData.length > 0 ? tripData[0].department : '');
 
-            const response = await axios.get(`http://localhost:8081/Group-Billing`, {
+            const response = await axios.get(`${apiUrl}/Group-Billing`, {
                 params: {
                     customer: customerValue,
                     fromDate: fromDateValue,
@@ -233,13 +164,12 @@ const useGroupbilling = () => {
                 setError(true);
                 setErrorMessage("No data found");
             }
-        } catch (error) {
-            console.error("Error fetching data:", error);
+        } catch {
             setRows([]);
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
-    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum]);
+    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum, apiUrl]);
 
 
     const convertToCSV = (data) => {
@@ -269,7 +199,7 @@ const useGroupbilling = () => {
         if (event.key === 'Enter') {
             try {
                 const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
-                const response = await axios.get(`http://localhost:8081/billingdata/${invoiceNumber}`);
+                const response = await axios.get(`${apiUrl}/billingdata/${invoiceNumber}`);
                 if (response.status === 200) {
                     const billingDetails = response.data;
                     if (billingDetails) {
@@ -291,7 +221,7 @@ const useGroupbilling = () => {
             }
         }
 
-    }, [invoiceno, book, selectedCustomerDatas]);
+    }, [invoiceno, book, selectedCustomerDatas, apiUrl]);
 
     return {
         rows,
@@ -303,7 +233,6 @@ const useGroupbilling = () => {
         warningMessage,
         book,
         handleChange,
-        isFieldReadOnly,
         hidePopup,
         invoiceno,
         selectedCustomerDatas,

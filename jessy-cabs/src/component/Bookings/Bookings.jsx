@@ -1,4 +1,4 @@
-import { useState  } from 'react';
+import { useState } from 'react';
 import "./Bookings.css";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
@@ -36,13 +36,7 @@ const Bookings = () => {
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
-        <MenuItem
-          label="Trip Sheet"
-          to="/home/bookings/tripsheet"
-          menuItemKey="Trip Sheet"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
+
         <MenuItem
           label="Received"
           to="/home/bookings/received"
@@ -50,6 +44,15 @@ const Bookings = () => {
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
+
+        <MenuItem
+          label="Trip Sheet"
+          to="/home/bookings/tripsheet"
+          menuItemKey="Trip Sheet"
+          activeMenuItem={activeMenuItem}
+          handleMenuItemClick={handleMenuItemClick}
+        />
+
         <MenuItem
           label="Dispatched"
           to="/home/bookings/dispatched"

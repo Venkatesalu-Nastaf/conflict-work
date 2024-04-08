@@ -5,10 +5,11 @@ import dayjs from "dayjs";
 import {
     VehicleRate,
 } from "./TripSheetdata";
+import { APIURL } from "../../url";
 
 const useTripsheet = () => {
-    const user_id = localStorage.getItem('useridno');
-    const [selectedCustomerData, setSelectedCustomerData] = useState({});
+    const apiUrl = APIURL;
+    const [selectedCustomerData, setSelectedCustomerData] = useState({}); //------------
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
         vehType: '',
         driverName: '',
@@ -24,7 +25,10 @@ const useTripsheet = () => {
     const [shedintime, setshedintime] = useState('');
     const [starttime2, setStartTime2] = useState('');
     const [closetime2, setCloseTime2] = useState('');
-    const [formData, setFormData] = useState({});
+
+    const [formData, setFormData] = useState({});  ////-------------
+    const [calcCheck, setCalcCheck] = useState(false);
+
     const location = useLocation();
     const [error, setError] = useState(false);
     const [shedKilometers, setShedKilometers] = useState('');
@@ -40,62 +44,34 @@ const useTripsheet = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage, setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [tripiddata, setTripiddata] = useState("");
+    const [sign, setSign] = useState(false)
 
-    // for page permission
+    //-------------------------calc-------------------
 
-    const [userPermissions, setUserPermissions] = useState({});
+    let [calcPackage, setcalcPackage] = useState('')
+    let [extraHR, setExtraHR] = useState('')
+    let [extraKM, setExtraKM] = useState('')
+    let [package_amount, setpackage_amount] = useState('')
+    let [extrakm_amount, setextrakm_amount] = useState('')
+    let [extrahr_amount, setextrahr_amount] = useState('')
+    let [ex_kmAmount, setEx_kmAmount] = useState('')
+    let [ex_hrAmount, setEx_HrAmount] = useState('')
+    // nighht value --------------------
+    let [nightBta, setNightBeta] = useState('')
+    let [nightCount, setNightCount] = useState('')
+    let [night_totalAmount, setnight_totalAmount] = useState('')
 
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Trip Sheet';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
-            }
-        };
+    //driver convinence --------------------------
+    let [driverBeta, setdriverBeta] = useState('')
+    let [driverbeta_Count, setdriverbeta_Count] = useState('')
+    let [driverBeta_amount, setdriverBeta_amount] = useState(0)
+    //--------------------------------------------------------------
 
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Trip Sheet';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
 
     const [packageData, setPackageData] = useState({
         customer: '',
@@ -111,32 +87,23 @@ const useTripsheet = () => {
     });
 
     const handleButtonClick = () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.read) {
-            const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-
-            if (!tripid) {
-                setError(true);
-                setErrorMessage("Please enter the tripid");
-            } else {
-                localStorage.setItem('selectedTripid', tripid);
-                const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
-                if (newTab) {
-                    newTab.focus();
-                } else {
-                }
-            }
+        const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+        if (!tripid) {
+            setError(true);
+            setErrorMessage("Please enter the tripid");
         } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            localStorage.setItem('selectedTripid', tripid);
+            const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
+            if (newTab) {
+                newTab.focus();
+            } else {
+            }
         }
     };
 
     //generate link
 
     const generateLink = async () => {
-
         try {
             const tripidNO = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
             if (!tripidNO) {
@@ -145,11 +112,22 @@ const useTripsheet = () => {
                 return;
             }
             const tripid = selectedCustomerData.tripid || formData.tripid || book.tripid;
-            const response = await axios.post(`http://localhost:8081/generate-link/${tripid}`)
+            const response = await axios.post(`${apiUrl}/generate-link/${tripid}`)
             setLink(response.data.link);
         } catch {
         }
     };
+
+
+    const SignPage = (event) => {
+        event.preventDefault();
+        navigator.clipboard.writeText(link);
+        setSign(true)
+        setTimeout(() => {
+            setSign(false)
+        }, 2000)
+    }
+
 
     const handlePopupClose = () => {
         setPopupOpen(false);
@@ -163,7 +141,7 @@ const useTripsheet = () => {
             if (!tripid) {
                 return;
             }
-            const response = await fetch(`http://localhost:8081/getmapimages/${tripid}`);
+            const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -183,7 +161,7 @@ const useTripsheet = () => {
                 setError(true);
                 setErrorMessage("Please enter the tripid");
             } else {
-                const response = await axios.get(`http://localhost:8081/get-gmapdata/${tripid}`);
+                const response = await axios.get(`${apiUrl}/get-gmapdata/${tripid}`);
                 const data = response.data;
                 setRow(data);
                 setMaplogimgPopupOpen(true);
@@ -194,45 +172,40 @@ const useTripsheet = () => {
 
     //refresh button function
     const handleRefresh = async () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.read) {
-            const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
-            try {
-                if (!tripid) {
-                    setError(true);
-                    setErrorMessage("Please enter the tripid");
+        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+        try {
+            if (!tripid) {
+                setError(true);
+                setErrorMessage("Please enter the tripid");
+            } else {
+                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}`);
+                const data = response.data;
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("successfully listed")
                 } else {
-                    const response = await axios.get(`http://localhost:8081/tripuploadcollect/${tripid}`);
-                    const data = response.data;
-                    if (data.length > 0) {
-                        const rowsWithUniqueId = data.map((row, index) => ({
-                            ...row,
-                            id: index + 1,
-                        }));
-                        setRows(rowsWithUniqueId);
-                        setSuccess(true);
-                        setSuccessMessage("successfully listed")
-                    } else {
-                        setRows([]);
-                        setError(true);
-                        setErrorMessage("no data found")
-                    }
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("no data found")
                 }
-            } catch {
             }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        } catch {
         }
     };
+
+
     //list data in row
     const [imageUrl, setImageUrl] = useState('');
     const handleTripRowClick = (params) => {
         setSelectedRow(params.row);
         const encodedPath = encodeURIComponent(params.row.path);
         setimgPopupOpen(true);
-        setImageUrl(`http://localhost:8081/get-image/${encodedPath}`);
+        setImageUrl(`${apiUrl}/get-image/${encodedPath}`);
     };
     const handleimgPopupClose = () => {
         setimgPopupOpen(false);
@@ -272,7 +245,7 @@ const useTripsheet = () => {
                     driverName: formValues.driverName || selectedCustomerData.driverName || book.driverName || formData.driverName,
                     mobileNo: formValues.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || formData.mobileNo
                 };
-                await axios.post('http://localhost:8081/send-tripsheet-email', dataToSend);
+                await axios.post(`${apiUrl}/send-tripsheet-email`, dataToSend);
                 setSuccess(true);
             } catch {
                 alert('An error occurred while sending the email');
@@ -288,51 +261,47 @@ const useTripsheet = () => {
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, success, warning, info]);
+
+
+    // data getting from dispatch --------------------------ayyanar
+    const [request, setRequest] = useState("");
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const statusValue = params.get('status') || 'Opened';
-        const bookingsmsValue = params.get('smsguest') || 'smsguest';
-        const sendemailValue = params.get('booker') || 'booker';
-        const emailcheckValue = params.get('emailcheck') || 'emailcheck';
-        const DriverSMSValue = params.get('DriverSMS') || 'DriverSMS';
-        const gpsValue = params.get('gps') || 'gps';
-        const appsValue = params.get('apps') || 'Waiting';
+        const request = params.get('request') || "";
+        setRequest(request);
+
+
+        //calc---------------
+        const calcPackage = params.get('calcPackage');
+        const extraHR = params.get('extraHR');
+        const extraKM = params.get('extraKM');
+        const package_amount = params.get('package_amount');
+        const extrakm_amount = params.get('extrakm_amount');
+        const extrahr_amount = params.get('extrahr_amount');
+        const ex_kmAmount = params.get('ex_kmAmount');
+        const ex_hrAmount = params.get('ex_hrAmount');
+        const nightBta = params.get('nightBta');
+        const nightCount = params.get('nightCount');
+        const night_totalAmount = params.get('night_totalAmount');
+        const driverBeta = params.get('driverBeta');
+        const driverbeta_Count = params.get('driverbeta_Count');
+        const driverBeta_amount = params.get('driverBeta_amount');
+        const totalcalcAmount = params.get('totalcalcAmount');
+        //----------------------
+
         const formData = {};
 
         const parameterKeys = [
-            'tripid', 'bookingno', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'caramount', 'minkm', 'minhrs', 'package', 'amount', 'exkm', 'amount1', 'exHrs', 'amount2', 'night', 'amount3', 'driverconvenience', 'amount4', 'exkmTkm', 'exHrsTHrs', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
+            'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload'
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -340,16 +309,49 @@ const useTripsheet = () => {
                 formData[key] = value;
             }
         });
+
+        let appsValue = params.get('apps') || 'Waiting';
+
+        // Check if dispatchcheck is true
+        if (formData['dispatchcheck'] === 'true') {
+            setIsEditMode(true);
+        } else {
+            setIsEditMode(false);
+        }
+
+        // Remove dispatchcheck from formData
+        delete formData['dispatchcheck'];
+
         formData['status'] = statusValue;
-        formData['smsguest'] = bookingsmsValue;
-        formData['booker'] = sendemailValue;
-        formData['emailcheck'] = emailcheckValue;
-        formData['DriverSMS'] = DriverSMSValue;
-        formData['gps'] = gpsValue;
+        // formData['smsguest'] = bookingsmsValue;
+        // formData['booker'] = sendemailValue;
+        // formData['emailcheck'] = emailcheckValue;
+        // formData['DriverSMS'] = DriverSMSValue;
+        // formData['gps'] = gpsValue;
         formData['apps'] = appsValue;
         setTripSheetData(formData);
         setBook(formData);
         setFormData(formData);
+
+        ///calc------
+        setcalcPackage(calcPackage);
+        setExtraHR(extraHR);
+        setExtraKM(extraKM);
+        setpackage_amount(package_amount);
+        setextrakm_amount(extrakm_amount || formData.extrakm_amount);
+        setextrahr_amount(extrahr_amount);
+        setEx_kmAmount(ex_kmAmount);
+        setEx_HrAmount(ex_hrAmount);
+        setNightBeta(nightBta);
+        setNightCount(nightCount);
+        setnight_totalAmount(night_totalAmount);
+        setdriverBeta(driverBeta);
+        setdriverbeta_Count(driverbeta_Count);
+        setdriverBeta_amount(driverBeta_amount);
+        setTotalcalcAmount(totalcalcAmount || formData.totalcalcAmount);
+
+        ///------
+
     }, [location]);
 
     useEffect(() => {
@@ -394,6 +396,7 @@ const useTripsheet = () => {
         closetime: '',
         shedintime: '',
         advancepaidtovendor: '',
+
         customercode: '',
         shedkm: '',
         shedin: '',
@@ -484,6 +487,7 @@ const useTripsheet = () => {
             mobile: '',
             guestname: '',
             guestmobileno: '',
+            additionaltime: '',
             email: '',
             address1: '',
             streetno: '',
@@ -581,6 +585,7 @@ const useTripsheet = () => {
             manualbillss: '',
             reload: '',
             locks: '',
+
         }));
         setSelectedCustomerDatas({});
         setSelectedCustomerData({});
@@ -588,41 +593,46 @@ const useTripsheet = () => {
         setFormValues({});
         setPackageData({});
         setPackageDetails({});
+        setIsEditMode(false);
+        calcCancel();
+        setRequest("");
+        setCalcCheck(false);
+
     };
+
+
 
     const handleETripsheetClick = (row) => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+        setTripiddata(tripid)
+
         if (!tripid) {
             setError(true);
             setErrorMessage("please enter the tripid");
         }
         else {
             localStorage.setItem('selectedTripid', tripid);
+            setTripiddata(tripid)
             setPopupOpen(true);
         }
     };
 
-    const handleDelete = async () => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.delete) {
-            if (!selectedCustomerData.tripid) {
-                return;
-            }
-            try {
-                await axios.delete(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid}`);
-                setFormData({});
-                setSelectedCustomerData({});
-                handleCancel();
-                setSuccess(true);
-                setSuccessMessage("Successfully Deleted");
-            } catch {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+
+    const handleDelete = async () => {
+        if (!selectedCustomerData.tripid) {
+            return;
+        }
+        try {
+            await axios.delete(`${apiUrl}/tripsheet/${selectedCustomerData.tripid}`);
+            setFormData({});
+            setSelectedCustomerData({});
+            handleCancel();
+            setSuccess(true);
+            setSuccessMessage("Successfully Deleted");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -633,11 +643,90 @@ const useTripsheet = () => {
         mobileNo: selectedCustomerDatas.mobileNo || '',
     }
 
+
     const handleEdit = async () => {
-        const permissions = checkPagePermission();
+        try {
+            try {
+                const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
+                const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+                const updatedCustomer = {
+                    ...book,
+                    ...selectedCustomer,
+                    ...vehilcedetails,
+                    ...selectedCustomerData,
+                    ...formData,
+                    apps: book.apps || formData.apps || selectedCustomerData.apps,
+                    starttime: starttime || book.starttime || formData.starttime || selectedCustomerData.starttime,
+                    closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
+                    reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+                    shedintime: shedintime || book.shedintime || selectedCustomerData.shedintime || formData.shedintime,
+                    starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
+                    closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
+                    additionaltime: additionalTime.additionaltime || book.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime,
+                    tripsheetdate: selectedBookingDate,
+                    vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
+                    vehType: VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '',
+                    driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
+                    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
+                    shedkm: shedKilometers.shedkm || book.shedkm || formData.shedkm || selectedCustomerData.shedkm,
+                    totaldays: calculateTotalDays(),
+                    totalkm1: calculateTotalKilometers(),
+                    totaltime: calculateTotalTime(),
+                    netamount: calculateTotalAmount(),
+                    exkm: packageDetails[0]?.extraKMS,
+                    exHrs: packageDetails[0]?.extraHours,
+                    night: packageDetails[0]?.NHalt,
+                    amount: packageDetails[0]?.Rate,
+                    exkm1: packageDetails[0]?.extraKMS,
+                    exHrs1: packageDetails[0]?.extraHours,
+                    night1: packageDetails[0]?.NHalt,
+                    amount5: packageDetails[0]?.Rate,
+                    amount1: calculateExkmAmount(),
+                    amount2: calculateExHrsAmount(),
+                    amount3: calculateNightAmount(),
+                    amount4: calculatedriverconvienceAmount(),
+                    package: packageDetails[0]?.package,
+                    pack: packageDetails[0]?.package,
+                    minhrs: packageDetails[0]?.Hours,
+                    minkm: packageDetails[0]?.KMS,
+                    calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, request,
+                };
+                for (const key in updatedCustomer) {
+                    if (key === '0') {
+                        delete updatedCustomer[key];
+                    }
+                }
+                await axios.put(`${apiUrl}/tripsheet-edit/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
+                handleCancel();
+                setShedKilometers("")
+                setAdditionalTime("")
+                // book()
+                // book.additionaltime = "";
+                // additionalTime.additionaltime = "";
 
-        if (permissions.read && permissions.modify) {
+                setRow([]);
+                setRows([]);
+                handleDriverSendSMS();
+                handleSendSMS();
+                handlecheck();
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+            } catch {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+        }
+    };
 
+
+    // handleConfirm
+
+
+    const handleConfirm = async () => {
+        try {
             try {
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
@@ -686,8 +775,14 @@ const useTripsheet = () => {
                         delete updatedCustomer[key];
                     }
                 }
-                await axios.put(`http://localhost:8081/tripsheet/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
+                await axios.put(`${apiUrl}/tripsheet-confirm/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
                 handleCancel();
+                setShedKilometers("")
+                setAdditionalTime("")
+                // book()
+                // book.additionaltime = "";
+                // additionalTime.additionaltime = "";
+
                 setRow([]);
                 setRows([]);
                 handleDriverSendSMS();
@@ -699,73 +794,73 @@ const useTripsheet = () => {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
             }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
     const handleAdd = async () => {
-        const permissions = checkPagePermission();
+        const customer = book.customer || "";
+        const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
+        const vehType = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
+        const driverName = formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '';
+        const mobileNo = formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
 
-        if (permissions.read && permissions.new) {
-            const customer = book.customer;
-            if (!customer) {
-                setError(true);
-                setErrorMessage("fill mantatory fields");
-                return;
-            }
-            try {
-                const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+        if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo) {
+            setError(true);
+            setErrorMessage("Please fill all mandatory fields");
+            return;
+        }
+        try {
+            const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
 
-                const updatedBook = {
-                    ...book,
-                    starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
-                    closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
-                    reporttime: reporttime || book.reporttime || formData.reporttime || selectedCustomerData.reporttime,
-                    shedintime: shedintime || book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
-                    starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
-                    closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
-                    additionaltime: additionalTime.additionaltime,
-                    tripsheetdate: selectedBookingDate,
-                    shedkm: shedKilometers.shedkm,
-                    totaldays: calculateTotalDays(),
-                    totalkm1: calculateTotalKilometers(),
-                    totaltime: calculateTotalTime(),
-                    netamount: calculateTotalAmount(),
-                    exkm: packageDetails[0]?.extraKMS,
-                    exHrs: packageDetails[0]?.extraHours,
-                    night: packageDetails[0]?.NHalt,
-                    amount: packageDetails[0]?.Rate,
-                    exkm1: packageDetails[0]?.extraKMS,
-                    exHrs1: packageDetails[0]?.extraHours,
-                    night1: packageDetails[0]?.NHalt,
-                    amount5: packageDetails[0]?.Rate,
-                    amount1: calculateExkmAmount(),
-                    amount2: calculateExHrsAmount(),
-                    amount3: calculateNightAmount(),
-                    amount4: calculatedriverconvienceAmount(),
-                    package: packageDetails[0]?.package,
-                    pack: packageDetails[0]?.package,
-                    minhrs: packageDetails[0]?.Hours,
-                    minkm: packageDetails[0]?.KMS,
-                };
-                await axios.post('http://localhost:8081/tripsheet', updatedBook);
-                handleCancel();
-                setRow([]);
-                setRows([]);
-                setSuccess(true);
-                handleSendSMS();
-                handleDriverSendSMS();
-                handlecheck();
-                setSuccessMessage("Successfully Added");
-            } catch {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            const updatedBook = {
+                ...book,
+                starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
+                closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
+                reporttime: reporttime || book.reporttime || formData.reporttime || selectedCustomerData.reporttime,
+                shedintime: shedintime || book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
+                starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
+                closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
+                additionaltime: additionalTime.additionaltime,
+                tripsheetdate: selectedBookingDate,
+                shedkm: shedKilometers.shedkm,
+                totaldays: calculateTotalDays(),
+                totalkm1: calculateTotalKilometers(),
+                totaltime: calculateTotalTime(),
+                netamount: calculateTotalAmount(),
+                exkm: packageDetails[0]?.extraKMS,
+                exHrs: packageDetails[0]?.extraHours,
+                night: packageDetails[0]?.NHalt,
+                amount: packageDetails[0]?.Rate,
+                exkm1: packageDetails[0]?.extraKMS,
+                exHrs1: packageDetails[0]?.extraHours,
+                night1: packageDetails[0]?.NHalt,
+                amount5: packageDetails[0]?.Rate,
+                amount1: calculateExkmAmount(),
+                amount2: calculateExHrsAmount(),
+                amount3: calculateNightAmount(),
+                amount4: calculatedriverconvienceAmount(),
+                package: packageDetails[0]?.package,
+                pack: packageDetails[0]?.package,
+                minhrs: packageDetails[0]?.Hours,
+                minkm: packageDetails[0]?.KMS,
+                calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+                request,
+            };
+            await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
+            handleCancel();
+            setRow([]);
+            setRows([]);
+            setSuccess(true);
+            handleSendSMS();
+            handleDriverSendSMS();
+            handlecheck();
+            setSuccessMessage("Successfully Added");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -810,6 +905,7 @@ const useTripsheet = () => {
         }));
     };
 
+    // speeddaial
     const handleClick = async (event, actionName) => {
         event.preventDefault();
         try {
@@ -826,7 +922,10 @@ const useTripsheet = () => {
             } else if (actionName === 'Edit') {
                 handleEdit();
             } else if (actionName === 'Add') {
-                handleAdd();
+                if (!isEditMode) {
+                    handleAdd();
+                }
+
             }
         } catch {
             setError(true);
@@ -835,33 +934,25 @@ const useTripsheet = () => {
     };
 
     const handleUpload = () => {
-        const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-        if (!tripid) {
-            setError(true);
-            setErrorMessage("Enter booking No")
-            return;
-        }
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.pdf, .jpg, .jpeg, .png';
         input.onchange = handleFileChange;
         input.click();
     };
-    //file upload
-    const handleFileChange = async (event) => {
+
+    const handleFileChange = (event) => {
+        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
         const file = event.target.files[0];
         if (!file) return;
-        const formDataUpload = new FormData();
-        formDataUpload.append('file', file);
-        formDataUpload.append('tripid', book.tripid || selectedCustomerData.tripid || formData.tripid);
-        try {
-            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            console.log(response);
-        } catch {
+        if (file) {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            axios.put(`${apiUrl}/tripsheet_uploads/${tripid}`, formData)
         }
     };
-    //end file upload
-    // Function to calculate total time
+
     const calculateTotalTime = useCallback(() => {
         const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
         const closeTime = formData.closetime || selectedCustomerData.closetime || book.closetime;
@@ -980,7 +1071,7 @@ const useTripsheet = () => {
         const closeKm = formData.shedin || book.shedin || selectedCustomerData.shedin || '';
 
         if (startKm !== undefined && closeKm !== undefined) {
-            let totalKm = closeKm - startKm;
+            let totalKm = parseInt(closeKm) - parseInt(startKm);
             const shedKmValue = parseInt(shedKilometers.shedkm) || parseInt(formData.shedkm) || parseInt(selectedCustomerData.shedkm) || parseInt(book.shedkm);
             if (!isNaN(shedKmValue)) {
                 totalKm += shedKmValue;
@@ -996,7 +1087,7 @@ const useTripsheet = () => {
         const amount2 = parseFloat(formData.amount2 || selectedCustomerData.amount2 || book.amount2) || calculateExHrsAmount() || 0;
         const amount3 = parseFloat(formData.amount3 || selectedCustomerData.amount3 || book.amount3) || calculateNightAmount() || 0;
         const amount4 = parseFloat(formData.amount4 || selectedCustomerData.amount4 || book.amount4) || calculatedriverconvienceAmount() || 0;
-        // Calculate the total amount
+
         const totalAmount = amount + amount1 + amount2 + amount3 + amount4;
         return totalAmount;
     }
@@ -1007,7 +1098,7 @@ const useTripsheet = () => {
         const amount7 = parseFloat(formData.amount7 || selectedCustomerData.amount7 || book.amount7) || calculateExHrsAmount2();
         const amount8 = parseFloat(formData.amount8 || selectedCustomerData.amount8 || book.amount8) || calculateNightAmount2();
         const amount9 = parseFloat(formData.amount9 || selectedCustomerData.amount9 || book.amount9) || calculatedriverconvienceAmount2();
-        // Calculate the total amount
+
         const totalAmount = amount5 + amount6 + amount7 + amount8 + amount9;
         return totalAmount;
     }
@@ -1017,6 +1108,7 @@ const useTripsheet = () => {
         address1: '',
         orderedby: '',
         employeeno: '',
+        request: '',
         customercode: '',
         guestname: '',
         tripid: '',
@@ -1085,7 +1177,6 @@ const useTripsheet = () => {
                 [name]: checked,
             }));
         } else {
-            // Check if the field is the time field
             if (name === 'starttime') {
                 const formattedTime = value;
                 setBook((prevBook) => ({
@@ -1145,13 +1236,37 @@ const useTripsheet = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
+                const response = await axios.get(`${apiUrl}/tripsheet/${event.target.value}`);
                 const bookingDetails = response.data;
                 if (response.status === 200 && bookingDetails) {
+
                     setSelectedCustomerData(bookingDetails);
                     setSelectedCustomerId(bookingDetails.tripid);
+
+                    //--------------calc---------
+
+                    setcalcPackage(bookingDetails.calcPackage);
+                    setExtraHR(bookingDetails.extraHR);
+                    setExtraKM(bookingDetails.extraKM);
+                    setpackage_amount(bookingDetails.package_amount);
+                    setextrakm_amount(bookingDetails.extrakm_amount);
+                    setextrahr_amount(bookingDetails.extrahr_amount);
+                    setEx_kmAmount(bookingDetails.ex_kmAmount);
+                    setEx_HrAmount(bookingDetails.ex_hrAmount);
+                    setNightBeta(Number(bookingDetails.nightBta));
+                    setNightCount(bookingDetails.nightCount);
+                    setnight_totalAmount(bookingDetails.night_totalAmount);
+                    setdriverBeta(bookingDetails.driverBeta);
+                    setdriverbeta_Count(bookingDetails.driverbeta_Count);
+                    setdriverBeta_amount(bookingDetails.driverBeta_amount);
+                    setTotalcalcAmount(bookingDetails.totalcalcAmount);
+
+                    //---------------------------
+                    setRequest(bookingDetails.request)
+                    //----------
                     setSuccess(true);
                     setSuccessMessage("Successfully listed");
+                    setIsEditMode(true);
                 } else {
                     setError(true);
                     setErrorMessage("No data found");
@@ -1163,11 +1278,10 @@ const useTripsheet = () => {
                 } else {
                     setError(true);
                     setErrorMessage("Failed to fetch data");
-                    console.error("Error fetching data:", error);
                 }
             }
         }
-    }, []);
+    }, [apiUrl]);
 
     const [enterPressCount, setEnterPressCount] = useState(0);
 
@@ -1177,7 +1291,7 @@ const useTripsheet = () => {
             event.preventDefault();
             if (enterPressCount === 0) {
                 try {
-                    const response = await axios.get(`http://localhost:8081/vehicleinfo/${event.target.value}`);
+                    const response = await axios.get(`${apiUrl}/vehicleinfo/${event.target.value}`);
                     const vehicleData = response.data;
                     setRows([vehicleData]);
                 } catch {
@@ -1186,7 +1300,7 @@ const useTripsheet = () => {
                 const selectedRow = rows[0];
                 if (selectedRow) {
                     setSelectedCustomerDatas(selectedRow);
-                    handleChange({ target: { name: "vehRegNo", value: selectedRow.vehRegNo } });
+                    handleChange({ target: { name: "vehRegNo", value: Number(selectedRow.vehRegNo) } });
                     handleChange({ target: { name: "vehType", value: selectedRow.vehType } });
                     handleChange({ target: { name: "driverName", value: selectedRow.driverName } });
                     handleChange({ target: { name: "mobileNo", value: selectedRow.mobileNo } });
@@ -1198,7 +1312,7 @@ const useTripsheet = () => {
             setEnterPressCount(0);
         }
 
-    }, [handleChange, rows, enterPressCount]);
+    }, [handleChange, rows, enterPressCount, apiUrl]);
 
     const handleRowClick = useCallback((params) => {
         setSelectedCustomerDatas(params);
@@ -1211,7 +1325,7 @@ const useTripsheet = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get('http://localhost:8081/getPackageDetails', {
+                const response = await axios.get(`${apiUrl}/getPackageDetails`, {
                     params: {
                         totalkm1: totalKilometers,
                         totaltime: totalTime,
@@ -1232,13 +1346,13 @@ const useTripsheet = () => {
         packageData.duty, packageData.vehType, packageData.customer,
         selectedCustomerData.customer, selectedCustomerData.duty, selectedCustomerData.vehType,
         selectedCustomerDatas.customer, selectedCustomerDatas.duty, selectedCustomerDatas.vehType,
-        totalKilometers, totalTime
+        totalKilometers, totalTime, apiUrl
     ]);
 
     const [smsguest, setSmsGuest] = useState(false);
 
     const handleSendSMS = async () => {
-        if (smsguest) {
+        if (smsguest || formData.smsguest || book.smsguest) {
             try {
                 const dataToSend = {
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
@@ -1252,7 +1366,7 @@ const useTripsheet = () => {
                     ofclanno: '044-49105959',
                 };
 
-                const response = await fetch('http://localhost:8081/tripguest-send-sms', {
+                const response = await fetch(`${apiUrl}/tripguest-send-sms`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1276,7 +1390,7 @@ const useTripsheet = () => {
     const [DriverSMS, setDriverSMS] = useState(false);
 
     const handleDriverSendSMS = async () => {
-        if (smsguest) {
+        if (DriverSMS || formData.DriverSMS || book.DriverSMS) {
             try {
                 const dataSend = {
                     guestname: formValues.guestname || selectedCustomerData.guestname || book.guestname || formData.guestname || '',
@@ -1290,7 +1404,7 @@ const useTripsheet = () => {
                     ofclanno: '044-49105959',
                 };
 
-                const response = await fetch('http://localhost:8081/tripdriver-send-sms', {
+                const response = await fetch(`${apiUrl}/tripdriver-send-sms`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1319,12 +1433,14 @@ const useTripsheet = () => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
             try {
-                const response = await fetch(`http://localhost:8081/routedata/${encodeURIComponent(tripid)}`);
+                const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);
 
                 if (response.status === 200) {
                     const routeData = await response.json();
                     setRouteData(routeData);
-                } else {
+                }
+                else {
+                    setRouteData("")
                     const timer = setTimeout(fetchData, 2000);
                     return () => clearTimeout(timer);
                 }
@@ -1333,48 +1449,66 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, []);
+    }, [apiUrl, tripiddata]);
+
+
 
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
+            setTripiddata(tripid);
 
             try {
-                const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
+                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
                 if (response.status === 200) {
                     const imageUrl = URL.createObjectURL(await response.blob());
                     setSignImageUrl(imageUrl);
                 }
-            } catch {
+
+                else {
+                    const timer = setTimeout(fetchData, 500);
+                    setSignImageUrl("");
+                    return () => clearTimeout(timer);
+                }
+            } catch (err) {
+                console.log(err, 'error');
             }
         };
         fetchData();
         return () => {
         };
-    }, []);
+    }, [apiUrl, tripiddata]);
+
 
     useEffect(() => {
         const fetchData = async () => {
+            // const tripid = localStorage.getItem('selectedTripid');
+
             try {
                 const tripid = localStorage.getItem('selectedTripid');
                 if (!tripid) {
                     return;
                 }
 
-                const response = await fetch(`http://localhost:8081/getmapimages/${tripid}`);
+                const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
                 if (response.status === 200) {
                     const responseData = await response.blob();
                     const imageUrl = URL.createObjectURL(responseData);
                     setGMapImageUrl(imageUrl);
-                } else {
+                }
+
+                else {
+                    setGMapImageUrl("")
+
                     const timer = setTimeout(fetchData, 2000);
                     return () => clearTimeout(timer);
                 }
+
             } catch {
             }
         };
         fetchData();
-    }, []);
+    }, [apiUrl, tripiddata]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -1383,12 +1517,14 @@ const useTripsheet = () => {
                 if (!tripid) {
                     return;
                 }
-                const response = await fetch(`http://localhost:8081/get-attachedimage/${tripid}`);
+                const response = await fetch(`${apiUrl}/get-attachedimage/${tripid}`);
                 if (response.status === 200) {
                     const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
                     setAttachedImage(attachedImageUrls);
-                } else {
+                }
+
+                else {
                     const timer = setTimeout(fetchData, 2000);
                     return () => clearTimeout(timer);
                 }
@@ -1396,7 +1532,7 @@ const useTripsheet = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -1409,31 +1545,23 @@ const useTripsheet = () => {
                     return;
                 }
 
-                const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
+                const response = await fetch(`${apiUrl}/get-companyimage/${organizationname}`);
 
-                // Check if the response status is 200
                 if (response.status === 200) {
                     const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-
-                    // Store image URLs in local storage
+                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
                     localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
-
                     setSelectedImage(attachedImageUrls);
                 } else {
-                    // If the response status is not 200, wait for 2 seconds and fetch again
                     const timer = setTimeout(fetchData, 2000);
-                    // Clear the timer to avoid memory leaks
                     return () => clearTimeout(timer);
                 }
-            } catch (error) {
-                // Handle errors
-                console.error('Error fetching image data:', error);
+            } catch {
             }
         };
 
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
 
     const [organizationdata, setorganizationData] = useState('');
@@ -1445,17 +1573,17 @@ const useTripsheet = () => {
             const storedcomanyname = localStorage.getItem('usercompanyname');
             const organizationname = decodeURIComponent(storedcomanyname);
             try {
-                const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
+                const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
                 if (response.status === 200) {
 
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
                         setorganizationData(userDataArray[0]);
                     }
-                } else {
-                    // If the response status is not 200, wait for 2 seconds and fetch again
+                }
+
+                else {
                     const timer = setTimeout(fetchData, 2000);
-                    // Clear the timer to avoid memory leaks
                     return () => clearTimeout(timer);
                 }
             } catch {
@@ -1463,12 +1591,226 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, []);
+    }, [apiUrl]);
+
+
+
+    // ayyanar bill calc------------------------------------------------------------------
+
+    // convert time into minutes     
+    // function convertTimeToNumber(timeString) {
+
+    //     const [hours, minutes] = timeString.split('h').map(str => parseInt(str));  // Split the time string into hours and minutes
+
+    //     // Calculate the total minutes
+    //     const totalMinutes = (hours * 60) + (minutes || 0); // if no minutes provided, consider it as 0
+
+    //     return totalMinutes;
+    // }
+
+    //-----------------------------------------------extra amounts 
+
+    let v_permit_vendor = formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || 0;
+    let permit = formData.permit || selectedCustomerData.permit || book.permit || 0;
+    let parking = formData.parking || selectedCustomerData.parking || book.parking || 0;
+    let toll = formData.toll || selectedCustomerData.toll || book.toll || 0;
+    let vender_toll = formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || 0;
+    let customer_advance = formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || 0;
+
+    //--------------------------------------------------------------------------
+    // convert time into hours  
+    function convertTimeToNumber(timeString) {
+        // Split the time string into hours and minutes
+        const [hours, minutes] = timeString.split('h').map(str => parseInt(str));
+
+        // Calculate the total hours
+        const totalHours = hours + (minutes || 0) / 60; // if no minutes provided, consider it as 0
+        return totalHours;
+    }
+
+
+    useEffect(() => {
+        const calcdata = () => {
+            if (nightBta && nightCount > 1) {
+                let nightTotalAmounts = Number(nightBta) * Number(nightCount)
+                setnight_totalAmount(nightTotalAmounts)
+            }
+            else if (nightBta) {
+                setnight_totalAmount(Number(nightBta))
+            }
+        }
+        calcdata();
+    }, [nightBta, nightCount])
+
+
+
+    const driverBeta_calc = (e) => {
+        setdriverBeta(e.target.value)
+    }
+
+    const driverbeta_Count_calc = (e) => {
+        setdriverbeta_Count(e.target.value)
+    }
+
+    useEffect(() => {
+        const calcdata = () => {
+            if (driverBeta && driverbeta_Count > 1) {
+                let driverbetaAmount = Number(driverBeta) * Number(driverbeta_Count)
+                setdriverBeta_amount(Number(driverbetaAmount))
+
+            } else if (driverBeta) {
+                setdriverBeta_amount(Number(driverBeta))
+            }
+        }
+        calcdata();
+    }, [driverBeta, driverbeta_Count])
+
+
+    //------------total amount calculations 
+
+    let [totalcalcAmount, setTotalcalcAmount] = useState()
+    useEffect(() => {
+        const totalAmountCalc = () => {
+            const total = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll) + Number(customer_advance);
+            setTotalcalcAmount(total);
+
+        }
+        totalAmountCalc()
+    }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll, v_permit_vendor, vender_toll])
+
+
+    // extra Amount calculation--------------------------
+    useEffect(() => {
+        const extraClac = () => {
+            let extraAbout_hr = Number(extraHR) * Number(extrahr_amount)
+            setEx_HrAmount(extraAbout_hr)
+        }
+        extraClac();
+    }, [extraHR, extrahr_amount])
+
+    useEffect(() => {
+        const extraClac = () => {
+            let extraAbout_km = Number(extraKM) * Number(extrakm_amount)
+            setEx_kmAmount(extraAbout_km)
+        }
+        extraClac();
+    }, [extraKM, extrakm_amount])
+
+    //----------------------------------------------------
+    // cncel
+    const calcCancel = () => {
+        totalHours = "";
+        totkm = "";
+        totalcalcAmount = ""
+        setcalcPackage();
+        setExtraHR();
+        setExtraKM();
+        setpackage_amount();
+        setextrakm_amount();
+        setextrahr_amount();
+        setEx_kmAmount();
+        setEx_HrAmount();
+        setNightBeta();
+        setNightCount();
+        setnight_totalAmount();
+        setdriverBeta();
+        setdriverbeta_Count();
+        setdriverBeta_amount();
+        setTotalcalcAmount();
+
+
+    }
+
+
+    // calc function
+
+    let data, hrs, kms, totkm, tothr, totalHours, duty, vehiletype;
+    const handleCalc = async () => {
+        try {
+
+            duty = formData.duty || selectedCustomerData.duty || book.duty;
+            vehiletype = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
+            totkm = await (formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
+            tothr = await (formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || '');
+
+            if (totkm && tothr) {
+                totalHours = await convertTimeToNumber(tothr);
+                const response = await axios.get(`${apiUrl}/t4hr-pack`, {
+                    params: {
+                        totkm: totkm,
+                        totalHours: totalHours,
+                        duty: duty,
+                        vehiletype: vehiletype,
+                    }
+                });
+                data = response.data;
+                hrs = data.Hours
+                kms = data.KMS
+                setextrakm_amount(data.extraKMS)
+                setextrahr_amount(data.extraHours)
+
+                if (Number(hrs) === 8) {
+                    setcalcPackage("8hr & 80km")
+                    setpackage_amount(data.Rate);
+
+                    if (Number(totalHours) > 8) {
+                        let time = Math.ceil(totalHours - hrs)
+                        setExtraHR(time)
+                    }
+                    else {
+                        setExtraHR(0)
+                    }
+
+                    if (totkm > 80) {
+                        const km = Math.ceil(totkm - kms);
+                        setExtraKM(km)
+
+                    } else {
+                        setExtraKM(0)
+                    }
+
+                } else if (Number(hrs) === 4) {
+
+                    setcalcPackage("4hr & 40km");
+                    setpackage_amount(data.Rate)
+
+                    if (totalHours > 4) {
+                        let time = Number(Math.ceil(totalHours - hrs));
+                        setExtraHR(time)
+                    }
+                    else {
+                        setExtraHR(0)
+                    }
+
+                    if (totkm > 40) {
+                        const km = Number(Math.ceil(totkm - kms));
+                        setExtraKM(km)
+                    } else {
+                        setExtraKM(0)
+                    }
+                }
+                setCalcCheck(true)
+
+            } else {
+                setError(true);
+                setErrorMessage("Check Hour & KM  ")
+            }
+
+        }
+        catch (err) {
+            console.log("pack fetch ", err)
+        }
+    }
+
+
+
+    //---------------------------------------
 
 
     return {
-        selectedCustomerData,
-        selectedCustomerId,
+        selectedCustomerData, ex_kmAmount, ex_hrAmount,
+        night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount, totalcalcAmount, driverBeta,
+        selectedCustomerId, nightBta, nightCount, driverbeta_Count,
         rows,
         error,
         success,
@@ -1478,11 +1820,10 @@ const useTripsheet = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        infoMessage,
+        // infoMessage,
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,
@@ -1552,6 +1893,14 @@ const useTripsheet = () => {
         imageUrl,
         link,
         isSignatureSubmitted,
+        isEditMode,
+        handleEdit,
+        SignPage,
+        sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
+        setNightBeta, setNightCount, request, setRequest, calcCheck,
+
+
+
     };
 };
 

@@ -38,7 +38,6 @@ const GroupBilling = () => {
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         hidePopup,
         invoiceno,
         selectedCustomerDatas,
@@ -187,7 +186,7 @@ const GroupBilling = () => {
                             </div>
                             <div className="input-field">
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("read")}>View Bill</Button>
+                                    <Button variant="contained" onClick={handleShow} >View Bill</Button>
                                 </div>
                             </div>
                         </div>

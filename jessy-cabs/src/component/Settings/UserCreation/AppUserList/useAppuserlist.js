@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { APIURL } from "../../../url";
 
 // TABLE START
 const columns = [
@@ -13,10 +14,9 @@ const columns = [
 // TABLE END
 
 const useAppuserlist = () => {
-
-
+    const apiUrl = APIURL;
     const [rows, setRows] = useState([]);
-    const [apps, setApps] = useState('active'); // Default to 'active'
+    const [apps, setApps] = useState('active');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
@@ -25,8 +25,6 @@ const useAppuserlist = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
-
-
 
     const hidePopup = () => {
         setSuccess(false);
@@ -38,8 +36,8 @@ const useAppuserlist = () => {
         if (error) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer); 
         }
     }, [error]);
 
@@ -47,29 +45,29 @@ const useAppuserlist = () => {
         if (success) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer); 
         }
     }, [success]);
     useEffect(() => {
         if (warning) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [warning]);
     useEffect(() => {
         if (info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000); 
+            return () => clearTimeout(timer); 
         }
     }, [info]);
 
     const handleListButtonClick = () => {
-        fetch(`http://localhost:8081/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
+        fetch(`${apiUrl}/tripsheet_driver_details?apps=${encodeURIComponent(apps)}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.length > 0) {
@@ -82,9 +80,7 @@ const useAppuserlist = () => {
                     setErrorMessage("No data found");
                 }
             })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
+            .catch();
     };
 
     const handleChangeStatus = (event) => {

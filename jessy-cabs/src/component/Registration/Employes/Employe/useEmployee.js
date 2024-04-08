@@ -1,33 +1,16 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
-
-
-// TABLE STRAT
-const columns = [
-    { field: "id", headerName: "Sno", width: 50 },
-    { field: "empid", headerName: "Employe ID", width: 140 },
-    { field: "empname", headerName: "Name", width: 130 },
-    { field: "empemailid", headerName: "Email", width: 130 },
-    { field: "empmobile", headerName: "Mobile", width: 130 },
-    { field: "jobroll", headerName: "Job Roll", width: 130 },
-    { field: "joiningdate", headerName: "Joining Date", width: 130 },
-    { field: "gender", headerName: "Gender", width: 130 },
-    { field: "bloodgroup", headerName: "Bloog Group", width: 130 },
-    { field: "guardian", headerName: "Guardian", width: 130 },
-    { field: "uanid", headerName: "UAN ID", width: 140 },
-    { field: "esino", headerName: "ESI NO", width: 140 },
-    { field: "fixedsalary", headerName: "Net Salary", width: 130 },
-    { field: "licenceno", headerName: "Driving Licence No", width: 140 },
-];
-// TABLE END
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import Button from "@mui/material/Button";
+import { APIURL } from "../../../url";
 
 const useEmployee = () => {
-
-    const user_id = localStorage.getItem('useridno');
-
+    const apiUrl = APIURL;
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -40,61 +23,56 @@ const useEmployee = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
     const [searchText, setSearchText] = useState('');
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
-    // for page permission
-
-    const [userPermissions, setUserPermissions] = useState({});
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Employee PayRoll';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
-            }
-        };
-
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Employee PayRoll';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
+    const handleButtonClick = (params) => {
+        const { empid } = params.row;
+        if (!empid) {
+            setError(true);
+            setErrorMessage("PLease Enter Booking No");
+            return;
         }
-
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
+        showPdf(empid);
     };
 
-    const permissions = checkPagePermission();
+    // TABLE STRAT
+    const columns = [
+        { field: "id", headerName: "Sno", width: 50 },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 130,
+            renderCell: (params) => (
+                <Button
+                    onClick={() => handleButtonClick(params)}
+                    aria-label="open-dialog"
+                >
+                    <Button variant="contained" color="primary">
+                        <UploadFileIcon />
+                        view
+                    </Button>
+                </Button>
+            ),
+        },
+        { field: "empid", headerName: "Employe ID", width: 140 },
+        { field: "empname", headerName: "Name", width: 130 },
+        { field: "empemailid", headerName: "Email", width: 130 },
+        { field: "empmobile", headerName: "Mobile", width: 130 },
+        { field: "jobroll", headerName: "Job Roll", width: 130 },
+        { field: "joiningdate", headerName: "Joining Date", width: 130 },
+        { field: "gender", headerName: "Gender", width: 130 },
+        { field: "bloodgroup", headerName: "Bloog Group", width: 130 },
+        { field: "guardian", headerName: "Guardian", width: 130 },
+        { field: "uanid", headerName: "UAN ID", width: 140 },
+        { field: "esino", headerName: "ESI NO", width: 140 },
+        { field: "fixedsalary", headerName: "Net Salary", width: 130 },
+        { field: "licenceno", headerName: "Driving Licence No", width: 140 },
+    ];
+    // TABLE END
 
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -112,7 +90,6 @@ const useEmployee = () => {
         pdf.setFont('helvetica', 'normal');
         pdf.text("Employee Details", 10, 10);
 
-        // Modify tableData to exclude the index number
         const tableData = rows.map((row) => [
             row['id'],
             row['empid'],
@@ -150,38 +127,17 @@ const useEmployee = () => {
         setInfo(false);
         setWarning(false);
     };
+
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, success, warning, info]);
+
+
 
     const [book, setBook] = useState({
         empid: '',
@@ -206,7 +162,6 @@ const useEmployee = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -216,7 +171,6 @@ const useEmployee = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -263,37 +217,86 @@ const useEmployee = () => {
             licenceno: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
 
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
-    const handleAdd = async () => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.new) {
-            const empname = book.empname;
-            if (!empname) {
-                setError(true);
-                setErrorMessage("Check your Employee ID");
-                return;
-            }
+    //--------show pdf---------------
+    const [allFile, setAllFile] = useState([]);
+
+    const showPdf = (showID) => {
+        axios.get(`${apiUrl}/employee-docView/${showID}`)
+            .then(res => {
+                if (res.data.length > 0) {
+                    setAllFile(res.data);
+                    setDialogOpen(true);
+                } else {
+                    setError(true);
+                    setErrorMessage('No data found');
+                }
+            })
+            .catch()
+    }
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+    };
+
+    ///--------------------------------------------
+
+    const empid = selectedCustomerData?.empid || book.empid
+    const [file, setFile] = useState(null);
+
+    const addPdf = async () => {
+        if (file !== null) {
+            const formData = new FormData();
+            formData.append("file", file);
             try {
-                await axios.post('http://localhost:8081/employees', book);
-                handleCancel();
-                setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
-            } catch {
-
+                await axios.post(`${apiUrl}/employee-pdf/${empid}`, formData)
+            }
+            catch {
+                setError(true);
+                setErrorMessage('something wrong');
             }
         } else {
-            // Display a warning or prevent the action
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            return
         }
+    }
+
+    //----------------------------------------------
+    const handleAdd = async () => {
+        const empname = book.empname;
+        if (!empname) {
+            setError(true);
+            setErrorMessage("Check your Employee ID");
+            return;
+        }
+        try {
+            await axios.post(`${apiUrl}/employees`, book);
+            handleCancel();
+            addPdf();
+            setRows([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } catch {
+        }
+    };
+
+    const handleEdit = async (userid) => {
+        const selectedCustomer = rows.find((row) => row.empid === empid);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
+        setSuccess(true);
+        setSuccessMessage("Successfully updated");
+        handleCancel();
+        addPdf();
+        setRows([]);
     };
 
 
@@ -301,108 +304,8 @@ const useEmployee = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/employees');
-                    const data = response.data;
-                    if (data.length > 0) {
-                        const rowsWithUniqueId = data.map((row, index) => ({
-                            ...row,
-                            id: index + 1,
-                        }));
-                        setRows(rowsWithUniqueId);
-                        setSuccess(true);
-                        setSuccessMessage("Successfully listed");
-                    } else {
-                        setRows([]);
-                        setError(true);
-                        setErrorMessage("No data found");
-                    }
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Cancel') {
-                handleCancel();
-                setRows([]);
-            } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`);
-                    setSelectedCustomerData(null);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Deleted");
-                    handleCancel();
-                    setRows([]);
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.empid === empid);
-                    const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://localhost:8081/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully updated");
-                    handleCancel();
-                    setRows([]);
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Add') {
-                handleAdd();
-            }
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-        }
-    };
-    useEffect(() => {
-        if (actionName === 'List') {
-            handleClick(null, 'List');
-        }
-    });
-
-    const handleUpload = () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.pdf, .jpg, .jpeg, .png';
-        input.onchange = handleFileChange;
-        input.click();
-    };
-    //file upload
-    const handleFileChange = async (event, documentType) => {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const uniqueFileName = `${documentType}_${Date.now()}_${file.name}`;
-        const formDataUpload = new FormData();
-        formDataUpload.append('file', file);
-        formDataUpload.append('documenttype', book.documenttype || selectedCustomerData.documenttype);
-        formDataUpload.append('documenttype', documentType);
-        formDataUpload.append('empid', book.empid || selectedCustomerData.empid);
-        formDataUpload.append('filename', uniqueFileName);
-        try {
-            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            console.log(response);
-        } catch {
-        }
-    };
-    //end file upload
-
-    const handleShowAll = async () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.read) {
-            try {
-                const response = await fetch(`http://localhost:8081/table-for-employee?searchText=${searchText}`);
-                const data = await response.json();
+                const response = await axios.get(`${apiUrl}/employees`);
+                const data = response.data;
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,
@@ -410,20 +313,95 @@ const useEmployee = () => {
                     }));
                     setRows(rowsWithUniqueId);
                     setSuccess(true);
-                    setSuccessMessage("successfully listed")
+                    setSuccessMessage("Successfully listed");
                 } else {
                     setRows([]);
                     setError(true);
-                    setErrorMessage("no data found")
+                    setErrorMessage("No data found");
                 }
-            } catch {
-                setError(true);
-                setErrorMessage("sorry")
             }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+
+            else if (actionName === 'Cancel') {
+                handleCancel();
+                setRows([]);
+            }
+
+            else if (actionName === 'Delete') {
+                await axios.delete(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`);
+                setSelectedCustomerData(null);
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
+                handleCancel();
+                setRows([]);
+            }
+
+            else if (actionName === 'Edit') {
+                const selectedCustomer = rows.find((row) => row.empid === empid);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`${apiUrl}/employees/${book.empid || selectedCustomerData.empid}`, updatedCustomer);
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                handleCancel();
+                addPdf();
+                setRows([]);
+            }
+
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
+    };
+
+    useEffect(() => {
+        if (actionName === 'List') {
+            handleClick(null, 'List');
+        }
+    });
+
+    const handleShowAll = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/table-for-employee?searchText=${searchText}`);
+            const data = await response.json();
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+                setSuccess(true);
+                setSuccessMessage("successfully listed")
+            } else {
+                setRows([]);
+                setError(true);
+                setErrorMessage("no data found")
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("sorry")
+        }
+    };
+
+    const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
+
+    const handleClosedeleteDialog = () => {
+        setDialogdeleteOpen(false);
+    };
+
+    const [imagedata, setImagedata] = useState(null);
+
+    const handleimagedelete = (imageName) => {
+        setImagedata(imageName)
+        setDialogdeleteOpen(true);
+    };
+
+    const handleContextMenu = () => {
+        axios.delete(`${apiUrl}/image-delete/` + imagedata)
+            .then(res => {
+                console.log("deleted")
+            })
+            .catch(err => console.log(err))
+        setDialogdeleteOpen(false);
+        setDialogOpen(false);
     };
 
     return {
@@ -438,23 +416,34 @@ const useEmployee = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        infoMessage,
+        // infoMessage,
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
+
         handleRowClick,
         handleAdd,
         hidePopup,
         formData,
         handleDateChange,
-        handleUpload,
         handleExcelDownload,
         handlePdfDownload,
         columns,
         searchText,
         setSearchText,
         handleShowAll,
+        allFile,
+        handleCloseDialog,
+        dialogOpen,
+        setFile,
+        isEditMode,
+        handleEdit,
+        handleContextMenu,
+        handleimagedelete,
+        handleClosedeleteDialog,
+        dialogdeleteOpen,
+        setError,
+        setErrorMessage,
     };
 };
 

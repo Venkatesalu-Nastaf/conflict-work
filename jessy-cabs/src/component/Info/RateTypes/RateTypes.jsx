@@ -9,7 +9,6 @@ import Division from './Division/Division';
 import TabContext from "@mui/lab/TabContext";
 import Ratevalidity from './Ratevalidity/Ratevalidity';
 
-
 const RateTypes = () => {
 
   const [value, setValue] = React.useState("ratetype");

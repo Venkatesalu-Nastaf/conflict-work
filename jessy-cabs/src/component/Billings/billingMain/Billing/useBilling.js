@@ -3,11 +3,11 @@ import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import { fetchBankOptions } from './BillingData';
 import dayjs from "dayjs";
+import { APIURL } from "../../../url.js";
 
 const useBilling = () => {
-
-    const user_id = localStorage.getItem('useridno');
-
+    const apiUrl = APIURL;
+    // const user_id = localStorage.getItem('useridno');
     const [bankOptions, setBankOptions] = useState([]);
     const [formData, setFormData] = useState({});
     const location = useLocation();
@@ -28,57 +28,7 @@ const useBilling = () => {
     });
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
 
-    // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
-            }
-        };
-
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = () => {
-        const currentPageName = 'CB Billing';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
 
     //for popup
     const hidePopup = () => {
@@ -87,57 +37,29 @@ const useBilling = () => {
         setInfo(false);
         setWarning(false);
     };
+
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, success, warning, info]);
+
 
     const handleEInvoiceClick = (row) => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.modify) {
-            const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-            const customer = book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer;
+        const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+        const customer = book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer;
 
-            if (!tripid) {
-                setError(true);
-                setErrorMessage("Please enter the Billing Data");
-            } else {
-                localStorage.setItem('selectedTripid', tripid);
-                localStorage.setItem('selectedcustomerid', customer);
-                setPopupOpen(true);
-            }
+        if (!tripid) {
+            setError(true);
+            setErrorMessage("Please enter the Billing Data");
         } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            localStorage.setItem('selectedTripid', tripid);
+            localStorage.setItem('selectedcustomerid', customer);
+            setPopupOpen(true);
         }
     };
 
@@ -346,76 +268,65 @@ const useBilling = () => {
             } else if (actionName === 'Cancel') {
                 handleCancel();
             } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
 
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
-                    setFormData(null);
-                    setSelectedCustomerData(null);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Deleted");
-                    handleCancel();
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
+
+
+                await axios.delete(`${apiUrl}/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
+                setFormData(null);
+                setSelectedCustomerData(null);
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
+                handleCancel();
+
             } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
 
-                if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.tripid === tripid);
-                    const updatedCustomer = {
-                        ...selectedCustomerDatas,
-                        ...selectedCustomer,
-                        ...selecting,
-                        ...formData,
-                        MinKilometers: selectedCustomerDatas.minkm || selectedCustomerData.minkm || '',
-                        MinHours: selectedCustomerDatas.minhrs || selectedCustomerData.minhrs || '',
-                        minchargeamount: selectedCustomerData.netamount || selectedCustomerDatas.minchargeamount || book.minchargeamount,
-                        MinCharges: selectedCustomerData.package || selectedCustomerDatas.MinCharges || book.MinCharges,
-                        cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
-                        cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
-                        nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
-                        dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
-                    };
-                    await axios.put(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
-                    handleCancel();
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Updated");
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
+
+                const selectedCustomer = rows.find((row) => row.tripid === tripid);
+                const updatedCustomer = {
+                    ...selectedCustomerDatas,
+                    ...selectedCustomer,
+                    ...selecting,
+                    ...formData,
+                    MinKilometers: selectedCustomerDatas.minkm || selectedCustomerData.minkm || '',
+                    MinHours: selectedCustomerDatas.minhrs || selectedCustomerData.minhrs || '',
+                    minchargeamount: selectedCustomerData.netamount || selectedCustomerDatas.minchargeamount || book.minchargeamount,
+                    MinCharges: selectedCustomerData.package || selectedCustomerDatas.MinCharges || book.MinCharges,
+                    cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
+                    cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
+                    nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
+                    dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
+                };
+                await axios.put(`${apiUrl}/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
+                handleCancel();
+                setSuccess(true);
+                setSuccessMessage("Successfully Updated");
+
             } else if (actionName === 'Add') {
-                const permissions = checkPagePermission();
 
-                if (permissions.read && permissions.new) {
-                    if (!customer) {
-                        setError(true);
-                        setErrorMessage("Fill mandatory fields");
-                        return;
-                    }
 
-                    const updatedBook = {
-                        ...book,
-                        ...selecting,
-                        ...selectedCustomerDatas,
-                        ...formData,
-                        customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
-                        Billingdate: selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
-                        cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
-                        cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
-                        nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
-                        dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
-                    };
-                    await axios.post('http://localhost:8081/billing', updatedBook);
-                    handleCancel();
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Added");
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
+
+                if (!customer) {
+                    setError(true);
+                    setErrorMessage("Fill mandatory fields");
+                    return;
                 }
+                const updatedBook = {
+                    ...book,
+                    ...selecting,
+                    ...selectedCustomerDatas,
+                    ...formData,
+                    customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
+                    Billingdate: selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
+                    cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
+                    cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
+                    nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
+                    dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
+                };
+                await axios.post(`${apiUrl}/billing`, updatedBook);
+                handleCancel();
+                setSuccess(true);
+                setSuccessMessage("Successfully Added");
+
             }
 
         } catch (err) {
@@ -432,25 +343,21 @@ const useBilling = () => {
     const calculateTotalAmount = () => {
         const totalkm1 = parseFloat(formData?.ChargesForExtra || selectedCustomerData?.totalkm1 || selectedCustomerDatas?.ChargesForExtra || book?.ChargesForExtra || 0);
         const chargesForExtraamount = parseFloat(formData?.ChargesForExtraamount || selectedCustomerData?.ChargesForExtraamount || selectedCustomerDatas?.ChargesForExtraamount || book?.ChargesForExtraamount || 0);
-
         if (!isNaN(totalkm1) && !isNaN(chargesForExtraamount)) {
             const totalAmount = totalkm1 * chargesForExtraamount;
             return totalAmount.toFixed(2);
         }
-
         return '';
     };
 
     const calculateTotalAmount2 = () => {
         const totaltime = formData.ChargesForExtraHRS || selectedCustomerData.totaltime || selectedCustomerDatas.ChargesForExtraHRS || book.ChargesForExtraHRS;
         const ChargesForExtraHRSamount = formData.ChargesForExtraHRSamount || selectedCustomerData.ChargesForExtraHRSamount || selectedCustomerDatas.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount;
-
         if (totaltime !== undefined && ChargesForExtraHRSamount !== undefined) {
             const [hours, minutes] = totaltime.split('h');
             const hoursInMinutes = parseFloat(hours) * 60 + parseFloat(minutes);
             const ratePerHour = parseFloat(ChargesForExtraHRSamount);
             const totalAmount = hoursInMinutes * (ratePerHour / 60);
-
             if (isNaN(totalAmount)) {
                 return "";
             } else {
@@ -523,8 +430,6 @@ const useBilling = () => {
         return '';
     };
 
-
-
     const calculateGrossAmount = () => {
         const {
             minchargeamount,
@@ -562,7 +467,7 @@ const useBilling = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`http://localhost:8081/tripsheet/${event.target.value}`);
+                const response = await axios.get(`${apiUrl}/tripsheet/${event.target.value}`);
                 const bookingDetails = response.data;
                 setSelectedCustomerData(bookingDetails);
             } catch (error) {
@@ -570,13 +475,13 @@ const useBilling = () => {
                 setErrorMessage('Error retrieving booking details.');
             }
         }
-    }, []);
+    }, [apiUrl]);
 
     const handleKeyenter = useCallback(async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`http://localhost:8081/billingdata/${event.target.value}`);
+                const response = await axios.get(`${apiUrl}/billingdata/${event.target.value}`);
                 const billingDetails = response.data;
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
@@ -586,13 +491,13 @@ const useBilling = () => {
                 setErrorMessage('Error retrieving billings details.');
             }
         }
-    }, []);
+    }, [apiUrl]);
 
     const handleKeyenter2 = useCallback(async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
-                const response = await axios.get(`http://localhost:8081/billing/${event.target.value}`);
+                const response = await axios.get(`${apiUrl}/billing/${event.target.value}`);
                 const billingDetails = response.data;
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
@@ -602,7 +507,7 @@ const useBilling = () => {
                 setErrorMessage('Error retrieving billings details.');
             }
         }
-    }, []);
+    }, [apiUrl]);
 
     const selecting = {
         tripid: selectedCustomerDatas.tripid || selectedCustomerData.tripid || '',
@@ -743,7 +648,7 @@ const useBilling = () => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
             try {
-                const response = await fetch(`http://localhost:8081/routedata/${encodeURIComponent(tripid)}`);
+                const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -754,13 +659,13 @@ const useBilling = () => {
         };
 
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
             try {
-                const response = await fetch(`http://localhost:8081/tripsheet/${tripid}`);
+                const response = await fetch(`${apiUrl}/tripsheet/${tripid}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -773,13 +678,13 @@ const useBilling = () => {
         };
 
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
             const customer = localStorage.getItem('selectedcustomerid');
             try {
-                const response = await fetch(`http://localhost:8081/customers/${encodeURIComponent(customer)}`);
+                const response = await fetch(`${apiUrl}/customers/${encodeURIComponent(customer)}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -789,13 +694,13 @@ const useBilling = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
             const tripid = localStorage.getItem('selectedTripid');
             try {
-                const response = await fetch(`http://localhost:8081/get-signimage/${tripid}`);
+                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -807,14 +712,14 @@ const useBilling = () => {
 
         fetchData();
         return () => { };
-    }, []);
+    }, [apiUrl]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const tripid = localStorage.getItem('selectedTripid');
-               
-                const response = await fetch(`http://localhost:8081/getmapimages/${tripid}`);
+
+                const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
                 if (response.status === 200) {
                     const responseData = await response.blob();
                     const imageUrl = URL.createObjectURL(responseData);
@@ -827,7 +732,7 @@ const useBilling = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     const organizationaddress1 = customerData.address1;
     const organizationaddress2 = customerData.address2;
@@ -851,8 +756,6 @@ const useBilling = () => {
     const roundOffValue = calculateRoundOff();
     const BalanceValue = calculatePayableAmount();
     const TotalAmountValue = calculateroundedPayableAmount();
-
-
     const [organizationdata, setorganizationData] = useState('');
 
     useEffect(() => {
@@ -862,25 +765,21 @@ const useBilling = () => {
             const storedcomanyname = localStorage.getItem('usercompanyname');
             const organizationname = decodeURIComponent(storedcomanyname);
             try {
-                const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
+                const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
                 if (response.status === 200) {
-
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
                         setorganizationData(userDataArray[0]);
                     }
                 } else {
-                    // If the response status is not 200, wait for 2 seconds and fetch again
                     const timer = setTimeout(fetchData, 2000);
-                    // Clear the timer to avoid memory leaks
                     return () => clearTimeout(timer);
                 }
             } catch {
             }
         };
-
         fetchData();
-    }, []);
+    }, [apiUrl]);
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -891,10 +790,10 @@ const useBilling = () => {
                 if (!organizationname) {
                     return;
                 }
-                const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
+                const response = await fetch(`${apiUrl}/get-companyimage/${organizationname}`);
                 if (response.status === 200) {
                     const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
                     localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
                     setSelectedImage(attachedImageUrls);
                 } else {
@@ -905,9 +804,7 @@ const useBilling = () => {
             }
         };
         fetchData();
-    }, []);
-
-   
+    }, [apiUrl]);
 
     return {
         selectedCustomerData,
@@ -923,7 +820,6 @@ const useBilling = () => {
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         hidePopup,
         formData,
         selectedCustomerDatas,

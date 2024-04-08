@@ -3,12 +3,12 @@ import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
+import { APIURL } from "../../../url";
+
 const useAccountinfo = () => {
-
-  const user_id = localStorage.getItem('useridno');
-
+  const apiUrl = APIURL;
+  // const user_id = localStorage.getItem('useridno');
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-  // const [value, setValue] = React.useState("online_password");
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
   const [rows, setRows] = useState([]);
   const [actionName] = useState('');
@@ -19,61 +19,10 @@ const useAccountinfo = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
-  const [infoMessage,setInfoMessage] = useState({});
+  // const [infoMessage, setInfoMessage] = useState({});
+  const [isEditMode, setIsEditMode] = useState(false);
 
-  // for page permission
-
-  const [userPermissions, setUserPermissions] = useState({});
-
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = 'Supplier Master';
-        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-        setUserPermissions(response.data);
-      } catch (error) {
-        console.error('Error fetching user permissions:', error);
-      }
-    };
-
-    fetchPermissions();
-  }, [user_id]);
-
-  const checkPagePermission = () => {
-    const currentPageName = 'Supplier Master';
-    const permissions = userPermissions || {};
-
-    if (permissions.page_name === currentPageName) {
-      return {
-        read: permissions.read_permission === 1,
-        new: permissions.new_permission === 1,
-        modify: permissions.modify_permission === 1,
-        delete: permissions.delete_permission === 1,
-      };
-    }
-
-    return {
-      read: false,
-      new: false,
-      modify: false,
-      delete: false,
-    };
-  };
-
-  const permissions = checkPagePermission();
-
-  // Function to determine if a field should be read-only based on permissions
-  const isFieldReadOnly = (fieldName) => {
-    if (permissions.read) {
-      // If user has read permission, check for other specific permissions
-      if (fieldName === "delete" && !permissions.delete) {
-        return true;
-      }
-      return false;
-    }
-    return true;
-  };
-
+  //----------popup----------------------
 
   const hidePopup = () => {
     setSuccess(false);
@@ -81,31 +30,15 @@ const useAccountinfo = () => {
     setInfo(false);
     setWarning(false);
   };
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [error]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
-    }
-  }, [info]);
 
   useEffect(() => {
-    if (success) {
+    if (error || success || warning || info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [success]);
+  }, [error, success, warning, info]);
 
 
   // download function
@@ -126,7 +59,6 @@ const useAccountinfo = () => {
     pdf.setFont('helvetica', 'normal');
     pdf.text("Account_Info", 10, 10);
 
-    // Modify tableData to exclude the index number
     const tableData = rows.map((row) => [
       row['id'],
       row['cperson'],
@@ -149,7 +81,6 @@ const useAccountinfo = () => {
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'Account_Info.pdf');
   };
-
 
   // TABLE START
   const columns = [
@@ -186,7 +117,6 @@ const useAccountinfo = () => {
     autoRefresh: '',
   });
 
-
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
 
@@ -210,10 +140,6 @@ const useAccountinfo = () => {
       }));
     }
   };
-  // const handleTabChange = (event, newValue) => {
-  //   setValue(newValue);
-  // };
-
 
   const handleAutocompleteChange = (event, value, name) => {
     const selectedOption = value ? value.label : '';
@@ -263,102 +189,113 @@ const useAccountinfo = () => {
       autoRefresh: '',
     }));
     setSelectedCustomerData({});
+    setIsEditMode(false);
   };
 
   const handleRowClick = useCallback((params) => {
     const customerData = params.row;
     setSelectedCustomerData(customerData);
     setSelectedCustomerId(params.row.accountNo);
+    setIsEditMode(true);
   }, []);
 
   const handleAdd = async () => {
-    const permissions = checkPagePermission();
     const accountNo = book.accountNo;
     if (!accountNo) {
       setError(true);
       setErrorMessage("Fill mandatory fields");
       return;
     }
-
-    if (permissions.read && permissions.new) {
-      try {
-        await axios.post('http://localhost:8081/accountinfo', book);
-        handleCancel();
-        setRows([]);
-        setSuccess(true);
-        setSuccessMessage("Successfully Added");
-      } catch {
-        setError(true);
-        setErrorMessage("Check your Network Connection");
-      }
-    } else {
-      // Display a warning or prevent the action
-      setInfo(true);
-      setInfoMessage("You do not have permission.");
+    try {
+      await axios.post(`ttp://${apiUrl}/accountinfo`, book);
+      handleCancel();
+      setRows([]);
+      setSuccess(true);
+      setSuccessMessage("Successfully Added");
+    } catch {
+      setError(true);
+      setErrorMessage("Check your Network Connection");
     }
   };
 
+  const handleEdit = async (accountNo) => {
+    try {
+      const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+      const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+      await axios.put(`${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+      setSuccess(true);
+      setSuccessMessage("Successfully updated");
+      handleCancel();
+      setRows([]);
+    } catch {
+      setError(true);
+      setErrorMessage("Check your Network Connection");
+    }
+  };
+
+  useEffect(() => {
+    const handleList = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/accountinfo`);
+        const data = response.data;
+        const rowsWithUniqueId = data.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }));
+        setRows(rowsWithUniqueId);
+      } catch {
+      }
+    }
+    handleList();
+  }, [apiUrl]);
 
   const handleClick = async (event, actionName, accountNo) => {
     event.preventDefault();
     try {
       if (actionName === 'List') {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.read) {
-          const response = await axios.get('http://localhost:8081/accountinfo');
-          const data = response.data;
-          if (data.length > 0) {
-            const rowsWithUniqueId = data.map((row, index) => ({
-              ...row,
-              id: index + 1,
-            }));
-            setRows(rowsWithUniqueId);
-            setSuccess(true);
-            setSuccessMessage("Successfully listed");
-          } else {
-            setRows([]);
-            setError(true);
-            setErrorMessage("No data found");
-          }
+        const response = await axios.get(`${apiUrl}/accountinfo`);
+        const data = response.data;
+        if (data.length > 0) {
+          const rowsWithUniqueId = data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setRows(rowsWithUniqueId);
+          setSuccess(true);
           setSuccessMessage("Successfully listed");
         } else {
-          setInfo(true);
-          setInfoMessage("You do not have permission.");
+          setRows([]);
+          setError(true);
+          setErrorMessage("No data found");
         }
-      } else if (actionName === 'Cancel') {
+        setSuccessMessage("Successfully listed");
+      }
+
+      else if (actionName === 'Cancel') {
         handleCancel();
         setRows([]);
-      } else if (actionName === 'Delete') {
-        const permissions = checkPagePermission();
+      }
 
-        if (permissions.read && permissions.delete) {
-          await axios.delete(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
-          setSelectedCustomerData(null);
-          setSuccess(true);
-          setSuccessMessage("Successfully Deleted");
-          handleCancel();
-          setRows([]);
-        } else {
-          setInfo(true);
-          setInfoMessage("You do not have permission.");
-        }
-      } else if (actionName === 'Edit') {
-        const permissions = checkPagePermission();
+      else if (actionName === 'Delete') {
+        await axios.delete(`${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`);
+        setSelectedCustomerData(null);
+        setSuccess(true);
+        setSuccessMessage("Successfully Deleted");
+        handleCancel();
+        setRows([]);
+      }
 
-        if (permissions.read && permissions.modify) {
-          const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
-          const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-          await axios.put(`http://localhost:8081/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
-          setSuccess(true);
-          setSuccessMessage("Successfully updated");
-          handleCancel();
-          setRows([]);
-        } else {
-          setInfo(true);
-          setInfoMessage("You do not have permission.");
-        }
-      } else if (actionName === 'Add') {
+      else if (actionName === 'Edit') {
+        const selectedCustomer = rows.find((row) => row.accountNo === accountNo);
+        const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+        await axios.put(`${apiUrl}/accountinfo/${book.accountNo || selectedCustomerData.accountNo}`, updatedCustomer);
+        setSuccess(true);
+        setSuccessMessage("Successfully updated");
+        handleCancel();
+        setRows([]);
+      }
+
+      else if (actionName === 'Add') {
         handleAdd();
       }
     } catch {
@@ -372,9 +309,6 @@ const useAccountinfo = () => {
     }
   });
 
-  const reversedRows = [...rows].reverse();
-
-
   return {
     selectedCustomerData,
     selectedCustomerId,
@@ -386,11 +320,10 @@ const useAccountinfo = () => {
     successMessage,
     errorMessage,
     warningMessage,
-    infoMessage,
+    // infoMessage,
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -398,9 +331,10 @@ const useAccountinfo = () => {
     handleAutocompleteChange,
     handleExcelDownload,
     handlePdfDownload,
-    reversedRows,
+    rows,
     columns,
-
+    isEditMode,
+    handleEdit,
   };
 };
 

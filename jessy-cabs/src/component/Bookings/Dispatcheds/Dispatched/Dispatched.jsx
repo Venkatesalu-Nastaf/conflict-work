@@ -7,6 +7,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Dialog from '@material-ui/core/Dialog';
 import MenuItem from '@mui/material/MenuItem';
 import { Department } from "./DispatchedData.js";
+import { Status } from "./DispatchedData.js";
 import Autocomplete from "@mui/material/Autocomplete";
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -25,11 +26,10 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useDispatched from './useDispatched.js';
 
-
-
 const Dispatched = () => {
 
   const {
+    statusvalue, handlestatusChange,
     fromDate,
     setFromDate,
     toDate,
@@ -45,7 +45,6 @@ const Dispatched = () => {
     setToDate,
     handleClick,
     handleShow,
-    isFieldReadOnly,
     handleShowAll,
     department,
     hidePopup,
@@ -60,7 +59,6 @@ const Dispatched = () => {
     selectedRow,
     handleTripsheetClick,
     columns
-    // ... (other state variables and functions)
   } = useDispatched();
 
   useEffect(() => {
@@ -95,12 +93,50 @@ const Dispatched = () => {
                   </LocalizationProvider>
                 </div>
                 <div className="input" >
-                  <Button variant="outlined" onClick={handleShow} disabled={isFieldReadOnly("read")}>Show</Button>  </div>
+                  <Button variant="outlined" onClick={handleShow} >Show</Button>  </div>
                 <div className="input">
-                  <Button variant="outlined" onClick={handleShowAll} disabled={isFieldReadOnly("read")}>Show All</Button>
+                  <Button variant="outlined" onClick={handleShowAll} >Show All</Button>
                 </div>
               </div>
               <div className="input-field">
+
+                {/* // status */}
+                <div className="input" style={{ width: "300px" }}>
+                  {/* <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={statusvalue}
+                    options={Status.map((option) => ({
+                      label: option.option,
+                    }))}
+                    onChange={(event, value) => handlestatusChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Status" inputRef={params.inputRef} />
+                      );
+                    }}
+                  /> */}
+
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={statusvalue}
+                    options={Status.map((option) => ({
+                      label: option.option,
+                    }))}
+                    onChange={(event, value) => handlestatusChange(event, value)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Status" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+
+                </div>
                 <div className="input" style={{ width: "300px" }}>
                   <Autocomplete
                     fullWidth
@@ -119,6 +155,7 @@ const Dispatched = () => {
                     }}
                   />
                 </div>
+
                 <div className="input" style={{ width: '170px' }}>
                   <Button variant="contained" onClick={handleButtontripsheet}>
                     New TripSheet
@@ -184,7 +221,6 @@ const Dispatched = () => {
               <DialogContent>
                 {selectedRow && (
                   <div>
-                    {/* <Button onClick={handleBookingClick}>Booking</Button> */}
                     <Button onClick={handleTripsheetClick}>Tripsheet</Button>
                   </div>
                 )}

@@ -4,11 +4,14 @@ import dayjs from "dayjs";
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
-
+import { APIURL } from "../../../url";
+import { useData } from '../../../Dashboard/Maindashboard/DataContext';
+import { useLocation } from "react-router-dom";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "status", headerName: "Status", width: 130 },
+    { field: "apps", headerName: "apps", width: 130 },
     { field: "startdate", headerName: "TripDate", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
     { field: "tripid", headerName: "Trip No", width: 130 },
     { field: "customer", headerName: "Customer", width: 130 },
@@ -34,9 +37,8 @@ const columns = [
 
 
 const useTransferdataentry = () => {
-
-    const user_id = localStorage.getItem('useridno');
-
+    const apiUrl = APIURL;
+    // const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [totalKm, setTotalKM] = useState(0);
     const [error, setError] = useState(false);
@@ -45,9 +47,11 @@ const useTransferdataentry = () => {
     const [toDate, setToDate] = useState(dayjs());
     const [success, setSuccess] = useState(false);
     const [totalTime, setTotalTime] = useState('');
-    const [invoiceno] = useState("");
+    const [invoiceno, setInvoiceno] = useState("");
+    const [groupId, setGroupId] = useState("")
     const [fromDate, setFromDate] = useState(dayjs());
-    const [Billingdate] = useState(dayjs());
+    const [endDate, setEndDate] = useState(dayjs());
+    const [Billingdate, setBillingdate] = useState(dayjs());
     const [date] = useState(dayjs());
     const [totalAmount, setTotalAmount] = useState(0);
     const [bankOptions, setBankOptions] = useState([]);
@@ -57,63 +61,16 @@ const useTransferdataentry = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [servicestation, setServiceStation] = useState("");
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
+    const [rowselect, setRowselect] = useState()
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
     const [info, setInfo] = useState(false);
     const [infoMessage, setInfoMessage] = useState({});
+    const location = useLocation();
+    const [formDataTransfer, setFormDataTransfer] = useState({});
+    const [transferId, setTransferId] = useState([])
 
-    // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
-            }
-        };
-
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = () => {
-        const currentPageName = 'CB Billing';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
+    const { setOrganizationName } = useData()
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -165,6 +122,23 @@ const useTransferdataentry = () => {
         localStorage.removeItem('selectedRowCount');
     };
 
+    // for fetching the organization names
+    useEffect(() => {
+        const organizationNames = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/customers`);
+                const organisationData = response?.data;
+                const names = organisationData.map(res => res.customer);
+                setOrganizationName(names);
+            } catch (error) {
+                console.error('Error fetching organization names:', error);
+            }
+        };
+        organizationNames();
+    }, [apiUrl, setOrganizationName])
+
+    // info box------------------
+
     const hidePopup = () => {
         setError(false);
         setSuccess(false);
@@ -172,39 +146,17 @@ const useTransferdataentry = () => {
         setInfo(false);
     };
 
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
 
     useEffect(() => {
-        if (success) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [success]);
+    }, [error, success, warning, info]);
+
+    //----------------------------------------------
 
     useEffect(() => {
         Organization()
@@ -226,6 +178,7 @@ const useTransferdataentry = () => {
         return {
             id: originalRow.id,
             startdate: originalRow.startdate,
+            apps: originalRow.apps,
             tripid: originalRow.tripid,
             customer: originalRow.customer,
             department: originalRow.department,
@@ -250,49 +203,60 @@ const useTransferdataentry = () => {
             status: originalRow.status,
         };
     };
+    const [book, setBook] = useState({
+        Billdate: '',
+        Groupid: '',
+        Invoice_no: '',
+        customer: '',
+        fromdate: '',
+        todate: '',
+        station: '',
+    });
 
     useEffect(() => {
-        const fetchData = async () => {
+        const params = new URLSearchParams(location.search);
+        const parameterKeys = [
+            "Groupid", "Invoice_no", "Status", "Billdate", "Organization_name", "Trip_id", "FromDate", "EndDate", "Amount"
+        ];
 
+        const formData = {};
+        parameterKeys.forEach(key => {
+            const value = params.get(key);
+            if (value !== null && value !== "null") {
+                formData[key] = value;
+            }
+        });
+        const transferlist = formData.Trip_id?.split(',')
+        setTransferId(transferlist)
+        setInvoiceno(formData.Invoice_no)
+        setGroupId(formData.Groupid)
+        setCustomer(formData.Organization_name)
+        setFromDate(formData.FromDate)
+        setEndDate(formData.EndDate)
+        setBillingdate(formData.Billdate)
+    }, [location, formDataTransfer])
+    useEffect(() => {
+        const fetchData = async () => {
             try {
-                const customer = localStorage.getItem('selectedcustomer');
-                const response = await fetch(`http://localhost:8081/tripsheetcustomer/${customer}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const tripData = await response.json();
+                const response = await axios.get(`${apiUrl}/tripsheetiddata/${transferId}`);
+                const tripData = await response.data;
                 if (Array.isArray(tripData)) {
-                    const transformedRows = tripData.map(transformRow);
-                    const rowsWithUniqueId = transformedRows.map((row, index) => ({
+                    //  const transformedRows = tripData.map(transformRow);
+                    const rowsWithUniqueId = tripData.map((row, index) => ({
                         ...row,
                         id: index + 1,
                     }));
                     setTripData(rowsWithUniqueId);
                     setRows(rowsWithUniqueId);
-                    if (transformedRows.length > 0) {
-                        const fromDate = dayjs(transformedRows[0].startdate);
-                        const toDate = dayjs(transformedRows[transformedRows.length - 1].startdate);
-
-                        // Set values in local storage
-                        localStorage.setItem('fromDate', fromDate.format('YYYY-MM-DD'));
-                        localStorage.setItem('toDate', toDate.format('YYYY-MM-DD'));
-
-                        // Now, you can also set your state if needed
-                        setFromDate(fromDate);
-                        setToDate(toDate);
-                    }
-                } else if (typeof tripData === 'object') {
-                    setRows([transformRow(tripData)]);
-                } else {
-                    setError(true);
-                    setErrorMessage('Fetched data has unexpected format.');
                 }
-            } catch {
-            }
 
-        };
-        fetchData();
-    }, []);
+            }
+            catch (error) {
+                console.log(error, "error");
+            }
+        }
+        fetchData()
+    }, [transferId])
 
     //calculate total amount in column
     useEffect(() => {
@@ -316,9 +280,9 @@ const useTransferdataentry = () => {
 
     //calculate total time in column
     const parseTimeToMinutes = (timeString) => {
-        const [hoursStr, minutesStr] = timeString.split(' ');
-        const hours = parseInt(hoursStr.replace('h', ''), 10) || 0;
-        const minutes = parseInt(minutesStr.replace('m', ''), 10) || 0;
+        const [hoursStr, minutesStr] = timeString?.split(' ');
+        const hours = parseInt(hoursStr?.replace('h', ''), 10) || 0;
+        const minutes = parseInt(minutesStr?.replace('m', ''), 10) || 0;
         return hours * 60 + minutes;
     };
 
@@ -338,22 +302,23 @@ const useTransferdataentry = () => {
         window.history.replaceState(null, document.title, window.location.pathname);
     }, []);
 
-    const [book, setBook] = useState({
-        Billingdate: '',
-        invoiceno: '',
-        customer: '',
-        fromdate: '',
-        todate: '',
-        station: '',
-    });
 
-    const handleChange = (event) => {
+
+    const handleChange = useCallback((event) => {
         const { name, value } = event.target;
+
         setBook((prevBook) => ({
             ...prevBook,
             [name]: value,
+
         }));
-    };
+
+    }, [setBook]);
+
+    const handlechnageinvoice = (event) => {
+
+        setInvoiceno(event.target.value)
+    }
 
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
@@ -367,27 +332,30 @@ const useTransferdataentry = () => {
                 return selectedRow ? selectedRow.tripid : null;
             })
             .filter((tripid) => tripid !== null);
-        setRowSelectionModel(selectedTripIds);
+        setRowselect(selectedTripIds)
+
+
         const tripsheetid = selectedTripIds;
+        setRowSelectionModel(tripsheetid);
         localStorage.setItem('selectedtripsheetid', tripsheetid);
         const selectedRowCount = selectedTripIds.length;
+
         localStorage.setItem('selectedrowcount', selectedRowCount);
     };
-
     const handleClickGenerateBill = () => {
         handleAdd();
         handleButtonClickTripsheet();
-        handleBillGenerate();
+        // handleBillGenerate();
     };
 
-    const handleButtonClickTripsheet = (row) => {
+    const handleButtonClickTripsheet = () => {
         const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
         const customername = customerdata;
         localStorage.setItem('selectedcustomer', customername);
         const storedCustomer = localStorage.getItem('selectedcustomer');
         const decodedCustomer = decodeURIComponent(storedCustomer);
         localStorage.setItem('selectedcustomerdata', decodedCustomer);
-        const billingPageUrl = `/home/billing/transfer?tab=TransferReport`;
+        const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&BillDate=${Billingdate}`;
         window.location.href = billingPageUrl;
     }
 
@@ -404,7 +372,7 @@ const useTransferdataentry = () => {
                 setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
                 return;
             }
-            const response = await axios.post('http://localhost:8081/updateStatus', {
+            const response = await axios.post(`${apiUrl}/updateStatus`, {
                 tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),
                 status: 'CBilled',
             });
@@ -423,33 +391,29 @@ const useTransferdataentry = () => {
 
 
     const handleAdd = async () => {
-        const permissions = checkPagePermission();
+
         const selectedRowCount = localStorage.getItem('selectedrowcount');
         const selectedTripIds = localStorage.getItem('selectedtripsheetid');
         const firstSelectedRow = rows.find(row => row.id === parseInt(selectedTripIds[0], 10));
         const guestnameFromFirstRow = firstSelectedRow ? firstSelectedRow.guestname : '';
 
-        if (permissions.read && permissions.new) {
-            const updatedBook = {
-                ...book,
-                Billingdate: Billingdate || book.Billingdate,
-                invoiceno: invoiceno || book.invoiceno,
-                customer: customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : '') || '',
-                fromdate: fromDate ? dayjs(fromDate).format('YYYY-MM-DD') : book.fromdate.format('YYYY-MM-DD'),
-                todate: toDate ? dayjs(toDate).format('YYYY-MM-DD') : book.todate.format('YYYY-MM-DD'),
-                station: servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '',
-                Totalamount: totalAmount,
-                status: 'Billed',
-                trips: selectedRowCount,
-                guestname: guestnameFromFirstRow,
-            };
-            await axios.post('http://localhost:8081/billing', updatedBook);
-            setSuccess(true);
-            setSuccessMessage("Successfully Added");
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
-        }
+        const updatedBook = {
+            ...book,
+            Billingdate: Billingdate || book.Billdate,
+            Invoice_no: invoiceno || book.Invoice_no,
+            customer: customer || selectedCustomerDatas?.customer || (tripData.length > 0 ? tripData[0].customer : '') || '',
+            fromdate: fromDate ? dayjs(fromDate).format('YYYY-MM-DD') : book.fromdate.format('YYYY-MM-DD'),
+            todate: toDate ? dayjs(toDate).format('YYYY-MM-DD') : book.todate.format('YYYY-MM-DD'),
+            station: servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '',
+            Totalamount: totalAmount,
+            status: 'Billed',
+            trips: selectedRowCount,
+            guestname: guestnameFromFirstRow,
+        };
+        await axios.post(`${apiUrl}/billing`, updatedBook);
+        setSuccess(true);
+        setSuccessMessage("Successfully Added");
+
     };
 
     const handleDateChange = (date, name) => {
@@ -464,6 +428,56 @@ const useTransferdataentry = () => {
             [name]: parsedDate,
         }));
     };
+    const handleAddOrganization = async () => {
+
+        if (rowSelectionModel.length === 0) {
+            setError(true)
+            setErrorMessage("Please select the Row")
+            return
+        }
+        try {
+            if (!rows || rows.length === 0) {
+                throw new Error("Rows data is empty");
+            }
+
+            const fromdate = rows[0]?.startdate;
+            const enddate = rows[rows.length - 1]?.startdate;
+            const fromDate = dayjs(fromdate).format('YYYY-MM-DD');
+            const EndDate = dayjs(enddate).format('YYYY-MM-DD');
+
+            const billdate = selectedCustomerDatas?.Billingdate || Billingdate;
+            const billDate = dayjs(billdate).format('YYYY-MM-DD');
+
+            const OrganizationName = selectedCustomerDatas.customer || customer;
+            const status = 'Be_Closed';
+            const Trips = rows.length;
+            const billstatus = "notbilled";
+
+
+
+            const transferlist = {
+                Status: billstatus,
+                Billdate: billDate,
+                Organization_name: OrganizationName,
+                Trip_id: rowSelectionModel,
+                FromDate: fromDate,
+                EndDate: EndDate,
+                Trips: Trips,
+                Amount: totalAmount,
+
+            }
+
+            await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
+            setSuccess(true);
+            setSuccessMessage("Successfully added");
+
+
+        } catch (error) {
+            console.error("Error occurred:", error);
+            setErrorMessage("Failed to add organization: " + error.message);
+        }
+    }
+
 
     const handleBillRemove = async () => {
         if (rowSelectionModel.length === 0) {
@@ -478,13 +492,14 @@ const useTransferdataentry = () => {
                 setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
                 return;
             }
-            const response = await axios.post('http://localhost:8081/updateStatusremove', {
+            const response = await axios.post(`${apiUrl}/updateStatusremove`, {
                 tripids: tripids,
-                status: 'Closed',
+                status: 'Opened',
             });
             if (response.status === 200) {
                 setSuccess(true);
                 setSuccessMessage('Removed successfully!');
+                setRows([])
             } else {
                 setError(true);
                 setErrorMessage('Failed to Remove bill. Please try again.');
@@ -503,8 +518,8 @@ const useTransferdataentry = () => {
 
         if (event.key === 'Enter') {
             try {
-                const invoiceNumber = book.invoiceno || invoiceno || selectedCustomerDatas.invoiceno;
-                const response = await axios.get(`http://localhost:8081/billingdata/${invoiceNumber}`);
+                const invoiceNumber = book.Invoice_no || invoiceno || selectedCustomerDatas.invoiceno;
+                const response = await axios.get(`${apiUrl}/billingdata/${invoiceNumber}`);
                 if (response.status === 200) {
                     const billingDetails = response.data;
                     if (billingDetails) {
@@ -526,9 +541,9 @@ const useTransferdataentry = () => {
             }
         }
 
-    }, [invoiceno, book, selectedCustomerDatas]);
+    }, [invoiceno, book, selectedCustomerDatas, apiUrl]);
 
-    const handleShow = useCallback(async () => {
+    const handleShow = async () => {
 
         try {
             const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
@@ -536,12 +551,12 @@ const useTransferdataentry = () => {
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
             const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
 
-            const response = await axios.get(`http://localhost:8081/Group-Billing`, {
+            const response = await axios.get(`${apiUrl}/Group-Billing`, {
                 params: {
                     customer: customerValue,
                     fromDate: fromDateValue,
                     toDate: toDateValue,
-                    servicestation: servicestationValue
+                    // servicestation: servicestationValue
                 },
             });
             const data = response.data;
@@ -564,7 +579,45 @@ const useTransferdataentry = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData]);
+    };
+
+    // const handleShow = useCallback(async () => {
+
+    //     try {
+    //         const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
+    //         const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
+    //         const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
+    //         const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+
+    //         const response = await axios.get(`${apiUrl}/Group-Billing`, {
+    //             params: {
+    //                 customer: customerValue,
+    //                 fromDate: fromDateValue,
+    //                 toDate: toDateValue,
+    //                 // servicestation: servicestationValue
+    //             },
+    //         });
+    //         const data = response.data;
+    //         if (data.length > 0) {
+    //             const rowsWithUniqueId = data.map((row, index) => ({
+    //                 ...row,
+    //                 id: index + 1,
+    //             }));
+    //             setRows(rowsWithUniqueId);
+    //             setSuccess(true);
+    //             setSuccessMessage("successfully listed")
+    //         } else {
+    //             setRows([]);
+    //             setError(true);
+    //             setErrorMessage("no data found")
+    //         }
+    //     } catch {
+    //         setRows([]);
+    //         setError(true);
+    //         setErrorMessage("Check your Network Connection");
+    //     }
+
+    // }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, apiUrl]);
 
     return {
         rows,
@@ -576,12 +629,12 @@ const useTransferdataentry = () => {
         warningMessage,
         book,
         handleChange,
-        isFieldReadOnly,
         hidePopup,
         date,
         Billingdate,
         selectedCustomerDatas,
         invoiceno,
+        setInvoiceno,
         handleKeyenter,
         customer,
         tripData,
@@ -602,12 +655,17 @@ const useTransferdataentry = () => {
         handleExcelDownload,
         handlePdfDownload,
         handleBillRemove,
+        handleAddOrganization,
         totalKm,
         totalTime,
         totalAmount,
         columns,
         setRowSelectionModel,
         handleRowSelection,
+        formDataTransfer,
+        handlechnageinvoice,
+        groupId,
+        setGroupId
     };
 };
 

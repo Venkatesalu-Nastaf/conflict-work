@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import React, { useState } from "react";
 import "./Card.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -7,7 +6,6 @@ import { motion, AnimateSharedLayout } from "framer-motion";
 import { MdCancel } from "@react-icons/all-files/md/MdCancel";
 import Chart from "react-apexcharts";
 
-// parent Card
 
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
@@ -26,51 +24,13 @@ const Card = (props) => {
 
 function CompactCard({ param, setExpanded }) {
 
-  const user_id = localStorage.getItem('useridno');
+  // const user_id = localStorage.getItem('useridno');
 
-  const [userPermissions, setUserPermissions] = useState({});
-
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = 'Dashboard page';
-        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-        setUserPermissions(response.data);
-      } catch (error) {
-        console.error('Error fetching user permissions:', error);
-      }
-    };
-
-    fetchPermissions();
-  }, [user_id]);
-
-  const checkPagePermission = () => {
-    const currentPageName = 'Dashboard page';
-    const permissions = userPermissions || {};
-
-    if (permissions.page_name === currentPageName) {
-      return {
-        read: permissions.read_permission === 1,
-        new: permissions.new_permission === 1,
-        modify: permissions.modify_permission === 1,
-        delete: permissions.delete_permission === 1,
-      };
-    }
-
-    return {
-      read: false,
-      new: false,
-      modify: false,
-      delete: false,
-    };
-  };
-
-  const permissions = checkPagePermission();
 
   const Png = param.png;
   return (
     <div >
-      {!permissions.read && (
+      {(
         <div className="loading-spinners">
           <motion.div
             className="CompactCard"
@@ -96,7 +56,7 @@ function CompactCard({ param, setExpanded }) {
           </motion.div>
         </div>
       )}
-      {permissions.read && (
+      {(
         <motion.div
           className="CompactCard"
           style={{
@@ -110,7 +70,8 @@ function CompactCard({ param, setExpanded }) {
           <div className="radialBar">
             <CircularProgressbar
               value={param.barValue}
-              text={`${param.barValue}%`}
+              // text={`${param.barValue}%`}
+              text={param.title === 'Billing' ? '' : `${param.barValue}%`}
             />
             <span>{param.title}</span>
           </div>

@@ -41,7 +41,6 @@ const VehicleStatement = () => {
     errorMessage,
     warningMessage,
     infoMessage,
-    isFieldReadOnly,
     hidePopup,
     servicestation,
     handleInputChange,
@@ -60,7 +59,6 @@ const VehicleStatement = () => {
     handleTripsheetClick,
     setToDate,
     columns
-    // ... (other state variables and functions)
   } = useVehiclestatement();
 
   useEffect(() => {
@@ -130,10 +128,10 @@ const VehicleStatement = () => {
               </div>
               <div className="input-field" style={{ justifyContent: "center" }}>
                 <div className="input" style={{ width: "130px" }} >
-                  <Button variant="outlined" onClick={handleShow} disabled={isFieldReadOnly("read")}>Show</Button>
+                  <Button variant="outlined" onClick={handleShow} >Show</Button>
                 </div>
                 <div className="input" style={{ width: "110px" }} >
-                  <Button variant="contained" onClick={handleShowAll} disabled={isFieldReadOnly("read")}>Show All</Button>
+                  <Button variant="contained" onClick={handleShowAll} >Show All</Button>
                 </div>
               </div>
               <div className="input-field" style={{ justifyContent: "end" }}>

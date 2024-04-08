@@ -2,7 +2,6 @@ import React from 'react';
 import './invoice.css';
 import { Button } from '@material-ui/core';
 import ReactDOMServer from 'react-dom/server';
-// import Logo from "../../Dashboard/MainDash/Sildebar/Logo-Img/logo.png";
 const PrintableInvoice = ({ tripSheetData, organizationdata, selectedImage, book, GmapimageUrl, attachedImage, signimageUrl, routeData, selectedCustomerData, selectedCustomerDatas, formData }) => {
 
   return (
@@ -10,10 +9,7 @@ const PrintableInvoice = ({ tripSheetData, organizationdata, selectedImage, book
       <article>
         <div className='invoice-container-header'>
           <div className="logo-image-invoice">
-            {/* <img src={Logo} alt="logo" /> */}
-
             <img src={Array.isArray(selectedImage) ? selectedImage[0] : selectedImage} alt={"Logo"} />
-
           </div>
           <div className="invoice-address">
             <address >
@@ -56,10 +52,12 @@ const PrintableInvoice = ({ tripSheetData, organizationdata, selectedImage, book
                 <th id='table-header'><span >Reporting @</span></th>
                 <td id='table-data'><span>{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}</span></td>
               </tr>
-              <tr>
+              {/* <tr>
                 <th id='table-header'><span>Remarks:</span></th>
                 <td id='table-data'><span>{tripSheetData.remark || selectedCustomerData.remark || selectedCustomerDatas.remark || book.remark}</span></td>
-              </tr>
+              </tr> */}
+
+
             </table>
             <table id='table-invoice' className="firstTable">
               <tr>
@@ -92,6 +90,14 @@ const PrintableInvoice = ({ tripSheetData, organizationdata, selectedImage, book
               </tr>
             </table>
           </div>
+
+
+          <div >
+            <label >  <span style={{ fontWeight: 600, fontSize: '75%', backgroundColor: '#E8EAE9' }}>Remarks : </span><span style={{ fontSize: 13, padding: 10 }}>{tripSheetData.remark || selectedCustomerData.remark || selectedCustomerDatas.remark || book.remark}</span>
+            </label>
+          </div>
+
+
           <div className="secondTable">
             <div className='vehicale-details-table'>
               <table id='table-invoice' >
@@ -131,9 +137,17 @@ const PrintableInvoice = ({ tripSheetData, organizationdata, selectedImage, book
                 <p id='line'>------------------</p>
                 <p id='line'>------------------</p>
               </div>
-              <div className="guest-sign">
-                <img className='dialogboximg' src={signimageUrl} alt='mapimage' />
+
+
+              {/* <div className="guest-sign">
+                <img className='dialogboximg' src={signimageUrl} alt='Signature' />
                 <p>Guest Signature</p>
+              </div> */}
+
+              <div className="guest-sign">
+                {signimageUrl !== "" ?
+                  <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}
+                <p style={{ textAlign: 'center' }}>Guest Signature</p>
               </div>
             </div>
           </div>

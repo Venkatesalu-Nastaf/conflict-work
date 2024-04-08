@@ -35,7 +35,6 @@ const PaymentDetail = () => {
     warningMessage,
     infoMessage,
     handleClick,
-    isFieldReadOnly,
     hidePopup,
     billingno,
     handleInputChange,
@@ -123,7 +122,7 @@ const PaymentDetail = () => {
               </div>
               <div className="input-field" style={{ justifyContent: 'center' }}>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("read")}>Search</Button>
+                  <Button variant="contained" onClick={handleShow} >Search</Button>
                 </div>
               </div>
             </div>

@@ -15,7 +15,6 @@ const UserSettings = () => {
     setValue(newValue);
   };
   return (
-
     <div className="UserSettings-main">
       <div className="form-container-UserSettings">
         <div className="container-main">
@@ -41,7 +40,6 @@ const UserSettings = () => {
         </div>
       </div>
     </div>
-
   );
 };
 

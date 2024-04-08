@@ -1,31 +1,42 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import { useData } from "../../MainDash/Sildebar/DataContext2";
+import axios from "axios";
 import "./Sidebar.css";
-// import Logo from "./Logo-Img/logo.png";  
+import Avatar from "@mui/material/Avatar";
 import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
-import Badge from '@mui/material/Badge';
-import Avatar from '@mui/material/Avatar';
-import { styled } from '@mui/material/styles';
-import logoImage from "../Sildebar/Logo-Img/logo.png";
+import Badge from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
 
 // ICONS
-import { useUser } from '../../../form/UserContext';
+import { useUser } from "../../../form/UserContext";
 import { BiHomeAlt } from "@react-icons/all-files/bi/BiHomeAlt";
 import { BiNotepad } from "@react-icons/all-files/bi/BiNotepad";
-import ClearIcon from '@mui/icons-material/Clear';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import ClearIcon from "@mui/icons-material/Clear";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import { AiOutlineBars } from "@react-icons/all-files/ai/AiOutlineBars";
 import { HiOutlineUsers } from "@react-icons/all-files/hi/HiOutlineUsers";
 import { FaUserAstronaut } from "@react-icons/all-files/fa/FaUserAstronaut";
 import { BiBarChartSquare } from "@react-icons/all-files/bi/BiBarChartSquare";
 import { AiOutlineSetting } from "@react-icons/all-files/ai/AiOutlineSetting";
 import { AiOutlineInfoCircle } from "@react-icons/all-files/ai/AiOutlineInfoCircle";
+import { APIURL } from "../../../url";
 
-const MenuItem = ({ label, to, value, alt, menuItemKey, name, isActive, handleMenuItemClick, icon: Icon }) => {
+const MenuItem = ({
+  label,
+  to,
+  value,
+  alt,
+  menuItemKey,
+  name,
+  isActive,
+  handleMenuItemClick,
+  icon: Icon,
+}) => {
   return (
     <Link
       className={isActive(value) ? "menuItem active" : "menuItem"}
@@ -39,27 +50,36 @@ const MenuItem = ({ label, to, value, alt, menuItemKey, name, isActive, handleMe
 };
 
 const Sidebar = () => {
+
+  const apiUrl = APIURL;
+
   const location = useLocation();
   const { user } = useUser();
   const [success, setSuccess] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
   const navigate = useNavigate();
   const currentPath = location.pathname;
-  const [expanded, setExpanded] = useState(true); const StyledBadge = styled(Badge)(({ theme }) => ({
-    '& .MuiBadge-badge': {
-    },
-    '@keyframes ripple': {
-    },
+  const [expanded, setExpanded] = useState(true);
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    "& .MuiBadge-badge": {},
+    "@keyframes ripple": {},
   }));
 
-  const user_id = localStorage.getItem('useridno');
-  const [permissions, setPermissions] = useState({});
+  //--------------------------to show logo-----------
 
-  // const pagename = localStorage.getItem('selectedMenuItem');
+  const { sharedData } = useData();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedprofileImage, setSelectedprofileImage] = useState(null);
+
+  useEffect(() => {
+    setSelectedImage(sharedData)
+  }, [sharedData])
+
+
+
+  //------------------popup------------------------
 
   const [info, setInfo] = useState(false);
   const [infoMessage, setInfoMessage] = useState({});
-
 
   const hidePopup = () => {
     setSuccess(false);
@@ -68,14 +88,15 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    if (info) {
+    if (info || success) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [info]);
-  //end
+  }, [info, success]);
+
+  //end-----------------------------------
 
   useEffect(() => {
     if (!localStorage.getItem("auth")) navigate("/");
@@ -86,28 +107,25 @@ const Sidebar = () => {
   };
 
   const handleMenuItemClick = async (menuItemKey, name, alt) => {
-    const currentPageName = name;
+    // const currentPageName = name;
     localStorage.setItem("selectedMenuItem", menuItemKey);
-
     try {
-      const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-      const permissions = response.data;
-      setPermissions(permissions);
-
-      if (permissions.read_permission === 1) {
+      const per = true;
+      if (per) {
         navigate(alt);
       } else {
         setInfo(true);
-        setInfoMessage("You do not have permission to access this page.");
+        setInfoMessage("Tthere is catch issue..");
       }
-    } catch (error) {
-      console.error('Error fetching user permissions:', error);
+    } catch {
     }
   };
 
   useEffect(() => {
     const selectedMenuItem = localStorage.getItem("selectedMenuItem");
-    const selectedItemIndex = Sidebardata.findIndex((item) => item.key === selectedMenuItem);
+    const selectedItemIndex = Sidebardata.findIndex(
+      (item) => item.key === selectedMenuItem
+    );
     if (selectedItemIndex !== -1) {
       navigate(selectedMenuItem);
     }
@@ -121,15 +139,6 @@ const Sidebar = () => {
       left: "-60%",
     },
   };
-
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
 
   useEffect(() => {
     if (user && user.username) {
@@ -151,39 +160,56 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const organizationname = localStorage.getItem('usercompany');
+        const organizationname = localStorage.getItem("usercompany");
 
         if (!organizationname) {
           return;
         }
 
-        const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
+        const response = await fetch(
+          `${apiUrl}/get-companyimage/${organizationname}`
+        );
 
-        // Check if the response status is 200
         if (response.status === 200) {
           const data = await response.json();
-          const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
+          const attachedImageUrls = data.imagePaths.map(
+            (path) => `${apiUrl}/images/${path}`
+          );
 
-          // Store image URLs in local storage
-          localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
-
-          setSelectedImage(attachedImageUrls);
+          localStorage.setItem(
+            "selectedImage",
+            JSON.stringify(attachedImageUrls)
+          );
         } else {
-          // If the response status is not 200, wait for 2 seconds and fetch again
           const timer = setTimeout(fetchData, 2000);
-          // Clear the timer to avoid memory leaks
           return () => clearTimeout(timer);
         }
       } catch (error) {
-        // Handle errors
-        console.error('Error fetching image data:', error);
+        console.error("Error fetching image data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [apiUrl]);
 
-  const storedImageUrls = JSON.parse(localStorage.getItem('selectedImage'));
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  useEffect(() => {
+    const handleImageView = () => {
+      const userid = localStorage.getItem("useridno");
+      axios
+        .get(`${apiUrl}/userprofileview/${userid}`)
+        .then((res) => {
+          if (res.status === 200) {
+            setSelectedprofileImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
+          } else {
+            const timer = setTimeout(handleImageView, 100);
+            return () => clearTimeout(timer);
+          }
+        });
+    };
+    handleImageView();
+  }, [sharedData, selectedprofileImage, apiUrl]);
 
   return (
     <>
@@ -199,16 +225,27 @@ const Sidebar = () => {
         variants={sidebarVariants}
         animate={window.innerWidth <= 768 ? `${expanded}` : ""}
       >
-        {/* <div className="logo">
-          <img src={Logo} alt="logo" />
-        </div> */}
-
         <div className="logo">
-          <img src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage} alt="" />
+          {selectedImage !== null ? (
+            <>
+              {!isImageLoaded && (
+                <div style={{ fontSize: "55px" }}>
+                  <BiBuildings />
+                </div>
+              )}
+              <img
+                src={`${apiUrl}/public/org_logo/${selectedImage}`}
+                alt=""
+                onLoad={() => setIsImageLoaded(true)}
+                style={{ display: isImageLoaded ? "block" : "none" }}
+              />
+            </>
+          ) : (
+            <div style={{ fontSize: "55px" }}>
+              <BiBuildings />
+            </div>
+          )}
         </div>
-
-
-
         <div className="menu">
           <MenuItem
             label="Dashboard"
@@ -222,7 +259,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Booking"
-            to={permissions.read && ("/home/bookings/booking")}
+            to={"/home/bookings/booking"}
             alt="/home/bookings/booking"
             value="/home/bookings"
             menuItemKey="/home/bookings"
@@ -233,7 +270,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Billing"
-            to={permissions.read && ("/home/billing/billing")}
+            to={"/home/billing/billing"}
             alt="/home/billing/billing"
             value="/home/billing"
             menuItemKey="/home/billing"
@@ -244,7 +281,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Register"
-            to={permissions.read && ("/home/registration/customer")}
+            to={"/home/registration/customer"}
             alt="/home/registration/customer"
             value="/home/registration"
             menuItemKey="/home/registration"
@@ -253,17 +290,9 @@ const Sidebar = () => {
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}
           />
-          {/* <MenuItem
-            label="Accounts"
-            to="/home/accounts/expense"
-            menuItemKey="/home/accounts"
-            isActive={isActive}
-            handleMenuItemClick={handleMenuItemClick}
-            icon={AiOutlineSetting}
-          />  */}
           <MenuItem
             label="Settings"
-            to={permissions.read && ("/home/settings/usercreation")}
+            to={"/home/settings/usercreation"}
             alt="/home/settings/usercreation"
             value="/home/settings"
             menuItemKey="/home/settings"
@@ -274,7 +303,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Info"
-            to={permissions.read && ("/home/info/ratetype")}
+            to={"/home/info/ratetype"}
             alt="/home/info/ratetype"
             value="/home/info"
             menuItemKey="/home/info"
@@ -303,14 +332,23 @@ const Sidebar = () => {
                 {storedUsername ? (
                   <div>
                     <p onClick={navigateToUserSettings}>{storedUsername}</p>
-                    {success &&
-                      <div className='alert-popup Success' >
-                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                    {success && (
+                      <div className="alert-popup Success">
+                        <div className="popup-icon">
+                          {" "}
+                          <FileDownloadDoneIcon
+                            style={{ color: "#fff" }}
+                          />{" "}
+                        </div>
+                        <span className="cancel-btn" onClick={hidePopup}>
+                          <ClearIcon
+                            color="action"
+                            style={{ fontSize: "14px" }}
+                          />{" "}
+                        </span>
                         <p>{success}</p>
                       </div>
-                    }
-
+                    )}
                   </div>
                 ) : (
                   <div>
@@ -322,22 +360,29 @@ const Sidebar = () => {
             <div className="avatar-item">
               <StyledBadge
                 overlap="circular"
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 variant="dot"
               >
-                <Avatar alt="userimage" src={logoImage} />
+                <Avatar
+                  alt="userimage"
+                  src={`${apiUrl}/images/${selectedprofileImage}`}
+                />
               </StyledBadge>
             </div>
-
           </div>
         </div>
-        {info &&
-          <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+        {info && (
+          <div className="alert-popup Info">
+            <div className="popup-icon">
+              {" "}
+              <BsInfo style={{ color: "#fff" }} />{" "}
+            </div>
+            <span className="cancel-btn" onClick={hidePopup}>
+              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+            </span>
             <p>{infoMessage}</p>
           </div>
-        }
+        )}
       </motion.div>
     </>
   );

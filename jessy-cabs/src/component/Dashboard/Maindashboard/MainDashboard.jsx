@@ -1,33 +1,53 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./MainDashboard.css";
-import Badge from '@mui/material/Badge';
-import Avatar from '@mui/material/Avatar';
-import { styled } from '@mui/material/styles';
+import Badge from "@mui/material/Badge";
+import Avatar from "@mui/material/Avatar";
+import { styled } from "@mui/material/styles";
 import Sidebar from "../MainDash/Sildebar/Slidebar";
 import { useNavigate, Outlet } from "react-router-dom";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
-// import logoImage from "../MainDash/Sildebar/Logo-Img/logo.png";
-import { useThemes } from '../../UserSettings/Themes/ThemesContext';
-import ClearIcon from '@mui/icons-material/Clear';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { ThemesProvider } from '../../UserSettings/Themes/ThemesContext';
-import { useUser } from '../../form/UserContext';
+import { useThemes } from "../../UserSettings/Themes/ThemesContext";
+import ClearIcon from "@mui/icons-material/Clear";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import { ThemesProvider } from "../../UserSettings/Themes/ThemesContext";
+import { useUser } from "../../form/UserContext";
 import Button from "@mui/material/Button";
+import { useData } from "./DataContext"; //- data contaxt
+import Logo from "../../../assets/img/logonas.png"
+
+// import axios from "axios";
 
 //dialog box
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import { APIURL } from "../../url";
 
 const MainDashboard = () => {
+  const apiUrl = APIURL;
+  const { sharedData, setFilteredData } = useData();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(true);
   const { selectedTheme } = useThemes();
   const { setSelectedTheme } = useThemes();
-  const { user } = useUser();
   const [success, setSuccess] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const { user, setUserdashboard, userdashboard } = useUser();
+
+
+  const data1 = localStorage.getItem("useridno")
+  const data2 = localStorage.getItem("usercompany")
+  const data4 = localStorage.getItem("username");
+  const data5 = localStorage.getItem("profileimages")
+  const data6 = localStorage.getItem("organizationimages")
+
+
+
+  useEffect(() => {
+
+    setSelectedImage(sharedData)
+  }, [sharedData])
 
   const handlePopupClose = () => {
     setPopupOpen(false);
@@ -36,30 +56,35 @@ const MainDashboard = () => {
   const IDLE_TIMEOUT_DURATION = 5 * 60 * 1000;
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
-    '& .MuiBadge-badge': {
-    },
-    '@keyframes ripple': {
-    },
+    "& .MuiBadge-badge": {},
+    "@keyframes ripple": {},
   }));
 
   const handleLogout = useCallback(() => {
-    setPopupOpen(true)
+    setPopupOpen(true);
   }, []);
 
-  const handleLogoutdialog = useCallback((e) => {
-    if (e) {
-      e.preventDefault();
-    }
-    localStorage.removeItem("auth");
-    localStorage.removeItem("username");
-    localStorage.removeItem("useridno");
-    localStorage.removeItem("selectedImage");
-    localStorage.removeItem("selectedprofileImage");
-    localStorage.removeItem("usercompany");
-    localStorage.removeItem("selectedMenuItem");
-    setExpanded(true);
-    navigate("/");
-  }, [navigate]);
+  const handleLogoutdialog = useCallback(
+    (e) => {
+      if (e) {
+        e.preventDefault();
+      }
+      localStorage.removeItem("auth");
+      localStorage.removeItem("username");
+      localStorage.removeItem("useridno");
+      localStorage.removeItem("selectedImage");
+      localStorage.removeItem("selectedprofileImage");
+      localStorage.removeItem("usercompany");
+      localStorage.removeItem("selectedMenuItem");
+      localStorage.removeItem("profileimages")
+      localStorage.removeItem("organizationimages")
+      localStorage.removeItem("selectedusertheme")
+
+      setExpanded(true);
+      navigate("/");
+    },
+    [navigate]
+  );
 
   useEffect(() => {
     if (!localStorage.getItem("auth")) {
@@ -123,7 +148,7 @@ const MainDashboard = () => {
     }
   };
 
-  const [routeData, setRouteData] = useState('');
+  const [routeData, setRouteData] = useState("");
 
   const storeUsername = localStorage.getItem("username");
 
@@ -131,52 +156,60 @@ const MainDashboard = () => {
     const fetchData = async () => {
       const username = storeUsername;
       try {
-        const response = await fetch(`http://localhost:8081/userdata/${encodeURIComponent(username)}`);
+        const response = await fetch(
+          `${apiUrl}/userdata/${encodeURIComponent(username)}`
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const routeData = await response.json();
         const usertheme = routeData[0]?.theme;
         setSelectedTheme(usertheme);
-        localStorage.setItem('selectedusertheme', JSON.stringify(usertheme));
+        localStorage.setItem("selectedusertheme", JSON.stringify(usertheme));
         setRouteData(routeData);
-      } catch (error) {
-      }
+      } catch (error) { }
     };
     fetchData();
-  }, [storeUsername, setSelectedTheme]);
-  const storedusertheme = JSON.parse(localStorage.getItem('selectedusertheme'));
-
-
-  // useEffect(() => {
-  //   const usertheme = routeData[0]?.theme;
-  //   setselectedtheme(usertheme);
-
-  //   console.log('user theme for dashboard', usertheme);
-  // }, [routeData, setselectedtheme]);
-
+  }, [storeUsername, setSelectedTheme, apiUrl]);
+  const storedusertheme = JSON.parse(localStorage.getItem("selectedusertheme"));
 
   const useridno = routeData[0]?.userid;
   const usercompany = routeData[0]?.organizationname;
 
-  localStorage.setItem('useridno', useridno);
+  localStorage.setItem("useridno", useridno);
 
-  localStorage.setItem('usercompany', usercompany);
+  localStorage.setItem("usercompany", usercompany);
 
+  // to show icon image
+
+  // useEffect(() => {
+  //   const handleImageView = () => {
+  //     const userid = localStorage.getItem("useridno");
+  //     axios.get(`${apiUrl}/userprofileview/${userid}`).then((res) => {
+  //       if (res.status === 200) {
+  //         setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
+  //       } else {
+  //         const timer = setTimeout(handleImageView, 100);
+  //         return () => clearTimeout(timer);
+  //       }
+  //     });
+  //   };
+  //   handleImageView();
+  // }, [sharedData, selectedImage, apiUrl]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userid = localStorage.getItem('useridno');
-        if (!userid) {
-          return;
-        }
-        const response = await fetch(`http://localhost:8081/get-profileimage/${userid}`);
-
+        const response = await fetch(`${apiUrl}/tripsheet`);
         if (response.status === 200) {
-          const data = await response.json();
-          const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-          localStorage.setItem('selectedprofileImage', JSON.stringify(attachedImageUrls));
-          setSelectedImage(attachedImageUrls);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.length > 0) {
+              setFilteredData(data);
+            } else {
+              setFilteredData([]);
+            }
+          } else {
+          }
         } else {
           const timer = setTimeout(fetchData, 2000);
           return () => clearTimeout(timer);
@@ -184,68 +217,106 @@ const MainDashboard = () => {
       } catch {
       }
     };
-    fetchData();
-  }, []);
 
-  const storedImageUrls = JSON.parse(localStorage.getItem('selectedprofileImage'));
+    fetchData();
+  }, [apiUrl, setFilteredData]);
+
+  useEffect(() => {
+    if (data1 !== undefined && data4 !== null && data2 !== undefined && storedusertheme !== null && selectedImage !== null) {
+      setTimeout(() => {
+        setUserdashboard(false)
+      }, 3000);
+
+    }
+  }, [data1, data2, data4, data5, setUserdashboard, data6, selectedImage, storedusertheme]);
+
 
   return (
-    <section className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme}`}>
-      <div className="glass">
-        <Sidebar expanded={expanded} />
-        <div className="header-user">
-          <div className="avatar-item">
-            <StyledBadge
-              overlap="circular"
-              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-              variant="dot"
-            >
-              {/* <Avatar alt="userimage" src={logoImage} /> */}
-              <Avatar
-                alt="userimage"
-                // src={selectedImage}
-                src={Array.isArray(storedImageUrls) ? storedImageUrls[0] : selectedImage}
-              />
-            </StyledBadge>
-          </div>
-          <div className="user-name-item">
-            {storedUsername ? (
-              <div>
-                <p onClick={navigateToUserSettings}>{storedUsername}</p>
-                {success &&
-                  <div className='alert-popup Success' >
-                    <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{success}</p>
-                  </div>
-                }
-              </div>
-            ) : (
-              <div>
-                <p>User not logged in</p>
-              </div>
-            )}
-          </div>
-          <div className="logout-item">
-            <FiLogOut className="logout-icon" onClick={handleLogout} />
+    <>
+      {userdashboard ? (
+        <div className={userdashboard ? "loading-container" : ""}>
+          <div className="loading-spinners">
+
+            <div className="logo-loading">
+              <img src={Logo} alt="logo" />
+            </div>
           </div>
         </div>
-        <Outlet />
-      </div>
-      <Dialog open={popupOpen} onClose={handlePopupClose}>
-        <DialogContent>
-          <p>Do you want to logout</p>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleLogoutdialog} variant="contained" color="primary">
-            Yes
-          </Button>
-          <Button onClick={handlePopupClose} variant="contained" color="primary">
-            NO
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </section>
+      ) :
+        <section
+          className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme
+            }`}
+        >
+          <div className="glass">
+            <Sidebar expanded={expanded} />
+            <div className="header-user">
+              <div className="avatar-item">
+                <StyledBadge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                  variant="dot"
+                >
+                  <Avatar
+                    alt="userimage"
+                    src={`${apiUrl}/public/user_profile/${selectedImage}`}
+                  />
+                </StyledBadge>
+
+                { }
+              </div>
+              <div className="user-name-item">
+                {storedUsername ? (
+                  <div>
+                    <p onClick={navigateToUserSettings}>{storedUsername}</p>
+                    {success && (
+                      <div className="alert-popup Success">
+                        <div className="popup-icon">
+                          {" "}
+                          <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+                        </div>
+                        <span className="cancel-btn" onClick={hidePopup}>
+                          <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+                        </span>
+                        <p>{success}</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <p>User not logged in</p>
+                  </div>
+                )}
+              </div>
+              <div className="logout-item">
+                <FiLogOut className="logout-icon" onClick={handleLogout} />
+              </div>
+            </div>
+            <Outlet />
+          </div>
+          <Dialog open={popupOpen} onClose={handlePopupClose}>
+            <DialogContent>
+              <p>Do you want to logout</p>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleLogoutdialog}
+                variant="contained"
+                color="primary"
+              >
+                Yes
+              </Button>
+              <Button
+                onClick={handlePopupClose}
+                variant="contained"
+                color="primary"
+              >
+                NO
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </section>
+      }
+    </>
   );
 };
 

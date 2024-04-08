@@ -26,8 +26,6 @@ import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useDivision from './useDivision.js';
 
-
-
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -72,13 +70,12 @@ const Division = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
     handleAutocompleteChange,
-
-    // ... (other state variables and functions)
+    isEditMode,
+    handleEdit,
   } = useDivision();
 
   useEffect(() => {
@@ -142,7 +139,6 @@ const Division = () => {
                     }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.customername || ''}
                     renderInput={(params) => {
-                      // params.inputProps.value = selectedCustomerData?.customername || ''
                       return (
                         <TextField {...params} label="Customer Name" name="customername" inputRef={params.inputRef} />
                       )
@@ -177,7 +173,11 @@ const Division = () => {
                   </FormControl>
                 </div>
                 <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                  {isEditMode ? (
+                    <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  ) : (
+                    <Button variant="contained" onClick={handleAdd} >Add</Button>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { useData } from '../../../Dashboard/MainDash/Sildebar/DataContext2';
+import { APIURL } from "../../../url";
 
 const useOrganization = () => {
-    const user_id = localStorage.getItem('useridno');
+    const apiUrl = APIURL;
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [rows] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -14,59 +17,35 @@ const useOrganization = () => {
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
     const [info, setInfo] = useState(false);
-    const [infoMessage, setInfoMessage] = useState({});
-    const [userPermissions, setUserPermissions] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
+    const { setSharedData, sharedData } = useData();
+
+    // for logo-------------------
+    useEffect(() => {
+        setSelectedImage(sharedData)
+    }, [sharedData])
+
+    //----------------------popup----
+
+    const hidePopup = () => {
+        setSuccess(false);
+        setWarning(false);
+        setInfo(false);
+        setError(false);
+        setErrorMessage('');
+    };
 
     useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'User Creation';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
-            }
-        };
+        if (error || info || warning || success) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
 
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = () => {
-        const currentPageName = 'User Creation';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
+            return () => clearTimeout(timer);
         }
+    }, [error, warning, info, success]);
 
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
-
+    //-----------------------
 
     const [book, setBook] = useState({
         organizationname: '',
@@ -95,31 +74,12 @@ const useOrganization = () => {
     });
 
 
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
-
-
     const handleKeyDown = useCallback(async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             try {
                 const filterValue = event.target.value;
-                const response = await axios.get(`http://localhost:8081/usercreation?filter=${filterValue}`);
+                const response = await axios.get(`${apiUrl}/usercreation?filter=${filterValue}`);
                 const bookingDetails = response.data;
                 if (Array.isArray(bookingDetails) && bookingDetails.length > 0) {
                     setBook(bookingDetails[0]);
@@ -129,58 +89,42 @@ const useOrganization = () => {
             } catch {
             }
         }
-    }, []);
+    }, [apiUrl]);
 
     const handleAdd = async () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.new) {
-            const name = selectedCustomerData?.organizationname || book.organizationname;
-            if (!name) {
-                setError(true);
-                setErrorMessage("fill mantatory fields");
-                return;
-            }
-            try {
-                await axios.post('http://localhost:8081/addcompany', book);
-                setSuccess(true);
-                setSuccessMessage("Organization Added Successfully");
-            } catch {
-                setError(true);
-                setErrorMessage("Something went wrong");
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        const name = selectedCustomerData?.organizationname || book.organizationname;
+        if (!name) {
+            setError(true);
+            setErrorMessage("fill mantatory fields");
+            return;
+        }
+        try {
+            await axios.post(`${apiUrl}/addcompany`, book);
+            setSuccess(true);
+            setSuccessMessage("Organization Added Successfully");
+        } catch {
+            setError(true);
+            setErrorMessage("Something went wrong");
         }
     };
-
 
     const handleUpdate = async (organizationname) => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.modify) {
-            try {
-                const selectedCustomer = rows.find((row) => row.organizationname === organizationname);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
-                const encode = companyname;
-                const decode = decodeURIComponent(encode);
-                await axios.put(`http://localhost:8081/companyupdate/${decode}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                setEditMode((prevEditMode) => !prevEditMode);
-            }
-            catch {
-                setError(true);
-                setErrorMessage("Something went wrong");
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        try {
+            const selectedCustomer = rows.find((row) => row.organizationname === organizationname);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
+            const encode = companyname;
+            const decode = decodeURIComponent(encode);
+            await axios.put(`${apiUrl}/companyupdate/${decode}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            setEditMode((prevEditMode) => !prevEditMode);
+        }
+        catch {
+            setError(true);
+            setErrorMessage("Something went wrong");
         }
     };
-
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -194,145 +138,75 @@ const useOrganization = () => {
         }));
     };
 
-    const handleUpload = () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.jpg, .jpeg, .png';
-        input.onchange = handleFileChange;
-        input.click();
-    };
-    //file upload
-    const handleFileChange = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        setSelectedImage(file);
-        const companyname = localStorage.getItem('usercompany');
-        const formDataUpload = new FormData();
-        formDataUpload.append('file', file);
-        formDataUpload.append('organizationname', selectedCustomerData?.organizationname || book.organizationname || companyname);
-        try {
-            const response = await axios.post('http://localhost:8081/uploads', formDataUpload);
-            console.log(response);
-        } catch {
-        }
-    };
-
 
     useEffect(() => {
         const fetchData = async () => {
+            const organizationname = localStorage.getItem('usercompany');
+
             try {
-                const organizationname = localStorage.getItem('usercompany');
-
-                if (!organizationname) {
-                    return;
-                }
-                const response = await fetch(`http://localhost:8081/get-companyimage/${organizationname}`);
-
-                // Check if the response status is 200
+                const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
                 if (response.status === 200) {
-                    const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `http://localhost:8081/images/${path}`);
-                    setSelectedImage(attachedImageUrls);
+
+                    const userDataArray = await response.json();
+                    if (userDataArray.length > 0) {
+                        setSelectedCustomerData(userDataArray[0]);
+                    } else {
+                        setErrorMessage('User data not found.');
+                        setError(true);
+                    }
                 } else {
-                    const timer = setTimeout(fetchData, 2000);
+                    const timer = setTimeout(fetchData, 50);
                     return () => clearTimeout(timer);
                 }
-            } catch (error) {
-                console.error('Error fetching image data:', error);
+            }
+            catch {
             }
         };
-
         fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const encoded = localStorage.getItem('usercompany');
-            localStorage.setItem('usercompanyname', encoded);
-            const storedcomanyname = localStorage.getItem('usercompanyname');
-            const organizationname = decodeURIComponent(storedcomanyname);
-            try {
-                const response = await fetch(`http://localhost:8081/organizationdata/${organizationname}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const userDataArray = await response.json();
-                if (userDataArray.length > 0) {
-                    setSelectedCustomerData(userDataArray[0]);
-                } else {
-
-                }
-            } catch {
-
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    // const handledelete =
-
-    // const permissions = checkPagePermission();
-
-    // if (permissions.read && permissions.delete) {
-    //     await axios.delete(`http://localhost:8081/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
-    //     setFormData(null);
-    //     setSelectedCustomerData(null);
-    //     setSuccessMessage("Successfully Deleted");
-    //     handleCancel();
-    // } else {
-    //     setInfo(true);
-    //     setInfoMessage("You do not have permission.");
-    // }
+    }, [apiUrl, selectedCustomerData]);
 
 
-    const handledelete = async () => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.delete) {
-            const companyname = encodeURIComponent(selectedCustomerData?.organizationname) || encodeURIComponent(book.organizationname);
-            const encode = companyname;
-            const decode = decodeURIComponent(encode);
-            await axios.delete(`http://localhost:8081/companydelete/${decode}`);
-            localStorage.removeItem("selectedImage");
-            setSelectedCustomerData(null);
-            setSuccess(true);
-            setSuccessMessage("Successfully Deleted");
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
-        }
-    };
-
-    const hidePopup = () => {
-        setSuccess(false);
-        setWarning(false);
-        setInfo(false);
-        setError(false);
-        setErrorMessage('');
-    };
-
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
 
     const toggleEditMode = () => {
         setEditMode((prevEditMode) => !prevEditMode);
     };
+
+    // logo image upload--------------------------------------
+
+    const handleUpload = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.pdf, .jpg, .jpeg, .png';
+        input.onchange = handleFileChange;
+        input.click();
+    };
+
+
+
+    const handleFileChange = (event) => {
+
+        try {
+            const organizationname = localStorage.getItem('usercompany');
+            const file = event.target.files[0];
+            if (!file) return;
+            console.log("organisa", organizationname)
+            setSharedData(file.name);
+            // setSelectedImage(file)
+
+            if (file && organizationname !== "undefined") {
+                // console.log("0", organizationname)
+                const formData = new FormData();
+                formData.append('image', file);
+                axios.put(`${apiUrl}/logo-upload/${organizationname}`, formData)
+            }
+        } catch (err) {
+            // console.log(err)
+        }
+
+    };
+
+    //--------------------------------------------
 
     return {
         selectedCustomerData,
@@ -344,13 +218,11 @@ const useOrganization = () => {
         warningMessage,
         book,
         handleChange,
-        isFieldReadOnly,
-        handledelete,
         handleAdd,
         hidePopup,
         selectedImage,
         info,
-        infoMessage,
+        // infoMessage,
         editMode,
         handleFileChange,
         handleUpload,

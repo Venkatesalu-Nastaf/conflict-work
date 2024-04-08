@@ -82,10 +82,10 @@ import AppsOutageOutlinedIcon from "@mui/icons-material/AppsOutageOutlined";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CurrencyRupeeTwoToneIcon from "@mui/icons-material/CurrencyRupeeTwoTone";
 // FontAwesomeIcon Link
-import { faTags } from "@fortawesome/free-solid-svg-icons";
+// import { faTags } from "@fortawesome/free-solid-svg-icons";
 import { faRoad } from "@fortawesome/free-solid-svg-icons";
 import { faStamp } from "@fortawesome/free-solid-svg-icons";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+// import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faEquals } from "@fortawesome/free-solid-svg-icons";
 import { faStopwatch } from "@fortawesome/free-solid-svg-icons";
 import { faCloudMoon } from "@fortawesome/free-solid-svg-icons";
@@ -148,6 +148,9 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
+
+
+
 const maplogcolumns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "tripid", headerName: "TripSheet No", width: 130 },
@@ -158,9 +161,14 @@ const maplogcolumns = [
 ];
 
 const TripSheet = () => {
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
   const {
-    selectedCustomerData,
-    selectedCustomerId,
+    selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
+    selectedCustomerId, setNightBeta, setNightCount, request, setRequest, calcCheck,
     rows,
     actionName,
     error,
@@ -174,7 +182,6 @@ const TripSheet = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -223,11 +230,11 @@ const TripSheet = () => {
     calculateNightAmount,
     calculateTotalAmount,
     calculatedriverconvienceAmount,
-    calculateExkmAmount2,
-    calculateExHrsAmount2,
-    calculateNightAmount2,
-    calculatedriverconvienceAmount2,
-    calculateTotalAmount2,
+    // calculateExkmAmount2,
+    // calculateExHrsAmount2,
+    // calculateNightAmount2,
+    // calculatedriverconvienceAmount2,
+    // calculateTotalAmount2,
     handleTripmapClick,
     mapimgpopupOpen,
     handleimgPopupClose,
@@ -245,6 +252,13 @@ const TripSheet = () => {
     imageUrl,
     link,
     isSignatureSubmitted,
+    isEditMode,
+    handleEdit,
+    SignPage,
+    sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
+    ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
+    totalcalcAmount,
+
   } = useTripsheet();
 
   useEffect(() => {
@@ -252,6 +266,12 @@ const TripSheet = () => {
       handleClick(null, "List");
     }
   }, [actionName, handleClick]);
+
+  // ayyanar.action
+
+  // Filter the actions array based on the editMode variable
+  const filteredActions = isEditMode ? actions.filter(action => action.name !== "Add") : actions;
+
 
   return (
     <div className="form-container">
@@ -280,7 +300,6 @@ const TripSheet = () => {
                   onKeyDown={handleKeyDown}
                   autoComplete="password"
                   autoFocus
-                  disabled={isFieldReadOnly("read")}
                 />
               </div>
               <div className="input">
@@ -478,7 +497,7 @@ const TripSheet = () => {
                   required
                 />
               </div>
-              <FormControlLabel
+              {/* <FormControlLabel
                 value="smsguest"
                 control={
                   <Checkbox
@@ -496,24 +515,42 @@ const TripSheet = () => {
                   />
                 }
                 label="Guest SMS"
-              />
+              /> */}
               <FormControlLabel
+                value="smsguest"
+                control={
+                  <Checkbox
+                    size="small"
+                    checked={smsguest}
+                    onChange={(event) => setSmsGuest(event.target.checked)}
+                  />
+                }
+                label="Guest SMS"
+              />
+              {/* <FormControlLabel
                 name="booker"
                 value="booker"
                 control={<Checkbox size="small" />}
                 label="Booker"
                 autoComplete="new-password"
                 onChange={handleChange}
+<<<<<<< HEAD
                 checked={Boolean(
                   formData.booker || selectedCustomerData?.booker || book.booker
                 )}
               />
               <FormControlLabel
+=======
+                checked={Boolean(formData.booker || selectedCustomerData?.booker || book.booker)}
+              /> */}
+              {/* <FormControlLabel
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                 name="emailcheck"
                 value="email"
                 label="Email"
                 autoComplete="new-password"
                 onChange={handleChange}
+<<<<<<< HEAD
                 checked={Boolean(
                   formData.emailcheck ||
                     selectedCustomerData?.emailcheck ||
@@ -531,6 +568,21 @@ const TripSheet = () => {
                     onChange={(event) => setSendEmail(event.target.checked)}
                   />
                 }
+=======
+                checked={Boolean(formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck)}
+                control={<Checkbox size="small" checked={sendEmail || formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck} onChange={(event) => setSendEmail(event.target.checked)} />}
+              /> */}
+              <FormControlLabel
+                value="email"
+                control={
+                  <Checkbox
+                    size="small"
+                    checked={sendEmail}
+                    onChange={(event) => setSendEmail(event.target.checked)}
+                  />
+                }
+                label="Email"
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
               />
             </div>
             <div className="input-field">
@@ -960,7 +1012,7 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input radio">
-                <FormControlLabel
+                {/* <FormControlLabel
                   id="DriverSMS"
                   value="DriverSMS"
                   control={
@@ -980,10 +1032,22 @@ const TripSheet = () => {
                     />
                   }
                   label="Driver SMS"
+                /> */}
+                <FormControlLabel
+                  value="DriverSMS"
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={DriverSMS}
+                      onChange={(event) => setDriverSMS(event.target.checked)}
+                    />
+                  }
+                  label="Driver SMS"
+
                 />
               </div>
               <div className="input radio">
-                <FormControlLabel
+                {/* <FormControlLabel
                   id="DriverSMS"
                   value="DriverSMS"
                   control={
@@ -997,7 +1061,8 @@ const TripSheet = () => {
                     />
                   }
                   label="GPS"
-                />
+                /> */}
+
               </div>
             </div>
             <div className="input-field">
@@ -1116,6 +1181,7 @@ const TripSheet = () => {
                 </div>
                 <TextField
                   size="small"
+<<<<<<< HEAD
                   name="request"
                   value={
                     formData.request ||
@@ -1124,10 +1190,17 @@ const TripSheet = () => {
                     ""
                   }
                   onChange={handleChange}
+=======
+                  name="Request"
+                  value={request || ''}
+                  // onChange={handleChange}
+                  onChange={(e) => { setRequest(e.target.value) }}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                   label="Request"
                   id="request"
                   autoComplete="password"
                 />
+
               </div>
               <div className="input">
                 <div className="icone">
@@ -1554,12 +1627,15 @@ const TripSheet = () => {
                   size="small"
                   autoComplete="password"
                 />
+
               </div>
               <div className="input">
                 <div className="icone">
                   <FontAwesomeIcon icon={faRoad} size="lg" />
                 </div>
                 <TextField
+
+                  // ayyanar total km
                   name="totalkm1"
                   value={
                     formData.totalkm1 ||
@@ -1573,9 +1649,93 @@ const TripSheet = () => {
                   label="Total KM"
                   id="totalkm1"
                   type="number"
+<<<<<<< HEAD
                   size="small"
+=======
+                  size='small'
                   autoComplete="password"
                 />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input">
+                <div className="icone">
+                  <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                </div>
+                <TextField
+                  name="additionaltime"
+                  value={formData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || additionalTime.additionaltime || ''}
+                  onChange={handleChange}
+                  label="Additional Time"
+                  id="additionaltime"
+                  variant="standard"
+                  autoComplete="password"
+                />
+
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                </div>
+                <TextField
+
+                  // ayyanar total time
+                  name="totaltime"
+                  value={formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || ''}
+                  onChange={handleChange}
+                  label="Total Time"
+                  id="totaltime"
+                  variant="standard"
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <FontAwesomeIcon icon={faStamp} />
+                </div>
+                <TextField
+                  name="permit"
+                  value={formData.permit || selectedCustomerData.permit || book.permit || ''}
+                  onChange={handleChange}
+                  label="Permit"
+                  id="permit"
+                  variant="standard"
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <FontAwesomeIcon icon={faSquareParking} />
+                </div>
+                <TextField
+                  name="parking"
+                  value={formData.parking || selectedCustomerData.parking || book.parking || ''}
+                  onChange={handleChange}
+                  label="Parking"
+                  id="parking"
+                  variant="standard"
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input">
+                <div className="icone">
+                  <TollTwoToneIcon color="action" />
+                </div>
+                <TextField
+                  name="toll"
+                  value={formData.toll || selectedCustomerData.toll || book.toll || ''}
+                  onChange={handleChange}
+                  label="Toll"
+                  id="Toll"
+                  variant="standard"
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
+                  autoComplete="password"
+                />
+              </div>
+              <div className="input">
+                <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
+                  calculate
+                </Button>
               </div>
             </div>
 
@@ -1640,15 +1800,22 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
+<<<<<<< HEAD
                 <Button
                   startIcon={<BorderColorIcon />}
                   variant="outlined"
                   onClick={handleETripsheetClick}
                   disabled={isFieldReadOnly("new")}
                 >
+=======
+                <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                   E-Tripsheet
                 </Button>
+
               </div>
+
+
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "400px" }}>
@@ -1700,6 +1867,7 @@ const TripSheet = () => {
                   </Button>
                 </DialogActions>
               </Dialog>
+<<<<<<< HEAD
               <div className="input" style={{ width: "175px" }}>
                 <Button
                   variant="contained"
@@ -1708,6 +1876,18 @@ const TripSheet = () => {
                 >
                   Add
                 </Button>
+=======
+              {/* // ayyanar calc */}
+              <div className="input" style={{ width: "160px" }}>
+                {isEditMode ? (<>
+                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
+
+                </>
+                ) : (
+                  <Button variant="contained" onClick={handleAdd} >Add</Button>
+                )}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
               </div>
             </div>
           </div>
@@ -1763,8 +1943,9 @@ const TripSheet = () => {
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
+              direction="left"
             >
-              {actions.map((action) => (
+              {filteredActions.map((action) => (
                 <SpeedDialAction
                   key={action.name}
                   icon={action.icon}
@@ -2438,9 +2619,15 @@ const TripSheet = () => {
                         onChange={handleChange}
                         id="exkmTkm"
                         variant="standard"
+<<<<<<< HEAD
                         autoComplete="password"
                       />
+=======
+                        autoComplete="password" />
+
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                     </div>
+
                     <div className="input">
                       <div className="icone">
                         <FontAwesomeIcon icon={faEquals} />
@@ -2533,6 +2720,7 @@ const TripSheet = () => {
                         variant="standard"
                         autoComplete="password"
                       />
+
                     </div>
                     <div className="input" style={{ width: "187px" }}>
                       <div className="icone">
@@ -2582,7 +2770,7 @@ const TripSheet = () => {
                           ""
                         }
                         onChange={handleChange}
-                        label="Driver Convenience"
+                        label="Driver Convenience00"
                         id="driver-convenience"
                         size="small"
                         variant="standard"
@@ -2694,8 +2882,14 @@ const TripSheet = () => {
                       <div className="icone">
                         <Inventory2Icon color="action" />
                       </div>
+                      {/* ayyanar */}
+                      {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
+
+
+
                       <TextField
                         name="pack"
+<<<<<<< HEAD
                         value={
                           formData.pack ||
                           selectedCustomerData.pack ||
@@ -2704,6 +2898,12 @@ const TripSheet = () => {
                           ""
                         }
                         onChange={handleChange}
+=======
+                        // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
+                        value={calcPackage || formData.calcPackage || ''}
+                        // onChange={handleChange}
+
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         label="Pack"
                         id="pack"
                         size="small"
@@ -2718,6 +2918,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount5"
+<<<<<<< HEAD
                         value={
                           formData.amount5 ||
                           selectedCustomerData.amount5 ||
@@ -2726,6 +2927,11 @@ const TripSheet = () => {
                           ""
                         }
                         onChange={handleChange}
+=======
+                        // value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate || ''}
+                        value={package_amount || formData.calcPackage || ''}
+                        // onChange={handleChange}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         size="small"
                         label="Amount"
                         autoComplete="password"
@@ -2741,8 +2947,14 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="exkm1"
+<<<<<<< HEAD
                         value={book.exkm1 || packageDetails[0]?.extraKMS || ""}
                         onChange={handleChange}
+=======
+                        // value={book.exkm1 || packageDetails[0]?.extraKMS || ''}
+                        // onChange={handleChange} 
+                        value={extraKM || formData.calcPackage || 0}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         label="Ex.Km"
                         id="ex-km"
                         autoComplete="password"
@@ -2754,6 +2966,7 @@ const TripSheet = () => {
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
+<<<<<<< HEAD
                       <TextField
                         size="small"
                         name="exkmTkm2"
@@ -2764,6 +2977,13 @@ const TripSheet = () => {
                           ""
                         }
                         onChange={handleChange}
+=======
+                      <TextField size="small"
+                        name='exkmTkm2'
+                        // value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2 || ''}
+                        value={extrakm_amount || formData.calcPackage || ''}
+                        // onChange={handleChange}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         id="exkmTkm"
                         variant="standard"
                         autoComplete="password"
@@ -2775,8 +2995,13 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount6"
+<<<<<<< HEAD
                         value={book.amount6 || calculateExkmAmount2() || ""}
                         onChange={handleChange}
+=======
+                        // value={book.amount6 || calculateExkmAmount2() || ''}
+                        value={ex_kmAmount || formData.calcPackage || 0}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         size="small"
                         label="Amount"
                         autoComplete="password"
@@ -2785,6 +3010,7 @@ const TripSheet = () => {
                       />
                     </div>
                   </div>
+
                   <div className="input-field">
                     <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
@@ -2792,6 +3018,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="exHrs1"
+<<<<<<< HEAD
                         value={
                           formData.exHrs1 ||
                           selectedCustomerData.exHrs1 ||
@@ -2800,6 +3027,11 @@ const TripSheet = () => {
                           ""
                         }
                         onChange={handleChange}
+=======
+                        // value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours || ''}
+                        value={extraHR || formData.calcPackage || ''}
+                        // onChange={handleChange}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         label="Ex.Hrs"
                         id="ex-Hrs"
                         size="small"
@@ -2813,6 +3045,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         size="small"
+<<<<<<< HEAD
                         name="exHrsTHrs2"
                         value={
                           formData.exHrsTHrs2 ||
@@ -2823,6 +3056,17 @@ const TripSheet = () => {
                         onChange={handleChange}
                         variant="standard"
                       />
+=======
+                        name='exHrsTHrs2'
+                        // value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2 || ''}  extrahr_amount
+                        value={extrahr_amount || formData.calcPackage || ''}
+                        // onChange={handleChange}
+                        variant="standard"
+                      />
+
+                      {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
+
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                     </div>
                     <div className="input">
                       <div className="icone">
@@ -2830,8 +3074,14 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount7"
+<<<<<<< HEAD
                         value={book.amount7 || calculateExHrsAmount2() || ""}
                         onChange={handleChange}
+=======
+                        // value={book.amount7 || calculateExHrsAmount2() || ''}
+                        // onChange={caculate_extraHR}
+                        value={ex_hrAmount || formData.calcPackage || 0}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         size="small"
                         label="Amount"
                         autoComplete="password"
@@ -2845,8 +3095,10 @@ const TripSheet = () => {
                       <div className="icone">
                         <FontAwesomeIcon icon={faCloudMoon} />
                       </div>
+
                       <TextField
                         name="night1"
+<<<<<<< HEAD
                         value={
                           formData.night1 ||
                           selectedCustomerData.night1 ||
@@ -2855,6 +3107,10 @@ const TripSheet = () => {
                           ""
                         }
                         onChange={handleChange}
+=======
+                        value={nightBta || ''}
+                        onChange={(e) => setNightBeta(e.target.value)}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         label="Night"
                         id="night"
                         autoComplete="password"
@@ -2868,6 +3124,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         size="small"
+<<<<<<< HEAD
                         name="nightThrs2"
                         value={
                           formData.nightThrs2 ||
@@ -2876,6 +3133,11 @@ const TripSheet = () => {
                           ""
                         }
                         onChange={handleChange}
+=======
+                        name='nightThrs2'
+                        value={nightCount || ''}
+                        onChange={(e) => setNightCount(e.target.value)}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         variant="standard"
                         autoComplete="password"
                       />
@@ -2886,6 +3148,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount8"
+<<<<<<< HEAD
                         value={
                           formData.amount8 ||
                           selectedCustomerData.amount8 ||
@@ -2894,6 +3157,9 @@ const TripSheet = () => {
                           ""
                         }
                         onChange={handleChange}
+=======
+                        value={night_totalAmount || 0}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         size="small"
                         autoComplete="password"
                         label="Amount"
@@ -2909,6 +3175,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="driverconvenience1"
+<<<<<<< HEAD
                         value={
                           formData.driverconvenience1 ||
                           selectedCustomerData.driverconvenience1 ||
@@ -2916,6 +3183,10 @@ const TripSheet = () => {
                           ""
                         }
                         onChange={handleChange}
+=======
+                        value={driverBeta || formData.driverBeta || ''}
+                        onChange={driverBeta_calc}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         label="Driver Convenience"
                         autoComplete="password"
                         id="driver-convenience"
@@ -2929,6 +3200,7 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         size="small"
+<<<<<<< HEAD
                         name="dtc2"
                         value={
                           formData.dtc2 ||
@@ -2937,6 +3209,11 @@ const TripSheet = () => {
                           ""
                         }
                         onChange={handleChange}
+=======
+                        name='dtc2'
+                        value={driverbeta_Count || formData.driverbeta_Count || ''}
+                        onChange={driverbeta_Count_calc}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         variant="standard"
                         autoComplete="password"
                       />
@@ -2947,12 +3224,16 @@ const TripSheet = () => {
                       </div>
                       <TextField
                         name="amount9"
+<<<<<<< HEAD
                         value={
                           book.amount9 ||
                           calculatedriverconvienceAmount2() ||
                           ""
                         }
                         onChange={handleChange}
+=======
+                        value={driverBeta_amount || 0}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                         size="small"
                         label="Amount"
                         id="amount"
@@ -2961,8 +3242,18 @@ const TripSheet = () => {
                       />
                     </div>
                   </div>
+
+                  <TextField
+                    name="amount9"
+                    value={totalcalcAmount || 0}
+                    size="small"
+                    label="Total Amount"
+                    id="amount"
+                    autoComplete="password"
+                    variant="standard"
+                  />
                   <div className="input-field">
-                    <div className="input" style={{ width: "390px" }}>
+                    {/* <div className="input" style={{ width: "390px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
@@ -2982,8 +3273,8 @@ const TripSheet = () => {
                         variant="standard"
                         sx={{ m: 1, width: "60ch" }}
                       />
-                    </div>
-                    <div className="input">
+                    </div> */}
+                    {/* <div className="input">
                       <div className="icone">
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
@@ -2997,10 +3288,10 @@ const TripSheet = () => {
                         autoComplete="password"
                         variant="standard"
                       />
-                    </div>
+                    </div> */}
                   </div>
                   <div className="input-field">
-                    <div className="input" style={{ width: "186px" }}>
+                    {/* <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
                         <FontAwesomeIcon icon={faTags} />
                       </div>
@@ -3019,14 +3310,14 @@ const TripSheet = () => {
                         autoComplete="password"
                         variant="standard"
                       />
-                    </div>
-                    <div className="input" style={{ width: "187px" }}>
+                    </div> */}
+                    {/* <div className="input" style={{ width: "187px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
                       <TextField size="small" variant="standard" />
-                    </div>
-                    <div className="input">
+                    </div> */}
+                    {/* <div className="input">
                       <div className="icone">
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
@@ -3045,10 +3336,10 @@ const TripSheet = () => {
                         id="on"
                         variant="standard"
                       />
-                    </div>
+                    </div> */}
                   </div>
                   <div className="input-field">
-                    <div className="input radio">
+                    {/* <div className="input radio">
                       <FormControlLabel
                         name="manualbills"
                         value="manualbills"
@@ -3062,8 +3353,8 @@ const TripSheet = () => {
                             book.manualbills
                         )}
                       />
-                    </div>
-                    <div className="input">
+                    </div> */}
+                    {/* <div className="input">
                       <div className="icone">
                         <AccountBalanceWalletIcon color="action" />
                       </div>
@@ -3081,9 +3372,9 @@ const TripSheet = () => {
                         label="Balance"
                         id="balance"
                       />
-                    </div>
+                    </div> */}
                   </div>
-                  <div className="input-field">
+                  {/* <div className="input-field">
                     <div className="input">
                       <TextField
                         size="small"
@@ -3107,7 +3398,7 @@ const TripSheet = () => {
                         autoComplete="password"
                       />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </TabPanel>
               <TabPanel value={4} sx={{ p: 2 }}>
@@ -3544,11 +3835,16 @@ const TripSheet = () => {
                   <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
                     <DialogContent>
                       {selectedRow && (
+<<<<<<< HEAD
                         <img
                           className="dialogboximg"
                           src={imageUrl}
                           alt={selectedRow.name}
                         />
+=======
+                        // <img className='dialogboximg' src={imageUrl} alt={selectedRow.name} />
+                        <embed src={imageUrl} type="application/pdf" width="100%" height="600px" />
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                       )}
                     </DialogContent>
                     <DialogActions>
@@ -3579,6 +3875,7 @@ const TripSheet = () => {
                         ) : (
                           <div>
                             <p>Copy this link to send to the passenger:</p>
+<<<<<<< HEAD
                             <div>
                               <textarea
                                 readOnly
@@ -3586,7 +3883,13 @@ const TripSheet = () => {
                               >
                                 {link}
                               </textarea>
+=======
+                            <div className='link-blank-button'>
+                              <textarea readOnly style={{ width: '400px', height: '8  0px' }}>{link}</textarea>
+                              <button onClick={SignPage} className='signature'>Copy </button>
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                             </div>
+                            {sign ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
                           </div>
                         )}
                       </div>

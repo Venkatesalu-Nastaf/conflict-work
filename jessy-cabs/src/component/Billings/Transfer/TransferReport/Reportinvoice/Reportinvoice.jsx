@@ -110,8 +110,6 @@ const PrintableInvoice = ({ routeData, organizationdata, selectedImage, routedDa
                             <p>GST is to be paid by Service Recepient Under RCM as per Notification 22/19 - Centraltax (Rate) dated 30-09-2019 <br /><span>E.& O.E In Words-Rupees</span></p>
                         </div>
                         <div className="Reportinvoice-signature">
-                            {/* <img src={Signature} alt="Guest Signature" /> */}
-                            {/* <span className="Reportinvoice-signature-title">Guest Signature</span> */}
                         </div>
                     </div>
                 </div>

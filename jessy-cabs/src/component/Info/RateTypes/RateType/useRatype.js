@@ -1,8 +1,10 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import { saveAs } from 'file-saver';
-
+import { APIURL } from "../../../url";
+import dayjs from "dayjs";
 
 // TABLE
 
@@ -11,21 +13,18 @@ const columns = [
     { field: "driverid", headerName: "Driver ID", width: 130 },
     { field: "ratename", headerName: "Rate Type", width: 130 },
     { field: "active", headerName: "Active", width: 130 },
-    { field: "starttime", headerName: "Start Time", width: 130 },
-    { field: "closetime", headerName: "Close Time", width: 130 },
+    { field: "starttime", headerName: "Start Date", width: 230 },
+    { field: "closetime", headerName: "Close Date", width: 230 },
 ];
 
-
 const useRatype = () => {
-
-    const user_id = localStorage.getItem('useridno');
-
+    const apiUrl = APIURL;
+    // const user_id = localStorage.getItem('useridno');
+    const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
-    const [starttime, setStartTime] = useState('');
-    const [closetime, setCloseTime] = useState('');
     const [formData] = useState({});
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -34,62 +33,45 @@ const useRatype = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
 
 
-    // for page permission
+    // handlechange-----------------
+    const handleDateChange = (date, name) => {
+        const formattedDate = dayjs(date).format("YYYY-MM-DD");
+        const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
 
-    const [userPermissions, setUserPermissions] = useState({});
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: parsedDate,
+        }));
+
+        setSelectedCustomerData((prevValues) => ({
+            ...prevValues,
+            [name]: parsedDate,
+        }));
+    };
+
+    //-----------------popup---------------
+
+    const hidePopup = () => {
+        setSuccess(false);
+        setError(false);
+        setInfo(false);
+        setWarning(false);
+    };
 
     useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Rate Type';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
-            }
-        };
-
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Rate Type';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
+        if (error || success || warning || info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
         }
+    }, [error, success, warning, info]);
 
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
 
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
+    //---------------------------------------------------
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -108,7 +90,6 @@ const useRatype = () => {
         pdf.setFont('helvetica', 'normal');
         pdf.text("Rate Type Details", 10, 10);
 
-        // Modify tableData to exclude the index number
         const tableData = rows.map((row) => [
             row['id'],
             row['driverid'],
@@ -129,46 +110,6 @@ const useRatype = () => {
     };
 
 
-    const hidePopup = () => {
-        setSuccess(false);
-        setError(false);
-        setInfo(false);
-        setWarning(false);
-    };
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [info]);
-
 
     const [book, setBook] = useState({
         driverid: '',
@@ -183,7 +124,6 @@ const useRatype = () => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -193,7 +133,6 @@ const useRatype = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -217,7 +156,6 @@ const useRatype = () => {
         }));
     };
 
-
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
@@ -230,101 +168,132 @@ const useRatype = () => {
             closetime: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
-    const handleAdd = async () => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.new) {
-            const ratename = book.ratename;
-            if (!ratename) {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-                return;
-            }
-            try {
-                const updatedBook = {
-                    ...book,
-                    starttime: starttime,
-                    closetime: closetime,
-                };
-                await axios.post('http://localhost:8081/ratetype', updatedBook);
-                handleCancel();
-                setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
-            } catch {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-            }
-        } else {
-            // Display a warning or prevent the action
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+
+    const handleAdd = async () => {
+        const ratename = book.ratename;
+        if (!ratename) {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+            return;
         }
+        try {
+            const updatedBook = {
+                stations: book.stations || selectedCustomerData.stations,
+                ratename: book.ratename || selectedCustomerData.ratename,
+                validity: book.validity || selectedCustomerData.validity,
+                active: book.active || selectedCustomerData.active,
+                starttime: book.starttime || selectedCustomerData.starttime,
+                closetime: book.closetime || selectedCustomerData.closetime
+            };
+
+            await axios.post(`${apiUrl}/ratetype`, updatedBook);
+            handleCancel();
+            setRows([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+        }
+    };
+
+
+    useEffect(() => {
+        const handlelist = async () => {
+
+            const response = await axios.get(`${apiUrl}/ratetype`);
+            const data = response.data;
+
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+            } else {
+                setRows([]);
+            }
+        }
+        handlelist();
+    }, [apiUrl]);
+
+    const handleEdit = async (driverid) => {
+        const selectedCustomer = rows.find((row) => row.driverid === driverid);
+        const updatedCustomer = {
+            driverid: selectedCustomer,
+            stations: selectedCustomerData.stations,
+            ratename: selectedCustomerData.ratename,
+            validity: selectedCustomerData.validity,
+            active: selectedCustomerData.active,
+            starttime: selectedCustomerData.starttime,
+            closetime: selectedCustomerData.closetime
+        };
+        await axios.put(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+        setSuccess(true);
+        setSuccessMessage("Successfully updated");
+        handleCancel();
+        setRows([]);
     };
 
     const handleClick = async (event, actionName, driverid) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/ratetype');
-                    const data = response.data;
-                    if (data.length > 0) {
-                        setRows(data);
-                        setSuccess(true);
-                        setSuccessMessage("Successfully listed");
-                    } else {
-                        setRows([]);
-                        setError(true);
-                        setErrorMessage("No data found");
-                    }
+                const response = await axios.get(`${apiUrl}/ratetype`);
+                const data = response.data;
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
                 } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
                 }
-            } else if (actionName === 'Cancel') {
+            }
+
+            else if (actionName === 'Cancel') {
                 handleCancel();
                 setRows([]);
-            } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
-                    setSelectedCustomerData(null);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Deleted");
-                    handleCancel();
-                    setRows([]);
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.driverid === driverid);
-                    const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://localhost:8081/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully updated");
-                    handleCancel();
-                    setRows([]);
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Add') {
-                handleAdd();
             }
+
+            else if (actionName === 'Delete') {
+                await axios.delete(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`);
+                setSelectedCustomerData(null);
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
+                handleCancel();
+                setRows([]);
+
+            } else if (actionName === 'Edit') {
+
+                const selectedCustomer = rows.find((row) => row.driverid === driverid);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`${apiUrl}/ratetype/${selectedCustomerData?.driverid || book.driverid}`, updatedCustomer);
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                handleCancel();
+                setRows([]);
+            }
+
+            else {
+                setInfo(true);
+                setInfoMessage("There is some issue.");
+            }
+
         } catch (err) {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -353,18 +322,18 @@ const useRatype = () => {
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,
         handleAutocompleteChange,
         formData,
         setBook,
-        setStartTime,
-        setCloseTime,
         handleExcelDownload,
         handlePdfDownload,
         columns,
+        isEditMode,
+        handleEdit,
+        handleDateChange
     };
 };
 

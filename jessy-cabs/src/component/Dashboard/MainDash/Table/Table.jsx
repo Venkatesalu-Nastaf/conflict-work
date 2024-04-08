@@ -1,5 +1,5 @@
-import { React, useState, useEffect } from "react";
-import axios from 'axios';
+import { React, useState, useEffect, useContext } from "react";
+// import axios from 'axios';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -15,9 +15,13 @@ import { Button, IconButton } from "@mui/material";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import { APIURL } from "../../../url";
+import { useData } from "../../Maindashboard/DataContext";
 
 // ICON
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+
+const apiUrl = APIURL;
 
 const makeStyle = (status) => {
   if (status === 'Waiting' || status === 'On_Going') {
@@ -41,68 +45,36 @@ const makeStyle = (status) => {
 }
 
 export default function BasicTable() {
-  const [filteredData, setFilteredData] = useState([]);
+
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
 
-  const user_id = localStorage.getItem('useridno');
+  const { filteredData, setFilteredData } = useData();
+  const data1 = filteredData;
 
-  const [userPermissions, setUserPermissions] = useState({});
 
   useEffect(() => {
-    const fetchPermissions = async () => {
+    const fetchData = async () => {
       try {
-        const currentPageName = 'Dashboard page';
-        const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-        setUserPermissions(response.data);
-      } catch (error) {
-        console.error('Error fetching user permissions:', error);
-      }
-    };
-
-    fetchPermissions();
-  }, [user_id]);
-
-  const checkPagePermission = () => {
-    const currentPageName = 'Dashboard page';
-    const permissions = userPermissions || {};
-
-    if (permissions.page_name === currentPageName) {
-      return {
-        read: permissions.read_permission === 1,
-        new: permissions.new_permission === 1,
-        modify: permissions.modify_permission === 1,
-        delete: permissions.delete_permission === 1,
-      };
-    }
-
-    return {
-      read: false,
-      new: false,
-      modify: false,
-      delete: false,
-    };
-  };
-
-  const permissions = checkPagePermission();
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('http://localhost:8081/tripsheet');
-      if (response.ok) {
-        const data = await response.json();
-        if (data.length > 0) {
-          setFilteredData(data);
+        const response = await fetch(`${apiUrl}/tripsheet`);
+        if (response.status === 200) {
+          if (response.ok) {
+            const data = await response.json();
+            if (data.length > 0) {
+              setFilteredData(data);
+            } else {
+              setFilteredData([]);
+            }
+          } else {
+          }
         } else {
-          setFilteredData([]);
+          const timer = setTimeout(fetchData, 2000);
+          return () => clearTimeout(timer);
         }
-      } else {
+      } catch {
       }
-    } catch {
-    }
-  };
+    };
 
-  useEffect(() => {
     fetchData();
   }, []);
 
@@ -135,18 +107,18 @@ export default function BasicTable() {
             </TableRow>
           </TableHead>
           <TableBody style={{ color: "white" }}>
-            {permissions.read && (
+            {(
               filteredData && filteredData.length > 0 ? (
                 filteredData.slice().reverse().map((trip) => (
                   <TableRow
                     key={trip.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">{trip.driverName}</TableCell>
+                    <TableCell component="th" scope="row">{trip.driverName ? trip.driverName : 'Not Assigned'}</TableCell>
                     <TableCell align="left">TS{trip.tripid}</TableCell>
                     {/* <TableCell align="left">{trip.startdate}</TableCell> */}
-                    <TableCell align="left">{format(new Date(trip.startdate), 'dd/MM/yyyy')}</TableCell>
-                    <TableCell align="left"><span className="status" style={makeStyle(trip.apps)}>{trip.apps}</span></TableCell>
+                    <TableCell align="left">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
+                    <TableCell align="left"><span className="status" style={makeStyle(trip.apps)}>{trip.apps ? trip.apps : "Not Mentioned"}</span></TableCell>
                     <TableCell align="left" className="Details">
                       <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>
                     </TableCell>
@@ -160,7 +132,7 @@ export default function BasicTable() {
                         </DialogActions>
                       </div>
                       <DialogContent>
-                        <Tripdetails />
+                        {/*  <Tripdetails /> */}
                         {selectedTrip && <Tripdetails tripData={selectedTrip} />}
                       </DialogContent>
                     </Dialog>

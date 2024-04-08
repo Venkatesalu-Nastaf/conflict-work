@@ -40,7 +40,8 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 // TABLE START
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
-  { field: "Stationname", headerName: "Statio_Name", width: 130 },
+  { field: "stationid", headerName: "Station_Id", width: 130 },
+  { field: "Stationname", headerName: "Station_Name", width: 130 },
   { field: "active", headerName: "Active", width: 160 },
   { field: "shortname", headerName: "Station", width: 130 },
   { field: "ownbranch", headerName: "Own_Branch", width: 130 },
@@ -53,7 +54,6 @@ const actions = [
   { icon: <ModeEditIcon />, name: "Edit" },
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
-
 
 const StationCreation = () => {
   const {
@@ -72,12 +72,11 @@ const StationCreation = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
-
-    // ... (other state variables and functions)
+    isEditMode,
+    handleEdit,
   } = useStationCreation();
 
   useEffect(() => {
@@ -196,8 +195,12 @@ const StationCreation = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-              <div className="input" style={{ width: "100px" }}>
-                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+              <div className="input" style={{ width: "160px" }}>
+                {isEditMode ? (
+                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" onClick={handleAdd} >Add</Button>
+                )}
               </div>
             </div>
           </div>

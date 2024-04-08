@@ -10,13 +10,14 @@ export function useUser() {
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [userdashboard,setUserdashboard] = useState(false)
 
   const loginUser = (username) => {
     setUser({ username });
   };
 
   return (
-    <UserContext.Provider value={{ user, loginUser }}>
+    <UserContext.Provider value={{ user, loginUser,userdashboard,setUserdashboard }}>
       {children}
     </UserContext.Provider>
   );

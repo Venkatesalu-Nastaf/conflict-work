@@ -88,3 +88,28 @@ export const Department = [
     optionvalue: "vijayawada",
   },
 ];
+
+
+export const Status = [
+
+  {
+    option: "Opened",
+    optionvalue: "Opened",
+  },
+  {
+    option: "Closed",
+    optionvalue: "Closed",
+  },
+  {
+    option: "Cancelled",
+    optionvalue: "Cancelled",
+  },
+  {
+    option: "Billed",
+    optionvalue: "Billed",
+  },
+  // {
+  //   option: "Be_Closed",
+  //   optionvalue: "Be_Closed",
+  // },
+]

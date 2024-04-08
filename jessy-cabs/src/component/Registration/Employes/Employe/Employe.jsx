@@ -19,6 +19,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+
 // ICONS
 import useEmployee from "./useEmployee";
 import BadgeIcon from "@mui/icons-material/Badge";
@@ -49,6 +52,8 @@ import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
+import { APIURL } from "../../../url";
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -70,6 +75,7 @@ const actions = [
 ];
 
 const Employe = () => {
+  const apiUrl = APIURL;
   const {
     selectedCustomerData,
     selectedCustomerId,
@@ -86,19 +92,29 @@ const Employe = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
     formData,
     handleDateChange,
-    handleUpload,
     handleExcelDownload,
     handlePdfDownload,
     columns,
     searchText,
     setSearchText,
     handleShowAll,
+    allFile,
+    handleCloseDialog,
+    dialogOpen,
+    setFile,
+    isEditMode,
+    handleEdit,
+    handleContextMenu,
+    handleimagedelete,
+    handleClosedeleteDialog,
+    dialogdeleteOpen,
+    setError,
+    setErrorMessage,
   } = useEmployee();
 
   useEffect(() => {
@@ -371,24 +387,32 @@ const Employe = () => {
                 />
               </div>
               <div className="input" style={{ width: "20px" }}>
-                <Button
-                  color="primary"
-                  onClick={() => handleUpload("LicenseCopy")}
-                  size="md"
-                >
-                  <UploadFileIcon />
-                </Button>
+                {selectedCustomerData?.empid || book.empid ? (
+                  <Button component="label">
+                    <UploadFileIcon />
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setFile(e.target.files[0])}
+                    />
+                  </Button>
+                ) : (
+                  <Button color="primary" variant="contained" onClick={() => {
+                    setError(true);
+                    setErrorMessage("Please Enter Booking No");
+                  }}>
+                    <UploadFileIcon />
+                  </Button>
+                )}
               </div>
             </div>
             <div className="input-field">
-              <div className="input" style={{ width: "100px" }}>
-                <Button
-                  variant="contained"
-                  onClick={handleAdd}
-                  disabled={isFieldReadOnly("new")}
-                >
-                  Add
-                </Button>
+              <div className="input" style={{ width: "160px" }}>
+                {isEditMode ? (
+                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" onClick={handleAdd} >Add</Button>
+                )}
               </div>
             </div>
           </div>
@@ -445,6 +469,7 @@ const Employe = () => {
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
+            direction="left"
           >
             {actions.map((action) => (
               <SpeedDialAction
@@ -510,6 +535,30 @@ const Employe = () => {
               pageSize={5}
             />
           </div>
+          <Dialog open={dialogOpen} onClose={handleCloseDialog} >
+            <DialogContent>
+              <div style={{ position: 'relative' }}>
+                {Array.isArray(allFile) && allFile.map((img, index) => (
+                  <div key={index} style={{ position: 'relative' }}>
+
+                    <embed src={`${apiUrl}/public/employee_doc/` + img.fileName} type="application/pdf" width="100%" height="600px" />
+                    <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} />
+                  </div>
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
+          <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
+            <DialogContent>
+              <div>
+                <h3>are you sure you want to delete</h3>
+                <div>
+                  <Button onClick={handleContextMenu}>yes</Button>
+                  <Button onClick={handleClosedeleteDialog}>No</Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </form>
     </div>

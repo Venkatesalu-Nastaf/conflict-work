@@ -5,8 +5,11 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import { APIURL } from "../url";
 
 const OnlineBooking = () => {
+  const apiUrl = APIURL;
+
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
@@ -38,8 +41,8 @@ const OnlineBooking = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -47,24 +50,24 @@ const OnlineBooking = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
   const [book, setBook] = useState({
@@ -121,7 +124,7 @@ const OnlineBooking = () => {
   const handleAdd = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:8081/booking', book);
+      await axios.post(`${apiUrl}/booking`, book);
       handleCancel();
       handlecheck();
       setSuccess(true);
@@ -148,7 +151,7 @@ const OnlineBooking = () => {
         remarks: formValues.remarks,
       };
 
-      await axios.post('http://localhost:8081/send-onbook-email', dataToSend);
+      await axios.post(`${apiUrl}/send-onbook-email`, dataToSend);
       setSuccess(true);
       setSuccessMessage("Mail sented Successfully");
     } catch (error) {

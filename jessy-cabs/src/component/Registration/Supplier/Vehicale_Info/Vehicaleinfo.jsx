@@ -15,7 +15,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Autocomplete } from "@mui/material";
+import Checkbox from '@mui/material/Checkbox';
 
 // FONTAWESOME ICON
 import { TbLicense } from "react-icons/tb";
@@ -49,10 +50,18 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useVehicleinfo from './useVehicleinfo';
+import EmailIcon from "@mui/icons-material/Email";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 
 
 
 
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import { APIURL } from "../../../url";
+
+import { FaCar } from "react-icons/fa";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -67,14 +76,60 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const actions = [
-  // { icon: <ChecklistIcon />, name: "List" }, 
   { icon: <CancelPresentationIcon />, name: "Cancel" },
   { icon: <DeleteIcon />, name: "Delete" },
   { icon: <ModeEditIcon />, name: "Edit" },
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
-const Vehicaleinfo = () => {
 
+export const vehicaleinfos = [
+  {
+    Option: "A/C",
+    // optionvalue: "a/c",
+  },
+  {
+    Option: "Non A/C",
+    // optionvalue: "non_a/c",
+  },
+];
+export const GroupTypes = [
+  {
+    Option: "Luxzury",
+    // optionvalue: "a/c",
+  },
+  {
+    Option: "Normal",
+    // optionvalue: "non_a/c",
+  },
+];
+
+export const fueltypes = [
+  {
+    Option: "Petrol",
+    // optionvalue: "a/c",
+  },
+  {
+    Option: "Diesel",
+    // optionvalue: "non_a/c",
+  },
+];
+export const Hire = [
+  {
+    Option: "Attached Vehicle",
+    optionvalue: "attachedvehicle",
+  },
+  {
+    Option: "Out Side Travels",
+    optionvalue: "outsidetravels",
+  },
+  {
+    Option: "Own  Vehicle",
+    optionvalue: "ownvehicle",
+  },
+
+];
+const Vehicaleinfo = () => {
+  const apiUrl = APIURL;
   const {
     selectedCustomerData,
     rows,
@@ -91,11 +146,9 @@ const Vehicaleinfo = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleAdd,
     hidePopup,
     handleDateChange,
-    handleUpload,
     searchText,
     setSearchText,
     fromDate,
@@ -106,10 +159,32 @@ const Vehicaleinfo = () => {
     handleExcelDownload,
     handlePdfDownload,
     columns,
-
-    // ... (other state variables and functions)
+    setInsurance,
+    setLicence,
+    setNationalPermit,
+    setStatePermit,
+    setRcbook,
+    setFcCopy,
+    allFile,
+    handleCloseDialog,
+    dialogOpen,
+    isEditMode,
+    handleEdit,
+    handleContextMenu,
+    handleimagedelete,
+    handleClosedeleteDialog,
+    dialogdeleteOpen,
+    setError,
+    setErrorMessage,
+    deletefile,
+    setDeleteFile,
+    handlecheckbox,
+    setSelectAll,
+    selectAll,
+    handleSelectAll,
+    handleDocumentDownload
   } = useVehicleinfo();
-
+  console.log(allFile, 'data.........');
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -120,65 +195,186 @@ const Vehicaleinfo = () => {
     <div className="vehicale-form">
       <form action="">
         <div className="detail-container-main-vehicale">
-          <div className="container-left-vehicale">
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <MinorCrashIcon color="action" />
+
+          <div className="vehicaleinfo-container">
+            <div className="vehicaleinfo-container-left">
+              <div className="input-field">
+                <div className="input">
+                  <div className="icone">
+                    <MinorCrashIcon color="action" />
+                  </div>
+                  <TextField
+                    name="vehicleId"
+                    value={selectedCustomerData.vehicleId || book.vehicleId}
+                    onChange={handleChange}
+                    label="Vehicle ID"
+                    id="standard-size-normal"
+                    variant="standard"
+                  />
                 </div>
-                <TextField
-                  name="vehicleId"
-                  value={selectedCustomerData.vehicleId || book.vehicleId}
-                  onChange={handleChange}
-                  label="Vehicle ID"
-                  id="standard-size-normal"
-                  variant="standard"
-                />
-              </div>
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Attached Date"
-                    format="DD/MM/YYYY"
-                    value={selectedCustomerData.doadate ? dayjs(selectedCustomerData.doadate) : null}
-                    onChange={(date) => handleDateChange(date, 'doadate')}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='doadate' value={selectedCustomerData.doadate} />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider>
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <CarCrashIcon color="action" />
+                <div className="input">
+                  <div className="icone">
+                    <FaCar />
+
+                  </div>
+                  <TextField
+                    name="vehiclename"
+
+                    // value={
+                    //   vechiclebook.vehiclename ||
+                    //   ""
+                    // }
+                    // onChange={handleChange}
+                    // onKeyDown={handleKeyEnter}
+                    label="Vehicle Name"
+                    id="standard-size-normal"
+                    variant="standard"
+                  />
+                  {/* </div> */}
                 </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="veh_reg_no"
-                  label="Vehicle Reg No"
-                  name="vehRegNo"
-                  value={selectedCustomerData.vehRegNo || book.vehRegNo}
-                  onChange={handleChange}
-                />
+
               </div>
-              <div className="input" style={{ width: "240px" }}>
-                <div className="icone">
-                  <PriceChangeIcon color="action" />
+              <div className="input-field">
+                <div className="input">
+                  <div className="icone">
+                    <AirportShuttleIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-demo"
+                    freeSolo
+                    sx={{ width: "20ch" }}
+                    // onChange={(event, value) =>
+                    //   handleAutocompleteChange(event, value, "hireTypes")
+                    // }
+                    // value={
+                    //   Hire.find((option) => option.Option)?.label ||
+                    //   formData.hireTypes ||
+                    //   selectedCustomerData.hireTypes ||
+                    //   book.hireTypes ||
+                    //   ""
+                    // }
+                    options={Hire?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    // getOptionLabel={(option) =>
+                    //   option.label ||
+                    //   formData.hireTypes ||
+                    //   selectedCustomerData.hireTypes ||
+                    //   book.hireTypes ||
+                    //   ""
+                    // }
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          label="Hire Types"
+                          name="hireTypes"
+                          inputRef={params.inputRef}
+                        />
+                      );
+                    }}
+                  />
                 </div>
-                <TextField
-                  name="costCenter"
-                  value={selectedCustomerData.costCenter || book.costCenter}
-                  onChange={handleChange}
-                  label="Cost Center Location"
-                  id="standard-size-normal"
-                  size='small'
-                />
+                <div className="input radio">
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    // value={vechiclebook?.vehicletype || ''}
+                    options={vehicaleinfos?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    // onChange={(event, value) => setVechiclebook((prevBook) => ({
+                    //   ...prevBook,
+                    //   "vehicletype": value?.label,
+                    // }))}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Vehicle Type" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="input-field">
-              <div className="input">
+              <div className="input-field">
+                <div className="input">
+                  <div className="icone">
+                    <EmailIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    // value={vechiclebook?.Groups || ''}
+                    options={GroupTypes?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    // onChange={(event, value) => setVechiclebook((prevBook) => ({
+                    //   ...prevBook,
+                    //   "Groups": value?.label,
+                    // }))}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
+                <div className="input radio">
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    // value={vechiclebook?.vehicletype || ''}
+                    options={fueltypes?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    // onChange={(event, value) => setVechiclebook((prevBook) => ({
+                    //   ...prevBook,
+                    //   "vehicletype": value?.label,
+                    // }))}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="fuel Type" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="input-field">
+                <div className="input">
+                  <div className="icone">
+                    <CarCrashIcon color="action" />
+                  </div>
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    id="veh_reg_no"
+                    label="Vehicle Reg No"
+                    name="vehRegNo"
+                    value={selectedCustomerData.vehRegNo || book.vehRegNo}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="input" style={{ width: "230px" }}>
+                  <div className="icone">
+                    <PriceChangeIcon color="action" />
+                  </div>
+                  <TextField
+                    name="costCenter"
+                    value={selectedCustomerData.costCenter || book.costCenter}
+                    onChange={handleChange}
+                    label="Cost Center Location"
+                    id="standard-size-normal"
+                    size='small'
+                  />
+                </div>
+                {/* <div className="input">
                 <div className="icone">
                   <CommuteIcon color="action" />
                 </div>
@@ -190,390 +386,557 @@ const Vehicaleinfo = () => {
                   id="veh_type"
                   size='small'
                 />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <EmojiTransportationIcon color="action" />
-                </div>
-                <TextField
-                  name="owner"
-                  value={selectedCustomerData.owner || book.owner}
-                  onChange={handleChange}
-                  label="Owner"
-                  id="owner"
-                  size='small'
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <ContactPhoneIcon color="action" />
-                </div>
-                <TextField
-                  name="mobileNo"
-                  value={selectedCustomerData.mobileNo || book.mobileNo}
-                  onChange={handleChange}
-                  label="Mobile No"
-                  id="mobile_no"
-                  size='small'
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <AttachEmailIcon color="action" />
-                </div>
-                <TextField
-                  name="email"
-                  size='small'
-                  value={selectedCustomerData.email || book.email}
-                  onChange={handleChange}
-                  label="Email"
-                  id="email"
-                />
+              </div> */}
               </div>
             </div>
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <AssessmentIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="year_model"
-                  name="yearModel"
-                  value={selectedCustomerData.yearModel || book.yearModel}
-                  onChange={handleChange}
-                  label="Year Model"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <ContactPhoneIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  name="insuranceno"
-                  value={selectedCustomerData.insuranceno || book.insuranceno}
-                  onChange={handleChange}
-                  label="Insurance No"
-                  id="tank_cap"
-                />
-              </div>
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Insurance Due Date"
-                    format="DD/MM/YYYY"
-                    value={selectedCustomerData.insduedate ? dayjs(selectedCustomerData.insduedate) : null}
-                    onChange={(date) => handleDateChange(date, 'insduedate')}
+            <div className="vehicaleinfo-container-right">
+              <div className="vehicaleinfo-update-main">
+                <div className="vehicaleinfo-update">
+                  <div
+                    className="Scroll-Style"
+                    style={{ overflow: "scroll", height: "220px" }}
                   >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='insduedate' value={selectedCustomerData.insduedate} />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider>
+                    <table>
+                      <thead id="update-header">
+                        <tr>
+                          <th>ID</th>
+                          <th>Vehicle_Name</th>
+                          <th>Vehicle_Type</th>
+                          <th>status</th>
+                          <th>Group</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        {rows?.length === 0 ? (
+                          <tr>
+                            <td colSpan={6}>No data available.</td>
+                          </tr>
+                        ) : (
+                          rows?.map((row) => (
+                            <tr
+                              id="update-row"
+                              key={row.id}
+                              onClick={() => handleRowClick(row)}
+
+                            >
+                              <td>{row.vehicleid}</td>
+                              <td>{row.vehiclename}</td>
+                              <td>{row.vehicletype}</td>
+                              <td>{row.Active}</td>
+                              <td>{row.Groups}</td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-              <div className="input">
-                <Button color="primary" onClick={() => handleUpload('InsuranceCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+            </div>
+          </div>
+          <div className="input-field">
+            <div className="input">
+              <div className="icone">
+                <AssessmentIcon color="action" />
+              </div>
+              <TextField
+                margin="normal"
+                size="small"
+                id="year_model"
+                name="yearModel"
+                value={selectedCustomerData.yearModel || book.yearModel}
+                onChange={handleChange}
+                label="Year Model"
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <EmojiTransportationIcon color="action" />
+              </div>
+              <TextField
+                name="owner"
+                value={selectedCustomerData.owner || book.owner}
+                onChange={handleChange}
+                label="Owner"
+                id="owner"
+                size='small'
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <ContactPhoneIcon color="action" />
+              </div>
+              <TextField
+                name="mobileNo"
+                value={selectedCustomerData.mobileNo || book.mobileNo}
+                onChange={handleChange}
+                label="Mobile No"
+                id="mobile_no"
+                size='small'
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <AttachEmailIcon color="action" />
+              </div>
+              <TextField
+                name="email"
+                size='small'
+                value={selectedCustomerData.email || book.email}
+                onChange={handleChange}
+                label="Email"
+                id="email"
+              />
+            </div>
+            <div className="input">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Attached Date"
+                  format="DD/MM/YYYY"
+                  value={selectedCustomerData.doadate ? dayjs(selectedCustomerData.doadate) : null}
+                  onChange={(date) => handleDateChange(date, 'doadate')}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField {...inputProps} inputRef={inputRef} name='doadate' value={selectedCustomerData.doadate} />
+                  )}
+                </DatePicker>
+              </LocalizationProvider>
+            </div>
+          </div>
+          <div className="input-field">
+            <div className="input">
+              <div className="icone">
+                <ContactPhoneIcon color="action" />
+              </div>
+              <TextField
+                margin="normal"
+                size="small"
+                name="insuranceno"
+                value={selectedCustomerData.insuranceno || book.insuranceno}
+                onChange={handleChange}
+                label="Insurance No"
+                id="tank_cap"
+              />
+            </div>
+            <div className="input">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Insurance Due Date"
+                  format="DD/MM/YYYY"
+                  value={selectedCustomerData.insduedate ? dayjs(selectedCustomerData.insduedate) : null}
+                  onChange={(date) => handleDateChange(date, 'insduedate')}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField {...inputProps} inputRef={inputRef} name='insduedate' value={selectedCustomerData.insduedate} />
+                  )}
+                </DatePicker>
+              </LocalizationProvider>
+            </div>
+            <div className="input">
+              {selectedCustomerData.vehicleId || book.vehicleId ? (
+                <Button color="primary" variant="contained" size="md" component="label">
+                  Insurance Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setInsurance(e.target.files[0])}
+                  />
+                </Button>
+              ) : (
+                <Button color="primary" variant="contained" onClick={() => {
+                  setError(true);
+                  setErrorMessage("Please Enter Booking No");
+                }}>
                   Insurance Copy
                 </Button>
-              </div>
+              )}
             </div>
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <TbLicense color="action" style={{ fontSize: "23px" }} />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  name="licenseno"
-                  value={selectedCustomerData.licenseno || book.licenseno}
-                  onChange={handleChange}
-                  label="License No"
-                  id="tank_cap"
-                />
+          </div>
+          <div className="input-field">
+            <div className="input">
+              <div className="icone">
+                <TbLicense color="action" style={{ fontSize: "23px" }} />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <BatchPredictionIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  name="licensebatchno"
-                  value={selectedCustomerData.licensebatchno || book.licensebatchno}
-                  onChange={handleChange}
-                  label="License Batch No"
-                  id="tank_cap"
-                />
+              <TextField
+                margin="normal"
+                size="small"
+                name="licenseno"
+                value={selectedCustomerData.licenseno || book.licenseno}
+                onChange={handleChange}
+                label="License No"
+                id="tank_cap"
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <BatchPredictionIcon color="action" />
               </div>
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="License Due Date"
-                    format="DD/MM/YYYY"
-                    value={selectedCustomerData.licduedate ? dayjs(selectedCustomerData.licduedate) : null}
-                    onChange={(date) => handleDateChange(date, 'licduedate')}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='licduedate' value={selectedCustomerData.licduedate} />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider>
-              </div>
-              <div className="input">
-                <Button color="primary" onClick={() => handleUpload('LicenseCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+              <TextField
+                margin="normal"
+                size="small"
+                name="licensebatchno"
+                value={selectedCustomerData.licensebatchno || book.licensebatchno}
+                onChange={handleChange}
+                label="License Batch No"
+                id="tank_cap"
+              />
+            </div>
+            <div className="input">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="License Due Date"
+                  format="DD/MM/YYYY"
+                  value={selectedCustomerData.licduedate ? dayjs(selectedCustomerData.licduedate) : null}
+                  onChange={(date) => handleDateChange(date, 'licduedate')}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField {...inputProps} inputRef={inputRef} name='licduedate' value={selectedCustomerData.licduedate} />
+                  )}
+                </DatePicker>
+              </LocalizationProvider>
+            </div>
+            <div className="input">
+              {selectedCustomerData.vehicleId || book.vehicleId ? (
+                <Button color="primary" variant="contained" size="md" component="label">
+                  License Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setLicence(e.target.files[0])}
+                  />
+                </Button>
+              ) : (
+                <Button color="primary" variant="contained" onClick={() => {
+                  setError(true);
+                  setErrorMessage("Please Enter Booking No");
+                }}>
                   License Copy
                 </Button>
-              </div>
+              )}
             </div>
-            <div className="input-field">
-              <div className="input" style={{ width: "220px" }}>
-                <div className="icone">
-                  <DocumentScannerIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  name="nationalpermito"
-                  value={selectedCustomerData.nationalpermito || book.nationalpermito}
-                  onChange={handleChange}
-                  label="National Permit No"
-                  id="tank_cap"
-                />
+          </div>
+          <div className="input-field">
+            <div className="input" style={{ width: "220px" }}>
+              <div className="icone">
+                <DocumentScannerIcon color="action" />
               </div>
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="National Permit Date"
-                    format="DD/MM/YYYY"
-                    value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
-                    onChange={(date) => handleDateChange(date, 'npdate')}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData.npdate} />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider>
-              </div>
-              <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" onClick={() => handleUpload('NationalPermitCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+              <TextField
+                margin="normal"
+                size="small"
+                name="nationalpermito"
+                value={selectedCustomerData.nationalpermito || book.nationalpermito}
+                onChange={handleChange}
+                label="National Permit No"
+                id="tank_cap"
+              />
+            </div>
+            <div className="input">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="National Permit Date"
+                  format="DD/MM/YYYY"
+                  value={selectedCustomerData.npdate ? dayjs(selectedCustomerData.npdate) : null}
+                  onChange={(date) => handleDateChange(date, 'npdate')}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField {...inputProps} inputRef={inputRef} name='npdate' value={selectedCustomerData.npdate} />
+                  )}
+                </DatePicker>
+              </LocalizationProvider>
+            </div>
+            <div className="input" style={{ width: "220px" }}>
+              {selectedCustomerData.vehicleId || book.vehicleId ? (
+                <Button color="primary" variant="contained" size="md" component="label">
+                  National Permit Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setNationalPermit(e.target.files[0])}
+                  />
+                </Button>
+              ) : (
+                <Button color="primary" variant="contained" onClick={() => {
+                  setError(true);
+                  setErrorMessage("Please Enter Booking No");
+                }}>
                   National Permit Copy
                 </Button>
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <SpeedIcon color="action" />
-                </div>
-                <TextField
-                  name="avgmileage"
-                  value={selectedCustomerData.avgmileage || book.avgmileage}
-                  onChange={handleChange}
-                  label="AVG Mileage"
-                  id="avgmileage"
-                  size="small"
-                />
-              </div>
+              )}
             </div>
-            <div className="input-field">
-              <div className="input" style={{ width: "220px" }}>
-                <div className="icone">
-                  <DocumentScannerIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  name="statepermito"
-                  value={selectedCustomerData.statepermito || book.statepermito}
-                  onChange={handleChange}
-                  label="State Permit No"
-                  id="tank_cap"
-                />
+            <div className="input">
+              <div className="icone">
+                <SpeedIcon color="action" />
               </div>
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="State Permit Date"
-                    format="DD/MM/YYYY"
-                    value={selectedCustomerData.spdate ? dayjs(selectedCustomerData.spdate) : null}
-                    onChange={(date) => handleDateChange(date, 'spdate')}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='spdate' value={selectedCustomerData.spdate} />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider>
+              <TextField
+                name="avgmileage"
+                value={selectedCustomerData.avgmileage || book.avgmileage}
+                onChange={handleChange}
+                label="AVG Mileage"
+                id="avgmileage"
+                size="small"
+              />
+            </div>
+          </div>
+          <div className="input-field">
+            <div className="input" style={{ width: "220px" }}>
+              <div className="icone">
+                <DocumentScannerIcon color="action" />
               </div>
-              <div className="input" style={{ width: "220px" }}>
-                <Button color="primary" onClick={() => handleUpload('StatePermitCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+              <TextField
+                margin="normal"
+                size="small"
+                name="statepermito"
+                value={selectedCustomerData.statepermito || book.statepermito}
+                onChange={handleChange}
+                label="State Permit No"
+                id="tank_cap"
+              />
+            </div>
+            <div className="input">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="State Permit Date"
+                  format="DD/MM/YYYY"
+                  value={selectedCustomerData.spdate ? dayjs(selectedCustomerData.spdate) : null}
+                  onChange={(date) => handleDateChange(date, 'spdate')}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField {...inputProps} inputRef={inputRef} name='spdate' value={selectedCustomerData.spdate} />
+                  )}
+                </DatePicker>
+              </LocalizationProvider>
+            </div>
+            <div className="input" style={{ width: "220px" }}>
+              {selectedCustomerData.vehicleId || book.vehicleId ? (
+                <Button color="primary" variant="contained" size="md" component="label">
+                  State Permit Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setStatePermit(e.target.files[0])}
+                  />
+                </Button>
+              ) : (
+                <Button color="primary" variant="contained" onClick={() => {
+                  setError(true);
+                  setErrorMessage("Please Enter Booking No");
+                }}>
                   State Permit Copy
                 </Button>
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <AccountBalanceWalletIcon color="action" />
-                </div>
-                <TextField
-                  name="financer"
-                  value={selectedCustomerData.financer || book.financer}
-                  onChange={handleChange}
-                  label="Financer"
-                  id="financer"
-                  size="small"
-                />
-              </div>
+              )}
             </div>
-            <div className="input-field">
-              <div className="input" style={{ width: "220px" }}>
-                <div className="icone">
-                  <HistoryEduIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  name="rcbookno"
-                  value={selectedCustomerData.rcbookno || book.rcbookno}
-                  onChange={handleChange}
-                  label="RC Book No"
-                  id="tank_cap"
-                />
+            <div className="input">
+              <div className="icone">
+                <AccountBalanceWalletIcon color="action" />
               </div>
-              <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="FC Date"
-                    format="DD/MM/YYYY"
-                    value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
-                    onChange={(date) => handleDateChange(date, 'fcdate')}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField {...inputProps} inputRef={inputRef} name='fcdate' value={selectedCustomerData.fcdate} />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider>
+              <TextField
+                name="financer"
+                value={selectedCustomerData.financer || book.financer}
+                onChange={handleChange}
+                label="Financer"
+                id="financer"
+                size="small"
+              />
+            </div>
+          </div>
+          <div className="input-field">
+            <div className="input" style={{ width: "220px" }}>
+              <div className="icone">
+                <HistoryEduIcon color="action" />
               </div>
-              <div className="input">
-                <Button color="primary" onClick={() => handleUpload('RCBookCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+              <TextField
+                margin="normal"
+                size="small"
+                name="rcbookno"
+                value={selectedCustomerData.rcbookno || book.rcbookno}
+                onChange={handleChange}
+                label="RC Book No"
+                id="tank_cap"
+              />
+            </div>
+            <div className="input">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="FC Date"
+                  format="DD/MM/YYYY"
+                  value={selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null}
+                  onChange={(date) => handleDateChange(date, 'fcdate')}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField {...inputProps} inputRef={inputRef} name='fcdate' value={selectedCustomerData.fcdate} />
+                  )}
+                </DatePicker>
+              </LocalizationProvider>
+            </div>
+            <div className="input">
+              {selectedCustomerData.vehicleId || book.vehicleId ? (
+                <Button color="primary" variant="contained" size="md" component="label">
+                  RC-Book Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setRcbook(e.target.files[0])}
+                  />
+                </Button>
+              ) : (
+                <Button color="primary" variant="contained" onClick={() => {
+                  setError(true);
+                  setErrorMessage("Please Enter Booking No");
+                }}>
                   RC-Book Copy
                 </Button>
-              </div>
-              <div className="input" style={{ width: "160px" }}>
-                <Button color="primary" onClick={() => handleUpload('FCCopy')} disabled={isFieldReadOnly("new")} size="md" variant="contained">
+              )}
+            </div>
+            <div className="input" style={{ width: "160px" }}>
+              {selectedCustomerData.vehicleId || book.vehicleId ? (
+                <Button color="primary" variant="contained" size="md" component="label">
+                  FC Copy
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setFcCopy(e.target.files[0])}
+                  />
+                </Button>
+              ) : (
+                <Button color="primary" variant="contained" onClick={() => {
+                  setError(true);
+                  setErrorMessage("Please Enter Booking No");
+                }}>
                   FC Copy
                 </Button>
-              </div>
+              )}
             </div>
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <AirlineSeatReclineExtraIcon color="action" />
-                </div>
-                <TextField
-                  name="driverName"
-                  value={selectedCustomerData.driverName || book.driverName}
-                  onChange={handleChange}
-                  label="Driver Name"
-                  id="driver_name"
-                  size="small"
-                />
+          </div>
+          <div className="input-field">
+            <div className="input">
+              <div className="icone">
+                <AirlineSeatReclineExtraIcon color="action" />
               </div>
-              <div className="input">
-                <div className="icone">
-                  <ContactPhoneIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  name="tankCap"
-                  value={selectedCustomerData.tankCap || book.tankCap}
-                  onChange={handleChange}
-                  label="Tank Cap"
-                  id="tank_cap"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <AltRouteIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  name="routeno"
-                  value={selectedCustomerData.routeno || book.routeno}
-                  onChange={handleChange}
-                  label="Route No"
-                  id="routeno"
-                />
-              </div>
-              <div className="input">
-                <div className="icone">
-                  <AutoModeIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  name="remarks"
-                  value={selectedCustomerData.remarks || book.remarks}
-                  onChange={handleChange}
-                  label="Remarks"
-                  id="remarks"
-                />
-              </div>
+              <TextField
+                name="driverName"
+                value={selectedCustomerData.driverName || book.driverName}
+                onChange={handleChange}
+                label="Driver Name"
+                id="driver_name"
+                size="small"
+              />
             </div>
-            <div className="input-field">
-              <div className="input">
-                <div className="icone">
-                  <AssignmentIndTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  name="OwnerType"
-                  value={selectedCustomerData.OwnerType || book.OwnerType}
+            <div className="input">
+              <div className="icone">
+                <ContactPhoneIcon color="action" />
+              </div>
+              <TextField
+                margin="normal"
+                size="small"
+                name="tankCap"
+                value={selectedCustomerData.tankCap || book.tankCap}
+                onChange={handleChange}
+                label="Tank Cap"
+                id="tank_cap"
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <AltRouteIcon color="action" />
+              </div>
+              <TextField
+                margin="normal"
+                size="small"
+                name="routeno"
+                value={selectedCustomerData.routeno || book.routeno}
+                onChange={handleChange}
+                label="Route No"
+                id="routeno"
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <AutoModeIcon color="action" />
+              </div>
+              <TextField
+                margin="normal"
+                size="small"
+                name="remarks"
+                value={selectedCustomerData.remarks || book.remarks}
+                onChange={handleChange}
+                label="Remarks"
+                id="remarks"
+              />
+            </div>
+          </div>
+          <div className="input-field">
+            {/* <div className="input">
+              <div className="icone">
+                <AssignmentIndTwoToneIcon color="action" />
+              </div>
+              <TextField
+                name="OwnerType"
+                value={selectedCustomerData.OwnerType || book.OwnerType}
+                onChange={handleChange}
+                label="Owner Type"
+                id="owner_type"
+                size="small"
+              />
+            </div> */}
+            <div className="input">
+              <FormControl>
+                <FormLabel id="demo-row-radio-buttons-group-label">
+                  Active
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="active"
+                  autoComplete="new-password"
                   onChange={handleChange}
-                  label="Owner Type"
-                  id="owner_type"
-                  size="small"
-                />
-              </div>
-              <div className="input">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    Active
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="active"
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    value={selectedCustomerData.active || book.active}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div>
-              <div className="input" style={{ width: "80px" }}>
-                <Button variant="outlined" startIcon={<SummarizeTwoToneIcon />}>
-                  list
-                </Button>
-              </div>
-              <div className="input" style={{ width: "80px" }}>
-                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
-              </div>
+                  value={selectedCustomerData.active || book.active}
+                >
+                  <FormControlLabel
+                    value="yes"
+                    control={<Radio />}
+                    label="Yes"
+                  />
+                  <FormControlLabel
+                    value="no"
+                    control={<Radio />}
+                    label="No"
+                  />
+                </RadioGroup>
+              </FormControl>
             </div>
 
+            <div className="input" style={{ width: "215px" }}>
+              <div className="icone">
+                <ContactMailIcon color="action" />
+              </div>
+              <TextField
+                size="small"
+                id="Segment"
+                label="Segment"
+                name="Segment"
+              // value={
+              //   vechiclebook.Segment ||
+              //   ""
+              // }
+              // onChange={handleChange}
+              />
+            </div>
+            <div className="input" style={{ width: "80px" }}>
+              <Button variant="outlined" startIcon={<SummarizeTwoToneIcon />}>
+                list
+              </Button>
+            </div>
+            <div className="input" style={{ width: "160px" }}>
+              {isEditMode ? (
+                <Button variant="contained" onClick={handleEdit}>Edit</Button>
+              ) : (
+                <Button variant="contained" onClick={handleAdd} >Add</Button>
+              )}
+            </div>
           </div>
         </div>
+
         {error && <div className='alert-popup Error' >
           <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
           <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
@@ -600,21 +963,7 @@ const Vehicaleinfo = () => {
             <p>{successMessage}</p>
           </div>
         }
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-          <StyledSpeedDial
-            ariaLabel="SpeedDial playground example"
-            icon={<SpeedDialIcon />}
-          >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name)}
-              />
-            ))}
-          </StyledSpeedDial>
-        </Box>
+
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Booking">
@@ -631,7 +980,6 @@ const Vehicaleinfo = () => {
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                   />
-
                 </div>
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -662,6 +1010,22 @@ const Vehicaleinfo = () => {
             </div>
           </div>
         </div>
+        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <StyledSpeedDial
+            ariaLabel="SpeedDial playground example"
+            icon={<SpeedDialIcon />}
+            direction="left"
+          >
+            {actions.map((action) => (
+              <SpeedDialAction
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={action.name}
+                onClick={(event) => handleClick(event, action.name)}
+              />
+            ))}
+          </StyledSpeedDial>
+        </Box>
         <div className="Download-btn">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
@@ -684,9 +1048,50 @@ const Vehicaleinfo = () => {
               columns={columns}
               onRowClick={handleRowClick}
               pageSize={5}
-              checkboxSelection
             />
           </div>
+          <Dialog open={dialogOpen} onClose={handleCloseDialog} >
+            <DialogContent>
+              <div style={{ position: 'relative' }}>
+                <Button variant='contained' style={{ marginBottom: 10 }} onClick={handleSelectAll}>
+                  {selectAll ? 'Deselect All' : 'Select All'}
+                </Button>
+                {Array.isArray(allFile) && allFile.map((img, index) => (
+                  <div key={index} style={{ borderBottom: '1px solid black' }}>
+                    {/* <embed src={${apiUrl}/public/vehicle_doc/ + img.fileName} type="application/pdf" width="100%" height="600px" /> */}
+                    {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
+                      ? <img src={`${apiUrl}/public/vehicle_doc/ + img.fileName`} type="application/pdf" width="100%" height="400px" /> :
+                      <embed src={`${apiUrl}/public/vehicle_doc/ + img.fileName`} type="application/pdf" width="100%" height="400px" />}
+                    {/* <button onClick={() => handleimagedelete(img.fileName)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0 }} /> */}
+
+                    <Checkbox typeof='checked'
+                      checked={deletefile.includes(img.fileName)}
+                      onClick={(event) => {
+
+                        handlecheckbox(img.fileName)
+
+                      }} />
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'flex', padding: 10, gap: 15 }}>
+
+                <Button variant="contained" onClick={() => handleimagedelete(deletefile)}>Delete</Button>
+                <Button variant='contained' onClick={() => handleDocumentDownload()}>Print</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+          <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
+            <DialogContent>
+              <div>
+                <h3>are you sure you want to delete</h3>
+                <div>
+                  <Button onClick={handleContextMenu}>yes</Button>
+                  <Button onClick={handleClosedeleteDialog}>No</Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </form>
     </div>

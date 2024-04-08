@@ -43,7 +43,6 @@ const Billed = () => {
     columns,
     handleButtonClick,
     handleShowAll,
-
   } = useBilled();
 
   useEffect(() => {

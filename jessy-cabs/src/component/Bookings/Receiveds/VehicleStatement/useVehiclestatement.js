@@ -3,7 +3,7 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
 import { saveAs } from 'file-saver';
-
+import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -29,9 +29,8 @@ const columns = [
 ];
 
 const useVehiclestatement = () => {
-
-    const user_id = localStorage.getItem('useridno');
-
+    const apiUrl = APIURL;
+    // const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
     const [servicestation, setServiceStation] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
@@ -47,59 +46,7 @@ const useVehiclestatement = () => {
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
-    // for page permission
-
-    const [userPermissions, setUserPermissions] = useState({});
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Booking';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
-            }
-        };
-
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Booking';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
+    //----popup------------------------
 
     const hidePopup = () => {
         setSuccess(false);
@@ -108,38 +55,15 @@ const useVehiclestatement = () => {
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
-    }, [error]);
+    }, [error, success, warning, info]);
 
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [info]);
+    //-----------------------------------------------------
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -157,7 +81,6 @@ const useVehiclestatement = () => {
         pdf.setFont('helvetica', 'normal');
         pdf.text("VehicleStatement Reports", 10, 10);
 
-        // Modify tableData to exclude the index number
         const tableData = rows.map((row) => [
             row['id'],
             row['status'],
@@ -184,14 +107,13 @@ const useVehiclestatement = () => {
     };
 
     const handleInputChange = (event, newValue) => {
-        setServiceStation(newValue ? newValue.label : ''); // Assuming the label field contains the station name
+        setServiceStation(newValue ? newValue.label : '');
     };
 
     const handleShow = useCallback(async () => {
-
         try {
             const response = await axios.get(
-                `http://localhost:8081/VehicleStatement-bookings?servicestation=${encodeURIComponent(
+                `${apiUrl}/VehicleStatement-bookings?servicestation=${encodeURIComponent(
                     servicestation
                 )}&fromDate=${encodeURIComponent(fromDate.toISOString())}&toDate=${encodeURIComponent(
                     toDate.toISOString()
@@ -216,14 +138,13 @@ const useVehiclestatement = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [servicestation, fromDate, toDate]);
-
+    }, [servicestation, fromDate, toDate, apiUrl]);
 
     const handleShowAll = useCallback(async () => {
 
         try {
             const response = await axios.get(
-                `http://localhost:8081/booking`
+                `${apiUrl}/booking`
             );
             const data = response.data;
             if (data.length > 0) {
@@ -244,7 +165,7 @@ const useVehiclestatement = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, []);
+    }, [apiUrl]);
 
     const handleButtonClick = (row) => {
         setSelectedRow(row);
@@ -274,7 +195,6 @@ const useVehiclestatement = () => {
         errorMessage,
         warningMessage,
         infoMessage,
-        isFieldReadOnly,
         hidePopup,
         servicestation,
         handleInputChange,

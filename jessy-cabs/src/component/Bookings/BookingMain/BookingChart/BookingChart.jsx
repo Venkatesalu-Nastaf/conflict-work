@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 import "./BookingChart.css";
 import Button from "@mui/material/Button";
@@ -8,11 +8,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 // ICONS
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import useBookingchart from './useBookingchart';
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import useBookingchart from "./useBookingchart";
 
 const BookingChart = () => {
   const {
@@ -26,7 +26,6 @@ const BookingChart = () => {
     warningMessage,
     infoMessage,
     handleClick,
-    isFieldReadOnly,
     hidePopup,
     fromDate,
     setFromDate,
@@ -35,12 +34,11 @@ const BookingChart = () => {
     vehicles,
     columns,
     showBookedStatusAll,
-    
   } = useBookingchart();
 
   useEffect(() => {
-    if (actionName === 'List') {
-      handleClick(null, 'List');
+    if (actionName === "List") {
+      handleClick(null, "List");
     }
   }, [actionName, handleClick]);
   return (
@@ -74,7 +72,7 @@ const BookingChart = () => {
                   <Button
                     variant="contained"
                     onClick={() => showBookedStatusAll(fromDate, toDate)}
-                    disabled={isFieldReadOnly("read")}
+
                   >
                     Show Booked Status All
                   </Button>
@@ -83,34 +81,54 @@ const BookingChart = () => {
             </div>
           </div>
         </div>
-        {error &&
-          <div className='alert-popup Error' >
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+        {error && (
+          <div className="alert-popup Error">
+            <div className="popup-icon">
+              {" "}
+              <ClearIcon style={{ color: "#fff" }} />{" "}
+            </div>
+            <span className="cancel-btn" onClick={hidePopup}>
+              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+            </span>
             <p>{errorMessage}</p>
           </div>
-        }
-        {warning &&
-          <div className='alert-popup Warning' >
-            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+        )}
+        {warning && (
+          <div className="alert-popup Warning">
+            <div className="popup-icon">
+              {" "}
+              <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
+            </div>
+            <span className="cancel-btn" onClick={hidePopup}>
+              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+            </span>
             <p>{warningMessage}</p>
           </div>
-        }
-        {success &&
-          <div className='alert-popup Success' >
-            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+        )}
+        {success && (
+          <div className="alert-popup Success">
+            <div className="popup-icon">
+              {" "}
+              <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+            </div>
+            <span className="cancel-btn" onClick={hidePopup}>
+              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+            </span>
             <p>{successMessage}</p>
           </div>
-        }
-        {info &&
-          <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+        )}
+        {info && (
+          <div className="alert-popup Info">
+            <div className="popup-icon">
+              {" "}
+              <BsInfo style={{ color: "#fff" }} />{" "}
+            </div>
+            <span className="cancel-btn" onClick={hidePopup}>
+              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+            </span>
             <p>{infoMessage}</p>
           </div>
-        }
+        )}
         <div className="table-bookingCopy-BookingChart">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid

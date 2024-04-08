@@ -1,15 +1,12 @@
 import React, { useEffect } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
-
 import Box from "@mui/material/Box";
-
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
-
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -35,6 +32,7 @@ import {
   RadioGroup,
   Checkbox,
 } from "@mui/material";
+
 // ICONS
 import InfoIcon from "@mui/icons-material/Info";
 import SellIcon from "@mui/icons-material/Sell";
@@ -83,6 +81,7 @@ import useBooking from "./useBooking";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import { APIURL } from "../../../url";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -97,6 +96,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 const Booking = () => {
+  const apiUrl = APIURL;
   const {
     selectedCustomerData,
     selectedCustomerId,
@@ -113,7 +113,6 @@ const Booking = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -127,6 +126,7 @@ const Booking = () => {
     selectedCustomerDatas,
     handleKeyEnter,
     formValues,
+    handleenterSearch,
     handleAutocompleteChange,
     setFormData,
     setStartTime,
@@ -139,9 +139,6 @@ const Booking = () => {
     currentYear,
     setTripTime,
     handleClickHide,
-    handleUpload,
-    handleGetMail,
-    attachedImage,
     actions,
     searchText,
     setSearchText,
@@ -159,8 +156,21 @@ const Booking = () => {
     reversedRows,
     columns,
     handletableClick,
-    popupOpenmail,
-    // ... (other state variables and functions)
+    setFile,
+    dialogOpen,
+    handleCloseDialog,
+    allFile,
+    handleButtonClick,
+    isEditMode,
+    handleEdit,
+    handleContextMenu,
+    handleimagedelete,
+    handleClosedeleteDialog,
+    dialogdeleteOpen,
+    handleprevent,
+    setErrorMessage,
+    setError,
+    edit,
   } = useBooking();
 
   useEffect(() => {
@@ -507,6 +517,7 @@ const Booking = () => {
             <div className="input-field">
               <div className="input">
                 <div className="icone">
+<<<<<<< HEAD
                   <DomainAddIcon color="action" />
                 </div>
                 <Autocomplete
@@ -549,6 +560,10 @@ const Booking = () => {
                 />
               </div>
               <div className="input">
+=======
+                  <LocationCityIcon color="action" />
+                </div>
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -639,9 +654,15 @@ const Booking = () => {
                     value={
                       formData.startdate || selectedCustomerData.startdate
                         ? dayjs(selectedCustomerData.startdate)
+<<<<<<< HEAD
                         : null || book.startdate
                         ? dayjs(book.startdate)
                         : null
+=======
+                        : dayjs() || book.startdate
+                          ? dayjs(book.startdate)
+                          : dayjs()
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
                     }
                     format="DD/MM/YYYY"
                     onChange={(date) => handleDateChange(date, "startdate")}
@@ -981,13 +1002,15 @@ const Booking = () => {
             </div>
             <div className="inpu-field">
               <div className="input">
-                <FormControlLabel
+                {/* <FormControlLabel
                   value="guestsms"
                   control={
                     <Checkbox
                       size="small"
                       name="guestsms"
-                      checked={guestsms || formData.guestsms || book.guestsms}
+                      // checked={guestsms || formData.guestsms || book.guestsms}
+                      checked={Boolean(guestsms || formData.guestsms || book.guestsms)}
+
                       onChange={(event) => {
                         setBook({ ...book, guestsms: event.target.checked });
                         setFormData({
@@ -999,21 +1022,35 @@ const Booking = () => {
                     />
                   }
                   label="Guest SMS"
-                />
+                /> */}
+
                 <FormControlLabel
+                  value="guestsms"
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={guestsms}
+                      defaultChecked
+                      onChange={(event) => setGuestSms(event.target.checked)}
+                    />
+                  }
+                  label="Guest SMS"
+                />
+
+                {/* <FormControlLabel
                   value="bookingsms"
                   control={<Checkbox size="small" />}
                   label="Booking SMS"
-                />
-                <FormControlLabel
+                /> */}
+                {/* <FormControlLabel
                   id="sendMailCheckbox"
                   value="sendemail"
                   control={
                     <Checkbox
                       size="small"
-                      checked={
+                      checked={Boolean(
                         sendEmail || formData.sendemail || book.sendemail
-                      }
+                      )}
                       onChange={(event) => {
                         setBook({ ...book, sendemail: event.target.checked });
                         setFormData({
@@ -1025,7 +1062,36 @@ const Booking = () => {
                     />
                   }
                   label="Send Email"
+                /> */}
+
+                <FormControlLabel
+                  id="sendMailCheckbox"
+                  value="sendemail"
+                  control={
+                    <Checkbox
+                      size="small"
+<<<<<<< HEAD
+                      checked={
+                        sendEmail || formData.sendemail || book.sendemail
+                      }
+                      onChange={(event) => {
+                        setBook({ ...book, sendemail: event.target.checked });
+                        setFormData({
+                          ...formData,
+                          sendemail: event.target.checked,
+                        });
+                        setSendEmail(event.target.checked);
+                      }}
+=======
+                      checked={sendEmail}
+                      defaultChecked
+                      onChange={(event) => setSendEmail(event.target.checked)}
+>>>>>>> 46319b289168a96e10e39b8f2fa1e6141312d0d6
+                    />
+                  }
+                  label="Send Email"
                 />
+
               </div>
               <div className="input">
                 <TextField
@@ -1086,6 +1152,7 @@ const Booking = () => {
                       <DatePicker
                         value={book.tripdate ? dayjs(book.tripdate) : dayjs()}
                         onChange={(date) => handleDateChange(date, "tripdate")}
+                        format="DD/MM/YYYY"
                       >
                         {({ inputProps, inputRef }) => (
                           <TextField
@@ -1126,100 +1193,56 @@ const Booking = () => {
               </div>
             </div>
             <div className="inpu-field">
-              <div className="input radio">
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    Email
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="emaildoggle"
-                    autoComplete="new-password"
-                    value={
-                      formData.emaildoggle ||
-                      selectedCustomerData.emaildoggle ||
-                      book.emaildoggle ||
-                      ""
-                    }
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel
-                      value="Local"
-                      control={<Radio />}
-                      label="Local"
-                    />
-                    <FormControlLabel
-                      value="service"
-                      control={<Radio />}
-                      label="Service"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div>
+              <div className="input radio"></div>
               <div className="input-field">
                 <div className="input">
-                  <Button
-                    variant="contained"
-                    onClick={handleUpload}
-                    disabled={isFieldReadOnly("new")}
-                  >
-                    Attach File
-                  </Button>
+                  {formData.bookingno ||
+                    selectedCustomerData.bookingno ||
+                    book.bookingno ? (
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      component="label"
+                    >
+                      Attach File
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onClick={handleprevent}
+                        onChange={(e) => setFile(e.target.files[0])}
+                      />
+                    </Button>
+                  ) : (
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() => {
+                        setError(true);
+                        setErrorMessage("Please Enter Booking No");
+                      }}
+                    >
+                      Attach File
+                    </Button>
+                  )}
                 </div>
                 <div className="input">
                   <Button
                     variant="outlined"
-                    onClick={handleGetMail}
-                    disabled={isFieldReadOnly("new")}
+                    onClick={handleButtonClick}
+
                   >
                     View
                   </Button>
                 </div>
               </div>
-              <Dialog open={popupOpenmail} onClose={handlePopupClose}>
-                <DialogContent>
-                  {attachedImage &&
-                    attachedImage.map((file, index) =>
-                      file.mimetype === "application/pdf" ? (
-                        <embed
-                          key={index}
-                          src={`http://localhost:8081/pdf/${file.path}`}
-                          type="application/pdf"
-                          width="100%"
-                          height="500px"
-                        />
-                      ) : (
-                        <img
-                          key={index}
-                          src={`http://localhost:8081/images/${file.path}`}
-                          alt={`Attached File ${index}`}
-                          style={{
-                            maxWidth: "100%",
-                            maxHeight: "500px",
-                            marginBottom: "10px",
-                          }}
-                        />
-                      )
-                    )}
-                </DialogContent>
-                <DialogActions>
-                  <Button
-                    onClick={handlePopupClose}
-                    variant="contained"
-                    color="primary"
-                  >
-                    OK
-                  </Button>
-                </DialogActions>
-              </Dialog>
             </div>
           </div>
         </div>
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+        {/* <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
+            direction="left"
           >
             {actions.map((action) => (
               <SpeedDialAction
@@ -1230,6 +1253,26 @@ const Booking = () => {
                   handleClick(event, action.name, selectedCustomerId)
                 }
               />
+            ))}
+          </StyledSpeedDial>
+        </Box> */}
+        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <StyledSpeedDial
+            ariaLabel="SpeedDial playground example"
+            icon={<SpeedDialIcon />}
+            direction="left"
+          >
+            {actions.map((action) => (
+              action.icon ? (
+                <SpeedDialAction
+                  key={action.name}
+                  icon={action.icon}
+                  tooltipTitle={action.name}
+                  onClick={(event) =>
+                    handleClick(event, action.name, selectedCustomerId)
+                  }
+                />
+              ) : null
             ))}
           </StyledSpeedDial>
         </Box>
@@ -1395,13 +1438,32 @@ const Booking = () => {
               />
             </div>
             <div className="input" style={{ width: "100px" }}>
-              <Button
-                variant="contained"
-                onClick={handleAdd}
-                disabled={isFieldReadOnly("new")}
-              >
-                Add
-              </Button>
+              <div className="input" style={{ width: "160px" }}>
+                {isEditMode ? (
+                  <Button variant="contained" onClick={handleEdit}>
+                    Edit
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    onClick={handleAdd}
+
+                  >
+                    Add
+                  </Button>
+                )}
+              </div>
+            </div>
+            <div>
+              {
+                edit ?
+                  <Button
+                    variant="contained"
+                    onClick={handleAdd}
+                  >
+                    Add New</Button> : <></>
+
+              }
             </div>
           </div>
           <Dialog open={popupOpen} onClose={handlePopupClose}>
@@ -1485,6 +1547,7 @@ const Booking = () => {
                     label="Search"
                     name="searchText"
                     value={searchText || ""}
+                    onKeyDown={handleenterSearch}
                     onChange={(e) => setSearchText(e.target.value)}
                   />
                 </div>
@@ -1547,6 +1610,45 @@ const Booking = () => {
               pageSize={5}
               checkboxSelection
             />
+            <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+              <DialogContent>
+                <div style={{ position: "relative" }}>
+                  {Array.isArray(allFile) &&
+                    allFile.map((img, index) => (
+                      <div key={index} style={{ position: "relative" }}>
+                        <embed
+                          src={`${apiUrl}/public/booking_doc/` + img.fileName}
+                          type="application/pdf"
+                          width="100%"
+                          height="600px"
+                        />
+                        <button
+                          onClick={() => handleimagedelete(img.fileName)}
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            opacity: 0,
+                          }}
+                        />
+                      </div>
+                    ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+            <Dialog open={dialogdeleteOpen} onClose={handleClosedeleteDialog}>
+              <DialogContent>
+                <div>
+                  <h3>are you sure you want to delete</h3>
+                  <div>
+                    <Button onClick={handleContextMenu}>yes</Button>
+                    <Button onClick={handleClosedeleteDialog}>No</Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </form>

@@ -1,30 +1,34 @@
-import { useState, useEffect, useCallback } from 'react';
+
+
+import { useState, useEffect, useCallback, useContext } from 'react';
 import axios from 'axios';
+import { APIURL } from "../../../url";
+import { useData } from '../../../Dashboard/Maindashboard/DataContext';
 
 // Table START
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
-    { field: "vehicleType", headerName: "Vehicle Type", width: 130 },
-    { field: "duty", headerName: "Duty", width: 130 },
-    { field: "Hours", headerName: "Hours", width: 130 },
-    { field: "KMS", headerName: "KMS", width: 130 },
-    { field: "Rate", headerName: "Rate", width: 130 },
-    { field: "PerHour", headerName: "PerHours", width: 130 },
-    { field: "PerKMS", headerName: "PerKMS", width: 130 },
-    { field: "extraHours", headerName: "ExtraHours", width: 130 },
-    { field: "extraKMS", headerName: "ExtraKMS", width: 130 },
-    { field: "UptoHours", headerName: "ChTime", width: 130 },
-    { field: "AKMS", headerName: "AllowKMS", width: 130 },
-    { field: "ChKMS", headerName: "ChKMS", width: 130 },
-    { field: "Bata", headerName: "Bata", width: 130 },
-    { field: "NHalt", headerName: "NightHalt", width: 130 },
+    { field: "vehicleType", headerName: "Vehicle Type", width: 180 },
+    { field: "duty", headerName: "Duty", width: 110 },
+    { field: "package", headerName: "Package", width: 110 },
+    { field: "Hours", headerName: "Hours", width: 80 },
+    { field: "KMS", headerName: "KMS", width: 80 },
+    { field: "Rate", headerName: "Rate", width: 80 },
+    { field: "extraHours", headerName: "ExtraHours", width: 100 },
+    { field: "extraKMS", headerName: "ExtraKMS", width: 100 },
+    { field: "PerHour", headerName: "PerHours", width: 110 },
+    { field: "PerKMS", headerName: "PerKMS", width: 100 },
+    { field: "chtime", headerName: "ChTime", width: 100 },
+    // { field: "AKMS", headerName: "AllowKMS", width: 130 },
+    { field: "ChKMS", headerName: "ChKMS", width: 100 },
+    { field: "Bata", headerName: "Bata", width: 100 },
+    { field: "NHalt", headerName: "NightHalt", width: 100 },
 ];
 // TABLE END
 
 const usePackagerateentry = () => {
-
-    const user_id = localStorage.getItem('useridno');
-
+    const apiUrl = APIURL;
+    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -36,62 +40,32 @@ const usePackagerateentry = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage,setInfoMessage] = useState({});
+    const [infoMessage, setInfoMessage] = useState({});
+    const [isEditMode, setIsEditMode] = useState(false);
 
+    const [validitydata, setValiditydata] = useState([])
+    const [datevalidity, setDatevalidity] = useState()
+    const { setOrganizationName } = useData()
 
-    // for page permission
-
-    const [userPermissions, setUserPermissions] = useState({});
 
     useEffect(() => {
-        const fetchPermissions = async () => {
+        const fetchOrganizationnames = async () => {
             try {
-                const currentPageName = 'Rate Type';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
+                const response = await axios.get(`${apiUrl}/ratetype`);
+                const data = response.data
+                const names = data.map(res => res.ratename)
+                setValiditydata(data)
+                setOrganizationName(names)
+            }
+            catch (error) {
+                console.log(error, "error");
             }
         };
+        fetchOrganizationnames()
+    }, [apiUrl, setOrganizationName, validitydata])
 
-        fetchPermissions();
-    }, [user_id]);
 
-    const checkPagePermission = () => {
-        const currentPageName = 'Rate Type';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
+    //// popup-----------------------------------------
 
     const hidePopup = () => {
         setSuccess(false);
@@ -100,39 +74,13 @@ const usePackagerateentry = () => {
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
+            }, 3000);
+            return () => clearTimeout(timer);
         }
-    }, [error]);
-
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timer); // Clean up the timer on unmount
-        }
-    }, [info]);
-
+    }, [error, success, warning, info]);
 
     const [book, setBook] = useState({
         ratetype: '',
@@ -155,11 +103,11 @@ const usePackagerateentry = () => {
         chtime: '',
         ChKMS: '',
     });
+
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
 
         if (type === 'checkbox') {
-            // For checkboxes, update the state based on the checked value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: checked,
@@ -169,7 +117,6 @@ const usePackagerateentry = () => {
                 [name]: checked,
             }));
         } else {
-            // For other input fields, update the state based on the value
             setBook((prevBook) => ({
                 ...prevBook,
                 [name]: value,
@@ -183,6 +130,7 @@ const usePackagerateentry = () => {
 
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
+
         setBook((prevBook) => ({
             ...prevBook,
             [name]: selectedOption,
@@ -191,7 +139,29 @@ const usePackagerateentry = () => {
             ...prevData,
             [name]: selectedOption,
         }));
+
+        if (name === "pricetag") {
+            getStartEndTimesByRateName(selectedOption)
+
+        }
     };
+
+    function getStartEndTimesByRateName(rateName) {
+        const filteredData = validitydata?.filter(item => item.ratename === rateName);
+        const datas = filteredData?.map(item => ({
+            startdate: item.starttime,
+            enddate: item.closetime
+        }));
+
+        setDatevalidity(datas[0])
+    }
+
+
+
+
+
+
+
 
 
     const handleCancel = () => {
@@ -218,37 +188,61 @@ const usePackagerateentry = () => {
             chtime: '',
         }));
         setSelectedCustomerData({});
+        setIsEditMode(false);
     };
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
         setSelectedCustomerId(params.row.customerId);
+        setIsEditMode(true);
     }, []);
 
-    const handleAdd = async () => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.new) {
-            const duty = book.duty;
-            if (!duty) {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-                return;
-            }
+    const handleAdd = async () => {
+        const duty = book.duty;
+        if (!duty) {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+            return;
+        }
+        try {
+            await axios.post(`${apiUrl}/ratemanagement`, book);
+            handleCancel();
+            setRows([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+        }
+    };
+
+
+    useEffect(() => {
+        const handleList = async () => {
             try {
-                await axios.post('http://localhost:8081/ratemanagement', book);
-                handleCancel();
-                setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
+                const response = await axios.get(`${apiUrl}/ratemanagement`);
+                const data = response.data;
+                setRows(data);
             } catch {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
             }
-        } else {
-            // Display a warning or prevent the action
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        }
+        handleList();
+    }, [apiUrl]);
+
+    const handleEdit = async () => {
+        try {
+            const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
+            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+            await axios.put(`${apiUrl}/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            setRows([]);
+
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -256,56 +250,42 @@ const usePackagerateentry = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.read) {
-                    const response = await axios.get('http://localhost:8081/ratemanagement');
-                    const data = response.data;
-                    if (data.length > 0) {
-                        setRows(data);
-                        setSuccess(true);
-                        setSuccessMessage("Successfully listed");
-                    } else {
-                        setRows([]);
-                        setError(true);
-                        setErrorMessage("No data found");
-                    }
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Cancel') {
-                handleCancel();
-            } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`);
-                    setSelectedCustomerData(null);
+                const response = await axios.get(`${apiUrl}/ratemanagement`);
+                const data = response.data;
+                if (data.length > 0) {
+                    setRows(data);
                     setSuccess(true);
-                    setSuccessMessage("Successfully Deleted");
-                    handleCancel();
-                    setRows([]);
+                    setSuccessMessage("Successfully listed");
                 } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
-
-                if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
-                    const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    await axios.put(`http://localhost:8081/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
+                    setRows([]);
                     setError(true);
-                    setSuccessMessage("Successfully updated");
-                    handleCancel();
-                    setRows([]);
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
+                    setErrorMessage("No data found");
                 }
-            } else if (actionName === 'Add') {
+            }
+
+            else if (actionName === 'Cancel') {
+                handleCancel();
+            }
+
+            else if (actionName === 'Delete') {
+                await axios.delete(`${apiUrl}/ratemanagement/${selectedCustomerData.id}`);
+                setSelectedCustomerData(null);
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
+                handleCancel();
+                setRows([]);
+            }
+
+            else if (actionName === 'Edit') {
+                const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
+                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
+                await axios.put(`${apiUrl}/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+                handleCancel();
+                setRows([]);
+            }
+            else if (actionName === 'Add') {
                 handleAdd();
             }
         } catch {
@@ -335,12 +315,14 @@ const usePackagerateentry = () => {
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,
         handleAutocompleteChange,
         columns,
+        isEditMode,
+        handleEdit,
+        datevalidity
     };
 };
 

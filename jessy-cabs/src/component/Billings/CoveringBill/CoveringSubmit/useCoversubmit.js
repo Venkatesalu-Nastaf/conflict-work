@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
+
 import axios from 'axios';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
 import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
+import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
@@ -19,7 +21,8 @@ const columns = [
 ];
 
 const useCoversubmit = () => {
-    const user_id = localStorage.getItem('useridno');
+    const apiUrl = APIURL;
+    // const user_id = localStorage.getItem('useridno');
     const [tripData] = useState('');
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
@@ -35,57 +38,7 @@ const useCoversubmit = () => {
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
 
-    // for page permission
 
-    const [userPermissions, setUserPermissions] = useState({});
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'CB Billing';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch {
-            }
-        };
-
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = () => {
-        const currentPageName = 'CB Billing';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -123,36 +76,23 @@ const useCoversubmit = () => {
         saveAs(pdfBlob, 'Cover.pdf');
     };
 
+    // POP UP---------------------------------
     const hidePopup = () => {
         setError(false);
         setSuccess(false);
         setWarning(false);
     };
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
 
     useEffect(() => {
-        if (success) {
+        if (error || success || warning) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [success]);
+    }, [error, success, warning]);
+
+    //----------------------------------------------------------
 
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
@@ -183,7 +123,7 @@ const useCoversubmit = () => {
     const handleShow = useCallback(async () => {
 
         try {
-            const response = await axios.get(`http://localhost:8081/payment-detail`, {
+            const response = await axios.get(`${apiUrl}/payment-detail`, {
                 params: {
                     customer: encodeURIComponent(customer),
                     fromDate: fromDate.format('YYYY-MM-DD'),
@@ -213,7 +153,7 @@ const useCoversubmit = () => {
             setErrorMessage("Check your Network Connection");
         }
 
-    }, [customer, fromDate, toDate, servicestation]);
+    }, [customer, fromDate, toDate, servicestation, apiUrl]);
 
     return {
         rows,
@@ -223,7 +163,6 @@ const useCoversubmit = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        isFieldReadOnly,
         hidePopup,
         customer,
         tripData,

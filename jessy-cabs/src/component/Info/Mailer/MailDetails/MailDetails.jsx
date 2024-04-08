@@ -21,10 +21,6 @@ import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 
-// TABLE START
-// function createData(Sno, Name, mobile) {
-//   return { Sno, Name, mobile };
-// }
 
 const rows = [
   // createData('1', "John Doe", "9912277222"),

@@ -1,14 +1,22 @@
 import { FaRupeeSign, FaRegMoneyBillAlt } from "react-icons/fa";
 import { BiPaste } from "react-icons/bi";
+import { APIURL } from "../../../url";
+
+const apiUrl = APIURL;
 
 const fetchDataFromBackend = async (date) => {
   try {
-    const response = await fetch(`http://localhost:8081/total_amounts_from_billing?date=${date}`);
+    const response = await fetch(`${apiUrl}/total_amounts_from_billing?date=${date}`);
     if (!response.ok) {
       return { totalAmount: 0, totalPaid: 0, totalPending: 0 };
     }
-    const data = await response.json();
-    return data;
+    if (response.status === 200) {
+      const data = await response.json();
+      return data;
+    } else {
+      const timer = setTimeout(fetchDataFromBackend, 2000);
+      return () => clearTimeout(timer);
+    }
   } catch {
     return { totalAmount: 0, totalPaid: 0, totalPending: 0 };
   }
@@ -16,12 +24,17 @@ const fetchDataFromBackend = async (date) => {
 
 const fetchMonthlyDataFromBackend = async (startDate, endDate) => {
   try {
-    const response = await fetch(`http://localhost:8081/monthly_data?startDate=${startDate}&endDate=${endDate}`);
+    const response = await fetch(`${apiUrl}/monthly_data?startDate=${startDate}&endDate=${endDate}`);
     if (!response.ok) {
       return [];
     }
-    const data = await response.json();
-    return data;
+    if (response.status === 200) {
+      const data = await response.json();
+      return data;
+    } else {
+      const timer = setTimeout(fetchMonthlyDataFromBackend, 2000);
+      return () => clearTimeout(timer);
+    }
   } catch {
     return [];
   }

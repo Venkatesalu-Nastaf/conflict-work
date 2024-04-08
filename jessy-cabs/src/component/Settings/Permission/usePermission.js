@@ -1,5 +1,7 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { APIURL } from "../../url";
 
 const usePermission = () => {
     const [warning, setWarning] = useState(false);
@@ -8,104 +10,26 @@ const usePermission = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState({});
-    const [info, setInfo] = useState(false);
-    const [infoMessage, setInfoMessage] = useState({});
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
-
     const [userData, setUserData] = useState(null);
+    // const user_id = localStorage.getItem('useridno');
 
+    //-----------------popup---------------
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || warning || success) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, warning, success]);
 
-    const user_id = localStorage.getItem('useridno');
-
-    // for page permission
-    const [userPermissions, setUserPermissions] = useState({});
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Permission';
-                const response = await axios.get(`http://localhost:8081/user-permissions/${user_id}/${currentPageName}`);
-                setUserPermissions(response.data);
-            } catch (error) {
-                console.error('Error fetching user permissions:', error);
-            }
-        };
-
-        fetchPermissions();
-    }, [user_id]);
-
-    const checkPagePermission = useCallback(() => {
-        const currentPageName = 'Permission';
-        const permissions = userPermissions || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    }, [userPermissions]);
-
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            // If user has read permission, check for    other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
+    //--------------------------------------------------
     const [userId, setUserId] = useState({
         userid: '',
     });
@@ -166,6 +90,18 @@ const usePermission = () => {
         );
     };
 
+    const handleHeaderCheckboxChange = (action, checked) => {
+        const updatedPermissions = permissionsData.map(permission => ({
+            ...permission,
+            [action]: checked,
+        }));
+        setPermissionsData(updatedPermissions);
+    };
+
+
+
+    const isActionChecked = (action) => permissionsData.every(permission => permission[action]);
+
     const handleChange = useCallback(async (event) => {
         const { name, value } = event.target;
         setUserId((prevUserId) => ({
@@ -174,17 +110,16 @@ const usePermission = () => {
         }));
 
         try {
-            const response = await fetch(`http://localhost:8081/usercreationgetdata/${value}`);
+            const response = await fetch(`${APIURL}/usercreationgetdata/${value}`);
             const data = await response.json();
             setUserData(data);
-        } catch (error) {
-            console.error('Error fetching user data:', error);
+        } catch {
         }
     }, []);
 
     const handleRowClick = useCallback((user) => {
-        setSelectedCustomerDatas(user); // Update selected user data
-        setUserId((prevUserId) => ({ ...prevUserId, userid: user.userid })); // Update userid field
+        setSelectedCustomerDatas(user);
+        setUserId((prevUserId) => ({ ...prevUserId, userid: user.userid }));
     }, []);
 
     const handleSavePermissions = async () => {
@@ -194,74 +129,53 @@ const usePermission = () => {
             return;
         }
 
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.new && permissions.modify) {
-            try {
-                await axios.post('http://localhost:8081/save-permissions', {
-                    userId: userId.userid,
-                    permissions: permissionsData,
-                    page_name: permissionsData.name
-                });
-                setSuccess(true);
-                setSuccessMessage("Successfully saved user permission");
-                handleCancel();
-            } catch (error) {
-                console.error('Error saving permissions:', error);
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        try {
+            await axios.post(`${APIURL}/save-permissions`, {
+                userId: userId.userid,
+                permissions: permissionsData,
+                page_name: permissionsData.name
+            });
+            setSuccess(true);
+            setSuccessMessage("Successfully saved user permission");
+            handleCancel();
+        } catch {
         }
     };
 
-    const handleKeyDown = useCallback(async (event) => {
+
+    const handleKeyDown = async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
-            const permissions = checkPagePermission();
+            try {
+                const response = await axios.get(`${APIURL}/userdataid/${event.target.value}`);
 
-            if (permissions.read && permissions.read) {
-                try {
-                    const response = await axios.get(`http://localhost:8081/userdataid/${event.target.value}`);
+                if (Array.isArray(response.data)) {
+                    const receivedPermissions = response.data;
 
-                    if (Array.isArray(response.data)) {
-                        const receivedPermissions = response.data;
+                    const permissionMap = receivedPermissions.reduce((map, permission) => {
+                        map[permission.page_name] = permission;
+                        return map;
+                    }, {});
 
-                        // Create a map from page_name to permission object
-                        const permissionMap = receivedPermissions.reduce((map, permission) => {
-                            map[permission.page_name] = permission;
-                            return map;
-                        }, {});
+                    setPermissionsData(prevPermissions => {
+                        return prevPermissions.map(permission => {
+                            const receivedPermission = permissionMap[permission.name] || {};
 
-                        // Update the state with the received permissions
-                        setPermissionsData(prevPermissions => {
-                            return prevPermissions.map(permission => {
-                                const receivedPermission = permissionMap[permission.name] || {};
-
-                                // Keep the original "ID" and "Form Name" columns fixed
-                                return {
-                                    id: permission.id,
-                                    name: permission.name,
-                                    read: Boolean(receivedPermission.read_permission),
-                                    new: Boolean(receivedPermission.new_permission),
-                                    modify: Boolean(receivedPermission.modify_permission),
-                                    delete: Boolean(receivedPermission.delete_permission),
-                                };
-                            });
+                            return {
+                                id: permission.id,
+                                name: permission.name,
+                                read: Boolean(receivedPermission.read_permission),
+                                new: Boolean(receivedPermission.new_permission),
+                                modify: Boolean(receivedPermission.modify_permission),
+                                delete: Boolean(receivedPermission.delete_permission),
+                            };
                         });
-                    } else {
-                        console.error('Invalid response format: Expected an array.');
-                    }
-
-                } catch (error) {
-                    console.error(error);
+                    });
                 }
-            } else {
-                setInfo(true);
-                setInfoMessage("You do not have permission.");
+            } catch {
             }
         }
-    }, [checkPagePermission]);
+    };
 
     const handleCancel = () => {
         setUserId({ userid: '' });
@@ -269,8 +183,6 @@ const usePermission = () => {
         setSelectedCustomerDatas({});
         setUserData(null);
     };
-
-
 
     return {
         error,
@@ -280,20 +192,16 @@ const usePermission = () => {
         errorMessage,
         warningMessage,
         handleChange,
-        isFieldReadOnly,
         hidePopup,
-        info,
         handleRowClick,
         selectedCustomerDatas,
-        infoMessage,
         userId,
         handleKeyDown,
         userData,
         handleSavePermissions,
         handleCancel,
         permissionsData,
-        handlePermissionChange,
-
+        handlePermissionChange, handleHeaderCheckboxChange, isActionChecked
     };
 };
 

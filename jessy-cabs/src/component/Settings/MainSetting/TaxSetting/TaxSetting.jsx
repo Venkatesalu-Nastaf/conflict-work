@@ -84,8 +84,8 @@ const TaxSetting = () => {
         handleDateChange,
         handleAutocompleteChange,
         columns,
-
-        // ... (other state variables and functions)
+        isEditMode,
+        handleEdit,
     } = useTaxsettings();
 
     useEffect(() => {
@@ -237,10 +237,13 @@ const TaxSetting = () => {
                                 }
                             />
                         </div>
+
                         <div className="input" style={{ width: "70px" }}>
-                            <Button color="primary" variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>
-                                Add
-                            </Button>
+                            {isEditMode ? (
+                                <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                            ) : (
+                                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import AutoModeIcon from "@mui/icons-material/AutoMode";
@@ -16,7 +15,6 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import useBookingcopy from './useBookingcopy';
-
 
 const BookingCopy = () => {
   const {
@@ -31,7 +29,6 @@ const BookingCopy = () => {
     infoMessage,
     actionName,
     handleClick,
-    isFieldReadOnly,
     hidePopup,
     bookingno,
     handleInputChange,
@@ -88,7 +85,7 @@ const BookingCopy = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "70px" }}>
-                <Button variant="outlined" onClick={handleShow} disabled={isFieldReadOnly("read")}>Show</Button>
+                <Button variant="outlined" onClick={handleShow} >Show</Button>
               </div>
             </div>
           </div>
@@ -127,7 +124,6 @@ const BookingCopy = () => {
               rows={rows}
               columns={columns}
               pageSize={5}
-            // checkboxSelection
             />
           </div>
         </div>

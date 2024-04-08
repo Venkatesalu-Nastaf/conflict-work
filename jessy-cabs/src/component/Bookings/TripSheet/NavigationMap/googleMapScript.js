@@ -1,6 +1,7 @@
 /* global google */
 
 import axios from 'axios';
+import { APIURL } from "../../../url";
 
 let map;
 let directionsService;
@@ -10,6 +11,9 @@ let endMarker;
 let searchBox;
 let popup;
 let waypoints = [];
+
+const apiUrl = APIURL;
+
 
 function initMap() {
     try {
@@ -67,7 +71,7 @@ function submitPopup() {
         return;
     }
     const selectedTripType = tripTypeElement.value;
-    fetch('http://localhost:8081/gmap-submitForm', {
+    fetch(`${apiUrl}/gmap-submitForm`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -279,7 +283,7 @@ function generateStaticMap() {
                 formDataUpload.append('tripid', tripid);
 
                 try {
-                    const response = await axios.post('http://localhost:8081/mapuploads', formDataUpload, {
+                    const response = await axios.post(`${apiUrl}/mapuploads`, formDataUpload, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'Accept': 'image/png',

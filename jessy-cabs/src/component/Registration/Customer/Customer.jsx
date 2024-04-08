@@ -61,10 +61,6 @@ const actions = [
   { icon: <BookmarkAddedIcon />, name: "Add" },
 ];
 
-
-
-
-
 const Customer = () => {
 
   const {
@@ -82,7 +78,6 @@ const Customer = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -92,10 +87,10 @@ const Customer = () => {
     isInputVisible,
     handleExcelDownload,
     handlePdfDownload,
-    reversedRows,
-    columns
-
-    // ... (other state variables and functions)
+    rows,
+    columns,
+    isEditMode,
+    handleEdit,
   } = useCustomer();
 
   useEffect(() => {
@@ -526,8 +521,12 @@ const Customer = () => {
               </div>
             </div>
             <div className="input-field">
-              <div className="input">
-                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+              <div className="input" style={{ width: "160px" }}>
+                {isEditMode ? (
+                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Button variant="contained" onClick={handleAdd} >Add</Button>
+                )}
               </div>
             </div>
             {error &&
@@ -563,6 +562,7 @@ const Customer = () => {
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"
                   icon={<SpeedDialIcon />}
+                  direction="left"
                 >
                   {actions.map((action) => (
                     <SpeedDialAction
@@ -594,7 +594,7 @@ const Customer = () => {
             </div>
             <div className="table-customer-lists">
               <DataGrid
-                rows={reversedRows}
+                rows={rows}
                 columns={columns}
                 onRowClick={handleRowClick}
                 initialState={{

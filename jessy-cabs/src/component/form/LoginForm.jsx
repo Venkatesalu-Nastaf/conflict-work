@@ -14,8 +14,11 @@ import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";
 import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircleFill";
+import { APIURL } from "../url.js";
+
 
 const Login = () => {
+  const apiUrl = APIURL;
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const toggle = () => {
@@ -26,11 +29,11 @@ const Login = () => {
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState(false);
   const [warning, setWarning] = useState(false);
-  const { loginUser } = useUser();
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
+  const { loginUser, setUserdashboard, userdasboard } = useUser();
 
   const hidePopup = () => {
     setSuccess(false);
@@ -43,8 +46,8 @@ const Login = () => {
     if (error) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -52,24 +55,24 @@ const Login = () => {
     if (success) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [success]);
   useEffect(() => {
     if (warning) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [warning]);
   useEffect(() => {
     if (info) {
       const timer = setTimeout(() => {
         hidePopup();
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timer); // Clean up the timer on unmount
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [info]);
 
@@ -84,8 +87,9 @@ const Login = () => {
   const formSubmitter = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8081/login", input);
+      const response = await axios.post(`${apiUrl}/login`, input);
       if (response.status === 200) {
+        setUserdashboard(true)
         loginUser(input.username);
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");
@@ -170,7 +174,6 @@ const Login = () => {
             <div className="group button-group">
               <button type="submit" className="signup-btn" onClick={formSubmitter}>
                 Login
-                {/* <span>Login</span> */}
               </button>
             </div>
             <div className="social_media_container">

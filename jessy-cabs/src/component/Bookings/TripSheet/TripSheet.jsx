@@ -179,7 +179,6 @@ const TripSheet = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -293,7 +292,6 @@ const TripSheet = () => {
                   onKeyDown={handleKeyDown}
                   autoComplete="password"
                   autoFocus
-                  disabled={isFieldReadOnly("read")}
                 />
               </div>
               <div className="input">
@@ -1287,7 +1285,7 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
-                <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} disabled={isFieldReadOnly("new")}>
+                <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
                   E-Tripsheet
                 </Button>
 
@@ -1331,7 +1329,7 @@ const TripSheet = () => {
 
                 </>
                 ) : (
-                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                  <Button variant="contained" onClick={handleAdd} >Add</Button>
                 )}
               </div>
             </div>

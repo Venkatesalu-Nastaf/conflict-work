@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from "../../../permissionContext/permissionContext"
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
 import { APIURL } from "../../../url";
@@ -36,115 +35,27 @@ const useMailagedetails = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage, setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
 
-    // for page permission
-
-
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'User Creation';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-
-    const checkPagePermission = () => {
-        const currentPageName = 'User Creation';
-        const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-
-
-    const permissions = checkPagePermission();
-
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
+    //----------------------popup-----------------
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
         setInfo(false);
         setWarning(false);
     };
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
 
     useEffect(() => {
-        if (success) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, success, warning, info]);
+
+    //----------------------------------------------------
 
     const [book, setBook] = useState({
         VehicleNo: '',
@@ -220,154 +131,130 @@ const useMailagedetails = () => {
         setIsEditMode(true);
     }, []);
     const handleAdd = async () => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read && permissions.new) {
-            const VehicleName = book.VehicleName;
-            if (!VehicleName) {
-                setError(true);
-                setErrorMessage("Check your Value");
-                return;
-            }
-            try {
-                const emptydate = selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null || book.emptydate ? dayjs(book.emptydate) : dayjs();
-                const filldate = selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null || book.filldate ? dayjs(book.filldate) : dayjs();
-                const updateBook = {
-                    ...book,
-                    emptydate: emptydate,
-                    filldate: filldate,
-                };
-                await axios.post(`${apiUrl}/fueldetails`, updateBook);
-                handleCancel();
-                setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
-            } catch {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+
+
+        const VehicleName = book.VehicleName;
+        if (!VehicleName) {
+            setError(true);
+            setErrorMessage("Check your Value");
+            return;
         }
-    };
-
-    const handleEdit = async () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.modify) {
-            const selectedCustomer = rows.find((row) => row.VehicleNo === selectedCustomerData?.id);
-
-            const emptydate = selectedCustomerData?.emptydate ? dayjs(selectedCustomerData?.emptydate).format('YYYY-MM-DD') : null;
-            const filldate = selectedCustomerData?.filldate ? dayjs(selectedCustomerData?.filldate).format('YYYY-MM-DD') : null;
-
-            const updatedCustomer = {
-                ...selectedCustomer,
-                ...selectedCustomerData,
+        try {
+            const emptydate = selectedCustomerData.emptydate ? dayjs(selectedCustomerData.emptydate) : null || book.emptydate ? dayjs(book.emptydate) : dayjs();
+            const filldate = selectedCustomerData.filldate ? dayjs(selectedCustomerData.filldate) : null || book.filldate ? dayjs(book.filldate) : dayjs();
+            const updateBook = {
+                ...book,
                 emptydate: emptydate,
                 filldate: filldate,
             };
+            await axios.post(`${apiUrl}/fueldetails`, updateBook);
+            handleCancel();
+            setRows([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+        }
 
-            try {
-                await axios.put(`${apiUrl}/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
-                setRows([]);
-            } catch (error) {
-                console.error("Error updating data:", error);
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+    };
+
+    const handleEdit = async () => {
+
+
+
+        const selectedCustomer = rows.find((row) => row.VehicleNo === selectedCustomerData?.id);
+
+        const emptydate = selectedCustomerData?.emptydate ? dayjs(selectedCustomerData?.emptydate).format('YYYY-MM-DD') : null;
+        const filldate = selectedCustomerData?.filldate ? dayjs(selectedCustomerData?.filldate).format('YYYY-MM-DD') : null;
+
+        const updatedCustomer = {
+            ...selectedCustomer,
+            ...selectedCustomerData,
+            emptydate: emptydate,
+            filldate: filldate,
+        };
+
+        try {
+            await axios.put(`${apiUrl}/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            setRows([]);
+        } catch (error) {
+            console.error("Error updating data:", error);
         }
     };
+
     useEffect(() => {
         const handlelist = async () => {
-            if (permissions.read) {
-                const response = await axios.get(`${apiUrl}/fueldetails`);
-                const data = response.data;
-
-                if (data.length > 0) {
-                    setRows(data);
-                } else {
-                    setRows([]);
-                }
+            const response = await axios.get(`${apiUrl}/fueldetails`);
+            const data = response.data;
+            if (data.length > 0) {
+                setRows(data);
+            } else {
+                setRows([]);
             }
         }
-
         handlelist();
-    }, [permissions, apiUrl]);
+    }, [apiUrl]);
 
     const handleClick = async (event, actionName) => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-                const permissions = checkPagePermission();
+                const response = await axios.get(`${apiUrl}/fueldetails`);
+                const data = response.data;
+                if (data.length > 0) {
 
-                if (permissions.read && permissions.read) {
-                    const response = await axios.get(`${apiUrl}/fueldetails`);
-                    const data = response.data;
-                    if (data.length > 0) {
-
-                        setRows(data);
-                        setSuccess(true);
-                        setSuccessMessage("Successfully listed");
-                    } else {
-                        setRows([]);
-                        setError(true);
-                        setErrorMessage("No data found");
-                    }
+                    setRows(data);
+                    setSuccess(true);
+                    setSuccessMessage("Successfully listed");
                 } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("No data found");
                 }
-            } else if (actionName === 'Cancel') {
+            }
+
+            else if (actionName === 'Cancel') {
                 handleCancel();
                 setRows([]);
-            } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
+            }
 
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`${apiUrl}/fueldetails/${selectedCustomerData?.id}`);
-                    setSelectedCustomerData(null);
+            else if (actionName === 'Delete') {
+                await axios.delete(`${apiUrl}/fueldetails/${selectedCustomerData?.id}`);
+                setSelectedCustomerData(null);
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
+                handleCancel();
+                setRows([]);
+            }
+
+            else if (actionName === 'Edit') {
+                const selectedCustomer = rows.find((row) => row.VehicleNo === selectedCustomerData?.id);
+                const emptydate = selectedCustomerData?.emptydate ? dayjs(selectedCustomerData?.emptydate).format('YYYY-MM-DD') : null;
+                const filldate = selectedCustomerData?.filldate ? dayjs(selectedCustomerData?.filldate).format('YYYY-MM-DD') : null;
+
+                const updatedCustomer = {
+                    ...selectedCustomer,
+                    ...selectedCustomerData,
+                    emptydate: emptydate,
+                    filldate: filldate,
+                };
+
+                try {
+                    await axios.put(`${apiUrl}/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
                     setSuccess(true);
-                    setSuccessMessage("Successfully Deleted");
+                    setSuccessMessage("Successfully updated");
                     handleCancel();
                     setRows([]);
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
+                } catch {
                 }
-            } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
+            }
 
-                if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.VehicleNo === selectedCustomerData?.id);
-
-                    const emptydate = selectedCustomerData?.emptydate ? dayjs(selectedCustomerData?.emptydate).format('YYYY-MM-DD') : null;
-                    const filldate = selectedCustomerData?.filldate ? dayjs(selectedCustomerData?.filldate).format('YYYY-MM-DD') : null;
-
-                    const updatedCustomer = {
-                        ...selectedCustomer,
-                        ...selectedCustomerData,
-                        emptydate: emptydate,
-                        filldate: filldate,
-                    };
-
-                    try {
-                        await axios.put(`${apiUrl}/fueldetails/${selectedCustomerData?.id}`, updatedCustomer);
-                        setSuccess(true);
-                        setSuccessMessage("Successfully updated");
-                        handleCancel();
-                        setRows([]);
-                    } catch {
-                    }
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Add') {
+            else if (actionName === 'Add') {
                 handleAdd();
             }
         } catch {
@@ -402,11 +289,9 @@ const useMailagedetails = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        infoMessage,
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,

@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -45,7 +44,7 @@ const useTripsheet = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage, setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -73,57 +72,6 @@ const useTripsheet = () => {
     let [driverBeta_amount, setdriverBeta_amount] = useState(0)
     //--------------------------------------------------------------
 
-    // for page permission   const currentPageName = 'Trip Sheet';
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-    const { userPermissions } = useContext(PermissionsContext);
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Trip Sheet';
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                setUserPermissions(permissions);
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-    const checkPagePermission = useCallback(() => {
-        const currentPageName = 'Trip Sheet';
-        const permissions = userPermissionss || {};
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    }, [userPermissionss])
-    ///---------------------------------------------------------------------------
-
-
-    const isFieldReadOnly = (fieldName) => {
-        const permissions = checkPagePermission();
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
 
     const [packageData, setPackageData] = useState({
         customer: '',
@@ -139,32 +87,23 @@ const useTripsheet = () => {
     });
 
     const handleButtonClick = () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.read) {
-            const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-
-            if (!tripid) {
-                setError(true);
-                setErrorMessage("Please enter the tripid");
-            } else {
-                localStorage.setItem('selectedTripid', tripid);
-                const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
-                if (newTab) {
-                    newTab.focus();
-                } else {
-                }
-            }
+        const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+        if (!tripid) {
+            setError(true);
+            setErrorMessage("Please enter the tripid");
         } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            localStorage.setItem('selectedTripid', tripid);
+            const newTab = window.open('/navigationmap', '_blank', 'noopener,noreferrer');
+            if (newTab) {
+                newTab.focus();
+            } else {
+            }
         }
     };
 
     //generate link
 
     const generateLink = async () => {
-
         try {
             const tripidNO = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
             if (!tripidNO) {
@@ -233,38 +172,33 @@ const useTripsheet = () => {
 
     //refresh button function
     const handleRefresh = async () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.read) {
-            const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
-            try {
-                if (!tripid) {
-                    setError(true);
-                    setErrorMessage("Please enter the tripid");
+        const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
+        try {
+            if (!tripid) {
+                setError(true);
+                setErrorMessage("Please enter the tripid");
+            } else {
+                const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}`);
+                const data = response.data;
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("successfully listed")
                 } else {
-                    const response = await axios.get(`${apiUrl}/tripuploadcollect/${tripid}`);
-                    const data = response.data;
-                    if (data.length > 0) {
-                        const rowsWithUniqueId = data.map((row, index) => ({
-                            ...row,
-                            id: index + 1,
-                        }));
-                        setRows(rowsWithUniqueId);
-                        setSuccess(true);
-                        setSuccessMessage("successfully listed")
-                    } else {
-                        setRows([]);
-                        setError(true);
-                        setErrorMessage("no data found")
-                    }
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("no data found")
                 }
-            } catch {
             }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        } catch {
         }
     };
+
+
     //list data in row
     const [imageUrl, setImageUrl] = useState('');
     const handleTripRowClick = (params) => {
@@ -686,26 +620,19 @@ const useTripsheet = () => {
 
 
     const handleDelete = async () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.delete) {
-            if (!selectedCustomerData.tripid) {
-                return;
-            }
-            try {
-                await axios.delete(`${apiUrl}/tripsheet/${selectedCustomerData.tripid}`);
-                setFormData({});
-                setSelectedCustomerData({});
-                handleCancel();
-                setSuccess(true);
-                setSuccessMessage("Successfully Deleted");
-            } catch {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        if (!selectedCustomerData.tripid) {
+            return;
+        }
+        try {
+            await axios.delete(`${apiUrl}/tripsheet/${selectedCustomerData.tripid}`);
+            setFormData({});
+            setSelectedCustomerData({});
+            handleCancel();
+            setSuccess(true);
+            setSuccessMessage("Successfully Deleted");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -719,83 +646,74 @@ const useTripsheet = () => {
 
     const handleEdit = async () => {
         try {
-
-            const permissions = checkPagePermission();
-
-            if (permissions.read && permissions.modify) {
-
-                try {
-                    const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
-                    const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
-                    const updatedCustomer = {
-                        ...book,
-                        ...selectedCustomer,
-                        ...vehilcedetails,
-                        ...selectedCustomerData,
-                        ...formData,
-                        apps: book.apps || formData.apps || selectedCustomerData.apps,
-                        starttime: starttime || book.starttime || formData.starttime || selectedCustomerData.starttime,
-                        closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
-                        reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
-                        shedintime: shedintime || book.shedintime || selectedCustomerData.shedintime || formData.shedintime,
-                        starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
-                        closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
-                        additionaltime: additionalTime.additionaltime || book.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime,
-                        tripsheetdate: selectedBookingDate,
-                        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
-                        vehType: VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '',
-                        driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
-                        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
-                        shedkm: shedKilometers.shedkm || book.shedkm || formData.shedkm || selectedCustomerData.shedkm,
-                        totaldays: calculateTotalDays(),
-                        totalkm1: calculateTotalKilometers(),
-                        totaltime: calculateTotalTime(),
-                        netamount: calculateTotalAmount(),
-                        exkm: packageDetails[0]?.extraKMS,
-                        exHrs: packageDetails[0]?.extraHours,
-                        night: packageDetails[0]?.NHalt,
-                        amount: packageDetails[0]?.Rate,
-                        exkm1: packageDetails[0]?.extraKMS,
-                        exHrs1: packageDetails[0]?.extraHours,
-                        night1: packageDetails[0]?.NHalt,
-                        amount5: packageDetails[0]?.Rate,
-                        amount1: calculateExkmAmount(),
-                        amount2: calculateExHrsAmount(),
-                        amount3: calculateNightAmount(),
-                        amount4: calculatedriverconvienceAmount(),
-                        package: packageDetails[0]?.package,
-                        pack: packageDetails[0]?.package,
-                        minhrs: packageDetails[0]?.Hours,
-                        minkm: packageDetails[0]?.KMS,
-                        calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, request,
-                    };
-                    for (const key in updatedCustomer) {
-                        if (key === '0') {
-                            delete updatedCustomer[key];
-                        }
+            try {
+                const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
+                const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+                const updatedCustomer = {
+                    ...book,
+                    ...selectedCustomer,
+                    ...vehilcedetails,
+                    ...selectedCustomerData,
+                    ...formData,
+                    apps: book.apps || formData.apps || selectedCustomerData.apps,
+                    starttime: starttime || book.starttime || formData.starttime || selectedCustomerData.starttime,
+                    closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
+                    reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+                    shedintime: shedintime || book.shedintime || selectedCustomerData.shedintime || formData.shedintime,
+                    starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
+                    closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
+                    additionaltime: additionalTime.additionaltime || book.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime,
+                    tripsheetdate: selectedBookingDate,
+                    vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
+                    vehType: VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '',
+                    driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
+                    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
+                    shedkm: shedKilometers.shedkm || book.shedkm || formData.shedkm || selectedCustomerData.shedkm,
+                    totaldays: calculateTotalDays(),
+                    totalkm1: calculateTotalKilometers(),
+                    totaltime: calculateTotalTime(),
+                    netamount: calculateTotalAmount(),
+                    exkm: packageDetails[0]?.extraKMS,
+                    exHrs: packageDetails[0]?.extraHours,
+                    night: packageDetails[0]?.NHalt,
+                    amount: packageDetails[0]?.Rate,
+                    exkm1: packageDetails[0]?.extraKMS,
+                    exHrs1: packageDetails[0]?.extraHours,
+                    night1: packageDetails[0]?.NHalt,
+                    amount5: packageDetails[0]?.Rate,
+                    amount1: calculateExkmAmount(),
+                    amount2: calculateExHrsAmount(),
+                    amount3: calculateNightAmount(),
+                    amount4: calculatedriverconvienceAmount(),
+                    package: packageDetails[0]?.package,
+                    pack: packageDetails[0]?.package,
+                    minhrs: packageDetails[0]?.Hours,
+                    minkm: packageDetails[0]?.KMS,
+                    calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, request,
+                };
+                for (const key in updatedCustomer) {
+                    if (key === '0') {
+                        delete updatedCustomer[key];
                     }
-                    await axios.put(`${apiUrl}/tripsheet-edit/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
-                    handleCancel();
-                    setShedKilometers("")
-                    setAdditionalTime("")
-                    // book()
-                    // book.additionaltime = "";
-                    // additionalTime.additionaltime = "";
-
-                    setRow([]);
-                    setRows([]);
-                    handleDriverSendSMS();
-                    handleSendSMS();
-                    handlecheck();
-                    setSuccess(true);
-                    setSuccessMessage("Successfully updated");
-                } catch {
-                    setError(true);
-                    setErrorMessage("Check your Network Connection");
                 }
-            } else {
-                setInfo(true);
-                setInfoMessage("You do not have permission.");
+                await axios.put(`${apiUrl}/tripsheet-edit/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
+                handleCancel();
+                setShedKilometers("")
+                setAdditionalTime("")
+                // book()
+                // book.additionaltime = "";
+                // additionalTime.additionaltime = "";
+
+                setRow([]);
+                setRows([]);
+                handleDriverSendSMS();
+                handleSendSMS();
+                handlecheck();
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
+            } catch {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
             }
         } catch {
             setError(true);
@@ -809,115 +727,27 @@ const useTripsheet = () => {
 
     const handleConfirm = async () => {
         try {
-
-            const permissions = checkPagePermission();
-
-            if (permissions.read && permissions.modify) {
-
-                try {
-                    const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
-                    const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
-                    const updatedCustomer = {
-                        ...book,
-                        ...selectedCustomer,
-                        ...vehilcedetails,
-                        ...selectedCustomerData,
-                        ...formData,
-                        starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
-                        closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
-                        reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
-                        shedintime: shedintime || book.shedintime || selectedCustomerData.shedintime || formData.shedintime,
-                        starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
-                        closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
-                        additionaltime: additionalTime.additionaltime,
-                        tripsheetdate: selectedBookingDate,
-                        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
-                        vehType: VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '',
-                        driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
-                        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
-                        shedkm: shedKilometers.shedkm,
-                        totaldays: calculateTotalDays(),
-                        totalkm1: calculateTotalKilometers(),
-                        totaltime: calculateTotalTime(),
-                        netamount: calculateTotalAmount(),
-                        exkm: packageDetails[0]?.extraKMS,
-                        exHrs: packageDetails[0]?.extraHours,
-                        night: packageDetails[0]?.NHalt,
-                        amount: packageDetails[0]?.Rate,
-                        exkm1: packageDetails[0]?.extraKMS,
-                        exHrs1: packageDetails[0]?.extraHours,
-                        night1: packageDetails[0]?.NHalt,
-                        amount5: packageDetails[0]?.Rate,
-                        amount1: calculateExkmAmount(),
-                        amount2: calculateExHrsAmount(),
-                        amount3: calculateNightAmount(),
-                        amount4: calculatedriverconvienceAmount(),
-                        package: packageDetails[0]?.package,
-                        pack: packageDetails[0]?.package,
-                        minhrs: packageDetails[0]?.Hours,
-                        minkm: packageDetails[0]?.KMS,
-                    };
-                    for (const key in updatedCustomer) {
-                        if (key === '0') {
-                            delete updatedCustomer[key];
-                        }
-                    }
-                    await axios.put(`${apiUrl}/tripsheet-confirm/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
-                    handleCancel();
-                    setShedKilometers("")
-                    setAdditionalTime("")
-                    // book()
-                    // book.additionaltime = "";
-                    // additionalTime.additionaltime = "";
-
-                    setRow([]);
-                    setRows([]);
-                    handleDriverSendSMS();
-                    handleSendSMS();
-                    handlecheck();
-                    setSuccess(true);
-                    setSuccessMessage("Successfully updated");
-                } catch {
-                    setError(true);
-                    setErrorMessage("Check your Network Connection");
-                }
-            } else {
-                setInfo(true);
-                setInfoMessage("You do not have permission.");
-            }
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-        }
-    };
-
-    const handleAdd = async () => {
-        const permissions = checkPagePermission();
-        if (permissions.read && permissions.new) {
-            const customer = book.customer || "";
-            const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
-            const vehType = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
-            const driverName = formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '';
-            const mobileNo = formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
-
-            if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo) {
-                setError(true);
-                setErrorMessage("Please fill all mandatory fields");
-                return;
-            }
             try {
+                const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
                 const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
-
-                const updatedBook = {
+                const updatedCustomer = {
                     ...book,
+                    ...selectedCustomer,
+                    ...vehilcedetails,
+                    ...selectedCustomerData,
+                    ...formData,
                     starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
                     closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
-                    reporttime: reporttime || book.reporttime || formData.reporttime || selectedCustomerData.reporttime,
-                    shedintime: shedintime || book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
+                    reporttime: reporttime || book.reporttime || selectedCustomerData.reporttime || formData.reporttime,
+                    shedintime: shedintime || book.shedintime || selectedCustomerData.shedintime || formData.shedintime,
                     starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
                     closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
                     additionaltime: additionalTime.additionaltime,
                     tripsheetdate: selectedBookingDate,
+                    vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '',
+                    vehType: VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '',
+                    driverName: formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '',
+                    mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '',
                     shedkm: shedKilometers.shedkm,
                     totaldays: calculateTotalDays(),
                     totalkm1: calculateTotalKilometers(),
@@ -939,25 +769,98 @@ const useTripsheet = () => {
                     pack: packageDetails[0]?.package,
                     minhrs: packageDetails[0]?.Hours,
                     minkm: packageDetails[0]?.KMS,
-                    calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
-                    request,
                 };
-                await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
+                for (const key in updatedCustomer) {
+                    if (key === '0') {
+                        delete updatedCustomer[key];
+                    }
+                }
+                await axios.put(`${apiUrl}/tripsheet-confirm/${selectedCustomerData.tripid || book.tripid || formData.tripid || packageDetails.tripid}`, updatedCustomer);
                 handleCancel();
+                setShedKilometers("")
+                setAdditionalTime("")
+                // book()
+                // book.additionaltime = "";
+                // additionalTime.additionaltime = "";
+
                 setRow([]);
                 setRows([]);
-                setSuccess(true);
-                handleSendSMS();
                 handleDriverSendSMS();
+                handleSendSMS();
                 handlecheck();
-                setSuccessMessage("Successfully Added");
+                setSuccess(true);
+                setSuccessMessage("Successfully updated");
             } catch {
                 setError(true);
                 setErrorMessage("Check your Network Connection");
             }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+        }
+    };
+
+    const handleAdd = async () => {
+        const customer = book.customer || "";
+        const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
+        const vehType = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
+        const driverName = formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '';
+        const mobileNo = formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
+
+        if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo) {
+            setError(true);
+            setErrorMessage("Please fill all mandatory fields");
+            return;
+        }
+        try {
+            const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+
+            const updatedBook = {
+                ...book,
+                starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
+                closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
+                reporttime: reporttime || book.reporttime || formData.reporttime || selectedCustomerData.reporttime,
+                shedintime: shedintime || book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
+                starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
+                closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
+                additionaltime: additionalTime.additionaltime,
+                tripsheetdate: selectedBookingDate,
+                shedkm: shedKilometers.shedkm,
+                totaldays: calculateTotalDays(),
+                totalkm1: calculateTotalKilometers(),
+                totaltime: calculateTotalTime(),
+                netamount: calculateTotalAmount(),
+                exkm: packageDetails[0]?.extraKMS,
+                exHrs: packageDetails[0]?.extraHours,
+                night: packageDetails[0]?.NHalt,
+                amount: packageDetails[0]?.Rate,
+                exkm1: packageDetails[0]?.extraKMS,
+                exHrs1: packageDetails[0]?.extraHours,
+                night1: packageDetails[0]?.NHalt,
+                amount5: packageDetails[0]?.Rate,
+                amount1: calculateExkmAmount(),
+                amount2: calculateExHrsAmount(),
+                amount3: calculateNightAmount(),
+                amount4: calculatedriverconvienceAmount(),
+                package: packageDetails[0]?.package,
+                pack: packageDetails[0]?.package,
+                minhrs: packageDetails[0]?.Hours,
+                minkm: packageDetails[0]?.KMS,
+                calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
+                request,
+            };
+            await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
+            handleCancel();
+            setRow([]);
+            setRows([]);
+            setSuccess(true);
+            handleSendSMS();
+            handleDriverSendSMS();
+            handlecheck();
+            setSuccessMessage("Successfully Added");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
@@ -1917,11 +1820,10 @@ const useTripsheet = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        infoMessage,
+        // infoMessage,
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,

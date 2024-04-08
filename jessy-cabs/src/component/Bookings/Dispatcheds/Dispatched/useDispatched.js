@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from "axios";
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
@@ -28,10 +27,7 @@ const useDispatched = () => {
     const apiUrl = APIURL;
     // const user_id = localStorage.getItem('useridno');
     const [rows, setRows] = useState([]);
-    // let [statusVAlue, setStatusVAlue] = useState("");
-
     const [department, setdepartment] = useState("");
-    // const [statusvalue, setstatusvalue] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
     const [toDate, setToDate] = useState(dayjs());
     const [error, setError] = useState(false);
@@ -45,63 +41,7 @@ const useDispatched = () => {
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
-
-    // for page permission    const currentPageName = 'Booking';
-
-    //--------------------------------------
-    const [userPermissionss, setUserPermissions] = useState({});
-    const { userPermissions } = useContext(PermissionsContext);
-    //----------------------------------------
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = "Booking";
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-    const checkPagePermission = () => {
-        const currentPageName = "Booking";
-        const permissions = userPermissionss || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-
-    //------------------------------
-
-    const permissions = checkPagePermission();
-
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
+    //---------------------popup----------------------------
 
     const hidePopup = () => {
         setSuccess(false);
@@ -118,6 +58,7 @@ const useDispatched = () => {
         }
     }, [error, success, warning, info]);
 
+    //--------------------------------------------------------
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -263,7 +204,6 @@ const useDispatched = () => {
         infoMessage,
         setToDate,
         handleShow,
-        isFieldReadOnly,
         handleShowAll,
         department,
         hidePopup,

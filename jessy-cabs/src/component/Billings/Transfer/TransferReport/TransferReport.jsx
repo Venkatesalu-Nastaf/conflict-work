@@ -83,7 +83,6 @@ const TransferReport = () => {
     errorMessage,
     warningMessage,
     handleClick,
-    isFieldReadOnly,
     ratetypeforpage,
     hidePopup,
     organizationdata,
@@ -141,7 +140,6 @@ const TransferReport = () => {
                     label="GroupTrip Id"
                     name="referenceno"
                     autoComplete='off'
-                    disabled={isFieldReadOnly("read")}
                     value={grouptTripid}
                   />
                 </div>
@@ -317,9 +315,7 @@ const TransferReport = () => {
                     }}
                   />
                 </div>
-                {/* <div className="input" style={{ width: "100px" }}>
-                  <Button variant="contained" onClick={() => handleEInvoiceClick()} disabled={isFieldReadOnly("new")}>PDF Bill</Button>
-                </div> */}
+
                 <div className="input" style={{ width: "180px" }}>
                   <FormControlLabel
                     value="bookingmail"
@@ -330,14 +326,9 @@ const TransferReport = () => {
                     }
                     label="Booking Mail"
                   />
-                  {/* <Button variant="outlined" disabled={isFieldReadOnly("new")} onClick={handleETripsheetClick} >Booking Mail</Button> */}
+
                 </div>
-                {/* <div className="input" style={{ width: "180px" }}>
-                  <Button variant="contained" onClick={() => handleMapInvoiceClick()} disabled={isFieldReadOnly("new")}>Image With Invoice Normal</Button>
-                </div>
-                <div className="input" style={{ width: "180px" }}>
-                  <Button variant="contained" onClick={() => handleLuxuryInvoiceClick()} disabled={isFieldReadOnly("new")}>Image With Invoice Luxury</Button>
-                </div> */}
+
                 <div className="input">
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">

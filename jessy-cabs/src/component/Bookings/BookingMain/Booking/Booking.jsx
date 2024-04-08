@@ -113,7 +113,6 @@ const Booking = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -1177,7 +1176,6 @@ const Booking = () => {
                     <Button
                       color="primary"
                       variant="contained"
-                      disabled={isFieldReadOnly("new")}
                       component="label"
                     >
                       Attach File
@@ -1192,7 +1190,6 @@ const Booking = () => {
                     <Button
                       color="primary"
                       variant="contained"
-                      disabled={isFieldReadOnly("new")}
                       onClick={() => {
                         setError(true);
                         setErrorMessage("Please Enter Booking No");
@@ -1206,7 +1203,7 @@ const Booking = () => {
                   <Button
                     variant="outlined"
                     onClick={handleButtonClick}
-                    disabled={isFieldReadOnly("new")}
+
                   >
                     View
                   </Button>
@@ -1233,26 +1230,26 @@ const Booking = () => {
             ))}
           </StyledSpeedDial>
         </Box> */}
-         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-      <StyledSpeedDial
-        ariaLabel="SpeedDial playground example"
-        icon={<SpeedDialIcon />}
-        direction="left"
-      >
-        {actions.map((action) => (
-          action.icon ? (
-            <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.name}
-              onClick={(event) =>
-                handleClick(event, action.name, selectedCustomerId)
-              }
-            />
-          ) : null
-        ))}
-      </StyledSpeedDial>
-    </Box>
+        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <StyledSpeedDial
+            ariaLabel="SpeedDial playground example"
+            icon={<SpeedDialIcon />}
+            direction="left"
+          >
+            {actions.map((action) => (
+              action.icon ? (
+                <SpeedDialAction
+                  key={action.name}
+                  icon={action.icon}
+                  tooltipTitle={action.name}
+                  onClick={(event) =>
+                    handleClick(event, action.name, selectedCustomerId)
+                  }
+                />
+              ) : null
+            ))}
+          </StyledSpeedDial>
+        </Box>
         <div className="vehicle-confirm">
           <div className="input-field">
             <div className="input">
@@ -1424,7 +1421,7 @@ const Booking = () => {
                   <Button
                     variant="contained"
                     onClick={handleAdd}
-                    disabled={isFieldReadOnly("new")}
+
                   >
                     Add
                   </Button>
@@ -1433,15 +1430,14 @@ const Booking = () => {
             </div>
             <div>
               {
-                edit?
-              <Button
-              variant="contained"
-               onClick={handleAdd}
-               disabled={isFieldReadOnly("new")}
-               >
-                Add New</Button>:<></>
-                
-}
+                edit ?
+                  <Button
+                    variant="contained"
+                    onClick={handleAdd}
+                  >
+                    Add New</Button> : <></>
+
+              }
             </div>
           </div>
           <Dialog open={popupOpen} onClose={handlePopupClose}>

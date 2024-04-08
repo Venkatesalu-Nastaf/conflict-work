@@ -11,7 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
-import { StationName, ViewFor } from "./DriverCreationData";
+import { StationName } from "./DriverCreationData";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { AiOutlineFileSearch } from "react-icons/ai";
@@ -98,7 +98,6 @@ const DriverCreation = () => {
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,
@@ -131,7 +130,7 @@ const DriverCreation = () => {
         selectAll,
         handleSelectAll,
         handleDocumentDownload,
-        searchText,setSearchText,fromDate,setFromDate,toDate,setToDate,handleenterSearch,handleShowAll,actions 
+        searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, actions
     } = useDrivercreation();
 
     useEffect(() => {
@@ -159,9 +158,9 @@ const DriverCreation = () => {
                                     id="id"
                                     label="driverID"
                                     name="driverid"
-                                    value={selectedCustomerData.driverid || book.driverid||''}
+                                    value={selectedCustomerData.driverid || book.driverid || ''}
                                     onChange={handleChange}
-                                variant="standard"
+                                    variant="standard"
                                 />
                             </div>
 
@@ -370,53 +369,53 @@ const DriverCreation = () => {
                                     id="badgeexpdate"
                                     sx={{ m: 1, width: "100ch" }}
                                 /> */}
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  
-                    <DatePicker
-                     label="Badge Expdate "
-                      value={
-                         selectedCustomerData.badgeexpdate
-                          ? dayjs(selectedCustomerData.badgeexpdate)
-                          : null || book.badgeexpdate
-                            ? dayjs(book.badgeexpdate)
-                           :null
-                      }
-                      format="DD/MM/YYYY"
-                      onChange={(date) => handleDateChange(date, "badgeexpdate")}
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField
-                          {...inputProps}
-                          inputRef={inputRef}
-                          value={selectedCustomerData?.badgeexpdate}
-                        />
-                      )}
-                    </DatePicker>
-              
-                </LocalizationProvider>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                    <DatePicker
+                                        label="Badge Expdate "
+                                        value={
+                                            selectedCustomerData.badgeexpdate
+                                                ? dayjs(selectedCustomerData.badgeexpdate)
+                                                : null || book.badgeexpdate
+                                                    ? dayjs(book.badgeexpdate)
+                                                    : null
+                                        }
+                                        format="DD/MM/YYYY"
+                                        onChange={(date) => handleDateChange(date, "badgeexpdate")}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField
+                                                {...inputProps}
+                                                inputRef={inputRef}
+                                                value={selectedCustomerData?.badgeexpdate}
+                                            />
+                                        )}
+                                    </DatePicker>
+
+                                </LocalizationProvider>
                             </div>
 
-                            
- <div className="input">
-                <div className="icone">
-                  <AddIcCallTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  name="Mobileno"
-                  autoComplete="new-password"
-                  value={
-                  selectedCustomerData.Mobileno ||
-                   book.Mobileno ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Mobile No"
-                  id="mobile"
-                  variant="standard"
-                />
+
+                            <div className="input">
+                                <div className="icone">
+                                    <AddIcCallTwoToneIcon color="action" />
+                                </div>
+                                <TextField
+                                    name="Mobileno"
+                                    autoComplete="new-password"
+                                    value={
+                                        selectedCustomerData.Mobileno ||
+                                        book.Mobileno ||
+                                        ""
+                                    }
+                                    onChange={handleChange}
+                                    label="Mobile No"
+                                    id="mobile"
+                                    variant="standard"
+                                />
+                            </div>
                         </div>
-                        </div>
-                        
+
                         <div className="input-field">
                             {/* <div className="input" style={{ width: "400px" }}>
                                 <div className="icone">
@@ -433,7 +432,7 @@ const DriverCreation = () => {
                                     variant="standard"
                                 /> */}
 
-                                <div className="input" style={{ width: "400px" }}>
+                            <div className="input" style={{ width: "400px" }}>
                                 <div className="icone">
                                     <LocationCityIcon color="action" />
                                 </div>
@@ -448,7 +447,7 @@ const DriverCreation = () => {
                                     variant="standard"
                                 />
                             </div>
-                            
+
                             {/* <div className="input">
                                 <div className="icone">
                                     <RateReviewIcon color="action" />
@@ -480,7 +479,7 @@ const DriverCreation = () => {
                             </div>
                             <div className="input" style={{ width: "160px" }}>
                                 {selectedCustomerData?.driverid || book.driverid ? (
-                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
+                                    <Button color="primary" variant="contained" component="label">
                                         aadhar card
                                         <input
                                             type="file"
@@ -489,7 +488,7 @@ const DriverCreation = () => {
                                         />
                                     </Button>
                                 ) : (
-                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                                    <Button color="primary" variant="contained" onClick={() => {
                                         setError(true);
                                         setErrorMessage("Please Enter Booking No");
                                     }}>
@@ -498,29 +497,29 @@ const DriverCreation = () => {
                                 )}
                             </div>
                             <div className="input">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="joining Date"
-                    value={
-                       selectedCustomerData.joiningdate
-                        ? dayjs(selectedCustomerData.joiningdate)
-                        : dayjs() || book.joiningdate
-                          ? dayjs(book.joiningdate)
-                          : dayjs()
-                    }
-                    format="DD/MM/YYYY"
-                    onChange={(date) => handleDateChange(date, "joiningdate")}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField
-                        {...inputProps}
-                        inputRef={inputRef}
-                        value={selectedCustomerData?.joiningdate}
-                      />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider>
-              </div>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        label="joining Date"
+                                        value={
+                                            selectedCustomerData.joiningdate
+                                                ? dayjs(selectedCustomerData.joiningdate)
+                                                : dayjs() || book.joiningdate
+                                                    ? dayjs(book.joiningdate)
+                                                    : dayjs()
+                                        }
+                                        format="DD/MM/YYYY"
+                                        onChange={(date) => handleDateChange(date, "joiningdate")}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField
+                                                {...inputProps}
+                                                inputRef={inputRef}
+                                                value={selectedCustomerData?.joiningdate}
+                                            />
+                                        )}
+                                    </DatePicker>
+                                </LocalizationProvider>
+                            </div>
                         </div>
                         <div className="input-field">
                             {/* <div className="input" style={{ width: "400px" }}>
@@ -575,35 +574,35 @@ const DriverCreation = () => {
                                     sx={{ m: 1, width: "140ch" }}
                                 /> */}
 
-                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  
-                        <DatePicker
-                       label="License Exp Date "
-                       value={
-                       selectedCustomerData.licenseexpdate
-                        ? dayjs(selectedCustomerData.licenseexpdate)
-                        : null || book.licenseexpdate
-                        ? dayjs(book.licenseexpdate)
-                          : null
-                    }
-                    format="DD/MM/YYYY"
-                    onChange={(date) => handleDateChange(date, "licenseexpdate")}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField
-                        {...inputProps}
-                        inputRef={inputRef}
-                        value={selectedCustomerData?.licenseexpdate}
-                      />
-                    )}
-                  </DatePicker>
-            
-              </LocalizationProvider>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                    <DatePicker
+                                        label="License Exp Date "
+                                        value={
+                                            selectedCustomerData.licenseexpdate
+                                                ? dayjs(selectedCustomerData.licenseexpdate)
+                                                : null || book.licenseexpdate
+                                                    ? dayjs(book.licenseexpdate)
+                                                    : null
+                                        }
+                                        format="DD/MM/YYYY"
+                                        onChange={(date) => handleDateChange(date, "licenseexpdate")}
+                                    >
+                                        {({ inputProps, inputRef }) => (
+                                            <TextField
+                                                {...inputProps}
+                                                inputRef={inputRef}
+                                                value={selectedCustomerData?.licenseexpdate}
+                                            />
+                                        )}
+                                    </DatePicker>
+
+                                </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "160px" }}>
 
                                 {selectedCustomerData?.driverid || book.driverid ? (
-                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} component="label">
+                                    <Button color="primary" variant="contained" component="label">
                                         License
                                         <input
                                             type="file"
@@ -612,7 +611,7 @@ const DriverCreation = () => {
                                         />
                                     </Button>
                                 ) : (
-                                    <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                                    <Button color="primary" variant="contained" onClick={() => {
                                         setError(true);
                                         setErrorMessage("Please Enter Booking No");
                                     }}>
@@ -664,7 +663,7 @@ const DriverCreation = () => {
                                 {isEditMode ? (
                                     <Button variant="contained" onClick={handleEdit}>Edit</Button>
                                 ) : (
-                                    <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                                    <Button variant="contained" onClick={handleAdd}>Add</Button>
                                 )}
                             </div>
                         </div>
@@ -713,72 +712,72 @@ const DriverCreation = () => {
                             {actions.map((action) => (
                                 action.icon ? (
                                     <SpeedDialAction
-                                      key={action.name}
-                                      icon={action.icon}
-                                      tooltipTitle={action.name}
-                                      onClick={(event) =>
-                                        handleClick(event, action.name, selectedCustomerId)
-                                      }
+                                        key={action.name}
+                                        icon={action.icon}
+                                        tooltipTitle={action.name}
+                                        onClick={(event) =>
+                                            handleClick(event, action.name, selectedCustomerId)
+                                        }
                                     />
-                                  ) : null
+                                ) : null
                             ))}
                         </StyledSpeedDial>
                     </Box>
 
                     <div className="detail-container-main">
-          <div className="container-left">
-            <div className="copy-title-btn-Booking">
-              <div className="input-field" style={{ justifyContent: "center" }}>
-                <div className="input" style={{ width: "230px" }}>
-                  <div className="icone">
-                    <AiOutlineFileSearch
-                      color="action"
-                      style={{ fontSize: "27px" }}
-                    />
-                  </div>
-                  <TextField
-                    size="small"
-                    id="id"
-                    label="Search"
-                    name="searchText"
-                    value={searchText || ""}
-                    onKeyDown={handleenterSearch}
-                    onChange={(e) => setSearchText(e.target.value)}
-                  />
-                </div>
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      label="From Date"
-                      name="fromDate"
-                      format="DD/MM/YYYY"
-                      value={fromDate}
-                      onChange={(date) => setFromDate(date)}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      label="To Date"
-                      name="toDate"
-                      format="DD/MM/YYYY"
-                      value={toDate}
-                      onChange={(date) => setToDate(date)}
-                    />
-                  </LocalizationProvider>
-                </div>
-                <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained"
-                   onClick={handleShowAll}
-                   >
-                    Search
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                        <div className="container-left">
+                            <div className="copy-title-btn-Booking">
+                                <div className="input-field" style={{ justifyContent: "center" }}>
+                                    <div className="input" style={{ width: "230px" }}>
+                                        <div className="icone">
+                                            <AiOutlineFileSearch
+                                                color="action"
+                                                style={{ fontSize: "27px" }}
+                                            />
+                                        </div>
+                                        <TextField
+                                            size="small"
+                                            id="id"
+                                            label="Search"
+                                            name="searchText"
+                                            value={searchText || ""}
+                                            onKeyDown={handleenterSearch}
+                                            onChange={(e) => setSearchText(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="input">
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DatePicker
+                                                label="From Date"
+                                                name="fromDate"
+                                                format="DD/MM/YYYY"
+                                                value={fromDate}
+                                                onChange={(date) => setFromDate(date)}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                    <div className="input">
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DatePicker
+                                                label="To Date"
+                                                name="toDate"
+                                                format="DD/MM/YYYY"
+                                                value={toDate}
+                                                onChange={(date) => setToDate(date)}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                    <div className="input" style={{ width: "140px" }}>
+                                        <Button variant="contained"
+                                            onClick={handleShowAll}
+                                        >
+                                            Search
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className="DriverCreation-table-container">
                         <div className="table-DriverCreations">
                             <DataGrid

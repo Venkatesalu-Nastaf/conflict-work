@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from "react";
-import { PermissionsContext } from "../../../permissionContext/permissionContext";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 // import axios from "axios";
 import { saveAs } from "file-saver";
@@ -16,11 +15,11 @@ const useTransferreport = () => {
   const [lxpopupOpen, setlxPopupOpen] = useState(false);
   const [servicestation, setServiceStation] = useState("");
   const [customer, setCustomer] = useState("");
-  const [grouptTripid,setGroupTripid] = useState("")
-  const [invoiceno,setInvoiceno] = useState("")
-  const [fromDate,setFromDate] = useState(dayjs())
-  const [endDate,setEndDate] = useState(dayjs())
-  const [invoiceDate,setInvoiceDate] = useState(dayjs())
+  const [grouptTripid, setGroupTripid] = useState("")
+  const [invoiceno, setInvoiceno] = useState("")
+  const [fromDate, setFromDate] = useState(dayjs())
+  const [endDate, setEndDate] = useState(dayjs())
+  const [invoiceDate, setInvoiceDate] = useState(dayjs())
   const [date] = useState(dayjs());
   const [info, setInfo] = useState(false);
   const [bankOptions, setBankOptions] = useState([]);
@@ -34,95 +33,29 @@ const useTransferreport = () => {
   const [warningMessage] = useState({});
   const [popupOpen, setPopupOpen] = useState(false);
   const location = useLocation()
-  // for page permission
 
-  //--------------------------------------
-
-  const [userPermissionss, setUserPermissions] = useState({});
-
-  const { userPermissions } = useContext(PermissionsContext);
-  // console.log("ratetype ", userPermissions)
-
-  //----------------------------------------
-
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = 'CB Billing';
-        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-        // setPermi(response.data);
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("org ", permissions)
-        setUserPermissions(permissions);
-
-      } catch {
-      }
-    };
-    fetchPermissions();
-  }, [userPermissions]);
-
-  //---------------------------------------
-
-  const checkPagePermission = () => {
-    const currentPageName = "CB Billing";
-    const permissions = userPermissionss || {};
-    // console.log('aaaaaaaa', permissions)
-
-    if (permissions.page_name === currentPageName) {
-      return {
-        read: permissions.read_permission === 1,
-        new: permissions.new_permission === 1,
-        modify: permissions.modify_permission === 1,
-        delete: permissions.delete_permission === 1,
-      };
-    }
-    return {
-      read: false,
-      new: false,
-      modify: false,
-      delete: false,
-    };
-  };
-
-
-  //------------------------------
-
-  const permissions = checkPagePermission();
-
-  // Function to determine if a field should be read-only based on permissions
-  const isFieldReadOnly = (fieldName) => {
-    if (permissions.read) {
-      // If user has read permission, check for other specific permissions
-      if (fieldName === "delete" && !permissions.delete) {
-        return true;
-      }
-      return false;
-    }
-    return true;
-  };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const parameterKeys = [
-        "Invoice_no","Group_id","Customer","FromDate","EndDate","BillDate"
+      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate"
     ];
 
     const formData = {};
     parameterKeys.forEach(key => {
-        const value = params.get(key);
-        if (value !== null && value !== "null") {
-            formData[key] = value;
-        }
+      const value = params.get(key);
+      if (value !== null && value !== "null") {
+        formData[key] = value;
+      }
     });
-    console.log(formData,"form..");
+    console.log(formData, "form..");
     setCustomer(formData.Customer)
     setFromDate(formData.FromDate)
     setEndDate(formData.EndDate)
     setGroupTripid(formData.Group_id)
     setInvoiceno(formData.Invoice_no)
     setInvoiceDate(formData.BillDate)
-}, [location])
+  }, [location])
 
 
   useEffect(() => {
@@ -137,7 +70,7 @@ const useTransferreport = () => {
     row["status"]
   ]);
   const handleExcelDownload = () => {
-    const header = ["Sno", "Tripsheet No", "VCode","Status", "Guest Name"];
+    const header = ["Sno", "Tripsheet No", "VCode", "Status", "Guest Name"];
     const csvData = [
       header,
       ...tableData.map((row) => row.map((value) => `"${value}"`)),
@@ -153,7 +86,7 @@ const useTransferreport = () => {
     pdf.setFont("helvetica", "normal");
     pdf.text("Customer Details", 10, 10);
     pdf.autoTable({
-      head: [["Sno", "Tripsheet No", "VCode", "Status","Guest Name"]],
+      head: [["Sno", "Tripsheet No", "VCode", "Status", "Guest Name"]],
       body: tableData,
       startY: 20,
     });
@@ -266,7 +199,7 @@ const useTransferreport = () => {
             id: index + 1,
             guestname: row.guestname,
             tripid: row.tripid,
-            status:row.status
+            status: row.status
           }));
           if (tripsheetNumbers.length > 0) {
             const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
@@ -517,7 +450,6 @@ const useTransferreport = () => {
     successMessage,
     errorMessage,
     warningMessage,
-    isFieldReadOnly,
     organizationdata,
     hidePopup,
     routedData,

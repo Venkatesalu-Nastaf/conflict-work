@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
@@ -47,71 +46,7 @@ const useVehiclestatement = () => {
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
-    // for page permission   const currentPageName = 'Booking';
-
-
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Booking';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Booking';
-        const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-
-    //------------------------------
-    const permissions = checkPagePermission();
-
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
+    //----popup------------------------
 
     const hidePopup = () => {
         setSuccess(false);
@@ -120,38 +55,15 @@ const useVehiclestatement = () => {
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
+    }, [error, success, warning, info]);
 
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    //-----------------------------------------------------
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -199,7 +111,6 @@ const useVehiclestatement = () => {
     };
 
     const handleShow = useCallback(async () => {
-
         try {
             const response = await axios.get(
                 `${apiUrl}/VehicleStatement-bookings?servicestation=${encodeURIComponent(
@@ -284,7 +195,6 @@ const useVehiclestatement = () => {
         errorMessage,
         warningMessage,
         infoMessage,
-        isFieldReadOnly,
         hidePopup,
         servicestation,
         handleInputChange,

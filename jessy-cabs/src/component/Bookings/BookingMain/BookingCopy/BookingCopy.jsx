@@ -29,7 +29,6 @@ const BookingCopy = () => {
     infoMessage,
     actionName,
     handleClick,
-    isFieldReadOnly,
     hidePopup,
     bookingno,
     handleInputChange,
@@ -86,7 +85,7 @@ const BookingCopy = () => {
                 </LocalizationProvider>
               </div>
               <div className="input" style={{ width: "70px" }}>
-                <Button variant="outlined" onClick={handleShow} disabled={isFieldReadOnly("read")}>Show</Button>
+                <Button variant="outlined" onClick={handleShow} >Show</Button>
               </div>
             </div>
           </div>

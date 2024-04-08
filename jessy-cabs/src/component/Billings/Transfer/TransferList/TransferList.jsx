@@ -37,7 +37,6 @@ const TransferList = () => {
         errorMessage,
         warningMessage,
         handleClick,
-        isFieldReadOnly,
         hidePopup,
         customer,
         bankOptions,
@@ -57,7 +56,7 @@ const TransferList = () => {
         handleButtonClickTripsheet,
 
     } = useTransferlist();
-    const {organizationName} = useData()
+    const { organizationName } = useData()
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
@@ -142,7 +141,7 @@ const TransferList = () => {
                                     />
                                 </div>
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("read")}>Search</Button>
+                                    <Button variant="contained" onClick={handleShow} >Search</Button>
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
 import jsPDF from 'jspdf';
@@ -24,7 +23,7 @@ const useVehicleinfo = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage, setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
 
@@ -76,11 +75,9 @@ const useVehicleinfo = () => {
     const handleSelectAll = () => {
         if (selectAll) {
             setDeleteFile([]);
-            // setCheckbox([])
         } else {
             const allFiles = allFile.map(img => img.fileName);
             setDeleteFile(allFiles);
-            // setCheckbox(allFiles)
             setSelectAll(false)
         }
         setSelectAll(prevState => !prevState);
@@ -117,79 +114,26 @@ const useVehicleinfo = () => {
         showPdf(vehicleId);
     };
 
-    // for page permission
-
-
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Supplier Master';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Supplier Master';
-        const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-
-    //------------------------------
-
-    const permissions = checkPagePermission();
-
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
+    //-------popup---------------------
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
         setInfo(false);
         setWarning(false);
     };
+
+    useEffect(() => {
+        if (error || success || warning || info) {
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [error, success, warning, info]);
+
+    //---------------------------------------
+
+
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
         const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
@@ -200,16 +144,6 @@ const useVehicleinfo = () => {
         const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
         saveAs(blob, "VehicleStatement Reports.csv");
     };
-    // const handlePdfDownload = () => {
-    //     console.log(rows,'rrrrrr');
-    //     const pdf = new jsPDF('Landscape');
-    //     pdf.setFontSize(12);
-    //     pdf.setFont('helvetica', 'normal');
-    //     pdf.text("VehicleStatement Reports", 10, 10);
-    // pdf.save("VehicleStatementReports.pdf");
-
-    // }
-
 
     const handlePdfDownload = () => {
         const pdf = new jsPDF('p', 'pt', 'letter');
@@ -299,38 +233,6 @@ const useVehicleinfo = () => {
     //     pdf.save("VehicleStatementReports.pdf");
     // };
 
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
 
     const [book, setBook] = useState({
         vehicleId: '',
@@ -561,7 +463,6 @@ const useVehicleinfo = () => {
     };
 
     const handleAdd = async () => {
-        const permissions = checkPagePermission();
 
         const vehicleId = book.vehicleId;
         if (!vehicleId) {
@@ -570,28 +471,23 @@ const useVehicleinfo = () => {
             return;
         }
 
-        if (permissions.read && permissions.new) {
-            try {
-                await axios.post(`${apiUrl}/vehicleinfo`, book);
-                handleCancel();
+        try {
+            await axios.post(`${apiUrl}/vehicleinfo`, book);
+            handleCancel();
 
-                addFcCopy_copy();
-                addRcBook_copy();
-                addStatePermit_copy();
-                addNationalPermit_copy();
-                addLicence_copy();
-                addInsurence_copy();
+            addFcCopy_copy();
+            addRcBook_copy();
+            addStatePermit_copy();
+            addNationalPermit_copy();
+            addLicence_copy();
+            addInsurence_copy();
 
-                setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
-            } catch {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-            }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            setRows([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
     const [deletefile, setDeleteFile] = useState([])
@@ -602,10 +498,9 @@ const useVehicleinfo = () => {
 
         if (deletefile.includes(fileName)) {
             setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
-            // setCheckbox(fileName)
         } else {
             setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
-            // setCheckbox(prevDeleteFile => [...prevDeleteFile, fileName]);
+
         }
     };
     const handleDocumentDownload = async () => {
@@ -684,31 +579,24 @@ const useVehicleinfo = () => {
 
     const handleEdit = async (vehicleId) => {
         try {
-            const permissions = checkPagePermission();
+            const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
+            const updatedCustomer = {
+                ...selectedCustomer,
+                ...selectedCustomerData,
+            };
+            await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
+            handleCancel();
 
-            if (permissions.read && permissions.modify) {
-                const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
-                const updatedCustomer = {
-                    ...selectedCustomer,
-                    ...selectedCustomerData,
-                };
-                await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
-                handleCancel();
+            addFcCopy_copy();
+            addRcBook_copy();
+            addStatePermit_copy();
+            addNationalPermit_copy();
+            addLicence_copy();
+            addInsurence_copy();
 
-                addFcCopy_copy();
-                addRcBook_copy();
-                addStatePermit_copy();
-                addNationalPermit_copy();
-                addLicence_copy();
-                addInsurence_copy();
-
-                setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully Updated");
-            } else {
-                setInfo(true);
-                setInfoMessage("You do not have permission.");
-            }
+            setRows([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully Updated");
         } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -724,47 +612,39 @@ const useVehicleinfo = () => {
                 setRows([]);
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
-            } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
+            }
 
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`);
-                    setSelectedCustomerData(null);
-                    handleCancel();
-                    setRows([]);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Deleted");
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
+            else if (actionName === 'Delete') {
+                await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`);
+                setSelectedCustomerData(null);
+                handleCancel();
+                setRows([]);
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
+            }
 
-                if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
-                    const updatedCustomer = {
-                        ...selectedCustomer,
-                        ...selectedCustomerData,
-                    };
-                    await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
-                    handleCancel();
-                    //
-                    addFcCopy_copy();
-                    addRcBook_copy();
-                    addStatePermit_copy();
-                    addNationalPermit_copy();
-                    addLicence_copy();
-                    addInsurence_copy();
-                    //
-                    setRows([]);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Updated");
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Add') {
+            else if (actionName === 'Edit') {
+                const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
+                const updatedCustomer = {
+                    ...selectedCustomer,
+                    ...selectedCustomerData,
+                };
+                await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
+                handleCancel();
+                //
+                addFcCopy_copy();
+                addRcBook_copy();
+                addStatePermit_copy();
+                addNationalPermit_copy();
+                addLicence_copy();
+                addInsurence_copy();
+                //
+                setRows([]);
+                setSuccess(true);
+                setSuccessMessage("Successfully Updated");
+            }
+
+            else if (actionName === 'Add') {
                 handleAdd();
             }
         } catch {
@@ -781,32 +661,25 @@ const useVehicleinfo = () => {
 
     //search funtion
     const handleSearch = async () => {
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.read) {
-            try {
-                const response = await fetch(`${apiUrl}/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
-                const data = await response.json();
-                if (data.length > 0) {
-                    const rowsWithUniqueId = data.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setRows(rowsWithUniqueId);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully listed")
-                } else {
-                    setRows([]);
-                    setError(true);
-                    setErrorMessage("No data found")
-                }
-            } catch {
+        try {
+            const response = await fetch(`${apiUrl}/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
+            const data = await response.json();
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+                setSuccess(true);
+                setSuccessMessage("Successfully listed")
+            } else {
+                setRows([]);
                 setError(true);
                 setErrorMessage("No data found")
             }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        } catch {
+            setError(true);
+            setErrorMessage("No data found")
         }
     };
 
@@ -826,18 +699,6 @@ const useVehicleinfo = () => {
 
     const [imagedata, setImagedata] = useState(null);
 
-    //     const handleimagedelete = (imageName) => {
-    //         console.log(deletefile, 'fileeee');
-
-    //         if (deletefile.length > 0) {
-    //             setImagedata(prevDeleteFile => [...prevDeleteFile, imageName]);
-
-    //             setDialogdeleteOpen(true);
-    //             setDeleteFile([]);
-    //         }
-    // }
-
-
     const handleimagedelete = (imageName) => {
         console.log(deletefile, 'fileeee');
 
@@ -848,7 +709,6 @@ const useVehicleinfo = () => {
                 }
                 return [...prevDeleteFile, imageName]; // Spread if already an array
             });
-
             setDialogdeleteOpen(true);
             setDeleteFile([]);
         }
@@ -889,13 +749,12 @@ const useVehicleinfo = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        infoMessage,
+        // infoMessage,
         book,
         handleClick,
         handleChange,
         selectedCustomerId,
         handleRowClick,
-        isFieldReadOnly,
         handleAdd,
         hidePopup,
         handleDateChange,

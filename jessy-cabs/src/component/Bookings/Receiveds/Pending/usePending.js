@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
@@ -41,71 +40,7 @@ const usePending = () => {
     const [warningMessage] = useState({});
     const [infoMessage] = useState({});
 
-    // for page permission const currentPageName = 'Booking';
-
-
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Booking';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Booking';
-        const permissions = userPermissionss || {};
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-
-    //------------------------------
-
-    const permissions = checkPagePermission();
-
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
+    //-------------popup-----------------
 
     const hidePopup = () => {
         setSuccess(false);
@@ -121,31 +56,7 @@ const usePending = () => {
             return () => clearTimeout(timer);
         }
     }, [error, success, warning, info]);
-
-    // useEffect(() => {
-    //     if (success) {s
-    //         const timer = setTimeout(() => {
-    //             hidePopup();
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [success]);
-    // useEffect(() => {
-    //     if (warning) {
-    //         const timer = setTimeout(() => {
-    //             hidePopup();
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [warning]);
-    // useEffect(() => {
-    //     if (info) {
-    //         const timer = setTimeout(() => {
-    //             hidePopup();
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [info]);
+    //-------------------------------------------------------------
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -194,9 +105,7 @@ const usePending = () => {
 
     const reversedRows = [...rows].reverse();
 
-
     const handleShow = useCallback(async () => {
-
         try {
             const response = await axios.get(
                 `${apiUrl}/pending-bookings?servicestation=${encodeURIComponent(
@@ -263,11 +172,6 @@ const usePending = () => {
     };
 
 
-    // const handleBookingClick = () => {
-    //     const bookingPageUrl = `/home/bookings/booking?bookingno=${selectedRow.bookingno || ''}&bookingdate=${selectedRow.bookingdate || ''}&bookingtime=${selectedRow.bookingtime || ''}&status=${selectedRow.status || ''}&tripid=${selectedRow.tripid || ''}&customer=${selectedRow.customer || ''}&orderedby=${selectedRow.orderedby || ''}&mobile=${selectedRow.mobile || ''}&guestname=${selectedRow.guestname || ''}&guestmobileno=${selectedRow.guestmobileno || ''}&email=${selectedRow.email || ''}&employeeno=${selectedRow.employeeno || ''}&address1=${selectedRow.address1 || ''}&streetno=${selectedRow.streetno || ''}&city=${selectedRow.city || ''}&report=${selectedRow.report || ''}&vehType=${selectedRow.vehType || ''}&paymenttype=${selectedRow.paymenttype || ''}&startdate=${selectedRow.startdate || ''}&starttime=${selectedRow.starttime || ''}&reporttime=${selectedRow.reporttime || ''}&duty=${selectedRow.duty || ''}&pickup=${selectedRow.pickup || ''}&customercode=${selectedRow.customercode || ''}&request=${selectedRow.registerno || ''}&flightno=${selectedRow.flightno || ''}&orderbyemail=${selectedRow.orderbyemail || ''}&remarks=${selectedRow.remarks || ''}&servicestation=${selectedRow.servicestation || ''}&advance=${selectedRow.advance || ''}&nameupdate=${selectedRow.nameupdate || ''}&address3=${selectedRow.address3 || ''}&address4=${selectedRow.address4 || ''}&cityupdate=${selectedRow.cityupdate || ''}&useage=${selectedRow.useage || ''}&username=${selectedRow.username || ''}&tripdate=${selectedRow.tripdate || ''}&triptime=${selectedRow.triptime || ''}&emaildoggle=${selectedRow.emaildoggle || ''}&hireTypes=${selectedRow.hireTypes || ''}&travelsname=${selectedRow.travelsname || ''}&vehRegNo=${selectedRow.vehRegNo || ''}&vehType=${selectedRow.vehType || ''}&driverName=${selectedRow.driverName || ''}&mobileNo=${selectedRow.mobileNo || ''}&travelsemail=${selectedRow.travelsemail || ''}`;
-    //     window.location.href = bookingPageUrl;
-    // };
-
     const handleTripsheetClick = () => {
         const bookingPageUrl = `/home/bookings/tripsheet?tripid=${selectedRow.tripid || ''}&bookingno=${selectedRow.bookingno || ''}&billingno=${selectedRow.billingno || ''}&apps=${selectedRow.apps || ''}&customer=${selectedRow.customer || ''}&orderedby=${selectedRow.orderedby || ''}&mobile=${selectedRow.mobile || ''}&guestname=${selectedRow.guestname || ''}&guestmobileno=${selectedRow.guestmobileno || ''}&email=${selectedRow.email || ''}&address1=${selectedRow.address1 || ''}&streetno=${selectedRow.streetno || ''}&city=${selectedRow.city || ''}&hireTypes=${selectedRow.hireTypes || ''}&department=${selectedRow.department || ''}&vehRegNo=${selectedRow.vehRegNo || ''}&vehType=${selectedRow.vehType || ''}&driverName=${selectedRow.driverName || ''}&mobileNo=${selectedRow.mobileNo || ''}&driversmsexbetta=${selectedRow.driversmsexbetta || ''}&gps=${selectedRow.gps || ''}&duty=${selectedRow.duty || ''}&pickup=${selectedRow.pickup || ''}&useage=${selectedRow.useage || ''}&request=${selectedRow.registerno || ''}&startdate=${selectedRow.startdate || ''}&closedate=${selectedRow.closedate || ''}&totaldays=${selectedRow.totaldays || ''}&employeeno=${selectedRow.employeeno || ''}&reporttime=${selectedRow.reporttime || ''}&starttime=${selectedRow.starttime || ''}&closetime=${selectedRow.closetime || ''}&additionaltime=${selectedRow.additionaltime || ''}&advancepaidtovendor=${selectedRow.advancepaidtovendor || ''}&customercode=${selectedRow.customercode || ''}&startkm=${selectedRow.startkm || ''}&closekm=${selectedRow.closekm || ''}&permit=${selectedRow.permit || ''}&parking=${selectedRow.parking || ''}&toll=${selectedRow.toll || ''}&vpermettovendor=${selectedRow.vpermettovendor || ''}&vendortoll=${selectedRow.vendortoll || ''}&customeradvance=${selectedRow.customeradvance || ''}&email1=${selectedRow.email1 || ''}&remark=${selectedRow.remark || ''}&smsguest=${selectedRow.smsguest || ''}&documentnotes=${selectedRow.documentnotes || ''}&VendorTripNo=${selectedRow.VendorTripNo || ''}&vehicles=${selectedRow.vehicles || ''}&duty1=${selectedRow.duty1 || ''}&startdate1=${selectedRow.startdate1 || ''}&closedate1=${selectedRow.closedate1 || ''}&totaldays1=${selectedRow.totaldays1 || ''}&locks=${selectedRow.locks || ''}&starttime2=${selectedRow.starttime2 || ''}&closetime2=${selectedRow.closetime2 || ''}&totaltime=${selectedRow.totaltime || ''}&startkm1=${selectedRow.startkm1 || ''}&closekm1=${selectedRow.closekm1 || ''}&totalkm1=${selectedRow.totalkm1 || ''}&remark1=${selectedRow.remark1 || ''}&caramount=${selectedRow.caramount || ''}&minkm=${selectedRow.minkm || ''}&minhrs=${selectedRow.minhrs || ''}&package=${selectedRow.package || ''}&amount=${selectedRow.amount || ''}&exkm=${selectedRow.exkm || ''}&amount1=${selectedRow.amount1 || ''}&exHrs=${selectedRow.exHrs || ''}&amount2=${selectedRow.amount2 || ''}&night=${selectedRow.night || ''}&amount3=${selectedRow.amount3 || ''}&driverconvenience=${selectedRow.driverconvenience || ''}&amount4=${selectedRow.amount4 || ''}&netamount=${selectedRow.netamount || ''}&vehcommission=${selectedRow.vehcommission || ''}&caramount1=${selectedRow.caramount1 || ''}&manualbills=${selectedRow.manualbills || ''}&pack=${selectedRow.pack || ''}&amount5=${selectedRow.amount5 || ''}&exkm1=${selectedRow.exkm1 || ''}&amount6=${selectedRow.amount6 || ''}&exHrs1=${selectedRow.exHrs1 || ''}&amount7=${selectedRow.amount7 || ''}&night1=${selectedRow.night1 || ''}&amount8=${selectedRow.amount8 || ''}&driverconvenience1=${selectedRow.driverconvenience1 || ''}&amount9=${selectedRow.amount9 || ''}&rud=${selectedRow.rud || ''}&netamount1=${selectedRow.netamount1 || ''}&discount=${selectedRow.discount || ''}&ons=${selectedRow.ons || ''}&manualbills1=${selectedRow.manualbills1 || ''}&balance=${selectedRow.balance || ''}&fcdate=${selectedRow.fcdate || ''}&taxdate=${selectedRow.taxdate || ''}&insdate=${selectedRow.insdate || ''}&stpermit=${selectedRow.stpermit || ''}&maintenancetype=${selectedRow.maintenancetype || ''}&kilometer=${selectedRow.kilometer || ''}&selects=${selectedRow.selects || ''}&documenttype=${selectedRow.documenttype || ''}&on1=${selectedRow.on1 || ''}&smsgust=${selectedRow.smsgust || ''}&booker=${selectedRow.booker || ''}&emailcheck=${selectedRow.emailcheck || ''}&valueprint=${selectedRow.valueprint || ''}&manualbillss=${selectedRow.manualbillss || ''}&reload=${selectedRow.reload || ''}`;
         window.location.href = bookingPageUrl;
@@ -288,7 +192,6 @@ const usePending = () => {
         errorMessage,
         warningMessage,
         infoMessage,
-        isFieldReadOnly,
         hidePopup,
         fromDate,
         setFromDate,

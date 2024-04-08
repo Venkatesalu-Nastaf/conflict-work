@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from "../../../permissionContext/permissionContext.js"
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import { fetchBankOptions } from './BillingData';
@@ -29,71 +28,7 @@ const useBilling = () => {
     });
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
 
-    // for page permission
 
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'CB Billing';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-    const checkPagePermission = () => {
-        const currentPageName = 'CB Billing';
-        const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-
-    //------------------------------
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        const permissions = checkPagePermission();
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
 
     //for popup
     const hidePopup = () => {
@@ -102,57 +37,29 @@ const useBilling = () => {
         setInfo(false);
         setWarning(false);
     };
+
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, success, warning, info]);
+
 
     const handleEInvoiceClick = (row) => {
-        const permissions = checkPagePermission();
 
-        if (permissions.read_permission && permissions.modify_permission) {
-            const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-            const customer = book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer;
+        const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
+        const customer = book.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || formData.customer;
 
-            if (!tripid) {
-                setError(true);
-                setErrorMessage("Please enter the Billing Data");
-            } else {
-                localStorage.setItem('selectedTripid', tripid);
-                localStorage.setItem('selectedcustomerid', customer);
-                setPopupOpen(true);
-            }
+        if (!tripid) {
+            setError(true);
+            setErrorMessage("Please enter the Billing Data");
         } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            localStorage.setItem('selectedTripid', tripid);
+            localStorage.setItem('selectedcustomerid', customer);
+            setPopupOpen(true);
         }
     };
 
@@ -361,74 +268,65 @@ const useBilling = () => {
             } else if (actionName === 'Cancel') {
                 handleCancel();
             } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
 
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`${apiUrl}/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
-                    setFormData(null);
-                    setSelectedCustomerData(null);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Deleted");
-                    handleCancel();
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
+
+
+                await axios.delete(`${apiUrl}/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`);
+                setFormData(null);
+                setSelectedCustomerData(null);
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
+                handleCancel();
+
             } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
-                if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.tripid === tripid);
-                    const updatedCustomer = {
-                        ...selectedCustomerDatas,
-                        ...selectedCustomer,
-                        ...selecting,
-                        ...formData,
-                        MinKilometers: selectedCustomerDatas.minkm || selectedCustomerData.minkm || '',
-                        MinHours: selectedCustomerDatas.minhrs || selectedCustomerData.minhrs || '',
-                        minchargeamount: selectedCustomerData.netamount || selectedCustomerDatas.minchargeamount || book.minchargeamount,
-                        MinCharges: selectedCustomerData.package || selectedCustomerDatas.MinCharges || book.MinCharges,
-                        cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
-                        cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
-                        nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
-                        dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
-                    };
-                    await axios.put(`${apiUrl}/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
-                    handleCancel();
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Updated");
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Add') {
-                const permissions = checkPagePermission();
 
-                if (permissions.read && permissions.new) {
-                    if (!customer) {
-                        setError(true);
-                        setErrorMessage("Fill mandatory fields");
-                        return;
-                    }
-                    const updatedBook = {
-                        ...book,
-                        ...selecting,
-                        ...selectedCustomerDatas,
-                        ...formData,
-                        customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
-                        Billingdate: selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
-                        cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
-                        cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
-                        nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
-                        dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
-                    };
-                    await axios.post(`${apiUrl}/billing`, updatedBook);
-                    handleCancel();
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Added");
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
+
+                const selectedCustomer = rows.find((row) => row.tripid === tripid);
+                const updatedCustomer = {
+                    ...selectedCustomerDatas,
+                    ...selectedCustomer,
+                    ...selecting,
+                    ...formData,
+                    MinKilometers: selectedCustomerDatas.minkm || selectedCustomerData.minkm || '',
+                    MinHours: selectedCustomerDatas.minhrs || selectedCustomerData.minhrs || '',
+                    minchargeamount: selectedCustomerData.netamount || selectedCustomerDatas.minchargeamount || book.minchargeamount,
+                    MinCharges: selectedCustomerData.package || selectedCustomerDatas.MinCharges || book.MinCharges,
+                    cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
+                    cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
+                    nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
+                    dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
+                };
+                await axios.put(`${apiUrl}/billing/${book.tripid || selecting.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid}`, updatedCustomer);
+                handleCancel();
+                setSuccess(true);
+                setSuccessMessage("Successfully Updated");
+
+            } else if (actionName === 'Add') {
+
+
+
+                if (!customer) {
+                    setError(true);
+                    setErrorMessage("Fill mandatory fields");
+                    return;
                 }
+                const updatedBook = {
+                    ...book,
+                    ...selecting,
+                    ...selectedCustomerDatas,
+                    ...formData,
+                    customer: formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer,
+                    Billingdate: selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs(),
+                    cfeamount: calculateTotalAmount() || selectedCustomerData.cfeamount || selectedCustomerDatas.cfeamount || book.cfeamount,
+                    cfehamount: calculateTotalAmount2() || selectedCustomerData.cfehamount || selectedCustomerDatas.cfehamount || book.cfehamount,
+                    nhamount: calculateTotalAmount3() || selectedCustomerData.nhamount || selectedCustomerDatas.nhamount || book.nhamount,
+                    dbamount: calculateTotalAmount4() || selectedCustomerData.dbamount || selectedCustomerDatas.dbamount || book.dbamount
+                };
+                await axios.post(`${apiUrl}/billing`, updatedBook);
+                handleCancel();
+                setSuccess(true);
+                setSuccessMessage("Successfully Added");
+
             }
 
         } catch (err) {
@@ -922,7 +820,6 @@ const useBilling = () => {
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         hidePopup,
         formData,
         selectedCustomerDatas,

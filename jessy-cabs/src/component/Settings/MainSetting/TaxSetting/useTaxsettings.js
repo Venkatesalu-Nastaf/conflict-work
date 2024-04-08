@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
 import { APIURL } from "../../../url";
@@ -35,74 +34,9 @@ const useTaxsettings = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage, setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
 
-
-
-    // for page permission
-
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Tax settings';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Tax settings';
-        const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-
-    //------------------------------
-    const permissions = checkPagePermission();
-
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
+    //--------------------------------popup------------
 
     const hidePopup = () => {
         setSuccess(false);
@@ -110,39 +44,17 @@ const useTaxsettings = () => {
         setInfo(false);
         setWarning(false);
     };
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
 
     useEffect(() => {
-        if (success) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
+    }, [error, success, warning, info]);
+
+    //-----------------------------------------------
 
     const [book, setBook] = useState({
         DateTaxFrom: '',
@@ -155,9 +67,9 @@ const useTaxsettings = () => {
         KKCess_Des: '',
         taxtype: '',
     });
+
     const handleChange = (event) => {
         const { name, value, checked, type } = event.target;
-
         if (type === 'checkbox') {
             setBook((prevBook) => ({
                 ...prevBook,
@@ -228,31 +140,83 @@ const useTaxsettings = () => {
         setIsEditMode(true);
     }, []);
 
+    //add----
     const handleAdd = async () => {
-        const permissions = checkPagePermission();
-        if (permissions.read && permissions.new) {
-            try {
-                await axios.post(`${apiUrl}/taxsetting`, book);
-                handleCancel();
-                setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
-            } catch {
-                setError(true);
-                setErrorMessage("Check your Network Connection");
-            }
-        } else {
-            // Display a warning or prevent the action
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        try {
+            await axios.post(`${apiUrl}/taxsetting`, book);
+            handleCancel();
+            setRows([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
         }
     };
 
+    // edit------
     const handleEdit = async (STax) => {
         try {
-            const permissions = checkPagePermission();
+            const selectedCustomer = rows.find((row) => row.STax === STax);
+            const updatedCustomer = {
+                ...selectedCustomer,
+                ...selectedCustomerData,
+            };
+            await axios.put(`${apiUrl}/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
+            handleCancel();
+            setRows([]);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
 
-            if (permissions.read && permissions.modify) {
+        } catch {
+            setError(true);
+            setErrorMessage("Check your Network Connection");
+        }
+    };
+
+    useEffect(() => {
+        const handlelist = async () => {
+            const response = await axios.get(`${apiUrl}/taxsetting`);
+            const data = response.data;
+
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+            } else {
+                setRows([]);
+            }
+        }
+        handlelist();
+    }, [apiUrl]);
+
+
+    const handleClick = async (event, actionName, STax) => {
+        event.preventDefault();
+        try {
+            if (actionName === 'List') {
+                const response = await axios.get(`${apiUrl}/taxsetting`);
+                const data = response.data;
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+                setSuccess(true);
+                setSuccessMessage("Successfully listed");
+            }
+
+            else if (actionName === 'Delete') {
+                await axios.delete(`${apiUrl}/taxsetting/${selectedCustomerData?.STax || book.STax}`);
+                setSelectedCustomerData(null);
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
+                handleCancel();
+            }
+
+            else if (actionName === 'Edit') {
                 const selectedCustomer = rows.find((row) => row.STax === STax);
                 const updatedCustomer = {
                     ...selectedCustomer,
@@ -263,87 +227,6 @@ const useTaxsettings = () => {
                 setRows([]);
                 setSuccess(true);
                 setSuccessMessage("Successfully updated");
-            } else {
-                setInfo(true);
-                setInfoMessage("You do not have permission.");
-            }
-        } catch {
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-        }
-    };
-
-    useEffect(() => {
-        const handlelist = async () => {
-            if (permissions.read) {
-                const response = await axios.get(`${apiUrl}/taxsetting`);
-                const data = response.data;
-
-                if (data.length > 0) {
-                    const rowsWithUniqueId = data.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setRows(rowsWithUniqueId);
-                } else {
-                    setRows([]);
-                }
-            }
-        }
-
-        handlelist();
-    }, [permissions, apiUrl]);
-
-    const handleClick = async (event, actionName, STax) => {
-        event.preventDefault();
-        try {
-            if (actionName === 'List') {
-                const permissions = checkPagePermission();
-                if (permissions.read && permissions.read) {
-                    const response = await axios.get(`${apiUrl}/taxsetting`);
-                    const data = response.data;
-                    const rowsWithUniqueId = data.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setRows(rowsWithUniqueId);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully listed");
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Cancel') {
-                handleCancel();
-            } else if (actionName === 'Delete') {
-                const permissions = checkPagePermission();
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`${apiUrl}/taxsetting/${selectedCustomerData?.STax || book.STax}`);
-                    setSelectedCustomerData(null);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Deleted");
-                    handleCancel();
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
-            } else if (actionName === 'Edit') {
-                const permissions = checkPagePermission();
-                if (permissions.read && permissions.modify) {
-                    const selectedCustomer = rows.find((row) => row.STax === STax);
-                    const updatedCustomer = {
-                        ...selectedCustomer,
-                        ...selectedCustomerData,
-                    };
-                    await axios.put(`${apiUrl}/taxsetting/${book.STax || selectedCustomerData.STax}`, updatedCustomer);
-                    handleCancel();
-                    setRows([]);
-                    setSuccess(true);
-                    setSuccessMessage("Successfully updated");
-                } else {
-                    setInfo(true);
-                    setInfoMessage("You do not have permission.");
-                }
             }
         } catch {
             setError(true);
@@ -368,11 +251,10 @@ const useTaxsettings = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        infoMessage,
+        // infoMessage,
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,

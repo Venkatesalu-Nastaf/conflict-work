@@ -45,7 +45,6 @@ const Dispatched = () => {
     setToDate,
     handleClick,
     handleShow,
-    isFieldReadOnly,
     handleShowAll,
     department,
     hidePopup,
@@ -94,9 +93,9 @@ const Dispatched = () => {
                   </LocalizationProvider>
                 </div>
                 <div className="input" >
-                  <Button variant="outlined" onClick={handleShow} disabled={isFieldReadOnly("read")}>Show</Button>  </div>
+                  <Button variant="outlined" onClick={handleShow} >Show</Button>  </div>
                 <div className="input">
-                  <Button variant="outlined" onClick={handleShowAll} disabled={isFieldReadOnly("read")}>Show All</Button>
+                  <Button variant="outlined" onClick={handleShowAll} >Show All</Button>
                 </div>
               </div>
               <div className="input-field">

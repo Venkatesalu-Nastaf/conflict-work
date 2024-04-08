@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import { PermissionsContext } from "../../../permissionContext/permissionContext";
 import axios from "axios";
 import dayjs from "dayjs";
 import { APIURL } from "../../../url";
@@ -36,75 +35,7 @@ const useBookingcopy = () => {
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
 
-  // for page permission   const currentPageName = "Booking";
-
-
-
-  //--------------------------------------
-
-  const [userPermissionss, setUserPermissions] = useState({});
-
-  const { userPermissions } = useContext(PermissionsContext);
-  // console.log("ratetype ", userPermissions)
-
-  //----------------------------------------
-
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = "Booking";
-        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-        // setPermi(response.data);
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("org ", permissions)
-        setUserPermissions(permissions);
-
-      } catch {
-      }
-    };
-    fetchPermissions();
-  }, [userPermissions]);
-
-  //---------------------------------------
-
-  const checkPagePermission = () => {
-    const currentPageName = "Booking";
-    const permissions = userPermissionss || {};
-    // console.log('aaaaaaaa', permissions)
-
-    if (permissions.page_name === currentPageName) {
-      return {
-        read: permissions.read_permission === 1,
-        new: permissions.new_permission === 1,
-        modify: permissions.modify_permission === 1,
-        delete: permissions.delete_permission === 1,
-      };
-    }
-    return {
-      read: false,
-      new: false,
-      modify: false,
-      delete: false,
-    };
-  };
-
-
-  //------------------------------
-
-  const permissions = checkPagePermission();
-
-  // Function to determine if a field should be read-only based on permissions
-  const isFieldReadOnly = (fieldName) => {
-    if (permissions.read) {
-      if (fieldName === "delete" && !permissions.delete) {
-        return true;
-      }
-      return false;
-    }
-    return true;
-  };
-
+  //-----popup---------------------------
   const hidePopup = () => {
     setSuccess(false);
     setError(false);
@@ -120,6 +51,7 @@ const useBookingcopy = () => {
       return () => clearTimeout(timer);
     }
   }, [error, warning, success, info]);
+  //---------------------------------------------------
 
   const handleInputChange = (event) => {
     setBookingNo(event.target.value);
@@ -163,7 +95,7 @@ const useBookingcopy = () => {
     errorMessage,
     warningMessage,
     infoMessage,
-    isFieldReadOnly,
+
     hidePopup,
     bookingno,
     handleInputChange,

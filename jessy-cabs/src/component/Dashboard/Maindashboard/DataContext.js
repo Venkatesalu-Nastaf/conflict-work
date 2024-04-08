@@ -14,7 +14,7 @@ export const useData = () => {
 export const DataProvider = ({ children }) => {
     const [sharedData, setSharedData] = useState('');
     const [organizationName, setOrganizationName] = useState([])
-    const[filteredData,setFilteredData]=useState([])
+    const [filteredData, setFilteredData] = useState([])
 
     useEffect(() => {
         const handleImageView = () => {
@@ -22,12 +22,11 @@ export const DataProvider = ({ children }) => {
             axios.get(`${apiUrl}/userprofileview/${userid}`)
                 .then(res => {
                     if (res.status === 200) {
-                        // setSelectedImage(res.data[0]?.filename);
+
                         setSharedData(res.data[0]?.filename)
-                        // localStorage.setItem("organisation_Image", res.data[0]?.filename)
-                        const data=res.data[0]?.filename
-                        localStorage.getItem("profileimages",data)
-                        console.log("22222 :", res.data[0]?.filename)
+                        const data = res.data[0]?.filename
+                        localStorage.getItem("profileimages", data)
+
                     } else {
                         const timer = setTimeout(handleImageView, 100);
                         return () => clearTimeout(timer);
@@ -38,7 +37,7 @@ export const DataProvider = ({ children }) => {
     }, [sharedData, setSharedData]);
 
     return (
-        <DataContext.Provider value={{ sharedData, setSharedData, organizationName, setOrganizationName,filteredData,setFilteredData}}>
+        <DataContext.Provider value={{ sharedData, setSharedData, organizationName, setOrganizationName, filteredData, setFilteredData }}>
             {children}
         </DataContext.Provider>
     );

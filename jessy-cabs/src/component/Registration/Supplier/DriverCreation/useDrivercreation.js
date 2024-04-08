@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
@@ -22,9 +21,6 @@ const useDrivercreation = () => {
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
-    // const [password, setPassword] = useState('');
-    // const [confirmPassword, setConfirmPassword] = useState('');
-    // const [passwordsMatch, setPasswordsMatch] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
@@ -33,11 +29,10 @@ const useDrivercreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
-    // const [userPermissions, setUserPermissions] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
-    const[searchText,setSearchText]=useState("")
-    const [fromDate,setFromDate]=useState(dayjs())
-    const [toDate,setToDate]=useState(dayjs())
+    const [searchText, setSearchText] = useState("")
+    const [fromDate, setFromDate] = useState(dayjs())
+    const [toDate, setToDate] = useState(dayjs())
     //venkat 
     const [Deleted, setDeleted] = useState(false);
     const [checkbox, setCheckbox] = useState([]);
@@ -46,69 +41,17 @@ const useDrivercreation = () => {
     // venkat
 
 
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
-
     const actions = [
         { icon: <ChecklistIcon />, name: "List" },
         { icon: <CancelPresentationIcon />, name: "Cancel" },
         { icon: <DeleteIcon />, name: "Delete" },
         { icon: <ModeEditIcon />, name: "Edit" },
         edit ? "" : { icon: <BookmarkAddedIcon />, name: "Add" }
-        
+
     ];
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'Driver Master';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-
-    const checkPagePermission = () => {
-        const currentPageName = 'Driver Master';
-        const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-
 
 
     // venkat
-
     const handleSelectAll = () => {
         if (selectAll) {
             setDeleteFile([]);
@@ -122,18 +65,6 @@ const useDrivercreation = () => {
         setSelectAll(prevState => !prevState);
     };
     // venkat
-
-    const permissions = checkPagePermission();
-
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
 
     // TABLE START
     const columns = [
@@ -180,7 +111,7 @@ const useDrivercreation = () => {
     ];
 
     const [book, setBook] = useState({
-        
+
         drivername: '',
         username: '',
         stations: '',
@@ -354,332 +285,213 @@ const useDrivercreation = () => {
     };
 
     const handleAdd = async () => {
-        // const stationname = book.stations;
-        console.log(book, "jjjjjj")
-        const permissions = checkPagePermission();
-
-        if (permissions.read && permissions.new) {
-            if (!book.stations && !book.drivername) {
-                setError(true)
-                setErrorMessage("All fields are mandatory");
-                return
-            }
-            if (!book.password && !book.address1) {
-                setError(true)
-                setErrorMessage("All fields are mandatory");
-                return
-            }
-
-            if (!book.Mobileno && !book.licenseno) {
-                setError(true)
-                setErrorMessage("All fields are mandatory");
-                return
-            }
-
-            if (!book.city ) {
-
-                setError(true)
-                setErrorMessage("All fields are mandatory");
-                return
-
-            }
-            if(!book.licenseexpdate ){
-                setError(true)
-                setErrorMessage("All fields are mandatory");
-                return
-
-
-            }
-            console.log(book,"data")
-            // const data={...book}
-            try {
-                // const data = {
-                //     drivername: book.drivername,
-                //     username: book.username,
-                //     stations: book.stations,
-                //     Mobileno: book.Mobileno,
-                //     userpassword: book.userpassword,
-                //     joiningdate: book.joiningdate|| dayjs(),
-                //     active: book.active||'yes',
-                //     address1: book.address1,
-                //     licenseno: book.licenseno,
-                //     licenseexpdate:book.licenseexpdate ,
-                //     city: book.city,
-                //     badgeno: book.badgeno,
-                //     badgeexpdate: book.badgeexpdate,
-                //     aadharno: book.aadharno,
-                // }
-                const data={...book}
-                console.log(data, "bookadd")
-                await axios.post(`${apiUrl}/drivercreation`, data);
-                handleCancel();
-                addPdf();
-                licenceSubmit();
-                setRows([]);
-                // validatePasswordMatch();
-                setSuccess(true);
-                setSuccessMessage("Successfully Added");
-            } catch (error) {
-                setError(true)
-                setErrorMessage("Check your Network Connection");
-            }
-
+        if (!book.stations && !book.drivername) {
+            setError(true)
+            setErrorMessage("All fields are mandatory");
+            return
+        }
+        if (!book.password && !book.address1) {
+            setError(true)
+            setErrorMessage("All fields are mandatory");
+            return
         }
 
-
-        else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+        if (!book.Mobileno && !book.licenseno) {
+            setError(true)
+            setErrorMessage("All fields are mandatory");
+            return
         }
 
+        if (!book.city) {
 
-    };
+            setError(true)
+            setErrorMessage("All fields are mandatory");
+            return
 
-    // useEffect(() => {
-    //     const handlelist = async () => {
-    //         if (permissions.read) {
-    //             const response = await axios.get(`${apiUrl}/drivercreation`);
-    //             const data = response.data;
-
-    //             if (data.length > 0) {
-    //                 const rowsWithUniqueId = data.map((row, index) => ({
-    //                     ...row,
-    //                     id: index + 1,
-    //                 }));
-    //                 setRows(rowsWithUniqueId);
-    //             } else {
-    //                 setRows([]);
-    //             }
-    //         }
-    //     }
-
-    //     handlelist();
-    // }, [permissions, apiUrl]);
-    
-  const handleShowAll = async () => {
-    // const permissions = checkPagePermission();
-
-    if (permissions.read && permissions.read) {
-      try {
-        const response = await fetch(
-          `${apiUrl}/searchfordriver?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
-        );
-        const data = await response.json();
-        if (data.length > 0) {
-          const rowsWithUniqueId = data.map((row, index) => ({
-            ...row,
-            id: index + 1,
-          }));
-          setRows(rowsWithUniqueId);
-          setSuccess(true);
-          setSuccessMessage("successfully listed");
-        } else {
-          setRows([]);
-          setError(true);
-          setErrorMessage("no data found");
         }
-      } catch {
-        setError(true);
-        setErrorMessage("sorry");
-      }
-    } else {
-      setInfo(true);
-      setInfoMessage("You do not have permission.");
-    }
-  };
-
-    const handleenterSearch = async (e) => {
-        // const permissions = checkPagePermission();
-        // e.preventDefault();
-        if (e.key === "Enter") {
-          if (permissions.read && permissions.read) {
-            try {
-              const response = await fetch(
-                `${apiUrl}/searchfordriver?searchText=${searchText}`
-              );
-              const data = await response.json();
-              console.log(data,"search")
-              if (data.length > 0) {
-                const rowsWithUniqueId = data.map((row, index) => ({
-                  ...row,
-                  id: index + 1,
-                }));
-                setRows(rowsWithUniqueId);
-                setSuccess(true);
-                setSuccessMessage("successfully listed");
-              } else {
-                setRows([]);
-                setError(true);
-                setErrorMessage("no data found");
-              }
-            } catch {
-              setError(true);
-              setErrorMessage("sorry");
-            }
-          } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
-          }
+        if (!book.licenseexpdate) {
+            setError(true)
+            setErrorMessage("All fields are mandatory");
+            return
         }
-      };
 
-    const handleEdit = async (userid) => {
-        // console.log(userid,"jjjj")
-        setEdit(true)
-        const permissions = checkPagePermission();
+        try {
 
-        if (permissions.read && permissions.modify) {
-            console.log(rows,"jjjjjjjjrows")
-            // const selectedCustomer = rows.find((row) => row.driverid === selectedCustomerId);
-            // const{id,driverid,...restcustomerdata}=selectedCustomer
-            // const updatedCustomer = { ...restcustomerdata, ...selectedCustomerData };
-            const updatedriver={
-                drivername:selectedCustomerData.drivername,
-                username: selectedCustomerData.username,
-                stations: selectedCustomerData.stations,
-                Mobileno: selectedCustomerData.Mobileno,
-                userpassword: selectedCustomerData.userpassword,
-                joiningdate: selectedCustomerData.joiningdate,
-                active: selectedCustomerData.active,
-                address1: selectedCustomerData.address1,
-                licenseno: selectedCustomerData.licenseno,
-                licenseexpdate: selectedCustomerData.licenseexpdate,
-                badgeno: selectedCustomerData.badgeno,
-                badgeexpdate: selectedCustomerData.badgeexpdate,
-                city: selectedCustomerData.city,
-                aadharno: selectedCustomerData.aadharno,
-            }
-            // const updatedCustomer = { ...selectedCustomerData };
-            await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,updatedriver);
-            setSuccess(true);
-            setSuccessMessage('Successfully updated');
+            const data = { ...book }
+            console.log(data, "bookadd")
+            await axios.post(`${apiUrl}/drivercreation`, data);
             handleCancel();
             addPdf();
             licenceSubmit();
             setRows([]);
-            setEdit(true)
-        } else {
-            setInfo(true);
-            setInfoMessage('You do not have permission.');
+            setSuccess(true);
+            setSuccessMessage("Successfully Added");
+        } catch (error) {
+            setError(true)
+            setErrorMessage("Check your Network Connection");
+        }
+    }
+
+
+
+
+    const handleShowAll = async () => {
+        try {
+            const response = await fetch(
+                `${apiUrl}/searchfordriver?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`
+            );
+            const data = await response.json();
+            if (data.length > 0) {
+                const rowsWithUniqueId = data.map((row, index) => ({
+                    ...row,
+                    id: index + 1,
+                }));
+                setRows(rowsWithUniqueId);
+                setSuccess(true);
+                setSuccessMessage("successfully listed");
+            } else {
+                setRows([]);
+                setError(true);
+                setErrorMessage("no data found");
+            }
+        } catch {
+            setError(true);
+            setErrorMessage("sorry");
         }
     };
 
-    const handleClick = async (event, actionName, userid) => {
-       
-        event.preventDefault();
+    const handleenterSearch = async (e) => {
+        if (e.key === "Enter") {
 
-        try {
-            const permissions = checkPagePermission();
-
-            if (actionName === 'List') {
-                if (permissions.read) {
-                    const response = await axios.get(`${apiUrl}/drivercreation`);
-                    const data = response.data;
-
-                    if (data.length > 0) {
-                        const rowsWithUniqueId = data.map((row, index) => ({
-                            ...row,
-                            id: index + 1,
-                        }));
-                        setRows(rowsWithUniqueId);
-                        setSuccess(true);
-                        setSuccessMessage('Successfully listed');
-                    } else {
-                        setRows([]);
-                        setError(true);
-                        setErrorMessage('No data found');
-                    }
+            try {
+                const response = await fetch(
+                    `${apiUrl}/searchfordriver?searchText=${searchText}`
+                );
+                const data = await response.json();
+                console.log(data, "search")
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("successfully listed");
                 } else {
-                    setInfo(true);
-                    setInfoMessage('You do not have permission.');
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("no data found");
                 }
-            } else if (actionName === 'Cancel') {
+            } catch {
+                setError(true);
+                setErrorMessage("sorry");
+            }
+
+        }
+    };
+
+    const handleEdit = async (userid) => {
+        setEdit(true)
+        const updatedriver = {
+            drivername: selectedCustomerData.drivername,
+            username: selectedCustomerData.username,
+            stations: selectedCustomerData.stations,
+            Mobileno: selectedCustomerData.Mobileno,
+            userpassword: selectedCustomerData.userpassword,
+            joiningdate: selectedCustomerData.joiningdate,
+            active: selectedCustomerData.active,
+            address1: selectedCustomerData.address1,
+            licenseno: selectedCustomerData.licenseno,
+            licenseexpdate: selectedCustomerData.licenseexpdate,
+            badgeno: selectedCustomerData.badgeno,
+            badgeexpdate: selectedCustomerData.badgeexpdate,
+            city: selectedCustomerData.city,
+            aadharno: selectedCustomerData.aadharno,
+        }
+
+        await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`, updatedriver);
+        setSuccess(true);
+        setSuccessMessage('Successfully updated');
+        handleCancel();
+        addPdf();
+        licenceSubmit();
+        setRows([]);
+        setEdit(true)
+    };
+
+    const handleClick = async (event, actionName, userid) => {
+        event.preventDefault();
+        try {
+            if (actionName === 'List') {
+                const response = await axios.get(`${apiUrl}/drivercreation`);
+                const data = response.data;
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage('Successfully listed');
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage('No data found');
+                }
+            }
+
+            else if (actionName === 'Cancel') {
                 handleCancel();
                 setRows([]);
-            } else if (actionName === 'Delete') {
-                if (permissions.read && permissions.delete) {
-                    await axios.delete(`${apiUrl}/drivercreation/${selectedCustomerData?.driverid || userid}`);
-                    setSelectedCustomerData(null);
-                    setSuccess(true);
-                    setSuccessMessage('Successfully Deleted');
-                    handleCancel();
-                    setRows([]);
-                } else {
-                    setInfo(true);
-                    setInfoMessage('You do not have permission.');
-                }
-            } else if (actionName === 'Edit') {
-              
-                if (permissions.read && permissions.modify) {
-                    // const selectedCustomer = rows.find((row) => row.driverid === userid);
-                    // const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                    // await axios.put(`${apiUrl}/drivercreation/${selectedCustomerData?.driverid || userid}`, updatedCustomer);
-                    handleEdit()
-                    setSuccess(true);
-                    setSuccessMessage('Successfully updated');
-                    handleCancel();
-                    addPdf();
-                    licenceSubmit();
-                    setRows([]);
-                } else {
-                    setInfo(true);
-                    setInfoMessage('You do not have permission.');
-                }
-            } else if (actionName === 'Add') {
-                handleAdd();
+            }
+
+            else if (actionName === 'Delete') {
+                await axios.delete(`${apiUrl}/drivercreation/${selectedCustomerData?.driverid || userid}`);
+                setSelectedCustomerData(null);
+                setSuccess(true);
+                setSuccessMessage('Successfully Deleted');
+                handleCancel();
+                setRows([]);
+            }
+
+            else if (actionName === 'Edit') {
+                handleEdit()
+                setSuccess(true);
+                setSuccessMessage('Successfully updated');
+                handleCancel();
+                addPdf();
+                licenceSubmit();
+                setRows([]);
+            } else {
+                setInfo(true);
+                setInfoMessage('There is some issue ');
             }
         } catch (error) {
             setError(true);
             setErrorMessage('Check your Network Connection');
         }
     };
+
+    //---------- popup------------------
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
         setInfo(false);
         setWarning(false);
-       
     };
+
     useEffect(() => {
-        if (error) {
+        if (error || success || warning || info) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
-    // useEffect(() => {
-    //     if (passwordsMatch) {
-    //         const timer = setTimeout(() => {
-    //             hidePopup();
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [passwordsMatch]);
+    }, [error, success, warning, info]);
+
+    //------------------------------------
+
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
@@ -688,9 +500,8 @@ const useDrivercreation = () => {
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
-        // setSelectedCustomerId(params.row.customerId);
         setSelectedCustomerId(params.row.driverid);
-      
+
         setIsEditMode(true);
         setEdit(true)
     }, []);
@@ -710,12 +521,6 @@ const useDrivercreation = () => {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
-
-    // const validatePasswordMatch = () => {
-    //     const password = selectedCustomerData?.userpassword || book.userpassword;
-    //     const confirmPassword = selectedCustomerData?.userconfirmpassword || book.userconfirmpassword;
-    //     setPasswordsMatch(password !== confirmPassword);
-    // };
 
     const [dialogdeleteOpen, setDialogdeleteOpen] = useState(false);
 
@@ -746,7 +551,6 @@ const useDrivercreation = () => {
     const handlecheckbox = (fileName) => {
         if (deletefile.includes(fileName)) {
             setDeleteFile(prevDeleteFile => prevDeleteFile.filter(file => file !== fileName));
-            // setCheckbox(fileName)
         } else {
             setDeleteFile(prevDeleteFile => [...prevDeleteFile, fileName]);
             setCheckbox(prevDeleteFile => [...prevDeleteFile, fileName]);
@@ -760,9 +564,6 @@ const useDrivercreation = () => {
             setDeleted(false)
         }, 2000)
     }
-    // venkat
-
-    // venkat
 
     const handleContextMenu = () => {
         try {
@@ -880,7 +681,6 @@ const useDrivercreation = () => {
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,
@@ -920,7 +720,7 @@ const useDrivercreation = () => {
         setSelectAll,
         handleSelectAll,
         handleDocumentDownload,
-        searchText,setSearchText,fromDate,setFromDate,toDate,setToDate,handleenterSearch,handleShowAll,edit,actions
+        searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, edit, actions
         // venkat
     };
 };

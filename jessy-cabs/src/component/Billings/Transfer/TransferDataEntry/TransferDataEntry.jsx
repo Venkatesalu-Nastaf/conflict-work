@@ -42,7 +42,6 @@ const TransferDataEntry = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     hidePopup,
     date,
     Billingdate,
@@ -82,7 +81,7 @@ const TransferDataEntry = () => {
     // ... (other state variables and functions)
   } = useTransferdataentry();
 
-  const {organizationName} = useData()
+  const { organizationName } = useData()
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -107,7 +106,7 @@ const TransferDataEntry = () => {
                       label="Group Trip ID"
                       name="tripid"
                       value={groupId}
-                      onChange={(e)=>setGroupId(e.target.value)}
+                      onChange={(e) => setGroupId(e.target.value)}
                       autoComplete='off'
                     />
                   </div>
@@ -122,7 +121,7 @@ const TransferDataEntry = () => {
                       <DatePicker
                         label="Bill Date"
                         name="Billingdate"
-                        value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate||formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate):null}
+                        value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate || formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate) : null}
                         format="DD/MM/YYYY"
                       />
                     </DemoContainer>
@@ -138,10 +137,10 @@ const TransferDataEntry = () => {
                       id="id"
                       label="Invoice No"
                       name="invoiceno"
-                      value={invoiceno }
+                      value={invoiceno}
                       // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate||formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate):null}
 
-                      onChange={(event)=>handlechnageinvoice(event)}
+                      onChange={(event) => handlechnageinvoice(event)}
                       autoComplete='off'
                       onKeyDown={handleKeyenter}
                     />
@@ -155,7 +154,7 @@ const TransferDataEntry = () => {
                       id="free-solo-demo"
                       freeSolo
                       size="small"
-                      value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') ||formDataTransfer.Organization_name ||''}
+                      value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || formDataTransfer.Organization_name || ''}
                       options={organizationName}
                       onChange={(event, value) => setCustomer(value)}
                       renderInput={(params) => {
@@ -171,7 +170,7 @@ const TransferDataEntry = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
-                          value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || formDataTransfer.FromDate ? dayjs(formDataTransfer.FromDate) : "" ||''}
+                          value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || formDataTransfer.FromDate ? dayjs(formDataTransfer.FromDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             handleDateChange(date, 'fromdate');
@@ -191,7 +190,7 @@ const TransferDataEntry = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
-                          value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || formDataTransfer.EndDate ?dayjs(formDataTransfer.EndDate):""||''}
+                          value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || formDataTransfer.EndDate ? dayjs(formDataTransfer.EndDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             handleDateChange(date, 'todate');
@@ -231,7 +230,7 @@ const TransferDataEntry = () => {
                 </div>
                 <div className="input-field" >
                   <div className="input">
-                    <Button variant="contained" onClick={handleShow} disabled={isFieldReadOnly("new")}>List</Button>
+                    <Button variant="contained" onClick={handleShow} >List</Button>
                   </div>
                   <div className="input">
                     <Button variant="contained" onClick={handleCancel}>Cancel</Button>

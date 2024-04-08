@@ -1,16 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
-import { PermissionsContext } from "../../../../permissionContext/permissionContext";
-// import axios from 'axios';
+import React, { useState } from "react";
 import "./Card.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import { MdCancel } from "@react-icons/all-files/md/MdCancel";
 import Chart from "react-apexcharts";
-// import { APIURL } from "../../../../url";
 
-// parent Card
-// const apiUrl = APIURL;
+
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
   return (
@@ -30,66 +26,11 @@ function CompactCard({ param, setExpanded }) {
 
   // const user_id = localStorage.getItem('useridno');
 
-  //permission  const currentPageName = 'Dashboard page';
-
-  //--------------------------------------
-
-  const [userPermissionss, setUserPermissions] = useState({});
-
-  const { userPermissions } = useContext(PermissionsContext);
-  // console.log("ratetype ", userPermissions)
-
-  //----------------------------------------
-
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
-        const currentPageName = 'Dashboard page';
-        // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-        // setPermi(response.data);
-
-        const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-        // console.log("org ", permissions)
-        setUserPermissions(permissions);
-
-      } catch {
-      }
-    };
-    fetchPermissions();
-  }, [userPermissions]);
-
-  //---------------------------------------
-
-  const checkPagePermission = () => {
-    const currentPageName = 'Dashboard page';
-    const permissions = userPermissionss || {};
-    // console.log('aaaaaaaa', permissions)
-
-    if (permissions.page_name === currentPageName) {
-      return {
-        read: permissions.read_permission === 1,
-        new: permissions.new_permission === 1,
-        modify: permissions.modify_permission === 1,
-        delete: permissions.delete_permission === 1,
-      };
-    }
-    return {
-      read: false,
-      new: false,
-      modify: false,
-      delete: false,
-    };
-  };
-
-
-  //------------------------------
-
-  const permissions = checkPagePermission();
 
   const Png = param.png;
   return (
     <div >
-      {!permissions.read && (
+      {(
         <div className="loading-spinners">
           <motion.div
             className="CompactCard"
@@ -115,7 +56,7 @@ function CompactCard({ param, setExpanded }) {
           </motion.div>
         </div>
       )}
-      {permissions.read && (
+      {(
         <motion.div
           className="CompactCard"
           style={{

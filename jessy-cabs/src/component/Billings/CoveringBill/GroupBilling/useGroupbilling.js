@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from '../../../permissionContext/permissionContext';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from "dayjs";
 import ReactDOMServer from 'react-dom/server';
@@ -53,74 +52,7 @@ const useGroupbilling = () => {
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
 
-    // for page permission
-
-    //--------------------------------------
-
-    const [userPermissionss, setUserPermissions] = useState({});
-
-    const { userPermissions } = useContext(PermissionsContext);
-    // console.log("ratetype ", userPermissions)
-
-    //----------------------------------------
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'CB Billing';
-                // const response = await axios.get(`${apiUrl}/user-permi/${user_id}/${currentPageName}`);
-                // setPermi(response.data);
-
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                // console.log("org ", permissions)
-                setUserPermissions(permissions);
-
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-    //---------------------------------------
-
-    const checkPagePermission = () => {
-        const currentPageName = 'CB Billing';
-        const permissions = userPermissionss || {};
-        // console.log('aaaaaaaa', permissions)
-
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    };
-
-
-    //------------------------------
-    const permissions = checkPagePermission();
-
-    // Function to determine if a field should be read-only based on permissions
-    const isFieldReadOnly = (fieldName) => {
-        // const permissions = checkPagePermission();
-        if (permissions.read) {
-            // If user has read permission, check for other specific permissions
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
-
+    // popup------------------------------
     const hidePopup = () => {
         setError(false);
         setSuccess(false);
@@ -128,31 +60,15 @@ const useGroupbilling = () => {
     };
 
     useEffect(() => {
-        if (warning) {
+        if (error || success || warning) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [warning]);
+    }, [error, success, warning]);
 
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
+    //------------------------------
 
     const handleserviceInputChange = (event, newValue) => {
         setServiceStation(newValue ? decodeURIComponent(newValue.label) : '');
@@ -317,7 +233,6 @@ const useGroupbilling = () => {
         warningMessage,
         book,
         handleChange,
-        isFieldReadOnly,
         hidePopup,
         invoiceno,
         selectedCustomerDatas,

@@ -146,7 +146,6 @@ const Vehicaleinfo = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleAdd,
     hidePopup,
     handleDateChange,
@@ -437,7 +436,7 @@ const Vehicaleinfo = () => {
             </div>
           </div>
           <div className="input-field">
-          <div className="input">
+            <div className="input">
               <div className="icone">
                 <AssessmentIcon color="action" />
               </div>
@@ -476,7 +475,7 @@ const Vehicaleinfo = () => {
                 id="mobile_no"
                 size='small'
               />
-            </div> 
+            </div>
             <div className="input">
               <div className="icone">
                 <AttachEmailIcon color="action" />
@@ -536,7 +535,7 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input">
               {selectedCustomerData.vehicleId || book.vehicleId ? (
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                <Button color="primary" variant="contained" size="md" component="label">
                   Insurance Copy
                   <input
                     type="file"
@@ -545,7 +544,7 @@ const Vehicaleinfo = () => {
                   />
                 </Button>
               ) : (
-                <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                <Button color="primary" variant="contained" onClick={() => {
                   setError(true);
                   setErrorMessage("Please Enter Booking No");
                 }}>
@@ -599,7 +598,7 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input">
               {selectedCustomerData.vehicleId || book.vehicleId ? (
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                <Button color="primary" variant="contained" size="md" component="label">
                   License Copy
                   <input
                     type="file"
@@ -608,7 +607,7 @@ const Vehicaleinfo = () => {
                   />
                 </Button>
               ) : (
-                <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                <Button color="primary" variant="contained" onClick={() => {
                   setError(true);
                   setErrorMessage("Please Enter Booking No");
                 }}>
@@ -648,7 +647,7 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input" style={{ width: "220px" }}>
               {selectedCustomerData.vehicleId || book.vehicleId ? (
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                <Button color="primary" variant="contained" size="md" component="label">
                   National Permit Copy
                   <input
                     type="file"
@@ -657,7 +656,7 @@ const Vehicaleinfo = () => {
                   />
                 </Button>
               ) : (
-                <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                <Button color="primary" variant="contained" onClick={() => {
                   setError(true);
                   setErrorMessage("Please Enter Booking No");
                 }}>
@@ -710,7 +709,7 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input" style={{ width: "220px" }}>
               {selectedCustomerData.vehicleId || book.vehicleId ? (
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                <Button color="primary" variant="contained" size="md" component="label">
                   State Permit Copy
                   <input
                     type="file"
@@ -719,7 +718,7 @@ const Vehicaleinfo = () => {
                   />
                 </Button>
               ) : (
-                <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                <Button color="primary" variant="contained" onClick={() => {
                   setError(true);
                   setErrorMessage("Please Enter Booking No");
                 }}>
@@ -772,7 +771,7 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input">
               {selectedCustomerData.vehicleId || book.vehicleId ? (
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                <Button color="primary" variant="contained" size="md" component="label">
                   RC-Book Copy
                   <input
                     type="file"
@@ -781,7 +780,7 @@ const Vehicaleinfo = () => {
                   />
                 </Button>
               ) : (
-                <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                <Button color="primary" variant="contained" onClick={() => {
                   setError(true);
                   setErrorMessage("Please Enter Booking No");
                 }}>
@@ -791,7 +790,7 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input" style={{ width: "160px" }}>
               {selectedCustomerData.vehicleId || book.vehicleId ? (
-                <Button color="primary" variant="contained" size="md" disabled={isFieldReadOnly("new")} component="label">
+                <Button color="primary" variant="contained" size="md" component="label">
                   FC Copy
                   <input
                     type="file"
@@ -800,7 +799,7 @@ const Vehicaleinfo = () => {
                   />
                 </Button>
               ) : (
-                <Button color="primary" variant="contained" disabled={isFieldReadOnly("new")} onClick={() => {
+                <Button color="primary" variant="contained" onClick={() => {
                   setError(true);
                   setErrorMessage("Please Enter Booking No");
                 }}>
@@ -932,7 +931,7 @@ const Vehicaleinfo = () => {
               {isEditMode ? (
                 <Button variant="contained" onClick={handleEdit}>Edit</Button>
               ) : (
-                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                <Button variant="contained" onClick={handleAdd} >Add</Button>
               )}
             </div>
           </div>

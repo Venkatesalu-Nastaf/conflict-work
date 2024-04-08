@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { PermissionsContext } from "../../../permissionContext/permissionContext"
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 
@@ -20,57 +19,8 @@ const useEmplyeecreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
-    const [infoMessage, setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
 
-    // for page permission ---------------------
-    const [userPermissionss, setUserPermissions] = useState({});
-    const { userPermissions } = useContext(PermissionsContext);
-
-    useEffect(() => {
-        const fetchPermissions = async () => {
-            try {
-                const currentPageName = 'User Creation';
-                const permissions = await userPermissions.find(permission => permission.page_name === currentPageName);
-                setUserPermissions(permissions);
-            } catch {
-            }
-        };
-        fetchPermissions();
-    }, [userPermissions]);
-
-
-    const checkPagePermission = useCallback(() => {
-        const currentPageName = 'User Creation';
-        const permissions = userPermissionss || {};
-        if (permissions.page_name === currentPageName) {
-            return {
-                read: permissions.read_permission === 1,
-                new: permissions.new_permission === 1,
-                modify: permissions.modify_permission === 1,
-                delete: permissions.delete_permission === 1,
-            };
-        }
-        return {
-            read: false,
-            new: false,
-            modify: false,
-            delete: false,
-        };
-    }, [userPermissionss])
-
-    const permissions = checkPagePermission();
-
-    ///---------------------------------------------------------------
-
-    const isFieldReadOnly = (fieldName) => {
-        if (permissions.read) {
-            if (fieldName === "delete" && !permissions.delete) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    };
 
     // TABLE START
     const columns = [
@@ -146,33 +96,27 @@ const useEmplyeecreation = () => {
 
     // add
     const handleAdd = async () => {
-        const permissions = checkPagePermission();
-        if (permissions.read && permissions.new) {
-            const stationname = book.userid;
-            if (password) {
-                if (!stationname) {
-                    setError(true);
-                    setErrorMessage("Fill mandatory fields");
-                    return;
-                }
-                try {
-                    console.log("book123 ", book)
-
-                    await axios.post(`${apiUrl}/usercreation-add`, book);
-                    handleCancel();
-                    setRows([]);
-                    // setBook({})
-                    setSuccess(true);
-                    setSuccessMessage("Successfully Added");
-                } catch (error) {
-                    setError(true);
-                    setErrorMessage("Check your Network Connection");
-                }
-
+        const stationname = book.userid;
+        if (password) {
+            if (!stationname) {
+                setError(true);
+                setErrorMessage("Fill mandatory fields");
+                return;
             }
-        } else {
-            setInfo(true);
-            setInfoMessage("You do not have permission.");
+            try {
+                console.log("book123 ", book)
+
+                await axios.post(`${apiUrl}/usercreation-add`, book);
+                handleCancel();
+                setRows([]);
+                // setBook({})
+                setSuccess(true);
+                setSuccessMessage("Successfully Added");
+            } catch (error) {
+                setError(true);
+                setErrorMessage("Check your Network Connection");
+            }
+
         }
     };
 
@@ -180,20 +124,14 @@ const useEmplyeecreation = () => {
     // edit
     const handleEdit = async (userid) => {
         try {
-            const permissions = checkPagePermission();
-            if (permissions.read && permissions.modify) {
-                const selectedCustomer = rows.find((row) => row.userid === userid);
-                const updatedCustomer = { ...selectedCustomer, ...book };
-                console.log(updatedCustomer, "update c")
-                await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
-                setRows([]);
-            } else {
-                setInfo(true);
-                setInfoMessage("You do not have permission.");
-            }
+            const selectedCustomer = rows.find((row) => row.userid === userid);
+            const updatedCustomer = { ...selectedCustomer, ...book };
+            console.log(updatedCustomer, "update c")
+            await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, updatedCustomer);
+            setSuccess(true);
+            setSuccessMessage("Successfully updated");
+            handleCancel();
+            setRows([]);
         } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -203,19 +141,13 @@ const useEmplyeecreation = () => {
     // delete 
     const handleDelete = async () => {
         try {
-            const permissions = checkPagePermission();
-            if (permissions.read && permissions.delete) {
-                await axios.delete(`${apiUrl}/usercreation-delete/${book.userid}`);
-                setSuccess(true);
-                setSuccessMessage("Successfully Deleted");
-                handleCancel();
-                setRows([]);
-            } else {
-                setInfo(true);
-                setInfoMessage("You do not have permission.");
-            }
-
-        } catch (err) {
+            await axios.delete(`${apiUrl}/usercreation-delete/${book.userid}`);
+            setSuccess(true);
+            setSuccessMessage("Successfully Deleted");
+            handleCancel();
+            setRows([]);
+        }
+        catch (err) {
             setError(true);
             setErrorMessage("Error in deleting");
         }
@@ -224,27 +156,25 @@ const useEmplyeecreation = () => {
 
     // show list
     const handleList = useCallback(async () => {
-        if (permissions.read && permissions.read) {
-            try {
-                const response = await axios.get(`${apiUrl}/usercreation`);
-                const data = response.data;
-                const rowsWithUniqueId = data.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-                setRows(rowsWithUniqueId);
-                return data;
-            } catch {
-            }
+        try {
+            const response = await axios.get(`${apiUrl}/usercreation`);
+            const data = response.data;
+            const rowsWithUniqueId = data.map((row, index) => ({
+                ...row,
+                id: index + 1,
+            }));
+            setRows(rowsWithUniqueId);
+            return data;
+        } catch {
         }
-    }, [permissions, apiUrl, setRows])
+    }, [apiUrl, setRows])
 
     //------------------------------------------------------
 
     // to show list automatically
     useEffect(() => {
         handleList();
-    }, [permissions, apiUrl, handleList]);
+    }, [apiUrl, handleList]);
 
     /// list of options ---------------------------------
     const handleClick = async (event, actionName, userid) => {
@@ -335,11 +265,9 @@ const useEmplyeecreation = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        infoMessage,
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,

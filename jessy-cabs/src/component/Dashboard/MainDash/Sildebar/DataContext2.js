@@ -29,7 +29,7 @@ export const DataProvider2 = ({ children }) => {
                             if (res.status === 200) {
                                 setSharedData(res.data[0]?.fileName)
                                 // localStorage.setItem("usr_ProfileImage", res.data[0]?.fileName)
-                                const data=res.data[0]?.fileName
+                                const data = res.data[0]?.fileName
                                 localStorage.setItem("organizationimages", data)
                                 // console.log("datacontaxt logo ", res.data[0]?.fileName)
                             }

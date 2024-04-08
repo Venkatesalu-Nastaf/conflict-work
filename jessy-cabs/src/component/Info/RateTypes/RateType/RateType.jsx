@@ -76,7 +76,6 @@ const RateType = () => {
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,
@@ -257,7 +256,7 @@ const RateType = () => {
                                     {isEditMode ? (
                                         <Button variant="contained" onClick={handleEdit}>Edit</Button>
                                     ) : (
-                                        <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                                        <Button variant="contained" onClick={handleAdd} >Add</Button>
                                     )}
                                 </div>
                             </div>

@@ -67,7 +67,6 @@ const PackageRateEntery = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -404,7 +403,7 @@ const PackageRateEntery = () => {
               {isEditMode ? (
                 <Button variant="contained" onClick={handleEdit}>Edit</Button>
               ) : (
-                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Save</Button>
+                <Button variant="contained" onClick={handleAdd} >Save</Button>
               )}
             </div>
           </div>

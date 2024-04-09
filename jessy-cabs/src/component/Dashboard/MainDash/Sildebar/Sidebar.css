@@ -6,6 +6,9 @@
   padding-right: 10px;
   transition: all 300ms ease;
   border-right: 1px solid #ccc;
+  
+  width: fit-content;
+    /* background: red; */
 }
 
 .header-user-mobile {

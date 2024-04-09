@@ -76,7 +76,7 @@
 
 @media screen and (max-width: 1200px) {
   .glass {
-    grid-template-columns: 10% 50% auto;
+    /* grid-template-columns: 10% 50% auto; */
     overflow-y: scroll;
   }
 

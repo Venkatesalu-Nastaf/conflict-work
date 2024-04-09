@@ -104,8 +104,8 @@ const UserSetting = () => {
                 </div>
               </div>
               <div className="container-userinfo-right">
-                <div className="input-field">
-                  <div className="input" style={{ width: "300px" }}>
+                <div className=" userInfo-inputs-feilds input-field">
+                  <div className="input" style={{ width: "200px" }}>
                     <div className="icone">
                       <BadgeIcon color="action" />
                     </div>
@@ -137,9 +137,8 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                </div>
-                <div className="input-field">
-                  <div className="input">
+
+                  <div className="input" style={{ width: "200px" }}>
                     <div className="icone">
                       <AccountCircleIcon color="action" />
                     </div>
@@ -173,7 +172,10 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input">
+                  <div className="input" style={{ width: "200px" }}>
+                  <div className="icone">
+                      <BadgeIcon color="action" />
+                    </div>
                     <TextField
                       size="small"
                       id="last-name"
@@ -186,9 +188,8 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                </div>
-                <div className="input-field">
-                  <div className="input">
+
+                  <div className="input" style={{ width: "200px" }}>
                     <div className="icone">
                       <SettingsPhoneIcon color="action" />
                     </div>
@@ -205,7 +206,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input" style={{ width: "415px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <div className="icone">
                       <AttachEmailIcon color="action" />
                     </div>
@@ -222,9 +223,9 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                </div>
-                <div className="input-field">
-                  <div className="input" style={{ width: "309px" }}>
+
+
+                  <div className="input" style={{ width: "200px" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                     </div>
@@ -262,7 +263,7 @@ const UserSetting = () => {
                       />
                     </FormControl>
                   </div>
-                  <div className="input" style={{ width: "309px" }}>
+                  <div className="input" style={{ width: "300px" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faLock} size="lg" />
                     </div>
@@ -302,7 +303,21 @@ const UserSetting = () => {
                       />
                     </FormControl>
                   </div>
+
+
+
                 </div>
+                {/* <div className="input-field">
+                
+                </div>
+                <div className="input-field">
+
+                 
+                </div>
+                <div className="input-field">
+
+                 
+                </div> */}
                 {editMode ? (
                   <div className="input-field">
                     <div className="input" style={{ width: "150px" }}>

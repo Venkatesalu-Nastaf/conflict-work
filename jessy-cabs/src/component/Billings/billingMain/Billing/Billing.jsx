@@ -163,7 +163,7 @@ const Billing = () => {
                                     value={formData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid || ''}
                                     onChange={handleChange}
                                     onKeyDown={handleKeyDown}
-                                // disabled={isFieldReadOnly("read")}
+                        
                                 />
                             </div>
                             <div className="input">

@@ -76,7 +76,6 @@ const TaxSetting = () => {
         book,
         handleClick,
         handleChange,
-        isFieldReadOnly,
         handleRowClick,
         handleAdd,
         hidePopup,
@@ -242,7 +241,7 @@ const TaxSetting = () => {
                             {isEditMode ? (
                                 <Button variant="contained" onClick={handleEdit}>Edit</Button>
                             ) : (
-                                <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                                <Button variant="contained" onClick={handleAdd} >Add</Button>
                             )}
                         </div>
                     </div>

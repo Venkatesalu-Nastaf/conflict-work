@@ -113,6 +113,7 @@ const Booking = () => {
     book,
     handleClick,
     handleChange,
+
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -1104,114 +1105,116 @@ const Booking = () => {
                 />
               </div>
             </div>
-            <div className={`copy-item ${displayCopy ? "block" : "none"}`}>
-              <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo"
-                    value={currentYear}
-                    options={[currentYear]}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Fin Years" />
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoItem label="Trip Date">
-                      <DatePicker
-                        value={book.tripdate ? dayjs(book.tripdate) : dayjs()}
-                        onChange={(date) => handleDateChange(date, "tripdate")}
-                        format="DD/MM/YYYY"
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField
-                            {...inputProps}
-                            inputRef={inputRef}
-                            value={selectedCustomerData?.tripdate}
-                          />
-                        )}
-                      </DatePicker>
-                    </DemoItem>
-                  </LocalizationProvider>
-                </div>
-                <div className="input time">
-                  <label>Trip Time</label>
-                  <input
-                    type="time"
-                    name="triptime"
-                    value={
-                      formData.triptime ||
-                      selectedCustomerData.triptime ||
-                      book.triptime ||
-                      ""
-                    }
-                    onChange={(event) => {
-                      setBook({ ...book, triptime: event.target.value });
-                      setTripTime(event.target.value);
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="input-field">
-                <div className="input-btn">
-                  <span onClick={handleClickHide} className="btn">
-                    Hide
-                  </span>
-                  <span className="btn">Copy</span>
-                </div>
+            <div className={`copy - item ${displayCopy ? "block" : "none"}`}>
+            <div className="input-field">
+              <div className="input" style={{ width: "300px" }}>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  value={currentYear}
+                  options={[currentYear]}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Fin Years" />
+                  )}
+                />
               </div>
             </div>
-            <div className="inpu-field">
-              <div className="input radio"></div>
-              <div className="input-field">
-                <div className="input">
-                  {formData.bookingno ||
-                    selectedCustomerData.bookingno ||
-                    book.bookingno ? (
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      component="label"
+            <div className="input-field">
+              <div className="input">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Trip Date">
+                    <DatePicker
+                      value={book.tripdate ? dayjs(book.tripdate) : dayjs()}
+                      onChange={(date) => handleDateChange(date, "tripdate")}
+                      format="DD/MM/YYYY"
                     >
-                      Attach File
-                      <input
-                        type="file"
-                        style={{ display: "none" }}
-                        onClick={handleprevent}
-                        onChange={(e) => setFile(e.target.files[0])}
-                      />
-                    </Button>
-                  ) : (
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      onClick={() => {
-                        setError(true);
-                        setErrorMessage("Please Enter Booking No");
-                      }}
-                    >
-                      Attach File
-                    </Button>
-                  )}
-                </div>
-                <div className="input">
+                      {({ inputProps, inputRef }) => (
+                        <TextField
+                          {...inputProps}
+                          inputRef={inputRef}
+                          value={selectedCustomerData?.tripdate}
+                        />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
+                </LocalizationProvider>
+              </div>
+              <div className="input time">
+                <label>Trip Time</label>
+                <input
+                  type="time"
+                  name="triptime"
+                  value={
+                    formData.triptime ||
+                    selectedCustomerData.triptime ||
+                    book.triptime ||
+                    ""
+                  }
+                  onChange={(event) => {
+                    setBook({ ...book, triptime: event.target.value });
+                    setTripTime(event.target.value);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <div className="input-btn">
+                <span onClick={handleClickHide} className="btn">
+                  Hide
+                </span>
+                <span className="btn">Copy</span>
+              </div>
+            </div>
+          </div>
+          <div className="inpu-field">
+            <div className="input radio"></div>
+            <div className="input-field">
+              <div className="input">
+                {formData.bookingno ||
+                  selectedCustomerData.bookingno ||
+                  book.bookingno ? (
                   <Button
-                    variant="outlined"
-                    onClick={handleButtonClick}
-
+                    color="primary"
+                    variant="contained"
+                 
+                    component="label"
                   >
-                    View
+                    Attach File
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onClick={handleprevent}
+                      onChange={(e) => setFile(e.target.files[0])}
+                    />
                   </Button>
-                </div>
+                ) : (
+                  <Button
+                    color="primary"
+                    variant="contained"
+             
+                    onClick={() => {
+                      setError(true);
+                      setErrorMessage("Please Enter Booking No");
+                    }}
+                  >
+                    Attach File
+                  </Button>
+                )}
+              </div>
+              <div className="input">
+                <Button
+                  variant="outlined"
+                  onClick={handleButtonClick}
+            
+                >
+                  View
+                </Button>
               </div>
             </div>
           </div>
         </div>
+    </div>
         {/* <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
@@ -1230,26 +1233,26 @@ const Booking = () => {
             ))}
           </StyledSpeedDial>
         </Box> */}
-        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-          <StyledSpeedDial
-            ariaLabel="SpeedDial playground example"
-            icon={<SpeedDialIcon />}
-            direction="left"
-          >
-            {actions.map((action) => (
-              action.icon ? (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                  onClick={(event) =>
-                    handleClick(event, action.name, selectedCustomerId)
-                  }
-                />
-              ) : null
-            ))}
-          </StyledSpeedDial>
-        </Box>
+         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+      <StyledSpeedDial
+        ariaLabel="SpeedDial playground example"
+        icon={<SpeedDialIcon />}
+        direction="left"
+      >
+        {actions.map((action) => (
+          action.icon ? (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+              onClick={(event) =>
+                handleClick(event, action.name, selectedCustomerId)
+              }
+            />
+          ) : null
+        ))}
+      </StyledSpeedDial>
+    </Box>
         <div className="vehicle-confirm">
           <div className="input-field">
             <div className="input">
@@ -1421,7 +1424,7 @@ const Booking = () => {
                   <Button
                     variant="contained"
                     onClick={handleAdd}
-
+             
                   >
                     Add
                   </Button>
@@ -1430,14 +1433,15 @@ const Booking = () => {
             </div>
             <div>
               {
-                edit ?
-                  <Button
-                    variant="contained"
-                    onClick={handleAdd}
-                  >
-                    Add New</Button> : <></>
-
-              }
+                edit?
+              <Button
+              variant="contained"
+               onClick={handleAdd}
+             
+               >
+                Add New</Button>:<></>
+                
+}
             </div>
           </div>
           <Dialog open={popupOpen} onClose={handlePopupClose}>
@@ -1591,7 +1595,7 @@ const Booking = () => {
                     allFile.map((img, index) => (
                       <div key={index} style={{ position: "relative" }}>
                         <embed
-                          src={`${apiUrl}/public/booking_doc/` + img.fileName}
+                          src={`${apiUrl}/public/booking_doc/ + img.fileName`}
                           type="application/pdf"
                           width="100%"
                           height="600px"
@@ -1625,8 +1629,8 @@ const Booking = () => {
             </Dialog>
           </div>
         </div>
-      </form>
-    </div>
+      </form >
+    </div >
   );
 };
 

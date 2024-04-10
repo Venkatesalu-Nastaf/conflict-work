@@ -5,14 +5,20 @@ import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 const useVehicleinfo = () => {
     const apiUrl = APIURL;
     // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
-    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    // const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [actionName] = useState('');
     const [rows, setRows] = useState([]);
+    const [rows1, setRows1] = useState([]);
     const [info, setInfo] = useState(false);
     const [toDate, setToDate] = useState(dayjs());
     const [fromDate, setFromDate] = useState(dayjs());
@@ -26,6 +32,9 @@ const useVehicleinfo = () => {
     // const [infoMessage, setInfoMessage] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
+    const [drivername, setDrivername] = useState([]);
+    const [enterPressCount, setEnterPressCount] = useState(0);
+    const [edit, setEdit] = useState(false)
 
     const columns = [
         { field: "id", headerName: "Sno", width: 70 },
@@ -45,31 +54,63 @@ const useVehicleinfo = () => {
             ),
         },
         { field: "vehicleId", headerName: "Vehicle ID", width: 130 },
-        { field: "doadate", headerName: "Atteched Date", width: 130 },
+        { field: "vehiclename", headerName: "Vehicle Name", width: 130 },
+        {
+            field: "doadate", headerName: "Attached Date", width: 130,
+
+            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+
+        },
         { field: "vehRegNo", headerName: "Vehicle Reg No", width: 130 },
-        { field: "costCenter", headerName: "Cost Center Location", width: 170 },
-        { field: "vehType", headerName: "Vehicle Type", width: 130 },
+        { field: "stations", headerName: "Stations", width: 170 },
+        { field: "hiretypes", headerName: "Hire types", width: 170 },
+        { field: "vechtype", headerName: "Vehicle Type", width: 130 },
+        { field: "fueltype", headerName: "Fuel Type", width: 130 },
+        { field: "Groups", headerName: "Groups Type", width: 130 },
         { field: "owner", headerName: "Owner", width: 90 },
         { field: "mobileNo", headerName: "Mobile No", width: 130 },
         { field: "email", headerName: "Email", width: 130 },
+        { field: "segement", headerName: "Segment", width: 130 },
         { field: "yearModel", headerName: "Year Model", width: 130 },
         { field: "insuranceno", headerName: "Insurance No", width: 130 },
-        { field: "insduedate", headerName: "Insurance Due Date", width: 150 },
-        { field: "licenseno", headerName: "License No", width: 130 },
-        { field: "licensebatchno", headerName: "License Batch No", width: 140 },
-        { field: "licduedate", headerName: "License Due Date", width: 140 },
+        {
+            field: "insduedate", headerName: "Insurance Due Date", width: 150,
+            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+        },
+        // { field: "licenseno", headerName: "License No", width: 130 },
+        // { field: "licensebatchno", headerName: "License Batch No", width: 140 },
+        // { field: "licduedate", headerName: "License Due Date", width: 140 },
         { field: "nationalpermito", headerName: "Notional Permit No", width: 150 },
-        { field: "npdate", headerName: "Notional Permit Date", width: 150 },
+        {
+            field: "npdate", headerName: "Notional Permit Date", width: 150,
+            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+        },
         { field: "statepermito", headerName: "State Permit No", width: 130 },
-        { field: "spdate", headerName: "State Permit Date", width: 130 },
-        { field: "rcbookno", headerName: "RC Book No", width: 130 },
-        { field: "fcdate", headerName: "FC Date", width: 130 },
+        {
+            field: "spdate", headerName: "State Permit Date", width: 130,
+            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+        },
+        {
+            field: "rcbookno", headerName: "RC Book No", width: 130,
+            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+        },
+        {
+            field: "fcdate", headerName: "FC Date", width: 130,
+            valueFormatter: (params) => dayjs(params.value).format("DD/MM/YYYY"),
+        },
         { field: "avgmileage", headerName: "AVG Mileage", width: 130 },
         { field: "driverName", headerName: "Driver Name", width: 130 },
         { field: "tankCap", headerName: "Tank Cap", width: 130 },
-        { field: "routeno", headerName: "Route No", width: 130 },
-        { field: "remarks", headerName: "Remarks", width: 130 },
-        { field: "OwnerType", headerName: "Owner Type", width: 130 },
+        // { field: "routeno", headerName: "Route No", width: 130 },
+        // { field: "remarks", headerName: "Remarks", width: 130 },
+        // { field: "OwnerType", headerName: "Owner Type", width: 130 },
+    ];
+
+    const actions = [
+        { icon: <CancelPresentationIcon />, name: "Cancel" },
+        { icon: <DeleteIcon />, name: "Delete" },
+        { icon: <ModeEditIcon />, name: "Edit" },
+        edit ? "" : { icon: <BookmarkAddedIcon />, name: "Add" }
     ];
 
     const handleSelectAll = () => {
@@ -105,11 +146,11 @@ const useVehicleinfo = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const handleButtonClick = (params) => {
         const { vehicleId } = params.row;
-        if (!vehicleId) {
-            setError(true);
-            setErrorMessage("PLease Enter Booking No");
-            return;
-        }
+        // if (!vehicleId) {
+        //     setError(true);
+        //     setErrorMessage("PLease Enter vehicleId");
+        //     return;
+        // }
 
         showPdf(vehicleId);
     };
@@ -214,6 +255,25 @@ const useVehicleinfo = () => {
     };
 
 
+    useEffect(() => {
+        const fetchOrganizationnames = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/drivernamevechicleinfo`);
+                const data = response.data
+                const names = data.map(res => res.drivername)
+
+                setDrivername(names)
+
+
+            }
+            catch (error) {
+                console.log(error, "error");
+            }
+        };
+        fetchOrganizationnames()
+    }, [apiUrl])
+
+
 
 
     // const handlePdfDownload = () => {
@@ -235,20 +295,27 @@ const useVehicleinfo = () => {
 
 
     const [book, setBook] = useState({
-        vehicleId: '',
-        doadate: '',
+
+        vehiclename: '',
+        hiretypes: '',
+        vechtype: '',
+        fueltype: '',
+        Groups: '',
+        doadate: dayjs(),
         vehRegNo: '',
-        costCenter: '',
-        vehType: '',
+        stations: '',
+        segement: '',
+        // costCenter: '',
+        // vehType: '',
         owner: '',
         mobileNo: '',
         email: '',
         yearModel: '',
         insuranceno: '',
         insduedate: '',
-        licenseno: '',
-        licensebatchno: '',
-        licduedate: '',
+        // licenseno: '',
+        // licensebatchno: '',
+        // licduedate: '',
         nationalpermito: '',
         npdate: '',
         avgmileage: '',
@@ -259,29 +326,35 @@ const useVehicleinfo = () => {
         fcdate: '',
         driverName: '',
         tankCap: '',
-        routeno: '',
-        remarks: '',
-        OwnerType: '',
-        active: '',
+        // routeno: '',
+        // remarks: '',
+        // OwnerType: '',
+        active: 'yes',
     });
 
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
-            vehicleId: '',
-            doadate: '',
+            vehiclename: '',
+            hiretypes: '',
+            vechtype: '',
+            fueltype: '',
+            Groups: '',
+            doadate: dayjs(),
             vehRegNo: '',
-            costCenter: '',
-            vehType: '',
+            stations: '',
+            segement: '',
+            // costCenter: '',
+            // vehType: '',
             owner: '',
             mobileNo: '',
             email: '',
             yearModel: '',
             insuranceno: '',
             insduedate: '',
-            licenseno: '',
-            licensebatchno: '',
-            licduedate: '',
+            // licenseno: '',
+            // licensebatchno: '',
+            // licduedate: '',
             nationalpermito: '',
             npdate: '',
             avgmileage: '',
@@ -292,15 +365,29 @@ const useVehicleinfo = () => {
             fcdate: '',
             driverName: '',
             tankCap: '',
-            routeno: '',
-            remarks: '',
-            OwnerType: '',
-            active: '',
+            // routeno: '',
+            // remarks: '',
+            // OwnerType: '',
+            active: 'yes',
+
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
 
+
+
+    const handleAutocompleteChange = (event, value, name) => {
+        const selectedOption = value ? value.label : '';
+        setBook((prevBook) => ({
+            ...prevBook,
+            [name]: selectedOption,
+        }));
+        setSelectedCustomerData((prevData) => ({
+            ...prevData,
+            [name]: selectedOption,
+        }));
+    };
     const handleChange = (event) => {
         const { name, value, checked } = event.target;
 
@@ -338,16 +425,68 @@ const useVehicleinfo = () => {
         }));
     };
 
-    const vehicleID = selectedCustomerData.vehicleId || book.vehicleId;
+
+    const handleKeyEnter = useCallback(
+        async (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                if (enterPressCount === 0) {
+                    if (event.target.value !== "") {
+
+                        try {
+                            const data = event.target.value
+                            // console.log(data,"tar",typeof(data))
+                            const response = await axios.get(`${apiUrl}/vechiclenameinfo`, {
+                                params: {
+                                    vehicletypename: data
+                                },
+                            });
+                            const vehicleData = response.data;
+
+                            setRows1(vehicleData);
+                            setSuccess(true)
+                            setSuccessMessage("Successfully listed");
+                        } catch (error) {
+                            setRows1([])
+                            setError(true);
+                            setSelectedCustomerData({})
+                            console.log(error.response.data.error, "enter")
+                            setErrorMessage(error.response.data.error);
+                        }
+                    }
+                    else {
+                        setRows1([])
+                        setSelectedCustomerData({})
+                    }
+                } else if (enterPressCount === 1) {
+                    const selectedRow = rows1[0];
+                    if (selectedRow) {
+                        setSelectedCustomerData(selectedRow);
+                        handleChange({
+                            target: { name: "vehiclename", value: selectedRow.vehiclename },
+                        });
+                    }
+                }
+                setEnterPressCount((prevCount) => prevCount + 1);
+            }
+            if (event.target.value === "") {
+                setEnterPressCount(0);
+            }
+        },
+        [rows1, enterPressCount, apiUrl, setSelectedCustomerData]
+    );
+
+
+
 
     // insurence copy-1
     const [insurance, setInsurance] = useState(null);
-    const addInsurence_copy = async () => {
+    const addInsurence_copy = async (vehicleid) => {
         if (insurance !== null) {
             const formData = new FormData();
             formData.append("file", insurance);
             try {
-                await axios.post(`${apiUrl}/insurance-pdf/${vehicleID}`, formData)
+                await axios.post(`${apiUrl}/insurance-pdf/${vehicleid}`, formData)
                 setInsurance(null)
             }
             catch {
@@ -361,35 +500,34 @@ const useVehicleinfo = () => {
     };
 
     // licence copyy---2
-    const [licence, setLicence] = useState(null);
-    const addLicence_copy = async () => {
-        if (licence !== null) {
+    // const [licence, setLicence] = useState(null);
+    // const addLicence_copy = async (vechicleid) => {
+    //     if (licence !== null) {
 
-            const formData = new FormData();
-            formData.append("file", licence);
-            try {
-                await axios.post(`${apiUrl}/licence-pdf/${vehicleID}`, formData);
-                setLicence(null)
-            }
-            catch {
-                setError(true);
-                setErrorMessage('something wrong');
-            }
-        } else {
-            return
-        }
-        setLicence(null);
-    };
+    //         const formData = new FormData();
+    //         formData.append("file", licence);
+    //         try {
+    //             await axios.post(`${apiUrl}/licence-pdf/${vechicleid}`, formData);
+    //             setLicence(null)
+    //         }
+    //         catch {
+    //             setError(true);
+    //             setErrorMessage('something wrong');
+    //         }
+    //     } else {
+    //         return
+    //     }
+    //     setLicence(null);
+    // };
 
     // nationalPermit copyy---3
     const [nationalPermit, setNationalPermit] = useState(null);
-    const addNationalPermit_copy = async () => {
+    const addNationalPermit_copy = async (vehicleid) => {
         if (nationalPermit !== null) {
-
             const formData = new FormData();
             formData.append("file", nationalPermit);
             try {
-                await axios.post(`${apiUrl}/nationalPermit-pdf/${vehicleID}`, formData);
+                await axios.post(`${apiUrl}/nationalPermit-pdf/${vehicleid}`, formData);
                 setNationalPermit(null);
             }
             catch {
@@ -404,12 +542,12 @@ const useVehicleinfo = () => {
 
     // statePermit copyy---4
     const [statePermit, setStatePermit] = useState(null);
-    const addStatePermit_copy = async () => {
+    const addStatePermit_copy = async (vechicleid) => {
         if (statePermit !== null) {
             const formData = new FormData();
             formData.append("file", statePermit);
             try {
-                await axios.post(`${apiUrl}/statePermit-pdf/${vehicleID}`, formData);
+                await axios.post(`${apiUrl}/statePermit-pdf/${vechicleid}`, formData);
                 setStatePermit(null);
             }
             catch {
@@ -424,12 +562,12 @@ const useVehicleinfo = () => {
 
     // rcBook copyy---5
     const [rcBook, setRcbook] = useState(null);
-    const addRcBook_copy = async () => {
+    const addRcBook_copy = async (vechicleid) => {
         if (rcBook !== null) {
             const formData = new FormData();
             formData.append("file", rcBook);
             try {
-                await axios.post(`${apiUrl}/rcBook-pdf/${vehicleID}`, formData);
+                await axios.post(`${apiUrl}/rcBook-pdf/${vechicleid}`, formData);
                 setRcbook(null);
             }
             catch {
@@ -444,12 +582,12 @@ const useVehicleinfo = () => {
 
     // FcCopy copyy---6
     const [fcCopy, setFcCopy] = useState(null);
-    const addFcCopy_copy = async () => {
+    const addFcCopy_copy = async (vechicleid) => {
         if (fcCopy !== null) {
             const formData = new FormData();
             formData.append("file", fcCopy);
             try {
-                await axios.post(`${apiUrl}/fcCopy-pdf/${vehicleID}`, formData);
+                await axios.post(`${apiUrl}/fcCopy-pdf/${vechicleid}`, formData);
                 setFcCopy(null);
             }
             catch {
@@ -464,23 +602,82 @@ const useVehicleinfo = () => {
 
     const handleAdd = async () => {
 
-        const vehicleId = book.vehicleId;
-        if (!vehicleId) {
+
+        if (!book.vehiclename) {
             setError(true);
-            setErrorMessage("Fill mandatory fields");
+            setErrorMessage("Enter Vehiclename");
             return;
+
+        }
+        if (!book.hiretypes) {
+            setError(true);
+            setErrorMessage("Enter Hiretypes");
+            return;
+
+        }
+        if (!book.fueltype) {
+            setError(true);
+            setErrorMessage("Enter Fueltype");
+            return;
+
+        }
+        if (!book.Groups) {
+            setError(true);
+            setErrorMessage("Enter Groups");
+            return;
+
+        }
+        if (!book.vechtype) {
+            setError(true);
+            setErrorMessage("Choose vehicletype");
+            return;
+
+        }
+        if (!book.mobileNo) {
+            setError(true);
+            setErrorMessage("Enter MobileNo");
+            return;
+
+        }
+        if (!book.driverName) {
+            setError(true);
+            setErrorMessage(" Choose Drivername");
+            return;
+
+        }
+        if (!book.vehRegNo) {
+            setError(true);
+            setErrorMessage("Enter VehicleRegNo");
+            return;
+
+        }
+        if (!book.stations) {
+            setError(true);
+            setErrorMessage("Choose Stations");
+            return;
+
+        }
+        if (!book.owner) {
+            setError(true);
+            setErrorMessage("Enter The Owner Name");
+            return;
+
         }
 
-        try {
-            await axios.post(`${apiUrl}/vehicleinfo`, book);
-            handleCancel();
 
-            addFcCopy_copy();
-            addRcBook_copy();
-            addStatePermit_copy();
-            addNationalPermit_copy();
-            addLicence_copy();
-            addInsurence_copy();
+        try {
+            const data = { ...book }
+            await axios.post(`${apiUrl}/vehicleinfo`, data);
+            const response = await axios.get(`${apiUrl}/lastvechileinfogetid`);
+            const lastvehicleidno = response.data.vehicleId;
+
+            addFcCopy_copy(lastvehicleidno);
+            addRcBook_copy(lastvehicleidno);
+            addStatePermit_copy(lastvehicleidno);
+            addNationalPermit_copy(lastvehicleidno);
+            // addLicence_copy(lastvehicleidno);
+            addInsurence_copy(lastvehicleidno);
+            handleCancel();
 
             setRows([]);
             setSuccess(true);
@@ -579,22 +776,21 @@ const useVehicleinfo = () => {
 
     const handleEdit = async (vehicleId) => {
         try {
-            const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
-            const updatedCustomer = {
-                ...selectedCustomer,
-                ...selectedCustomerData,
-            };
-            await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
+            // const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
+            const { id, vehicleId, ...restselectedcustomerdata } = selectedCustomerData
+            await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`, restselectedcustomerdata);
+
+
+            addFcCopy_copy(selectedCustomerData.vehicleId);
+            addRcBook_copy(selectedCustomerData.vehicleId);
+            addStatePermit_copy(selectedCustomerData.vehicleId);
+            addNationalPermit_copy(selectedCustomerData.vehicleId);
+            // addLicence_copy(selectedCustomerData.vehicleId);
+            addInsurence_copy(selectedCustomerData.vehicleId);
             handleCancel();
 
-            addFcCopy_copy();
-            addRcBook_copy();
-            addStatePermit_copy();
-            addNationalPermit_copy();
-            addLicence_copy();
-            addInsurence_copy();
-
-            setRows([]);
+            setRows1([]);
+            setRows([])
             setSuccess(true);
             setSuccessMessage("Successfully Updated");
         } catch {
@@ -609,39 +805,24 @@ const useVehicleinfo = () => {
             if (actionName === 'List') {
             } else if (actionName === 'Cancel') {
                 handleCancel();
+                setRows1([]);
                 setRows([]);
                 setSuccess(true);
                 setSuccessMessage("Successfully listed");
             }
 
             else if (actionName === 'Delete') {
-                await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`);
-                setSelectedCustomerData(null);
+                await axios.delete(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId}`);
+                setSelectedCustomerData({});
                 handleCancel();
                 setRows([]);
+                setRows1([]);
                 setSuccess(true);
                 setSuccessMessage("Successfully Deleted");
             }
 
             else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.vehicleId === vehicleId);
-                const updatedCustomer = {
-                    ...selectedCustomer,
-                    ...selectedCustomerData,
-                };
-                await axios.put(`${apiUrl}/vehicleinfo/${selectedCustomerData.vehicleId || book.vehicleId}`, updatedCustomer);
-                handleCancel();
-                //
-                addFcCopy_copy();
-                addRcBook_copy();
-                addStatePermit_copy();
-                addNationalPermit_copy();
-                addLicence_copy();
-                addInsurence_copy();
-                //
-                setRows([]);
-                setSuccess(true);
-                setSuccessMessage("Successfully Updated");
+                handleEdit()
             }
 
             else if (actionName === 'Add') {
@@ -664,12 +845,14 @@ const useVehicleinfo = () => {
         try {
             const response = await fetch(`${apiUrl}/searchvehicleinfo?searchText=${searchText}&fromDate=${fromDate}&toDate=${toDate}`);
             const data = await response.json();
+            console.log(data, "typedata")
             if (data.length > 0) {
                 const rowsWithUniqueId = data.map((row, index) => ({
                     ...row,
                     id: index + 1,
                 }));
                 setRows(rowsWithUniqueId);
+                setSelectedCustomerData(rowsWithUniqueId)
                 setSuccess(true);
                 setSuccessMessage("Successfully listed")
             } else {
@@ -683,10 +866,51 @@ const useVehicleinfo = () => {
         }
     };
 
+    const handleenterSearch = async (e) => {
+        if (e.key === "Enter") {
+
+            try {
+                const response = await fetch(
+                    `${apiUrl}/searchvehicleinfo?searchText=${searchText}`
+                );
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    const rowsWithUniqueId = data.map((row, index) => ({
+                        ...row,
+                        id: index + 1,
+                    }));
+                    setRows(rowsWithUniqueId);
+                    setSuccess(true);
+                    setSuccessMessage("successfully listed");
+                } else {
+                    setRows([]);
+                    setError(true);
+                    setErrorMessage("no data found");
+                }
+            } catch {
+                setError(true);
+                setErrorMessage("sorry");
+            }
+
+        }
+    };
+
     const handleRowClick = useCallback((params) => {
+        const customerData = params
+        setSelectedCustomerData(customerData);
+        handleChange({
+            target: { name: "vehiclename", value: customerData.vehiclename },
+        });
+
+        setEdit(true)
+        setIsEditMode(true);
+    }, []);
+    const handleRowClick1 = useCallback((params) => {
         const customerData = params.row;
         setSelectedCustomerData(customerData);
-        setSelectedCustomerId(params.row.customerId);
+
+        setEdit(true)
         setIsEditMode(true);
     }, []);
 
@@ -753,8 +977,8 @@ const useVehicleinfo = () => {
         book,
         handleClick,
         handleChange,
-        selectedCustomerId,
         handleRowClick,
+        handleRowClick1,
         handleAdd,
         hidePopup,
         handleDateChange,
@@ -769,7 +993,7 @@ const useVehicleinfo = () => {
         handlePdfDownload,
         columns,
         setInsurance,
-        setLicence,
+        // setLicence,
         setNationalPermit,
         setStatePermit,
         setRcbook,
@@ -786,7 +1010,7 @@ const useVehicleinfo = () => {
         setSelectAll,
         selectAll,
         handleSelectAll,
-        handleDocumentDownload
+        handleDocumentDownload, drivername, handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, actions
     };
 };
 

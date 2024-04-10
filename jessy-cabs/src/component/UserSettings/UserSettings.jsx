@@ -17,7 +17,7 @@ const UserSettings = () => {
   return (
     <div className="UserSettings-main">
       <div className="form-container-UserSettings">
-        <div className="container-main">
+        <div className="container-main user-inputs-feilds">
           <Box sx={{ width: "100%", typography: "body1" }}>
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -29,7 +29,7 @@ const UserSettings = () => {
                   <Tab label="Themes" value="Themes" />
                 </TabList>
               </Box>
-              <TabPanel value="UserInfo">
+              <TabPanel value="UserInfo" >
                 <UserSetting />
               </TabPanel>
               <TabPanel value="Themes">

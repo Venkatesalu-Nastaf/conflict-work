@@ -130,6 +130,7 @@ console.log(searchText,fromDate,toDate,"dateeeee")
       'driverName',
       'tankCap',
       'active',
+      'stations'
     ];
 
     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');

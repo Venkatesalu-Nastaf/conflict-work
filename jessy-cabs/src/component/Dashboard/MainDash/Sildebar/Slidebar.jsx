@@ -348,7 +348,7 @@ const Sidebar = () => {
             menuItemKey="/home/settings"
             name="Settings page"
             isActive={isActive}
-            handleMenuItemClick={handleMenuItemClick}
+            handleMenuItemClick={handleaddClick}
             icon={AiOutlineSetting}
           /> */}
 

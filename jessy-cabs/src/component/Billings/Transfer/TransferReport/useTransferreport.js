@@ -5,8 +5,7 @@ import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
 import { APIURL } from "../../../url";
-import { Location, useLocation } from "react-router-dom";
-
+import {  useLocation } from "react-router-dom";
 const useTransferreport = () => {
   const apiUrl = APIURL;
   // const user_id = localStorage.getItem("useridno");
@@ -15,7 +14,7 @@ const useTransferreport = () => {
   const [lxpopupOpen, setlxPopupOpen] = useState(false);
   const [servicestation, setServiceStation] = useState("");
   const [customer, setCustomer] = useState("");
-  const [grouptTripid, setGroupTripid] = useState("")
+  const [groupTripid, setGroupTripid] = useState("")
   const [invoiceno, setInvoiceno] = useState("")
   const [fromDate, setFromDate] = useState(dayjs())
   const [endDate, setEndDate] = useState(dayjs())
@@ -34,7 +33,6 @@ const useTransferreport = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const location = useLocation()
 
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const parameterKeys = [
@@ -48,7 +46,6 @@ const useTransferreport = () => {
         formData[key] = value;
       }
     });
-    console.log(formData, "form..");
     setCustomer(formData.Customer)
     setFromDate(formData.FromDate)
     setEndDate(formData.EndDate)
@@ -445,10 +442,12 @@ const useTransferreport = () => {
   return {
     rows,
     error,
+    setError,
     success,
     warning,
     successMessage,
     errorMessage,
+    setErrorMessage,
     warningMessage,
     organizationdata,
     hidePopup,
@@ -483,11 +482,11 @@ const useTransferreport = () => {
     organizationcity,
     organizationgstnumber,
     invoiceno,
-    grouptTripid,
+    groupTripid,
     fromDate,
     endDate,
     customer,
-    invoiceDate
+    invoiceDate,
   };
 };
 

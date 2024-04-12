@@ -1,33 +1,34 @@
-import { useState } from 'react';
+import React from 'react';
 import "./Settings.css";
-import { Link, Outlet, useLocation } from "react-router-dom";
+// import { Link, Outlet, useLocation } from "react-router-dom";
+import {  Outlet } from "react-router-dom";
 
-const MenuItem = ({ label, to, handleMenuItemClick }) => {
-  const location = useLocation();
-  const isActive = location.pathname === to;
+// const MenuItem = ({ label, to, handleMenuItemClick }) => {
+//   const location = useLocation();
+//   const isActive = location.pathname === to;
 
-  return (
-    <Link
-      className={`menu-link ${isActive ? "actives" : ""}`}
-      to={to}
-      onClick={() => handleMenuItemClick(label)}
-    >
-      {label}
-    </Link>
-  );
-};
+//   return (
+//     <Link
+//       className={`menu-link ${isActive ? "actives" : ""}`}
+//       to={to}
+//       onClick={() => handleMenuItemClick(label)}
+//     >
+//       {label}
+//     </Link>
+//   );
+// };
 
 const Settings = () => {
-  const [activeMenuItem, setActiveMenuItem] = useState('');
+  // const [activeMenuItem, setActiveMenuItem] = useState('');
 
-  const handleMenuItemClick = (menuItem) => {
-    localStorage.setItem('activeMenuItem', menuItem);
-    setActiveMenuItem(menuItem);
-  };
+  // const handleMenuItemClick = (menuItem) => {
+  //   localStorage.setItem('activeMenuItem', menuItem);
+  //   setActiveMenuItem(menuItem);
+  // };
 
   return (
     <div className="Settings-main">
-      <div className="menu-bar">
+      {/* <div className="menu-bar">
         <MenuItem
           label="User Creation"
           to="/home/settings/usercreation"
@@ -56,7 +57,7 @@ const Settings = () => {
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
-      </div>
+      </div> */}
       <Outlet />
     </div>
 

@@ -31,7 +31,9 @@ const useTransferreport = () => {
   const [warning, setWarning] = useState(false);
   const [warningMessage] = useState({});
   const [popupOpen, setPopupOpen] = useState(false);
+  const [misformat,setMisformat]=useState('')
   const location = useLocation()
+  
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -487,6 +489,7 @@ const useTransferreport = () => {
     endDate,
     customer,
     invoiceDate,
+    misformat,setMisformat
   };
 };
 

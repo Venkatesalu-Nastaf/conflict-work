@@ -37,6 +37,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortawesome/free-solid-svg-icons";
 import useTransferreport from './useTransferreport';
+import useExeclpage from './ExcelPage';
 
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -98,6 +99,7 @@ const TransferReport = () => {
     bankOptions,
     selectedImage,
     setCustomer,
+    misformat,setMisformat,
     servicestation,
     handleserviceInputChange,
     handleEInvoiceClick,
@@ -108,7 +110,7 @@ const TransferReport = () => {
     npopupOpen,
     handleETripsheetClick,
     lxpopupOpen,
-    handleExcelDownload,
+    // handleExcelDownload,
     handlePdfDownload,
     routeData,
     roundedAmount,
@@ -122,6 +124,8 @@ const TransferReport = () => {
     organizationgstnumber,
 
   } = useTransferreport();
+  const {
+        handleExcelDownload,error1,errormessage1} = useExeclpage()
   const [invoicedata,setInvoicedata] = useState([])
   const [addressDetails,setAddressDetails] = useState([])
   const [loading, setLoading] = useState(false); // State for loading indicator
@@ -167,6 +171,7 @@ const TransferReport = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const tripData = await response.json();
+        // console.log(tripData,"trip")
         setInvoicedata(tripData)
     }
     catch(err){
@@ -274,7 +279,7 @@ fetchData()
                     options={MISformat.map((option) => ({
                       label: option.Option,
                     }))}
-                    onChange={(event, value) => setCustomer(value)}
+                    onChange={(event, value) => setMisformat(value.label)}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="MIS Format" inputRef={params.inputRef} />
@@ -462,7 +467,7 @@ fetchData()
                             Download
                           </Button>
                           <Menu {...bindMenu(popupState)}>
-                            <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                            <MenuItem onClick={()=>handleExcelDownload(misformat,invoicedata)}>Excel</MenuItem>
                             <MenuItem onClick={handleDownloadPdf}>PDF</MenuItem>
                             <MenuItem onClick={handlePdfDownload}>Both</MenuItem>
                           </Menu>
@@ -600,6 +605,13 @@ fetchData()
               <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
               <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
               <p>{errorMessage}</p>
+            </div>
+          }
+          {error1 &&
+            <div className='alert-popup Error'>
+              <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errormessage1}</p>
             </div>
           }
           {success &&

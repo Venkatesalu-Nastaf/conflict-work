@@ -7,7 +7,18 @@
     margin-top: 90px;
     align-items: center;
   }
+@media only screen and (max-width: 768px)  {
 
+  .UserSettings-main {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 1rem;
+    gap: 1rem;
+    margin-top: 30px;
+    align-items: center;
+  }
+}
 
 @media only screen and (min-width: 768px) and (max-width:836px){
   .user-inputs-feilds{

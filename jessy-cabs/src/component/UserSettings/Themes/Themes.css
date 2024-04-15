@@ -20,6 +20,7 @@
   justify-content: space-around;
   align-items: center;
   gap: 80px;
+  flex-wrap: wrap;
 
 }
 .theme-options .theme-image img {
@@ -44,4 +45,21 @@
 }
 .theme-options .theme-image p:hover {
   text-decoration: underline;
+}
+
+
+
+@media only screen and (max-width: 450px) {
+  .theme-options-main {
+    /* margin: 30px; */
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: none !important;
+    background: transparent !important; 
+}
+
+.Theme-Title{
+  font-size: 15px;
+  font-size: 18px;
+}
 }

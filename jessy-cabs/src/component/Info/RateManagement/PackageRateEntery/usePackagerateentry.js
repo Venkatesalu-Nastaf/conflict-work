@@ -1,38 +1,76 @@
 
 
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 import { useData } from '../../../Dashboard/Maindashboard/DataContext';
 
 // Table START
 const columns = [
-    { field: "id", headerName: "Sno", width: 70 },
-    { field: "vehicleType", headerName: "Vehicle Type", width: 180 },
-    { field: "duty", headerName: "Duty", width: 110 },
-    { field: "package", headerName: "Package", width: 110 },
-    { field: "Hours", headerName: "Hours", width: 80 },
-    { field: "KMS", headerName: "KMS", width: 80 },
-    { field: "Rate", headerName: "Rate", width: 80 },
-    { field: "extraHours", headerName: "ExtraHours", width: 100 },
-    { field: "extraKMS", headerName: "ExtraKMS", width: 100 },
-    { field: "PerHour", headerName: "PerHours", width: 110 },
-    { field: "PerKMS", headerName: "PerKMS", width: 100 },
-    { field: "chtime", headerName: "ChTime", width: 100 },
-    // { field: "AKMS", headerName: "AllowKMS", width: 130 },
-    { field: "ChKMS", headerName: "ChKMS", width: 100 },
-    { field: "Bata", headerName: "Bata", width: 100 },
-    { field: "NHalt", headerName: "NightHalt", width: 100 },
+    { field: "id", headerName: "ID", width: 60 },
+    { field: "ratetype", headerName: "Rate Type", width: 120 },
+    { field: "duty", headerName: "Duty", width: 100 },
+    { field: "OrganizationName", headerName: "Organization Name", width: 150 },
+    { field: "vehicleType", headerName: "vehicle Type", width: 110 },
+
+    { field: "package", headerName: "Package", width: 80 },
+    { field: "Hours", headerName: "Hours", width: 70 },
+    { field: "KMS", headerName: "KMS", width: 70 },
+    { field: "Rate", headerName: "Rate", width: 70 },
+    { field: "UptoHours", headerName: "Upto Hours", width: 100 },
+    { field: "UptoKMS", headerName: "UptoKMS", width: 90 },
+
+    { field: "extraHours", headerName: "Extra Hours", width: 100 },
+    { field: "extraKMS", headerName: "Extra KMS", width: 90 },
+    { field: "AKMS", headerName: "AKMS", width: 70 },
+    { field: "NHalt", headerName: "NHalt", width: 70 },
+    { field: "Bata", headerName: "Bata", width: 70 },
+    { field: "Validity", headerName: "Validity", width: 80 },
+
 ];
 // TABLE END
 
+
+
 const usePackagerateentry = () => {
+
+    ///ayyanar------------------
+
+
+    const [fieldSets, setFieldSets] = useState([{
+        // dinamic data
+        duty: '',
+        package: '',
+        Hours: '',
+        KMS: '',
+        Rate: '',
+        UptoHours: '',
+        UptoKMS: '',
+        extraHours: '',
+        extraKMS: '',
+        AKMS: '',
+        NHalt: '',
+        Bata: '',
+    }]);
+
+
+    const [commonData, setCommonData] = useState({
+        //static data
+        ratetype: '',
+        OrganizationName: "",
+        vehicleType: '',
+        Validity: '',
+    });
+
+    //------------------------------
+
     const apiUrl = APIURL;
     // const user_id = localStorage.getItem('useridno');
-    const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
+
+    //error message
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [info, setInfo] = useState(false);
@@ -40,9 +78,12 @@ const usePackagerateentry = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    const [infoMessage, setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
+
+    //-------editmode------------------
     const [isEditMode, setIsEditMode] = useState(false);
 
+    //------------------------------------------------
     const [validitydata, setValiditydata] = useState([])
     const [datevalidity, setDatevalidity] = useState()
     const { setOrganizationName } = useData()
@@ -82,69 +123,80 @@ const usePackagerateentry = () => {
         }
     }, [error, success, warning, info]);
 
-    const [book, setBook] = useState({
-        ratetype: '',
-        pricetag: '',
-        Validity: '',
-        vehicleType: '',
-        package: '',
-        duty: '',
-        Hours: '',
-        KMS: '',
-        Rate: '',
-        PerHour: '',
-        PerKMS: '',
-        extraHours: '',
-        extraKMS: '',
-        UptoHours: '',
-        AKMS: '',
-        NHalt: '',
-        Bata: '',
-        chtime: '',
-        ChKMS: '',
-    });
 
-    const handleChange = (event) => {
-        const { name, value, checked, type } = event.target;
+    //------on change---------------------------------------------
 
-        if (type === 'checkbox') {
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: checked,
-            }));
-            setSelectedCustomerData((prevData) => ({
-                ...prevData,
-                [name]: checked,
-            }));
-        } else {
-            setBook((prevBook) => ({
-                ...prevBook,
-                [name]: value,
-            }));
-            setSelectedCustomerData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
-        }
+    const handleChange = (event, index) => {
+        const { name, value } = event.target;
+
+        const newFieldSets = [...fieldSets];
+        newFieldSets[index][name] = value;
+        setFieldSets(newFieldSets);
+
+        setCommonData(prevCommonData => ({
+            ...prevCommonData,
+            [name]: value
+        }));
+
     };
 
-    const handleAutocompleteChange = (event, value, name) => {
+
+
+
+    const handleAutocompleteChange = (event, value, name, index) => {
         const selectedOption = value ? value.label : '';
 
-        setBook((prevBook) => ({
-            ...prevBook,
-            [name]: selectedOption,
-        }));
-        setSelectedCustomerData((prevData) => ({
-            ...prevData,
-            [name]: selectedOption,
-        }));
+        if (index !== undefined) {
+            // Handle Autocomplete fields with index (inside map function)
+            const newFieldSets = [...fieldSets];
+            newFieldSets[index][name] = selectedOption;
+            setFieldSets(newFieldSets);
+        } else {
+            // Handle Autocomplete fields without index (outside map function)
+            setCommonData(prevCommonData => ({
+                ...prevCommonData,
+                [name]: selectedOption,
+            }));
+        }
 
+        // Additional logic based on name if needed
         if (name === "pricetag") {
-            getStartEndTimesByRateName(selectedOption)
-
+            getStartEndTimesByRateName(selectedOption);
         }
     };
+
+
+
+    //ayyanar----------------------------------------
+    const handleAddExtra = () => {
+        setFieldSets([...fieldSets, {
+            duty: '',
+            package: '',
+            Hours: '',
+            KMS: '',
+            Rate: '',
+            UptoHours: '',
+            UptoKMS: '',
+            extraHours: '',
+            extraKMS: '',
+            AKMS: '',
+            NHalt: '',
+            Bata: '',
+        }]);
+    };
+
+
+    const handleCancelUI = (index) => {
+        if (fieldSets.length === 1) {
+            return;
+        }
+        const newDatas = [...fieldSets];
+        newDatas.splice(index, 1);
+        setFieldSets(newDatas);
+    };
+
+
+    // -------------------------------------------------------------
 
     function getStartEndTimesByRateName(rateName) {
         const filteredData = validitydata?.filter(item => item.ratename === rateName);
@@ -157,61 +209,89 @@ const usePackagerateentry = () => {
     }
 
 
-
-
-
-
-
-
-
     const handleCancel = () => {
-        setBook((prevBook) => ({
-            ...prevBook,
-            ratetype: '',
-            pricetag: '',
-            package: '',
-            Validity: '',
-            vehicleType: '',
+        setFieldSets((prefiled) => ([{
+            // dinamic data
             duty: '',
+            package: '',
             Hours: '',
             KMS: '',
             Rate: '',
-            PerHour: '',
-            PerKMS: '',
+            UptoHours: '',
+            UptoKMS: '',
             extraHours: '',
             extraKMS: '',
-            UptoHours: '',
             AKMS: '',
             NHalt: '',
             Bata: '',
-            ChKMS: '',
-            chtime: '',
-        }));
-        setSelectedCustomerData({});
+        }]));
+
+
+        setCommonData(prev => ({
+            ratetype: '',
+            OrganizationName: '',
+            vehicleType: '',
+            Validity: '',
+        }))
+
         setIsEditMode(false);
     };
+
+
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
-        setSelectedCustomerData(customerData);
-        setSelectedCustomerId(params.row.customerId);
+
+        const { duty, package: pkg, Hours, KMS, Rate, UptoHours, UptoKMS, extraHours, extraKMS, AKMS, NHalt, Bata } = customerData;
+        setFieldSets([{
+            duty,
+            package: pkg,
+            Hours,
+            KMS,
+            Rate,
+            UptoHours,
+            UptoKMS,
+            extraHours,
+            extraKMS,
+            AKMS,
+            NHalt,
+            Bata,
+        }]);
+
+        // Extract relevant properties for commonData
+        const { ratetype, OrganizationName, vehicleType, Validity } = customerData;
+        setCommonData({
+            ratetype,
+            OrganizationName,
+            vehicleType,
+            Validity,
+        });
+        setSelectedCustomerId(params.row.id);
         setIsEditMode(true);
     }, []);
 
 
+
     const handleAdd = async () => {
-        const duty = book.duty;
-        if (!duty) {
+        const dutys = fieldSets.map(fieldSet => fieldSet.duty); // Extract duties from fieldSets
+
+        // Check if any duty is empty
+        if (dutys.some(duty => !duty)) {
             setError(true);
-            setErrorMessage("Check your Network Connection");
+            setErrorMessage("Enter Duty field and others..!");
             return;
         }
+
         try {
-            await axios.post(`${apiUrl}/ratemanagement`, book);
-            handleCancel();
-            setRows([]);
+            // Combine commonData with each fieldSet
+            const requestData = fieldSets.map(fieldSet => ({ ...commonData, ...fieldSet }));
+
+            await axios.post(`${apiUrl}/ratemanagement-add`, requestData);
+            // If successful, update state
             setSuccess(true);
             setSuccessMessage("Successfully Added");
-        } catch {
+            handleCancel()
+        } catch (error) {
+            // If an error occurs, handle it
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
@@ -230,11 +310,16 @@ const usePackagerateentry = () => {
         handleList();
     }, [apiUrl]);
 
+
+    //Edit
     const handleEdit = async () => {
         try {
-            const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
-            const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-            await axios.put(`${apiUrl}/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
+            const updatedData = {
+                ...commonData,
+                ...fieldSets[0] // Assuming fieldSets contains only one set of data
+            };
+
+            await axios.put(`${apiUrl}/ratemanagement-edit/${selectedCustomerId}`, updatedData);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
@@ -245,6 +330,20 @@ const usePackagerateentry = () => {
             setErrorMessage("Check your Network Connection");
         }
     };
+
+    const handledelete = async () => {
+        try {
+
+            await axios.delete(`${apiUrl}/ratemanagement/${selectedCustomerId}`);
+            setSuccess(true);
+            setSuccessMessage("Successfully Deleted");
+            handleCancel();
+            setRows([]);
+        }
+        catch {
+
+        }
+    }
 
     const handleClick = async (event, actionName, duty) => {
         event.preventDefault();
@@ -268,23 +367,13 @@ const usePackagerateentry = () => {
             }
 
             else if (actionName === 'Delete') {
-                await axios.delete(`${apiUrl}/ratemanagement/${selectedCustomerData.id}`);
-                setSelectedCustomerData(null);
-                setSuccess(true);
-                setSuccessMessage("Successfully Deleted");
-                handleCancel();
-                setRows([]);
+                handledelete();
             }
 
             else if (actionName === 'Edit') {
-                const selectedCustomer = rows.find((row) => row.id === selectedCustomerData.id);
-                const updatedCustomer = { ...selectedCustomer, ...selectedCustomerData };
-                await axios.put(`${apiUrl}/ratemanagement/${selectedCustomerData.id}`, updatedCustomer);
-                setSuccess(true);
-                setSuccessMessage("Successfully updated");
-                handleCancel();
-                setRows([]);
+                handleEdit();
             }
+
             else if (actionName === 'Add') {
                 handleAdd();
             }
@@ -300,7 +389,7 @@ const usePackagerateentry = () => {
     });
 
     return {
-        selectedCustomerData,
+
         selectedCustomerId,
         rows,
         actionName,
@@ -311,8 +400,8 @@ const usePackagerateentry = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        infoMessage,
-        book,
+        // infoMessage,
+
         handleClick,
         handleChange,
         handleRowClick,
@@ -322,7 +411,9 @@ const usePackagerateentry = () => {
         columns,
         isEditMode,
         handleEdit,
-        datevalidity
+        datevalidity,
+        handleAddExtra, fieldSets, commonData, handleCancelUI,
+
     };
 };
 

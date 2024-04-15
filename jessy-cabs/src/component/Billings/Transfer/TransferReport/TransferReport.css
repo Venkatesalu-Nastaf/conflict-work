@@ -78,3 +78,12 @@
 }
 
 
+
+.ajay{
+    visibility: hidden;
+    height: 0px;
+    overflow: hidden;
+    /* display: none !important; */
+/* position: absolute; */
+width: 0px !important;
+}

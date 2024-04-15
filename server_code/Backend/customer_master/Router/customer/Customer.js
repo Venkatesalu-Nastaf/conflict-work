@@ -42,6 +42,17 @@ router.put('/customers/:customerId', (req, res) => {
   });
 });
 
+router.get('/customeraddress/:customername',(req,res)=>{
+  const customername = req.params.customername;
+  db.query('select address1,address2,city from customers where customer = ?',[customername],(err,result)=>{
+    if(err){
+      return res.status(500).json({ error: 'Failed to get data in MySQL' });
+    }
+     return res.status(200).json(result)
+     
+  })
+})
+
 // Collect data for Customer Master table
 router.get('/customers', (req, res) => {
   db.query('SELECT * FROM customers', (err, results) => {

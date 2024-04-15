@@ -17,7 +17,7 @@ import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 import Mailpdf from './Mailpdf/Mailpdf';
 import PdfPage from './PdfPage';
 import { saveAs } from 'file-saver';
-import { PDFViewer, pdf } from '@react-pdf/renderer';
+import {  pdf } from '@react-pdf/renderer';
 
 //for popup
 import ClearIcon from '@mui/icons-material/Clear';
@@ -84,8 +84,6 @@ const TransferReport = () => {
     warning,
     successMessage,
     errorMessage,
-    setErrorMessage,
-    setError,
     warningMessage,
     handleClick,
     ratetypeforpage,
@@ -100,13 +98,9 @@ const TransferReport = () => {
     setCustomer,
     servicestation,
     handleserviceInputChange,
-    handleEInvoiceClick,
-    handleMapInvoiceClick,
-    handleLuxuryInvoiceClick,
     pbpopupOpen,
     handlePopupClose,
     npopupOpen,
-    handleETripsheetClick,
     lxpopupOpen,
     handleExcelDownload,
     handlePdfDownload,
@@ -124,9 +118,7 @@ const TransferReport = () => {
   } = useTransferreport();
   const [invoicedata,setInvoicedata] = useState([])
   const [addressDetails,setAddressDetails] = useState([])
-  const [loading, setLoading] = useState(false); // State for loading indicator
   const apiUrl = APIURL;
-
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');

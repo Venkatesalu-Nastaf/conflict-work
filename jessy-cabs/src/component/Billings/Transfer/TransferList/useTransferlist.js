@@ -6,7 +6,6 @@ import { saveAs } from "file-saver";
 import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
 import { APIURL } from "../../../url";
 import { useData } from "../../../Dashboard/Maindashboard/DataContext";
-import { useNavigate } from "react-router-dom";
 
 const useTransferlist = () => {
   const apiUrl = APIURL;
@@ -159,7 +158,7 @@ const useTransferlist = () => {
       setError(true);
       setErrorMessage("Check your Network Connection");
     }
-  }, [customer, fromDate, toDate, servicestation, selectedStatus, apiUrl]);
+  }, [customer, fromDate, toDate, selectedStatus, apiUrl]);
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -174,7 +173,7 @@ const useTransferlist = () => {
             id: index + 1,
           }));
           setRows(rowsWithUniqueId);
-          setSuccess(true);
+          // setSuccess(true);
           setSuccessMessage("Successfully listed");
         } else {
           setRows([]);

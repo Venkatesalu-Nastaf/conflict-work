@@ -236,7 +236,6 @@ const PdfContent = ({invdata,invoiceno,invoiceDate,groupTripid,customeraddress,c
     const [address1,setAddress1] = useState('')
     const [address2,setAddress2] = useState('')
     const [address3,setAddress3] = useState('')
-    const [extraKm,setExtraKm] = useState('')
     const [extraKmAmount,setExtraKmAmount] = useState('')
     const organizationname = customer
 
@@ -250,17 +249,19 @@ useEffect(() => {
     let permitamount = 0
     let exkmamount = 0
     invdata?.map((li) => {
+      console.log(li.netamount,'net');
       totalamount += parseInt(li.netamount || 0)
       parkingamount += parseInt(li.parking || 0)
       permitamount += parseInt(li.permit || 0)
       exkmamount += parseInt(li.ex_kmAmount || 0) // Corrected property name
+      return null
     })
     setTotalAmount(totalamount)
     setParking(parkingamount)
     setPermit(permitamount)
     setExtraKmAmount(exkmamount)
   }
-}, [apiUrl])
+}, [apiUrl,invdata])
 
 
 useEffect(() => {
@@ -272,22 +273,23 @@ useEffect(() => {
       address1 = li.address1
       address2 = li.address2
       city = li.city
+      return null
     })
   
     setAddress1(address1)
     setAddress2(address2)
     setAddress3(city)
   }
-}, [apiUrl])
+}, [apiUrl,customeraddress])
 
 
 const fullAmount = parseInt(totalAmount) + parseInt(extraKmAmount)
 const cgst = totalAmount * 2.5 / 100
 const sgst = totalAmount * 2.5 / 100
-const FullAmount = totalAmount + cgst + sgst
 const park = parseInt(parking)
 const permitcharge = parseInt(permit)
 const parkpermit  = park + permitcharge
+const FullAmount = fullAmount + cgst + sgst + park + permitcharge
 const rupeestext = numWords(parseInt(FullAmount))
 return(
 <>
@@ -428,8 +430,8 @@ return(
 
 <View >
 <Text style={styles.total}>SUB TOTAL </Text>
-<Text style={styles.text2}>CGST 2.5% on {totalAmount}</Text>
-<Text style={styles.text2}>SGST 2.5% on {totalAmount}</Text>
+<Text style={styles.text2}>CGST 2.5% on {fullAmount}</Text>
+<Text style={styles.text2}>SGST 2.5% on {fullAmount}</Text>
 <Text style={styles.text2}>Parking & Permit</Text>
 <Text style={styles.text2}>Total Amount</Text>
 </View>

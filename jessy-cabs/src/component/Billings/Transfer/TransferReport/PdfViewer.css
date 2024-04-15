@@ -1,0 +1,95 @@
+iframe{
+    width: 100% !important;
+    /* height: 100% !important; */
+}
+
+.invoice-header{
+    display: flex !important;
+}
+
+
+
+/* pdf css */
+
+.pdf-content{
+    padding: 10px;
+}
+
+.contents-division{
+    border: 2px solid #000000 ;
+    padding: 10px;
+}
+.top-text{
+    margin: 1px !important;
+}
+.top-info{
+    display: flex;
+    justify-content: start;
+}
+.top-second{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tax-invoice{
+    padding: 2px;
+    text-align: center;
+    border: 2px solid #000000;
+    background-color: antiquewhite;
+    color: #000000;
+}
+
+.tax-invoice-paragraph{
+    margin: 2px;
+}
+
+.underline-text{
+    text-decoration: underline;
+}
+
+.second-text-division{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+table, th {
+    border:1px solid black;
+    
+    border-collapse: collapse;
+  }
+  
+  td{
+  border-right: 1px solid black ;
+  }
+
+  .bottom-division{
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+  }
+
+  .bottom-division-child{
+    display: flex;
+    gap: 20px;
+  }
+
+  .total-Amount{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .second-main{
+    border: 2px solid #000000;
+  }
+
+  .last-division{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .signature{
+    display: flex;
+    justify-content: end;
+  }

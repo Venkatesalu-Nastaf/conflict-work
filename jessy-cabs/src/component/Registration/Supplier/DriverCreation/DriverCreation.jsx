@@ -478,23 +478,25 @@ const DriverCreation = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "160px" }}>
-                                {selectedCustomerData?.driverid || book.driverid ? (
-                                    <Button color="primary" variant="contained" component="label">
-                                        aadhar card
-                                        <input
-                                            type="file"
-                                            style={{ display: "none" }}
-                                            onChange={(e) => setFile(e.target.files[0])}
-                                        />
-                                    </Button>
-                                ) : (
+                                {/* {selectedCustomerData?.driverid || book.driverid ? ( */}
+                                <Button color="primary" variant="contained" component="label">
+                                    aadhar card
+                                    <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => setFile(e.target.files[0])}
+
+                                    />
+                                </Button>
+
+                                {/* ) : (
                                     <Button color="primary" variant="contained" onClick={() => {
                                         setError(true);
                                         setErrorMessage("Please Enter Booking No");
                                     }}>
                                         aadhar card
                                     </Button>
-                                )}
+                                )} */}
                             </div>
                             <div className="input">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -601,23 +603,23 @@ const DriverCreation = () => {
                             </div>
                             <div className="input" style={{ width: "160px" }}>
 
-                                {selectedCustomerData?.driverid || book.driverid ? (
-                                    <Button color="primary" variant="contained" component="label">
-                                        License
-                                        <input
-                                            type="file"
-                                            style={{ display: "none" }}
-                                            onChange={(e) => setLicencepdf(e.target.files[0])}
-                                        />
-                                    </Button>
-                                ) : (
+                                {/* {selectedCustomerData?.driverid || book.driverid ? ( */}
+                                <Button color="primary" variant="contained" component="label">
+                                    License
+                                    <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => setLicencepdf(e.target.files[0])}
+                                    />
+                                </Button>
+                                {/* ) : (
                                     <Button color="primary" variant="contained" onClick={() => {
                                         setError(true);
                                         setErrorMessage("Please Enter Booking No");
                                     }}>
                                         License
                                     </Button>
-                                )}
+                                )} */}
 
                             </div>
                             <div className="input radio">

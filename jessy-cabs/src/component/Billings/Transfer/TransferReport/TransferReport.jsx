@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState} from 'react';
 import "./TransferReport.css";
-
+import { APIURL } from '../../../url';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -15,6 +15,9 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 import Mailpdf from './Mailpdf/Mailpdf';
+import PdfPage from './PdfPage';
+import { saveAs } from 'file-saver';
+import { PDFViewer, pdf } from '@react-pdf/renderer';
 
 //for popup
 import ClearIcon from '@mui/icons-material/Clear';
@@ -70,7 +73,7 @@ const TransferReport = () => {
 
   const {
     invoiceno,
-    grouptTripid,
+    groupTripid,
     fromDate,
     endDate,
     invoiceDate,
@@ -81,6 +84,8 @@ const TransferReport = () => {
     warning,
     successMessage,
     errorMessage,
+    setErrorMessage,
+    setError,
     warningMessage,
     handleClick,
     ratetypeforpage,
@@ -117,14 +122,108 @@ const TransferReport = () => {
     organizationgstnumber,
 
   } = useTransferreport();
+  const [invoicedata,setInvoicedata] = useState([])
+  const [addressDetails,setAddressDetails] = useState([])
+  const [loading, setLoading] = useState(false); // State for loading indicator
+  const apiUrl = APIURL;
+
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/customeraddress/${customer}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const addressdetail = await response.json();
+        setAddressDetails(addressdetail);
+      } catch (err) {
+        console.error('Error fetching customer address:', err);
+      }
+    };
+  
+    fetchdata();
+  }, [apiUrl, customer]);
+  
+  useEffect(()=>{
+    const fetchData = async () => {
+
+    try {
+        const tripid = localStorage.getItem("selectedtripsheetid");
+        const encoded = localStorage.getItem("selectedcustomerdata");
+        localStorage.setItem("selectedcustomer", encoded);
+        const storedCustomer = localStorage.getItem("selectedcustomer");
+        const customer = decodeURIComponent(storedCustomer);
+        const response = await fetch(
+          `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
+            customer
+          )}/${tripid}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const tripData = await response.json();
+        setInvoicedata(tripData)
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+fetchData()
+},[apiUrl])
+
+  const handleDownloadPdf = async () => {
+    const fileName = 'test.pdf';
+        const blob = await pdf(<PdfPage invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer}/>).toBlob();
+          saveAs(blob, fileName);
+
+  };
+  // const handleDownloadPdf = async () => {
+  //   try {
+  //     const fileName = 'test.pdf';
+  //     // Fetch data first
+  //     const tripid = localStorage.getItem("selectedtripsheetid");
+  //     const encoded = localStorage.getItem("selectedcustomerdata");
+  //     localStorage.setItem("selectedcustomer", encoded);
+  //     const storedCustomer = localStorage.getItem("selectedcustomer");
+  //     const customer = decodeURIComponent(storedCustomer);
+  //     const response = await fetch(
+  //       `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  //     const tripData = await response.json();
+  
+  //     // Then generate PDF
+  //     const pdfContent = <PdfPage invdata={tripData} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} />;
+  //     const blob = await pdf(pdfContent).toBlob();
+  //     saveAs(blob, fileName);
+  //   } catch (error) {
+  //     console.error('Error downloading PDF:', error);
+  //     setError(true)
+  //     setErrorMessage("Network Error")
+  //   }
+  // };
+  
+  
+
+  // const handleDownloadPdf = async()=>{
+  //     const doc = <Documents />;
+  //     const asPdf = pdf({}); // {} is important, throws without an argument
+  //     asPdf.updateContainer(doc);
+  //     const blob = await asPdf.toBlob();
+  //     saveAs(blob, 'document.pdf');
+  // }
+
 
   return (
     <div className="TransferReport-form Scroll-Style-hide">
+    
       <form >
         <div className="detail-container-main">
           <div className="container-left">
@@ -140,7 +239,7 @@ const TransferReport = () => {
                     label="GroupTrip Id"
                     name="referenceno"
                     autoComplete='off'
-                    value={grouptTripid}
+                    value={groupTripid}
                   />
                 </div>
                 <div className="input" style={{ width: "230px" }}>
@@ -364,7 +463,7 @@ const TransferReport = () => {
                           </Button>
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                            <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                            <MenuItem onClick={handleDownloadPdf}>PDF</MenuItem>
                             <MenuItem onClick={handlePdfDownload}>Both</MenuItem>
                           </Menu>
                         </React.Fragment>

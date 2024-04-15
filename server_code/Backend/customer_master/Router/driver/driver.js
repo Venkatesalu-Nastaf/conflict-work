@@ -75,14 +75,18 @@ router.post('/driver-pdf/:id', uploadfile.single("file"), async (req, res) => {
   const userId = req.params.id;
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
-  console.log(fileName,"driver pdf",fileName)
-  if(fileName){
-  const sql = `insert into driver_proof(driverid,fileName,file_type	)values(${userId},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-}
+  // console.log(fileName,"driver pdf",fileType,userId)
+  if (fileName) {
+
+    const sql = `insert into driver_proof(driverid,fileName,file_type	)values('${userId}','${fileName}','${fileType}')`;
+    db.query(sql, (err, result) => {
+      if (err) {
+
+        return res.json({ Message: "Error" });
+      }
+      return res.json({ Status: "success" });
+    })
+  }
 })
 
 //licence 
@@ -103,14 +107,14 @@ router.post('/driver-licencepdf/:id', uploadfileLicence.single("file"), async (r
   const userId = req.params.id
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
-  console.log(fileName,"fileanme driving license",fileType)
-   if(fileName) {
-  const sql = `insert into driver_proof(driverid,fileName,file_type)values(${userId},'${fileName}','${fileType}')`;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Message: "Error" });
-    return res.json({ Status: "success" });
-  })
-}
+  if (fileName) {
+    const sql = `insert into driver_proof(driverid,fileName,file_type)values('${userId}','${fileName}','${fileType}')`;
+    db.query(sql, (err, result) => {
+      if (err) return res.json({ Message: "Error" });
+      console.log(result, "license")
+      return res.json({ Status: "success" });
+    })
+  }
 })
 
 //pdf view -

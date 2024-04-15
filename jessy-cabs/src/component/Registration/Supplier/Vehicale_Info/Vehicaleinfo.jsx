@@ -43,7 +43,7 @@ import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 // import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 // import BatchPredictionIcon from '@mui/icons-material/BatchPrediction';
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
-import SummarizeTwoToneIcon from "@mui/icons-material/SummarizeTwoTone";
+// import SummarizeTwoToneIcon from "@mui/icons-material/SummarizeTwoTone";
 // import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
 // import AssignmentIndTwoToneIcon from "@mui/icons-material/AssignmentIndTwoTone";
@@ -99,6 +99,14 @@ export const GroupTypes = [
   },
   {
     Option: "Normal",
+    // optionvalue: "non_a/c",
+  },
+  {
+    Option: "Premium",
+    // optionvalue: "a/c",
+  },
+  {
+    Option: "Non-Premium",
     // optionvalue: "non_a/c",
   },
 ];

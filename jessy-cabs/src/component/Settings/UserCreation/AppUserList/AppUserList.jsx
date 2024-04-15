@@ -46,7 +46,7 @@ const AppUserList = () => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-AppUserList">
-              <div className="input-field">
+              <div className="input-field appuser-inputs">
                 <div className="input radio">
                   <FormControl>
                     <FormLabel style={{ textAlign: 'center' }} id="demo-row-radio-buttons-group-label">

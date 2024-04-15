@@ -1,0 +1,25 @@
+.permission-table{
+    width: -webkit-fill-available;
+}
+.td-content{
+    text-align: center;
+}
+
+.table-header > .th-content{
+    text-align: center;
+    background-color: #fff8f0;
+}
+
+.table-container{
+    overflow-x: scroll;
+}
+
+@media only screen and (max-width:900px){
+   .search-profile{
+    display: flex;
+    flex-wrap: wrap; 
+justify-content:center;
+} 
+    
+    
+}

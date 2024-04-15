@@ -3,7 +3,7 @@
   width: 100%;
   overflow-x: hidden;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   color: #000;
 }
 
@@ -11,6 +11,7 @@
 .EmployeeCreation-main .EmployeeCreation-form-container {
   overflow: scroll;
   height: 75vh;
+  /* width: 81vw; */
   width: 81vw;
   display: flex;
   flex-direction: column;
@@ -55,4 +56,68 @@
   height: 400px;
   width: 100%;
   overflow: hidden;
+}
+
+.employee-creation-inputfeilds{
+  flex-wrap: wrap;
+}
+
+@media screen  and (max-width: 767.99px){
+  .EmployeeCreation-main .EmployeeCreation-form-container {
+    overflow: scroll;
+    height: 75vh;
+    /* width: 81vw; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    color: #000;
+    background-color: var(--glass);
+  }
+}
+
+
+.add-icon{
+  position: relative;
+  right: 30px;
+  height: 10px !important;
+
+}
+
+
+@media only screen and (min-width: 850px) and (max-width: 1230px) {
+  .add-icon{
+    position: relative !important;
+    right: 100px !important;
+    height: 60px !important;
+  
+  }
+  
+}
+
+@media only screen and (min-width: 768.99px) and (max-width: 849.99px) {
+ .add-icon{
+    position: relative !important;
+    right: 150px !important;
+    height: 60px !important;
+  
+  }
+  
+}
+
+.user-table-permission{
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.search-profile{
+  display: flex;
+}
+.user-name-text{
+  margin: 0px;
+}
+
+.user-details-text{
+  margin: 0px;
+  width: 200px;
 }

@@ -120,7 +120,7 @@ const UserSetting = () => {
                       disabled={!editMode}
                     />
                   </div>
-                  <div className="input" style={{ width: "300px" }}>
+                  <div className="input" style={{ width: "240px" }}>
                     <div className="icone">
                       <WorkspacePremiumIcon color="action" />
                     </div>
@@ -263,7 +263,7 @@ const UserSetting = () => {
                       />
                     </FormControl>
                   </div>
-                  <div className="input" style={{ width: "300px" }}>
+                  <div className="input" style={{ width: "240px" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faLock} size="lg" />
                     </div>

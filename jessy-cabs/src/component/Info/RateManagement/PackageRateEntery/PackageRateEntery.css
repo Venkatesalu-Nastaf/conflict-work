@@ -91,3 +91,32 @@
     background-color: #457cdc;
     /* Adjust color as needed */
 }
+
+.buttons-inputs{
+    display: flex;
+    gap: 10px;
+}
+
+.feild-inputs{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+.first{
+    display: flex;
+    gap :10px;
+}
+
+.add-details{
+    margin-top: 20px;
+}
+
+
+.icon-cancel{
+    font-size: 25px;
+    color: rgb(186, 19, 19);
+}
+
+.cancel-icon{
+    margin-left: 10px;
+}

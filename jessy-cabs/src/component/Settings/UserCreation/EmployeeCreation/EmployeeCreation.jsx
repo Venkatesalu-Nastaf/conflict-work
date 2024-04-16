@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./EmployeeCreation.css";
 import Box from "@mui/material/Box";
 import Input from '@mui/material/Input';
@@ -14,6 +14,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { StationName } from "./EmployeeCreationData";      //Branch Name
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import Avatar from "../../../../assets/img/avatar.png"
+import {UserPermission} from '../../../UserPermission/UserPermission'
+
+//material ui
+import { AiOutlineSearch } from 'react-icons/ai';
 
 // FONTAWESOME
 // import { faLock } from "@fortawesome/free-solid-svg-icons";
@@ -95,12 +100,31 @@ const EmployeeCreation = () => {
     }
   }, [actionName, handleClick]);
 
+
+
+  // for search input
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    // Perform search logic or update search results here
+  };
+
+  //  for showing table
+  const [showPermission, setShowPermission] = useState(false);
+
+  const togglePermission = () => {
+    setShowPermission(!showPermission);
+  };
+  //table completed
+
   return (
     <div className="EmployeeCreation-main">
       <div className="EmployeeCreation-form-container">
         <form onSubmit={handleClick}>
           <div className="EmployeeCreation-header">
-            <div className="input-field">
+            <div className="input-field employee-creation-inputfeilds">
               <div className="input">
                 <div className="icone">
                   <BadgeIcon color="action" />
@@ -154,7 +178,7 @@ const EmployeeCreation = () => {
                   }
                 />
               </div>
-              <div className="input" style={{ width: "330px" }}>
+              <div className="input" style={{ width: "200px" }}>
                 <div className="icone">
                   <ListAltIcon color="action" />
                 </div>
@@ -168,7 +192,7 @@ const EmployeeCreation = () => {
                 // variant="standard"
                 />
               </div>
-              <div className="input" style={{ width: "330px" }}>
+              <div className="input" style={{ width: "200px" }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -182,8 +206,8 @@ const EmployeeCreation = () => {
                   variant="standard"
                 />
               </div>
-            </div>
-            <div className="input-field">
+
+
               <div className="input" style={{ width: "240px" }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
@@ -269,6 +293,9 @@ const EmployeeCreation = () => {
                 )}
               </div>
             </div>
+            {/* <div className="input-field employee-creation-inputfeilds">
+            
+            </div> */}
           </div>
           {error &&
             <div className='alert-popup Error' >
@@ -299,11 +326,13 @@ const EmployeeCreation = () => {
             </div>
           }
 
-          <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <Box sx={{ mt: 3, }}
+            className="add-icon">
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
               direction="left"
+
             >
               {actions.map((action) => (
                 <SpeedDialAction
@@ -315,7 +344,78 @@ const EmployeeCreation = () => {
               ))}
             </StyledSpeedDial>
           </Box>
+
+
+
+
+
+
+
+
+
+
+
           <div className="EmployeeCreation-table-container">
+            <div className='search-profile'>
+
+              <div className="search-input-container">
+
+                <TextField
+                  id="search-input"
+                  label="Search"
+                  variant="outlined"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  InputProps={{
+                    endAdornment: <AiOutlineSearch />,
+                  }}
+                />
+<div>
+
+                  <div className='user-table-permission'  onClick={togglePermission}>
+                        <img src={Avatar} alt="profile" width="50"/>
+                      <div>
+                        <h3 className="user-name-text">Ajay</h3>
+                        <p className="user-details-text">frontend Developer</p>
+                      </div>
+                </div>
+
+                <div className='user-table-permission'>
+                        <img src={Avatar} alt="profile" width="50"/>
+                      <div>
+                        <h3 className="user-name-text">Ajay</h3>
+                        <p className="user-details-text">frontend Developer</p>
+                      </div>
+                </div>
+
+                <div className='user-table-permission'>
+                        <img src={Avatar} alt="profile" width="50"/>
+                      <div>
+                        <h3 className="user-name-text">Ajay</h3>
+                        <p className="user-details-text">frontend Developer</p>
+                      </div>
+                </div>
+
+                <div className='user-table-permission'>
+                        <img src={Avatar} alt="profile" width="50"/>
+                      <div>
+                        <h3 className="user-name-text">Ajay</h3>
+                        <p className="user-details-text">frontend Developer</p>
+                      </div>
+                </div>
+</div>
+          
+    
+
+         
+              </div>
+
+
+           {showPermission && <UserPermission />}
+
+
+            </div>
+
             <div className="table-EmployeeCreations">
               <DataGrid
                 rows={rows}

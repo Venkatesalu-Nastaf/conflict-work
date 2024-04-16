@@ -30,7 +30,7 @@ function CompactCard({ param, setExpanded }) {
   const Png = param.png;
   return (
     <div >
-      {(
+      {/* {(
         <div className="loading-spinners">
           <motion.div
             className="CompactCard"
@@ -55,7 +55,8 @@ function CompactCard({ param, setExpanded }) {
             </div>
           </motion.div>
         </div>
-      )}
+      )} */}
+     
       {(
         <motion.div
           className="CompactCard"

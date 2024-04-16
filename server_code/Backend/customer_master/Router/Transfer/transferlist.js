@@ -33,18 +33,67 @@ router.get('/payment-detail', (req, res) => {
   });
 });
 
-router.get('/tripsheetcustomertripid/:customer/:tripid', (req, res) => {
+router.get('/tripsheetcustomertripid/:customer/:tripid', async(req, res) => {
   const customer = req.params.customer;
   const tripid = req.params.tripid.split(',');
+
   const decodedCustomer = decodeURIComponent(customer);
   db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?)', [decodedCustomer, tripid], (err, result) => {
     if (err) {
+      
       return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
     }
     if (result.length === 0) {
       return res.status(404).json({ error: 'Tripsheet not found' });
     }
+
+    let vehtypes = result.map(obj => obj.vehType);
+    db.query('select vehiclename, fueltype ,segement ,Groups from vehicleinfo where vehiclename IN (?)',[vehtypes],(err,result1)=>{
+      if (err) {
+  
+        return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
+      }
+      if (result1.length === 0) {
+        return res.status(404).json({ error: 'Tripsheet not found' });
+      }
+      const vehicleDataMap = {};
+      result1.forEach(row => {
+        vehicleDataMap[row.vehiclename] = { fueltype: row.fueltype, segement: row.segement,Groups:row.Groups };
+
+      });
+      // console.log(vehicleDataMap,"map")
+      db.query('select customer,gstTax from customers where customer=?',[customer],(err,result2)=>{
+        if (err) {
+          return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
+        }
+        if (result2.length === 0) {
+
+          return res.status(404).json({ error: 'customer not found' });
+        }
+      
+   
+         result2.forEach(row=>{
+          // vehicleDataMap[row.customer]={gsttax:row.gstTax}
+          vehicleDataMap[row.customer] = {  gsttax: row.gstTax };
+
+         })
+
+      // })
+
+      // Add fueltype to each object in the result array
+      result.forEach(obj => {
+        const vehicleData = vehicleDataMap[obj.vehType];
+        const customerdetails=vehicleDataMap[obj.customer];
+        obj.fueltype = vehicleData ? vehicleData.fueltype : 'Unknown'; // Set default value if fueltype not found
+        obj.segement = vehicleData ? vehicleData.segement : 'Unknown';
+        obj.Groups=vehicleData ?  vehicleData.Groups :'unknown';
+        obj.gstTax=customerdetails?customerdetails.gsttax:'unknown'
+      });
+  
+    
     return res.status(200).json(result);
+      })
+    })
   });
 });
 

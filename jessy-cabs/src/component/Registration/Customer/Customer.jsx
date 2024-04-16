@@ -468,11 +468,17 @@ const Customer = () => {
               </div>
               <div className="input dropdown">
                 <label htmlFor="">GST</label>
-                <select name="" id="">
+                {/* <select name="" id="">
                   <option value="">None</option>
                   <option value="">5%</option>
                   <option value="">12.5%</option>
-                </select>
+                </select> */}
+                <select name="gstTax"  value={selectedCustomerData.gstTax|| book.gstTax} onChange={handleChange}>
+                                        {/* <option value="" disabled>Select GST</option> */}
+                                        <option value="" >None</option>
+                                        <option value="5%">5%</option>
+                                        <option value="12.5%">12.5%</option>
+                                    </select>
               </div>
             </div>
           </div>

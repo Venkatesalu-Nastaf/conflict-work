@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import dayjs from "dayjs";
@@ -259,6 +259,7 @@ const useCustomer = () => {
         setSelectedCustomerData({});
         setIsEditMode(false);
     };
+    
 
     const handleRowClick = useCallback((params) => {
         const customerData = params.row;
@@ -294,6 +295,7 @@ const useCustomer = () => {
             ...selectedCustomerData,
             date: selectedCustomerData?.date ? dayjs(selectedCustomerData?.date) : null,
         };
+    
         await axios.put(`${apiUrl}/customers/${book.customerId || selectedCustomerData.customerId}`, updatedCustomer);
         handleCancel();
         setRows([]);

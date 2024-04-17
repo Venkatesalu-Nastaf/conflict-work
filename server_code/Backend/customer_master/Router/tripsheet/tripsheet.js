@@ -904,14 +904,11 @@ router.get(`/t4hr-pack`, (req, res) => {
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;
-    console.log(totalHours, vehicletype, duty, totkm, OrganizationName)
 
     if (!totalHours || !vehicletype || !duty || !totkm || !OrganizationName) {
         res.status(400).json({ error: 'Missing required parameters' });
         return;
     }
-
-    // const sql = `SELECT * FROM ratemanagement WHERE duty = ? AND vehicleType = ? AND (? <= UptoHours) AND (? <= UptoKMS) ORDER BY UptoHours limit 1`;
 
     const sql = `SELECT * 
                     FROM ratemanagement
@@ -925,21 +922,16 @@ router.get(`/t4hr-pack`, (req, res) => {
     // Execute the query with dynamic parameters 
     db.query(sql, [duty, vehicletype, OrganizationName, totalHours, totkm, duty, vehicletype, OrganizationName], (error, results) => {
         if (error) {
-            console.error('Error fetching data:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
-
         }
 
         // Check if any rows were returned
         if (results.length === 0) {
-            console.log(results)
             return res.status(404).json({ error: 'No data found' });
-
         }
 
         // Send the fetched row in the response
         res.json(results[0]);
-        console.log(results)
     });
 });
 

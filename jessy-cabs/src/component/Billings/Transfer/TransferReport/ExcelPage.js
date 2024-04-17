@@ -3,14 +3,15 @@ import { useState, useEffect } from "react";
 // import axios from "axios";
 import Excel from 'exceljs';
 import { saveAs } from "file-saver";
+import dayjs from 'dayjs';
 
 
 
 
 const useExeclpage = () => {
     // const [misformat,setMisformat]=useState('')
-    const [error1,setError1]=useState(false)
-    const [errormessage1,setErrorMessage1]=useState({})
+    const [error1, setError1] = useState(false)
+    const [errormessage1, setErrorMessage1] = useState({})
     const columns2 = [
         { key: "SNo", header: "Ref", width: 130 },
         { key: "department", header: "Hub Location", width: 150 },
@@ -37,7 +38,7 @@ const useExeclpage = () => {
         { key: "starttime1", header: "Shift Timing", width: 150 },
         { key: "UserNos_Occupancy", header: "User Nos / Occupancy", width: 180 },
         { key: "location", header: "Location", width: 120 },
-        
+
         { key: "Groups", header: "Vehicle Category", width: 150 },
         { key: "remark", header: "Route Type (Pick/Drop)", width: 180 },
         { key: "starttime", header: "Garage Initial Time", width: 180 },
@@ -117,42 +118,37 @@ const useExeclpage = () => {
 
     useEffect(() => {
         if (error1) {
-          const timer = setTimeout(() => {
-            hidePopup();
-          }, 3000);
-          return () => clearTimeout(timer);
+            const timer = setTimeout(() => {
+                hidePopup();
+            }, 3000);
+            return () => clearTimeout(timer);
         }
-      }, [error1]);
-      const hidePopup = () => {
+    }, [error1]);
+    const hidePopup = () => {
 
         setError1(false);
 
 
-      };
+    };
 
 
 
 
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
-    const workBookName = 'MyWorkBook';
 
-    const handleExcelDownload = async (misformat, invoice) => {
-        // console.log(misformat, invoice, "mis")
+
+    const handleExcelDownload = async (misformat, invoice, invoicedate) => {
         const data = invoice;
 
-
-           if(!misformat){
+        if (!misformat) {
             setError1(true)
             setErrorMessage1(" SELECT MIS  EXCEL FORMAT")
             return
-           }
+        }
         if (misformat === "Old MIS") {
             try {
-                // console.log(misformat, "misenterold")
-
-                const fileName = workBookName;
-
+                const fileName = `OLD MIS ${dayjs(invoicedate).format(" MMMM D")}`
                 // creating one worksheet in workbook
                 const worksheet = workbook.addWorksheet(workSheetName);
                 worksheet.columns = columns2;
@@ -165,7 +161,7 @@ const useExeclpage = () => {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
-                        fgColor: { argb: 'FF00FF00' } // Green background color
+                        fgColor: { argb: '9BB0C1' } // Green background color
                     };
                 });
 
@@ -186,16 +182,12 @@ const useExeclpage = () => {
                     singleData["duty1"] = singleData["duty"]
                     singleData["Vendor"] = " Jesscy Cabs"
                     singleData["VendorName"] = " Jesscy Cabs"
-                    singleData["vechicletype"]=singleData["vehType"]
-                    singleData["vehTypebilling"]=singleData["vehType"]
-                    singleData["totalkm2"]=singleData["totalkm1"]
-                    singleData["Gender"]=singleData["gender"]?singleData["gender"]:"N/A"
-                    singleData["EscortRoute"]=singleData["escort"]?singleData["escort"]:'N/A'
-                    singleData["starttime1"]=singleData["starttime"]
-                    // singleData[]
-                    // console.log(index, "misexcel", singleData)
-                    // Add row to worksheet
-                    // console.log(singleData,"misdata")
+                    singleData["vechicletype"] = singleData["vehType"]
+                    singleData["vehTypebilling"] = singleData["vehType"]
+                    singleData["totalkm2"] = singleData["totalkm1"]
+                    singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
+                    singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
+                    singleData["starttime1"] = singleData["starttime"]
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -219,8 +211,6 @@ const useExeclpage = () => {
 
                     // loop through currentCell to apply border only for the non-empty cell of excel
                     currentCell.forEach((singleCell) => {
-                        // store the cell address i.e. A1, A2, A3, B1, B2, B3, ...
-                        // console.log(singleCell, "ad")
                         const cellAddress = singleCell._address;
 
                         // apply border
@@ -249,10 +239,8 @@ const useExeclpage = () => {
 
         else if (misformat === "New MIS") {
             try {
-                // console.log(misformat, "misenternew")
 
-                const fileName = workBookName;
-
+                const fileName = `MIS ${dayjs(invoicedate).format(" MMMM D")}`
                 // creating one worksheet in workbook
                 const worksheet = workbook.addWorksheet(workSheetName);
                 worksheet.columns = columns;
@@ -281,20 +269,17 @@ const useExeclpage = () => {
                     singleData["SNo"] = index + 1;
                     const location = `${singleData.address1}, ${singleData.streetno}, ${singleData.city}`;
                     singleData['location'] = location
-                    singleData["Gender"]=singleData["gender"]?singleData["gender"]:"N/A"
-                    singleData["EscortRoute"]=singleData["escort"]?singleData["escort"]:'N/A'
+                    singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
+                    singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
                     singleData["VendorName"] = " Jesscy Cabs"
-                    singleData["vehType1"]=singleData["vehType"]
-                    singleData["PickupPoint_Shed"]=singleData["pickup"]
-                    singleData["Zonetranfer"]=singleData["department"]?` ${singleData["department"]}-Airport Transfer`:""
-                    singleData["timeluxury"]=singleData["Groups"] === "Luxzury"?singleData["starttime"]:"00.00"
-                    singleData["Endtimeluxury"]=singleData["Groups"] === "Luxzury"?singleData["shedintime"]:"00.00" 
-                    singleData["totaltime1"]=singleData["totaltime"]
-                    singleData["opsremark"]=singleData["opsremark"]?singleData["Opremark"]:''
+                    singleData["vehType1"] = singleData["vehType"]
+                    singleData["PickupPoint_Shed"] = singleData["pickup"]
+                    singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
+                    singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
+                    singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
+                    singleData["totaltime1"] = singleData["totaltime"]
+                    singleData["opsremark"] = singleData["opsremark"] ? singleData["Opremark"] : ''
 
-                    // console.log(index,"misexcel")
-                    // console.log(index, "misexcel", singleData)
-                    // Add row to worksheet
                     worksheet.addRow(singleData);
 
                     // Adjust column width based on the length of the cell values in the added row
@@ -308,9 +293,6 @@ const useExeclpage = () => {
                     });
                 });
 
-
-
-
                 // loop through all of the rows and set the outline style.
                 worksheet.eachRow({ includeEmpty: false }, (row) => {
                     // store each cell to currentCell
@@ -318,8 +300,7 @@ const useExeclpage = () => {
 
                     // loop through currentCell to apply border only for the non-empty cell of excel
                     currentCell.forEach((singleCell) => {
-                        // store the cell address i.e. A1, A2, A3, B1, B2, B3, ...
-                        // console.log(singleCell, "ad")
+
                         const cellAddress = singleCell._address;
 
                         // apply border
@@ -331,7 +312,6 @@ const useExeclpage = () => {
                         };
                     });
                 });
-
                 // write the content using writeBuffer
                 const buf = await workbook.xlsx.writeBuffer();
 
@@ -350,7 +330,7 @@ const useExeclpage = () => {
     }
 
     return {
-        handleExcelDownload,error1,errormessage1
+        handleExcelDownload, error1, errormessage1
     }
 
 }

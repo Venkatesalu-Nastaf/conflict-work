@@ -320,16 +320,11 @@ const useTripsheet = () => {
         } else {
             setIsEditMode(false);
         }
-        console.log("params12", formData)
+
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
 
         formData['status'] = statusValue;
-        // formData['smsguest'] = bookingsmsValue;
-        // formData['booker'] = sendemailValue;
-        // formData['emailcheck'] = emailcheckValue;
-        // formData['DriverSMS'] = DriverSMSValue;
-        // formData['gps'] = gpsValue;
         formData['apps'] = appsValue;
         setTripSheetData(formData);
         setBook(formData);
@@ -955,23 +950,6 @@ const useTripsheet = () => {
         }
     };
 
-    // const calculateTotalTime = useCallback(() => {
-    //     const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
-    //     const closeTime = formData.closetime || selectedCustomerData.closetime || book.closetime;
-    //     if (startTime && closeTime) {
-    //         const startTimeObj = dayjs(startTime, 'HH:mm');
-    //         const closeTimeObj = dayjs(closeTime, 'HH:mm');
-    //         let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
-    //         const additionalTimeValue = parseInt(additionalTime.additionaltime) || parseInt(formData.additionaltime) || parseInt(selectedCustomerData.additionaltime) || parseInt(book.additionaltime);
-    //         if (!isNaN(additionalTimeValue)) {
-    //             totalTimeMinutes += additionalTimeValue * 60;
-    //         }
-    //         const hours = Math.floor(totalTimeMinutes / 60);
-    //         const minutes = totalTimeMinutes % 60;
-    //         return `${hours}h ${minutes}m`;
-    //     }
-    //     return '';
-    // }, [formData, selectedCustomerData, book, additionalTime]);
 
     const calculateTotalTime = useCallback(() => {
         const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
@@ -994,7 +972,7 @@ const useTripsheet = () => {
                 const additionalMinutesValue = minutesMatch ? parseInt(minutesMatch[1]) : 0;
                 additionalMinutes += additionalMinutesValue;
             }
-            console.log(additionalMinutes, "minadd")
+
             totalTimeMinutes += additionalMinutes;
             const hours = Math.floor(totalTimeMinutes / 60);
             const minutes = totalTimeMinutes % 60;
@@ -1712,18 +1690,6 @@ const useTripsheet = () => {
             const total = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll) + Number(customer_advance);
             const convetTotal = Math.ceil(total)
             setTotalcalcAmount(Number(convetTotal));
-            console.log("total2", typeof (total), total)
-            // console.log("total2 package_amount", typeof (package_amount)); // "number"
-            // console.log("total2 ex_hrAmount", typeof (ex_hrAmount)); // "number"
-            // console.log("total2 ex_kmAmount", typeof (ex_kmAmount)); // "number"
-            // console.log("total2 night_totalAmount", typeof (night_totalAmount)); // "number"
-            // console.log("total2 driverBeta_amount", typeof (driverBeta_amount)); // "number"
-            // console.log("total2 customer_advance", typeof (customer_advance), typeof (Number(customer_advance))); // "number"
-            // console.log("total2 parking", typeof (parking)); // "number"
-            // console.log("total2 permit", typeof (permit)); // "number"
-            // console.log("total2 toll", typeof (toll)); // "number"
-            // console.log("total2 v_permit_vendor", typeof (v_permit_vendor)); // "string"
-            // console.log("total2 vender_toll", typeof (vender_toll)); // "string"
         }
         totalAmountCalc()
     }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll, v_permit_vendor, vender_toll])
@@ -1793,7 +1759,6 @@ const useTripsheet = () => {
 
                 totalHours = await convertTimeToNumber(tothr);
                 const consvertedTotalHour = parseFloat(totalHours.toFixed(2))
-                console.log("data7_datas", duty, vehiletype, tothr, totkm)
 
                 const response = await axios.get(`${apiUrl}/t4hr-pack`, {
                     params: {
@@ -1805,7 +1770,6 @@ const useTripsheet = () => {
                     }
                 });
                 data = response.data;
-                console.log("data7", data)
 
                 const packages = data.package;
                 const Hours = Number(data.Hours);
@@ -1816,14 +1780,10 @@ const useTripsheet = () => {
                 const NHalt = Number(data.NHalt);
                 const Bata = Number(data.Bata);
 
-                // console.log("aaaa", totalHours, typeof (consvertedTotalHour), typeof (Hours))
-
                 if (consvertedTotalHour > Hours) {
-                    // console.log("aaaa1", consvertedTotalHour, Hours, typeof (consvertedTotalHour), typeof (Hours));
+
                     let time = consvertedTotalHour - Hours;
-                    // console.log("aaaa2", time, typeof (time));
                     const convertedTime = Number(time.toFixed(2))
-                    console.log("aaaaa", convertedTime, typeof (convertedTime))
                     setExtraHR(convertedTime);
                 }
 

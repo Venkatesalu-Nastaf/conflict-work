@@ -44,7 +44,7 @@ router.put('/customers/:customerId', (req, res) => {
 
 router.get('/customeraddress/:customername',(req,res)=>{
   const customername = req.params.customername;
-  db.query('select address1,address2,city from customers where customer = ?',[customername],(err,result)=>{
+  db.query('select address1,address2,city,gstnumber from customers where customer = ?',[customername],(err,result)=>{
     if(err){
       return res.status(500).json({ error: 'Failed to get data in MySQL' });
     }

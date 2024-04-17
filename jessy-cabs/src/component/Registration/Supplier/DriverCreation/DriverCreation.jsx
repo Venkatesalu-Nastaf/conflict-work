@@ -57,7 +57,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 // import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import useDrivercreation from './useDrivercreation';
 import { APIURL } from "../../../url";
-import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -122,8 +122,8 @@ const DriverCreation = () => {
         handleimagedelete,
         handleClosedeleteDialog,
         dialogdeleteOpen,
-        setError,
-        setErrorMessage,
+        // setError,
+        // setErrorMessage,
         handlecheckbox,
         deletefile,
         Deleted,
@@ -805,7 +805,7 @@ const DriverCreation = () => {
                                     </Button>                                    {Array.isArray(allFile) && allFile.map((img, index) => (
                                         <div key={index} style={{ borderBottom: '1px solid black' }} >
                                             {img.file_type === "image/jpg" || img.file_type === "image/jpeg" || img.file_type === "image/png" || img.file_type === "image/gif" || img.file_type === "image/svg"
-                                                ? <img src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" /> :
+                                                ? <img src={`${apiUrl}/public/driver_doc/` + img.fileName} alt="driverimage" type="application/pdf" width="100%" height="400px" /> :
                                                 <embed src={`${apiUrl}/public/driver_doc/` + img.fileName} type="application/pdf" width="100%" height="400px" />}
 
 

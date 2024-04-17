@@ -39,7 +39,7 @@ const TransferList = () => {
         handleClick,
         hidePopup,
         customer,
-        bankOptions,
+        // bankOptions,
         setCustomer,
         fromDate,
         setFromDate,

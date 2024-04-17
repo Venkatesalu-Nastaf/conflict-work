@@ -32,6 +32,7 @@ const useTransferreport = () => {
   const [warningMessage] = useState({});
   const [popupOpen, setPopupOpen] = useState(false);
   const [misformat,setMisformat]=useState('')
+  const [pdfBillList,setPdfBillList] = useState('')
   const location = useLocation()
   
 
@@ -489,7 +490,10 @@ const useTransferreport = () => {
     endDate,
     customer,
     invoiceDate,
-    misformat,setMisformat
+    misformat,
+    setMisformat,
+    pdfBillList,
+    setPdfBillList
   };
 };
 

@@ -767,23 +767,10 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div>
+
+
               <div className="input radio">
-                {/* <FormControlLabel
-                  id="DriverSMS"
-                  value="DriverSMS"
-                  control={
-                    <Checkbox
-                      size="small"
-                      checked={DriverSMS || formData.DriverSMS || book.DriverSMS}
-                      onChange={(event) => {
-                        setBook({ ...book, DriverSMS: event.target.checked });
-                        setFormData({ ...formData, DriverSMS: event.target.checked });
-                        setDriverSMS(event.target.checked);
-                      }}
-                    />
-                  }
-                  label="Driver SMS"
-                /> */}
+
                 <FormControlLabel
                   value="DriverSMS"
                   control={

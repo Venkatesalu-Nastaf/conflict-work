@@ -275,6 +275,8 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
+
+
         const statusValue = params.get('status') || 'Opened';
         const request = params.get('request') || "";
         setRequest(request);
@@ -318,7 +320,7 @@ const useTripsheet = () => {
         } else {
             setIsEditMode(false);
         }
-
+        console.log("params12", formData)
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
 
@@ -953,6 +955,24 @@ const useTripsheet = () => {
         }
     };
 
+    // const calculateTotalTime = useCallback(() => {
+    //     const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
+    //     const closeTime = formData.closetime || selectedCustomerData.closetime || book.closetime;
+    //     if (startTime && closeTime) {
+    //         const startTimeObj = dayjs(startTime, 'HH:mm');
+    //         const closeTimeObj = dayjs(closeTime, 'HH:mm');
+    //         let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
+    //         const additionalTimeValue = parseInt(additionalTime.additionaltime) || parseInt(formData.additionaltime) || parseInt(selectedCustomerData.additionaltime) || parseInt(book.additionaltime);
+    //         if (!isNaN(additionalTimeValue)) {
+    //             totalTimeMinutes += additionalTimeValue * 60;
+    //         }
+    //         const hours = Math.floor(totalTimeMinutes / 60);
+    //         const minutes = totalTimeMinutes % 60;
+    //         return `${hours}h ${minutes}m`;
+    //     }
+    //     return '';
+    // }, [formData, selectedCustomerData, book, additionalTime]);
+
     const calculateTotalTime = useCallback(() => {
         const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
         const closeTime = formData.closetime || selectedCustomerData.closetime || book.closetime;
@@ -960,10 +980,22 @@ const useTripsheet = () => {
             const startTimeObj = dayjs(startTime, 'HH:mm');
             const closeTimeObj = dayjs(closeTime, 'HH:mm');
             let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
-            const additionalTimeValue = parseInt(additionalTime.additionaltime) || parseInt(formData.additionaltime) || parseInt(selectedCustomerData.additionaltime) || parseInt(book.additionaltime);
-            if (!isNaN(additionalTimeValue)) {
-                totalTimeMinutes += additionalTimeValue * 60;
+            let additionalMinutes = 0;
+
+            // Parse additional time value if available
+            const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
+            if (additionalTimeValue) {
+                const hoursMatch = additionalTimeValue.match(/(\d+)h/);
+                const minutesMatch = additionalTimeValue.match(/(\d+)m/);
+                const additionalHours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+                const additionalMinutesFromHours = additionalHours * 60;
+                additionalMinutes += additionalMinutesFromHours;
+
+                const additionalMinutesValue = minutesMatch ? parseInt(minutesMatch[1]) : 0;
+                additionalMinutes += additionalMinutesValue;
             }
+            console.log(additionalMinutes, "minadd")
+            totalTimeMinutes += additionalMinutes;
             const hours = Math.floor(totalTimeMinutes / 60);
             const minutes = totalTimeMinutes % 60;
             return `${hours}h ${minutes}m`;
@@ -1610,12 +1642,12 @@ const useTripsheet = () => {
 
     //-----------------------------------------------extra amounts 
 
-    let v_permit_vendor = formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || 0;
-    let permit = formData.permit || selectedCustomerData.permit || book.permit || 0;
-    let parking = formData.parking || selectedCustomerData.parking || book.parking || 0;
-    let toll = formData.toll || selectedCustomerData.toll || book.toll || 0;
-    let vender_toll = formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || 0;
-    let customer_advance = formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || 0;
+    let v_permit_vendor = Number(formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || 0);
+    let permit = Number(formData.permit || selectedCustomerData.permit || book.permit || 0);
+    let parking = Number(formData.parking || selectedCustomerData.parking || book.parking || 0);
+    let toll = Number(formData.toll || selectedCustomerData.toll || book.toll || 0);
+    let vender_toll = Number(formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || 0);
+    let customer_advance = Number(formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || 0);
 
     //--------------------------------------------------------------------------
     // convert time into hours  
@@ -1637,6 +1669,9 @@ const useTripsheet = () => {
             }
             else if (nightBta) {
                 setnight_totalAmount(Number(nightBta))
+            }
+            else {
+                setnight_totalAmount()
             }
         }
         calcdata();
@@ -1660,6 +1695,8 @@ const useTripsheet = () => {
 
             } else if (driverBeta) {
                 setdriverBeta_amount(Number(driverBeta))
+            } else {
+                setdriverBeta_amount()
             }
         }
         calcdata();
@@ -1668,12 +1705,25 @@ const useTripsheet = () => {
 
     //------------total amount calculations 
 
-    let [totalcalcAmount, setTotalcalcAmount] = useState()
+    let [totalcalcAmount, setTotalcalcAmount] = useState(0)
+
     useEffect(() => {
         const totalAmountCalc = () => {
             const total = Number(package_amount) + Number(ex_hrAmount) + Number(ex_kmAmount) + Number(night_totalAmount) + Number(driverBeta_amount) + Number(v_permit_vendor) + Number(permit) + Number(parking) + Number(toll) + Number(vender_toll) + Number(customer_advance);
-            setTotalcalcAmount(total);
-
+            const convetTotal = Math.ceil(total)
+            setTotalcalcAmount(Number(convetTotal));
+            console.log("total2", typeof (total), total)
+            // console.log("total2 package_amount", typeof (package_amount)); // "number"
+            // console.log("total2 ex_hrAmount", typeof (ex_hrAmount)); // "number"
+            // console.log("total2 ex_kmAmount", typeof (ex_kmAmount)); // "number"
+            // console.log("total2 night_totalAmount", typeof (night_totalAmount)); // "number"
+            // console.log("total2 driverBeta_amount", typeof (driverBeta_amount)); // "number"
+            // console.log("total2 customer_advance", typeof (customer_advance), typeof (Number(customer_advance))); // "number"
+            // console.log("total2 parking", typeof (parking)); // "number"
+            // console.log("total2 permit", typeof (permit)); // "number"
+            // console.log("total2 toll", typeof (toll)); // "number"
+            // console.log("total2 v_permit_vendor", typeof (v_permit_vendor)); // "string"
+            // console.log("total2 vender_toll", typeof (vender_toll)); // "string"
         }
         totalAmountCalc()
     }, [package_amount, ex_hrAmount, ex_kmAmount, night_totalAmount, driverBeta_amount, customer_advance, parking, permit, toll, v_permit_vendor, vender_toll])
@@ -1724,7 +1774,7 @@ const useTripsheet = () => {
 
     // calc function
 
-    let data, hrs, kms, totkm, tothr, totalHours, duty, vehiletype;
+    let data, totkm, tothr, totalHours, duty, vehiletype, organizationname;
     const handleCalc = async () => {
         try {
 
@@ -1732,75 +1782,85 @@ const useTripsheet = () => {
             vehiletype = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
             totkm = await (formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
             tothr = await (formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || '');
+            organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
 
-            if (totkm && tothr) {
+            if (!totkm || !tothr || !duty || !vehiletype || !organizationname) {
+                setError(true);
+                setErrorMessage("Check Hour & KM & duty and vehiletype.! ")
+                return;
+
+            } else {
+
                 totalHours = await convertTimeToNumber(tothr);
+                const consvertedTotalHour = parseFloat(totalHours.toFixed(2))
+                console.log("data7_datas", duty, vehiletype, tothr, totkm)
+
                 const response = await axios.get(`${apiUrl}/t4hr-pack`, {
                     params: {
                         totkm: totkm,
                         totalHours: totalHours,
                         duty: duty,
-                        vehiletype: vehiletype,
+                        vehicletype: vehiletype,
+                        organizationname: organizationname,
                     }
                 });
                 data = response.data;
-                hrs = data.Hours
-                kms = data.KMS
-                setextrakm_amount(data.extraKMS)
-                setextrahr_amount(data.extraHours)
+                console.log("data7", data)
 
-                if (Number(hrs) === 8) {
-                    setcalcPackage("8hr & 80km")
-                    setpackage_amount(data.Rate);
+                const packages = data.package;
+                const Hours = Number(data.Hours);
+                const KMS = Number(data.KMS);
+                const Rate = Number(data.Rate);
+                const extraHours = Number(data.extraHours);
+                const extraKMS = Number(data.extraKMS);
+                const NHalt = Number(data.NHalt);
+                const Bata = Number(data.Bata);
 
-                    if (Number(totalHours) > 8) {
-                        let time = Math.ceil(totalHours - hrs)
-                        setExtraHR(time)
-                    }
-                    else {
-                        setExtraHR(0)
-                    }
+                // console.log("aaaa", totalHours, typeof (consvertedTotalHour), typeof (Hours))
 
-                    if (totkm > 80) {
-                        const km = Math.ceil(totkm - kms);
-                        setExtraKM(km)
-
-                    } else {
-                        setExtraKM(0)
-                    }
-
-                } else if (Number(hrs) === 4) {
-
-                    setcalcPackage("4hr & 40km");
-                    setpackage_amount(data.Rate)
-
-                    if (totalHours > 4) {
-                        let time = Number(Math.ceil(totalHours - hrs));
-                        setExtraHR(time)
-                    }
-                    else {
-                        setExtraHR(0)
-                    }
-
-                    if (totkm > 40) {
-                        const km = Number(Math.ceil(totkm - kms));
-                        setExtraKM(km)
-                    } else {
-                        setExtraKM(0)
-                    }
+                if (consvertedTotalHour > Hours) {
+                    // console.log("aaaa1", consvertedTotalHour, Hours, typeof (consvertedTotalHour), typeof (Hours));
+                    let time = consvertedTotalHour - Hours;
+                    // console.log("aaaa2", time, typeof (time));
+                    const convertedTime = Number(time.toFixed(2))
+                    console.log("aaaaa", convertedTime, typeof (convertedTime))
+                    setExtraHR(convertedTime);
                 }
-                setCalcCheck(true)
 
-            } else {
-                setError(true);
-                setErrorMessage("Check Hour & KM  ")
+                if (totkm > KMS) {
+                    let KM = (Number(totkm) - Number(KMS))
+                    setExtraKM(KM);
+                }
+
+                setcalcPackage(packages);
+                setpackage_amount(Rate);
+                setextrakm_amount(extraKMS);
+                setextrahr_amount(extraHours);
+                setNightBeta(NHalt);
+                setdriverBeta(Bata);
+
             }
 
         }
         catch (err) {
-            console.log("pack fetch ", err)
+
+            if (err.response.status === 404) {
+                setError(true)
+                setErrorMessage("Data Not Found")
+            }
+            else if (err.response.status === 500) {
+                setError(true)
+                setErrorMessage("Fetching Error")
+            }
+            else {
+                console.log("pack fetch ", err)
+            }
+
         }
     }
+
+
+
 
 
 

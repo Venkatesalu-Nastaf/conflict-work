@@ -59,6 +59,23 @@
     background-color: var(--glass);
 }
 
+@media screen and (min-width:970px) and (max-width:1240px) {
+    .form-container-ratetype .container-main{ 
+      width: 76vw !important;
+    }
+  }
+  
+  @media screen and (min-width:769px) and (max-width:969.99px) {
+    .form-container-ratetype .container-main { 
+      width: 70vw !important;
+    }
+  }
+  /* @media screen and (min-width:320px) and (max-width:769.99px) {
+    .container-main { 
+      width: 85% !important; 
+    }
+  } */
+
 .ratetype-form .Title-Name {
     position: relative;
 }
@@ -83,3 +100,25 @@
     background-color: #457cdc;
     /* Adjust color as needed */
 }
+
+.rate-type-inputs{
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media only screen and (max-width:500px) {
+    .click-menu-icon{
+        top: 37px !important;
+    left: 29px !important;
+    }
+    
+}
+
+@media only screen and (max-width:500px) {
+    .copy-title-btn-RateType{
+        margin-top: 0px !important;
+        border: none !important;
+        background-color: transparent;
+    }
+}
+

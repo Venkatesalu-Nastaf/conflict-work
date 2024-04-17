@@ -27,6 +27,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import useRatevalidity from './useRatevalidity';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -88,8 +89,8 @@ const Ratevalidity = () => {
                 <div className="detail-container-main">
                     <div className="container-left">
                         <div className="copy-title-btn-RateValidity">
-                            <div className="input-field">
-                                <div className="input">
+                            <div className="input-field RateValidity-input-feilds">
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <BadgeIcon color="action" />
                                     </div>
@@ -103,7 +104,7 @@ const Ratevalidity = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input">
+                                <div className="input RateValidity-input">
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
@@ -117,7 +118,11 @@ const Ratevalidity = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "30%" }}>
+                                <div className="input RateValidity-input" >
+                                <div className="icone">
+                                    <DateRangeIcon color="action" />
+                                </div>
+
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             label="From Date"
@@ -131,7 +136,10 @@ const Ratevalidity = () => {
                                         </DatePicker>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input" style={{ width: "30%" }}>
+                                <div className="input RateValidity-input" >
+                                <div className="icone">
+                                    <DateRangeIcon color="action" />
+                                </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             label="To Date"
@@ -145,9 +153,9 @@ const Ratevalidity = () => {
                                         </DatePicker>
                                     </LocalizationProvider>
                                 </div>
-                            </div>
-                            <div className="input-field">
-                                <div className="input" style={{ width: "300px" }}>
+                            {/* </div>
+                            <div className="input-field"> */}
+                                <div className="input RateValidity-input" style={{ width: "300px" }}>
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
                                     </div>
@@ -187,7 +195,7 @@ const Ratevalidity = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-                                <div className="input" style={{ width: "160px" }}>
+                                <div className="input RateValidity-input" style={{ width: "160px" }}>
                                     {isEditMode ? (
                                         <Button variant="contained" onClick={handleEdit}>Edit</Button>
                                     ) : (
@@ -226,7 +234,7 @@ const Ratevalidity = () => {
                         <p>{infoMessage}</p>
                     </div>
                 }
-                <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+                <Box  className="box-mui-icons" sx={{ position: "relative", mt: 3, height: 320 }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
                         icon={<SpeedDialIcon />}

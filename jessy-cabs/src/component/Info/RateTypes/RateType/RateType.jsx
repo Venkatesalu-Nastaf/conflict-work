@@ -103,7 +103,7 @@ const RateType = () => {
                 <div className="detail-container-main">
                     <div className="container-left">
                         <div className="copy-title-btn-RateType">
-                            <div className="input-field">
+                            <div className="input-field rate-type-inputs">
                                 <div className="input">
                                     <div className="icone">
                                         <BadgeIcon color="action" />
@@ -156,8 +156,8 @@ const RateType = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
-                            <div className="input-field">
+                            {/* </div>
+                            <div className="input-field"> */}
                                 <div className="input" style={{ width: "300px" }}>
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
@@ -250,8 +250,8 @@ const RateType = () => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                            </div>
-                            <div className="input-field">
+                            {/* </div>
+                            <div className="input-field"> */}
                                 <div className="input" style={{ width: "160px" }}>
                                     {isEditMode ? (
                                         <Button variant="contained" onClick={handleEdit}>Edit</Button>
@@ -306,7 +306,9 @@ const RateType = () => {
                         )}
                     </PopupState>
                 </div>
-                <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+                <Box
+                className="click-menu-icon"
+                sx={{ position: "relative", mt: 3, height: 320 }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
                         icon={<SpeedDialIcon />}

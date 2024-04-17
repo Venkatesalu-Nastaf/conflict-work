@@ -122,7 +122,7 @@ const BackUp = () => {
         <div className="BackUp-form">
             <form action="">
                 <div className="BackUp-header">
-                    <div className="input-field" style={{ justifyContent: 'center', marginTop: '20px' }}>
+                    <div className="input-field backup-inputs"  style={{ justifyContent: 'center', marginTop: '20px' }}>
                         <div className="input">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Start Date">
@@ -170,7 +170,7 @@ const BackUp = () => {
                                 </div>
                             </div>
                         ) : (
-                            <Box sx={{ width: '85%', marginTop: '20%' }}>
+                            <Box sx={{ width: '85%', marginTop: '20%' ,marginBottom: '20%'}}>
                                 <LinearProgressWithLabel variant="buffer" value={progress} valueBuffer={buffer} />
                             </Box>
                         )}

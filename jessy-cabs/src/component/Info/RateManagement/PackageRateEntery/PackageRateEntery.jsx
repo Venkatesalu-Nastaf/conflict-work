@@ -99,8 +99,8 @@ const PackageRateEntery = () => {
         <div className="PackageRateEntery-container-main">
           <div className="container-left">
             <div className="copy-title-btn-PackageRateEntery">
-              <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
+              <div className="input-field PackageRateEntery-input-feild">
+                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
                   <div className="icone">
                     <TypeSpecimenOutlinedIcon color="action" />
                   </div>
@@ -125,7 +125,7 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{ width: "300px" }}>
+                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
@@ -150,7 +150,7 @@ const PackageRateEntery = () => {
                 </div>
 
 
-                <div className="input" style={{ width: "300px" }}>
+                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -177,10 +177,10 @@ const PackageRateEntery = () => {
 
 
 
-              </div>
+              {/* </div>
 
-              <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
+              <div className="input-field"> */}
+                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -259,7 +259,7 @@ const PackageRateEntery = () => {
                     />
                   </div>
 
-                  <div className="input" style={{ width: "100px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <TextField
                       type='number'
                       size="small"
@@ -271,7 +271,7 @@ const PackageRateEntery = () => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
-                  <div className="input" style={{ width: "100px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <TextField
                       type='number'
                       size="small"
@@ -283,7 +283,7 @@ const PackageRateEntery = () => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
-                  <div className="input" style={{ width: "100px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <TextField
                       type='number'
                       size="small"
@@ -296,7 +296,7 @@ const PackageRateEntery = () => {
                     />
                   </div>
 
-                  <div className="input" style={{ width: "110px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <TextField
                       type='number'
                       size="small"
@@ -308,7 +308,7 @@ const PackageRateEntery = () => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
-                  <div className="input" style={{ width: "100px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <TextField
                       type='number'
                       size="small"
@@ -320,10 +320,10 @@ const PackageRateEntery = () => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
-                </div>
-                <div className='first'>
+                {/* </div>
+                <div className='first'> */}
 
-                  <div className="input" style={{ width: "110px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <TextField
                       type='number'
                       size="small"
@@ -336,7 +336,7 @@ const PackageRateEntery = () => {
                     />
                   </div>
 
-                  <div className="input" style={{ width: "100px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <TextField
                       type='number'
                       size="small"
@@ -348,7 +348,7 @@ const PackageRateEntery = () => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
-                  <div className="input" style={{ width: "100px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <TextField
                       type='number'
                       size="small"
@@ -360,7 +360,7 @@ const PackageRateEntery = () => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
-                  <div className="input" style={{ width: "100px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <TextField
                       type='number'
                       size="small"
@@ -372,7 +372,7 @@ const PackageRateEntery = () => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
-                  <div className="input" style={{ width: "100px" }}>
+                  <div className="input" style={{ width: "200px" }}>
                     <TextField
                       type='number'
                       size="small"

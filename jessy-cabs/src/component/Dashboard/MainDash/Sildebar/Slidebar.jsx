@@ -38,7 +38,7 @@ const MenuItem = ({
   icon: Icon,
   dropdownItems = [],
 }) => {
-  console.log(value,"ajay");
+  // console.log(value,"ajay");
   return (
     // <Link
     //   className={isActive(value) ? "menuItem active" : "menuItem"}
@@ -98,6 +98,7 @@ const Sidebar = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedprofileImage, setSelectedprofileImage] = useState(null);
   const [settingsDropdownVisible, setSettingsDropdownVisible] = useState(false);
+  const [infoDropdownVisible, setInfoDropdownVisible] = useState(false);
 
   useEffect(() => {
     setSelectedImage(sharedData)
@@ -137,10 +138,20 @@ const Sidebar = () => {
 
   const handleSettingsClick = () => {
     setSettingsDropdownVisible(!settingsDropdownVisible);
+    setInfoDropdownVisible(false)
   };
+
+
+  const handleinfoClick =()=>{
+    setInfoDropdownVisible(!infoDropdownVisible);
+    setSettingsDropdownVisible(false);
+
+
+  }
 
   const handleMenuItemClick = async (menuItemKey, name, alt) => {
     setSettingsDropdownVisible(false);
+    setInfoDropdownVisible(false);
 
     // const currentPageName = name;
     localStorage.setItem("selectedMenuItem", menuItemKey);
@@ -196,6 +207,14 @@ const Sidebar = () => {
       navigate("settings/mainsetting");
     }else if(window.location.pathname !== "/settings/usercreation"){
       navigate("/settings/usercreation");
+    }else if(window.location.pathname !== "/info/ratetype"){
+      navigate("/info/ratetype");
+    }else if(window.location.pathname !== "/home/info/ratemanagement"){
+      navigate("/home/info/ratemanagement");
+    }else if(window.location.pathname !== "/home/info/mailer"){
+      navigate("/home/info/mailer");
+    }else if(window.location.pathname !== "/home/info/fuelinfo"){
+      navigate("/home/info/fuelinfo");
     }
   };
 
@@ -353,9 +372,9 @@ const Sidebar = () => {
           /> */}
 
 <motion.div >
-        {/* Other sidebar content */}
+        
         <MenuItem
-          label="Settings"
+          label="Settings "
           // to={"/home/settings"}
           // alt="/home/settings"
           value="/home/settings"
@@ -385,6 +404,8 @@ const Sidebar = () => {
             // },
           ]}
         />
+
+
       </motion.div>
 
       {settingsDropdownVisible && (
@@ -439,7 +460,115 @@ const Sidebar = () => {
          </div>
         </div>
       )}
-          <MenuItem
+
+
+
+<motion.div >
+        
+        <MenuItem
+          label="info "
+          // to={"/home/settings"}
+          // alt="/home/info"
+          value="/home/info"
+          menuItemKey="/home/info"
+          name="info page"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+          dropdownItems={[
+            // {
+            //   label: "user Creation",
+            //   to : "settings/usercreation",
+            // alt:"settings/usercreation",
+            // value:"settings",
+            // menuItemKey:"settings",
+            // name:"User page",
+            // isActive:{isActive},
+            // handleMenuItemClick:{handleMenuItemClick},
+            // icon:{FaUserAstronaut}
+            // },
+            // {
+            //   label: "Setting 2",
+            //   to: "/home/settings/setting2",
+            //   menuItemKey: "/home/settings/setting2",
+            //   name: "Setting 2",
+            //   alt: "/home/settings/setting2",
+            // },
+          ]}
+        />
+
+
+      </motion.div>
+
+      {infoDropdownVisible && (
+        <div className="settings-dropdown">
+         <div className="settings-dropdown-links">
+         <Link
+          label="User"
+          to="info/ratetype"
+          alt="info/ratetype"
+          value="/home/info"
+          menuItemKey="ratetype"
+          name="ratetype"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+          className="dropdown-links"
+        
+         >Rate Type</Link>
+         </div>
+
+         <div className="settings-dropdown-links">
+         <Link 
+          label="ratemanagement"
+          to="/home/info/ratemanagement"
+          alt="/home/info/ratemanagement"
+          value="/home/info"
+          menuItemKey="ratemanagement"
+          name="ratemanagement"
+          className="dropdown-links"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+         >Rate Management</Link>
+         </div>
+
+         <div className="settings-dropdown-links">
+         <Link 
+          label="mailer"
+          to="/home/info/mailer"
+          alt="/home/info/mailer"
+          value="/home/info"
+          menuItemKey="mailer"
+          name="mailer"
+          className="dropdown-links"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+         >Mailer</Link>
+         </div>
+
+         <div className="settings-dropdown-links">
+         <Link 
+          label="fuelinfo"
+          to="/home/info/fuelinfo"
+          alt="/home/info/fuelinfo"
+          value="/home/info"
+          menuItemKey="fuelinfo"
+          name="fuelinfo"
+          className="dropdown-links"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+         >Fuel Info</Link>
+         </div>
+
+
+         
+     
+        </div>
+      )}
+          {/* <MenuItem
             label="Info"
             to={"/home/info/ratetype"}
             alt="/home/info/ratetype"
@@ -448,8 +577,8 @@ const Sidebar = () => {
             name="Info page"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
-            icon={AiOutlineInfoCircle}
-          />
+            icon={FaUserAstronaut}
+          /> */}
           <MenuItem
             label="User"
             to="/home/usersettings/usersetting"

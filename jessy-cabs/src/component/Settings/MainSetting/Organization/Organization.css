@@ -100,6 +100,7 @@
 .container-organisation-main {
     position: relative;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -127,4 +128,102 @@
     position: absolute;
     top: 10px;
     right: 20px;
+}
+
+@media screen and (min-width:970px)  and (max-width: 1011px){
+    .container-organisation-main {
+        width: 95%;
+    }
+}
+
+@media screen and (min-width:769px)  and (max-width: 969.99px){
+    .container-organisation-main {
+        width: 61vw;
+    }
+}
+
+@media screen and (min-width:540px)  and (max-width: 769.99px){
+    .container-organisation-main {
+        width: 69vw;
+    }
+}
+
+@media screen and (min-width:320px)  and (max-width: 539.99px){
+    .container-organisation-main {
+        width: 61vw;
+    }
+}
+
+.organisation-details-input-feilds{
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media only screen and (min-width:964px) and (max-width:1241px) {
+   
+    .input-buttons-small{
+        width: 200px !important;
+    }
+    /* .container-organisation-left{
+border-right: 1px solid transparent !important;
+    } */
+}
+
+@media screen and (max-width:963.99px) {
+    .container-organisation-main{
+        flex-wrap: wrap !important;
+    }
+    .input-buttons-small{
+        width: 200px !important;
+    }
+    .container-organisation-left{
+        border-right: 1px solid transparent !important;
+    }
+}
+.container-organisation-main{
+    flex-wrap: nowrap;
+}
+@media screen and (max-width: 562px) {
+    .organisation-details-input-feilds{
+        flex-wrap: wrap !important;
+        flex-direction: column;
+    }
+}
+.organisation-details-input{
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media screen and (max-width: 465px){
+    .save-cancel-inputs{
+        flex-wrap: wrap !important;
+    }
+    .office-address{
+flex-wrap: wrap;
+    }
+    .organization-input{
+        width: 150px !important;
+        flex-wrap: wrap !important;
+    }
+
+    .organisation-details {
+        margin: 0px ;
+        border: none !important;
+        border-radius: 15px;
+        padding:  0px;
+        background-color: var(--glass);
+    }
+
+    .organisation-details .input {
+        margin-left: 20px;
+        justify-content: center !important;
+    }
+}
+
+
+@media only  screen and (min-width:466px)  and (max-width: 656px){
+    .organization-input{
+        width: 200px !important;
+        flex-wrap: wrap !important;
+    }
 }

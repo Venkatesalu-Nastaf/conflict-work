@@ -174,10 +174,30 @@
 .settings-dropdown-links{
   text-align: center !important;
   padding: 10px !important;
+  transition: transform 0.5s ease;
 }
+
+
+
 
 .dropdown-links{
   color: #000000 !important;
   text-decoration: none;
+ 
+}
+
+
+
+
+.settings-dropdown-links:hover{
+  /* background-color: red; */
+ transform: scale(0.9); 
+ border-left: 8px solid rgb(54, 164, 172);
+ color:#000000
 
 }
+
+
+
+
+

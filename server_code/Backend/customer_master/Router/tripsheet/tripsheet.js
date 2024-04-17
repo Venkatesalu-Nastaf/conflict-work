@@ -895,33 +895,47 @@ router.get('/get-gmapdata/:tripid', (req, res) => {
 
 //ayyanar 4hr and 8hr pack fetch
 
-router.get(`/t4hr-pack`, (req, res) => {
+//------------------------------------
 
-    const total_km = parseInt(req.query.totkm);
-    const { tothr, vehiletype, duty } = req.query.totalHours;
-    let hr;
-    if (total_km <= 49 && tothr <= 6) {
-        hr = 4;
-        db.query("select * from ratemanagement where Hours=?", [hr], (err, result) => {
-            if (err) {
-                return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-            }
-            return res.status(200).json(result[0]);
-        })
+router.get(`/t4hr-pack`, (req, res) => {
+    // Extract dynamic inputs from query parameters
+    const totalHours = req.query.totalHours;
+    const vehicletype = req.query.vehicletype;
+    const duty = req.query.duty;
+    const totkm = req.query.totkm;
+    const OrganizationName = req.query.organizationname;
+
+    if (!totalHours || !vehicletype || !duty || !totkm || !OrganizationName) {
+        res.status(400).json({ error: 'Missing required parameters' });
+        return;
     }
-    else if (total_km > 49 || tothr > 6) {
-        hr = 8;
-        db.query("select * from ratemanagement where Hours=?", [hr], (err, result) => {
-            if (err) {
-                return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-            }
-            return res.status(200).json(result[0]);
-        })
-    }
-    else {
-        res.json("wrong data")
-    }
-})
+
+    const sql = `SELECT * 
+                    FROM ratemanagement
+                    WHERE duty = ?
+                        AND vehicleType = ?
+                        AND OrganizationName =?
+                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND vehicleType = ? AND OrganizationName =?))
+                    ORDER BY UptoHours 
+                    LIMIT 1;`
+
+    // Execute the query with dynamic parameters 
+    db.query(sql, [duty, vehicletype, OrganizationName, totalHours, totkm, duty, vehicletype, OrganizationName], (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        // Check if any rows were returned
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'No data found' });
+        }
+
+        // Send the fetched row in the response
+        res.json(results[0]);
+    });
+});
+
+
 
 
 

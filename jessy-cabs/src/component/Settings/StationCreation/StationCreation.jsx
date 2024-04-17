@@ -91,7 +91,7 @@ const StationCreation = () => {
         <form action="">
           <span className="Title-Name">Station Creation</span>
           <div className="stationcreation-header">
-            <div className="input-field">
+            <div className="input-field station-creation-inputfeilds">
               <div className="input">
                 <div className="icone">
                   <BadgeIcon color="action" />
@@ -141,8 +141,8 @@ const StationCreation = () => {
                 />
 
               </div>
-            </div>
-            <div className="input-field">
+            {/* </div>
+            <div className="input-field"> */}
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">

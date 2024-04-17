@@ -14,6 +14,7 @@ import { useUser } from "../../form/UserContext";
 import Button from "@mui/material/Button";
 import { useData } from "./DataContext"; //- data contaxt
 import Logo from "../../../assets/img/logonas.png"
+import { PiWarningCircleBold } from "react-icons/pi";
 
 // import axios from "axios";
 
@@ -292,27 +293,36 @@ const MainDashboard = () => {
             </div>
             <Outlet />
           </div>
+
+
+
+
+
           <Dialog open={popupOpen} onClose={handlePopupClose}>
+            {/* <p>sdfghjkl;'</p> */}
             <DialogContent>
-              <p>Do you want to logout</p>
+              <p className="modal-warning-icon">< PiWarningCircleBold  className="warning-icon"/></p>
+              <p className="modal-warning-text">Are you sure want to logout from this <br /> application ?</p>
             </DialogContent>
-            <DialogActions>
+            <DialogActions className="yes-no-buttons">
               <Button
                 onClick={handleLogoutdialog}
                 variant="contained"
-                color="primary"
+                className="logout-btn"
               >
-                Yes
+                Yes, I'm Sure
               </Button>
               <Button
                 onClick={handlePopupClose}
                 variant="contained"
-                color="primary"
+                className="logout-cancel-btn"
               >
-                NO
+                NO, Cancel
               </Button>
             </DialogActions>
           </Dialog>
+
+
         </section>
       }
     </>

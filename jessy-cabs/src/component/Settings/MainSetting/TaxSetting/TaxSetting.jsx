@@ -97,7 +97,7 @@ const TaxSetting = () => {
         <div className="TaxSetting-form">
             <form onSubmit={handleClick}>
                 <div className="TaxSetting-header">
-                    <div className="input-field" style={{ padding: '0px 15px' }}>
+                    <div className="input-field tax-setting-input" style={{ padding: '0px 15px' }}>
                         <div className="input">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
@@ -168,8 +168,8 @@ const TaxSetting = () => {
                                 variant="standard"
                             />
                         </div>
-                    </div>
-                    <div className="input-field" style={{ padding: '0px 15px' }}>
+                    {/* </div>
+                    <div className="input-field" style={{ padding: '0px 15px' }}> */}
                         <div className="input">
                             <div className="icone">
                                 <FontAwesomeIcon icon={faNewspaper} size="xl" />
@@ -241,7 +241,7 @@ const TaxSetting = () => {
                             {isEditMode ? (
                                 <Button variant="contained" onClick={handleEdit}>Edit</Button>
                             ) : (
-                                <Button variant="contained" onClick={handleAdd} >Add</Button>
+                                <Button variant="contained" onClick={handleAdd}>Add</Button>
                             )}
                         </div>
                     </div>
@@ -315,6 +315,8 @@ const TaxSetting = () => {
                     </div>
                 </div>
             </form>
+
+          
         </div>
     )
 }

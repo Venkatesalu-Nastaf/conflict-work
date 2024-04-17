@@ -34,13 +34,30 @@
   border: 2px solid #ccc;
   overflow: scroll;
   height: 75vh;
-  width: 81vw;
+  width: 81vw !important;
   display: flex;
   flex-direction: column;
   padding-top: 28px;
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
+}
+
+@media screen and (min-width:970px) and (max-width:1240px) {
+  .main-setting-main .main-setting-form-container { 
+    width: 76vw !important;
+  }
+}
+
+@media screen and (min-width:769px) and (max-width:969.99px) {
+  .main-setting-main .main-setting-form-container { 
+    width: 70vw !important;
+  }
+}
+@media screen and (min-width:320px) and (max-width:769.99px) {
+  .main-setting-main { 
+    width: 85% !important;
+  }
 }
 
 .stationcreation-header {
@@ -85,3 +102,25 @@
   width: 100%;
   overflow: scroll;
 }
+
+.back-up-component{
+  display: flex;
+  justify-content: center;
+}
+
+
+
+@media screen and (min-width:320px) and (max-width:380px) {
+  .tablists{
+font-size: 8px !important;
+padding: 2px !important;
+  }
+}
+
+@media screen and (min-width:380.99px) and (max-width:510px) {
+  .tablists{
+font-size: 11px !important;
+padding: 2px !important;
+  }
+}
+

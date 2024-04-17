@@ -28,6 +28,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import useDriverbatarate from './useDriverbatarate.js';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -89,8 +90,11 @@ const DriverBataRate = () => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-DriverBataRate">
-              <div className="input-field">
-                <div className="input" >
+              <div className="input-field DriverBataRate-inputfeild">
+                <div className="input DriverBataRate-input">
+                <div className="icone">
+                  <DateRangeIcon color="action" />
+                </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="From Date"
@@ -104,7 +108,11 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" >
+                <div className="input DriverBataRate-input">
+
+                <div className="icone">
+                  <DateRangeIcon color="action" />
+                </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="To Date"
@@ -118,7 +126,7 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "300px" }}>
+                <div className="input DriverBataRate-input" style={{ width: "300px" }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -145,7 +153,7 @@ const DriverBataRate = () => {
                   <Button variant="contained">Show</Button>
                 </div>
               </div>
-              <div className="input-field">
+              <div className="input-field DriverBataRate-inputfeild">
                 <div className="input" style={{ width: "200px" }}>
                   <div className="icone">
                     <EngineeringIcon color="action" />
@@ -193,8 +201,8 @@ const DriverBataRate = () => {
                     onChange={handleChange}
                   />
                 </div>
-              </div>
-              <div className="input-field">
+              {/* </div>
+              <div className="input-field"> */}
                 <div className="input">
                   <TextField
                     type='number'

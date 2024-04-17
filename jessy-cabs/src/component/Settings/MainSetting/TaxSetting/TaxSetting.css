@@ -41,3 +41,8 @@
 .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
     border-color: #456ddc !important;
 }
+
+.tax-setting-input{
+    flex-wrap: wrap;
+    justify-content: center;
+}

@@ -172,3 +172,30 @@
   border-radius: 4px;
   box-sizing: border-box;
 }
+
+/* popup modal */
+
+.warning-icon{
+  color: red;
+  font-size: 50px;
+}
+.modal-warning-icon{
+  display: flex;
+  justify-content: center;
+}
+.modal-warning-text{
+  font-size: 20px;
+  font-weight: 600;
+}
+.yes-no-buttons{
+  justify-content: center !important;
+}
+.logout-btn{
+  color: #fff !important;
+  background-color: red !important;
+}
+.logout-cancel-btn{
+  background-color: #fff !important;
+  border: 1px solid #494848 !important;
+  color: #000 !important;
+}

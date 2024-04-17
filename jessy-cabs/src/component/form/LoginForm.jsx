@@ -33,7 +33,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
   const [infoMessage] = useState({});
-  const { loginUser, setUserdashboard, userdasboard } = useUser();
+  const { loginUser, setUserdashboard} = useUser();
 
   const hidePopup = () => {
     setSuccess(false);

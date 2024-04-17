@@ -39,9 +39,9 @@ const TransferDataEntry = () => {
     successMessage,
     errorMessage,
     warningMessage,
-    book,
+    // book,
     handleClick,
-    handleChange,
+    // handleChange,
     hidePopup,
     date,
     Billingdate,
@@ -50,7 +50,7 @@ const TransferDataEntry = () => {
     handleKeyenter,
     customer,
     tripData,
-    bankOptions,
+    // bankOptions,
     setCustomer,
     fromDate,
     handleDateChange,
@@ -121,7 +121,9 @@ const TransferDataEntry = () => {
                       <DatePicker
                         label="Bill Date"
                         name="Billingdate"
-                        value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate || formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate) : null}
+                        // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate || formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate) : null}
+                        value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate ) : null  }
+
                         format="DD/MM/YYYY"
                       />
                     </DemoContainer>
@@ -154,7 +156,7 @@ const TransferDataEntry = () => {
                       id="free-solo-demo"
                       freeSolo
                       size="small"
-                      value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || formDataTransfer.Organization_name || ''}
+                      value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || formDataTransfer?.Organization_name || ''}
                       options={organizationName}
                       onChange={(event, value) => setCustomer(value)}
                       renderInput={(params) => {
@@ -170,7 +172,7 @@ const TransferDataEntry = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
-                          value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || formDataTransfer.FromDate ? dayjs(formDataTransfer.FromDate) : "" || ''}
+                          value={selectedCustomerDatas.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate || formDataTransfer?.FromDate ? dayjs(formDataTransfer?.FromDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             handleDateChange(date, 'fromdate');
@@ -190,7 +192,7 @@ const TransferDataEntry = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
-                          value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || formDataTransfer.EndDate ? dayjs(formDataTransfer.EndDate) : "" || ''}
+                          value={selectedCustomerDatas.todate ? dayjs(selectedCustomerDatas.todate) : toDate || formDataTransfer?.EndDate ? dayjs(formDataTransfer?.EndDate) : "" || ''}
                           format="DD/MM/YYYY"
                           onChange={(date) => {
                             handleDateChange(date, 'todate');

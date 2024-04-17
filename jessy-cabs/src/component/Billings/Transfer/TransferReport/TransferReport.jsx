@@ -18,6 +18,9 @@ import Mailpdf from './Mailpdf/Mailpdf';
 import PdfPage from './PdfPage';
 import { saveAs } from 'file-saver';
 import {  pdf } from '@react-pdf/renderer';
+// import PdfContent2 from './PdfContent2.';
+import PdfContent2 from './PdfContent2';
+import {useData} from "../../../Dashboard/MainDash/Sildebar/DataContext2"
 
 //for popup
 import ClearIcon from '@mui/icons-material/Clear';
@@ -116,13 +119,24 @@ const TransferReport = () => {
     popupOpen,
     organizationcity,
     organizationgstnumber,
-
+    pdfBillList,
+    setPdfBillList,
+    setError,
+    setErrorMessage
   } = useTransferreport();
   const {
         handleExcelDownload,error1,errormessage1} = useExeclpage()
   const [invoicedata,setInvoicedata] = useState([])
   const [addressDetails,setAddressDetails] = useState([])
   const apiUrl = APIURL;
+  const [organizationsdetail1,setOrganisationDetail]=useState([]);
+  const { sharedData } = useData();
+  const [imageorganisation, setSelectedImageorganisation] = useState(null);
+  console.log(imageorganisation,"image")
+
+  useEffect(() => {
+    setSelectedImageorganisation(sharedData)
+  }, [sharedData])
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
@@ -137,6 +151,23 @@ const TransferReport = () => {
         }
         const addressdetail = await response.json();
         setAddressDetails(addressdetail);
+      } catch (err) {
+        console.error('Error fetching customer address:', err);
+      }
+    };
+  
+    fetchdata();
+  }, [apiUrl, customer]);
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/organisationpdfdata`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const organizationdetails = await response.json();
+        setOrganisationDetail(organizationdetails)
+       
       } catch (err) {
         console.error('Error fetching customer address:', err);
       }
@@ -173,50 +204,25 @@ const TransferReport = () => {
 fetchData()
 },[apiUrl])
 
-  const handleDownloadPdf = async () => {
+const handleDownloadPdf = async () => {
+  if(!pdfBillList){
+       setError(true)
+       setErrorMessage('Select PDF Format')
+       return
+  }
+
+  else if (pdfBillList === "PDF 1") {
     const fileName = 'test.pdf';
-        const blob = await pdf(<PdfPage invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer}/>).toBlob();
-          saveAs(blob, fileName);
+    const blob = await pdf(<PdfPage invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
+    saveAs(blob, fileName);
+  }
+  else if (pdfBillList === "PDF 2") {
+    const fileName = 'test.pdf';
+    const blob = await pdf(<PdfContent2 invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation}/>).toBlob();
+    saveAs(blob, fileName);
+  }
 
-  };
-  // const handleDownloadPdf = async () => {
-  //   try {
-  //     const fileName = 'test.pdf';
-  //     // Fetch data first
-  //     const tripid = localStorage.getItem("selectedtripsheetid");
-  //     const encoded = localStorage.getItem("selectedcustomerdata");
-  //     localStorage.setItem("selectedcustomer", encoded);
-  //     const storedCustomer = localStorage.getItem("selectedcustomer");
-  //     const customer = decodeURIComponent(storedCustomer);
-  //     const response = await fetch(
-  //       `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-  //     const tripData = await response.json();
-  
-  //     // Then generate PDF
-  //     const pdfContent = <PdfPage invdata={tripData} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} />;
-  //     const blob = await pdf(pdfContent).toBlob();
-  //     saveAs(blob, fileName);
-  //   } catch (error) {
-  //     console.error('Error downloading PDF:', error);
-  //     setError(true)
-  //     setErrorMessage("Network Error")
-  //   }
-  // };
-  
-  
-
-  // const handleDownloadPdf = async()=>{
-  //     const doc = <Documents />;
-  //     const asPdf = pdf({}); // {} is important, throws without an argument
-  //     asPdf.updateContainer(doc);
-  //     const blob = await asPdf.toBlob();
-  //     saveAs(blob, 'document.pdf');
-  // }
-
+}
 
   return (
     <div className="TransferReport-form Scroll-Style-hide">
@@ -395,7 +401,7 @@ fetchData()
                     name="misformat"
                     autoComplete='off'
                   /> */}
-                  <Autocomplete
+                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
@@ -403,7 +409,8 @@ fetchData()
                     options={PDFbill.map((option) => ({
                       label: option.Option,
                     }))}
-                    onChange={(event, value) => setCustomer(value)}
+                    value={pdfBillList} // Set the value to the state variable pdfBillList
+                    onChange={(event, value) => setPdfBillList(value.label)}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="PDF Bill" inputRef={params.inputRef} />
@@ -459,7 +466,7 @@ fetchData()
                             Download
                           </Button>
                           <Menu {...bindMenu(popupState)}>
-                            <MenuItem onClick={()=>handleExcelDownload(misformat,invoicedata)}>Excel</MenuItem>
+                            <MenuItem onClick={()=>handleExcelDownload(misformat,invoicedata,invoiceDate)}>Excel</MenuItem>
                             <MenuItem onClick={handleDownloadPdf}>PDF</MenuItem>
                             <MenuItem onClick={handlePdfDownload}>Both</MenuItem>
                           </Menu>

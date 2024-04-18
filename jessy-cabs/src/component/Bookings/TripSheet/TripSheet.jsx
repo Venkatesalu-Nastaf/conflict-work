@@ -165,7 +165,7 @@ const TripSheet = () => {
 
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
-    selectedCustomerId, setNightBeta, setNightCount, request, setRequest, calcCheck,
+    selectedCustomerId, setNightBeta, setNightCount, request, setRequest, calcCheck, vehileName,
     rows,
     actionName,
     error,
@@ -254,7 +254,7 @@ const TripSheet = () => {
     SignPage,
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
-    totalcalcAmount,
+    totalcalcAmount, escort, handleEscortChange,
 
   } = useTripsheet();
 
@@ -268,6 +268,7 @@ const TripSheet = () => {
 
   // Filter the actions array based on the editMode variable
   const filteredActions = isEditMode ? actions.filter(action => action.name !== "Add") : actions;
+
 
 
   return (
@@ -717,6 +718,7 @@ const TripSheet = () => {
                 <div className="icone">
                   <NoCrashIcon color="action" />
                 </div>
+                {/* 
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -724,9 +726,11 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
+                
                   value={VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
-                  options={VehicleRate.map((option) => ({
-                    label: option.option,
+
+                  options={vehileName?.map((option) => ({
+                    label: option,
                   }))}
                   getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                   renderInput={(params) => {
@@ -735,7 +739,29 @@ const TripSheet = () => {
                     )
                   }
                   }
+                /> */}
+
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
+                  // value={formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
+                  value={(formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType) ? (formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType) : null}
+                  // options={vehileName || []}
+                  options={vehileName?.map((option) => ({
+                    label: option,
+                  }))}
+                  // getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Vehicle Rate" autoComplete="password" name="vehType" inputRef={params.inputRef} />
+                  )}
                 />
+
               </div>
             </div>
             <div className="input-field">
@@ -1298,6 +1324,56 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div>
+
+              <div className='input'>
+                <label>Escort</label>
+
+                <label>
+                  <input
+                    type="radio"
+                    value="Yes"
+                    checked={escort === "Yes"}
+                    onChange={handleEscortChange}
+                  />
+                  Yes
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="No"
+                    checked={escort === "No"}
+                    onChange={handleEscortChange}
+                  />
+                  No
+                </label>
+              </div>
+
+              {/* <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Active
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="active"
+                    onChange={handleChange}
+                    value={selectedCustomerData?.active || book.active}
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div> */}
+
               <Dialog open={popupOpen} onClose={handlePopupClose}>
                 <DialogContent>
                   <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />

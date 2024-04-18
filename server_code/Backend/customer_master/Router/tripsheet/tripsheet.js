@@ -76,7 +76,7 @@ router.post('/tripsheet-add', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort,
 
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
@@ -189,7 +189,7 @@ router.post('/tripsheet-add', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -330,7 +330,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -439,7 +439,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -936,6 +936,17 @@ router.get(`/t4hr-pack`, (req, res) => {
 });
 
 
+router.get(`/ge-tVehicleName`, (req, res) => {
+    const sql = `select * from vehicleinfo `;
+    db.query(sql, (error, result) => {
+        if (error) {
+            return res.status(500).json({ error: "Internal Server Error" })
+        }
+        return res.status(200).json(result)
+
+    })
+
+})
 
 
 

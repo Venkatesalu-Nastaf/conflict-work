@@ -90,7 +90,7 @@ const Division = () => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Division">
-              <div className="input-field">
+              <div className="input-field divisionform-inputfeilds">
                 <div className="input">
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -105,7 +105,8 @@ const Division = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input" style={{ width: "300px" }}>
+          
+                <div className="input division-form-size" style={{ width: "300px" }}>
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -119,9 +120,9 @@ const Division = () => {
                     onChange={handleChange}
                   />
                 </div>
-              </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
+              {/* </div>
+              <div className="input-field"> */}
+                <div className="input division-form-size" style={{ width: "300px" }}>
                   <div className="icone">
                     <WarehouseIcon color="action" />
                   </div>
@@ -180,6 +181,7 @@ const Division = () => {
                   )}
                 </div>
               </div>
+              
             </div>
           </div>
         </div>

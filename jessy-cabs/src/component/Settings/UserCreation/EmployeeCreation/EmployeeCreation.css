@@ -43,7 +43,7 @@
 
 /* TABLE */
 .EmployeeCreation-table-container {
-  margin-top: 10px;
+  /* margin-top: 10px; */
   border: 1px solid #ccc;
   padding: 20px;
   background-color: var(--glass);
@@ -79,7 +79,9 @@
 .add-icon{
   position: relative;
   right: 30px;
-  height: 10px !important;
+  /* height: 10px !important; */
+  background-color: #fff !important;
+  margin-top: 0px !important;
 
 }
 
@@ -89,6 +91,7 @@
     position: relative !important;
     right: 100px !important;
     height: 60px !important;
+    background-color: #fff;
   
   }
   

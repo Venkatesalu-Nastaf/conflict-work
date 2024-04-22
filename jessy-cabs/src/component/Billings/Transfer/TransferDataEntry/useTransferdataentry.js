@@ -342,9 +342,10 @@ const useTransferdataentry = () => {
         localStorage.setItem('selectedrowcount', selectedRowCount);
     };
     const handleClickGenerateBill = () => {
-        handleAdd();
-        handleButtonClickTripsheet();
+      
         // handleBillGenerate();
+        //   handleAdd();
+        handleButtonClickTripsheet();
     };
 
     const handleButtonClickTripsheet = () => {
@@ -352,41 +353,45 @@ const useTransferdataentry = () => {
         const customername = customerdata;
         localStorage.setItem('selectedcustomer', customername);
         const storedCustomer = localStorage.getItem('selectedcustomer');
-        const decodedCustomer = decodeURIComponent(storedCustomer);
-        localStorage.setItem('selectedcustomerdata', decodedCustomer);
+            const decodedCustomer = decodeURIComponent(storedCustomer);
+            localStorage.setItem('selectedcustomerdata', decodedCustomer);
         const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&BillDate=${Billingdate}`;
         window.location.href = billingPageUrl;
     }
 
-    // const handleBillGenerate = async () => {
-    //     if (rowSelectionModel.length === 0) {
-    //         setError(true);
-    //         setErrorMessage('Please select rows before generating the bill.');
-    //         return;
-    //     }
-    //     try {
-    //         const tripids = rowSelectionModel;
-    //         if (tripids.some((tripid) => tripid === null || tripid === undefined)) {
-    //             setError(true);
-    //             setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
-    //             return;
-    //         }
-    //         const response = await axios.post(`${apiUrl}/updateStatus`, {
-    //             tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),
-    //             status: 'CBilled',
-    //         });
-    //         if (response.status === 200) {
-    //             setSuccess(true);
-    //             setSuccessMessage('Bill generated successfully!');
-    //         } else {
-    //             setError(true);
-    //             setErrorMessage('Failed to generate bill. Please try again.');
-    //         }
-    //     } catch {
-    //         setError(true);
-    //         setErrorMessage('An error occurred. Please try again later.');
-    //     }
-    // };
+    const handleBillGenerate = async () => {
+        if (rowSelectionModel.length === 0) {
+            setError(true);
+            setErrorMessage('Please select rows before generating the bill.');
+            return;
+        }
+       
+        try {
+            const tripids = rowSelectionModel;
+            if (tripids.some((tripid) => tripid === null || tripid === undefined)) {
+                setError(true);
+                setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
+                return;
+            }
+            handleAdd();
+            handleButtonClickTripsheet();
+            const response = await axios.post(`${apiUrl}/updateStatus`, {
+                tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),
+                status: 'CBilled',
+            });
+            if (response.status === 200) {
+                setSuccess(true);
+                setSuccessMessage('Bill generated successfully!');
+            } else {
+                setError(true);
+                setErrorMessage('Failed to generate bill. Please try again.');
+            }
+        } catch {
+            setError(true);
+            setErrorMessage('An error occurred. Please try again later.');
+        }
+   
+    };
 
 
     const handleAdd = async () => {

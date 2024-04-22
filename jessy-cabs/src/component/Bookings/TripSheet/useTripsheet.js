@@ -1346,35 +1346,39 @@ const useTripsheet = () => {
         handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
     }, [handleChange]);
 
-    const totalKilometers = packageData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1 || book.totalkm1 || formData.totalkm1 || calculateTotalKilometers();
-    const totalTime = packageData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime || calculateTotalTime();
+    // const totalKilometers = Number(packageData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1 || book.totalkm1 || formData.totalkm1 || calculateTotalKilometers());
+    // const totalTime = Number(packageData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime || calculateTotalTime());
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await axios.get(`${apiUrl}/getPackageDetails`, {
-                    params: {
-                        totalkm1: totalKilometers,
-                        totaltime: totalTime,
-                        vehType: packageData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType || formData.vehType,
-                        customer: packageData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || formData.customer,
-                        duty: packageData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty || formData.duty,
-                    },
-                });
-                const packagedet = response.data;
-                setPackageDetails(packagedet);
-            } catch {
-            }
-        }
-        fetchData();
-    }, [
-        book.duty, book.vehType, book.customer,
-        formData.duty, formData.vehType, formData.customer,
-        packageData.duty, packageData.vehType, packageData.customer,
-        selectedCustomerData.customer, selectedCustomerData.duty, selectedCustomerData.vehType,
-        selectedCustomerDatas.customer, selectedCustomerDatas.duty, selectedCustomerDatas.vehType,
-        totalKilometers, totalTime, apiUrl
-    ]);
+    // // useEffect(() => {
+    //     async function fetchData() {
+    //         try {
+
+    //             console.log(typeof (totalKilometers))
+    //             console.log(typeof (totalTime))
+    //             const response = await axios.get(`${apiUrl}/getPackageDetails`, {
+    //                 params: {
+    //                     totalkm1: totalKilometers,
+    //                     totaltime: totalTime,
+    //                     vehType: packageData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType || formData.vehType,
+    //                     customer: packageData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || formData.customer,
+    //                     duty: packageData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty || formData.duty,
+    //                 },
+    //             });
+    //             const packagedet = response.data;
+    //             setPackageDetails(packagedet);
+
+    //         } catch {
+    //         }
+    //     }
+    //     fetchData();
+    // }, [
+    //     book.duty, book.vehType, book.customer,
+    //     formData.duty, formData.vehType, formData.customer,
+    //     packageData.duty, packageData.vehType, packageData.customer,
+    //     selectedCustomerData.customer, selectedCustomerData.duty, selectedCustomerData.vehType,
+    //     selectedCustomerDatas.customer, selectedCustomerDatas.duty, selectedCustomerDatas.vehType,
+    //     totalKilometers, totalTime, apiUrl
+    // ]);
 
     const [smsguest, setSmsGuest] = useState(false);
 
@@ -1570,21 +1574,24 @@ const useTripsheet = () => {
             try {
                 const organizationname = localStorage.getItem('usercompany');
 
-                if (!organizationname) {
+                if (!organizationname || organizationname === "undefined") {
                     return;
                 }
+                if (organizationname) {
+                    const response = await fetch(`${apiUrl}/get-companyimage/${organizationname}`);
 
-                const response = await fetch(`${apiUrl}/get-companyimage/${organizationname}`);
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/public/org_logo/${path}`);
+                        localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
+                        setSelectedImage(attachedImageUrls);
+                    } else {
+                        const timer = setTimeout(fetchData, 2000);
+                        return () => clearTimeout(timer);
+                    }
 
-                if (response.status === 200) {
-                    const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/public/org_logo/${path}`);
-                    localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
-                    setSelectedImage(attachedImageUrls);
-                } else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
                 }
+
             } catch {
             }
         };
@@ -1601,6 +1608,11 @@ const useTripsheet = () => {
             localStorage.setItem('usercompanyname', encoded);
             const storedcomanyname = localStorage.getItem('usercompanyname');
             const organizationname = decodeURIComponent(storedcomanyname);
+
+            if (organizationname === "undefined") {
+                return;
+            }
+
             try {
                 const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
                 if (response.status === 200) {

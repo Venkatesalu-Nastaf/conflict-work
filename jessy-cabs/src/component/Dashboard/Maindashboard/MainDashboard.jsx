@@ -181,26 +181,11 @@ const MainDashboard = () => {
 
   localStorage.setItem("usercompany", usercompany);
 
-  // to show icon image
 
-  // useEffect(() => {
-  //   const handleImageView = () => {
-  //     const userid = localStorage.getItem("useridno");
-  //     axios.get(`${apiUrl}/userprofileview/${userid}`).then((res) => {
-  //       if (res.status === 200) {
-  //         setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
-  //       } else {
-  //         const timer = setTimeout(handleImageView, 100);
-  //         return () => clearTimeout(timer);
-  //       }
-  //     });
-  //   };
-  //   handleImageView();
-  // }, [sharedData, selectedImage, apiUrl]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/tripsheet`);
+        const response = await fetch(`${apiUrl}/tripsheet-maindash`);
         if (response.status === 200) {
           if (response.ok) {
             const data = await response.json();
@@ -301,7 +286,7 @@ const MainDashboard = () => {
           <Dialog open={popupOpen} onClose={handlePopupClose}>
             {/* <p>sdfghjkl;'</p> */}
             <DialogContent>
-              <p className="modal-warning-icon">< PiWarningCircleBold  className="warning-icon"/></p>
+              <p className="modal-warning-icon">< PiWarningCircleBold className="warning-icon" /></p>
               <p className="modal-warning-text">Are you sure want to logout from this <br /> application ?</p>
             </DialogContent>
             <DialogActions className="yes-no-buttons">

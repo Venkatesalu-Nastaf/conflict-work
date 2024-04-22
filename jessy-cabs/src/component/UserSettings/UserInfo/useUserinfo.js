@@ -128,6 +128,10 @@ const useUserinfo = () => {
         const fetchData = async () => {
             const userid = localStorage.getItem('useridno');
             try {
+                if (userid === "undefined") {
+                    return;
+                }
+
                 const response = await fetch(`${apiUrl}/userdataforuserinfo/${userid}`);
                 if (response.status === 200) {
 

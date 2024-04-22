@@ -39,6 +39,8 @@ import MainDashboard from "./component/Dashboard/Maindashboard/MainDashboard";
 import StationCreation from "./component/Settings/StationCreation/StationCreation";
 import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapComponent";
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
+import TemplateSelection from "./component/Info/Mailer/TemplateSelection/TemplateSelection";
+import TemplateCreation from "./component/Info/Mailer/TemplateCreation/TemplateCreation";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -100,6 +102,8 @@ function App() {
                   element={<RateManagement />}
                 />
                 <Route path="/home/info/mailer" element={<Mailer />} />
+                <Route path="/home/info/TemplateSelection" element={<TemplateSelection />} />
+                <Route path="/home/info/TemplateCreation" element={<TemplateCreation />} />
                 <Route path="/home/info/fuelinfo" element={<FuelInfo />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>

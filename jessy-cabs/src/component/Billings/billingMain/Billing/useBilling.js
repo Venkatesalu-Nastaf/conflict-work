@@ -683,13 +683,22 @@ const useBilling = () => {
     useEffect(() => {
         const fetchData = async () => {
             const customer = localStorage.getItem('selectedcustomerid');
+
+            if (customer === null) {
+                return;
+            }
+
             try {
-                const response = await fetch(`${apiUrl}/customers/${encodeURIComponent(customer)}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                if (customer) {
+                    const response = await fetch(`${apiUrl}/customers/${encodeURIComponent(customer)}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const customerData = await response.json();
+                    setCustomerData(customerData);
+
                 }
-                const customerData = await response.json();
-                setCustomerData(customerData);
+
             } catch {
             }
         };
@@ -790,16 +799,20 @@ const useBilling = () => {
                 if (!organizationname) {
                     return;
                 }
-                const response = await fetch(`${apiUrl}/get-companyimage/${organizationname}`);
-                if (response.status === 200) {
-                    const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
-                    localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
-                    setSelectedImage(attachedImageUrls);
-                } else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
+                if (organizationname) {
+                    const response = await fetch(`${apiUrl}/get-companyimage/${organizationname}`);
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
+                        localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
+                        setSelectedImage(attachedImageUrls);
+                    } else {
+                        const timer = setTimeout(fetchData, 2000);
+                        return () => clearTimeout(timer);
+                    }
+
                 }
+
             } catch {
             }
         };

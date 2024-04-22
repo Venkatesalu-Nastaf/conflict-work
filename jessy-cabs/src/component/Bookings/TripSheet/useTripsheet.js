@@ -939,6 +939,10 @@ const useTripsheet = () => {
         }
     };
 
+
+    // lllllllllll
+    const [statechange, setStateChange] = useState(false)
+
     const handleUpload = () => {
         const input = document.createElement('input');
         input.type = 'file';
@@ -951,10 +955,12 @@ const useTripsheet = () => {
         const documentType = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || '';
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
         const file = event.target.files[0];
+        setStateChange((prev) => !prev)
         if (!file) return;
         if (file) {
             const formData = new FormData();
             formData.append('image', file);
+
 
             axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}`, formData)
         }
@@ -1531,6 +1537,8 @@ const useTripsheet = () => {
         fetchData();
     }, [apiUrl, tripiddata]);
 
+
+    // llllllll
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -1553,7 +1561,7 @@ const useTripsheet = () => {
             }
         };
         fetchData();
-    }, [apiUrl]);
+    }, [apiUrl, statechange]);
 
     const [selectedImage, setSelectedImage] = useState(null);
 

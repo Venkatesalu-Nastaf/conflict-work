@@ -832,7 +832,7 @@ router.post('/send-tripsheet-email', async (req, res) => {
 //collect data
 router.get('/tripuploadcollect/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    db.query("SELECT * FROM tripsheetupload where tripid=?", [tripid], (err, results) => {
+    db.query("SELECT * FROM tripsheetupload where tripid=? or bookingno=?", [tripid, tripid], (err, results) => {
         if (err) {
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
         }

@@ -105,7 +105,7 @@ const Customer = () => {
         <form onSubmit={handleClick}>
           <span className="Title-Name">Customer</span>
           <div className="Customer-page-header">
-            <div className="input-field">
+            <div className="input-field Customer-page-input-field">
               <div className="input">
                 <div className="icone">
                   <AccountBalanceWalletIcon color="action" />
@@ -183,8 +183,8 @@ const Customer = () => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-            </div>
-            <div className="input-field">
+            {/* </div>
+            <div className="input-field"> */}
               <div className="input">
                 <div className="icone">
                   <AttachEmailIcon color="action" />
@@ -270,8 +270,8 @@ const Customer = () => {
             </div>
           </div>
           <div className="Customer-page-secend-containers">
-            <div className="input-field  checkbox">
-              <div className="input" style={{ width: "400px" }}>
+            <div className="input-field  checkbox customer-input-feild">
+              <div className="input input-address" style={{ width: "400px" }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
@@ -333,9 +333,9 @@ const Customer = () => {
                 onChange={handleChange}
                 checked={Boolean(selectedCustomerData?.hourRoundedOff || book.hourRoundedOff)}
               />
-            </div>
-            <div className="input-field">
-              <div className="input" style={{ width: "400px" }}>
+            {/* </div>
+            <div className="input-field"> */}
+              <div className="input input-address" style={{ width: "400px" }}>
                 <div className="icone">
                   <HomeTwoToneIcon color="action" />
                 </div>
@@ -409,8 +409,8 @@ const Customer = () => {
                   variant="standard"
                 />
               </div>
-            </div>
-            <div className="input-field">
+            {/* </div>
+            <div className="input-field"> */}
               <div className="input" style={{ width: "400px" }}>
                 <div className="icone">
                   <LocationCityIcon color="action" />
@@ -483,8 +483,8 @@ const Customer = () => {
             </div>
           </div>
           <div className="detail-container-main-customer">
-            <div className="input-field">
-              <div className="input" style={{ width: "400px" }}>
+            <div className="input-field customer-input-feild-add">
+              <div className="input" >
                 <FormLabel>BillingGroup</FormLabel>
                 <Switch label='' onClick={handleButtonClick} />
                 {isInputVisible && (
@@ -525,8 +525,8 @@ const Customer = () => {
                   size='small'
                 />
               </div>
-            </div>
-            <div className="input-field">
+            {/* </div>
+            <div className="input-field"> */}
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
                   <Button variant="contained" onClick={handleEdit}>Edit</Button>
@@ -563,7 +563,7 @@ const Customer = () => {
                 <p>{successMessage}</p>
               </div>
             }
-            <div className="SpeedDial" style={{ padding: '26px', }}>
+            <div className="SpeedDial" style={{ padding: '26px',margin:'50px' }}>
               <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                 <StyledSpeedDial
                   ariaLabel="SpeedDial playground example"

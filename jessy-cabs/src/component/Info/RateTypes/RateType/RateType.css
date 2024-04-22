@@ -103,7 +103,7 @@
 
 .rate-type-inputs{
     flex-wrap: wrap;
-    justify-content: center;
+    /* justify-content: center; */
 }
 
 @media only screen and (max-width:500px) {

@@ -87,7 +87,7 @@
 
 .RateValidity-input-feilds{
     flex-wrap: wrap;
-    justify-content: center;
+    /* justify-content: center; */
 }
 
 @media only screen and (min-width:320px) and (max-width:1240px) {

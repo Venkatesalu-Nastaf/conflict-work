@@ -4,7 +4,7 @@
 }
 
 .FuelInfo-main {
-  width: 100%;
+  width: 100% !important;
   overflow-x: hidden;
   display: flex;
   border-radius: 10px;

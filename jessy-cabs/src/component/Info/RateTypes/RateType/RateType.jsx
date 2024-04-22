@@ -88,6 +88,8 @@ const RateType = () => {
         isEditMode,
         handleEdit,
         handleDateChange,
+        organizationNames
+
     } = useRatype();
 
     useEffect(() => {
@@ -146,7 +148,7 @@ const RateType = () => {
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
-                                    <TextField
+                                    {/* <TextField
                                         size="small"
                                         id="id"
                                         label="Organization Name"
@@ -154,7 +156,28 @@ const RateType = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ratename || book.ratename}
                                         onChange={handleChange}
-                                    />
+                                    /> */}
+                                    <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo-pricetag"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) => handleAutocompleteChange(event, value, "ratename")}
+                // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
+                value={selectedCustomerData?.ratename|| book.selectedCustomerData || ""}
+                // options={PriceTag.map((option) => ({
+                //   label: option.option,
+                // }))}
+                options={organizationNames?.map((option) => ({ label: option }))} // Use organizationName here
+                getOptionLabel={(option) => option.label || selectedCustomerData?.ratename || ''}
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params}  label="Organization Name"name="ratename" inputRef={params.inputRef} />
+                  )
+                }
+                }
+              />
                                 </div>
                             {/* </div>
                             <div className="input-field"> */}

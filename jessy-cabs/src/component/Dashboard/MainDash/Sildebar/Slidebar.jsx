@@ -804,7 +804,9 @@ const Sidebar = () => {
               icon={AiOutlineSetting}
               onClick={handleRegistermenuClick}
               className="dropdown-links-registration"
-            ><MdGroup/><span>Customer</span></Link>
+            >
+              {/* <MdGroup/> */}
+            <span>Customer</span></Link>
           {/* </div>
 
           <div className="registration-dropdown-links"> */}
@@ -821,7 +823,9 @@ const Sidebar = () => {
               icon={AiOutlineSetting}
               onClick={handleRegistermenuClick}
 
-            ><MdGroupRemove/><span>Supplier</span> </Link>
+            >
+              {/* <MdGroupRemove/> */}
+            <span>Supplier</span> </Link>
           {/* </div>
 
           <div className="registration-dropdown-links"> */}
@@ -838,7 +842,9 @@ const Sidebar = () => {
               icon={AiOutlineSetting}
               onClick={handleRegistermenuClick}
 
-            ><HiOutlineUserGroup /><span>Employees
+            >
+              {/* <HiOutlineUserGroup /> */}
+            <span>Employees
               </span></Link>
           {/* </div> */}
 

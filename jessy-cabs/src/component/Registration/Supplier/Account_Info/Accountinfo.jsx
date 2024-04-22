@@ -103,7 +103,7 @@ const Accuntinfo = () => {
       <form onSubmit={handleClick}>
         <div className="detail-container-main-account">
           <div className="container-left-account">
-            <div className="input-field">
+            <div className="input-field account-info-input-feild">
               <div className="input">
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
@@ -162,8 +162,8 @@ const Accuntinfo = () => {
                   variant="standard"
                 />
               </div>
-            </div>
-            <div className="input-field">
+            {/* </div>
+            <div className="input-field"> */}
               <div className="input" style={{ width: "415px" }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
@@ -215,8 +215,8 @@ const Accuntinfo = () => {
                   }
                 />
               </div>
-            </div>
-            <div className="input-field">
+            {/* </div>
+            <div className="input-field"> */}
               <div className="input" style={{ width: "415px" }}>
                 <div className="icone">
                   <HomeTwoToneIcon color="action" />
@@ -264,8 +264,8 @@ const Accuntinfo = () => {
                   }}
                 />
               </div>
-            </div>
-            <div className="input-field">
+            {/* </div>
+            <div className="input-field"> */}
               <div className="input" style={{ width: "415px" }}>
                 <div className="icone">
                   <LocationCityIcon color="action" />
@@ -319,7 +319,7 @@ const Accuntinfo = () => {
             </div>
           </div>
         </div>
-        <div className="input-field">
+        <div className="input-field account-info-label">
           <div className="input">
             <FormControl>
               <FormLabel id="demo-row-radio-buttons-group-label">

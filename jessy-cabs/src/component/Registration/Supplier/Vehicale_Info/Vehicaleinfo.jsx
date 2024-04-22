@@ -18,6 +18,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Autocomplete } from "@mui/material";
 import Checkbox from '@mui/material/Checkbox';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { FiUpload } from "react-icons/fi";
+
 
 // FONTAWESOME ICON
 // import { TbLicense } from "react-icons/tb";
@@ -58,6 +60,7 @@ import { StationName } from "../DriverCreation/DriverCreationData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 // import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
+import DateRangeIcon from '@mui/icons-material/DateRange';
 
 
 
@@ -203,14 +206,18 @@ const Vehicaleinfo = () => {
   }, [actionName, handleClick]);
 
 
+
+  
+
   return (
     <div className="vehicale-form">
       <form action="">
         <div className="detail-container-main-vehicale">
 
           <div className="vehicaleinfo-container">
+            
             <div className="vehicaleinfo-container-left">
-              <div className="input-field">
+              <div className="input-field vehicleinfo-inputfeild">
                 <div className="input">
                   <div className="icone">
                     <MinorCrashIcon color="action" />
@@ -243,8 +250,8 @@ const Vehicaleinfo = () => {
                   {/* </div> */}
                 </div>
 
-              </div>
-              <div className="input-field">
+              {/* </div>
+              <div className="input-field"> */}
                 <div className="input">
                   <div className="icone">
                     <AirportShuttleIcon color="action" />
@@ -309,8 +316,8 @@ const Vehicaleinfo = () => {
                     }}
                   />
                 </div>
-              </div>
-              <div className="input-field">
+              {/* </div>
+              <div className="input-field"> */}
                 <div className="input">
                   <div className="icone">
                     <EmailIcon color="action" />
@@ -358,8 +365,8 @@ const Vehicaleinfo = () => {
                     }}
                   />
                 </div>
-              </div>
-              <div className="input-field">
+              {/* </div>
+              <div className="input-field"> */}
                 <div className="input">
                   <div className="icone">
                     <CarCrashIcon color="action" />
@@ -425,8 +432,7 @@ const Vehicaleinfo = () => {
                 />
               </div> */}
               </div>
-            </div>
-            <div className="vehicaleinfo-container-right">
+              <div className="vehicaleinfo-container-right">
               <div className="vehicaleinfo-update-main">
                 <div className="vehicaleinfo-update">
                   <div
@@ -473,8 +479,56 @@ const Vehicaleinfo = () => {
                 </div>
               </div>
             </div>
+            </div>
+            {/* <div className="vehicaleinfo-container-right">
+              <div className="vehicaleinfo-update-main">
+                <div className="vehicaleinfo-update">
+                  <div
+                    className="Scroll-Style"
+                    style={{ overflow: "scroll", height: "220px" }}
+                  >
+                    <table>
+                      <thead id="update-header">
+                        <tr>
+                          <th>ID</th>
+                          <th>Vehicle_Name</th>
+                          <th>Owner</th>
+                          <th>Vehicle_Type</th>
+                          <th>status</th>
+                          <th>Group</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        {rows1?.length === 0 ? (
+                          <tr>
+                            <td colSpan={6}>No data available.</td>
+                          </tr>
+                        ) : (
+                          rows1?.map((row) => (
+                            <tr
+                              id="update-row"
+                              key={row.id}
+                              onClick={() => handleRowClick(row)}
+
+                            >
+                              <td>{row.vehicleId}</td>
+                              <td>{row.vehiclename}</td>
+                              <td>{row.owner}</td>
+                              <td>{row.vechtype}</td>
+                              <td>{row.active}</td>
+                              <td>{row.Groups}</td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div> */}
           </div>
-          <div className="input-field">
+          <div className="input-field vehicleinfo-inputfeild">
             {/* <div className="input"> */}
 
             <div className="input" style={{ width: "215px" }}>
@@ -560,8 +614,8 @@ const Vehicaleinfo = () => {
                 </DatePicker>
               </LocalizationProvider>
             </div> */}
-          </div>
-          <div className="input-field">
+          {/* </div>
+          <div className="input-field"> */}
             <div className="input">
               <div className="icone">
                 <ContactPhoneIcon color="action" />
@@ -592,8 +646,14 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input">
               {/* {selectedCustomerData.vehicleId || book.vehicleId ? ( */}
-              <Button color="primary" variant="contained" size="md" component="label">
-                Insurance Copy
+              <Button color="primary" variant="contained" size="md" component="label" style={{display:'flex', alignItems:'center',gap:'10px'}}>
+              <FiUpload />
+              <span>
+              Insurance Copy
+
+              </span>
+
+               
                 <input
                   type="file"
                   style={{ display: "none" }}
@@ -657,72 +717,10 @@ const Vehicaleinfo = () => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-          </div>
+          {/* </div> */}
 
-          {/* <div className="input-field">
-            <div className="input">
-              <div className="icone">
-                <TbLicense color="action" style={{ fontSize: "23px" }} />
-              </div>
-              <TextField
-                margin="normal"
-                size="small"
-                name="licenseno"
-                value={selectedCustomerData.licenseno || book.licenseno}
-                onChange={handleChange}
-                label="License No"
-                id="tank_cap"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <BatchPredictionIcon color="action" />
-              </div>
-              <TextField
-                margin="normal"
-                size="small"
-                name="licensebatchno"
-                value={selectedCustomerData.licensebatchno || book.licensebatchno}
-                onChange={handleChange}
-                label="License Batch No"
-                id="tank_cap"
-              />
-            </div>
-            <div className="input">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="License Due Date"
-                  format="DD/MM/YYYY"
-                  value={selectedCustomerData.licduedate ? dayjs(selectedCustomerData.licduedate) : null}
-                  onChange={(date) => handleDateChange(date, 'licduedate')}
-                >
-                  {({ inputProps, inputRef }) => (
-                    <TextField {...inputProps} inputRef={inputRef} name='licduedate' value={selectedCustomerData.licduedate} />
-                  )}
-                </DatePicker>
-              </LocalizationProvider>
-            </div>
-            <div className="input">
-              {selectedCustomerData.vehicleId || book.vehicleId ? (
-                <Button color="primary" variant="contained" size="md" component="label">
-                  License Copy
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(e) => setLicence(e.target.files[0])}
-                  />
-                </Button>
-              ) : (
-                <Button color="primary" variant="contained" onClick={() => {
-                  setError(true);
-                  setErrorMessage("Please Enter Booking No");
-                }}>
-                  License Copy
-                </Button>
-              )}
-            </div>
-          </div> */}
-          <div className="input-field">
+       
+          {/* <div className="input-field"> */}
             <div className="input" style={{ width: "220px" }}>
               <div className="icone">
                 <DocumentScannerIcon color="action" />
@@ -739,6 +737,7 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
+                
                 <DatePicker
                   label="National Permit Date"
                   format="DD/MM/YYYY"
@@ -760,8 +759,12 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input" style={{ width: "220px" }}>
 
-              <Button color="primary" variant="contained" size="md" component="label">
-                National Permit Copy
+              <Button color="primary" variant="contained" size="md" component="label" style={{display:'flex', alignItems:'center',gap:'10px'}}> 
+              <FiUpload />
+              <span>
+              National PermitCopy
+              </span>
+                
                 <input
                   type="file"
                   style={{ display: "none" }}
@@ -784,8 +787,8 @@ const Vehicaleinfo = () => {
                 size="small"
               />
             </div>
-          </div>
-          <div className="input-field">
+          {/* </div>
+          <div className="input-field"> */}
             <div className="input" style={{ width: "220px" }}>
               <div className="icone">
                 <DocumentScannerIcon color="action" />
@@ -823,8 +826,14 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input" style={{ width: "220px" }}>
 
-              <Button color="primary" variant="contained" size="md" component="label">
-                State Permit Copy
+              <Button color="primary" variant="contained" size="md" component="label" style={{display:'flex', alignItems:'center',gap:'10px'}}>
+              <FiUpload />
+              <span>
+              State Permit Copy
+
+              </span>
+
+              
                 <input
                   type="file"
                   style={{ display: "none" }}
@@ -846,8 +855,8 @@ const Vehicaleinfo = () => {
                 size="small"
               />
             </div>
-          </div>
-          <div className="input-field">
+          {/* </div>
+          <div className="input-field"> */}
             <div className="input" style={{ width: "220px" }}>
               <div className="icone">
                 <HistoryEduIcon color="action" />
@@ -886,8 +895,14 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input">
 
-              <Button color="primary" variant="contained" size="md" component="label">
-                RC-Book Copy
+              <Button color="primary" variant="contained" size="md" component="label" style={{display:'flex', alignItems:'center',gap:'10px'}}>
+              <FiUpload />
+              <span>
+              RC-Book Copy
+
+              </span>
+
+                
                 <input
                   type="file"
                   style={{ display: "none" }}
@@ -898,8 +913,12 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input" style={{ width: "160px" }}>
 
-              <Button color="primary" variant="contained" size="md" component="label">
-                FC Copy
+              <Button color="primary" variant="contained" size="md" component="label" style={{display:'flex', alignItems:'center',gap:'10px'}}>
+              <FiUpload />
+              <span>
+              FC Copy
+              </span>
+
                 <input
                   type="file"
                   style={{ display: "none" }}
@@ -908,8 +927,8 @@ const Vehicaleinfo = () => {
               </Button>
 
             </div>
-          </div>
-          <div className="input-field">
+          {/* </div>
+          <div className="input-field"> */}
 
             <div className="input">
               <div className="icone">
@@ -925,49 +944,7 @@ const Vehicaleinfo = () => {
                 id="tank_cap"
               />
             </div>
-            {/* <div className="input">
-              <div className="icone">
-                <AltRouteIcon color="action" />
-              </div>
-              <TextField
-                margin="normal"
-                size="small"
-                name="routeno"
-                value={selectedCustomerData.routeno || book.routeno}
-                onChange={handleChange}
-                label="Route No"
-                id="routeno"
-              />
-            </div>
-            <div className="input">
-              <div className="icone">
-                <AutoModeIcon color="action" />
-              </div>
-              <TextField
-                margin="normal"
-                size="small"
-                name="remarks"
-                value={selectedCustomerData.remarks || book.remarks}
-                onChange={handleChange}
-                label="Remarks"
-                id="remarks"
-              />
-            </div> */}
-            {/* </div> */}
-            {/* <div className="input-field"> */}
-            {/* <div className="input">
-              <div className="icone">
-                <AssignmentIndTwoToneIcon color="action" />
-              </div>
-              <TextField
-                name="OwnerType"
-                value={selectedCustomerData.OwnerType || book.OwnerType}
-                onChange={handleChange}
-                label="Owner Type"
-                id="owner_type"
-                size="small"
-              />
-            </div> */}
+          
             <div className="input">
               <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
@@ -1041,7 +1018,7 @@ const Vehicaleinfo = () => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Booking">
-              <div className="input-field" style={{ justifyContent: 'center' }}>
+              <div className="input-field" style={{ justifyContent: 'center',flexWrap:'wrap' }}>
                 <div className="input" style={{ width: "230px" }}>
                   <div className="icone">
                     <AiOutlineFileSearch color="action" style={{ fontSize: "27px" }} />
@@ -1058,6 +1035,9 @@ const Vehicaleinfo = () => {
                 </div>
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <div className="icone">
+                  <DateRangeIcon color="action" />
+                </div>
                     <DatePicker
                       label="From Date"
                       format="DD/MM/YYYY"
@@ -1069,6 +1049,9 @@ const Vehicaleinfo = () => {
                 </div>
                 <div className="input">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <div className="icone">
+                  <DateRangeIcon color="action" />
+                </div>
                     <DatePicker
                       label="To Date"
                       format="DD/MM/YYYY"

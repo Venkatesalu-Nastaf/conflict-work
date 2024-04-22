@@ -53,6 +53,8 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import { APIURL } from "../../../url";
+import DateRangeIcon from '@mui/icons-material/DateRange';
+
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -128,7 +130,7 @@ const Employe = () => {
       <form onSubmit={handleClick}>
         <div className="detail-container-main-Employe">
           <div className="container-Employe">
-            <div className="input-field">
+            <div className="input-field employee-input-feilds">
               <div className="input">
                 <div className="icone">
                   <BadgeIcon color="action" />
@@ -185,8 +187,8 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className="input-field">
+            {/* </div>
+            <div className="input-field"> */}
               <div className="input">
                 <div className="icone">
                   <WorkOutlineRoundedIcon color="action" />
@@ -203,6 +205,9 @@ const Employe = () => {
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <div className="icone">
+                  <DateRangeIcon color="action" />
+                </div>
                   <DatePicker
                     label="Joining Date"
                     format="DD/MM/YYYY"
@@ -251,9 +256,9 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className="input-field">
-              <div className="input" style={{ width: "415px" }}>
+            {/* </div>
+            <div className="input-field"> */}
+              <div className="input input-address" style={{ width: "415px" }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
@@ -297,9 +302,9 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className="input-field">
-              <div className="input" style={{ width: "415px" }}>
+            {/* </div>
+            <div className="input-field"> */}
+              <div className="input input-address" style={{ width: "415px" }}>
                 <div className="icone">
                   <LocationCityIcon color="action" />
                 </div>
@@ -342,8 +347,8 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className="input-field">
+            {/* </div>
+            <div className="input-field"> */}
               <div className="input" style={{ width: "260px" }}>
                 <div className="icone">
                   <DeviceHubRoundedIcon color="action" />
@@ -372,7 +377,7 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{ width: "250px" }}>
+              <div className="input" style={{ width: "250px",display:'flex',flexWrap:'nowrap',alignItems:'center',marginTop:'20px' }}>
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
                 </div>
@@ -385,8 +390,8 @@ const Employe = () => {
                   value={selectedCustomerData?.licenceno || book.licenceno}
                   onChange={handleChange}
                 />
-              </div>
-              <div className="input" style={{ width: "20px" }}>
+
+              <div>
                 {selectedCustomerData?.empid || book.empid ? (
                   <Button component="label">
                     <UploadFileIcon />
@@ -405,6 +410,27 @@ const Employe = () => {
                   </Button>
                 )}
               </div>
+              </div>
+              
+              {/* <div className="input" style={{ width: "20px" }}>
+                {selectedCustomerData?.empid || book.empid ? (
+                  <Button component="label">
+                    <UploadFileIcon />
+                    <input
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={(e) => setFile(e.target.files[0])}
+                    />
+                  </Button>
+                ) : (
+                  <Button color="primary" variant="contained" onClick={() => {
+                    setError(true);
+                    setErrorMessage("Please Enter Booking No");
+                  }}>
+                    <UploadFileIcon />
+                  </Button>
+                )}
+              </div> */}
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "160px" }}>
@@ -484,7 +510,7 @@ const Employe = () => {
           </StyledSpeedDial>
         </Box>
         <div className="Employe-search-container">
-          <div className="input-field" style={{ justifyContent: "center" }}>
+          <div className="input-field  Employe-search-input" style={{ justifyContent: "center" }}>
             <div className="input" style={{ width: "230px" }}>
               <div className="icone">
                 <AiOutlineFileSearch

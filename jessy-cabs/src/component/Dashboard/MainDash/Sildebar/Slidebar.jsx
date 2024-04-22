@@ -24,6 +24,10 @@ import { FaUserAstronaut } from "@react-icons/all-files/fa/FaUserAstronaut";
 import { BiBarChartSquare } from "@react-icons/all-files/bi/BiBarChartSquare";
 import { AiOutlineSetting } from "@react-icons/all-files/ai/AiOutlineSetting";
 import { AiOutlineInfoCircle } from "@react-icons/all-files/ai/AiOutlineInfoCircle";
+import { MdGroup } from "react-icons/md";
+import { MdGroupRemove } from "react-icons/md";
+import { HiOutlineUserGroup } from "react-icons/hi";
+
 import { APIURL } from "../../../url";
 
 const MenuItem = ({
@@ -99,6 +103,7 @@ const Sidebar = () => {
   const [selectedprofileImage, setSelectedprofileImage] = useState(null);
   const [settingsDropdownVisible, setSettingsDropdownVisible] = useState(false);
   const [infoDropdownVisible, setInfoDropdownVisible] = useState(false);
+  const [registrationDropdownVisible, setRegistrationDropdownVisible] = useState(false);
 
   useEffect(() => {
     setSelectedImage(sharedData)
@@ -139,12 +144,30 @@ const Sidebar = () => {
   const handleSettingsClick = () => {
     setSettingsDropdownVisible(!settingsDropdownVisible);
     setInfoDropdownVisible(false)
+    setRegistrationDropdownVisible(false);
+
   };
 
 
   const handleinfoClick =()=>{
     setInfoDropdownVisible(!infoDropdownVisible);
     setSettingsDropdownVisible(false);
+    setRegistrationDropdownVisible(false);
+
+
+
+  }
+
+  const handleRegisterClick =()=>{
+    setRegistrationDropdownVisible(!registrationDropdownVisible);
+    setSettingsDropdownVisible(false);
+    setInfoDropdownVisible(false)
+
+
+  }
+  const handleRegistermenuClick =()=>{
+    setRegistrationDropdownVisible(false);
+ 
 
 
   }
@@ -152,6 +175,8 @@ const Sidebar = () => {
   const handleMenuItemClick = async (menuItemKey, name, alt) => {
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false);
+    setRegistrationDropdownVisible(false);
+
 
     // const currentPageName = name;
     localStorage.setItem("selectedMenuItem", menuItemKey);
@@ -215,6 +240,14 @@ const Sidebar = () => {
       navigate("/home/info/mailer");
     }else if(window.location.pathname !== "/home/info/fuelinfo"){
       navigate("/home/info/fuelinfo");
+    }else if(window.location.pathname !== "/home/registration/customer"){
+      navigate("/home/registration/customer");
+    }
+    else if(window.location.pathname !== "/home/registration/supplier"){
+      navigate("/home/registration/supplier");
+    }
+    else if(window.location.pathname !== "/home/registration/employes"){
+      navigate("/home/registration/employes");
     }
   };
 
@@ -359,7 +392,7 @@ const Sidebar = () => {
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}
           />
-          {/* <MenuItem
+          <MenuItem
             label="Settings"
             to={"/home/settings/usercreation"}
             alt="/home/settings/usercreation"
@@ -367,10 +400,10 @@ const Sidebar = () => {
             menuItemKey="/home/settings"
             name="Settings page"
             isActive={isActive}
-            handleMenuItemClick={handleaddClick}
+            handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineSetting}
-          /> */}
-
+          />
+{/* 
 <motion.div >
         
         <MenuItem
@@ -567,8 +600,8 @@ const Sidebar = () => {
          
      
         </div>
-      )}
-          {/* <MenuItem
+      )} */}
+          <MenuItem
             label="Info"
             to={"/home/info/ratetype"}
             alt="/home/info/ratetype"
@@ -577,8 +610,8 @@ const Sidebar = () => {
             name="Info page"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
-            icon={FaUserAstronaut}
-          /> */}
+            icon={AiOutlineInfoCircle}
+          />
           <MenuItem
             label="User"
             to="/home/usersettings/usersetting"
@@ -715,7 +748,7 @@ const Sidebar = () => {
             handleMenuItemClick={handleMenuItemClick}
             icon={BiBarChartSquare}
           />
-          <MenuItem
+          {/* <MenuItem
             label="Register"
             to={"/home/registration/customer"}
             alt="/home/registration/customer"
@@ -725,8 +758,8 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}
-          />
-          <MenuItem
+          /> */}
+          {/* <MenuItem
             label="Settings"
             to={"/home/settings/usercreation"}
             alt="/home/settings/usercreation"
@@ -736,8 +769,287 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineSetting}
-          />
-          <MenuItem
+          /> */}
+
+
+
+
+<motion.div>
+        <MenuItem
+          label="Register"
+          // to={"/home/registration/customer"}
+          // alt="/home/registration/customer"
+          value="/home/registration"
+          menuItemKey="/home/registration"
+          name="Registration page"
+          isActive={isActive}
+          handleMenuItemClick={handleRegisterClick}
+          icon={BiNotepad}
+         
+        />
+      </motion.div>
+
+      {registrationDropdownVisible && (
+        <div className="registration-dropdown">
+          {/* <div className="registration-dropdown-links"> */}
+            <Link
+              label="Customer Registration"
+              to="/home/registration/customer"
+              alt="/home/registration/customer"
+              value="/home/registration"
+              menuItemKey="/home/registration/customer"
+              name="Customer Registration"
+              isActive={isActive}
+              handleMenuItemClick={handleRegisterClick}
+              icon={AiOutlineSetting}
+              onClick={handleRegistermenuClick}
+              className="dropdown-links-registration"
+            ><MdGroup/><span>Customer</span></Link>
+          {/* </div>
+
+          <div className="registration-dropdown-links"> */}
+            <Link
+              label="Supplier Registration"
+              to="/home/registration/supplier"
+              alt="/home/registration/supplier"
+              value="/home/registration"
+              menuItemKey="/home/registration/supplier"
+              name="Supplier Registration"
+              className="dropdown-links-registration"
+              isActive={isActive}
+              handleMenuItemClick={handleRegisterClick}
+              icon={AiOutlineSetting}
+              onClick={handleRegistermenuClick}
+
+            ><MdGroupRemove/><span>Supplier</span> </Link>
+          {/* </div>
+
+          <div className="registration-dropdown-links"> */}
+            <Link
+              label="Supplier Registration"
+              to="/home/registration/employes"
+              alt="/home/registration/employes"
+              value="/home/registration"
+              menuItemKey="/home/registration/employes"
+              name="Supplier Registration"
+              className="dropdown-links-registration"
+              isActive={isActive}
+              handleMenuItemClick={handleRegisterClick}
+              icon={AiOutlineSetting}
+              onClick={handleRegistermenuClick}
+
+            ><HiOutlineUserGroup /><span>Employees
+              </span></Link>
+          {/* </div> */}
+
+          </div>
+      )}
+
+
+
+
+          
+<motion.div >
+        
+        <MenuItem
+          label="Settings "
+          // to={"/home/settings"}
+          // alt="/home/settings"
+          value="/home/settings"
+          menuItemKey="/home/settings"
+          name="Settings page"
+          isActive={isActive}
+          handleMenuItemClick={handleSettingsClick}
+          icon={AiOutlineSetting}
+          dropdownItems={[
+            // {
+            //   label: "user Creation",
+            //   to : "settings/usercreation",
+            // alt:"settings/usercreation",
+            // value:"settings",
+            // menuItemKey:"settings",
+            // name:"User page",
+            // isActive:{isActive},
+            // handleMenuItemClick:{handleMenuItemClick},
+            // icon:{FaUserAstronaut}
+            // },
+            // {
+            //   label: "Setting 2",
+            //   to: "/home/settings/setting2",
+            //   menuItemKey: "/home/settings/setting2",
+            //   name: "Setting 2",
+            //   alt: "/home/settings/setting2",
+            // },
+          ]}
+        />
+
+
+      </motion.div>
+
+      {settingsDropdownVisible && (
+        <div className="settings-dropdown">
+         <div className="settings-dropdown-links">
+         <Link
+          label="User"
+          to="settings/usercreation"
+          alt="settings/usercreation"
+          value="/home/settings"
+          menuItemKey="settings"
+          name="User page"
+          isActive={isActive}
+          handleMenuItemClick={handleSettingsClick}
+          icon={AiOutlineSetting}
+          className="dropdown-links"
+        
+         >user Creation</Link>
+         </div>
+         <div className="settings-dropdown-links">
+         <Link 
+          label="jjjjjjjjj"
+          to="settings/stationcreation"
+          alt="home/settings/stationcreation"
+          value="settings"
+          menuItemKey="settings"
+          name="ffff"
+          className="dropdown-links"
+          isActive={isActive}
+          handleMenuItemClick={handleSettingsClick}
+          icon={AiOutlineSetting}
+         >Station Creation</Link>
+         </div>
+
+
+         
+         <div className="settings-dropdown-links">
+         <Link
+         to="settings/mainsetting"
+         label="User"
+          // to="/home/usersettings/usersetting"
+          alt="settings/mainsetting"
+          value="home/settings"
+          menuItemKey="home/settings"
+          name="User page" isActive={isActive}
+          handleMenuItemClick={handleSettingsClick}
+          icon={AiOutlineSetting}
+          className="dropdown-links"
+           >
+          <p>
+          Main setting
+          </p>
+         </Link>
+
+         </div>
+        </div>
+      )}
+
+
+
+<motion.div >
+        
+        <MenuItem
+          label="info "
+          // to={"/home/settings"}
+          // alt="/home/info"
+          value="/home/info"
+          menuItemKey="/home/info"
+          name="info page"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineInfoCircle}
+          dropdownItems={[
+            // {
+            //   label: "user Creation",
+            //   to : "settings/usercreation",
+            // alt:"settings/usercreation",
+            // value:"settings",
+            // menuItemKey:"settings",
+            // name:"User page",
+            // isActive:{isActive},
+            // handleMenuItemClick:{handleMenuItemClick},
+            // icon:{FaUserAstronaut}
+            // },
+            // {
+            //   label: "Setting 2",
+            //   to: "/home/settings/setting2",
+            //   menuItemKey: "/home/settings/setting2",
+            //   name: "Setting 2",
+            //   alt: "/home/settings/setting2",
+            // },
+          ]}
+        />
+
+
+      </motion.div>
+
+      {infoDropdownVisible && (
+        <div className="settings-dropdown">
+         <div className="settings-dropdown-links">
+         <Link
+          label="User"
+          to="info/ratetype"
+          alt="info/ratetype"
+          value="/home/info"
+          menuItemKey="ratetype"
+          name="ratetype"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+          className="dropdown-links"
+        
+         >Rate Type</Link>
+         </div>
+
+         <div className="settings-dropdown-links">
+         <Link 
+          label="ratemanagement"
+          to="/home/info/ratemanagement"
+          alt="/home/info/ratemanagement"
+          value="/home/info"
+          menuItemKey="ratemanagement"
+          name="ratemanagement"
+          className="dropdown-links"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+         >Rate Management</Link>
+         </div>
+
+         <div className="settings-dropdown-links">
+         <Link 
+          label="mailer"
+          to="/home/info/mailer"
+          alt="/home/info/mailer"
+          value="/home/info"
+          menuItemKey="mailer"
+          name="mailer"
+          className="dropdown-links"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+         >Mailer</Link>
+         </div>
+
+         <div className="settings-dropdown-links">
+         <Link 
+          label="fuelinfo"
+          to="/home/info/fuelinfo"
+          alt="/home/info/fuelinfo"
+          value="/home/info"
+          menuItemKey="fuelinfo"
+          name="fuelinfo"
+          className="dropdown-links"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+         >Fuel Info</Link>
+         </div>
+
+
+         
+     
+        </div>
+      )}
+          {/* <MenuItem
             label="Info"
             to={"/home/info/ratetype"}
             alt="/home/info/ratetype"
@@ -747,7 +1059,20 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineInfoCircle}
-          />
+          /> */}
+
+          
+
+
+
+
+
+
+
+
+
+
+
           <MenuItem
             label="User"
             to="/home/usersettings/usersetting"

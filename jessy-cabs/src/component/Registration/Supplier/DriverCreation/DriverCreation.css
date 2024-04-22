@@ -3,7 +3,7 @@
     width: 100%;
     overflow-x: hidden;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     color: #000;
 }
 
@@ -58,4 +58,56 @@
 
 .detail-container-main {
     display: flex;
+  }
+
+  .driver-info-inputs{
+   flex-wrap: wrap; 
+   /* justify-content: center; */
+  }
+
+  @media screen and (min-width:970px) and (max-width:1240px) {
+    .form-container .container-main{ 
+      width: 76vw !important;
+    }
+  }
+  
+  @media screen and (min-width:769px) and (max-width:969.99px) {
+    .form-container .container-main{ 
+      width: 70vw !important;
+    }
+  }
+
+  /* @media screen and (min-width:970px) and (max-width:1240px) {
+    .DriverCreation-main .DriverCreation-form-container{ 
+      width: 76vw !important;
+    }
+  }
+  
+  @media screen and (min-width:769px) and (max-width:969.99px) {
+    .DriverCreation-main .DriverCreation-form-container{ 
+      width: 70vw !important;
+    }
+  } */
+
+  .driver-input{
+    width: 300px !important;
+  }
+
+
+ 
+  @media screen and (min-width:320px) and (max-width:700px) {
+    .detail-container-main-crivercreation{
+    
+        display: flex;
+        width: 85% !important;
+    
+  }
+  }
+
+  @media screen and (min-width:320px) and (max-width:380px) {
+    .copy-title-btn-Booking {
+        background-color: transparent;
+        border:none !important;
+    }
+
   }

@@ -114,19 +114,21 @@
   width: 535px;
   /* height: 535px; */
 }
+
 .mapview {
   width: 580px !important;
   height: 550px !important;
 }
+
 /* link button style */
-.link-blank-button{
+.link-blank-button {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.signature{
-  background-color:#1976d2;
+.signature {
+  background-color: #1976d2;
   color: #fff;
   border-radius: 10px;
   padding: 10px 20px;
@@ -134,4 +136,8 @@
   font-weight: 600;
   border: 2px solid #1976d2;
   cursor: pointer;
+}
+
+.customer-bill-input {
+  width: 150px;
 }

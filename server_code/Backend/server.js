@@ -301,18 +301,26 @@ const uploadtripsheet = multer({
   storage: storagetripsheet
 })
 
-app.put('/tripsheet_uploads/:id', uploadtripsheet.single('image'), (req, res) => {
+app.put('/tripsheet_uploads/:id/:documentType', uploadtripsheet.single('image'), (req, res) => {
   const userId = req.params.id;
   const fileName = req.file.filename;
+  const documentType = req.params.documentType;
   const filename = req.file.originalname;
+  console.log("aaa", userId, fileName, filename, documentType)
 
-  const insertQuery = `INSERT INTO tripsheetupload (tripid, path, name) VALUES (?, ?, ?)`;
-  db.query(insertQuery, [userId, fileName, filename], (err, result) => {
-    if (err) {
-      return res.status(500).json({ Message: "Error inserting profile picture", err });
-    }
-    return res.status(200).json({ Status: "success" });
-  })
+  if (userId, fileName, filename, documentType) {
+    const insertQuery = `INSERT INTO tripsheetupload (tripid, path, name,documenttype) VALUES (?, ?, ?,?)`;
+    db.query(insertQuery, [userId, fileName, filename, documentType], (err, result) => {
+      if (err) {
+        return res.status(500).json({ Message: "Error inserting profile picture", err });
+      }
+      return res.status(200).json({ Status: "success" });
+    })
+
+  } else {
+    return res.status(500).json({ Message: "some data undefind" })
+  }
+
 });
 
 // login page databse fetch:
@@ -412,8 +420,8 @@ app.use('/images', express.static(attachedDirectory));
 // Example route to serve an image by its filename
 app.get('/get-attachedimage/:tripid', (req, res) => {
   const { tripid } = req.params;
-  const query = 'SELECT path FROM tripsheetupload WHERE tripid = ?';
-
+  const query = 'SELECT path FROM tripsheetupload WHERE tripid = ? ';
+  // const query = `SELECT path FROM tripsheetupload WHERE tripid = ? AND documenttype IN ('TripSheet', 'Parking', 'Toll', 'Permit', 'Sign')`;
   db.query(query, [tripid], (err, results) => {
     if (err) {
       return res.status(500).send('Internal Server Error');
@@ -464,11 +472,12 @@ const companyattachedDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
 app.use('/images', express.static(companyattachedDirectory));
 // Example route to serve an image by its filename
-app.get('/get-companyimage/:tripid', (req, res) => {
-  const { tripid } = req.params;
-  const query = 'SELECT path FROM tripsheetupload WHERE organizationname = ?';
+app.get('/get-companyimage/:organizationname', (req, res) => {
+  const { organizationname } = req.params;
+  const query = 'SELECT * FROM organisation_logo WHERE organisation_name = ?';
+  // const query = 'SELECT fileName FROM organisation_logo WHERE organisation_name = ?';
 
-  db.query(query, [tripid], (err, results) => {
+  db.query(query, [organizationname], (err, results) => {
     if (err) {
       return res.status(500).send('Internal Server Error');
     }
@@ -477,8 +486,7 @@ app.get('/get-companyimage/:tripid', (req, res) => {
       // No record found for the given tripid
       return res.status(404).send('Images not found');
     }
-
-    const imagePaths = results.map(result => result.path);
+    const imagePaths = results.map(result => result.fileName);
     res.json({ imagePaths });
   });
 });

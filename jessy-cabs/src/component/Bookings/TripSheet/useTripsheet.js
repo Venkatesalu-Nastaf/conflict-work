@@ -6,6 +6,9 @@ import {
     VehicleRate,
 } from "./TripSheetdata";
 import { APIURL } from "../../url";
+import Invoice from '../Invoice/Invoice';
+import { saveAs } from 'file-saver';
+import { pdf } from '@react-pdf/renderer';
 
 const useTripsheet = () => {
     const apiUrl = APIURL;
@@ -604,8 +607,8 @@ const useTripsheet = () => {
     };
 
 
-
-    const handleETripsheetClick = (row) => {
+    //607
+    const handleETripsheetClick = async (row) => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
         setTripiddata(tripid)
 
@@ -945,6 +948,7 @@ const useTripsheet = () => {
     };
 
     const handleFileChange = (event) => {
+        const documentType = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || '';
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
         const file = event.target.files[0];
         if (!file) return;
@@ -952,7 +956,7 @@ const useTripsheet = () => {
             const formData = new FormData();
             formData.append('image', file);
 
-            axios.put(`${apiUrl}/tripsheet_uploads/${tripid}`, formData)
+            axios.put(`${apiUrl}/tripsheet_uploads/${tripid}/${documentType}`, formData)
         }
     };
 
@@ -1566,7 +1570,7 @@ const useTripsheet = () => {
 
                 if (response.status === 200) {
                     const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
+                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/public/org_logo/${path}`);
                     localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
                     setSelectedImage(attachedImageUrls);
                 } else {
@@ -1745,6 +1749,7 @@ const useTripsheet = () => {
     }
 
 
+
     // calc function
 
     let data, totkm, tothr, totalHours, duty, vehiletype, organizationname;
@@ -1847,13 +1852,41 @@ const useTripsheet = () => {
         setEscort(event.target.value);
     };
 
+    /// fro cal dialog box
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = async () => {
+
+        duty = formData.duty || selectedCustomerData.duty || book.duty;
+        vehiletype = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
+        totkm = await (formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || '');
+        tothr = await (formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || '');
+        organizationname = formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''
+
+        if (!totkm || !tothr || !duty || !vehiletype || !organizationname) {
+            setError(true);
+            setErrorMessage("Check Hour & KM & duty and vehiletype.! ")
+            return;
+
+        }
+        else {
+            setOpen(true);
+        }
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+
+
     //---------------------------------------
 
 
     return {
         selectedCustomerData, ex_kmAmount, ex_hrAmount, escort, setEscort,
         night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount, totalcalcAmount, driverBeta,
-        selectedCustomerId, nightBta, nightCount, driverbeta_Count, vehileName, handleEscortChange,
+        selectedCustomerId, nightBta, nightCount, driverbeta_Count, vehileName, handleEscortChange, handleClickOpen, open, handleClose,
         rows,
         error,
         success,

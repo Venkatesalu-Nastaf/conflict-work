@@ -96,6 +96,13 @@ import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
+
+// ggggg
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import { TransitionProps } from '@mui/material/transitions';
+
 import useTripsheet from './useTripsheet';
 
 // UpdateTbaleRowsGPSSlider TABLE START
@@ -254,7 +261,7 @@ const TripSheet = () => {
     SignPage,
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
-    totalcalcAmount, escort, handleEscortChange,
+    totalcalcAmount, escort, handleEscortChange, handleClickOpen, open, handleClose,
 
   } = useTripsheet();
 
@@ -269,6 +276,17 @@ const TripSheet = () => {
   // Filter the actions array based on the editMode variable
   const filteredActions = isEditMode ? actions.filter(action => action.name !== "Add") : actions;
 
+
+  //gggggggggggg
+  // const [open, setOpen] = React.useState(false);
+
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
+
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
 
 
   return (
@@ -1247,10 +1265,416 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
-                <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
+
+                {/* ggggggggg */}
+                {/* <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
+                  calculate
+                </Button> */}
+                <Button style={{ marginLeft: "10px" }} variant="contained"
+                  onClick={() => {
+                    handleCalc();
+                    handleClickOpen();
+                  }}
+                >
                   calculate
                 </Button>
               </div>
+              {/* ////gggggggggggg */}
+
+              <React.Fragment>
+
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title" style={{ paddingBottom: 0 }}>
+                    {"Customer Bill"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      <div className="Customer-Customer-Bill-Slider">
+                        <div className="input-field">
+                          <div className="input" style={{ width: "390px" }}>
+                            <div className="icone">
+                              <Inventory2Icon color="action" />
+                            </div>
+                            {/* ayyanar */}
+                            {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
+
+
+
+                            <TextField
+                              name="pack"
+                              // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
+                              value={calcPackage || formData.calcPackage || ''}
+                              // onChange={handleChange}
+
+                              label="Pack"
+                              id="pack"
+                              size="small"
+                              variant="standard"
+                              autoComplete="password"
+                              sx={{ m: 1, width: "60ch" }}
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faEquals} />
+                            </div>
+                            <TextField
+                              name="amount5"
+                              // value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate || ''}
+                              value={package_amount || formData.calcPackage || ''}
+                              // onChange={handleChange}
+                              size="small"
+                              label="Amount"
+                              autoComplete="password"
+                              id="amount"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+                        <div className="input-field">
+                          <div className="input" style={{ width: "186px" }}>
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faRoad} />
+                            </div>
+                            <TextField
+                              name="exkm1"
+                              className='customer-bill-input'
+                              // value={book.exkm1 || packageDetails[0]?.extraKMS || ''}
+                              // onChange={handleChange} 
+                              value={extraKM || formData.calcPackage || 0}
+                              label="Ex.Km"
+                              id="ex-km"
+                              autoComplete="password"
+                              size="small"
+                              variant="standard"
+                            />
+                          </div>
+                          <div className="input" style={{ width: "187px" }}>
+                            <div className="icone">
+                              <TollTwoToneIcon color="action" />
+                            </div>
+                            <TextField size="small"
+                              name='exkmTkm2'
+                              className='customer-bill-input'
+                              // value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2 || ''}
+                              value={extrakm_amount || formData.calcPackage || ''}
+                              // onChange={handleChange}
+                              id="exkmTkm"
+                              variant="standard"
+                              autoComplete="password"
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faEquals} />
+                            </div>
+                            <TextField
+                              name="amount6"
+                              className='customer-bill-input'
+                              // value={book.amount6 || calculateExkmAmount2() || ''}
+                              value={ex_kmAmount || formData.calcPackage || 0}
+                              size="small"
+                              label="Amount"
+                              autoComplete="password"
+                              id="amount"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="input-field">
+                          <div className="input" style={{ width: "186px" }}>
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faStopwatch} />
+                            </div>
+                            <TextField
+                              name="exHrs1"
+                              className='customer-bill-input'
+                              // value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours || ''}
+                              value={extraHR || formData.calcPackage || ''}
+                              // onChange={handleChange}
+                              label="Ex.Hrs"
+                              id="ex-Hrs"
+                              size="small"
+                              autoComplete="password"
+                              variant="standard"
+                            />
+                          </div>
+                          <div className="input" style={{ width: "187px" }}>
+                            <div className="icone">
+                              <TollTwoToneIcon color="action" />
+                            </div>
+                            <TextField
+                              size="small"
+                              name='exHrsTHrs2'
+                              className='customer-bill-input'
+                              // value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2 || ''}  extrahr_amount
+                              value={extrahr_amount || formData.calcPackage || ''}
+                              // onChange={handleChange}
+                              variant="standard"
+                            />
+
+                            {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
+
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faEquals} />
+                            </div>
+                            <TextField
+                              name="amount7"
+                              className='customer-bill-input'
+                              // value={book.amount7 || calculateExHrsAmount2() || ''}
+                              // onChange={caculate_extraHR}
+                              value={ex_hrAmount || formData.calcPackage || 0}
+                              size="small"
+                              label="Amount"
+                              autoComplete="password"
+                              id="amount"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+                        <div className="input-field">
+                          <div className="input" style={{ width: "186px" }}>
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faCloudMoon} />
+                            </div>
+
+                            <TextField
+                              name="night1"
+                              className='customer-bill-input'
+                              value={nightBta || ''}
+                              onChange={(e) => setNightBeta(e.target.value)}
+                              label="Night"
+                              id="night"
+                              autoComplete="password"
+                              size="small"
+                              variant="standard"
+                            />
+                          </div>
+                          <div className="input" style={{ width: "187px" }}>
+                            <div className="icone">
+                              <TollTwoToneIcon color="action" />
+                            </div>
+                            <TextField
+                              size="small"
+                              className='customer-bill-input'
+                              name='nightThrs2'
+                              value={nightCount || ''}
+                              onChange={(e) => setNightCount(e.target.value)}
+                              variant="standard"
+                              autoComplete="password"
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faEquals} />
+                            </div>
+                            <TextField
+                              name="amount8"
+                              className='customer-bill-input'
+                              value={night_totalAmount || 0}
+                              size="small"
+                              autoComplete="password"
+                              label="Amount"
+                              id="amount"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+                        <div className="input-field">
+                          <div className="input" style={{ width: "186px" }}>
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                            </div>
+                            <TextField
+                              name="driverconvenience1"
+                              className='customer-bill-input'
+                              value={driverBeta || formData.driverBeta || ''}
+                              onChange={driverBeta_calc}
+                              label="Driver Convenience"
+                              autoComplete="password"
+                              id="driver-convenience"
+                              size="small"
+                              variant="standard"
+                            />
+                          </div>
+                          <div className="input" style={{ width: "187px" }}>
+                            <div className="icone">
+                              <TollTwoToneIcon color="action" />
+                            </div>
+                            <TextField
+                              size="small"
+                              name='dtc2'
+                              className='customer-bill-input'
+                              value={driverbeta_Count || formData.driverbeta_Count || ''}
+                              onChange={driverbeta_Count_calc}
+                              variant="standard"
+                              autoComplete="password"
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faEquals} />
+                            </div>
+                            <TextField
+                              name="amount9"
+                              className='customer-bill-input'
+                              value={driverBeta_amount || 0}
+                              size="small"
+                              label="Amount"
+                              id="amount"
+                              autoComplete="password"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+
+                        <TextField
+                          name="amount9"
+                          value={totalcalcAmount || 0}
+                          size="small"
+                          label="Total Amount"
+                          id="amount"
+                          autoComplete="password"
+                          variant="standard"
+                          style={{ marginTop: '25px', marginLeft: '15px' }}
+                        />
+                        <div className="input-field">
+                          {/* <div className="input" style={{ width: "390px" }}>
+                      <div className="icone">
+                        <TollTwoToneIcon color="action" />
+                      </div>
+                      <TextField
+                        name="rud"
+                        value={formData.rud || selectedCustomerData.rud || book.rud || ''}
+                        onChange={handleChange}
+                        label="Rud"
+                        id="rud"
+                        size="small"
+                        autoComplete="password"
+                        variant="standard"
+                        sx={{ m: 1, width: "60ch" }}
+                      />
+                    </div> */}
+                          {/* <div className="input">
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faEquals} />
+                      </div>
+                      <TextField
+                        name="netamount1"
+                        value={book.netamount1 || calculateTotalAmount2() || ''}
+                        onChange={handleChange}
+                        size="small"
+                        label="Net Amount"
+                        id="net-amount"
+                        autoComplete="password"
+                        variant="standard"
+                      />
+                    </div> */}
+                        </div>
+                        <div className="input-field">
+                          {/* <div className="input" style={{ width: "186px" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faTags} />
+                      </div>
+                      <TextField
+                        name="discount"
+                        value={formData.discount || selectedCustomerData.discount || book.discount || ''}
+                        onChange={handleChange}
+                        label="Discount"
+                        id="discount"
+                        size="small"
+                        autoComplete="password"
+                        variant="standard"
+                      />
+                    </div> */}
+                          {/* <div className="input" style={{ width: "187px" }}>
+                      <div className="icone">
+                        <TollTwoToneIcon color="action" />
+                      </div>
+                      <TextField size="small" variant="standard" />
+                    </div> */}
+                          {/* <div className="input">
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faEquals} />
+                      </div>
+                      <TextField
+                        name="ons"
+                        value={formData.ons || selectedCustomerData.ons || book.ons || ''}
+                        onChange={handleChange}
+                        size="small"
+                        label="On"
+                        autoComplete="password"
+                        id="on"
+                        variant="standard"
+                      />
+                    </div> */}
+                        </div>
+                        <div className="input-field">
+                          {/* <div className="input radio">
+                      <FormControlLabel
+                        name="manualbills"
+                        value="manualbills"
+                        control={<Checkbox size="small" />}
+                        label="Manual Bills"
+                        autoComplete="new-password"
+                        onChange={handleChange}
+                        checked={Boolean(formData.manualbills || selectedCustomerData?.manualbills || book.manualbills)}
+                      />
+                    </div> */}
+                          {/* <div className="input">
+                      <div className="icone">
+                        <AccountBalanceWalletIcon color="action" />
+                      </div>
+                      <TextField
+                        name="balance"
+                        value={formData.balance || selectedCustomerData.balance || book.balance || ''}
+                        onChange={handleChange}
+                        size="small"
+                        autoComplete="password"
+                        label="Balance"
+                        id="balance"
+                      />
+                    </div> */}
+                        </div>
+                        {/* <div className="input-field">
+                    <div className="input">
+                      <TextField size="small" variant="standard" autoComplete="password" />
+                    </div>
+                    <div className="input">
+                      <div
+                        className="icone"
+                        style={{
+                          padding: "0px 10px 0px 0px",
+                          "font-size": "20px",
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                      </div>
+                      <TextField size="small" variant="standard" autoComplete="password" />
+                    </div>
+                  </div> */}
+                      </div>
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions style={{ padding: '20px' }}>
+                    <Button onClick={handleClose} style={{ backgroundColor: 'red', color: 'white' }}>Cancel</Button>
+                    <Button variant="contained" onClick={handleClose} autoFocus>
+                      Save
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </React.Fragment>
+
+              {/* //ggggggggggggggg */}
+
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "250px" }}>
@@ -1374,9 +1798,10 @@ const TripSheet = () => {
                 </FormControl>
               </div> */}
 
-              <Dialog open={popupOpen} onClose={handlePopupClose}>
-                <DialogContent>
-                  <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
+              {/* aaaaaaa */}
+              <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                  <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -1384,6 +1809,7 @@ const TripSheet = () => {
                   </Button>
                 </DialogActions>
               </Dialog>
+
               {/* // ayyanar calc */}
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (<>

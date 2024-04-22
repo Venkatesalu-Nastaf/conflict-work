@@ -21,7 +21,9 @@ import {  pdf } from '@react-pdf/renderer';
 // import PdfContent2 from './PdfContent2.';
 import PdfContent2 from './PdfContent2';
 import {useData} from "../../../Dashboard/MainDash/Sildebar/DataContext2"
-
+import PdfParticularData from './PdfParticularData';
+import Modal from '@mui/material/Modal';
+import { Box } from '@mui/material';
 //for popup
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
@@ -41,15 +43,8 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortawesome/free-solid-svg-icons";
 import useTransferreport from './useTransferreport';
 import useExeclpage from './ExcelPage';
+import { PdfData } from './PdfContext';
 
-const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "vcode", headerName: "VCode", width: 130 },
-  { field: "guestname", headerName: "Guest Name", width: 130 },
-  { field: "tripid", headerName: "Trip No", width: 130 },
-  { field: "status", headerName: "Status", width: 130 },
-  { field: "view", headerName: "View", width: 130 },
-];
 
 export const PDFbill = [
   {
@@ -122,7 +117,7 @@ const TransferReport = () => {
     pdfBillList,
     setPdfBillList,
     setError,
-    setErrorMessage
+    setErrorMessage,
   } = useTransferreport();
   const {
         handleExcelDownload,error1,errormessage1} = useExeclpage()
@@ -130,10 +125,13 @@ const TransferReport = () => {
   const [addressDetails,setAddressDetails] = useState([])
   const apiUrl = APIURL;
   const [organizationsdetail1,setOrganisationDetail]=useState([]);
+  const [popup,setPopup] = useState(false)
   const { sharedData } = useData();
+  const [particularPdf,setParticularPdf] = useState([])
   const [imageorganisation, setSelectedImageorganisation] = useState(null);
   console.log(imageorganisation,"image")
-
+  const [tripno,setTripno] = useState('')
+const {pdfPrint,setPdfPrint} = PdfData()
   useEffect(() => {
     setSelectedImageorganisation(sharedData)
   }, [sharedData])
@@ -158,6 +156,8 @@ const TransferReport = () => {
   
     fetchdata();
   }, [apiUrl, customer]);
+
+
   useEffect(() => {
     const fetchdata = async () => {
       try {
@@ -194,7 +194,7 @@ const TransferReport = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const tripData = await response.json();
-        // console.log(tripData,"trip")
+        console.log(tripData,"trip")
         setInvoicedata(tripData)
     }
     catch(err){
@@ -203,6 +203,12 @@ const TransferReport = () => {
 }
 fetchData()
 },[apiUrl])
+
+// useEffect(()=>{
+//   const fetchData = async () =>{
+//     const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
+//   }
+// })
 
 const handleDownloadPdf = async () => {
   if(!pdfBillList){
@@ -223,7 +229,51 @@ const handleDownloadPdf = async () => {
   }
 
 }
+const handlePopup= ()=>{
+  setPdfPrint(false)
+}
 
+const columns = [
+  { field: "id", headerName: "Sno", width: 70 },
+  { field: "vcode", headerName: "VCode", width: 130 },
+  { field: "guestname", headerName: "Guest Name", width: 130 },
+  { field: "tripid", headerName: "Trip No", width: 130 },
+  { field: "status", headerName: "Status", width: 130 },
+  // { field: "view", headerName: "View", width: 130 },
+  {
+    field: 'actions',
+    headerName: 'Actions',
+    width: 130,
+    renderCell: (params) => (
+        <Button
+            onClick={() => handleButtonClick(params)}
+            aria-label="open-dialog"
+        >
+            <Button variant="contained" color="primary">
+                view
+            </Button>
+
+        </Button>
+    ),
+},
+];
+
+const handleprint = async()=>{
+  const fileName = 'test.pdf';
+  const blob = await pdf(<PdfParticularData  />).toBlob();
+  saveAs(blob, fileName);
+}
+
+const handleButtonClick = async(params) => {
+  setPdfPrint(true)
+const {tripid,customer} = params.row;
+setTripno(tripid)
+const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
+const pdfdetails = await response.json()
+console.log(pdfdetails,'idd');
+
+setParticularPdf(pdfdetails)
+};
   return (
     <div className="TransferReport-form Scroll-Style-hide">
     
@@ -628,6 +678,45 @@ const handleDownloadPdf = async () => {
             </div>
           }
         </div>
+        {/* <Dialog open={popup} onClose={handlePopup}>
+                <DialogContent style={{ width: 1000 }}>
+                  <PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handlePopup} variant="contained" color="primary">
+                    Cancel
+                  </Button>
+                </DialogActions>
+              </Dialog> */}
+               <Modal
+        open={pdfPrint}
+        onClose={handlePopup}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '854px',
+            height: '700px',
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+            overflowY:'auto'
+          }}
+        >
+      
+          <PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} tripno={tripno}/>
+
+          {/* <Button onClick={handlePopup} variant="contained" color="primary">
+                    Cancel
+                  </Button> */}
+        </Box>
+      </Modal>
       </form>
     </div>
   )

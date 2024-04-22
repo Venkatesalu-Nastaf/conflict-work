@@ -334,7 +334,8 @@ router.get('/table-for-booking', (req, res) => {
 // its for multer file- 1
 const booking_storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './customer_master/public/booking_doc')
+        // cb(null, './customer_master/public/booking_doc')
+        cb(null, './uploads')
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
@@ -346,9 +347,12 @@ const booking_uploadfile = multer({ storage: booking_storage });
 
 router.post('/bookingpdf/:id', booking_uploadfile.single("file"), async (req, res) => {
     const booking_id = req.params.id;
-    const fileName = req.file.filename;
+    const path = req.file.filename;
     const fileType = req.file.mimetype;
-    const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
+    const fileName = req.file.filename;
+    const documenttype = "mail"
+    // const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
+    const sql = `insert into tripsheetupload(bookingno, path, mimetype,name,documenttype)values(${booking_id}, '${path}', '${fileType}','${fileName}','${documenttype}')`;
     db.query(sql, (err, result) => {
         if (err) return res.json({ Message: "Error" });
         return res.json({ Status: "success" });

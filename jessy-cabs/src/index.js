@@ -7,12 +7,14 @@ import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from './component/form/UserContext';
 import { DataProvider } from './component/Dashboard/Maindashboard/DataContext'
 import { DataProvider2 } from './component/Dashboard/MainDash/Sildebar/DataContext2'
+import { PdfDataProvider } from "./component/Billings/Transfer/TransferReport/PdfContext";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <PdfDataProvider>
       <DataProvider2>
         <DataProvider>
           <UserProvider>
@@ -22,6 +24,7 @@ root.render(
           </UserProvider>
         </DataProvider>
       </DataProvider2>
+      </PdfDataProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

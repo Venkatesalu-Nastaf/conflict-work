@@ -199,7 +199,8 @@ const useTransferreport = () => {
             id: index + 1,
             guestname: row.guestname,
             tripid: row.tripid,
-            status: row.status
+            status: row.status,
+            customer:row.customer
           }));
           if (tripsheetNumbers.length > 0) {
             const rowsWithUniqueId = tripsheetNumbers.map((row, index) => ({
@@ -493,7 +494,8 @@ const useTransferreport = () => {
     misformat,
     setMisformat,
     pdfBillList,
-    setPdfBillList
+    setPdfBillList,
+  
   };
 };
 

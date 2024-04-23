@@ -3,12 +3,10 @@ import { APIURL } from "../../../url";
 import './PdfParticularData.css'
 import generatePDF from 'react-to-pdf';
 import { PdfData } from "./PdfContext";
-import Button from "@mui/material/Button";
 
 const PdfParticularData = ({addressDetails,particularPdf,organisationdetail,imagename,tripno})=>{
-    console.log(tripno,organisationdetail,particularPdf,'pdf');
     const targetRef = useRef();
-    const {pdfPrint,setPdfPrint} = PdfData()
+    const {setPdfPrint} = PdfData()
 
     const [orgname,setOrgname] = useState('')
     const [orgaddress1,setOrgaddress1] = useState('')
@@ -30,6 +28,8 @@ const PdfParticularData = ({addressDetails,particularPdf,organisationdetail,imag
     const [signimageUrl,setSignImageUrl] = useState('')
     const [GmapimageUrl, setGMapImageUrl] = useState('');
     const [attachedImage, setAttachedImage] = useState('');
+    const [routeData, setRouteData] = useState('');
+    const [remark,setRemark] = useState('')
     const apiUrl = APIURL;
     const organisationimage=imagename
     const organisationdetails=organisationdetail
@@ -64,7 +64,8 @@ const PdfParticularData = ({addressDetails,particularPdf,organisationdetail,imag
         let vehtype = ''
         let vehno = ''
         let drivernames = ''
-// particularPdf?.map((li)=>{
+        let remarks = ''
+        let driverMobNo = ''
           if (Array.isArray(particularPdf)) {
             particularPdf.forEach((li) => {
     addressone = li.address1
@@ -79,6 +80,8 @@ const PdfParticularData = ({addressDetails,particularPdf,organisationdetail,imag
     vehtype = li.vehType
     vehno = li.vehRegNo
     drivernames = li.driverName
+    remarks = li.remark
+    driverMobNo = li.mobile
 })
           }
 setAddress1(addressone)
@@ -92,6 +95,9 @@ setCustomermobile(guestmobile)
 setDuty(dutytype)
 setVehicletype(vehtype)
 setVehicleno(vehno)
+setRemark(remarks)
+setDrivername(drivernames)
+setDrivermobile(driverMobNo)
         },[particularPdf])
 
     // useEffect(() => {
@@ -151,6 +157,28 @@ useEffect(()=>{
 const fetchData = async()=>{
     const tripidno = tripno
     try{
+    const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripidno)}`);
+    if (response.status === 200) {
+        const routeData = await response.json();
+        setRouteData(routeData);
+    }
+    else {
+        setRouteData("")
+        const timer = setTimeout(fetchData, 2000);
+        return () => clearTimeout(timer);
+    }
+}
+catch(err){
+    console.log(err,'error');
+}
+}
+fetchData()
+},[apiUrl,tripno])
+
+useEffect(()=>{
+const fetchData = async()=>{
+    const tripidno = tripno
+    try{
         const response = await fetch(`${apiUrl}/get-attachedimage/${tripidno}`);
         if (response.status === 200) {
             const data = await response.json();
@@ -186,8 +214,8 @@ setPdfPrint(false)
            </div>
            <div className="Taxinvoicediv">
             <h3  className="Taxinvoicetext">
-                <span>TAX </span>
-                <span className="invoice">INVOICE</span>
+                <span>LOG </span>
+                <span className="invoice">SHEET</span>
                  </h3>
            </div>
            <div className="imagediv">
@@ -206,37 +234,37 @@ setPdfPrint(false)
            <div style={{display:'flex',gap:30,border:'1.5px solid #000000',padding:10}}>
             <div className="clientFistDiv">
              
-               <p className="detailstext"><span>Client Name :</span> <span className="clientName">{customer}</span></p>
-               <p className="detailstext"><span>Address :</span><span className="clientName">{address1}, {address3}{'\n'}{address2}</span></p>
-                 <p className="detailstext"><span>Category :</span><span></span></p>
-                 <p className="detailstext"> <span>Fuel Type :</span><span className="clientName">{fuel}</span></p>
-                 <p className="detailstext"> <span>Emp.No :</span><span className="clientName">{empno}</span></p>
-                 <p className="detailstext"><span>Emp.Name :</span ><span className="clientName"> {guestname}</span></p>
-                 <p className="detailstext"><span>Report Add</span><span></span></p>
-                 <p className="detailstext"><span>Client Mobile</span><span className="clientName">{customermobile}</span></p>
-                 <p className="detailstext"><span>Drop Address</span><span></span></p>
+               <p className="detailstext"><span className="labeltag">Client Name </span><p className="colontag">:</p> <span className="clientName">{customer}</span></p>
+               <p className="detailstext"><span className="labeltag">Address </span><p className="colontag">:</p><span className="clientName">{address1}, {address3}{'\n'}{address2}</span></p>
+                 <p className="detailstext"><span className="labeltag">Category </span><p className="colontag">:</p><span className="clientName"></span></p>
+                 <p className="detailstext"> <span className="labeltag">Fuel Type </span><p className="colontag">:</p><span className="clientName">{fuel}</span></p>
+                 <p className="detailstext"> <span className="labeltag">Emp.No </span><p className="colontag">:</p><span className="clientName">{empno}</span></p>
+                 <p className="detailstext"><span className="labeltag">Emp.Name </span ><p className="colontag">:</p><span className="clientName"> {guestname}</span></p>
+                 <p className="detailstext"><span className="labeltag">Report Add</span><p className="colontag">:</p><span></span></p>
+                 <p className="detailstext"><span className="labeltag">Client Mobile</span><p className="colontag">:</p><span className="clientName">{customermobile}</span></p>
+                 <p className="detailstext"><span className="labeltag">Drop Address</span><p className="colontag">:</p><span></span></p>
             </div>
             <div className="clientSecondDiv">
-             <p className="detailstext"><span>Escort Route : </span><span className="clientName">No</span> </p>
-             <p className="detailstext">Airport Transfer : <span>No</span> </p>
-             <p className="detailstext">CCode : <span>No</span> </p>
+             <p className="detailstext"><span className="labeltagsecond">Escort Route </span><p className="colontag">:</p><span >No</span> </p>
+             <p className="detailstext"> <span className="labeltagsecond">Airport Transfer</span><p className="colontag">:</p><span>No</span> </p>
+             <p className="detailstext"><span className="labeltagsecond">CCode </span><p className="colontag">:</p><span>No</span> </p>
             </div>
             <div>
-              <p className="detailstext">Log No</p>
-              <p className="detailstext">Date</p>
-              <p className="detailstext"><span>Duty Type : </span><span className="clientName">{duty}</span> </p>
-              <p className="detailstext"><span>Vehicle Type : </span><span className="clientName">{vehicletype}</span> </p>
-              <p className="detailstext"><span>Vehicle No : </span><span className="clientName">{vehicleno}</span></p>
-              <p className="detailstext"><span>Driver Name : </span><span className="clientName">{drivername}</span></p>
-              <p className="detailstext">Driver Mobile</p>
-              <p className="detailstext">Request No</p>
-              <p className="detailstext">Service City</p>
-              <p className="detailstext">Package</p>
-              <p className="detailstext">Segment</p>
+              <p className="detailstext"><span className="labeltag">Log No</span><p className="colontag">:</p></p>
+              <p className="detailstext"><span className="labeltag">Date</span><p className="colontag">:</p></p>
+              <p className="detailstext"><span className="labeltag">Duty Type  </span><p className="colontag">:</p><span className="clientName">{duty}</span> </p>
+              <p className="detailstext"><span className="labeltag">Vehicle Type  </span><p className="colontag">:</p><span className="clientName">{vehicletype}</span> </p>
+              <p className="detailstext"><span className="labeltag">Vehicle No  </span><p className="colontag">:</p><span className="clientName">{vehicleno}</span></p>
+              <p className="detailstext"><span className="labeltag">Driver Name  </span><p className="colontag">:</p><span className="clientName">{drivername}</span></p>
+              <p className="detailstext"><span className="labeltag">Driver Mobile</span><p className="colontag">:</p><span className="clientName">{drivermobile}</span></p>
+              <p className="detailstext"><span className="labeltag">Request No</span><p className="colontag">:</p></p>
+              <p className="detailstext"><span className="labeltag">Service City</span><p className="colontag">:</p></p>
+              <p className="detailstext"><span className="labeltag">Package</span><p className="colontag">:</p></p>
+              <p className="detailstext"><span className="labeltag">Segment</span><p className="colontag">:</p></p>
             </div>
            </div>
            <div className="remarksdiv">
-            <p><span className="remarks">Remarks :</span> <span className="remarksdata">TIDEL PARK TO IBIS HOTEL</span ></p>
+            <p><span className="remarks">Remarks :</span> <span className="remarksdata">{remark}</span ></p>
            </div>
            <div className="tablediv">
            <div className="table">
@@ -292,10 +320,11 @@ setPdfPrint(false)
                 </tbody>
             </table>
            </div>
-           <div className="sign" >
+           <div className="sign" style={{display:'flex',flexDirection:'column',
+        justifyContent:'space-between'}}>
           {signimageUrl !== "" ? 
-          <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}
-          <h3 style={{ marginTop: 'auto', marginBottom: '0' }}>Guest Signature</h3>
+          <img className='dialogboximg' style={{marginTop:'40px'}} src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}
+          <h3 style={{margin :'0px'}}>Guest Signature</h3>
            </div>
            </div>
            <div>
@@ -310,10 +339,18 @@ setPdfPrint(false)
           
 
             </div>
+            <div className="tripsheet-RouteSummary">
+            <h2>Route Summary</h2>
+            <ol type="1">
+              {routeData.length > 0 && routeData.map((data, index) => (
+                <li><p key={index}><strong>{data.trip_type}</strong>: {data.place_name}</p></li>
+              ))}
+            </ol>
+          </div>
            </div>
            <div >
             <p className="attachtext">Attached Image</p>
-            {attachedImage && Array.isArray(attachedImage) && attachedImage.length && attachedImage!==""> 0 ? 
+            {attachedImage && Array.isArray(attachedImage) && attachedImage.length && attachedImage!=="" > 0 ? 
   attachedImage.map((image, index) => (
     <img key={index} src={image} alt='' className="attachimage" />
   ))
@@ -323,6 +360,7 @@ setPdfPrint(false)
 
 
            </div>
+         
            </div>
            <div className="printdiv">
            <button  className="print" onClick={() => generatePDF(targetRef, {filename: 'page.pdf'})}>PRINT</button>

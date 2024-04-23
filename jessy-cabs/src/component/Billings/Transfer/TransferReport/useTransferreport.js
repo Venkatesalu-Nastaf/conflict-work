@@ -16,9 +16,9 @@ const useTransferreport = () => {
   const [customer, setCustomer] = useState("");
   const [groupTripid, setGroupTripid] = useState("")
   const [invoiceno, setInvoiceno] = useState("")
-  const [fromDate, setFromDate] = useState(dayjs())
-  const [endDate, setEndDate] = useState(dayjs())
-  const [invoiceDate, setInvoiceDate] = useState(dayjs())
+  const [fromDate, setFromDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [invoiceDate, setInvoiceDate] = useState('')
   const [date] = useState(dayjs());
   const [info, setInfo] = useState(false);
   const [bankOptions, setBankOptions] = useState([]);
@@ -489,7 +489,6 @@ const useTransferreport = () => {
     groupTripid,
     fromDate,
     endDate,
-    customer,
     invoiceDate,
     misformat,
     setMisformat,

@@ -49,35 +49,9 @@ export default function BasicTable() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
 
-  const { filteredData, setFilteredData } = useData();
+  const { filteredData } = useData();
+
   const data1 = filteredData;
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/tripsheet`);
-        if (response.status === 200) {
-          if (response.ok) {
-            const data = await response.json();
-            if (data.length > 0) {
-              setFilteredData(data);
-            } else {
-              setFilteredData([]);
-            }
-          } else {
-          }
-        } else {
-          const timer = setTimeout(fetchData, 2000);
-          return () => clearTimeout(timer);
-        }
-      } catch {
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const handlePopupClose = () => {
     setPopupOpen(false);
   };

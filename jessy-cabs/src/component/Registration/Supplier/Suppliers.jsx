@@ -7,7 +7,7 @@ import TabContext from "@mui/lab/TabContext";
 import Accountinfo from './Account_Info/Accountinfo.jsx';
 import Vehicaleinfo from './Vehicale_Info/Vehicaleinfo.jsx';
 import DriverCreation from './DriverCreation/DriverCreation.jsx';
-
+import "./Suppliers.css"
 const Suppliers = () => {
     const [value, setValue] = React.useState("accounting_info");
 
@@ -21,9 +21,9 @@ const Suppliers = () => {
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Accounting Info" value="accounting_info" />
-                                <Tab label="Vehicle Info" value="vehicle_info" />
-                                <Tab label="Driver Info" value="driverinfo" />
+                                <Tab label="Accounting Info" className='tab-content' value="accounting_info" />
+                                <Tab label="Vehicle Info" className='tab-content' value="vehicle_info" />
+                                <Tab label="Driver Info" className='tab-content' value="driverinfo" />
 
                             </TabList>
                         </Box>

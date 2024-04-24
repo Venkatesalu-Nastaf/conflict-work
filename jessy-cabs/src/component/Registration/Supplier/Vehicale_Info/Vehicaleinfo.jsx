@@ -61,6 +61,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 // import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import { PiCarSimpleFill } from "react-icons/pi";
+import { BsFillFuelPumpFill } from "react-icons/bs";
 
 
 
@@ -215,6 +217,9 @@ const Vehicaleinfo = () => {
         <div className="detail-container-main-vehicale">
 
           <div className="vehicaleinfo-container">
+
+
+
             
             <div className="vehicaleinfo-container-left">
               <div className="input-field vehicleinfo-inputfeild">
@@ -293,6 +298,11 @@ const Vehicaleinfo = () => {
                   />
                 </div>
                 <div className="input radio">
+
+                <div className="icone">
+                    <PiCarSimpleFill color="action" />
+                  </div>
+
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -346,6 +356,10 @@ const Vehicaleinfo = () => {
                   />
                 </div>
                 <div className="input radio">
+                  
+                  <div className="icone">
+                    <BsFillFuelPumpFill color="action" />
+                  </div>
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -382,17 +396,7 @@ const Vehicaleinfo = () => {
                   />
                 </div>
                 <div className="input" style={{ width: "230px" }}>
-                  {/* <div className="icone">
-                    <PriceChangeIcon color="action" />
-                  </div>
-                  <TextField
-                    name="costCenter"
-                    value={selectedCustomerData.costCenter || book.costCenter}
-                    onChange={handleChange}
-                    label="Cost Center Location"
-                    id="standard-size-normal"
-                    size='small'
-                  /> */}
+             
 
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuildingFlag} />
@@ -418,19 +422,7 @@ const Vehicaleinfo = () => {
                   />
                   {/* </div> */}
                 </div>
-                {/* <div className="input">
-                <div className="icone">
-                  <CommuteIcon color="action" />
-                </div>
-                <TextField
-                  name="vehType"
-                  value={selectedCustomerData.vehType || book.vehType}
-                  onChange={handleChange}
-                  label="Vehicle Type"
-                  id="veh_type"
-                  size='small'
-                />
-              </div> */}
+             
               </div>
               <div className="vehicaleinfo-container-right">
               <div className="vehicaleinfo-update-main">
@@ -480,6 +472,15 @@ const Vehicaleinfo = () => {
               </div>
             </div>
             </div>
+
+
+
+
+
+
+
+
+
             {/* <div className="vehicaleinfo-container-right">
               <div className="vehicaleinfo-update-main">
                 <div className="vehicaleinfo-update">

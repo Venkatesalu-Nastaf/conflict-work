@@ -61,6 +61,12 @@
 .employee-creation-inputfeilds{
   flex-wrap: wrap;
 }
+@media screen  and (max-width: 1141px){
+  .employee-creation-inputfeilds{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
 
 @media screen  and (max-width: 767.99px){
   .EmployeeCreation-main .EmployeeCreation-form-container {

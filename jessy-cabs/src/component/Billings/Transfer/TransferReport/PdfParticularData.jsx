@@ -5,6 +5,8 @@ import generatePDF from 'react-to-pdf';
 import { PdfData } from "./PdfContext";
 
 const PdfParticularData = ({addressDetails,particularPdf,organisationdetail,imagename,tripno})=>{
+    console.log(tripno,"tri",organisationdetail,"org",particularPdf,'modelapdf',typeof(particularPdf),Array.isArray(particularPdf));
+
     const targetRef = useRef();
     const {setPdfPrint} = PdfData()
 

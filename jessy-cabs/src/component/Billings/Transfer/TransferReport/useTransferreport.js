@@ -33,6 +33,9 @@ const useTransferreport = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [misformat,setMisformat]=useState('')
   const [pdfBillList,setPdfBillList] = useState('')
+  
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  const[rowzip,setRowszipdata]=useState([])
   const location = useLocation()
   
 
@@ -443,6 +446,62 @@ const useTransferreport = () => {
     fetchData();
   }, [apiUrl]);
 
+  const handleRowSelection = (newSelectionModel) => {
+    const selectedTripIds = newSelectionModel
+        .filter((selectedId) => selectedId !== null)
+        .map((selectedId) => {
+            const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+            return selectedRow ? selectedRow.tripid : null;
+        })
+        .filter((tripid) => tripid !== null);
+    // setRowselect(selectedTripIds)
+
+
+    const tripsheetid = selectedTripIds;
+    setRowSelectionModel(tripsheetid);
+    // localStorage.setItem('selectedtripsheetid', tripsheetid);
+    // const selectedRowCount = selectedTripIds.length;
+
+    // localStorage.setItem('selectedrowcount', selectedRowCount);
+};
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const tripid = rowSelectionModel
+      const encoded = localStorage.getItem("selectedcustomerdata");
+      localStorage.setItem("selectedcustomer", encoded);
+      const storedCustomer = localStorage.getItem("selectedcustomer");
+      const customer = decodeURIComponent(storedCustomer);
+      // console.log(tripid,customer,"transfer",rowSelectionModel)
+      // console.log(tripid,"objtripid")
+      const response = await fetch(
+        `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
+          customer
+        )}/${tripid}`
+      );
+      // console.log(response,"objresponse")
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const tripData = await response.json();
+      // if (Array.isArray(tripData)) {
+        
+      //     const rowsWithUniqueId = tripData.map((row, index) => ({
+      //       ...row,
+        
+      //     }));
+      console.log(tripData,"obj")
+          setRowszipdata(tripData);
+          // setSuccess(true);
+          setSuccessMessage("successfully listed");
+        
+     
+    } catch { }
+  };
+  fetchData();
+}, [apiUrl,rowSelectionModel,rowzip,handleRowSelection]);
+
   return {
     rows,
     error,
@@ -494,6 +553,11 @@ const useTransferreport = () => {
     setMisformat,
     pdfBillList,
     setPdfBillList,
+    
+  handleRowSelection,
+  rowzip,
+  rowSelectionModel,
+  setRowSelectionModel
   
   };
 };

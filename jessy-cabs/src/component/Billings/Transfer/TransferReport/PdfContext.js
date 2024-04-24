@@ -10,9 +10,10 @@ export const PdfData = () => {
 
 export const PdfDataProvider = ({ children }) => {
     const [pdfPrint,setPdfPrint] = useState(false)
+   
     
     return (
-        <DataContext.Provider value={{pdfPrint,setPdfPrint }}>
+        <DataContext.Provider value={{pdfPrint,setPdfPrint}}>
             {children}
         </DataContext.Provider>
     );

@@ -399,9 +399,54 @@ app.get('/get-signimage/:tripid', (req, res) => {
       }
 
       // Send the file
+      console.log(imagePath,"image")
       res.sendFile(imagePath);
 
     });
+  });
+});
+
+
+// app.use('/signimages', express.static('customer_master'));
+app.get('/get-signimageforpdfrendered/:tripid', (req, res) => {
+  const { tripid } = req.params;
+  // const query = 'SELECT signature_path FROM signatures WHERE tripid = ?';
+  const query = 'SELECT signature_path AS path FROM signatures WHERE tripid = ?';
+  db.query(query, [tripid], (err, results) => {
+    if (err) {
+      return res.status(500).send('Internal Server Error');
+    }
+    if (results.length === 0) {
+      // No record found for the given tripid
+      return res.status(404).send('Image not found');
+    }
+    if (!results[0].path) {
+      // Handle the case where the path is null or undefined
+      return res.status(500).send('Internal Server Error: Image path is missing');
+    }
+    // const imagePath = path.join(signatureDirectory, results[0].path);
+    console.log(results,"imageresult")
+    const data=results[0].path
+    console.log(data)
+    res.json(data);
+
+
+    // res.sendFile(imagePath, (err) => {
+    //   if (err) {
+    //     return res.status(500).send('Internal Server Error');
+    //   }
+
+    // fs.access(imagePath, fs.constants.F_OK, (err) => {
+    //   if (err) {
+
+    //     return res.status(404).send('File not found');
+    //   }
+
+    //   // Send the file
+    //   console.log(imagePath,"image")
+    //   res.sendFile(imagePath);
+
+    // });
   });
 });
 

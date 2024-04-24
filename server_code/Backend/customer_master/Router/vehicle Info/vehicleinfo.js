@@ -136,7 +136,7 @@ console.log(searchText,fromDate,toDate,"dateeeee")
     const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
     query += ` AND (${likeConditions})`;
-    params = columnsToSearch.map(() => `%${searchText}%`);
+    params = columnsToSearch.map(() => `${searchText}%`);
   }
 
 
@@ -153,7 +153,7 @@ console.log(searchText,fromDate,toDate,"dateeeee")
     query += ' AND doadate >= DATE_ADD(?, INTERVAL 0 DAY) AND doadate <= DATE_ADD(?, INTERVAL 1 DAY)';
     params.push(formattedFromDate, formattedToDate);
   }
-   
+    
   db.query(query, params, (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
@@ -261,9 +261,10 @@ const StatePermit_uploadfile = multer({ storage: StatePermit_storage });
 router.post('/statePermit-pdf/:vehicleId', StatePermit_uploadfile.single("file"), async (req, res) => {
   const vehicleId = req.params.vehicleId;
   const fileName = req.file.filename;
+  const fileType = req.file.mimetype;
 
   if (fileName && vehicleId) {
-    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type	)values('${vehicleId}','${fileName}','${fileType}')`;
+    const sql = `insert into vehicle_documents(vehicleId,fileName,file_type)values('${vehicleId}','${fileName}','${fileType}')`;
     db.query(sql, (err, result) => {
       if (err) return res.json({ Message: "Error" });
       return res.json({ Status: "success" });

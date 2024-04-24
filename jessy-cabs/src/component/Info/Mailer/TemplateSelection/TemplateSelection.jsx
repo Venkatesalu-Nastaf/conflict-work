@@ -2,17 +2,25 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import "./TemplateSelection.css";
 import Template from "../../../../assets/img/template-sample.svg";
+import { IoChevronBack } from "react-icons/io5";
 
 const TemplateSelection = () => {
 
   const Navigate = useNavigate();
   const NavToTemplateCreation = ()=>{
-    Navigate("/home/info/TemplateCreation");
-    }
+    Navigate("/home/info/mailer/TemplateCreation");
+  }
+
+  const backToMailer = ()=>{
+    Navigate("/home/info/mailer");
+  }
+
+
+    
   return (
     <>
       <div style={{width: '100%'}}>
-        <div style={{marginBottom: '20px', fontSize: '22px', fontWeight: '600'}}>Template Gallery</div>
+      <div style={{cursor: 'pointer'}} onClick={backToMailer}> <IoChevronBack style={{fontSize: '30px'}} /></div> 
         <div style={{display: 'flex'}}>
           <div style={{backgroundColor: "#fff", padding: '24px', height: '100vh', width: '220px'}}>
             <div style={{display: 'grid'}}>

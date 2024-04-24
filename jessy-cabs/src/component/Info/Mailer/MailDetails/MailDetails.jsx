@@ -85,7 +85,7 @@ const MailDetails = () => {
   const navigate = useNavigate();
 
   const handleTemplateCreation = () =>{
-    navigate("/home/info/TemplateSelection");
+    navigate("/home/info/mailer/TemplateSelection");
   }
 
   return (
@@ -121,11 +121,12 @@ const MailDetails = () => {
                       name="MailMessage"
                       label="Mail Message"
                       id="MailMessage"
+                      className="mail-textarea1"
                       sx={{ m: 1, width: "200ch" }}
                     />
                   </div>
                 </div>
-                <div className="input-field">
+                <div className="input-field mail-textarea1-btn">
                   <div className="input" >
                     <Button variant="contained" endIcon={<SendIcon />}>
                       Send
@@ -141,24 +142,28 @@ const MailDetails = () => {
               <div className="textbox">
                 <div className="textboxlist">
                   <div className="textboxlist-customer ">
-                    <div className="input-field">
-                      <div className="input" style={{ width: "300px" }}>
-                        <div className="icone">
-                          <AiOutlineFileSearch style={{ fontSize: '23px' }} />
+                    <div className="input-field" style={{justifyContent: 'center', flexWrap: 'wrap'}}>
+                      <div>
+                        <div className="input template-input" style={{ width: "300px" }}>
+                          <div className="icone">
+                            <AiOutlineFileSearch style={{ fontSize: '23px' }} />
+                          </div>
+                          <TextField
+                            size="small"
+                            id="templatename"
+                            label="Template Name"
+                            name="templatename"
+                            sx={{ m: 1, width: "200ch" }}
+                          />
                         </div>
-                        <TextField
-                          size="small"
-                          id="templatename"
-                          label="Template Name"
-                          name="templatename"
-                          sx={{ m: 1, width: "200ch" }}
-                        />
                       </div>
-                      <div className="input" style={{ width: "100px" }}>
-                        <Button variant="contained">Search</Button>
-                      </div>
-                      <div className="input" onClick={handleTemplateCreation}>
-                        <Button variant="contained">Create Template</Button>
+                      <div className="template-search-btn" style={{display: 'flex'}}>
+                        <div className="input" style={{ width: "100px" }}>
+                          <Button variant="contained">Search</Button>
+                        </div>
+                        <div className="input" onClick={handleTemplateCreation}>
+                          <Button variant="contained">Create Template</Button>
+                        </div>
                       </div>
                     </div>
                     <div className="mailDetails-list-update">
@@ -186,7 +191,7 @@ const MailDetails = () => {
               </div>
             </div>
           </div>
-          <div className="detail-container-main-mailDetails">
+          {/* <div className="detail-container-main-mailDetails">
             <div className="container-left-mailDetails">
               <div className="mailDetails-header">
                 <div className="input-field" style={{ justifyContent: "center" }}>
@@ -239,7 +244,7 @@ const MailDetails = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

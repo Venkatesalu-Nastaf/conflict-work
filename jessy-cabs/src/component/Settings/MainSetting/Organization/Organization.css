@@ -238,7 +238,7 @@ border-right: 1px solid transparent !important;
 }
 
 .organisation-input-row .office-address, .organisation-input-row .organization-input{
-    width: 100%;
+    width: fit-content;
     display: grid;
     gap: 10px;
     padding-left: 30px;
@@ -259,5 +259,12 @@ border-right: 1px solid transparent !important;
     .organisation-input-row .office-address, .organisation-input-row .organization-input{
         padding-left: 0px;
     }
+}
+
+@media screen and (min-width: 1041px) {
+    .organisation-btn-row{
+        position: relative;
+        top: 14px;
+    }   
 }
 

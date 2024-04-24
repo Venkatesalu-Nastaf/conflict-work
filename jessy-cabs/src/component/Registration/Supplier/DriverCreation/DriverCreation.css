@@ -64,6 +64,12 @@
    flex-wrap: wrap; 
    /* justify-content: center; */
   }
+  @media screen and (max-width:1240px) {
+    .driver-info-inputs{
+      flex-wrap: wrap; 
+      justify-content: center;
+     }
+  }
 
   @media screen and (min-width:970px) and (max-width:1240px) {
     .form-container .container-main{ 
@@ -90,7 +96,7 @@
   } */
 
   .driver-input{
-    width: 300px !important;
+    /* width: 300px !important; */
   }
 
 

@@ -53,13 +53,13 @@ const SMSReport = () => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-SMSReport">
-              <div className="input-field">
-                <div className="input" style={{ width: "50%" }}>
+              <div className="input-field sms-report-inputfeild">
+                <div className="input" style={{ width: "200px" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker label="From Date" defaultValue={dayjs()} />
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "50%" }}>
+                <div className="input" style={{ width: "200px" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker label="To Date" defaultValue={dayjs()} />
                   </LocalizationProvider>
@@ -78,8 +78,8 @@ const SMSReport = () => {
                     />
                   </Button>
                 </div>
-              </div>
-              <div className="input-field">
+              {/* </div>
+              <div className="input-field"> */}
                 <div className="input" style={{ width: "300px" }}>
                   <Autocomplete
                     fullWidth

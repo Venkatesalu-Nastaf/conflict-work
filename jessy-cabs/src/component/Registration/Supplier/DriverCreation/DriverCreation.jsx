@@ -231,7 +231,7 @@ const DriverCreation = () => {
                                     sx={{ m: 1, width: "200ch" }}
                                 />
                             </div> */}
-                            <div className="input driver-input" style={{ width: "240px" }}>
+                            <div className="input driver-input" >
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                                 </div>

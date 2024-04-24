@@ -741,6 +741,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
 // collect data from tripsheet database------------------------------------
 router.get('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
+
     db.query('SELECT * FROM tripsheet WHERE tripid = ? AND status != "CBilled"', tripid, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
@@ -750,6 +751,22 @@ router.get('/tripsheet/:tripid', (req, res) => {
         }
         const bookingDetails = result[0]; // Assuming there is only one matching booking
         return res.status(200).json(bookingDetails);
+    });
+});
+
+
+
+router.get('/tripsheet-maindash', (req, res) => {
+
+    db.query('SELECT * FROM tripsheet ', (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+        // const bookingDetails = result[0]; // Assuming there is only one matching booking
+        return res.status(200).json(result);
     });
 });
 
@@ -842,25 +859,26 @@ router.get('/tripuploadcollect/:tripid', (req, res) => {
 //end collect data
 // End tripsheet database
 //get data from ratemanagement for package database
-router.get('/getPackageDetails', (req, res) => {
-    const { vehType, customer, duty, totaltime, totalkm1 } = req.query;
-    const query = `SELECT * FROM ratemanagement WHERE vehicleType = ? AND pricetag = ? AND duty = ? ORDER BY ABS(Hours - ?), ABS(KMS - ?) LIMIT 1;`;
-    const params = [vehType, customer, duty, totaltime, totalkm1];
+// router.get('/getPackageDetails', (req, res) => {
+//     const { vehType, customer, duty, totaltime, totalkm1 } = req.query;
 
-    db.query(query, params, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to retrieve package details from MySQL' });
-        }
-        // Check if there are matching records
-        if (result.length > 0) {
-            // Send the matching records as a response
-            return res.status(200).json(result);
-        } else {
-            // No matching records found
-            return res.status(404).json({ message: 'No matching records found' });
-        }
-    });
-});
+//     const query = `SELECT * FROM ratemanagement WHERE vehicleType = ? AND pricetag = ? AND duty = ? ORDER BY ABS(Hours - ?), ABS(KMS - ?) LIMIT 1;`;
+//     const params = [vehType, customer, duty, totaltime, totalkm1];
+
+//     db.query(query, params, (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to retrieve package details from MySQL' });
+//         }
+//         // Check if there are matching records
+//         if (result.length > 0) {
+//             // Send the matching records as a response
+//             return res.status(200).json(result);
+//         } else {
+//             // No matching records found
+//             return res.status(404).json({ message: 'No matching records found' });
+//         }
+//     });
+// });
 //end package database
 //for map database
 router.post('/gmap-submitForm', (req, res) => {

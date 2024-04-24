@@ -7,10 +7,9 @@ import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
-import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
+import { useMediaQuery } from "@mui/material";
+
 
 // ICONS
 import { useUser } from "../../../form/UserContext";
@@ -24,6 +23,25 @@ import { FaUserAstronaut } from "@react-icons/all-files/fa/FaUserAstronaut";
 import { BiBarChartSquare } from "@react-icons/all-files/bi/BiBarChartSquare";
 import { AiOutlineSetting } from "@react-icons/all-files/ai/AiOutlineSetting";
 import { AiOutlineInfoCircle } from "@react-icons/all-files/ai/AiOutlineInfoCircle";
+// import { FaChevronDown } from "react-icons/fa";
+import { GrUserSettings } from "react-icons/gr";
+import { GrSettingsOption } from "react-icons/gr";
+import { FaCodeBranch } from "react-icons/fa6";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
+import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
+import { GiDuration } from "react-icons/gi";
+import { SiMinutemailer } from "react-icons/si";
+import { BsFillFuelPumpFill } from "react-icons/bs";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+ 
+
+
+import { GiReceiveMoney } from "react-icons/gi";
+import { MdGroup } from "react-icons/md";
+import { MdGroupRemove } from "react-icons/md";
+import { HiOutlineUserGroup } from "react-icons/hi";
+
 import { APIURL } from "../../../url";
 
 const MenuItem = ({
@@ -38,7 +56,6 @@ const MenuItem = ({
   icon: Icon,
   dropdownItems = [],
 }) => {
-  // console.log(value,"ajay");
   return (
     // <Link
     //   className={isActive(value) ? "menuItem active" : "menuItem"}
@@ -99,6 +116,7 @@ const Sidebar = () => {
   const [selectedprofileImage, setSelectedprofileImage] = useState(null);
   const [settingsDropdownVisible, setSettingsDropdownVisible] = useState(false);
   const [infoDropdownVisible, setInfoDropdownVisible] = useState(false);
+  const [registrationDropdownVisible, setRegistrationDropdownVisible] = useState(false);
 
   useEffect(() => {
     setSelectedImage(sharedData)
@@ -139,12 +157,34 @@ const Sidebar = () => {
   const handleSettingsClick = () => {
     setSettingsDropdownVisible(!settingsDropdownVisible);
     setInfoDropdownVisible(false)
+    setRegistrationDropdownVisible(false);
+    setIssettingdropdownclicked((prevExpanded) => !prevExpanded);
+
   };
 
 
   const handleinfoClick =()=>{
     setInfoDropdownVisible(!infoDropdownVisible);
     setSettingsDropdownVisible(false);
+    setRegistrationDropdownVisible(false);
+    setIsinfodropdownclicked((prevExpanded) => !prevExpanded);
+
+
+
+  }
+
+  const handleRegisterClick =()=>{
+    setRegistrationDropdownVisible(!registrationDropdownVisible);
+    setSettingsDropdownVisible(false);
+    setInfoDropdownVisible(false)
+    setIsRegisterdropdownclicked((prevExpanded) => !prevExpanded);
+
+
+
+  }
+  const handleRegistermenuClick =()=>{
+    setRegistrationDropdownVisible(false);
+ 
 
 
   }
@@ -152,6 +192,8 @@ const Sidebar = () => {
   const handleMenuItemClick = async (menuItemKey, name, alt) => {
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false);
+    setRegistrationDropdownVisible(false);
+
 
     // const currentPageName = name;
     localStorage.setItem("selectedMenuItem", menuItemKey);
@@ -215,6 +257,14 @@ const Sidebar = () => {
       navigate("/home/info/mailer");
     }else if(window.location.pathname !== "/home/info/fuelinfo"){
       navigate("/home/info/fuelinfo");
+    }else if(window.location.pathname !== "/home/registration/customer"){
+      navigate("/home/registration/customer");
+    }
+    else if(window.location.pathname !== "/home/registration/supplier"){
+      navigate("/home/registration/supplier");
+    }
+    else if(window.location.pathname !== "/home/registration/employes"){
+      navigate("/home/registration/employes");
     }
   };
 
@@ -272,11 +322,41 @@ const Sidebar = () => {
     handleImageView();
   }, [sharedData, selectedprofileImage, apiUrl]);
 
+
+  // const isExtraSmallScreen = useMediaQuery("(max-width: 599.95px)");
+  // const isSmallScreen = useMediaQuery("(min-width: 600px) and (max-width: 959.95px)");
+  // const isMediumScreen = useMediaQuery("(min-width: 960px) and (max-width: 1279.95px)");
+  // const isLargeScreen = useMediaQuery("(min-width: 1280px)");
+
+  const [isRegisterdropdownclicked, setIsRegisterdropdownclicked] = useState(false);
+const [issettingdropdownclicked, setIssettingdropdownclicked] = useState(false);
+const [isinfodropdownclicked, setIsinfodropdownclicked] = useState(false);
+
+
+// const isSmallScreen = useMediaQuery("(min-width: 579px) and (max-width: 768.99px)");
+// const isExtraSmallScreen = useMediaQuery("(min-width: 430px) and(max-width: 576.99px)");
+// const isExtremeSmallScreen = useMediaQuery("(min-width: 320px) and(max-width: 429.99px)");
+
+
+// function determineSidebarWidth() {
+//   if (isExtraSmallScreen) {
+//     return "55%";
+//   } else if (isSmallScreen) {
+//     return "33%";
+//   } else if (isExtremeSmallScreen) {
+//     return "82%";
+//   } 
+// }
+
   return (
     <>
       <div
-        className="bars"
-        style={expanded ? { left: "60%" } : { left: "5%" }}
+        // className="bars"
+        className={`bars ${expanded ? "bars" : "closedsidebar"}`}
+        // className={expanded ? "bars" : "closedsidebar"}
+        // style={expanded ? { left: determineSidebarWidth() } : { left: "5%" }}
+        // style={expanded ? { left: "33%" } : { left: "5%" }}
+        
         // style={expanded ? { left: "5%" } : { left: "60%" }}
         onClick={() => setExpanded(!expanded)}
         
@@ -290,8 +370,8 @@ const Sidebar = () => {
 
       <motion.div
         className="sidebar desktop-view-sidebar"
-        variants={sidebarVariants}
-        animate={window.innerWidth <= 768 ? `${!expanded}` : ""}
+        // variants={sidebarVariants}
+        // animate={window.innerWidth <= 768.99 ? `${!expanded}` : ""}
       >
         {/* <p>aaaaaaaaaaaaa</p> */}
         <div className="logo">
@@ -359,7 +439,7 @@ const Sidebar = () => {
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}
           />
-          {/* <MenuItem
+          <MenuItem
             label="Settings"
             to={"/home/settings/usercreation"}
             alt="/home/settings/usercreation"
@@ -367,10 +447,10 @@ const Sidebar = () => {
             menuItemKey="/home/settings"
             name="Settings page"
             isActive={isActive}
-            handleMenuItemClick={handleaddClick}
+            handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineSetting}
-          /> */}
-
+          />
+{/* 
 <motion.div >
         
         <MenuItem
@@ -567,8 +647,8 @@ const Sidebar = () => {
          
      
         </div>
-      )}
-          {/* <MenuItem
+      )} */}
+          <MenuItem
             label="Info"
             to={"/home/info/ratetype"}
             alt="/home/info/ratetype"
@@ -577,8 +657,8 @@ const Sidebar = () => {
             name="Info page"
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
-            icon={FaUserAstronaut}
-          /> */}
+            icon={AiOutlineInfoCircle}
+          />
           <MenuItem
             label="User"
             to="/home/usersettings/usersetting"
@@ -657,8 +737,8 @@ const Sidebar = () => {
 
 <motion.div
         className="sidebar mobile-view-sidebar"
-        variants={sidebarVariants}
-        animate={window.innerWidth <= 768 ? `${expanded}` : ""}
+        // variants={sidebarVariants}
+        // animate={window.innerWidth <= 768 ? `${expanded}` : ""}
       >
         {/* <p>mobile</p> */}
         <div className="logo">
@@ -715,7 +795,7 @@ const Sidebar = () => {
             handleMenuItemClick={handleMenuItemClick}
             icon={BiBarChartSquare}
           />
-          <MenuItem
+          {/* <MenuItem
             label="Register"
             to={"/home/registration/customer"}
             alt="/home/registration/customer"
@@ -725,8 +805,8 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiNotepad}
-          />
-          <MenuItem
+          /> */}
+          {/* <MenuItem
             label="Settings"
             to={"/home/settings/usercreation"}
             alt="/home/settings/usercreation"
@@ -736,8 +816,449 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineSetting}
-          />
-          <MenuItem
+          /> */}
+
+
+
+
+<motion.div>
+        <MenuItem
+          // label="Register "
+          label={
+            <span style={{display:'flex',alignItems:"center" , gap:'14px'}}>
+              
+              <span>
+              Register
+              </span>
+              <span style={{marginTop:'10px'}}>
+              {/* <FaChevronDown/>  */}
+              {isRegisterdropdownclicked ? <FaChevronUp /> : <FaChevronDown />}
+              </span>
+             
+            </span>
+          }
+          // to={"/home/registration/customer"}
+          // alt="/home/registration/customer"
+          value="/home/registration"
+          menuItemKey="/home/registration"
+          name="Registration page"
+          isActive={isActive}
+          handleMenuItemClick={handleRegisterClick}
+          icon={BiNotepad}
+        />
+      </motion.div>
+
+      {registrationDropdownVisible && (
+        <div className="settings-dropdown">
+          <div className="settings-dropdown-links">
+            <Link
+              label="Customer Registration"
+              to="/home/registration/customer"
+              alt="/home/registration/customer"
+              value="/home/registration"
+              menuItemKey="/home/registration/customer"
+              name="Customer Registration"
+              isActive={isActive}
+              handleMenuItemClick={handleRegisterClick}
+              icon={AiOutlineSetting}
+              onClick={handleRegistermenuClick}
+              className="dropdown-links"
+            >
+
+              <p className="dropdown-icon">
+                <span>
+                <MdGroup />
+                </span>
+                
+                <span className="menu-items-registration">
+                Customer
+                </span>
+              </p>
+
+              
+            </Link>
+          </div>
+
+
+    
+
+          <div className="settings-dropdown-links">
+            <Link
+              label="Supplier Registration"
+              to="/home/registration/supplier"
+              alt="/home/registration/supplier"
+              value="/home/registration"
+              menuItemKey="/home/registration/supplier"
+              name="Supplier Registration"
+              className="dropdown-links"
+              isActive={isActive}
+              handleMenuItemClick={handleRegisterClick}
+              icon={AiOutlineSetting}
+              onClick={handleRegistermenuClick}
+
+            >
+
+              <p className="dropdown-icon">
+                <span>
+                  <MdGroupRemove />
+                </span>
+                
+                <span className="menu-items-registration">
+                Supplier
+                </span>
+              </p>
+               </Link>
+          </div>
+
+          <div className="settings-dropdown-links">
+            <Link
+              label="Supplier Registration"
+              to="/home/registration/employes"
+              alt="/home/registration/employes"
+              value="/home/registration"
+              menuItemKey="/home/registration/employes"
+              name="Supplier Registration"
+              className="dropdown-links"
+              isActive={isActive}
+              handleMenuItemClick={handleRegisterClick}
+              icon={AiOutlineSetting}
+              onClick={handleRegistermenuClick}
+
+            >
+               <p className="dropdown-icon">
+                <span>
+                  <HiOutlineUserGroup />
+                </span>
+                
+                <span className="menu-items-registration">
+                Employees
+                </span>
+              </p>
+
+
+
+              
+              </Link>
+          </div>
+
+          </div>
+      )}
+
+
+
+
+          
+<motion.div >
+        
+        <MenuItem
+          // label="Settings "
+          label={
+            <span style={{display:'flex',alignItems:"center" , gap:'14px'}}>
+              
+              <span>
+              Settings
+              </span>
+              <span style={{marginTop:'10px'}}>
+              {issettingdropdownclicked ? <FaChevronUp /> : <FaChevronDown />}
+
+              {/* <FaChevronDown/>  */}
+              </span>
+             
+            </span>
+          }
+          // to={"/home/settings"}
+          // alt="/home/settings"
+          value="/home/settings"
+          menuItemKey="/home/settings"
+          name="Settings page"
+          isActive={isActive}
+          handleMenuItemClick={handleSettingsClick}
+          icon={AiOutlineSetting}
+          dropdownItems={[
+            // {
+            //   label: "user Creation",
+            //   to : "settings/usercreation",
+            // alt:"settings/usercreation",
+            // value:"settings",
+            // menuItemKey:"settings",
+            // name:"User page",
+            // isActive:{isActive},
+            // handleMenuItemClick:{handleMenuItemClick},
+            // icon:{FaUserAstronaut}
+            // },
+            // {
+            //   label: "Setting 2",
+            //   to: "/home/settings/setting2",
+            //   menuItemKey: "/home/settings/setting2",
+            //   name: "Setting 2",
+            //   alt: "/home/settings/setting2",
+            // },
+          ]}
+        />
+
+
+      </motion.div>
+
+      {settingsDropdownVisible && (
+        <div className="settings-dropdown">
+         <div className="settings-dropdown-links">
+         <Link
+          label="User"
+          to="settings/usercreation"
+          alt="settings/usercreation"
+          value="/home/settings"
+          menuItemKey="settings"
+          name="User page"
+          isActive={isActive}
+          handleMenuItemClick={handleSettingsClick}
+          icon={AiOutlineSetting}
+          className="dropdown-links"
+         >
+
+              <p className="dropdown-icon">
+                <span>
+                <GrUserSettings />
+                </span>
+                
+                <span>
+                user Creation
+                </span>
+              </p>
+          </Link>
+         </div>
+         <div className="settings-dropdown-links">
+         <Link 
+          label="Station Creation"
+          to="settings/stationcreation"
+          alt="home/settings/stationcreation"
+          value="settings"
+          menuItemKey="settings"
+          name="Station Creation"
+          className="dropdown-links "
+          isActive={isActive}
+          handleMenuItemClick={handleSettingsClick}
+          icon={AiOutlineSetting}
+         >
+          <p className="dropdown-icon">
+          <span>
+          <FaCodeBranch  />
+          </span>
+          
+          <span>
+          Station Creation
+          </span>
+          </p>
+      
+         
+          </Link>
+         </div>
+
+
+         
+         <div className="settings-dropdown-links">
+         <Link
+         to="settings/mainsetting"
+         label="User"
+          // to="/home/usersettings/usersetting"
+          alt="settings/mainsetting"
+          value="home/settings"
+          menuItemKey="home/settings"
+          name="User page" isActive={isActive}
+          handleMenuItemClick={handleSettingsClick}
+          icon={AiOutlineSetting}
+          className="dropdown-links "
+           >   
+
+            <p className="dropdown-icon">
+              <span>
+              <GrSettingsOption />
+              </span>
+              
+              <span>
+              Main setting
+              </span>
+              </p>
+               
+         </Link>
+
+         </div>
+        </div>
+      )}
+
+
+
+<motion.div >
+        
+        <MenuItem
+          // label="info "
+          label={
+            <span style={{display:'flex',alignItems:"center" , gap:'14px'}}>
+              
+              <span>
+              info
+              </span>
+              <span style={{marginTop:'10px'}}>
+              {isinfodropdownclicked ? <FaChevronUp /> : <FaChevronDown />}
+
+              {/* <FaChevronDown/>  */}
+              </span>
+             
+            </span>
+          }
+          // to={"/home/settings"}
+          // alt="/home/info"
+          value="/home/info"
+          menuItemKey="/home/info"
+          name="info page"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineInfoCircle}
+          dropdownItems={[
+            // {
+            //   label: "user Creation",
+            //   to : "settings/usercreation",
+            // alt:"settings/usercreation",
+            // value:"settings",
+            // menuItemKey:"settings",
+            // name:"User page",
+            // isActive:{isActive},
+            // handleMenuItemClick:{handleMenuItemClick},
+            // icon:{FaUserAstronaut}
+            // },
+            // {
+            //   label: "Setting 2",
+            //   to: "/home/settings/setting2",
+            //   menuItemKey: "/home/settings/setting2",
+            //   name: "Setting 2",
+            //   alt: "/home/settings/setting2",
+            // },
+          ]}
+        />
+
+
+      </motion.div>
+
+      {infoDropdownVisible && (
+        <div className="settings-dropdown">
+         <div className="settings-dropdown-links">
+         <Link
+          label="User"
+          to="info/ratetype"
+          alt="info/ratetype"
+          value="/home/info"
+          menuItemKey="ratetype"
+          name="ratetype"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+          className="dropdown-links"
+        
+         >
+           <p className="dropdown-icon">
+              <span>
+              <GiDuration  />
+              </span>
+              
+              <span>
+              Rate Type
+              </span>
+              </p>
+          
+         
+         </Link>
+         </div>
+
+         <div className="settings-dropdown-links">
+         <Link 
+          label="ratemanagement"
+          to="/home/info/ratemanagement"
+          alt="/home/info/ratemanagement"
+          value="/home/info"
+          menuItemKey="ratemanagement"
+          name="ratemanagement"
+          className="dropdown-links"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+         >
+
+            <p className="dropdown-icon">
+              <span>
+              <GiReceiveMoney   />
+              </span>
+              
+              <span>
+              Rate Management
+              </span>
+              </p>
+          
+          
+         </Link>
+         </div>
+
+         <div className="settings-dropdown-links">
+         <Link 
+          label="mailer"
+          to="/home/info/mailer"
+          alt="/home/info/mailer"
+          value="/home/info"
+          menuItemKey="mailer"
+          name="mailer"
+          className="dropdown-links"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+         >
+
+            <p className="dropdown-icon">
+              <span>
+              <SiMinutemailer   />
+              </span>
+              
+              <span>
+              Mailer
+              </span>
+              </p>
+          
+          
+          
+          
+          </Link>
+         </div>
+
+         <div className="settings-dropdown-links">
+         <Link 
+          label="fuelinfo"
+          to="/home/info/fuelinfo"
+          alt="/home/info/fuelinfo"
+          value="/home/info"
+          menuItemKey="fuelinfo"
+          name="fuelinfo"
+          className="dropdown-links"
+          isActive={isActive}
+          handleMenuItemClick={handleinfoClick}
+          icon={AiOutlineSetting}
+         >
+              <p className="dropdown-icon">
+              <span>
+              <BsFillFuelPumpFill    />
+              </span>
+              
+              <span>
+              Fuel Info
+              </span>
+              </p>
+          
+          
+          </Link>
+         </div>
+
+
+         
+     
+        </div>
+      )}
+          {/* <MenuItem
             label="Info"
             to={"/home/info/ratetype"}
             alt="/home/info/ratetype"
@@ -747,7 +1268,20 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={AiOutlineInfoCircle}
-          />
+          /> */}
+
+          
+
+
+
+
+
+
+
+
+
+
+
           <MenuItem
             label="User"
             to="/home/usersettings/usersetting"

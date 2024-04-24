@@ -110,3 +110,33 @@
     border-radius: 15px;
     padding: 15px 15px 25px;
 }
+
+@media screen and (min-width:970px) and (max-width:1240px) {
+    .FuelInfo-main .FuelInfo-form-container{ 
+      width: 76vw !important;
+    }
+  }
+  
+  @media screen and (min-width:769px) and (max-width:969.99px) {
+    .FuelInfo-main .FuelInfo-form-container { 
+      width: 70vw !important;
+    }
+  }
+
+  .detailsFuel-inputs{
+    flex-wrap: wrap;
+    /* justify-content: center; */
+  }
+  @media screen and (max-width:1333px) {
+    .detailsFuel-inputs{
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+  }
+ 
+
+  @media screen and (max-width:768px) {
+    .FuelInfo-main {
+        width: 84% !important;
+    }
+  }

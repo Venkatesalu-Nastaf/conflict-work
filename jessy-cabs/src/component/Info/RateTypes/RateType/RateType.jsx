@@ -88,6 +88,8 @@ const RateType = () => {
         isEditMode,
         handleEdit,
         handleDateChange,
+        organizationNames
+
     } = useRatype();
 
     useEffect(() => {
@@ -118,7 +120,7 @@ const RateType = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "300px" }}>
+                                <div className="input" style={{}}>
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
@@ -146,7 +148,7 @@ const RateType = () => {
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
-                                    <TextField
+                                    {/* <TextField
                                         size="small"
                                         id="id"
                                         label="Organization Name"
@@ -154,7 +156,28 @@ const RateType = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ratename || book.ratename}
                                         onChange={handleChange}
-                                    />
+                                    /> */}
+                                    <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo-pricetag"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) => handleAutocompleteChange(event, value, "ratename")}
+                // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
+                value={selectedCustomerData?.ratename|| book.selectedCustomerData || ""}
+                // options={PriceTag.map((option) => ({
+                //   label: option.option,
+                // }))}
+                options={organizationNames?.map((option) => ({ label: option }))} // Use organizationName here
+                getOptionLabel={(option) => option.label || selectedCustomerData?.ratename || ''}
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params}  label="Organization Name"name="ratename" inputRef={params.inputRef} />
+                  )
+                }
+                }
+              />
                                 </div>
                             {/* </div>
                             <div className="input-field"> */}
@@ -172,7 +195,7 @@ const RateType = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input radio" style={{ width: "120px" }}>
+                                <div className="input radio" style={{ width: "120px", paddingLeft:'10px' }}>
                                     <FormControl>
                                         <FormLabel id="demo-row-radio-buttons-group-label">
                                             Active

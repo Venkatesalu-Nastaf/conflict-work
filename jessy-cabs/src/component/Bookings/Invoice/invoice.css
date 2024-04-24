@@ -31,18 +31,18 @@
 
 }
 
-.attached-toll {
+/* .attached-toll {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 10px auto;
-}
+} */
 
-.attached-toll img.attached-image {
+/* .attached-toll img.attached-image {
   width: 95%;
   max-width: 100%;
   height: 300px;
-}
+} */
 
 .invoice-container-header {
   display: flex;
@@ -318,7 +318,11 @@ header img {
 }
 
 .tripsheet-location-img img {
-  width: 320px;
+  /* width: 320px; */
+  /* width: 714.33px; */
+  height: 300px;
+  /* or you can use 90% directly */
+  width: 100%;
 }
 
 .tripsheet-RouteSummary {
@@ -335,13 +339,14 @@ header img {
   font-weight: 500;
 }
 
+
+
 .attached-toll {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 10px auto;
+  margin-top: 110px;
 }
 
 .attached-toll img {
-  width: 500px;
+  height: 350px;
+  width: 100%;
+  margin: 10px;
 }

@@ -125,11 +125,9 @@ const TransferReport = () => {
   const [addressDetails,setAddressDetails] = useState([])
   const apiUrl = APIURL;
   const [organizationsdetail1,setOrganisationDetail]=useState([]);
-  const [popup,setPopup] = useState(false)
   const { sharedData } = useData();
   const [particularPdf,setParticularPdf] = useState([])
   const [imageorganisation, setSelectedImageorganisation] = useState(null);
-  console.log(imageorganisation,"image")
   const [tripno,setTripno] = useState('')
 const {pdfPrint,setPdfPrint} = PdfData()
   useEffect(() => {
@@ -194,7 +192,6 @@ const {pdfPrint,setPdfPrint} = PdfData()
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const tripData = await response.json();
-        console.log(tripData,"trip")
         setInvoicedata(tripData)
     }
     catch(err){
@@ -203,7 +200,6 @@ const {pdfPrint,setPdfPrint} = PdfData()
 }
 fetchData()
 },[apiUrl])
-
 // useEffect(()=>{
 //   const fetchData = async () =>{
 //     const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
@@ -221,14 +217,19 @@ const handleDownloadPdf = async () => {
     const fileName = 'test.pdf';
     const blob = await pdf(<PdfPage invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
     saveAs(blob, fileName);
+    localStorage.removeItem("selectedcustomerdata");
+    localStorage.removeItem("selectedtripsheetid");
   }
   else if (pdfBillList === "PDF 2") {
     const fileName = 'test.pdf';
     const blob = await pdf(<PdfContent2 invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation}/>).toBlob();
     saveAs(blob, fileName);
+    localStorage.removeItem("selectedcustomerdata");
+    localStorage.removeItem("selectedtripsheetid");
   }
 
 }
+
 const handlePopup= ()=>{
   setPdfPrint(false)
 }
@@ -258,11 +259,6 @@ const columns = [
 },
 ];
 
-const handleprint = async()=>{
-  const fileName = 'test.pdf';
-  const blob = await pdf(<PdfParticularData  />).toBlob();
-  saveAs(blob, fileName);
-}
 
 const handleButtonClick = async(params) => {
   setPdfPrint(true)
@@ -270,8 +266,6 @@ const {tripid,customer} = params.row;
 setTripno(tripid)
 const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
 const pdfdetails = await response.json()
-console.log(pdfdetails,'idd');
-
 setParticularPdf(pdfdetails)
 };
   return (

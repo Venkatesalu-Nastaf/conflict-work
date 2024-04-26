@@ -23,7 +23,6 @@ import { faBuilding, faFileInvoiceDollar } from "@fortawesome/free-solid-svg-ico
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useGroupbilling from './useGroupbilling';
 
-
 const GroupBilling = () => {
 
     const {
@@ -40,6 +39,7 @@ const GroupBilling = () => {
         handleChange,
         hidePopup,
         invoiceno,
+        setInvoiceno,
         selectedCustomerDatas,
         handleKeyenter,
         customer,
@@ -57,8 +57,14 @@ const GroupBilling = () => {
         handleShow,
         handleExcelDownload,
         handleCoverPDFDownload,
-        columns
-
+        columns,
+        rowSelectionModel,
+        setRowSelectionModel,
+        handleRowSelection,
+        handlegroupData,
+        handleButtonClickTripsheet,
+        referenceNo,
+        handleKeyDown
     } = useGroupbilling();
 
     useEffect(() => {
@@ -78,15 +84,31 @@ const GroupBilling = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
-                                    <TextField
+                                    {/* <TextField
                                         size="small"
                                         id="id"
-                                        label="Invoice No"
+                                        label="Reference No"
                                         name="invoiceno"
                                         value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
-                                        onChange={handleChange}
+                                        options={referenceNo}
+                                        onChange={(event,value)=>setInvoiceno(value)}
                                         autoComplete='off'
                                         onKeyDown={handleKeyenter}
+                                    /> */}
+                                       <Autocomplete
+                                        fullWidth
+                                        id="free-solo-demo"
+                                        freeSolo
+                                        size="small"
+                                        value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}   
+                                        options={referenceNo || []}
+                                        onKeyDown={handleKeyDown}                                  
+                                        onChange={(event,value)=>setInvoiceno(value)}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField {...params} label="Reference No" name='ReferenceNo' inputRef={params.inputRef} />
+                                            );
+                                        }}
                                     />
                                 </div>
                                 <div className="input" style={{ width: "230px" }}>
@@ -175,6 +197,7 @@ const GroupBilling = () => {
                                         options={Stations.map((option) => ({
                                             label: option.optionvalue,
                                         }))}
+                                    
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {
                                             return (
@@ -210,10 +233,10 @@ const GroupBilling = () => {
                     </div>
                     <div className="input-field">
                         <div className="input" style={{ width: "140px" }}>
-                            <Button variant="contained">Delete Invoice</Button>
+                            <Button variant="contained" onClick={handlegroupData}>Save</Button>
                         </div>
                         <div className="input" >
-                            <Button variant="contained">Delete Selected Bill</Button>
+                            <Button variant="contained">Remove</Button>
                         </div>
                     </div>
                 </div>
@@ -224,6 +247,12 @@ const GroupBilling = () => {
                             rows={rows}
                             columns={columns}
                             pageSize={5}
+                            onRowClick={handleButtonClickTripsheet}
+                            onRowSelectionModelChange={(newRowSelectionModel) => {
+                                setRowSelectionModel(newRowSelectionModel);
+                                handleRowSelection(newRowSelectionModel);
+                              }}
+                            getRowId={(row)=>row.id}
                             checkboxSelection
                             disableRowSelectionOnClick
                         />

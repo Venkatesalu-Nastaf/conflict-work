@@ -12,6 +12,10 @@ export const Status = [
     Option: "Cancelled",
     optionvalue: "cancelled",
   },
+  {
+  Option:"Billed",
+  optionvalue: "Billed",
+  }
 ];
 
 // Apps

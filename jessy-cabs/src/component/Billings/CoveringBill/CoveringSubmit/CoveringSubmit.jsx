@@ -52,6 +52,7 @@ const CoveringSubmit = () => {
         handlePdfDownload,
         handleShow,
         columns,
+        handleButtonClickTripsheet
     } = useCoversubmit();
 
     useEffect(() => {
@@ -178,6 +179,7 @@ const CoveringSubmit = () => {
                             columns={columns}
                             pageSize={5}
                             checkboxSelection
+                            onRowClick={handleButtonClickTripsheet}
                         />
                     </div>
                 </div>

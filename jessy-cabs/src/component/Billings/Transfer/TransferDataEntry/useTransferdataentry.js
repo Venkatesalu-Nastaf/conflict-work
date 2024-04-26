@@ -226,6 +226,7 @@ const useTransferdataentry = () => {
             }
         });
         const transferlist = formData.Trip_id?.split(',')
+        console.log(transferlist,'tid');
         setTransferId(transferlist)
         setInvoiceno(formData.Invoice_no)
         setGroupId(formData.Groupid)

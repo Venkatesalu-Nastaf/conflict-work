@@ -23,7 +23,7 @@ import { BiBorderRadius } from 'react-icons/bi';
 
     const navigate = useNavigate();
     const BackToSelection =()=>{
-        navigate("/home/info/TemplateSelection");
+        navigate("/home/info/mailer/TemplateSelection");
     }
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -93,7 +93,7 @@ import { BiBorderRadius } from 'react-icons/bi';
 
 <div className='word-head'> 
 <div className='back-input'>
-<div className='cursor-pointer'><p className='back-section text-white' onClick={BackToSelection}> <IoChevronBack /></p></div> 
+<div style={{cursor: 'pointer'}}><p className='back-section text-white' onClick={BackToSelection}> <IoChevronBack /></p></div> 
 
 <div>
 <div>

@@ -3,10 +3,14 @@
   padding: 0px !important;
 }
 
-.detail-container-main {
+.VehicleStatement-container-main {
   display: flex;
   width: 70%;
 }
+
+/* .VehicleStatement-container-main{
+  width: 100% !important;
+} */
 
 .form-container-receiveds .Title-Name {
   font-size: 20px;
@@ -83,4 +87,51 @@
   height: 3px;
   background-color: #457cdc;
   /* Adjust color as needed */
+}
+
+@media screen and (min-width:970px) and (max-width:1240px) {
+  .form-container-receiveds .container-main { 
+    width: 76vw !important;
+  }
+}
+
+@media screen and (min-width:769px) and (max-width:969.99px) {
+  .form-container-receiveds .container-main { 
+    width: 70vw !important;
+  }
+}
+
+.vehiclestatement-inputfeild{
+  flex-wrap: wrap;
+}
+
+@media screen and  (max-width:1290px) {
+
+  .vehiclestatement-inputfeild{
+    justify-content: center;
+  }
+}
+@media screen  and (max-width:462px){
+  .show-btn-vehicle{
+    flex-wrap: wrap;
+  }
+
+  .SearchContainer-VehicleStatement {
+    border: none;
+    background-color: transparent;
+  }
+  .VehicleStatement-container-main{
+    width: 100% !important;
+  }
+
+  .vehiecle-date{
+    width: 200px !important;
+  }
+}
+
+
+@media screen  and (max-width:700px){
+  .SearchContainer-VehicleStatement {
+    width: 75% !important;
+  }
 }

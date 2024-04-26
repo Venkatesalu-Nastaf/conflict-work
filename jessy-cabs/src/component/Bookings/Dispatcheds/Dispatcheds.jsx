@@ -2,12 +2,11 @@ import React from 'react';
 import './Dispatcheds.css';
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import Billed from './Billed/Billed';
-import Closed from './Closed/Closed';
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import Dispatched from './Dispatched/Dispatched';
+import VehicleStatement from './VehicleStatement/VehicleStatement';
 
 const Dispatcheds = () => {
     const [value, setValue] = React.useState("dispatched");
@@ -23,14 +22,12 @@ const Dispatcheds = () => {
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Dispatched" value="dispatched" />
-                                <Tab label="Closed" value="closed" />
-                                <Tab label="Billed" value="billed" />
+                                <Tab label="Trip Status" value="dispatched" />
+                                <Tab label="VehicleStatement" value="vehicleStatement" />
                             </TabList>
                         </Box>
                         <TabPanel value="dispatched"><Dispatched /></TabPanel>
-                        <TabPanel value="closed"><Closed /></TabPanel>
-                        <TabPanel value="billed"><Billed /> </TabPanel>
+                        <TabPanel value="vehicleStatement"><VehicleStatement /></TabPanel>
                     </TabContext>
                 </Box>
             </div>

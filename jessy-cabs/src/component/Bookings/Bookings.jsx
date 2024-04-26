@@ -36,14 +36,20 @@ const Bookings = () => {
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
-
-        <MenuItem
+<MenuItem
+          label="Trip Status"
+          to="/home/bookings/dispatched"
+          menuItemKey="Dispatched"
+          activeMenuItem={activeMenuItem}
+          handleMenuItemClick={handleMenuItemClick}
+        />
+        {/* <MenuItem
           label="Received"
           to="/home/bookings/received"
           menuItemKey="Received"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
-        />
+        /> */}
 
         <MenuItem
           label="Trip Sheet"
@@ -53,13 +59,13 @@ const Bookings = () => {
           handleMenuItemClick={handleMenuItemClick}
         />
 
-        <MenuItem
+        {/* <MenuItem
           label="Dispatched"
           to="/home/bookings/dispatched"
           menuItemKey="Dispatched"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
-        />
+        /> */}
       </div>
 
       <Outlet />

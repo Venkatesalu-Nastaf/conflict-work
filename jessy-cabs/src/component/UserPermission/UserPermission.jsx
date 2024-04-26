@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { MenuItem, Select } from '@material-ui/core';
 import './UserPermission.css'
 import Switch from '@mui/material/Switch';
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 export const UserPermission = () => {
+
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
   return (
 
 
@@ -38,28 +45,57 @@ export const UserPermission = () => {
                 </td>
               </tr>
               <tr>
-                <td className='td-content'>VIEW</td>
+              <td className='td-content'>
+      <Select
+        value={selectedOption}
+        onChange={handleChange}
+        displayEmpty
+        className='booking-dropdown'
+      >
+        <MenuItem value='' disabled>
+          Select Option
+        </MenuItem>
+        <MenuItem value='option1'>Option 1</MenuItem>
+        <MenuItem value='option2'>Option 2</MenuItem>
+        <MenuItem value='option3'>Option 3</MenuItem>
+      </Select>
+    </td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
               </tr>
               <tr>
-                <td className='td-content'>READ</td>
+                {/* <td className='td-content'>Billing</td> */}
+                <td className='td-content'>
+      <Select
+        value={selectedOption}
+        onChange={handleChange}
+        displayEmpty
+        className='booking-dropdown'
+      >
+        <MenuItem value='' disabled>
+          Select Option
+        </MenuItem>
+        <MenuItem value='option1'>Option 1</MenuItem>
+        <MenuItem value='option2'>Option 2</MenuItem>
+        <MenuItem value='option3'>Option 3</MenuItem>
+      </Select>
+    </td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
               </tr>
               <tr>
-                <td className='td-content'>WRITE</td>
+                <td className='td-content'>Register</td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
               </tr>
               <tr>
-                <td className='td-content'>EDIT</td>
+                <td className='td-content'>Settings</td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>

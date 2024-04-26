@@ -76,7 +76,7 @@ router.post('/tripsheet-add', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1, escort,
+        remark1, escort, minHour, minKM,
 
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
@@ -189,7 +189,7 @@ router.post('/tripsheet-add', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1, escort,
+        remark1, escort, minHour, minKM,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -330,7 +330,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1, escort,
+        remark1, escort, minHour, minKM,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -439,7 +439,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1, escort,
+        remark1, escort, minHour, minKM,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -567,7 +567,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort, minHour, minKM,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -676,7 +676,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort, minHour, minKM,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -918,7 +918,8 @@ router.get('/get-gmapdata/:tripid', (req, res) => {
 router.get(`/t4hr-pack`, (req, res) => {
     // Extract dynamic inputs from query parameters
     const totalHours = req.query.totalHours;
-    const vehicletype = req.query.vehicletype;
+    // const vehicletype = req.query.vehicletype;
+    const vehicletype = "AUDI A6";
     const duty = req.query.duty;
     const totkm = req.query.totkm;
     const OrganizationName = req.query.organizationname;

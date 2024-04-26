@@ -6,9 +6,9 @@ import {
     VehicleRate,
 } from "./TripSheetdata";
 import { APIURL } from "../../url";
-import Invoice from '../Invoice/Invoice';
-import { saveAs } from 'file-saver';
-import { pdf } from '@react-pdf/renderer';
+// import Invoice from '../Invoice/Invoice';
+// import { saveAs } from 'file-saver';
+// import { pdf } from '@react-pdf/renderer';
 
 const useTripsheet = () => {
     const apiUrl = APIURL;
@@ -64,10 +64,15 @@ const useTripsheet = () => {
     let [extrahr_amount, setextrahr_amount] = useState('')
     let [ex_kmAmount, setEx_kmAmount] = useState('')
     let [ex_hrAmount, setEx_HrAmount] = useState('')
+
+    let [minHour, setMinHour] = useState()
+    let [minKM, setMinKM] = useState()
+
     // nighht value --------------------
     let [nightBta, setNightBeta] = useState('')
     let [nightCount, setNightCount] = useState('')
     let [night_totalAmount, setnight_totalAmount] = useState('')
+
 
     //driver convinence --------------------------
     let [driverBeta, setdriverBeta] = useState('')
@@ -603,6 +608,8 @@ const useTripsheet = () => {
         setRequest("");
         setCalcCheck(false);
         setEscort("No");
+        setMinHour();
+        setMinKM();
 
     };
 
@@ -695,8 +702,11 @@ const useTripsheet = () => {
                     pack: packageDetails[0]?.package,
                     minhrs: packageDetails[0]?.Hours,
                     minkm: packageDetails[0]?.KMS,
-                    calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, request, escort
+                    calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, request, escort, minHour, minKM,
+
                 };
+
+
                 for (const key in updatedCustomer) {
                     if (key === '0') {
                         delete updatedCustomer[key];
@@ -853,7 +863,7 @@ const useTripsheet = () => {
                 minhrs: packageDetails[0]?.Hours,
                 minkm: packageDetails[0]?.KMS,
                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
-                request, escort,
+                request, escort, minHour, minKM,
             };
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
             handleCancel();
@@ -1353,8 +1363,6 @@ const useTripsheet = () => {
     //     async function fetchData() {
     //         try {
 
-    //             console.log(typeof (totalKilometers))
-    //             console.log(typeof (totalTime))
     //             const response = await axios.get(`${apiUrl}/getPackageDetails`, {
     //                 params: {
     //                     totalkm1: totalKilometers,
@@ -1830,6 +1838,9 @@ const useTripsheet = () => {
                 setextrahr_amount(extraHours);
                 setNightBeta(NHalt);
                 setdriverBeta(Bata);
+
+                setMinHour(Hours);
+                setMinKM(KMS);
 
             }
 

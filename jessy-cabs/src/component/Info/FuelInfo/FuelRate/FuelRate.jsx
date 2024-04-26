@@ -73,12 +73,12 @@ const FuelRate = () => {
             <form action="">
                 <div className="FuelRate-header">
                     <div className="input-field">
-                        <div className="input" style={{ width: "570px" }}>
+                        <div className="input fuelrate-input" style={{ width: "570px" }}>
                             <div className="icone" style={{ paddingBottom: "15px" }} >
                                 <FontAwesomeIcon icon={faGasPump} size="xl" />
                             </div>
                             <Autocomplete
-                                fullWidth
+                                // fullWidth
                                 size="small"
                                 id="free-solo-demo"
                                 freeSolo
@@ -92,9 +92,19 @@ const FuelRate = () => {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        sx={{ m: 1, width: "50ch" }}
+                                        // sx={{ m: 1, width: "50ch" }}
                                         label="Select State"
-                                    />
+                                    
+
+                                    sx={{
+                                        m: 1,
+                                        width: "190px", // Set width to 100% for mobile devices
+                                        "@media (min-width: 667px)": {
+                                          width: "50ch", // Set width to 50ch for larger screens
+                                        },
+                                      }}
+
+                                      />
                                 )}
                             />
                         </div>

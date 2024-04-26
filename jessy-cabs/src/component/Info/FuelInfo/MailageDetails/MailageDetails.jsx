@@ -36,6 +36,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useMailagedetails from './useMailagedetails';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -99,12 +100,13 @@ const MailageDetails = () => {
   }, [actionName, handleClick]);
 
   return (
+   
     <div className="form-container-FuelInfo">
       <div className="MailageDetails-Main">
         <form >
           <div className="MailageDetails-page-header">
             <div className="detailsFuel">
-              <div className="input-field">
+              <div className="input-field detailsFuel-inputs">
                 <div className="input" >
                   <div className="icone">
                     <CarCrashIcon color="action" />
@@ -136,6 +138,9 @@ const MailageDetails = () => {
                 <div className="input">
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <div className="icone">
+                  <DateRangeIcon color="action" />
+                </div>
                     <DatePicker
                       label="Fill Date"
                       format="DD/MM/YYYY"
@@ -151,6 +156,9 @@ const MailageDetails = () => {
                 <div className="input">
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <div className="icone">
+                  <DateRangeIcon color="action" />
+                </div>
                     <DatePicker
                       label="Empty Date"
                       format="DD/MM/YYYY"
@@ -163,8 +171,8 @@ const MailageDetails = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-              </div>
-              <div className="input-field">
+              {/* </div>
+              <div className="input-field"> */}
                 <div className="input" >
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -231,8 +239,8 @@ const MailageDetails = () => {
                     }}
                   />
                 </div>
-              </div>
-              <div className="input-field">
+              {/* </div>
+              <div className="input-field"> */}
                 <div className="input" style={{ width: "250px" }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faGasPump} size="xl" />

@@ -61,7 +61,6 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async(req, res) => {
         vehicleDataMap[row.vehiclename] = { fueltype: row.fueltype, segement: row.segement,Groups:row.Groups };
 
       });
-      // console.log(vehicleDataMap,"map")
       db.query('select customer,gstTax from customers where customer=?',[customer],(err,result2)=>{
         if (err) {
           return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
@@ -247,7 +246,6 @@ router.get('/gettransfer_list',(req,res)=>{
 
 router.get('/gettransfer_listdatas',(req,res)=>{
   const { Status,Organization_name,FromDate,EndDate  } = req.query;
-  console.log(Status,"=========");
   // const { Status  } = req.query;
   if(Status==="all")
   {

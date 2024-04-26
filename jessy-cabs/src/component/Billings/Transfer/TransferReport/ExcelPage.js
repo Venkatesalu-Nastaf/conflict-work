@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import Excel from 'exceljs';
 import { saveAs } from "file-saver";
 import dayjs from 'dayjs';
+import JSZip from 'jszip';
+import PdfParticularData from './PdfParticularData';
+import {  pdf } from '@react-pdf/renderer';
 
 
 
@@ -32,7 +35,7 @@ const useExeclpage = () => {
         { key: "employeeno", header: "Employee SAP Code", width: 150 },
         { key: "guestname", header: "Travelled Employee Name", width: 200 },
         { key: "Gender", header: "Gender", width: 100 },
-        { key: "EscortRoute", header: "Escort Route", width: 150 },
+        { key: "escort", header: "Escort Route", width: 150 },
         { key: "pickup", header: "Pickup Point / Shed", width: 180 },
         { key: "useage", header: "Drop Point", width: 120 },
         { key: "starttime1", header: "Shift Timing", width: 150 },
@@ -62,7 +65,7 @@ const useExeclpage = () => {
         { key: "night_totalAmount", header: "Night Charges", width: 150 },
         { key: "driverBeta", header: "Driver Bhatta", width: 150 },
         { key: "OutstationCharges", header: "Outstation Charges", width: 180 },
-        { key: "totalcalcAmount", header: "Total Amount", width: 150 },
+        { key: "t", header: "Total Amount", width: 150 },
         { key: "PenaltyAmount", header: "Penalty Amount", width: 150 },
         { key: "gstTax", header: "GST%", width: 100 },
         { key: "permit", header: "Permit", width: 120 },
@@ -92,7 +95,7 @@ const useExeclpage = () => {
         { key: "tripsheetdate", header: "Date", width: 120 },
         { key: "employeeno", header: "User Name", width: 150 },
         { key: "Gender", header: "Gender", width: 100 },
-        { key: "EscortRoute", header: "Escort Route", width: 150 },
+        { key: "escort", header: "Escort Route", width: 150 },
         { key: "pickup", header: "Pickup Point", width: 180 },
         { key: "useage", header: "Drop Point", width: 120 },
         { key: "remark", header: "Runing Details", width: 150 },
@@ -139,13 +142,16 @@ const useExeclpage = () => {
 
 
     const handleExcelDownload = async (misformat, invoice, invoicedate) => {
+        console.log(misformat, invoice, invoicedate, "zipexcel")
         const data = invoice;
+
 
         if (!misformat) {
             setError1(true)
             setErrorMessage1(" SELECT MIS  EXCEL FORMAT")
             return
         }
+        
         if (misformat === "Old MIS") {
             try {
                 const fileName = `OLD MIS ${dayjs(invoicedate).format(" MMMM D")}`
@@ -227,7 +233,11 @@ const useExeclpage = () => {
                 const buf = await workbook.xlsx.writeBuffer();
 
                 // download the processed file
+
                 saveAs(new Blob([buf]), `${fileName}.xlsx`);
+
+
+
             } catch (error) {
                 console.error('<<<ERRROR>>>', error);
                 console.error('Something Went Wrong', error.message);
@@ -253,7 +263,7 @@ const useExeclpage = () => {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
-                        fgColor: { argb: 'FF00FF00' } // Green background color
+                        fgColor: { argb: '9BB0C1' } // Green background color
                     };
                 });
 
@@ -329,8 +339,231 @@ const useExeclpage = () => {
         }
     }
 
+
+    const handledatazipDownload = async (misformat, invoice, invoicedate,customer,addressDetails,particularPdf,organizationsdetail1,imageorganisation,tripno ) => {
+        console.log(misformat, invoice, invoicedate, customer,"zipexcel")
+        const data = invoice;
+        const customername=customer;
+        const workbook = new Excel.Workbook();
+        try {
+            const zip = new JSZip();
+              if(data.length=== 0){
+                setError1(true)
+                setErrorMessage1(" SELECT DATA ")
+                return
+              }
+
+            if (!misformat) {
+                setError1(true)
+                setErrorMessage1(" SELECT MIS  EXCEL FORMAT")
+                return
+            }
+            // if(!pdfBillList){
+            //     setError1(true)
+            //     setErrorMessage1(" SELECT PDF FORMAT")
+            //     return
+            // }
+            
+            if (misformat === "Old MIS") {
+                //    try {
+                const fileName = `OLD MIS ${dayjs(invoicedate).format(" MMMM D")}`
+                // creating one worksheet in workbook
+                const worksheet = workbook.addWorksheet("workSheetName1");
+                worksheet.columns = columns2;
+
+                // updated the font for first row.
+                worksheet.getRow(1).font = { bold: true };
+
+                // Set background color for header cells
+                worksheet.getRow(1).eachCell((cell, colNumber) => {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '9BB0C1' } // Green background color
+                    };
+                });
+
+
+                worksheet.getRow(1).height = 30;
+                // loop through all of the columns and set the alignment with width.
+                worksheet.columns.forEach((column) => {
+                    column.width = column.header.length + 5;
+                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                });
+
+                data.forEach((singleData, index) => {
+                    singleData["SNo"] = index + 1;
+                    // singleData["duty1"]=singleData["duty"]
+                    const location = `${singleData.address1}, ${singleData.streetno}, ${singleData.city}`;
+                    singleData['location'] = location
+
+                    singleData["duty1"] = singleData["duty"]
+                    singleData["Vendor"] = " Jesscy Cabs"
+                    singleData["VendorName"] = " Jesscy Cabs"
+                    singleData["vechicletype"] = singleData["vehType"]
+                    singleData["vehTypebilling"] = singleData["vehType"]
+                    singleData["totalkm2"] = singleData["totalkm1"]
+                    singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
+                    singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
+                    singleData["starttime1"] = singleData["starttime"]
+                    worksheet.addRow(singleData);
+
+                    // Adjust column width based on the length of the cell values in the added row
+                    worksheet.columns.forEach((column) => {
+                        const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+                        const cellLength = cellValue.toString().length; // Get length of cell value as a string
+                        const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+                        // Set column width to the maximum of current width and cell length plus extra space
+                        column.width = Math.max(currentColumnWidth, cellLength + 5);
+                    });
+                });
+
+
+
+
+                // loop through all of the rows and set the outline style.
+                worksheet.eachRow({ includeEmpty: false }, (row) => {
+                    // store each cell to currentCell
+                    const currentCell = row._cells;
+
+                    // loop through currentCell to apply border only for the non-empty cell of excel
+                    currentCell.forEach((singleCell) => {
+                        const cellAddress = singleCell._address;
+
+                        // apply border
+                        worksheet.getCell(cellAddress).border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' },
+                        };
+                    });
+                });
+                const folderName = 'Old MIS FOLDER';
+                const folder = zip.folder(folderName);
+
+                // write the content using writeBuffer
+                const buf = await workbook.xlsx.writeBuffer();
+                const timestamp = new Date().getTime();
+                folder.file(`${fileName}_${timestamp}.xlsx`, buf);
+
+
+            }
+
+            else if (misformat === "New MIS") {
+                //    try {
+
+                const fileName = `MIS ${dayjs(invoicedate).format(" MMMM D")}`
+                // creating one worksheet in workbook
+                const worksheet = workbook.addWorksheet("workSheetName1");
+                worksheet.columns = columns;
+
+                // updated the font for first row.
+                worksheet.getRow(1).font = { bold: true };
+
+                // Set background color for header cells
+                worksheet.getRow(1).eachCell((cell, colNumber) => {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '9BB0C1' } // Green background color
+                    };
+                });
+
+
+                worksheet.getRow(1).height = 30;
+                // loop through all of the columns and set the alignment with width.
+                worksheet.columns.forEach((column) => {
+                    column.width = column.header.length + 5;
+                    column.alignment = { horizontal: 'center', vertical: 'middle' };
+                });
+
+                data.forEach((singleData, index) => {
+                    singleData["SNo"] = index + 1;
+                    const location = `${singleData.address1}, ${singleData.streetno}, ${singleData.city}`;
+                    singleData['location'] = location
+                    singleData["Gender"] = singleData["gender"] ? singleData["gender"] : "N/A"
+                    singleData["EscortRoute"] = singleData["escort"] ? singleData["escort"] : 'N/A'
+                    singleData["VendorName"] = " Jesscy Cabs"
+                    singleData["vehType1"] = singleData["vehType"]
+                    singleData["PickupPoint_Shed"] = singleData["pickup"]
+                    singleData["Zonetranfer"] = singleData["department"] ? ` ${singleData["department"]}-Airport Transfer` : ""
+                    singleData["timeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["starttime"] : "00.00"
+                    singleData["Endtimeluxury"] = singleData["Groups"] === "Luxzury" ? singleData["shedintime"] : "00.00"
+                    singleData["totaltime1"] = singleData["totaltime"]
+                    singleData["opsremark"] = singleData["opsremark"] ? singleData["Opremark"] : ''
+
+                    worksheet.addRow(singleData);
+
+                    // Adjust column width based on the length of the cell values in the added row
+                    worksheet.columns.forEach((column) => {
+                        const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+                        const cellLength = cellValue.toString().length; // Get length of cell value as a string
+                        const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+                        // Set column width to the maximum of current width and cell length plus extra space
+                        column.width = Math.max(currentColumnWidth, cellLength + 5);
+                    });
+                });
+
+                // loop through all of the rows and set the outline style.
+                worksheet.eachRow({ includeEmpty: false }, (row) => {
+                    // store each cell to currentCell
+                    const currentCell = row._cells;
+
+                    // loop through currentCell to apply border only for the non-empty cell of excel
+                    currentCell.forEach((singleCell) => {
+
+                        const cellAddress = singleCell._address;
+
+                        // apply border
+                        worksheet.getCell(cellAddress).border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' },
+                        };
+                    });
+                });
+                // write the content using writeBuffer
+                const folderName = 'MIS Folder';
+                const folder = zip.folder(folderName);
+                const buf = await workbook.xlsx.writeBuffer();
+                const timestamp = new Date().getTime();
+                folder.file(`${fileName}_${timestamp}.xlsx`, buf)
+             
+
+            }
+            
+            
+          
+                // const folderNamepdf = 'NEW Folder';
+                // const timestamp = new Date().getTime();
+                // const fileName = `PDF 2 ${dayjs(invoicedate).format(" MMMM D")}`
+                // const folder = zip.folder(folderNamepdf);
+                // console.log(addressDetails,particularPdf,organizationsdetail1,imageorganisation,tripno,"blobed")
+            //     const blobed = await pdf(<PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} tripno={tripno}/>
+            // ).toBlob();
+            // console.log(blobed,"blob")
+            //     folder.file(`${fileName}_${timestamp}.pdf`, blob);
+            
+
+                
+            const zipContent = await zip.generateAsync({ type: 'blob' });
+            // Download the ZIP file
+            saveAs(zipContent, `HCL ${customername} ${dayjs(invoicedate).format(" MMMM D")}.zip`);
+        }
+        catch (error) {
+            console.error('<<<ERROR>>>', error);
+            console.error('Something Went Wrong', error.message);
+        } finally {
+            // Clean up resources
+            workbook.removeWorksheet(workSheetName);
+        }
+    }
     return {
-        handleExcelDownload, error1, errormessage1
+        handleExcelDownload, error1, errormessage1, handledatazipDownload
     }
 
 }

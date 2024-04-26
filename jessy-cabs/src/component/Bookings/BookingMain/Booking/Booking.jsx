@@ -172,7 +172,14 @@ const Booking = () => {
     setErrorMessage,
     setError,
     edit,
+    handleKeyEnterdriver,
+    rowdriver,
+    handleRowClickdriver,
+    vehileName,
+    selectedCustomerdriver
   } = useBooking();
+  console.log(rowdriver,"driver")
+  
 
   useEffect(() => {
     if (actionName === "List") {
@@ -558,11 +565,11 @@ const Booking = () => {
                   }}
                 />
               </div>
-              <div className="input">
-                <div className="icone">
+              {/* <div className="input"> */}
+                {/* <div className="icone">
                   <TaxiAlertTwoToneIcon color="action" />
-                </div>
-                <Autocomplete
+                </div> */}
+                {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -572,13 +579,12 @@ const Booking = () => {
                     handleAutocompleteChange(event, value, "vehType")
                   }
                   value={
-                    VehicleModel.find((option) => option.carmodel)?.label ||
                     formData.vehType ||
                     selectedCustomerData.vehType ||
                     book.vehType ||
                     ""
                   }
-                  options={VehicleModel.map((option) => ({
+                  options={Vehiclename.map((option) => ({
                     label: option.carmodel,
                   }))}
                   getOptionLabel={(option) =>
@@ -598,8 +604,43 @@ const Booking = () => {
                       />
                     );
                   }}
-                />
-              </div>
+                /> */}
+                {/* <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo-pricetag"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "vehType")
+                }
+                // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
+                value={
+                  formData.vehType ||
+                  selectedCustomerData.vehType ||
+                  book.vehType ||selectedCustomerdriver.vehiclename||
+                  ""
+                }
+                // options={PriceTag.map((option) => ({
+                //   label: option.option,
+                // }))}
+                options={vehileName?.map((option) => ({ label: option }))} // Use organizationName here
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.vehType ||
+                  selectedCustomerData.vehType ||
+                  book.vehType ||selectedCustomerdriver.vehiclename||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params}  label="Vehicle Type"
+                    name="vehType" inputRef={params.inputRef} />
+                  )
+                }
+                }
+              /> */}
+              {/* </div> */}
               <div className="input">
                 <div className="icone">
                   <AccountBalanceWalletTwoToneIcon color="action" />
@@ -968,22 +1009,22 @@ const Booking = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {rows.length === 0 ? (
+                      {rows?.length === 0 ? (
                         <tr>
                           <td colSpan={6}>No data available.</td>
                         </tr>
                       ) : (
-                        rows.map((row) => (
+                        rows?.map((row) => (
                           <tr
                             id="update-row"
                             key={row.id}
                             onClick={() => handleRowClick(row)}
                           >
-                            <td>{row.customer}</td>
-                            <td>{row.name}</td>
-                            <td>{row.email}</td>
-                            <td>{row.address1}</td>
-                            <td>{row.phoneno}</td>
+                            <td>{row?.customer}</td>
+                            <td>{row?.name}</td>
+                            <td>{row?.email}</td>
+                            <td>{row?.address1}</td>
+                            <td>{row?.phoneno}</td>
                           </tr>
                         ))
                       )}
@@ -1213,6 +1254,48 @@ const Booking = () => {
               </div>
             </div>
           </div>
+
+          <div className="booking-update-main " style={{marginTop:'20px'}}>
+              <div className="booking-update">
+                <div
+                  className="Scroll-Style"
+                  style={{ overflow: "scroll", height: "220px" }}
+                >
+                  <table>
+                    <thead id="update-header">
+                      <tr>
+                        <th>Driver_NAME</th>
+                        <th>VEHICLE_Name</th>
+                        <th>VEHICLE NO</th>
+                        <th>HIRE TYPES</th>
+                        <th>ACTIVE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rowdriver?.length === 0 ? (
+                        <tr>
+                          <td colSpan={6}>No data available.</td>
+                        </tr>
+                      ) : (
+                        rowdriver?.map((row) => (
+                          <tr
+                            id="update-row"
+                            key={row.id}
+                            onClick={() => handleRowClickdriver(row)}
+                          >
+                            <td>{row.driverName}</td>
+                            <td>{row.vehType}</td>
+                            <td>{row.vehRegNo}</td>
+                            <td>{row.hireTypes}</td>
+                            <td>{row.active}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
         </div>
     </div>
         {/* <Box sx={{ position: "relative", mt: 3, height: 320 }}>
@@ -1272,7 +1355,7 @@ const Booking = () => {
                   Hire.find((option) => option.Option)?.label ||
                   formData.hireTypes ||
                   selectedCustomerData.hireTypes ||
-                  book.hireTypes ||
+                  book.hireTypes || selectedCustomerdriver.hireTypes||
                   ""
                 }
                 options={Hire.map((option) => ({
@@ -1282,7 +1365,7 @@ const Booking = () => {
                   option.label ||
                   formData.hireTypes ||
                   selectedCustomerData.hireTypes ||
-                  book.hireTypes ||
+                  book.hireTypes ||selectedCustomerdriver.hireTypes||
                   ""
                 }
                 renderInput={(params) => {
@@ -1326,10 +1409,11 @@ const Booking = () => {
                 value={
                   formData.vehRegNo ||
                   selectedCustomerData.vehRegNo ||
-                  book.vehRegNo ||
+                  book.vehRegNo ||selectedCustomerdriver.vehRegNo||
                   ""
                 }
                 onChange={handleChange}
+                onKeyDown={handleKeyEnterdriver}
                 label="Vehicle Register No"
                 id="vehRegNo"
                 variant="standard"
@@ -1345,7 +1429,7 @@ const Booking = () => {
                 value={
                   formData.vehiclemodule ||
                   selectedCustomerData.vehiclemodule ||
-                  book.vehiclemodule ||
+                  book.vehiclemodule || selectedCustomerdriver.vehiclemodule||
                   ""
                 }
                 onChange={handleChange}
@@ -1355,6 +1439,82 @@ const Booking = () => {
                 required
               />
             </div>
+            <div className="input">
+                <div className="icone">
+                  <TaxiAlertTwoToneIcon color="action" />
+                </div>
+                {/* <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "vehType")
+                  }
+                  value={
+                    formData.vehType ||
+                    selectedCustomerData.vehType ||
+                    book.vehType ||
+                    ""
+                  }
+                  options={Vehiclename.map((option) => ({
+                    label: option.carmodel,
+                  }))}
+                  getOptionLabel={(option) =>
+                    option.label ||
+                    formData.vehType ||
+                    selectedCustomerData.vehType ||
+                    book.vehType ||
+                    ""
+                  }
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        {...params}
+                        label="Vehicle Type"
+                        name="vehType"
+                        inputRef={params.inputRef}
+                      />
+                    );
+                  }}
+                /> */}
+                <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo-pricetag"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "vehType")
+                }
+                // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
+                value={
+                  formData.vehType ||
+                  selectedCustomerData.vehType ||
+                  book.vehType ||selectedCustomerdriver.vehType|| 
+                  ""
+                }
+                // options={PriceTag.map((option) => ({
+                //   label: option.option,
+                // }))}
+                options={vehileName?.map((option) => ({ label: option }))} // Use organizationName here
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.vehType ||
+                  selectedCustomerData.vehType ||
+                  book.vehType ||selectedCustomerdriver.vehType||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params}  label="Vehicle Type"
+                    name="vehType" inputRef={params.inputRef} />
+                  )
+                }
+                }
+              />
+              </div>
           </div>
           <div className="input-field">
             <div className="input">
@@ -1367,10 +1527,11 @@ const Booking = () => {
                 value={
                   formData.driverName ||
                   selectedCustomerData.driverName ||
-                  book.driverName ||
+                  book.driverName || selectedCustomerdriver?.driverName|| 
                   ""
                 }
                 onChange={handleChange}
+                onKeyDown={handleKeyEnterdriver}
                 label="Driver Name"
                 id="drivername"
                 variant="standard"
@@ -1386,7 +1547,7 @@ const Booking = () => {
                 value={
                   formData.mobileNo ||
                   selectedCustomerData.mobileNo ||
-                  book.mobileNo ||
+                  book.mobileNo || selectedCustomerdriver.mobileNo||
                   ""
                 }
                 onChange={handleChange}

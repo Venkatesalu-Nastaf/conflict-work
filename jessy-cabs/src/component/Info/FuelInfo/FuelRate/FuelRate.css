@@ -36,3 +36,13 @@
     height: 400px;
     width: 100%;
   }
+
+  .fuelrate-input{
+    justify-content: unset !important;
+}
+  @media screen and (max-width:668px) {
+    .fuelrate-input{
+        width: 300px !important;
+        justify-content: unset !important;
+    }
+  }

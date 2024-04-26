@@ -44,6 +44,8 @@ import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortaweso
 import useTransferreport from './useTransferreport';
 import useExeclpage from './ExcelPage';
 import { PdfData } from './PdfContext';
+import JSZip from 'jszip';
+import PdfzipParticularData from './Pdfpatricularzipdata'
 
 
 export const PDFbill = [
@@ -118,20 +120,23 @@ const TransferReport = () => {
     setPdfBillList,
     setError,
     setErrorMessage,
+    handleRowSelection,
+    rowzip,
+    rowSelectionModel,
+    setRowSelectionModel
   } = useTransferreport();
   const {
-        handleExcelDownload,error1,errormessage1} = useExeclpage()
+        handleExcelDownload,error1,errormessage1,
+        handledatazipDownload} = useExeclpage()
   const [invoicedata,setInvoicedata] = useState([])
   const [addressDetails,setAddressDetails] = useState([])
   const apiUrl = APIURL;
   const [organizationsdetail1,setOrganisationDetail]=useState([]);
-  const [popup,setPopup] = useState(false)
   const { sharedData } = useData();
   const [particularPdf,setParticularPdf] = useState([])
   const [imageorganisation, setSelectedImageorganisation] = useState(null);
-  console.log(imageorganisation,"image")
   const [tripno,setTripno] = useState('')
-const {pdfPrint,setPdfPrint} = PdfData()
+const {pdfPrint,setPdfPrint,setPdfzip} = PdfData()
   useEffect(() => {
     setSelectedImageorganisation(sharedData)
   }, [sharedData])
@@ -186,15 +191,11 @@ const {pdfPrint,setPdfPrint} = PdfData()
         const storedCustomer = localStorage.getItem("selectedcustomer");
         const customer = decodeURIComponent(storedCustomer);
         const response = await fetch(
-          `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
-            customer
-          )}/${tripid}`
-        );
+          `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const tripData = await response.json();
-        console.log(tripData,"trip")
         setInvoicedata(tripData)
     }
     catch(err){
@@ -203,7 +204,6 @@ const {pdfPrint,setPdfPrint} = PdfData()
 }
 fetchData()
 },[apiUrl])
-
 // useEffect(()=>{
 //   const fetchData = async () =>{
 //     const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
@@ -221,14 +221,19 @@ const handleDownloadPdf = async () => {
     const fileName = 'test.pdf';
     const blob = await pdf(<PdfPage invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
     saveAs(blob, fileName);
+    localStorage.removeItem("selectedcustomerdata");
+    localStorage.removeItem("selectedtripsheetid");
   }
   else if (pdfBillList === "PDF 2") {
     const fileName = 'test.pdf';
     const blob = await pdf(<PdfContent2 invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation}/>).toBlob();
     saveAs(blob, fileName);
+    localStorage.removeItem("selectedcustomerdata");
+    localStorage.removeItem("selectedtripsheetid");
   }
 
 }
+
 const handlePopup= ()=>{
   setPdfPrint(false)
 }
@@ -258,11 +263,6 @@ const columns = [
 },
 ];
 
-const handleprint = async()=>{
-  const fileName = 'test.pdf';
-  const blob = await pdf(<PdfParticularData  />).toBlob();
-  saveAs(blob, fileName);
-}
 
 const handleButtonClick = async(params) => {
   setPdfPrint(true)
@@ -270,10 +270,90 @@ const {tripid,customer} = params.row;
 setTripno(tripid)
 const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
 const pdfdetails = await response.json()
-console.log(pdfdetails,'idd');
-
 setParticularPdf(pdfdetails)
+
 };
+const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
+  if(!misformat){
+    setError(true)
+    setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
+  return
+  }
+  if(!pdfBillList){
+    setError(true)
+    setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
+  return
+  }
+  handleExcelDownload(misformat1, invoicedata1, invoiceDate1);
+  handleDownloadPdf();
+};
+ const zipdata=rowzip
+
+
+const handleDownloadZippdf = async () => {
+  
+
+  const zip = new JSZip();
+ 
+
+  // console.log(zipdata,"zippdf")
+
+  // Iterate through each PDF data and add it to the ZIP archive
+  // zipdata?.map(async (pdfData, index) => {
+  //   console.log(pdfData,"zip")
+  //     const blob = await pdf(
+  //         <PdfParticularData 
+  //             addressDetails={addressDetails} 
+  //             particularPdf={pdfData} 
+  //             organisationdetail={organizationsdetail1} 
+  //             imagename={imageorganisation} 
+  //             tripno={pdfData.tripid}
+  //         />
+  //     ).toBlob();
+      
+  //     const fileName = `PDF_${index + 1}.pdf`; 
+  //     console.log(blob,"hh");// Generate a unique filename for each PDF
+  //     zip.file(fileName, blob);
+ 
+
+  
+  const pdfPromises = zipdata.map(async (pdfData, index) => {
+    // console.log(pdfData,"modedata")
+    const blob = await pdf(
+        <PdfzipParticularData
+            addressDetails={addressDetails} 
+            particularPdf={[pdfData]} 
+            organisationdetail={organizationsdetail1} 
+            imagename={imageorganisation} 
+            tripno={pdfData.tripid}
+        />
+    ).toBlob();
+
+    const fileName = `PDF_${index + 1}.pdf`; 
+    // console.log(blob,"pdfblob")
+    zip.file(fileName, blob);
+
+    // Return the filename for tracking
+});
+
+// Wait for all promises to resolve
+await Promise.all(pdfPromises);
+
+ 
+
+  // Generate the ZIP file asynchronously
+  zip.generateAsync({ type: "blob" })
+      .then((blob) => {
+          // Trigger download
+          saveAs(blob, 'pdfFiles.zip');
+          
+      })
+      .catch((error) => {
+          console.error('Failed to generate zip file: ', error);
+      });
+};
+
+
   return (
     <div className="TransferReport-form Scroll-Style-hide">
     
@@ -319,7 +399,7 @@ setParticularPdf(pdfdetails)
                     name="misformat"
                     autoComplete='off'
                   /> */}
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
@@ -333,7 +413,25 @@ setParticularPdf(pdfdetails)
                         <TextField {...params} label="MIS Format" inputRef={params.inputRef} />
                       );
                     }}
+                  /> */}
+
+<Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    options={MISformat?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    onChange={(event, value) => setMisformat(value?.label)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="MIS Format" inputRef={params.inputRef} />
+                      );
+                    }}
                   />
+
+                
 
                 </div>
                 <div className="input">
@@ -518,7 +616,7 @@ setParticularPdf(pdfdetails)
                           <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={()=>handleExcelDownload(misformat,invoicedata,invoiceDate)}>Excel</MenuItem>
                             <MenuItem onClick={handleDownloadPdf}>PDF</MenuItem>
-                            <MenuItem onClick={handlePdfDownload}>Both</MenuItem>
+                            <MenuItem onClick={()=>handleBothDownload(misformat, invoicedata, invoiceDate)}>Both</MenuItem>
                           </Menu>
                         </React.Fragment>
                       )}
@@ -597,7 +695,9 @@ setParticularPdf(pdfdetails)
                     </Button>
                     <Menu {...bindMenu(popupState)}>
                       {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                      <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem>
+                      <MenuItem onClick={()=>handledatazipDownload(misformat,zipdata,invoiceDate,customer,addressDetails,particularPdf,organizationsdetail1,imageorganisation,tripno) }>ZIP</MenuItem>
+                      <MenuItem onClick={handleDownloadZippdf}>ZIP</MenuItem>
+                      {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
                     </Menu>
                   </React.Fragment>
                 )}
@@ -615,6 +715,10 @@ setParticularPdf(pdfdetails)
                 rows={rows}
                 columns={columns}
                 pageSize={5}
+                onRowSelectionModelChange={(newRowSelectionModel) => {
+                  setRowSelectionModel(newRowSelectionModel);
+                  handleRowSelection(newRowSelectionModel);
+                }}
                 checkboxSelection
                 disableRowSelectionOnClick
               />
@@ -717,6 +821,7 @@ setParticularPdf(pdfdetails)
                   </Button> */}
         </Box>
       </Modal>
+     
       </form>
     </div>
   )

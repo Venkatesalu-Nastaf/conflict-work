@@ -117,3 +117,62 @@
   border: 1px solid #959393;
   border-radius: 3px;
 }
+
+@media screen and (min-width:970px) and (max-width:1240px) {
+  .form-container .customer-form{ 
+    width: 76vw !important;
+  }
+}
+
+@media screen and (min-width:769px) and (max-width:969.99px) {
+  .form-container .customer-form { 
+    width: 70vw !important;
+  }
+}
+
+.customer-input-feild{
+  flex-wrap: wrap;
+  /* justify-content: center; */
+}
+
+.Customer-page-input-field{
+  flex-wrap: wrap;
+/* justify-content: center; */
+}
+
+.customer-input-feild-add{
+  flex-wrap: wrap;
+  /* justify-content: center; */
+
+}
+
+@media screen and (max-width:969px) {
+  .customer-input-feild{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .Customer-page-input-field{
+    flex-wrap: wrap;
+  justify-content: center;
+  }
+  
+  .customer-input-feild-add{
+    flex-wrap: wrap;
+    justify-content: center;
+  
+  }
+}
+
+@media screen and (max-width:769px) {
+  .form-container.form-container {
+    width: 85% !important;
+  }
+  
+}
+
+@media screen and (max-width:400px) {
+  .input-address{
+    width: 200px !important;
+  }
+}

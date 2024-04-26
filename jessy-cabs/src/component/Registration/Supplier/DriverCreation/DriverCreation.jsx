@@ -147,8 +147,9 @@ const DriverCreation = () => {
             <div className="DriverCreation-form-container">
                 <form onSubmit={handleClick}>
                     <div className="DriverCreation-header">
-                        <div className="input-field">
-                            <div className="input">
+                        
+                        <div className="input-field driver-info-inputs">
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <BadgeIcon color="action" />
                                 </div>
@@ -164,7 +165,7 @@ const DriverCreation = () => {
                                 />
                             </div>
 
-                            <div className="input">
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
@@ -178,7 +179,7 @@ const DriverCreation = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input">
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
@@ -192,7 +193,7 @@ const DriverCreation = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="input">
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                                 </div>
@@ -230,7 +231,7 @@ const DriverCreation = () => {
                                     sx={{ m: 1, width: "200ch" }}
                                 />
                             </div> */}
-                            <div className="input" style={{ width: "240px" }}>
+                            <div className="input driver-input" >
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                                 </div>
@@ -259,64 +260,10 @@ const DriverCreation = () => {
                                 </FormControl>
                             </div>
 
-                        </div>
-                        <div className="input-field">
-
-                            {/* <div className="input" style={{ width: "240px" }}>
-                                <div className="icone">
-                                    <FontAwesomeIcon icon={faLock} size="lg" />
-                                </div>
-                                <FormControl sx={{ m: 1, width: '35ch' }} variant="standard">
-                                    <InputLabel htmlFor="confirm-password">Confirm Password</InputLabel>
-                                    <Input
-                                        name="userconfirmpassword"
-                                        value={selectedCustomerData?.userconfirmpassword || book.userconfirmpassword}
-                                        onChange={handleChange}
-                                        id="confirm-password"
-                                        type={showPassword ? 'text' : 'password'}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="confirm-password"
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                >
-                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                    />
-                                </FormControl>
-
-                            </div> */}
-
-                            {/* <div className="input">
-                                <div className="icone">
-                                    <QuizOutlinedIcon color="action" />
-                                </div>
-                                <Autocomplete
-                                    fullWidth
-                                    size="small"
-                                    id="free-solo-demo-viewfor"
-                                    freeSolo
-                                    sx={{ width: "20ch" }}
-                                    value={ViewFor.find((option) => option.Option)?.label || selectedCustomerData?.viewfor || ''}
-                                    onChange={(event, value) => handleAutocompleteChange(event, value, "viewfor")}
-                                    options={ViewFor.map((option) => ({
-                                        label: option.Option,
-                                    }))}
-                                    getOptionLabel={(option) => option.label || selectedCustomerData?.viewfor || ''}
-                                    renderInput={(params) => {
-                                        return (
-                                            <TextField {...params} label="View For" name="viewfor" />
-                                        )
-                                    }
-                                    }
-                                />
-                            </div> */}
-                        </div>
-                        <div className="input-field">
-                            <div className="input" style={{ width: "400px" }}>
+                        {/* </div>
+                      
+                        <div className="input-field"> */}
+                            <div className="input driver-input" style={{ width: "400px" }}>
                                 <div className="icone">
                                     <AddHomeWorkIcon color="action" />
                                 </div>
@@ -346,7 +293,7 @@ const DriverCreation = () => {
                                     onChange={handleChange}
                                 />
                             </div> */}
-                            <div className="input">
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <PostAddIcon color="action" />
                                 </div>
@@ -359,7 +306,7 @@ const DriverCreation = () => {
                                     id="badgeno"
                                 />
                             </div>
-                            <div className="input" >
+                            <div className="input driver-input" >
                                 {/* <TextField
                                     size="small"
                                     name="badgeexpdate"
@@ -396,7 +343,7 @@ const DriverCreation = () => {
                             </div>
 
 
-                            <div className="input">
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <AddIcCallTwoToneIcon color="action" />
                                 </div>
@@ -414,9 +361,9 @@ const DriverCreation = () => {
                                     variant="standard"
                                 />
                             </div>
-                        </div>
+                        {/* </div>
 
-                        <div className="input-field">
+                        <div className="input-field"> */}
                             {/* <div className="input" style={{ width: "400px" }}>
                                 <div className="icone">
                                     <HomeTwoToneIcon color="action" />
@@ -432,7 +379,7 @@ const DriverCreation = () => {
                                     variant="standard"
                                 /> */}
 
-                            <div className="input" style={{ width: "400px" }}>
+                            <div className="input driver-input" style={{ width: "400px" }}>
                                 <div className="icone">
                                     <LocationCityIcon color="action" />
                                 </div>
@@ -462,7 +409,7 @@ const DriverCreation = () => {
                                 />
                             </div> */}
 
-                            <div className="input" >
+                            <div className="input driver-input" >
                                 <div className="icone">
                                     <AssignmentIndIcon color="action" />
                                 </div>
@@ -477,7 +424,7 @@ const DriverCreation = () => {
                                 // variant="standard"
                                 />
                             </div>
-                            <div className="input" style={{ width: "160px" }}>
+                            <div className="input driver-input" style={{ width: "160px" }}>
                                 {/* {selectedCustomerData?.driverid || book.driverid ? ( */}
                                 <Button color="primary" variant="contained" component="label">
                                     aadhar card
@@ -498,7 +445,7 @@ const DriverCreation = () => {
                                     </Button>
                                 )} */}
                             </div>
-                            <div className="input">
+                            <div className="input driver-input">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="joining Date"
@@ -522,8 +469,8 @@ const DriverCreation = () => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                        </div>
-                        <div className="input-field">
+                        {/* </div>
+                        <div className="input-field"> */}
                             {/* <div className="input" style={{ width: "400px" }}>
                                 <div className="icone">
                                     <LocationCityIcon color="action" />
@@ -552,7 +499,7 @@ const DriverCreation = () => {
                                     id="PFNo"
                                 />
                             </div> */}
-                            <div className="input">
+                            <div className="input driver-input">
                                 <div className="icone">
                                     <TaxiAlertIcon color="action" />
                                 </div>
@@ -565,7 +512,7 @@ const DriverCreation = () => {
                                     id="licenseno"
                                 />
                             </div>
-                            <div className="input" style={{ width: "200px" }}>
+                            <div className="input driver-input" style={{ width: "200px" }}>
                                 {/* <TextField
                                     size="small"
                                     name="licenseexpdate"
@@ -601,7 +548,7 @@ const DriverCreation = () => {
 
                                 </LocalizationProvider>
                             </div>
-                            <div className="input" style={{ width: "160px" }}>
+                            <div className="input driver-input" style={{ width: "160px" }}>
 
                                 {/* {selectedCustomerData?.driverid || book.driverid ? ( */}
                                 <Button color="primary" variant="contained" component="label">
@@ -622,7 +569,7 @@ const DriverCreation = () => {
                                 )} */}
 
                             </div>
-                            <div className="input radio">
+                            <div className="input radio driver-input">
                                 <FormControl>
                                     <FormLabel id="demo-row-radio-buttons-group-label">
                                         Active
@@ -726,10 +673,10 @@ const DriverCreation = () => {
                         </StyledSpeedDial>
                     </Box>
 
-                    <div className="detail-container-main">
+                    <div className="detail-container-main detail-container-main-crivercreation">
                         <div className="container-left">
                             <div className="copy-title-btn-Booking">
-                                <div className="input-field" style={{ justifyContent: "center" }}>
+                                <div className="input-field" style={{ justifyContent: "center", flexWrap:'wrap' }}>
                                     <div className="input" style={{ width: "230px" }}>
                                         <div className="icone">
                                             <AiOutlineFileSearch

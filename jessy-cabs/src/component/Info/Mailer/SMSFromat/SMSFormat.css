@@ -24,11 +24,21 @@
 }
 
 .input-field .inputs {
-    width: 200px;
+    /* width: 200px; */
     margin-top: 20px;
 }
 .input-field .inputs .sms-box{
     background-color: var(--glass);
+}
+
+@media screen and (max-width: 650px) {
+    .input-field .inputs{
+        width: 100% !important;
+    }
+
+    .input-field .inputs .sms-box{
+        width: 100% !important;
+    }
 }
 
 .Title-Names {
@@ -61,4 +71,23 @@
 /* Date */
 .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
     border-color: #456ddc !important;
+}
+
+.sms-input-field{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+@media screen and (max-width: 1277px) {
+    .sms-input-field{
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 910px) {
+    .sms-input-field{
+        position: relative;
+        left: -35px;
+    }
 }

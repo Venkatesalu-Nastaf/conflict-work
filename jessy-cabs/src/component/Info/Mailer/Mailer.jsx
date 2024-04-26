@@ -8,7 +8,6 @@ import TabContext from "@mui/lab/TabContext";
 import SMSReport from './SMSReport/SMSReport';
 import SMSFormat from './SMSFromat/SMSFormat';
 import MailDetails from './MailDetails/MailDetails'; 
-import TemplateSelection from './TemplateSelection/TemplateSelection';
 
 const Mailer = () => {
 
@@ -27,13 +26,11 @@ const Mailer = () => {
                                 <Tab label="Mailer" value="Mailer" />
                                 <Tab label="SMS Report" value="SMSReport" />
                                 <Tab label="SMS Format" value="SMSFormat" />
-                                <Tab label="template" value="TemplateSelection" />
                             </TabList>
                         </Box>
                         <TabPanel value="Mailer"><MailDetails /></TabPanel>
                         <TabPanel value="SMSReport"><SMSReport /></TabPanel>
                         <TabPanel value="SMSFormat"><SMSFormat /></TabPanel>
-                        <TabPanel value="TemplateSelection"><TemplateSelection /></TabPanel>
                     </TabContext>
                 </Box>
             </div>

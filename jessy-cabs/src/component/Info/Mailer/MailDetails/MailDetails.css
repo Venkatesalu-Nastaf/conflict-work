@@ -20,11 +20,40 @@
     padding: 20px ;
 }
 
+@media screen and (max-width: 560px) {
+    .mailDetails-header {
+       width: 65vw;
+    }
+}
+
+@media screen and (max-width: 561px) {
+    .mail-textarea1{
+        width: 100% !important;
+    }
+    .mail-textarea1-btn{
+        position: relative;
+        left: -25px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .textbox{
+        width: 69vw !important;
+        padding-left: 0px !important;
+    }
+}
+
 .detail-container-main-mailDetails {
     border-top: 1px solid #ccc;
     display: flex;
     justify-content: center;
     padding: 30px;
+}
+
+@media screen and (max-width: 1160px) {
+    .detail-container-main-mailDetails {
+        flex-wrap: wrap;
+    }
 }
 
 .mailDetails-form-container .mailDetails-form::-webkit-scrollbar {
@@ -70,7 +99,7 @@
 
 .mailDetails-list-update {
     margin-top: 10px;
-    overflow: scroll;
+    /* overflow: scroll; */
     height: 190px;
 }
 
@@ -106,6 +135,19 @@
     border: 2px solid #ccc;
     border-radius: 10px;
     margin-top: 30px;
+}
+
+@media screen and (max-width: 410px) {
+    .template-input{
+        width: 200px !important;
+    }
+    .template-search-btn{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .textboxlist{
+        height: 285px;
+    }
 }
 
 /* VENDOR INFO CONTENT */

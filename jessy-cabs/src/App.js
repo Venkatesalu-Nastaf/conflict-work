@@ -102,8 +102,8 @@ function App() {
                   element={<RateManagement />}
                 />
                 <Route path="/home/info/mailer" element={<Mailer />} />
-                <Route path="/home/info/TemplateSelection" element={<TemplateSelection />} />
-                <Route path="/home/info/TemplateCreation" element={<TemplateCreation />} />
+                <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
+                <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
                 <Route path="/home/info/fuelinfo" element={<FuelInfo />} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>

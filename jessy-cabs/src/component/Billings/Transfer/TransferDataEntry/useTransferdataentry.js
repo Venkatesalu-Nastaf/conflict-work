@@ -226,7 +226,6 @@ const useTransferdataentry = () => {
             }
         });
         const transferlist = formData.Trip_id?.split(',')
-        console.log(transferlist,'tid');
         setTransferId(transferlist)
         setInvoiceno(formData.Invoice_no)
         setGroupId(formData.Groupid)
@@ -238,25 +237,28 @@ const useTransferdataentry = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/tripsheetiddata/${transferId}`);
-                const tripData = await response.data;
-                if (Array.isArray(tripData)) {
-                    //  const transformedRows = tripData.map(transformRow);
-                    const rowsWithUniqueId = tripData.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setTripData(rowsWithUniqueId);
-                    setRows(rowsWithUniqueId);
-                }
 
+                if (transferId?.length > 0 && transferId !== undefined) {
+
+                    const response = await axios.get(`${apiUrl}/tripsheetiddata/${transferId}`);
+                    const tripData = await response.data;
+
+                    if (Array.isArray(tripData)) {
+                        const rowsWithUniqueId = tripData.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        setTripData(rowsWithUniqueId);
+                        setRows(rowsWithUniqueId);
+                    }
+                }
             }
             catch (error) {
                 console.log(error, "error");
             }
         }
         fetchData()
-    }, [transferId,apiUrl])
+    }, [transferId, apiUrl])
 
     //calculate total amount in column
     useEffect(() => {
@@ -343,7 +345,7 @@ const useTransferdataentry = () => {
         localStorage.setItem('selectedrowcount', selectedRowCount);
     };
     const handleClickGenerateBill = () => {
-      
+
         // handleBillGenerate();
         //   handleAdd();
         handleButtonClickTripsheet();
@@ -354,8 +356,8 @@ const useTransferdataentry = () => {
         const customername = customerdata;
         localStorage.setItem('selectedcustomer', customername);
         const storedCustomer = localStorage.getItem('selectedcustomer');
-            const decodedCustomer = decodeURIComponent(storedCustomer);
-            localStorage.setItem('selectedcustomerdata', decodedCustomer);
+        const decodedCustomer = decodeURIComponent(storedCustomer);
+        localStorage.setItem('selectedcustomerdata', decodedCustomer);
         const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&BillDate=${Billingdate}`;
         window.location.href = billingPageUrl;
     }
@@ -366,7 +368,7 @@ const useTransferdataentry = () => {
             setErrorMessage('Please select rows before generating the bill.');
             return;
         }
-       
+
         try {
             const tripids = rowSelectionModel;
             if (tripids.some((tripid) => tripid === null || tripid === undefined)) {
@@ -391,7 +393,7 @@ const useTransferdataentry = () => {
             setError(true);
             setErrorMessage('An error occurred. Please try again later.');
         }
-   
+
     };
 
 

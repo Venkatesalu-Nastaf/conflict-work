@@ -399,7 +399,6 @@ app.get('/get-signimage/:tripid', (req, res) => {
       }
 
       // Send the file
-      console.log(imagePath,"image")
       res.sendFile(imagePath);
 
     });
@@ -425,9 +424,7 @@ app.get('/get-signimageforpdfrendered/:tripid', (req, res) => {
       return res.status(500).send('Internal Server Error: Image path is missing');
     }
     // const imagePath = path.join(signatureDirectory, results[0].path);
-    console.log(results,"imageresult")
-    const data=results[0].path
-    console.log(data)
+    const data = results[0].path
     res.json(data);
 
 
@@ -443,7 +440,6 @@ app.get('/get-signimageforpdfrendered/:tripid', (req, res) => {
     //   }
 
     //   // Send the file
-    //   console.log(imagePath,"image")
     //   res.sendFile(imagePath);
 
     // });

@@ -611,6 +611,8 @@ const useTripsheet = () => {
         setMinHour();
         setMinKM();
 
+        localStorage.removeItem('selectedTripid');
+
     };
 
 
@@ -633,16 +635,19 @@ const useTripsheet = () => {
 
 
     const handleDelete = async () => {
-        if (!selectedCustomerData.tripid) {
-            return;
-        }
+
+        const tripid = selectedCustomerData.tripid;
         try {
-            await axios.delete(`${apiUrl}/tripsheet/${selectedCustomerData.tripid}`);
-            setFormData({});
-            setSelectedCustomerData({});
-            handleCancel();
-            setSuccess(true);
-            setSuccessMessage("Successfully Deleted");
+            if (tripid !== null && tripid !== "undefined" && tripid) {
+
+                await axios.delete(`${apiUrl}/tripsheet/${selectedCustomerData.tripid}`);
+                setFormData({});
+                setSelectedCustomerData({});
+                handleCancel();
+                setSuccess(true);
+                setSuccessMessage("Successfully Deleted");
+            }
+
         } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -1271,43 +1276,53 @@ const useTripsheet = () => {
     const handleKeyDown = useCallback(async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
+            const tripid = event.target.value;
             try {
-                const response = await axios.get(`${apiUrl}/tripsheet/${event.target.value}`);
-                const bookingDetails = response.data;
-                if (response.status === 200 && bookingDetails) {
 
-                    setSelectedCustomerData(bookingDetails);
-                    setSelectedCustomerId(bookingDetails.tripid);
+                if (tripid !== null && tripid !== "undefined" && tripid) {
 
-                    //--------------calc---------
+                    const response = await axios.get(`${apiUrl}/tripsheet/${tripid}`);
+                    const bookingDetails = response.data;
+                    if (response.status === 200 && bookingDetails) {
 
-                    setcalcPackage(bookingDetails.calcPackage);
-                    setExtraHR(bookingDetails.extraHR);
-                    setExtraKM(bookingDetails.extraKM);
-                    setpackage_amount(bookingDetails.package_amount);
-                    setextrakm_amount(bookingDetails.extrakm_amount);
-                    setextrahr_amount(bookingDetails.extrahr_amount);
-                    setEx_kmAmount(bookingDetails.ex_kmAmount);
-                    setEx_HrAmount(bookingDetails.ex_hrAmount);
-                    setNightBeta(Number(bookingDetails.nightBta));
-                    setNightCount(bookingDetails.nightCount);
-                    setnight_totalAmount(bookingDetails.night_totalAmount);
-                    setdriverBeta(bookingDetails.driverBeta);
-                    setdriverbeta_Count(bookingDetails.driverbeta_Count);
-                    setdriverBeta_amount(bookingDetails.driverBeta_amount);
-                    setTotalcalcAmount(bookingDetails.totalcalcAmount);
+                        setSelectedCustomerData(bookingDetails);
+                        setSelectedCustomerId(bookingDetails.tripid);
 
-                    //---------------------------
-                    setRequest(bookingDetails.request)
-                    setEscort(bookingDetails.escort)
-                    //----------
-                    setSuccess(true);
-                    setSuccessMessage("Successfully listed");
-                    setIsEditMode(true);
-                } else {
-                    setError(true);
-                    setErrorMessage("No data found");
+                        //--------------calc---------
+
+                        setcalcPackage(bookingDetails.calcPackage);
+                        setExtraHR(bookingDetails.extraHR);
+                        setExtraKM(bookingDetails.extraKM);
+                        setpackage_amount(bookingDetails.package_amount);
+                        setextrakm_amount(bookingDetails.extrakm_amount);
+                        setextrahr_amount(bookingDetails.extrahr_amount);
+                        setEx_kmAmount(bookingDetails.ex_kmAmount);
+                        setEx_HrAmount(bookingDetails.ex_hrAmount);
+                        setNightBeta(Number(bookingDetails.nightBta));
+                        setNightCount(bookingDetails.nightCount);
+                        setnight_totalAmount(bookingDetails.night_totalAmount);
+                        setdriverBeta(bookingDetails.driverBeta);
+                        setdriverbeta_Count(bookingDetails.driverbeta_Count);
+                        setdriverBeta_amount(bookingDetails.driverBeta_amount);
+                        setTotalcalcAmount(bookingDetails.totalcalcAmount);
+
+                        //---------------------------
+                        setRequest(bookingDetails.request)
+                        setEscort(bookingDetails.escort)
+                        //----------
+                        setSuccess(true);
+                        setSuccessMessage("Successfully listed");
+                        setIsEditMode(true);
+                    } else {
+                        setError(true);
+                        setErrorMessage("No data found");
+                    }
                 }
+                else {
+                    setError(true);
+                    setErrorMessage("Enter tripid");
+                }
+
             } catch (error) {
                 if (error.response && error.response.status === 404) {
                     setError(true);
@@ -1470,19 +1485,24 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
+            const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
             try {
-                const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);
+                if (tripid !== null && tripid !== "undefined" && tripid) {
+                    const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);
 
-                if (response.status === 200) {
-                    const routeData = await response.json();
-                    setRouteData(routeData);
+                    if (response.status === 200) {
+                        const routeData = await response.json();
+                        setRouteData(routeData);
+                    }
+                    else {
+                        setRouteData("")
+                        const timer = setTimeout(fetchData, 2000);
+                        return () => clearTimeout(timer);
+                    }
+                    return
+
                 }
-                else {
-                    setRouteData("")
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
-                }
+
             } catch {
             }
         };
@@ -1494,21 +1514,25 @@ const useTripsheet = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
+            // const tripid = localStorage.getItem('selectedTripid');
+            const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
             setTripiddata(tripid);
 
             try {
-                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
-                if (response.status === 200) {
-                    const imageUrl = URL.createObjectURL(await response.blob());
-                    setSignImageUrl(imageUrl);
+                if (tripid !== null && tripid && tripid !== "undefined") {
+                    const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
+                    if (response.status === 200) {
+                        const imageUrl = URL.createObjectURL(await response.blob());
+                        setSignImageUrl(imageUrl);
+                    }
+
+                    else {
+                        const timer = setTimeout(fetchData, 500);
+                        setSignImageUrl("");
+                        return () => clearTimeout(timer);
+                    }
                 }
 
-                else {
-                    const timer = setTimeout(fetchData, 500);
-                    setSignImageUrl("");
-                    return () => clearTimeout(timer);
-                }
             } catch (err) {
                 console.log(err, 'error');
             }
@@ -1524,25 +1548,25 @@ const useTripsheet = () => {
             // const tripid = localStorage.getItem('selectedTripid');
 
             try {
-                const tripid = localStorage.getItem('selectedTripid');
-                if (!tripid) {
-                    return;
+                // const tripid = localStorage.getItem('selectedTripid');
+                const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+
+                if (tripid !== null && tripid && tripid !== "undefined") {
+
+                    const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
+                    if (response.status === 200) {
+                        const responseData = await response.blob();
+                        const imageUrl = URL.createObjectURL(responseData);
+                        setGMapImageUrl(imageUrl);
+                    }
+                    else {
+                        setGMapImageUrl("")
+                        const timer = setTimeout(fetchData, 2000);
+                        return () => clearTimeout(timer);
+                    }
                 }
 
-                const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
-                if (response.status === 200) {
-                    const responseData = await response.blob();
-                    const imageUrl = URL.createObjectURL(responseData);
-                    setGMapImageUrl(imageUrl);
-                }
-
-                else {
-                    setGMapImageUrl("")
-
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
-                }
-
+                return '';
             } catch {
             }
         };
@@ -1554,20 +1578,20 @@ const useTripsheet = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const tripid = localStorage.getItem('selectedTripid');
-                if (!tripid) {
-                    return;
-                }
-                const response = await fetch(`${apiUrl}/get-attachedimage/${tripid}`);
-                if (response.status === 200) {
-                    const data = await response.json();
-                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
-                    setAttachedImage(attachedImageUrls);
-                }
+                // const tripid = localStorage.getItem('selectedTripid');
+                const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
 
-                else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
+                if (tripid !== null && tripid && tripid !== "undefined") {
+                    const response = await fetch(`${apiUrl}/get-attachedimage/${tripid}`);
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
+                        setAttachedImage(attachedImageUrls);
+                    }
+                    else {
+                        const timer = setTimeout(fetchData, 2000);
+                        return () => clearTimeout(timer);
+                    }
                 }
             } catch {
             }

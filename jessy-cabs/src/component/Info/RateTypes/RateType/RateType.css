@@ -5,7 +5,7 @@
 
 .detail-container-main {
     display: flex;
-    width: 70%;
+    width: 90% !important;
 }
 
 .form-container-ratetype .Title-Name {
@@ -105,20 +105,31 @@
     flex-wrap: wrap;
     /* justify-content: center; */
 }
+@media only screen and (max-width:1196px) {
+    .rate-type-inputs{
+        flex-wrap: wrap;
+        justify-content: center;
+    } 
+}
+
 
 @media only screen and (max-width:500px) {
     .click-menu-icon{
         top: 37px !important;
     left: 29px !important;
     }
-    
-}
 
-@media only screen and (max-width:500px) {
     .copy-title-btn-RateType{
         margin-top: 0px !important;
         border: none !important;
         background-color: transparent;
+    }
+    
+}
+
+@media only screen and (min-width:374px) and (max-width:699.9px) {
+    .copy-title-btn-RateType{
+       width: 80% !important; 
     }
 }
 

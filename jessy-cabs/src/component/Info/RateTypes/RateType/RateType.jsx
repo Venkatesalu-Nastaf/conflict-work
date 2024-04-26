@@ -120,7 +120,7 @@ const RateType = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "300px" }}>
+                                <div className="input" style={{}}>
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
@@ -195,7 +195,7 @@ const RateType = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input radio" style={{ width: "120px" }}>
+                                <div className="input radio" style={{ width: "120px", paddingLeft:'10px' }}>
                                     <FormControl>
                                         <FormLabel id="demo-row-radio-buttons-group-label">
                                             Active

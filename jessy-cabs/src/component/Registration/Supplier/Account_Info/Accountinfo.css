@@ -138,3 +138,17 @@
 
   }
   
+
+  @media screen and (max-width:1200px) {
+    .account-info-input-feild{
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .account-info-label{
+      flex-wrap: wrap;
+      justify-content: center;
+  
+  
+    }
+  }
+  

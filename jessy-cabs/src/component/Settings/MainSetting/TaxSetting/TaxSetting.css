@@ -44,5 +44,12 @@
 
 .tax-setting-input{
     flex-wrap: wrap;
-    justify-content: center;
+    /* justify-content: center; */
+}
+
+@media screen and (max-width:1325px) {
+    .tax-setting-input{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }

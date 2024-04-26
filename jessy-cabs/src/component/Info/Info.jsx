@@ -26,6 +26,20 @@ const Info = () => {
     setActiveMenuItem(menuItem);
   };
 
+  const myLocation = useLocation();
+  var myTo = ''
+  if(myLocation.pathname == '/home/info/mailer/TemplateSelection'){
+    myTo = '/home/info/mailer/TemplateSelection';
+  }
+  else if(myLocation.pathname == '/home/info/mailer/TemplateCreation'){
+    myTo = '/home/info/mailer/TemplateCreation'
+  }
+  else{
+    myTo = '/home/info/mailer';
+  }
+
+
+
 
   return (
 
@@ -47,7 +61,7 @@ const Info = () => {
         />
         <MenuItem
           label="Mailers"
-          to="/home/info/mailer"
+          to={myTo}
           menuItemKey="Mailers"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}

@@ -4,6 +4,10 @@ import "./VehicleStatement.css";
 import Menu from '@mui/material/Menu';
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+
+
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,6 +21,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { styled } from "@mui/material/styles";
+import SpeedDial from "@mui/material/SpeedDial";
+
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -25,12 +33,51 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useVehiclestatement from './useVehiclestatement';
+import { IoBusinessSharp } from "react-icons/io5";
+import { MdDateRange } from "react-icons/md";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+
+
+
+
+
+
+
+
+
+
+
+const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+  position: "absolute",
+  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+    top: theme.spacing(2),
+    left: theme.spacing(2),
+  },
+}));
+const actions = [
+  { icon: <ChecklistIcon />, name: "List" },
+  { icon: <CancelPresentationIcon />, name: "Cancel" },
+  { icon: <DeleteIcon />, name: "Delete" },
+  { icon: <ModeEditIcon />, name: "Edit" },
+  { icon: <BookmarkAddedIcon />, name: "Add" },
+];
+
 
 
 const VehicleStatement = () => {
 
   const {
     actionName,
+    selectedCustomerId,
     handleClick,
     rows,
     error,
@@ -70,11 +117,15 @@ const VehicleStatement = () => {
   return (
     <div className="VehicleStatement-form Scroll-Style-hide">
       <form action="">
-        <div className="detail-container-main">
+        <div className=" VehicleStatement-container-main ">
           <div className="container-left">
             <div className="SearchContainer-VehicleStatement">
-              <div className="input-field">
-                <div className="input">
+              <div className="input-field vehiclestatement-inputfeild">
+                <div className="input" style={{width:'200px'}}>
+                    <div className="icone" style={{fontSize:'25px'}}>
+                      <IoBusinessSharp  color="action" />
+                    </div>
+
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -91,7 +142,11 @@ const VehicleStatement = () => {
                     }
                   />
                 </div>
-                <div className="input">
+                <div className="input" style={{width:'200px'}}>
+                    <div className="icone" style={{fontSize:'25px'}}>
+                      <IoBusinessSharp  color="action" />
+                    </div>
+
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -108,7 +163,13 @@ const VehicleStatement = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{ width: "60%" }}>
+
+
+                <div className="input vehiecle-date" style={{ width:"250px"}}>
+                    <div className="icone" style={{fontSize:'25px'}}>
+                      <MdDateRange  color="action" />
+                    </div>
+
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
@@ -116,6 +177,19 @@ const VehicleStatement = () => {
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
                       />
+                   
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+
+                <div className="input vehiecle-date" style={{ width:"250px"}}>
+                    <div className="icone" style={{fontSize:'25px'}}>
+                      <MdDateRange  color="action" />
+                    </div>
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                    
                       <DatePicker
                         label="To Date"
                         value={toDate}
@@ -125,8 +199,9 @@ const VehicleStatement = () => {
                   </LocalizationProvider>
                 </div>
 
+
               </div>
-              <div className="input-field" style={{ justifyContent: "center" }}>
+              <div className="input-field show-btn-vehicle" style={{ justifyContent: "center" }}>
                 <div className="input" style={{ width: "130px" }} >
                   <Button variant="outlined" onClick={handleShow} >Show</Button>
                 </div>
@@ -149,6 +224,27 @@ const VehicleStatement = () => {
             </div>
           </div>
         </div>
+
+        <div className="SpeedDial" style={{ padding: '26px', margin:' 15px 10px 0px 0px'}}>
+              <Box sx={{ position: "relative", mt: 2, }}>
+                <StyledSpeedDial
+                  ariaLabel="SpeedDial playground example"
+                  icon={<SpeedDialIcon />}
+                  direction="left"
+                >
+                  {actions.map((action) => (
+                    <SpeedDialAction
+                      key={action.name}
+                      icon={action.icon}
+                      tooltipTitle={action.name}
+                      onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
+                    />
+                  ))}
+                </StyledSpeedDial>
+              </Box>
+            </div>
+
+
         {error &&
           <div className='alert-popup Error' >
             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>

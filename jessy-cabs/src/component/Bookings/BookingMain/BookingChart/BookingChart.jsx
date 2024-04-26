@@ -13,6 +13,9 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import useBookingchart from "./useBookingchart";
+import Chart from 'react-apexcharts';
+import ReactECharts from 'echarts-for-react';
+
 
 const BookingChart = () => {
   const {
@@ -41,8 +44,146 @@ const BookingChart = () => {
       handleClick(null, "List");
     }
   }, [actionName, handleClick]);
+
+
+  const chartData = {
+    series: [44, 55, 13, 43, 22],
+    options: {
+      chart: {
+        type: 'pie',
+      },
+      labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200,
+          },
+          legend: {
+            position: 'bottom',
+          },
+        },
+      }],
+    },};
+
+
+
+    const chartOptions = {
+      title: {
+        text: 'Event and Action Chart'
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' }
+      },
+      xAxis: {
+        type: 'category',
+        data: ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [{
+        type: 'bar',
+        data: [20, 35, 15, 25, 30]
+      }]
+    };
+  
+    const onChartClick = (param, echartsInstance) => {
+      if (param.componentType === 'series') {
+        alert('Clicked on data item: ' + param.value);
+      }
+    };
+
+
+
+
+
   return (
-    <div className="BookingChart-form Scroll-Style-hide">
+
+<>
+
+<Chart
+      options={chartData.options}
+      series={chartData.series}
+      type="pie"
+      width="400"
+    />
+
+
+   
+
+<div className="App">
+      <ReactECharts
+        option={chartOptions}
+        style={{ height: '400px', width: '800px' }}
+        onEvents={{ click: onChartClick }}
+      />
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {/* <div className="BookingChart-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
@@ -140,7 +281,9 @@ const BookingChart = () => {
           </div>
         </div>
       </form>
-    </div>
+    </div> */}
+
+    </>
   );
 };
 

@@ -9,7 +9,12 @@ import MenuItem from '@mui/material/MenuItem';
 import { Department } from "./DispatchedData.js";
 import { Status } from "./DispatchedData.js";
 import Autocomplete from "@mui/material/Autocomplete";
-import DialogTitle from '@material-ui/core/DialogTitle';
+import useDispatched from './useDispatched.js';
+import { MdOutlineCalendarMonth } from "react-icons/md";
+import { SiStatuspal } from "react-icons/si";
+import { GiMatterStates } from "react-icons/gi";
+import Box from "@mui/material/Box";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -17,6 +22,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { styled } from "@mui/material/styles";
+import SpeedDial from "@mui/material/SpeedDial";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -24,13 +34,49 @@ import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import useDispatched from './useDispatched.js';
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+
+
+
+
+
+
+
+
+
+
+
+const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+  position: "absolute",
+  "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+  "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+    top: theme.spacing(2),
+    left: theme.spacing(2),
+  },
+}));
+const actions = [
+  { icon: <ChecklistIcon />, name: "List" },
+  { icon: <CancelPresentationIcon />, name: "Cancel" },
+  { icon: <DeleteIcon />, name: "Delete" },
+  { icon: <ModeEditIcon />, name: "Edit" },
+  { icon: <BookmarkAddedIcon />, name: "Add" },
+];
+
+
 
 const Dispatched = () => {
 
   const {
     statusvalue, handlestatusChange,
     fromDate,
+    selectedCustomerId,
     setFromDate,
     toDate,
     actionName,
@@ -49,7 +95,7 @@ const Dispatched = () => {
     department,
     hidePopup,
     handleInputChange,
-    handleButtontripsheet,
+    // handleButtontripsheet,
     handleExcelDownload,
     handlePdfDownload,
     reversedRows,
@@ -73,8 +119,13 @@ const Dispatched = () => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Dispatched">
-              <div className="input-field">
-                <div className="input" style={{ width: "50%" }}>
+              <div className="input-field dispatched-input-feilds">
+                <div className="input">
+
+                <div className="icone" style={{fontSize:'25px'}}>
+                      <MdOutlineCalendarMonth color="action" />
+                    </div>
+
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
@@ -83,6 +134,20 @@ const Dispatched = () => {
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
                       />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+
+
+                <div className="input dispatch-input" >
+
+                <div className="icone" style={{fontSize:'25px'}}>
+                      <MdOutlineCalendarMonth color="action" />
+                    </div>
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                     
                       <DatePicker
                         label="To Date"
                         format="DD/MM/YYYY"
@@ -92,32 +157,27 @@ const Dispatched = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
+
+
+               
+                <div className='show-all-button'>
                 <div className="input" >
-                  <Button variant="outlined" onClick={handleShow} >Show</Button>  </div>
+                  <Button variant="outlined" onClick={handleShow} >Show</Button> 
+                   </div>
                 <div className="input">
                   <Button variant="outlined" onClick={handleShowAll} >Show All</Button>
                 </div>
+                </div>
               </div>
-              <div className="input-field">
+              <div className="input-field dispatched-input-feilds">
 
-                {/* // status */}
+                
                 <div className="input" style={{ width: "300px" }}>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={statusvalue}
-                    options={Status.map((option) => ({
-                      label: option.option,
-                    }))}
-                    onChange={(event, value) => handlestatusChange(event, value)}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Status" inputRef={params.inputRef} />
-                      );
-                    }}
-                  /> */}
+                 
+
+                    <div className="icone" style={{fontSize:'25px'}}>
+                      <SiStatuspal  color="action" />
+                    </div>
 
                   <Autocomplete
                     fullWidth
@@ -138,6 +198,11 @@ const Dispatched = () => {
 
                 </div>
                 <div className="input" style={{ width: "300px" }}>
+
+                <div className="icone" style={{fontSize:'25px'}}>
+                      <GiMatterStates color="action"   />
+                    </div>
+
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -156,11 +221,11 @@ const Dispatched = () => {
                   />
                 </div>
 
-                <div className="input" style={{ width: '170px' }}>
+                {/* <div className="input" style={{ width: '170px' }}>
                   <Button variant="contained" onClick={handleButtontripsheet}>
                     New TripSheet
                   </Button>
-                </div>
+                </div> */}
               </div>
             </div>
             {error &&
@@ -193,6 +258,30 @@ const Dispatched = () => {
             }
           </div>
         </div>
+
+
+
+        <div className="SpeedDial" style={{ padding: '26px', margin:'14px -35px 0px 0px'}}>
+              <Box sx={{ position: "relative", mt: 2, }}>
+                <StyledSpeedDial
+                  ariaLabel="SpeedDial playground example"
+                  icon={<SpeedDialIcon />}
+                  direction="left"
+                >
+                  {actions.map((action) => (
+                    <SpeedDialAction
+                      key={action.name}
+                      icon={action.icon}
+                      tooltipTitle={action.name}
+                      onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
+                    />
+                  ))}
+                </StyledSpeedDial>
+              </Box>
+            </div>
+
+
+
         <div className="table-bookingCopy-Dispatched">
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">

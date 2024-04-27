@@ -84,8 +84,8 @@
 
 .add-icon{
   position: relative;
-  right: 30px;
-  /* height: 10px !important; */
+  right: 0px;
+  height: 60px !important;
   background-color: #fff !important;
   margin-top: 0px !important;
 
@@ -95,10 +95,9 @@
 @media only screen and (min-width: 850px) and (max-width: 1230px) {
   .add-icon{
     position: relative !important;
-    right: 100px !important;
+    right: 0px !important;
     height: 60px !important;
     background-color: #fff;
-  
   }
   
 }
@@ -106,7 +105,7 @@
 @media only screen and (min-width: 768.99px) and (max-width: 849.99px) {
  .add-icon{
     position: relative !important;
-    right: 150px !important;
+    right: 0px !important;
     height: 60px !important;
   
   }
@@ -116,7 +115,7 @@
 .user-table-permission{
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .search-profile{

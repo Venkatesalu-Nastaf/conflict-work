@@ -20,7 +20,7 @@ const UserCreation = () => {
             <div className="main-setting-form-container">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
-                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-userpermission">
                             <TabList onChange={handleChange}>
                                 <Tab label="User" value="Employee" />
                                 {/* <Tab label="Driver" value="Driver" /> */}

@@ -82,10 +82,16 @@ body {
   padding-left: 5px;
 }
 
+.alert-popup-main{
+  position: absolute;
+  top: 39px;
+  right: 55px;
+}
+
 .alert-popup {
   display: flex;
   align-items: center;
-  position: fixed;
+  position: relative;
   top: 120px;
   right: 50px;
   padding: 4px 15px 4px 7px;

@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import './UserPermission.css'
 import Switch from '@mui/material/Switch';
-import { BiSolidDownArrow } from "react-icons/bi";
-import { BiSolidUpArrow } from "react-icons/bi";
+// import { BiSolidDownArrow } from "react-icons/bi";
+// import { BiSolidUpArrow } from "react-icons/bi";
+
+import { CiCircleChevDown, CiCircleChevUp } from "react-icons/ci";
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 export const UserPermission = () => {
@@ -77,7 +79,7 @@ export const UserPermission = () => {
                 </td>
               </tr>
               <tr>
-              <td className='td-content Booking-table'  onClick={toggleDropdown}> <span>BOOKING</span>{isDropdownVisible ? (<span> <BiSolidUpArrow />  </span>):(<span><BiSolidDownArrow /></span>)}
+              <td className='td-content Booking-table'  onClick={toggleDropdown}> <span>BOOKING</span>{isDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon'/>  </span>):(<span><CiCircleChevDown className='table-up-down-icon' /></span>)}
 
               
                </td>
@@ -120,7 +122,7 @@ export const UserPermission = () => {
 
 
               <tr onClick={togglebillingDropdown}>
-                <td className='td-content  Booking-table'  ><span>BILLING</span>{isbillingDropdownVisible ? (<span> <BiSolidUpArrow />  </span>):(<span><BiSolidDownArrow /></span>)}</td>
+                <td className='td-content  Booking-table'  ><span>BILLING</span>{isbillingDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon'/>  </span>):(<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
@@ -171,7 +173,7 @@ export const UserPermission = () => {
 
 
               <tr onClick={toggleregisterDropdown}>
-                <td className='td-content Booking-table'  ><span>REGISTER</span>{isregisterDropdownVisible ? (<span> <BiSolidUpArrow />  </span>):(<span><BiSolidDownArrow /></span>)}</td>
+                <td className='td-content Booking-table'  ><span>REGISTER</span>{isregisterDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>):(<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
@@ -213,7 +215,7 @@ export const UserPermission = () => {
 
 
               <tr onClick={togglesettingDropdown}>
-                <td className='td-content Booking-table'  ><span>REGISTER</span>{issettingDropdownVisible ? (<span> <BiSolidUpArrow />  </span>):(<span><BiSolidDownArrow /></span>)}</td>
+                <td className='td-content Booking-table'  ><span>REGISTER</span>{issettingDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>):(<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
@@ -255,7 +257,7 @@ export const UserPermission = () => {
 
 
               <tr onClick={toggleinfoDropdown}>
-                <td className='td-content Booking-table'  ><span>Info</span>{isinfoDropdownVisible ? (<span> <BiSolidUpArrow  style={{color:'red'}}/>  </span>):(<span><BiSolidDownArrow /></span>)}</td>
+                <td className='td-content Booking-table'  ><span>Info</span>{isinfoDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon'  style={{color:'red'}}/>  </span>):(<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>

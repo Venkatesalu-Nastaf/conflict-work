@@ -45,6 +45,8 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useEmplyeecreation from './useEmplyeecreation';
 
+
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -355,10 +357,10 @@ const EmployeeCreation = () => {
 
 
 
-          <div className="EmployeeCreation-table-container">
+          <div className="EmployeeCreation-table-container" style={{marginTop: '20px'}}>
             <div className='search-profile'>
 
-              <div className="search-input-container">
+              <div className="search-input-container" style={{marginBottom: '20px'}}>
 
                 <TextField
                   id="search-input"
@@ -370,7 +372,7 @@ const EmployeeCreation = () => {
                     endAdornment: <AiOutlineSearch />,
                   }}
                 />
-<div>
+                <div>
 
                   <div className='user-table-permission'  onClick={togglePermission}>
                         <img src={Avatar} alt="profile" width="50"/>

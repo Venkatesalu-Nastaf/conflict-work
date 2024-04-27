@@ -53,7 +53,6 @@ const useBilling = () => {
             setError(true);
             setErrorMessage("Please enter TripID");
         } else {
-            localStorage.setItem('selectedTripid', tripid);
             localStorage.setItem('selectedcustomerid', customer);
             setPopupOpen(true);
         }
@@ -423,14 +422,19 @@ const useBilling = () => {
     // for fetching map route data 
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
+            const tripid = book.tripid;
             try {
-                const response = await fetch(`${apiUrl}/routedata-map/${encodeURIComponent(tripid)}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+
+                if (tripid !== null && tripid !== 'undefined' && tripid) {
+                    const response = await fetch(`${apiUrl}/routedata-map/${encodeURIComponent(tripid)}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const routeData = await response.json();
+                    setRouteData(routeData);
+
                 }
-                const routeData = await response.json();
-                setRouteData(routeData);
+
 
             } catch (error) {
             }
@@ -464,14 +468,18 @@ const useBilling = () => {
     // fetching signature image
     useEffect(() => {
         const fetchData = async () => {
-            const tripid = localStorage.getItem('selectedTripid');
+            // const tripid = localStorage.getItem('selectedTripid');
+
+            const tripid = book.tripid;
             try {
-                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                if (tripid !== null && tripid !== 'undefined' && tripid) {
+                    const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const imageUrl = URL.createObjectURL(await response.blob());
+                    setMapImageUrl(imageUrl);
                 }
-                const imageUrl = URL.createObjectURL(await response.blob());
-                setMapImageUrl(imageUrl);
             } catch {
             }
         };
@@ -483,17 +491,19 @@ const useBilling = () => {
     // get map image 
     useEffect(() => {
         const fetchData = async () => {
+            const tripid = book.tripid;
             try {
-                const tripid = localStorage.getItem('selectedTripid');
-
-                const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
-                if (response.status === 200) {
-                    const responseData = await response.blob();
-                    const imageUrl = URL.createObjectURL(responseData);
-                    setGMapImageUrl(imageUrl);
-                } else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
+                // const tripid = localStorage.getItem('selectedTripid');
+                if (tripid !== null && tripid !== 'undefined' && tripid) {
+                    const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
+                    if (response.status === 200) {
+                        const responseData = await response.blob();
+                        const imageUrl = URL.createObjectURL(responseData);
+                        setGMapImageUrl(imageUrl);
+                    } else {
+                        const timer = setTimeout(fetchData, 2000);
+                        return () => clearTimeout(timer);
+                    }
                 }
             } catch {
             }
@@ -534,16 +544,19 @@ const useBilling = () => {
             const storedcomanyname = localStorage.getItem('usercompanyname');
             const organizationname = decodeURIComponent(storedcomanyname);
             try {
-                const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
-                if (response.status === 200) {
-                    const userDataArray = await response.json();
-                    if (userDataArray.length > 0) {
-                        setorganizationData(userDataArray[0]);
+                if (organizationname !== "undefined" && organizationname) {
+                    const response = await fetch(`${apiUrl}/organizationdata/${organizationname}`);
+                    if (response.status === 200) {
+                        const userDataArray = await response.json();
+                        if (userDataArray.length > 0) {
+                            setorganizationData(userDataArray[0]);
+                        }
+                    } else {
+                        const timer = setTimeout(fetchData, 2000);
+                        return () => clearTimeout(timer);
                     }
-                } else {
-                    const timer = setTimeout(fetchData, 2000);
-                    return () => clearTimeout(timer);
                 }
+                return;
             } catch {
             }
         };
@@ -556,10 +569,8 @@ const useBilling = () => {
         const fetchData = async () => {
             try {
                 const organizationname = localStorage.getItem('usercompany');
-                if (!organizationname) {
-                    return;
-                }
-                if (organizationname) {
+
+                if (organizationname !== "undefined" && organizationname !== undefined && organizationname) {
                     const response = await fetch(`${apiUrl}/get-companyimage/${organizationname}`);
                     if (response.status === 200) {
                         const data = await response.json();
@@ -571,6 +582,7 @@ const useBilling = () => {
                         return () => clearTimeout(timer);
                     }
                 }
+
             } catch {
             }
         };

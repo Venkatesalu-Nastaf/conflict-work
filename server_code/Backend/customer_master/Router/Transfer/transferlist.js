@@ -33,14 +33,14 @@ router.get('/payment-detail', (req, res) => {
   });
 });
 
-router.get('/tripsheetcustomertripid/:customer/:tripid', async(req, res) => {
+router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
   const customer = req.params.customer;
   const tripid = req.params.tripid.split(',');
 
   const decodedCustomer = decodeURIComponent(customer);
   db.query('SELECT * FROM tripsheet WHERE customer = ? AND tripid IN (?)', [decodedCustomer, tripid], (err, result) => {
     if (err) {
-      
+
       return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
     }
     if (result.length === 0) {
@@ -48,9 +48,9 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async(req, res) => {
     }
 
     let vehtypes = result.map(obj => obj.vehType);
-    db.query('select vehiclename, fueltype ,segement ,Groups from vehicleinfo where vehiclename IN (?)',[vehtypes],(err,result1)=>{
+    db.query('select vehiclename, fueltype ,segement ,Groups from vehicleinfo where vehiclename IN (?)', [vehtypes], (err, result1) => {
       if (err) {
-  
+
         return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
       }
       if (result1.length === 0) {
@@ -58,10 +58,10 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async(req, res) => {
       }
       const vehicleDataMap = {};
       result1.forEach(row => {
-        vehicleDataMap[row.vehiclename] = { fueltype: row.fueltype, segement: row.segement,Groups:row.Groups };
+        vehicleDataMap[row.vehiclename] = { fueltype: row.fueltype, segement: row.segement, Groups: row.Groups };
 
       });
-      db.query('select customer,gstTax from customers where customer=?',[customer],(err,result2)=>{
+      db.query('select customer,gstTax from customers where customer=?', [customer], (err, result2) => {
         if (err) {
           return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
         }
@@ -69,32 +69,36 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async(req, res) => {
 
           return res.status(404).json({ error: 'customer not found' });
         }
-      
-   
-         result2.forEach(row=>{
+
+
+        result2.forEach(row => {
           // vehicleDataMap[row.customer]={gsttax:row.gstTax}
-          vehicleDataMap[row.customer] = {  gsttax: row.gstTax };
+          vehicleDataMap[row.customer] = { gsttax: row.gstTax };
 
-         })
+        })
 
-      // })
+        // })
 
-      // Add fueltype to each object in the result array
-      result.forEach(obj => {
-        const vehicleData = vehicleDataMap[obj.vehType];
-        const customerdetails=vehicleDataMap[obj.customer];
-        obj.fueltype = vehicleData ? vehicleData.fueltype : 'Unknown'; // Set default value if fueltype not found
-        obj.segement = vehicleData ? vehicleData.segement : 'Unknown';
-        obj.Groups=vehicleData ?  vehicleData.Groups :'unknown';
-        obj.gstTax=customerdetails?customerdetails.gsttax:'unknown'
-      });
-  
-    
-    return res.status(200).json(result);
+        // Add fueltype to each object in the result array
+        result.forEach(obj => {
+          const vehicleData = vehicleDataMap[obj.vehType];
+          const customerdetails = vehicleDataMap[obj.customer];
+          obj.fueltype = vehicleData ? vehicleData.fueltype : 'Unknown'; // Set default value if fueltype not found
+          obj.segement = vehicleData ? vehicleData.segement : 'Unknown';
+          obj.Groups = vehicleData ? vehicleData.Groups : 'unknown';
+          obj.gstTax = customerdetails ? customerdetails.gsttax : 'unknown'
+        });
+
+
+        return res.status(200).json(result);
       })
     })
   });
 });
+
+
+
+
 
 router.get('/tripsheetcustomer/:customer', (req, res) => {
   const customer = req.params.customer;
@@ -214,15 +218,15 @@ router.get('/Get-Billing', (req, res) => {
     return res.status(200).json(result);
   });
 });
-router.post('/transferlistdatatrip',(req,res)=>{
-  const{ Status,Billdate,Organization_name,FromDate,EndDate,Trips,Amount,Trip_id}=req.body;
-  const sqlquery='insert into Transfer_list(Status,Billdate,Organization_name,Trip_id,FromDate,EndDate,Trips,Amount) values(?,?,?,?,?,?,?,?)'
+router.post('/transferlistdatatrip', (req, res) => {
+  const { Status, Billdate, Organization_name, FromDate, EndDate, Trips, Amount, Trip_id } = req.body;
+  const sqlquery = 'insert into Transfer_list(Status,Billdate,Organization_name,Trip_id,FromDate,EndDate,Trips,Amount) values(?,?,?,?,?,?,?,?)'
 
   if (!Array.isArray(Trip_id)) {
     return res.status(400).json({ error: 'id should be an array' });
   }
   const idString = Trip_id.join(',');
-  db.query(sqlquery,[Status,Billdate,Organization_name,idString,FromDate,EndDate,Trips,Amount], (err, result) => {
+  db.query(sqlquery, [Status, Billdate, Organization_name, idString, FromDate, EndDate, Trips, Amount], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve  from MySQL' });
     }
@@ -231,49 +235,116 @@ router.post('/transferlistdatatrip',(req,res)=>{
 
 });
 
-router.get('/gettransfer_list',(req,res)=>{
-  db.query('SELECT * FROM Transfer_list',  (err, result) => {
+router.get('/gettransfer_list', (req, res) => {
+  db.query('SELECT * FROM Transfer_list', (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
     }
     return res.status(200).json(result);
 
   });
-  
+
 })
 
 
 
-router.get('/gettransfer_listdatas',(req,res)=>{
-  const { Status,Organization_name,FromDate,EndDate  } = req.query;
+router.get('/gettransfer_listdatas', (req, res) => {
+  const { Status, Organization_name, FromDate, EndDate } = req.query;
   // const { Status  } = req.query;
-  if(Status==="all")
-  {
-  db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY)',[Organization_name,FromDate,EndDate],(err, result) => {
-    // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
-  // 
+  if (Status === "all") {
+    db.query('SELECT * FROM Transfer_list where  Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY)', [Organization_name, FromDate, EndDate], (err, result) => {
+      // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
+      // 
       if (err) {
         return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
       }
       return res.status(200).json(result);
-  
+
     });
   }
 
-   else{
-  db.query('SELECT * FROM Transfer_list where Status=? AND Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY)',[Status,Organization_name,FromDate,EndDate],(err, result) => {
-  // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
-// 
-    if (err) {
-      return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
-    }
-    return res.status(200).json(result);
+  else {
+    db.query('SELECT * FROM Transfer_list where Status=? AND Organization_name=?  AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND FromDate <= DATE_ADD(?, INTERVAL 1 DAY)', [Status, Organization_name, FromDate, EndDate], (err, result) => {
+      // db.query('SELECT * FROM Transfer_list where Status=? ',[Status],(err, result) => {
+      // 
+      if (err) {
+        return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+      }
+      return res.status(200).json(result);
 
-  });
-}
-  
+    });
+  }
+
 })
 
 
+ 
 
+router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) => {
+  const customer = req.params.customer;
+  const tripids = req.params.tripid.split(',');
+  // console.log(customer, tripid)
+
+  const decodedCustomer = decodeURIComponent(customer);
+
+  const promises = tripids.map(tripid => {
+    return new Promise((resolve, reject) => {
+      db.query(
+        `
+        SELECT 
+          ts.*, 
+          vi.fueltype AS fueltype, 
+          vi.segement AS segment, 
+          vi.Groups AS Groups, 
+          c.gstTax AS gstTax,
+          bo.report AS Report,
+          JSON_ARRAYAGG(JSON_OBJECT('attachedimageurl', us.path)) AS Attachedimage,
+          JSON_ARRAYAGG(JSON_OBJECT('trip_type', gd.trip_type, 'place_name', gd.place_name)) AS gmapdata,
+          JSON_OBJECT('signature_path', s.signature_path) AS signature_data,
+          JSON_OBJECT('map_path', mi.path) AS map_data
+        FROM 
+          tripsheet AS ts
+        LEFT JOIN 
+          vehicleinfo AS vi ON ts.vehType = vi.vehiclename
+        LEFT JOIN 
+          customers AS c ON ts.customer = c.customer
+        LEFT JOIN 
+          gmapdata AS gd ON ts.tripid = gd.tripid
+        LEFT JOIN 
+          signatures AS s ON ts.tripid = s.tripid
+        LEFT JOIN 
+          mapimage AS mi ON ts.tripid = mi.tripid
+          LEFT JOIN 
+          tripsheetupload AS us ON ts.tripid = us.tripid
+          LEFT JOIN 
+          booking AS bo ON ts.tripid = bo.tripid
+        WHERE 
+          ts.customer = ? AND ts.tripid = ?
+        GROUP BY 
+          ts.tripid
+        `,
+        [decodedCustomer, tripid],
+        (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result[0]); // Assuming we expect only one result per tripid
+          }
+        }
+      );
+    });
+  });
+
+  Promise.all(promises)
+    .then(results => {
+      return res.status(200).json(results);
+    })
+    .catch(error => {
+      return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
+    });
+});
+
+
+
+ 
 module.exports = router;

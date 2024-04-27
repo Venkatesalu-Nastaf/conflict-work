@@ -5,8 +5,9 @@ import Excel from 'exceljs';
 import { saveAs } from "file-saver";
 import dayjs from 'dayjs';
 import JSZip from 'jszip';
-import PdfParticularData from './PdfParticularData';
+
 import {  pdf } from '@react-pdf/renderer';
+import PdfzipParticularData from './Pdfpatricularzipdata'
 
 
 
@@ -340,14 +341,14 @@ const useExeclpage = () => {
     }
 
 
-    const handledatazipDownload = async (misformat, invoice, invoicedate,customer,addressDetails,particularPdf,organizationsdetail1,imageorganisation,tripno ) => {
-        console.log(misformat, invoice, invoicedate, customer,"zipexcel")
+    const handledatazipDownload = async (misformat, invoice, invoicedate,customer,organizationsdetail1,imageorganisation,rowSelectionModel ) => {
+        console.log(misformat,"m", invoice,"in", invoicedate, customer,"zipexcel",rowSelectionModel,"mo")
         const data = invoice;
         const customername=customer;
         const workbook = new Excel.Workbook();
         try {
             const zip = new JSZip();
-              if(data.length=== 0){
+              if(rowSelectionModel.length === 0){
                 setError1(true)
                 setErrorMessage1(" SELECT DATA ")
                 return
@@ -358,11 +359,7 @@ const useExeclpage = () => {
                 setErrorMessage1(" SELECT MIS  EXCEL FORMAT")
                 return
             }
-            // if(!pdfBillList){
-            //     setError1(true)
-            //     setErrorMessage1(" SELECT PDF FORMAT")
-            //     return
-            // }
+           
             
             if (misformat === "Old MIS") {
                 //    try {
@@ -536,17 +533,31 @@ const useExeclpage = () => {
 
             }
             
+            const pdffolder = zip.folder("pdffolder");
+            const pdfPromises = invoice?.map(async (pdfData, index) => {
+              console.log(pdfData,"modedata")
             
+              const blob = await pdf(
+                  <PdfzipParticularData
+                     
+                      particularPdf={[pdfData]} 
+                      organisationdetail={organizationsdetail1} 
+                      imagename={imageorganisation} 
+                     
+                  />
+              ).toBlob();
           
-                // const folderNamepdf = 'NEW Folder';
-                // const timestamp = new Date().getTime();
-                // const fileName = `PDF 2 ${dayjs(invoicedate).format(" MMMM D")}`
-                // const folder = zip.folder(folderNamepdf);
-                // console.log(addressDetails,particularPdf,organizationsdetail1,imageorganisation,tripno,"blobed")
-            //     const blobed = await pdf(<PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} tripno={tripno}/>
-            // ).toBlob();
-            // console.log(blobed,"blob")
-            //     folder.file(`${fileName}_${timestamp}.pdf`, blob);
+              const fileName = `PDF_${index + 1}.pdf`; 
+              // console.log(blob,"pdfblob")
+              // zip.file(fileName, blob);
+              pdffolder.file(fileName, blob);
+          
+              // Return the filename for tracking
+          });
+          
+          // Wait for all promises to resolve
+          await Promise.all(pdfPromises);
+          
             
 
                 

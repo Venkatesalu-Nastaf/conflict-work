@@ -27,7 +27,6 @@ import OnlineBooking from "./component/OnlineBooking/OnlineBooking";
 import Permission from "./component/Settings/Permission/Permission";
 import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
 import BookingMain from "./component/Bookings/BookingMain/BookingMain";
-import Dispatcheds from "./component/Bookings/Dispatcheds/Dispatcheds";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
 // import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import BillingMain from "./component/Billings/billingMain/billingMain";
@@ -41,6 +40,7 @@ import NavigationMap from "./component/Bookings/TripSheet/NavigationMap/MapCompo
 import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLoginForm";
 import TemplateSelection from "./component/Info/Mailer/TemplateSelection/TemplateSelection";
 import TemplateCreation from "./component/Info/Mailer/TemplateCreation/TemplateCreation";
+import TripStatusMain from "./component/Bookings/TripStatusMain/TripStatusMain";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -77,8 +77,8 @@ function App() {
                 />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route
-                  path="/home/bookings/dispatched"
-                  element={<Dispatcheds />}
+                  path="/home/bookings/tripstatus"
+                  element={<TripStatusMain />}
                 />
               </Route>
               <Route path="/home/registration" element={<Registration />}>

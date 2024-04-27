@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
-import "./Dispatched.css";
+import "./TripStatus.css";
 import Menu from '@mui/material/Menu';
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import Dialog from '@material-ui/core/Dialog';
 import MenuItem from '@mui/material/MenuItem';
-import { Department } from "./DispatchedData.js";
-import { Status } from "./DispatchedData.js";
+import { Department } from "./TripStatusData.js";
+import { Status } from "./TripStatusData.js";
 import Autocomplete from "@mui/material/Autocomplete";
-import useDispatched from './useDispatched.js';
+import useTripStatus from './useTripStatus.js';
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { SiStatuspal } from "react-icons/si";
 import { GiMatterStates } from "react-icons/gi";
@@ -71,7 +71,7 @@ const actions = [
 
 
 
-const Dispatched = () => {
+const TripStatus = () => {
 
   const {
     statusvalue, handlestatusChange,
@@ -105,7 +105,7 @@ const Dispatched = () => {
     selectedRow,
     handleTripsheetClick,
     columns
-  } = useDispatched();
+  } = useTripStatus();
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -114,12 +114,12 @@ const Dispatched = () => {
   }, [actionName, handleClick]);
 
   return (
-    <div className="dispatched-form Scroll-Style-hide">
+    <div className="TripStatus-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
-            <div className="copy-title-btn-Dispatched">
-              <div className="input-field dispatched-input-feilds">
+            <div className="copy-title-btn-TripStatus">
+              <div className="input-field TripStatus-input-feilds">
                 <div className="input">
 
                 <div className="icone" style={{fontSize:'25px'}}>
@@ -169,7 +169,7 @@ const Dispatched = () => {
                 </div>
                 </div>
               </div>
-              <div className="input-field dispatched-input-feilds">
+              <div className="input-field TripStatus-input-feilds">
 
                 
                 <div className="input" style={{ width: "300px" }}>
@@ -282,7 +282,7 @@ const Dispatched = () => {
 
 
 
-        <div className="table-bookingCopy-Dispatched">
+        <div className="table-bookingCopy-TripStatus">
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
@@ -327,4 +327,4 @@ const Dispatched = () => {
   )
 }
 
-export default Dispatched
+export default TripStatus

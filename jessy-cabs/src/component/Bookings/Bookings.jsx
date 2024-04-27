@@ -38,8 +38,8 @@ const Bookings = () => {
         />
 <MenuItem
           label="Trip Status"
-          to="/home/bookings/dispatched"
-          menuItemKey="Dispatched"
+          to="/home/bookings/tripstatus"
+          menuItemKey="TripStatus"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
@@ -60,9 +60,9 @@ const Bookings = () => {
         />
 
         {/* <MenuItem
-          label="Dispatched"
+          label="TripStatus"
           to="/home/bookings/dispatched"
-          menuItemKey="Dispatched"
+          menuItemKey="TripStatus"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         /> */}

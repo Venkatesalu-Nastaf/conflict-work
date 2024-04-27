@@ -35,7 +35,8 @@ const useTransferreport = () => {
   const [pdfBillList,setPdfBillList] = useState('')
   
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const[rowzip,setRowszipdata]=useState([])
+  // const[rowzip,setRowszipdata]=useState([])
+  const[pdfzipdata,setPdfzipdata]=useState([])
   const location = useLocation()
   
 
@@ -465,18 +466,63 @@ const useTransferreport = () => {
     // localStorage.setItem('selectedrowcount', selectedRowCount);
 };
 
+// useEffect(() => {
+//   const fetchData = async () => {
+//     try {
+//       const tripid = rowSelectionModel
+//       const encoded = localStorage.getItem("selectedcustomerdata");
+//       localStorage.setItem("selectedcustomer", encoded);
+//       const storedCustomer = localStorage.getItem("selectedcustomer");
+//       const customer = decodeURIComponent(storedCustomer);
+//       // console.log(tripid,customer,"transfer",rowSelectionModel)
+//       // console.log(tripid,"objtripid")
+//       const response = await fetch(
+//         `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
+//           customer
+//         )}/${tripid}`
+//       );
+//       // console.log(response,"objresponse")
+//       if (!response.ok) {
+//         throw new Error(`HTTP error! Status: ${response.status}`);
+//       }
+//       const tripData = await response.json();
+//       // if (Array.isArray(tripData)) {
+        
+//       //     const rowsWithUniqueId = tripData.map((row, index) => ({
+//       //       ...row,
+        
+//       //     }));
+//       console.log(tripData,"obj")
+//           setRowszipdata(tripData);
+//           // setSuccess(true);
+//           setSuccessMessage("successfully listed");
+        
+     
+//     } catch { }
+//   };
+//   fetchData();
+// }, [apiUrl,rowSelectionModel,rowzip,handleRowSelection]);
 useEffect(() => {
   const fetchData = async () => {
     try {
+
+
       const tripid = rowSelectionModel
+
+
+
       const encoded = localStorage.getItem("selectedcustomerdata");
       localStorage.setItem("selectedcustomer", encoded);
       const storedCustomer = localStorage.getItem("selectedcustomer");
       const customer = decodeURIComponent(storedCustomer);
       // console.log(tripid,customer,"transfer",rowSelectionModel)
-      // console.log(tripid,"objtripid")
+      console.log(tripid,"objtripid",typeof(tripid))
+
+      if(tripid.length>=1)
+      {
+      
       const response = await fetch(
-        `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(
+        `${apiUrl}/pdfdatatransferreporttripid2/${encodeURIComponent(
           customer
         )}/${tripid}`
       );
@@ -491,16 +537,21 @@ useEffect(() => {
       //       ...row,
         
       //     }));
-      console.log(tripData,"obj")
-          setRowszipdata(tripData);
+      console.log(tripData,"pdfobjneee")
+         
+          setPdfzipdata(tripData)
           // setSuccess(true);
           setSuccessMessage("successfully listed");
         
      
-    } catch { }
+    } 
+    else{
+      return
+    }
+  }catch { }
   };
   fetchData();
-}, [apiUrl,rowSelectionModel,rowzip,handleRowSelection]);
+}, [apiUrl,rowSelectionModel,pdfzipdata,handleRowSelection,rows]);
 
   return {
     rows,
@@ -555,9 +606,11 @@ useEffect(() => {
     setPdfBillList,
     
   handleRowSelection,
-  rowzip,
+  // rowzip,
   rowSelectionModel,
-  setRowSelectionModel
+  
+  setRowSelectionModel,
+  pdfzipdata
   
   };
 };

@@ -121,9 +121,10 @@ const TransferReport = () => {
     setError,
     setErrorMessage,
     handleRowSelection,
-    rowzip,
+    // rowzip,
     rowSelectionModel,
-    setRowSelectionModel
+    setRowSelectionModel,
+    pdfzipdata
   } = useTransferreport();
   const {
         handleExcelDownload,error1,errormessage1,
@@ -161,6 +162,7 @@ const {pdfPrint,setPdfPrint,setPdfzip} = PdfData()
   
     fetchdata();
   }, [apiUrl, customer]);
+  console.log(rowSelectionModel,"model")
 
 
   useEffect(() => {
@@ -287,71 +289,8 @@ const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
   handleExcelDownload(misformat1, invoicedata1, invoiceDate1);
   handleDownloadPdf();
 };
- const zipdata=rowzip
 
 
-const handleDownloadZippdf = async () => {
-  
-
-  const zip = new JSZip();
- 
-
-  // console.log(zipdata,"zippdf")
-
-  // Iterate through each PDF data and add it to the ZIP archive
-  // zipdata?.map(async (pdfData, index) => {
-  //   console.log(pdfData,"zip")
-  //     const blob = await pdf(
-  //         <PdfParticularData 
-  //             addressDetails={addressDetails} 
-  //             particularPdf={pdfData} 
-  //             organisationdetail={organizationsdetail1} 
-  //             imagename={imageorganisation} 
-  //             tripno={pdfData.tripid}
-  //         />
-  //     ).toBlob();
-      
-  //     const fileName = `PDF_${index + 1}.pdf`; 
-  //     console.log(blob,"hh");// Generate a unique filename for each PDF
-  //     zip.file(fileName, blob);
- 
-
-  
-  const pdfPromises = zipdata.map(async (pdfData, index) => {
-    // console.log(pdfData,"modedata")
-    const blob = await pdf(
-        <PdfzipParticularData
-            addressDetails={addressDetails} 
-            particularPdf={[pdfData]} 
-            organisationdetail={organizationsdetail1} 
-            imagename={imageorganisation} 
-            tripno={pdfData.tripid}
-        />
-    ).toBlob();
-
-    const fileName = `PDF_${index + 1}.pdf`; 
-    // console.log(blob,"pdfblob")
-    zip.file(fileName, blob);
-
-    // Return the filename for tracking
-});
-
-// Wait for all promises to resolve
-await Promise.all(pdfPromises);
-
- 
-
-  // Generate the ZIP file asynchronously
-  zip.generateAsync({ type: "blob" })
-      .then((blob) => {
-          // Trigger download
-          saveAs(blob, 'pdfFiles.zip');
-          
-      })
-      .catch((error) => {
-          console.error('Failed to generate zip file: ', error);
-      });
-};
 
 
   return (
@@ -695,8 +634,8 @@ await Promise.all(pdfPromises);
                     </Button>
                     <Menu {...bindMenu(popupState)}>
                       {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                      <MenuItem onClick={()=>handledatazipDownload(misformat,zipdata,invoiceDate,customer,addressDetails,particularPdf,organizationsdetail1,imageorganisation,tripno) }>ZIP</MenuItem>
-                      <MenuItem onClick={handleDownloadZippdf}>ZIP</MenuItem>
+                      <MenuItem onClick={()=>handledatazipDownload(misformat,pdfzipdata,invoiceDate,customer,organizationsdetail1,imageorganisation,rowSelectionModel) }>  ZIP </MenuItem>
+                      {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
                       {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
                     </Menu>
                   </React.Fragment>
@@ -721,6 +660,10 @@ await Promise.all(pdfPromises);
                 }}
                 checkboxSelection
                 disableRowSelectionOnClick
+                selectionModel={rowSelectionModel} // Pass the selection model to maintain selection
+
+               
+
               />
             </div>
           </div>

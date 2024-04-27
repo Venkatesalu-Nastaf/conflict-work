@@ -6,11 +6,11 @@
     display: flex;
     width: 70%;
   }
-  .form-container-dispatched .Title-Name {
+  .form-container-TripStatus .Title-Name {
     font-size: 20px;
     font-weight: 500;
   }
-  .form-container-dispatched .dispatched-form {
+  .form-container-TripStatus .TripStatus-form {
     height: 100vh;
     width: 100vw;
     overflow-x: hidden;
@@ -20,11 +20,11 @@
     color: #000;
     background-color: var(--glass);
   }
-  .form-container-dispatched {
+  .form-container-TripStatus {
     display: flex;
     border-radius: 10px;
   }
-  .form-container-dispatched .container-main::-webkit-scrollbar {
+  .form-container-TripStatus .container-main::-webkit-scrollbar {
     width: 0px;
     height: 0px;
     overflow-x: hidden;
@@ -35,11 +35,11 @@
     margin-top: 30px;
   }
   
-  .form-container-dispatched .container-main::-webkit-scrollbar-thumb {
+  .form-container-TripStatus .container-main::-webkit-scrollbar-thumb {
     background-color: transparent;
     outline: 1px solid transparent;
   }
-  .form-container-dispatched .container-main {
+  .form-container-TripStatus .container-main {
     border: 2px solid #ccc;
     overflow: scroll;
     height: 77vh;
@@ -51,7 +51,7 @@
     color: #000;
     background-color: var(--glass);
   }
-  .dispatched-form .Title-Name {
+  .TripStatus-form .Title-Name {
     position: relative;
   }
   .copy-title-btn {
@@ -62,7 +62,7 @@
     border-radius: 10px;
   }
   
-  .dispatched-form .Title-Name::after {
+  .TripStatus-form .Title-Name::after {
     content: "";
     position: absolute;
     bottom: -10px;
@@ -74,23 +74,23 @@
   }
 
   @media screen and (min-width:970px) and (max-width:1240px) {
-    .form-container-dispatched .container-main{ 
+    .form-container-TripStatus .container-main{ 
       width: 76vw !important;
     }
   }
   
   @media screen and (min-width:769px) and (max-width:969.99px) {
-    .form-container-dispatched .container-main { 
+    .form-container-TripStatus .container-main { 
       width: 70vw !important;
     }
   }
 
-  .dispatched-input-feilds{
+  .TripStatus-input-feilds{
     flex-wrap: wrap;
     /* justify-content: center; */
   }
 
-  .dispatched-input-feilds .input{
+  .TripStatus-input-feilds .input{
     width: fit-content;
     justify-content: center;
     gap: 2px;
@@ -113,7 +113,7 @@ align-items: center;
 
   @media screen and (max-width:1209px) {
 
-      .dispatched-input-feilds{
+      .TripStatus-input-feilds{
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -142,7 +142,7 @@ align-items: center;
       width: 190px !important;
     }
    
-    .dispatched-input-feilds .input{
+    .TripStatus-input-feilds .input{
       width: 200px !important;
       justify-content: space-around;
       /* gap: 2px; */

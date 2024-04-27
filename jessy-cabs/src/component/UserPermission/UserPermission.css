@@ -1,6 +1,20 @@
 .permission-table{
     width: -webkit-fill-available;
+    overflow-y: auto;
+    height: 400px !important;
 }
+
+.permission-table::-webkit-scrollbar  {
+    width: 4px !important; /* Adjust the width of the scrollbar */
+    background-color: #457ddd;
+  }
+
+  .table-header{
+    position: sticky;
+    top: 0;
+    z-index: 111;
+  }
+
 .td-content{
     text-align: center;
 }
@@ -11,7 +25,7 @@
 }
 
 .table-container{
-    overflow-x: scroll;
+    /* overflow-x: scroll; */
 }
 
 @media only screen and (max-width:900px){
@@ -22,4 +36,11 @@ justify-content:center;
 } 
     
     
+}
+
+.Booking-table{
+    display: flex;
+    gap : 8px;
+    align-items: center;
+    justify-content: center;
 }

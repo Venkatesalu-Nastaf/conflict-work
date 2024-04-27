@@ -1,23 +1,55 @@
-import React, { useState } from 'react';
-import { MenuItem, Select } from '@material-ui/core';
+import React, { useState } from 'react'
 import './UserPermission.css'
 import Switch from '@mui/material/Switch';
+import { BiSolidDownArrow } from "react-icons/bi";
+import { BiSolidUpArrow } from "react-icons/bi";
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 export const UserPermission = () => {
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isbillingDropdownVisible, setIsbillingDropdownVisible] = useState(false);
+  const [isregisterDropdownVisible, setIsregisterDropdownVisible] = useState(false);
+  const [issettingDropdownVisible, setIssettingDropdownVisible] = useState(false);
+  const [isinfoDropdownVisible, setIsinfoDropdownVisible] = useState(false);
 
-  const [selectedOption, setSelectedOption] = useState('');
-
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+    setIsbillingDropdownVisible(false);
   };
+
+  const togglebillingDropdown = () => {
+    setIsbillingDropdownVisible(!isbillingDropdownVisible);
+    setIsDropdownVisible(false);
+
+  };
+
+  const toggleregisterDropdown = () => {
+    setIsregisterDropdownVisible(!isregisterDropdownVisible);
+    setIsDropdownVisible(false);
+    setIsbillingDropdownVisible(false);
+
+  };
+  const togglesettingDropdown = () => {
+    setIssettingDropdownVisible(!issettingDropdownVisible);
+    setIsDropdownVisible(false);
+    setIsbillingDropdownVisible(false);
+
+  };
+
+  const toggleinfoDropdown = () => {
+    setIsinfoDropdownVisible(!isinfoDropdownVisible);
+    setIsDropdownVisible(false);
+    setIsbillingDropdownVisible(false);
+
+  };
+
   return (
 
 
   
-      <div className='permission-table '>
+      <div className='permission-table'>
         {/* <h3 className='members-txt '>UserName</h3> */}
-        <div className="table-container">
+        <div className="table-containerr">
           <table>
             <thead>
               <tr className='table-header'>
@@ -45,62 +77,223 @@ export const UserPermission = () => {
                 </td>
               </tr>
               <tr>
-              <td className='td-content'>
-      <Select
-        value={selectedOption}
-        onChange={handleChange}
-        displayEmpty
-        className='booking-dropdown'
-      >
-        <MenuItem value='' disabled>
-          Select Option
-        </MenuItem>
-        <MenuItem value='option1'>Option 1</MenuItem>
-        <MenuItem value='option2'>Option 2</MenuItem>
-        <MenuItem value='option3'>Option 3</MenuItem>
-      </Select>
-    </td>
+              <td className='td-content Booking-table'  onClick={toggleDropdown}> <span>BOOKING</span>{isDropdownVisible ? (<span> <BiSolidUpArrow />  </span>):(<span><BiSolidDownArrow /></span>)}
+
+              
+               </td>
+              <td className='td-content'><input type="checkbox" /></td>
+              <td className='td-content'><input type="checkbox" /></td>
+              <td className='td-content'><input type="checkbox" /></td>
+              <td className='td-content'><input type="checkbox" /></td>
+              </tr>
+            {isDropdownVisible && (
+              <>
+                  <tr>
+                  <td className='td-content'>Booking</td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+                <tr>
+                <td className='td-content'>Trip Status</td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+                <tr>
+                <td className='td-content'>Trip sheet</td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+              </>
+
+            
+                 )}
+
+
+
+              <tr onClick={togglebillingDropdown}>
+                <td className='td-content  Booking-table'  ><span>BILLING</span>{isbillingDropdownVisible ? (<span> <BiSolidUpArrow />  </span>):(<span><BiSolidDownArrow /></span>)}</td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
               </tr>
-              <tr>
-                {/* <td className='td-content'>Billing</td> */}
-                <td className='td-content'>
-      <Select
-        value={selectedOption}
-        onChange={handleChange}
-        displayEmpty
-        className='booking-dropdown'
-      >
-        <MenuItem value='' disabled>
-          Select Option
-        </MenuItem>
-        <MenuItem value='option1'>Option 1</MenuItem>
-        <MenuItem value='option2'>Option 2</MenuItem>
-        <MenuItem value='option3'>Option 3</MenuItem>
-      </Select>
-    </td>
+
+
+              {isbillingDropdownVisible && (
+              <>
+                  <tr>
+                  <td className='td-content'>Billing</td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+                <tr>
+                <td className='td-content'>Transfer</td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+                <tr>
+                <td className='td-content'>Covering Bill</td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+              </>
+
+            
+                 )}
+
+
+
+
+
+
+
+
+
+
+
+
+              <tr onClick={toggleregisterDropdown}>
+                <td className='td-content Booking-table'  ><span>REGISTER</span>{isregisterDropdownVisible ? (<span> <BiSolidUpArrow />  </span>):(<span><BiSolidDownArrow /></span>)}</td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
               </tr>
-              <tr>
-                <td className='td-content'>Register</td>
+
+              {isregisterDropdownVisible && (
+              <>
+                  <tr>
+                  <td className='td-content'>Customer</td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+                <tr>
+                <td className='td-content'>Supllier</td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+                <tr>
+                <td className='td-content'>Employee</td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+              </>
+
+            
+                 )}
+
+
+
+
+              <tr onClick={togglesettingDropdown}>
+                <td className='td-content Booking-table'  ><span>REGISTER</span>{issettingDropdownVisible ? (<span> <BiSolidUpArrow />  </span>):(<span><BiSolidDownArrow /></span>)}</td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
               </tr>
-              <tr>
-                <td className='td-content'>Settings</td>
+
+              {issettingDropdownVisible && (
+              <>
+                  <tr>
+                  <td className='td-content'>User Creation</td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+                <tr>
+                <td className='td-content'>Station Creation</td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+                <tr>
+                <td className='td-content'>Main Setting</td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+              </>
+
+            
+                 )}
+
+
+
+
+              <tr onClick={toggleinfoDropdown}>
+                <td className='td-content Booking-table'  ><span>Info</span>{isinfoDropdownVisible ? (<span> <BiSolidUpArrow  style={{color:'red'}}/>  </span>):(<span><BiSolidDownArrow /></span>)}</td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
                 <td className='td-content'><input type="checkbox" /></td>
               </tr>
+
+              {isinfoDropdownVisible && (
+              <>
+                  <tr>
+                  <td className='td-content'>Rate Type</td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                  <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+                <tr>
+                <td className='td-content'>Mailers</td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+                <tr>
+                <td className='td-content'>Fuel Info</td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                <td className='td-content'><input type="checkbox" /></td>
+                </tr>
+
+              </>
+
+            
+                 )}
+
+
             </tbody>
           </table>
         </div>

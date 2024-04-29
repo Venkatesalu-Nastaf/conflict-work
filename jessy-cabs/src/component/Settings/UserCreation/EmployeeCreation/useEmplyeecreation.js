@@ -182,7 +182,8 @@ const useEmplyeecreation = () => {
         try {
             if (actionName === 'List') {
                 handleList().then((showlist) => {
-                    if (showlist.length > 0) {
+
+                    if (showlist?.length > 0) {
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                     } else {
@@ -252,6 +253,10 @@ const useEmplyeecreation = () => {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
+
+    // console.log("roews", rows)
+    // console.log("roews", rows[0].username)
+    // console.log("roews", rows[0].designation)
 
     return {
 

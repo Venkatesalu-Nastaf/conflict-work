@@ -480,3 +480,35 @@ export const VehicleModel = [
     carmodelvalue: "XYLO-A/C",
   },
 ];
+
+
+export const GroupTypes = [
+  {
+    Option: "Luxzury",
+    // optionvalue: "a/c",
+  },
+  {
+    Option: "Normal",
+    // optionvalue: "non_a/c",
+  },
+  {
+    Option: "Premium",
+    // optionvalue: "a/c",
+  },
+  {
+    Option: "Non-Premium",
+    // optionvalue: "non_a/c",
+  },
+];
+
+
+export const vehicaleinfos = [
+  {
+    Option: "A/C",
+    // optionvalue: "a/c",
+  },
+  {
+    Option: "Non A/C",
+    // optionvalue: "non_a/c",
+  },
+];

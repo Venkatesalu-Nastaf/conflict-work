@@ -11,6 +11,7 @@ import {
   Pickup,
   Email,
   Select,
+  GroupTypes
 } from "./TripSheetdata";
 import dayjs from "dayjs";
 import { Table } from "@mui/joy";
@@ -33,6 +34,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { TextField, FormControlLabel, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import EmailIcon from "@mui/icons-material/Email";
 //dialog box
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -100,8 +102,8 @@ import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 // ggggg
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
+// import Slide from '@mui/material/Slide';
+// import { TransitionProps } from '@mui/material/transitions';
 
 import useTripsheet from './useTripsheet';
 
@@ -723,15 +725,44 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input" style={{ width: "150px" }}>
-                <TextField
+                {/* <TextField
                   margin="normal"
                   size="small"
                   id="category"
                   label="category"
                   name="category"
                   autoComplete="password"
-                />
-              </div>
+                /> */}
+                 <div className="icone">
+                    <EmailIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    // value={book?.Groups || selectedCustomerData?.Groups || ''}
+                    
+                    value={(formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups|| packageData.Groups || book.Groups) : null}
+                    
+                    options={GroupTypes?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    // onChange={(event, value) => setVechiclebook((prevBook) => ({
+                    //   ...prevBook,
+                    //   "Groups": value?.label,
+                    // }))}
+
+                    onChange={(event, value) => handleAutocompleteChange(event, value,"Groups")}
+                    
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
+              
               <div className="input">
                 <div className="icone">
                   <NoCrashIcon color="action" />
@@ -1820,6 +1851,13 @@ const TripSheet = () => {
                 ) : (
                   <Button variant="contained" onClick={handleAdd} >Add</Button>
                 )}
+
+
+                  {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""} */}
+
+               
+              
               </div>
             </div>
           </div>

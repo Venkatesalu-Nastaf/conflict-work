@@ -20,8 +20,9 @@ import {
   Hire,
   PayType,
   Report,
-  VehicleModel,
   Service_Station,
+  GroupTypes ,
+  vehicaleinfos
 } from "./Booking";
 import {
   TextField,
@@ -34,18 +35,19 @@ import {
 } from "@mui/material";
 
 // ICONS
+import { PiCarSimpleFill } from "react-icons/pi";
 import InfoIcon from "@mui/icons-material/Info";
 import SellIcon from "@mui/icons-material/Sell";
-// import ClearIcon from "@mui/icons-material/Clear";
+import ClearIcon from "@mui/icons-material/Clear";
 
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import FmdBadIcon from "@mui/icons-material/FmdBad";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import NoCrashIcon from "@mui/icons-material/NoCrash";
-import CommuteIcon from "@mui/icons-material/Commute";
+
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
-// import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
@@ -53,10 +55,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import EngineeringIcon from "@mui/icons-material/Engineering";
+import EmailIcon from "@mui/icons-material/Email";
 
 import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-// import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
@@ -69,7 +72,7 @@ import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import TaxiAlertTwoToneIcon from "@mui/icons-material/TaxiAlertTwoTone";
 import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
-// import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 
 import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -79,7 +82,7 @@ import useBooking from "./useBooking";
 
 //dialog box
 import Dialog from "@material-ui/core/Dialog";
-// import DialogActions from "@material-ui/core/DialogActions";
+import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { APIURL } from "../../../url";
 
@@ -102,21 +105,21 @@ const Booking = () => {
     selectedCustomerId,
     rows,
     actionName,
-    // error,
-    // success,
-    // info,
-    // warning,
-    // successMessage,
-    // errorMessage,
-    // warningMessage,
-    // infoMessage,
+    error,
+    success,
+    info,
+    warning,
+    successMessage,
+    errorMessage,
+    warningMessage,
+    infoMessage,
     book,
     handleClick,
     handleChange,
 
     handleRowClick,
     handleAdd,
-    // hidePopup,
+    hidePopup,
     formData,
     handleKeyDown,
     handleDateChange,
@@ -135,8 +138,8 @@ const Booking = () => {
     setGuestSms,
     sendEmail,
     setSendEmail,
-    // displayCopy,
-    // lastBookingNo,
+    
+    lastBookingNo,
     currentYear,
     setTripTime,
     handleClickHide,
@@ -150,8 +153,8 @@ const Booking = () => {
     toDate,
     setToDate,
     handleShowAll,
-    // popupOpen,
-    // handlePopupClose,
+    popupOpen,
+    handlePopupClose,
     handleExcelDownload,
     handlePdfDownload,
     reversedRows,
@@ -174,6 +177,10 @@ const Booking = () => {
     setErrorMessage,
     setError,
     edit,
+    handleKeyEnterdriver,
+    vehileName,
+    selectedCustomerdriver
+    
   } = useBooking();
 
   console.log(rowdriver,"driver");
@@ -767,7 +774,7 @@ const Booking = () => {
                   }}
                 />
               </div>
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+              {/* <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
                 <div className="icone">
                   <TaxiAlertTwoToneIcon color="action" />
                 </div>
@@ -808,7 +815,7 @@ const Booking = () => {
                     );
                   }}
                 />
-              </div>
+              </div> */}
               <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
                 <div className="icone">
                   <AccountBalanceWalletTwoToneIcon color="action" />
@@ -2466,7 +2473,7 @@ const Booking = () => {
                   Hire.find((option) => option.Option)?.label ||
                   formData.hireTypes ||
                   selectedCustomerData.hireTypes ||
-                  book.hireTypes ||
+                  book.hireTypes ||selectedCustomerdriver.hireTypes||
                   ""
                 }
                 options={Hire.map((option) => ({
@@ -2476,7 +2483,7 @@ const Booking = () => {
                   option.label ||
                   formData.hireTypes ||
                   selectedCustomerData.hireTypes ||
-                  book.hireTypes ||
+                  book.hireTypes ||selectedCustomerdriver.hireTypes||
                   ""
                 }
                 renderInput={(params) => {
@@ -2520,17 +2527,18 @@ const Booking = () => {
                 value={
                   formData.vehRegNo ||
                   selectedCustomerData.vehRegNo ||
-                  book.vehRegNo ||
+                  book.vehRegNo || selectedCustomerdriver.vehRegNo||
                   ""
                 }
                 onChange={handleChange}
+                onKeyDown={handleKeyEnterdriver}
                 label="Vehicle Register No"
                 id="vehRegNo"
                 variant="standard"
               />
             </div>
             <div className="input">
-              <div className="icone">
+              {/* <div className="icone">
                 <CommuteIcon color="action" />
               </div>
               <TextField
@@ -2547,8 +2555,119 @@ const Booking = () => {
                 id="vehiclemodule"
                 variant="standard"
                 required
-              />
+              /> */}
+               <div className="icone">
+                    <PiCarSimpleFill color="action" />
+                  </div>
+
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={
+                      formData.vehiclemodule ||
+                      selectedCustomerData.vehiclemodule ||
+                      book.vehiclemodule || selectedCustomerdriver.vehiclemodule||
+                      ""
+                    }
+                    options={vehicaleinfos?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    // onChange={(event, value) => setVechiclebook((prevBook) => ({
+                    //   ...prevBook,
+                    //   "vechtype": value?.label,
+                    // }))}
+                    onChange={(event, value) =>
+                      handleAutocompleteChange(event, value, "vehiclemodule")
+                    }
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Vehicle Type" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                
             </div>
+            <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+                <div className="icone">
+                  <TaxiAlertTwoToneIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "vehType")
+                  }
+                  value={
+                    // vehileName.find((option) => option.carmodel)?.label ||
+                    formData.vehType ||
+                    selectedCustomerData.vehType ||
+                    book.vehType ||selectedCustomerdriver.vehType||
+                    ""
+                  }
+                  options={vehileName.map((option) => ({
+                    label: option,
+                  }))}
+                  getOptionLabel={(option) =>
+                    option.label ||
+                    formData.vehType ||
+                    selectedCustomerData.vehType ||
+                    book.vehType ||selectedCustomerdriver.vehType||
+                    ""
+                  }
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        {...params}
+                        // label="Vehicle Type"
+                        label="Vehicle Name"
+                        name="vehType"
+                        inputRef={params.inputRef}
+                      />
+                    );
+                  }}
+                />
+              </div>
+              <div className="input">
+                  <div className="icone">
+                    <EmailIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    // value={book?.Groups || selectedCustomerData?.Groups || ''}
+                    value={
+                      // vehileName.find((option) => option.carmodel)?.label ||
+                      formData.Groups ||
+                      selectedCustomerData.Groups ||
+                      book.Groups|| selectedCustomerdriver.Groups||
+                      ""
+                    }
+                    
+                    options={GroupTypes?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    // onChange={(event, value) => setVechiclebook((prevBook) => ({
+                    //   ...prevBook,
+                    //   "Groups": value?.label,
+                    // }))}
+                    onChange={(event, value) =>
+                      handleAutocompleteChange(event, value, "Groups")
+                    }
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
+                
 
             <div className="input">
               <div className="icone">
@@ -2560,10 +2679,11 @@ const Booking = () => {
                 value={
                   formData.driverName ||
                   selectedCustomerData.driverName ||
-                  book.driverName ||
+                  book.driverName || selectedCustomerdriver.driverName||
                   ""
                 }
                 onChange={handleChange}
+                onKeyDown={handleKeyEnterdriver}
                 label="Driver Name"
                 id="drivername"
                 variant="standard"
@@ -2579,7 +2699,7 @@ const Booking = () => {
                 value={
                   formData.mobileNo ||
                   selectedCustomerData.mobileNo ||
-                  book.mobileNo ||
+                  book.mobileNo || selectedCustomerdriver.mobileNo||
                   ""
                 }
                 onChange={handleChange}
@@ -2840,7 +2960,10 @@ const Booking = () => {
               }
             </div>
           </div>
-          <Dialog open={popupOpen} onClose={handlePopupClose}>
+          
+        </div> */}
+
+<Dialog open={popupOpen} onClose={handlePopupClose}>
             <DialogContent>
               Booking Number:
               <br /> <h1>{lastBookingNo}</h1>
@@ -2903,7 +3026,6 @@ const Booking = () => {
               <p>{successMessage}</p>
             </div>
           )}
-        </div> */}
 
 
 

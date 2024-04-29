@@ -20,14 +20,16 @@
   width: 100%;
   border-radius: 20px;
   height: 3px;
-  background-color: #457cdc;
+  /* background-color: #457cdc; */
+  background-color: #1976d2;
   /* Adjust color as needed */
 }
 
 .stationcreation-main .Title-Name {
-  font-size: 20px;
+  font-size: 18px;
   padding-left: 20px;
   font-weight: 500;
+  color: #1976d2;
 }
 
 .stationcreation-main .stationcreation-form-container {
@@ -40,7 +42,8 @@
   padding-top: 28px;
   border-radius: 20px;
   color: #000;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
+  background-color: #f0ece2;
 }
 
 @media screen and (min-width:970px) and (max-width:1240px) {
@@ -70,7 +73,7 @@
   border-top: solid 1px #ccc;
   background: var(--glass);
   padding: 10px;
-  margin-top: 10px;
+  margin-top: 0px !important;
   margin-bottom: -10px;
 }
 
@@ -102,7 +105,7 @@
 }
 
 .textboxlist-TripSheet .list-update::-webkit-scrollbar-thumb {
-  background-color: #457cdc;
+  background-color: #1976d2;
   width: 50px;
   cursor: pointer;
   border-radius: 20px;
@@ -132,4 +135,13 @@
   flex-wrap: wrap !important;
   justify-content: center;
 }
+}
+
+.station-creation-heading{
+  position: sticky;
+  top: -27px;
+  z-index: 5;
+  background-color: #f0ece2;
+  padding: 10px 10px 10px 10px ;
+  margin: 0px;
 }

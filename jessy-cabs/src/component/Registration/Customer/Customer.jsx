@@ -103,7 +103,10 @@ const Customer = () => {
     <div className="form-container">
       <div className="customer-form">
         <form onSubmit={handleClick}>
+          <p className="head-tab-customer">
           <span className="Title-Name">Customer</span>
+
+          </p>
           <div className="Customer-page-header">
             <div className="input-field Customer-page-input-field">
               <div className="input">

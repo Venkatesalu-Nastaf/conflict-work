@@ -207,6 +207,7 @@ const StationCreation = () => {
               </div>
             </div>
           </div>
+          <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
               <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -235,6 +236,7 @@ const StationCreation = () => {
               <p>{infoMessage}</p>
             </div>
           }
+          </div>
 
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial

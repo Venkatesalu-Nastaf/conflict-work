@@ -110,6 +110,7 @@ const Login = () => {
         <div className="right-col">
           <form className="portal"  >
             <div className="title">login</div>
+            <div className='alert-popup-main'>
             {error &&
               <div className='alert-popup Error' >
                 <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -138,6 +139,7 @@ const Login = () => {
                 <p>{infoMessage}</p>
               </div>
             }
+            </div>
             <div className="user-input">
               <input
                 type="text"
@@ -176,7 +178,7 @@ const Login = () => {
                 Login
               </button>
             </div>
-            <div className="social_media_container">
+            {/* <div className="social_media_container">
               <a href="/" className="social facebook">
                 <i>
                   <RiFacebookCircleFill />
@@ -192,7 +194,7 @@ const Login = () => {
                   <FaLinkedin />
                 </i>
               </a>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>

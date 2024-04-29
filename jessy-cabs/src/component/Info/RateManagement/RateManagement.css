@@ -1,0 +1,7 @@
+.head-tab-ratemanagemant{
+    position: sticky;
+    top: -28px;
+    z-index: 5;
+    background-color: #f0ece2;
+    padding: 10px 10px 0px 10px;
+}

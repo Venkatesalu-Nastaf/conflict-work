@@ -18,7 +18,8 @@
     flex-direction: column;
     padding: 20px;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
+    background-color: #f0ece2;
   }
   .form-container-Mailer {
     display: flex;
@@ -77,3 +78,10 @@
     overflow: auto !important;
   }
   
+
+  .head-tab-mailer{
+    position: sticky;
+    top: -28px;
+    z-index: 5;
+    background-color: #f0ece2;
+  }

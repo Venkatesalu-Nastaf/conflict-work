@@ -25,3 +25,10 @@
         font-size: 9px !important;
     }
 } */
+
+.head-tab{
+    position: sticky;
+    top: -19px;
+    z-index: 1;
+    background-color: #f0ece2;
+}

@@ -49,7 +49,8 @@
     padding-top: 20px;
     border-radius: 20px;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
+    background-color: #f0ece2;
   }
   .TripStatus-form .Title-Name {
     position: relative;
@@ -147,6 +148,14 @@ align-items: center;
       justify-content: space-around;
       /* gap: 2px; */
     }
+  }
+
+  .tripstatus-header{
+    top: -28px;
+    z-index: 5;
+    background-color: #f0ece2;
+    padding: 10px 10px 0px 10px;
+
   }
   
   

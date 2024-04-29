@@ -6,6 +6,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import DriverBataRate from './DriverBataRate/DriverBataRate';
 import PackageRateEntery from './PackageRateEntery/PackageRateEntery';
+import './RateManagement.css'
 
 const RateManagement = () => {
 
@@ -20,7 +21,7 @@ const RateManagement = () => {
       <div className="container-main">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-ratemanagemant">
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="Package Rate" value="packagerateentery" />
                 <Tab label="Driver Bata Rate" value="driverbatarate" />

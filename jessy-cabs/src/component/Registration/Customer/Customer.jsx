@@ -103,7 +103,10 @@ const Customer = () => {
     <div className="form-container">
       <div className="customer-form">
         <form onSubmit={handleClick}>
+          <p className="head-tab-customer">
           <span className="Title-Name">Customer</span>
+
+          </p>
           <div className="Customer-page-header">
             <div className="input-field Customer-page-input-field">
               <div className="input">
@@ -477,7 +480,7 @@ const Customer = () => {
                                         {/* <option value="" disabled>Select GST</option> */}
                                         <option value="" >None</option>
                                         <option value="5%">5%</option>
-                                        <option value="12.5%">12.5%</option>
+                                        <option value="12%">12%</option>
                                     </select>
               </div>
             </div>
@@ -535,6 +538,7 @@ const Customer = () => {
                 )}
               </div>
             </div>
+            <div className='alert-popup-main'>
             {error &&
               <div className='alert-popup Error' >
                 <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -563,6 +567,7 @@ const Customer = () => {
                 <p>{successMessage}</p>
               </div>
             }
+            </div>
             <div className="SpeedDial" style={{ padding: '26px',margin:'50px' }}>
               <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                 <StyledSpeedDial

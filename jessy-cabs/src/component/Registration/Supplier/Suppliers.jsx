@@ -19,7 +19,7 @@ const Suppliers = () => {
             <div className="container-main">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
-                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }} className ="head-tab">
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Accounting Info" className='tab-content' value="accounting_info" />
                                 <Tab label="Vehicle Info" className='tab-content' value="vehicle_info" />

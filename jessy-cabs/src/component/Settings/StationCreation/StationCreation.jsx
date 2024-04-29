@@ -89,7 +89,10 @@ const StationCreation = () => {
     <div className="stationcreation-main">
       <div className="stationcreation-form-container">
         <form action="">
-          <span className="Title-Name">Station Creation</span>
+        <p className="station-creation-heading">
+        <span className="Title-Name ">Station Creation</span>
+
+        </p>
           <div className="stationcreation-header">
             <div className="input-field station-creation-inputfeilds">
               <div className="input">

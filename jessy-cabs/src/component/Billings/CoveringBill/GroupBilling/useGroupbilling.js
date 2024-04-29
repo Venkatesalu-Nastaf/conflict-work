@@ -8,6 +8,7 @@ import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData'
 import { APIURL } from "../../../url";
 import { useLocation } from 'react-router-dom';
 import { ReferenceNo } from './RefenceNo';
+import { RefPdfData } from './GroupBillingContext';
 
 const useGroupbilling = () => {
     const apiUrl = APIURL;
@@ -42,6 +43,11 @@ const useGroupbilling = () => {
     const [particularId, setParticularId] = useState([])
     const [refInvNo, setRefInvNo] = useState('')
     const [refInvDate, setRefInvDate] = useState('')
+    const [refPdfData, setRefPdfData] = useState([])
+    const [refFromDate, setRefFromDate] = useState('')
+    const [refToDate, setRefToDate] = useState('')
+    const [gstno, setGstno] = useState('')
+    const {  setRefPdfPrint, setRefCustomer, setReferNo } = RefPdfData()
     // popup------------------------------
     const hidePopup = () => {
         setError(false);
@@ -78,7 +84,7 @@ const useGroupbilling = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const parameterKeys = [
-            "Tripid", "InvoiceNo", "InvoiceColumn", "InvoiceDate"
+            "Tripid", "InvoiceNo", "InvoiceColumn", "InvoiceDate", "FromDate", "ToDate", "ReferenceNo"
         ];
         const formData = {};
         parameterKeys.forEach(key => {
@@ -92,7 +98,8 @@ const useGroupbilling = () => {
         setGroupInvoiceNumber(formData.InvoiceNo)
         setGroupInvoice(formData.InvoiceColumn)
         setGroupInvoiceDate(formData.InvoiceDate)
-
+        setRefFromDate(formData.FromDate)
+        setRefToDate(formData.ToDate)
     }, [location])
 
 
@@ -131,6 +138,7 @@ const useGroupbilling = () => {
             .catch(() => {
             });
     }, [])
+
 
     useEffect(() => {
         if (error || success || warning) {
@@ -213,6 +221,8 @@ const useGroupbilling = () => {
                 setRefInvNo(RefInvoiceNo)
                 const RefInvDate = GroupReference.map((li) => li.InvoiceDate)
                 setRefInvDate(RefInvDate)
+                const ReferenceNo = GroupReference.map((li) => li.ReferenceNo)
+                setReferNo(ReferenceNo)
             }
             catch (err) {
 
@@ -226,8 +236,9 @@ const useGroupbilling = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            const id = particularId
             try {
-                const Tripresponse = await axios.get(`${apiUrl}/ParticularLists/${particularId}`);
+                const Tripresponse = await axios.get(`${apiUrl}/ParticularLists/${id}`);
                 const TripDetails = await Tripresponse.data;
 
                 const RefTripDetails = TripDetails.map(item => ({
@@ -235,9 +246,9 @@ const useGroupbilling = () => {
                     ...(groupInvoice && { InvoiceNo: refInvNo }), // Include InvoiceNo only if groupInvoice is true
                     ...{ InvoiceDate: refInvDate }
                 }));
+                setRows(RefTripDetails)
                 setSuccess(true)
                 setSuccessMessage("Successfully Listed")
-                setRows(RefTripDetails)
             } catch (error) {
                 console.error('Error fetching Trip data:', error);
             }
@@ -349,7 +360,6 @@ const useGroupbilling = () => {
 
     const handleButtonClickTripsheet = (params) => {
         const data = params.row;
-        console.log(data, 'data');
 
     };
 
@@ -372,14 +382,60 @@ const useGroupbilling = () => {
             })
             .filter((tripid) => tripid !== null);
 
-        const tripsheetid = selectedTripIds;
-        setRowSelectionModel(tripsheetid);
-        setRowSelectedValues(selectedTrips)
-        localStorage.setItem('selectedtripsheetid', tripsheetid);
-        const selectedRowCount = selectedTripIds.length;
 
-        localStorage.setItem('selectedrowcount', selectedRowCount);
+
+        const PdfSelectedTrips = newSelectionModel
+            .filter((selectedId) => selectedId !== null)
+            .map((selectedId) => {
+                const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+                return selectedRow ? selectedRow : null;
+            })
+            .filter((tripid) => tripid !== null);
+
+        const PdfSelectedcustomer = newSelectionModel
+            .filter((selectedId) => selectedId !== null)
+            .map((selectedId) => {
+                const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+                return selectedRow ? selectedRow.customer : null;
+            })
+            .filter((tripid) => tripid !== null);
+
+
+        setRowSelectionModel(PdfSelectedTrips);
+        setRowSelectedValues(selectedTrips)
+        setRefPdfData(PdfSelectedTrips)
+        setRefCustomer(PdfSelectedcustomer)
+        // localStorage.setItem('selectedtripsheetid', tripsheetid);
+        // const selectedRowCount = selectedTripIds.length;
+
+        // localStorage.setItem('selectedrowcount', selectedRowCount);
     };
+
+    const handlePopup = () => {
+        setRefPdfPrint(false)
+    }
+    const handleGstPdf = () => {
+        setRefPdfPrint(true)
+    }
+
+    console.log(rowSelectionModel, 'roww');
+    const handleRemoveData = async () => {
+        const selectedIds = rowSelectionModel.map(row => row.id);
+        const tripIds = rowSelectionModel.map(row => row.tripid);
+
+        try {
+            await axios.put(`${apiUrl}/statusupdate/${tripIds}`);
+            console.log('Status updated successfully');
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+
+        const updatedRows = rows.filter(row => !selectedIds.includes(row.id));
+        setRows(updatedRows);
+
+        setRowSelectionModel([]);
+    };
+
 
 
     const handlegroupData = async () => {
@@ -398,7 +454,7 @@ const useGroupbilling = () => {
         }
         try {
             const groupbillList = {
-                Status: "Billed",
+                status: "Billed",
                 InvoiceDate: InvoiceDate,
                 Customer: customer,
                 FromDate: FromDate,
@@ -407,13 +463,12 @@ const useGroupbilling = () => {
                 Amount: TotalAmount,
                 Trip_id: rowSelectionModel,
             };
-
             await axios.post(`${apiUrl}/GroupBillingList`, groupbillList);
             setSuccess(true)
             setSuccessMessage("Successfully Added")
             setRows([])
         } catch (err) {
-            console.log(err, "error");
+            console.log(err, "errordet");
         }
     }
 
@@ -455,8 +510,15 @@ const useGroupbilling = () => {
         handlegroupData,
         handleButtonClickTripsheet,
         referenceNo,
-        handleKeyDown
-
+        handleKeyDown,
+        handleGstPdf,
+        handlePopup,
+        refPdfData,
+        refFromDate,
+        refToDate,
+        gstno,
+        setGstno,
+        handleRemoveData
     };
 };
 

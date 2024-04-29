@@ -64,4 +64,17 @@ router.get('/customers', (req, res) => {
 });
 
 
+router.get('/gstdetails/:customer',(req,res)=>{
+  const customer = req.params.customer;
+  const sqlquery = "select gstTax from customers where customer=?";
+  db.query(sqlquery,[customer],(err,result)=>{
+    if(err){
+      console.log(err,'error');
+    }
+    return res.status(200).json(result);
+
+  })
+})
+
+
 module.exports = router;

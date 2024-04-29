@@ -480,7 +480,7 @@ const Customer = () => {
                                         {/* <option value="" disabled>Select GST</option> */}
                                         <option value="" >None</option>
                                         <option value="5%">5%</option>
-                                        <option value="12.5%">12.5%</option>
+                                        <option value="12%">12%</option>
                                     </select>
               </div>
             </div>
@@ -538,6 +538,7 @@ const Customer = () => {
                 )}
               </div>
             </div>
+            <div className='alert-popup-main'>
             {error &&
               <div className='alert-popup Error' >
                 <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -566,6 +567,7 @@ const Customer = () => {
                 <p>{successMessage}</p>
               </div>
             }
+            </div>
             <div className="SpeedDial" style={{ padding: '26px',margin:'50px' }}>
               <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                 <StyledSpeedDial

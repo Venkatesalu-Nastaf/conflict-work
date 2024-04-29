@@ -183,6 +183,7 @@ const Organization = () => {
                                         </IconButton>
                                     </div>
                                 )}
+                                <div className='alert-popup-main'>
                                 {error &&
                                     <div className='alert-popup Error' >
                                         <div className="popup-icon"> <ClearIcon styleName={{ color: '#fff' }} /> </div>
@@ -204,6 +205,7 @@ const Organization = () => {
                                         <p>{warningMessage}</p>
                                     </div>
                                 }
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -450,7 +452,7 @@ const Organization = () => {
 
                     </div>
                     
-                  
+                  <div className='alert-popup-main'>
                     {info &&
                         <div className='alert-popup Info' >
                             <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
@@ -458,6 +460,7 @@ const Organization = () => {
                             <p>{infoMessage}</p>
                         </div>
                     }
+                    </div>
                 </div>
             </form>
         </div>

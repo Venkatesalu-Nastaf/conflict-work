@@ -989,6 +989,7 @@ const Vehicaleinfo = () => {
           </div>
         </div>
 
+        <div className='alert-popup-main'>
         {error && <div className='alert-popup Error' >
           <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
           <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
@@ -1015,6 +1016,7 @@ const Vehicaleinfo = () => {
             <p>{successMessage}</p>
           </div>
         }
+        </div>
 
         <div className="detail-container-main">
           <div className="container-left">

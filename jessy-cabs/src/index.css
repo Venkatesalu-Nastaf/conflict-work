@@ -83,9 +83,16 @@ body {
 }
 
 .alert-popup-main{
-  position: absolute;
-  top: 39px;
+  position: fixed;
+  top: 60px;
   right: 55px;
+  z-index: 9999;
+}
+
+@media screen and (max-width: 490px) {
+  .alert-popup-main{
+    right: -40px;
+  }
 }
 
 .alert-popup {

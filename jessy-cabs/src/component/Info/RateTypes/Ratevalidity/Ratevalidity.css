@@ -66,12 +66,19 @@
 }
 
 .copy-title-btn-RateValidity {
-    width: 100%;
+    /* width: 100%; */
     margin-top: 30px;
     background-color: var(--glass);
     padding: 20px 20px;
     border: 2px solid #ccc;
     border-radius: 15px;
+}
+
+@media screen and (max-width: 375px) {
+    .detail-container-main .container-left {
+        position: relative;
+        left: 14px !important;
+    }
 }
 
 .RateValidity-form .Title-Name::after {

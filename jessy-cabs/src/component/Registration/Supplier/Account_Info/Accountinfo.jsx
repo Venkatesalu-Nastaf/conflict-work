@@ -382,6 +382,7 @@ const Accuntinfo = () => {
             )}
           </div>
         </div>
+        <div className='alert-popup-main'>
         {error &&
           <div className='alert-popup Error' >
             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -410,6 +411,7 @@ const Accuntinfo = () => {
             <p>{successMessage}</p>
           </div>
         }
+        </div>
         <div className="SpeedDial" style={{ "paddingTop": "96px" }}>
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial

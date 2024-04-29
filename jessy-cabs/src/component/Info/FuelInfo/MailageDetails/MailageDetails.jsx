@@ -285,6 +285,7 @@ const MailageDetails = () => {
                 {mileage.toFixed(2)} km/L
               </p>
             </div>
+            <div className='alert-popup-main'>
             {error &&
               <div className='alert-popup Error' >
                 <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -313,6 +314,7 @@ const MailageDetails = () => {
                 <p>{infoMessage}</p>
               </div>
             }
+            </div>
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>
               <StyledSpeedDial
                 ariaLabel="SpeedDial playground example"

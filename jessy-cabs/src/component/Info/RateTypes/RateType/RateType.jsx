@@ -286,6 +286,7 @@ const RateType = () => {
                         </div>
                     </div>
                 </div>
+                <div className='alert-popup-main'>
                 {error &&
                     <div className='alert-popup Error' >
                         <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -314,6 +315,7 @@ const RateType = () => {
                         <p>{infoMessage}</p>
                     </div>
                 }
+                </div>
                 <div className="Download-btn">
                     <PopupState variant="popover" popupId="demo-popup-menu">
                         {(popupState) => (

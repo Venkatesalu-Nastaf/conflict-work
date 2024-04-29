@@ -1,0 +1,9 @@
+
+
+.head-tab-booking {
+    position: sticky;
+    top: -28px;
+    z-index: 5;
+    padding: 10px 10px 0px 10px;
+    background-color: #f0ece2;
+}

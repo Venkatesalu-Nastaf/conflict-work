@@ -96,6 +96,7 @@ const AppUserList = () => {
           </div>
         </div>
 
+        <div className='alert-popup-main'>
         {error &&
           <div className='alert-popup Error' >
             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -124,6 +125,7 @@ const AppUserList = () => {
             <p>{infoMessage}</p>
           </div>
         }
+        </div>
         <div className="table-bookingCopys">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid

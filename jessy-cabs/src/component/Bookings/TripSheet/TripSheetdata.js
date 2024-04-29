@@ -18,6 +18,25 @@ export const Status = [
   }
 ];
 
+export const GroupTypes = [
+  {
+    Option: "Luxzury",
+    // optionvalue: "a/c",
+  },
+  {
+    Option: "Normal",
+    // optionvalue: "non_a/c",
+  },
+  {
+    Option: "Premium",
+    // optionvalue: "a/c",
+  },
+  {
+    Option: "Non-Premium",
+    // optionvalue: "non_a/c",
+  },
+];
+
 // Apps
 
 export const Apps = [

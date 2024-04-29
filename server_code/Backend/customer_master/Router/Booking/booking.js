@@ -156,7 +156,7 @@ router.get('/drivername-details/:driver', (req, res) => {
         
     let vehderivername= result.map(obj => obj.driverName);
     
-    console.log(vehderivername,"name")
+    // console.log(vehderivername,"name")
     db.query('select Mobileno,driverName from drivercreation where driverName in (?)',[vehderivername],(err,result1)=>{
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
@@ -164,7 +164,7 @@ router.get('/drivername-details/:driver', (req, res) => {
         if (result1.length === 0) {
             return res.status(404).json({ error: 'Customer not found' });
         }
-        console.log(result1,"da")
+        // console.log(result1,"da")
         const vehicleDataname= {};
 
       result1.forEach(row => {
@@ -178,7 +178,7 @@ router.get('/drivername-details/:driver', (req, res) => {
         obj.driverno= vehicle? vehicle.MobileNo : 'Unknown'; // Set default value if fueltype not found
     
       }); 
-      console.log(result)
+    //   console.log(result)
         return res.status(200).json(result);
     })
    
@@ -350,6 +350,7 @@ router.get('/table-for-booking', (req, res) => {
             'travelsemail',
             'triptime',
             'tripdate',
+            'Groups'
         ];
 
         const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');

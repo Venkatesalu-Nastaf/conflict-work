@@ -14,62 +14,62 @@ router.post('/billing', (req, res) => {
   });
 });
 
-router.post('/GroupBillingList',(req,res)=>{
-  const {Status,InvoiceDate,Customer,FromDate,ToDate,Trips,Amount,Trip_id} = req.body
-  const sqlquery = "insert into Group_billing(Status,InvoiceDate,Customer,FromDate,ToDate,Trips,Amount,Trip_id) values (?,?,?,?,?,?,?,?)";
-  const sqlquery1 = `Update tripsheet set status = 'Billed' where tripid IN (?)`
-  const idString = Trip_id.join(',');
-  db.query(sqlquery,[Status,InvoiceDate,Customer,FromDate,ToDate,Trips,Amount,idString], (err, result) => {
+router.post('/GroupBillingList', (req, res) => {
+  const { status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id } = req.body;
+
+  const sqlquery = "INSERT INTO Group_billing(Status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  const sqlquery1 = "UPDATE tripsheet SET status = 'Billed' WHERE tripid IN (?)";
+
+  db.query(sqlquery, [status, InvoiceDate, Customer, FromDate, ToDate, Trips, Amount, Trip_id.join(',')], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: 'Failed to retrieve  from MySQL' });
+      return res.status(500).json({ error: 'Failed to insert into MySQL' });
     }
-    if(result.affectedRows>=1){
-    db.query(sqlquery1,[idString],(err,result1) =>{
 
-      if(err){
-        return res.status(500).json({ error: 'Failed to retrieve  from MySQL' });
-      }
-    })
-    return res.status(200).json({ message: 'inserted successfully' });
 
-  }
-    return res.status(200).json({ message: 'inserted successfully' });
+    if (result.affectedRows >= 1) {
+      db.query(sqlquery1, [Trip_id], (err, result1) => {
+        if (err) {
+          return res.status(500).json({ error: 'Failed to update tripsheet status in MySQL' });
+        }
+
+
+        return res.status(200).json({ message: 'Inserted and updated successfully' });
+      });
+    }
   });
- 
-
-})
+});
 
 
-router.get('/ListDetails',(req,res)=>{
-  const {Customer,FromDate,ToDate} = req.query;
+router.get('/ListDetails', (req, res) => {
+  const { Customer, FromDate, ToDate } = req.query;
   const sqlquery = "SELECT * FROM Group_billing WHERE Customer = ? AND FromDate >= ? AND FromDate <= ?";
-  db.query(sqlquery,[Customer,FromDate,ToDate],(err,result)=>{
-         if(err){
-          console.log(err,'error');
-         }
-         return res.status(200).json(result)
-         
+  db.query(sqlquery, [Customer, FromDate, ToDate], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+    }
+    return res.status(200).json(result)
+
   })
 
 })
 
 
-router.get('/ReferenceNo',(req,res)=>{
+router.get('/ReferenceNo', (req, res) => {
   const sqlquery = "select ReferenceNo from Group_billing";
-  db.query(sqlquery,(err,result)=>{
-    if(err){
-      console.log(err,'error');
+  db.query(sqlquery, (err, result) => {
+    if (err) {
+      console.log(err, 'error');
     }
     return res.status(200).json(result)
   })
 })
 
-router.get('/GroupReference/:ReferenceNo',(req,res)=>{
+router.get('/GroupReference/:ReferenceNo', (req, res) => {
   const ReferenceNo = req.params.ReferenceNo;
   const sqlquery = "select * from Group_billing where ReferenceNo = ?";
-  db.query(sqlquery,[ReferenceNo],(err,result)=>{
-    if(err){
-      console.log(err,'error');
+  db.query(sqlquery, [ReferenceNo], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
     }
     return res.status(200).json(result)
   })
@@ -106,6 +106,16 @@ router.put('/billing/:tripid', (req, res) => {
   });
 });
 
+router.put('/statusupdate/:tripid',(req,res)=>{
+  const tripid = req.params.tripid;
+db.query('update tripsheet set status="Closed",apps="Be_Closed" where tripid=?',[tripid],(err,result)=>{
+  if (err) {
+    return res.status(500).json({ error: "Failed to update data in MySQL" });
+  }
+  return res.status(200).json({ message: "Data updated successfully" });
+
+})
+})
 // collect data for Billing table
 router.get('/billing', (req, res) => {
   db.query('SELECT * FROM billing', (err, results) => {
@@ -178,10 +188,11 @@ router.get('/routedata/:tripid', (req, res) => {
 });
 
 
-router.get('/ParticularLists/:tripno',(req,res)=>{
-  const tripno  = req.params.tripno;
+router.get('/ParticularLists/:tripno', (req, res) => {
+  const tripno = req.params.tripno;
+
   const tripIds = tripno.split(',');
-  const query = `SELECT * FROM tripsheet WHERE Status="Billed" AND tripid IN (?)`;
+  const query = `SELECT * FROM tripsheet WHERE status="Billed" AND tripid IN (?)`;
   db.query(query, [tripIds], (err, result) => {
     if (err) {
       console.error(err);
@@ -194,12 +205,12 @@ router.get('/ParticularLists/:tripno',(req,res)=>{
 
 //cover billing
 router.get('/Group-Billing', (req, res) => {
-  const {  customer, fromDate, toDate  } = req.query;
+  const { customer, fromDate, toDate } = req.query;
 
   let query = 'SELECT * FROM tripsheet WHERE  apps="Be_Closed" and status="Closed" and customer=?  AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
 
 
-  db.query(query, [customer, fromDate, toDate ], (err, result) => {
+  db.query(query, [customer, fromDate, toDate], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
     }

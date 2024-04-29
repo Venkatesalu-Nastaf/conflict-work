@@ -108,6 +108,10 @@ export const Status = [
     option: "Billed",
     optionvalue: "Billed",
   },
+  {
+    option: "pending",
+    optionvalue: "pending",
+  },
   // {
   //   option: "Be_Closed",
   //   optionvalue: "Be_Closed",

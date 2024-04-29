@@ -240,9 +240,13 @@ router.post('/tripsheet-add', (req, res) => {
         }
 
         if (result.affectedRows > 0) {
-            db.query(`UPDATE booking SET status = "Opened" WHERE bookingno=${bookingno}; `)
-        }
+            if(status === "Opened" || status === "Cancelled"){
+
+            db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${bookingno}; `)
+            }
+        
         return res.status(200).json({ message: "Data inserted successfully" });
+        }
     });
 });
 
@@ -489,9 +493,17 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }
         if (result.affectedRows === 0) {
+        
             return res.status(404).json({ error: "Customer not found" });
         }
+        if (result.affectedRows > 0) {
+            if(status === "Opened" || status === "Cancelled"){
+            db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${bookingno}; `)
+            }
+        
+       
         return res.status(200).json({ message: "Data updated successfully" });
+        }
     });
 });
 

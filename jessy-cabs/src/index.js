@@ -8,6 +8,7 @@ import { UserProvider } from './component/form/UserContext';
 import { DataProvider } from './component/Dashboard/Maindashboard/DataContext'
 import { DataProvider2 } from './component/Dashboard/MainDash/Sildebar/DataContext2'
 import { PdfDataProvider } from "./component/Billings/Transfer/TransferReport/PdfContext";
+import { RefPdfDataProvider } from "./component/Billings/CoveringBill/GroupBilling/GroupBillingContext";
 import { MailerTemplateDataProvider } from "./component/Info/Mailer/MailerContext";
 
 
@@ -15,6 +16,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <RefPdfDataProvider>
     <PdfDataProvider>
     <MailerTemplateDataProvider>
 
@@ -32,6 +34,7 @@ root.render(
       </MailerTemplateDataProvider>
 
       </PdfDataProvider>
+      </RefPdfDataProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

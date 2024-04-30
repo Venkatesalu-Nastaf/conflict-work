@@ -15,7 +15,7 @@ import { StationName } from "./EmployeeCreationData";      //Branch Name
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import Avatar from "../../../../assets/img/avatar.png"
-import {UserPermission} from '../../../UserPermission/UserPermission'
+import { UserPermission } from '../../../UserPermission/UserPermission'
 
 //material ui
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -236,32 +236,7 @@ const EmployeeCreation = () => {
                   />
                 </FormControl>
               </div>
-              {/* <div className="input" style={{ width: "240px" }}>
-                <div className="icone">
-                  <FontAwesomeIcon icon={faLock} size="lg" />
-                </div>
-                <FormControl sx={{ m: 1, width: '35ch' }} variant="standard">
-                  <InputLabel htmlFor="confirm-password">Confirm Password</InputLabel>
-                  <Input
-                    name="userconfirmpassword"
-                    value={ book.userconfirmpassword}
-                    onChange={handleChange}
-                    id="confirm-password"
-                    type={showPassword ? 'text' : 'password'}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="confirm-password"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </div> */}
+
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -295,9 +270,7 @@ const EmployeeCreation = () => {
                 )}
               </div>
             </div>
-            {/* <div className="input-field employee-creation-inputfeilds">
-            
-            </div> */}
+
           </div>
           {error &&
             <div className='alert-popup Error' >
@@ -347,20 +320,10 @@ const EmployeeCreation = () => {
             </StyledSpeedDial>
           </Box>
 
-
-
-
-
-
-
-
-
-
-
-          <div className="EmployeeCreation-table-container" style={{marginTop: '20px'}}>
+          <div className="EmployeeCreation-table-container" style={{ marginTop: '20px' }}>
             <div className='search-profile'>
 
-              <div className="search-input-container" style={{marginBottom: '20px'}}>
+              <div className="search-input-container" style={{ marginBottom: '20px' }}>
 
                 <TextField
                   id="search-input"
@@ -372,49 +335,58 @@ const EmployeeCreation = () => {
                     endAdornment: <AiOutlineSearch />,
                   }}
                 />
-                <div>
 
-                  <div className='user-table-permission'  onClick={togglePermission}>
-                        <img src={Avatar} alt="profile" width="50"/>
-                      <div>
-                        <h3 className="user-name-text">Ajay</h3>
-                        <p className="user-details-text">frontend Developer</p>
-                      </div>
-                </div>
 
-                <div className='user-table-permission'>
-                        <img src={Avatar} alt="profile" width="50"/>
-                      <div>
-                        <h3 className="user-name-text">Ajay</h3>
-                        <p className="user-details-text">frontend Developer</p>
-                      </div>
-                </div>
+                {rows.map((row, index) => (
 
-                <div className='user-table-permission'>
-                        <img src={Avatar} alt="profile" width="50"/>
-                      <div>
-                        <h3 className="user-name-text">Ajay</h3>
-                        <p className="user-details-text">frontend Developer</p>
-                      </div>
-                </div>
+                  <div className='user-table-permission' onClick={togglePermission} id={index}>
+                    <img src={Avatar} alt="profile" width="50" />
+                    <div>
+                      <h3 className="user-name-text">{row.username}</h3>
+                      <p className="user-details-text">{row.designation}</p>
+                    </div>
+                  </div>
 
-                <div className='user-table-permission'>
-                        <img src={Avatar} alt="profile" width="50"/>
-                      <div>
-                        <h3 className="user-name-text">Ajay</h3>
-                        <p className="user-details-text">frontend Developer</p>
-                      </div>
-                </div>
-</div>
-          
-    
+                ))}
 
-         
+                {/* <div>
+
+                  <div className='user-table-permission' onClick={togglePermission}>
+                    <img src={Avatar} alt="profile" width="50" />
+                    <div>
+                      <h3 className="user-name-text">Ajay</h3>
+                      <p className="user-details-text">frontend Developer</p>
+                    </div>
+                  </div>
+
+                  <div className='user-table-permission'>
+                    <img src={Avatar} alt="profile" width="50" />
+                    <div>
+                      <h3 className="user-name-text">Ajay</h3>
+                      <p className="user-details-text">frontend Developer</p>
+                    </div>
+                  </div>
+
+                  <div className='user-table-permission'>
+                    <img src={Avatar} alt="profile" width="50" />
+                    <div>
+                      <h3 className="user-name-text">Ajay</h3>
+                      <p className="user-details-text">frontend Developer</p>
+                    </div>
+                  </div>
+
+                  <div className='user-table-permission'>
+                    <img src={Avatar} alt="profile" width="50" />
+                    <div>
+                      <h3 className="user-name-text">Ajay</h3>
+                      <p className="user-details-text">frontend Developer</p>
+                    </div>
+                  </div>
+                </div> */}
+
               </div>
 
-
-           {showPermission && <UserPermission />}
-
+              {showPermission && <UserPermission />}
 
             </div>
 

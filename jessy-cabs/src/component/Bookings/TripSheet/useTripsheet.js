@@ -329,8 +329,10 @@ const useTripsheet = () => {
 
           console.log(formData['status'],"form")
 
-        // Check if dispatchcheck is true
+        // Check if dispatchcheck is 
+        
         if (formData['dispatchcheck'] === 'true' && formData['status']=== "pending") {
+           formData['status']="Opened"
             setIsEditMode(false);
         } else {
             setIsEditMode(true);

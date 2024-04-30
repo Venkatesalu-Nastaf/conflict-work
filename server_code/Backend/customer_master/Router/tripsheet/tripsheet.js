@@ -249,7 +249,7 @@ router.post('/tripsheet-add', (req, res) => {
 
             db.query(`UPDATE booking SET status = 'Opened' WHERE bookingno=${bookingno}; `,(err,result5)=>{
                 if (err) {
-                    console.log(error)
+                    console.log(err)
                     return res.status(500).json({ error: "Failed to insert data into MySQL" });
                 }
                 if (result.affectedRows > 0) {

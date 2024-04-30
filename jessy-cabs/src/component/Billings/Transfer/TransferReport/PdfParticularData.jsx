@@ -3,6 +3,7 @@ import { APIURL } from "../../../url";
 import './PdfParticularData.css'
 import generatePDF from 'react-to-pdf';
 import { PdfData } from "./PdfContext";
+import dayjs from "dayjs";
 
 const PdfParticularData = ({addressDetails,particularPdf,organisationdetail,imagename,tripno})=>{
     console.log(tripno,"tri",organisationdetail,"org",particularPdf,'modelapdf',typeof(particularPdf),Array.isArray(particularPdf));
@@ -31,6 +32,29 @@ const PdfParticularData = ({addressDetails,particularPdf,organisationdetail,imag
     const [GmapimageUrl, setGMapImageUrl] = useState('');
     const [attachedImage, setAttachedImage] = useState('');
     const [routeData, setRouteData] = useState('');
+    const [request, setRequest] = useState('')
+    const [calcpackage, setCalcPackages] = useState('')
+    const [report, setReport] = useState('')
+    const [dropaddress, setDropAddress] = useState('')
+    const [segment, setSegement] = useState('')
+    const [department, setDepartment] = useState('')
+    const [escort, setEscort] = useState('')
+    const [Tripidno, setTripidno] = useState('')
+    const [tripsheetdate, setTripsheetdate] = useState('')
+    const [tripStartDate, setTripStartDate] = useState('')
+    const [tripCloseDate, setTripCloseDate] = useState('')
+    const [tripReporttime, setTripReporttime] = useState('')
+    const [tripClosetime, setTripClosetime] = useState('')
+    const [triptotaldays, setTripTotalDays] = useState('')
+    const [triptotaltime, setTripTotalTime] = useState('')
+    const [triptotalkms, setTriptotalKms] = useState('')
+    const [totalpermit, setTotalpermit] = useState('')
+    const [totaltoll, setTotaltoll] = useState('')
+    const [totalparking, setTotalParking] = useState('')
+    const [tripCustomercode, setTripCustomercode] = useState('')
+    const [category, setCategory] = useState('')
+  
+    
     const [remark,setRemark] = useState('')
     const apiUrl = APIURL;
     const organisationimage=imagename
@@ -68,6 +92,28 @@ const PdfParticularData = ({addressDetails,particularPdf,organisationdetail,imag
         let drivernames = ''
         let remarks = ''
         let driverMobNo = ''
+        let request = ''
+    let packages = ''
+
+    let Dropaddress = ''
+    let Report = ''
+    let Segment = ''
+    let Department = ''
+    let Escort = ''
+    let Tripid = ''
+    let Tripdate = ''
+    let Tripstartdate = ''
+    let TripClosedate = ''
+    let Reporttime = ''
+    let CloseTime = ''
+    let Totaldays = ''
+    let Totaltime = ''
+    let Totalkms = ''
+    let TotalParking = ''
+    let TotalToll = ''
+    let TotalPermit = ''
+    let CustomerCode = ''
+    let Categorygroups = ''
           if (Array.isArray(particularPdf)) {
             particularPdf.forEach((li) => {
     addressone = li.address1
@@ -84,8 +130,32 @@ const PdfParticularData = ({addressDetails,particularPdf,organisationdetail,imag
     drivernames = li.driverName
     remarks = li.remark
     driverMobNo = li.mobile
+    request = li.request
+
+    packages = li.calcPackage
+    Dropaddress = li.useage
+    Report = li.report
+    Segment = li.segement
+    Department = li.department
+    Escort = li.escort
+    Tripid = li.tripid
+    Tripdate = li.tripsheetdate
+    Tripstartdate = li.startdate
+    TripClosedate = li.closedate
+    Reporttime = li.reporttime
+    CloseTime = li.closetime
+    Totaldays = li.totaldays
+    Totaltime = li.totaltime
+    Totalkms = li.totalkm1
+    TotalParking = li.parking
+    TotalToll = li.toll
+    TotalPermit = li.permit
+    CustomerCode = li.customercode
+    Categorygroups = li.Groups
+
 })
           }
+          console.log(segment,"seg")
 setAddress1(addressone)
 setAddress2(addresstwo)
 setAddress3(addressthree)
@@ -100,6 +170,32 @@ setVehicleno(vehno)
 setRemark(remarks)
 setDrivername(drivernames)
 setDrivermobile(driverMobNo)
+setRemark(remarks)
+setDrivername(drivernames)
+setDrivermobile(driverMobNo)
+
+setRequest(request)
+setReport(Report)
+setDropAddress(Dropaddress)
+setSegement(Segment)
+setDepartment(Department)
+setEscort(Escort)
+setTripidno(Tripid)
+setTripsheetdate(Tripdate)
+setTripStartDate(Tripstartdate)
+setTripCloseDate(TripClosedate)
+setTripReporttime(Reporttime)
+setTripClosetime(CloseTime)
+setTripTotalDays(Totaldays)
+setTripTotalTime(Totaltime)
+setTriptotalKms(Totalkms)
+setTotalParking(TotalParking)
+setTotalpermit(TotalPermit)
+setTotaltoll(TotalToll)
+setTripCustomercode(CustomerCode)
+setCategory(Categorygroups)
+
+setCalcPackages(packages)
         },[particularPdf])
 
     // useEffect(() => {
@@ -238,31 +334,31 @@ setPdfPrint(false)
              
                <p className="detailstext"><span className="labeltag">Client Name </span><p className="colontag">:</p> <span className="clientName">{customer}</span></p>
                <p className="detailstext"><span className="labeltag">Address </span><p className="colontag">:</p><span className="clientName">{address1}, {address3}{'\n'}{address2}</span></p>
-                 <p className="detailstext"><span className="labeltag">Category </span><p className="colontag">:</p><span className="clientName"></span></p>
+                 <p className="detailstext"><span className="labeltag">Category </span><p className="colontag">:</p><span className="clientName">{category}</span></p>
                  <p className="detailstext"> <span className="labeltag">Fuel Type </span><p className="colontag">:</p><span className="clientName">{fuel}</span></p>
                  <p className="detailstext"> <span className="labeltag">Emp.No </span><p className="colontag">:</p><span className="clientName">{empno}</span></p>
                  <p className="detailstext"><span className="labeltag">Emp.Name </span ><p className="colontag">:</p><span className="clientName"> {guestname}</span></p>
                  <p className="detailstext"><span className="labeltag">Report Add</span><p className="colontag">:</p><span></span></p>
                  <p className="detailstext"><span className="labeltag">Client Mobile</span><p className="colontag">:</p><span className="clientName">{customermobile}</span></p>
-                 <p className="detailstext"><span className="labeltag">Drop Address</span><p className="colontag">:</p><span></span></p>
+                 <p className="detailstext"><span className="labeltag">Drop Address</span><p className="colontag">:</p><span>{dropaddress}</span></p>
             </div>
             <div className="clientSecondDiv">
-             <p className="detailstext"><span className="labeltagsecond">Escort Route </span><p className="colontag">:</p><span >No</span> </p>
-             <p className="detailstext"> <span className="labeltagsecond">Airport Transfer</span><p className="colontag">:</p><span>No</span> </p>
-             <p className="detailstext"><span className="labeltagsecond">CCode </span><p className="colontag">:</p><span>No</span> </p>
+             <p className="detailstext"><span className="labeltagsecond">Escort Route </span><p className="colontag">:</p><span >{escort}</span> </p>
+             <p className="detailstext"> <span className="labeltagsecond">Airport Transfer</span><p className="colontag">:</p><span>{report === "APT" ? "Yes" : "No"}</span> </p>
+             <p className="detailstext"><span className="labeltagsecond">CCode </span><p className="colontag">:</p><span>{tripCustomercode ? tripCustomercode : 'No'}</span> </p>
             </div>
             <div>
-              <p className="detailstext"><span className="labeltag">Log No</span><p className="colontag">:</p></p>
-              <p className="detailstext"><span className="labeltag">Date</span><p className="colontag">:</p></p>
+              <p className="detailstext"><span className="labeltag">Log No</span><p className="colontag">:</p>{Tripidno}</p>
+              <p className="detailstext"><span className="labeltag">Date</span><p className="colontag">:</p>{tripsheetdate ? dayjs(tripsheetdate).format('DD/MM/YYYY') : ""}</p>
               <p className="detailstext"><span className="labeltag">Duty Type  </span><p className="colontag">:</p><span className="clientName">{duty}</span> </p>
               <p className="detailstext"><span className="labeltag">Vehicle Type  </span><p className="colontag">:</p><span className="clientName">{vehicletype}</span> </p>
               <p className="detailstext"><span className="labeltag">Vehicle No  </span><p className="colontag">:</p><span className="clientName">{vehicleno}</span></p>
               <p className="detailstext"><span className="labeltag">Driver Name  </span><p className="colontag">:</p><span className="clientName">{drivername}</span></p>
               <p className="detailstext"><span className="labeltag">Driver Mobile</span><p className="colontag">:</p><span className="clientName">{drivermobile}</span></p>
-              <p className="detailstext"><span className="labeltag">Request No</span><p className="colontag">:</p></p>
-              <p className="detailstext"><span className="labeltag">Service City</span><p className="colontag">:</p></p>
-              <p className="detailstext"><span className="labeltag">Package</span><p className="colontag">:</p></p>
-              <p className="detailstext"><span className="labeltag">Segment</span><p className="colontag">:</p></p>
+              <p className="detailstext"><span className="labeltag">Request No</span><p className="colontag">:</p>{request}</p>
+              <p className="detailstext"><span className="labeltag">Service City</span><p className="colontag">:</p>{department}</p>
+              <p className="detailstext"><span className="labeltag">Package</span><p className="colontag">:</p>{calcpackage}</p>
+              <p className="detailstext"><span className="labeltag">Segment</span><p className="colontag">:</p>{segment}</p>
             </div>
            </div>
            <div className="remarksdiv">
@@ -281,41 +377,41 @@ setPdfPrint(false)
                 </thead>
                 <tbody>
                 <tr>
-                    <td>Closing</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-
-
-                </tr>
-                <tr>
-                    <td>Releasing</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>Starting</td>
+                    <td>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</td>
+                    <td>{'-'}</td>
+                    <td>{'-'}</td>
 
 
                 </tr>
                 <tr>
                     <td>Reporting</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</td>
+                    <td>{tripReporttime ? tripReporttime : 0.00}</td>
+                    <td>{'-'}</td>
+
 
                 </tr>
                 <tr>
-                    <td> Starting </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>Releasing</td>
+                    <td>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</td>
+                    <td>{tripClosetime}</td>
+                    <td>{triptotalkms}</td>
+
+                </tr>
+                <tr>
+                    <td> Closing </td>
+                    <td>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</td>
+                    <td>{'-'}</td>
+                    <td>{'-'}</td>
 
                    
                 </tr>
                 <tr>
                     <td>Total </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{triptotaldays ? triptotaldays : 0}</td>
+                    <td>{triptotaltime ? triptotaltime : 0.00}</td>
+                    <td>{triptotalkms ? triptotalkms : 0}</td>
 
                    
                 </tr>
@@ -331,9 +427,9 @@ setPdfPrint(false)
            </div>
            <div>
             <div className="parkingdiv">
-                <p>Total Parking</p>
-                <p>Total Permit</p>
-                <p>Total Fastag/Toll</p>
+                <p>Total Parking :{totalparking ? totalparking : 0}</p>
+                <p>Total Permit :{totalpermit ? totalpermit : 0}</p>
+                <p>Total Fastag/Toll:{totaltoll ? totaltoll : 0}</p>
 
             </div>
             <div>
@@ -359,6 +455,7 @@ setPdfPrint(false)
  : 
   <div></div>
 }
+
 
            </div>
          

@@ -76,10 +76,10 @@
 }
 
 @media screen and (max-width: 1200px) {
-  .glass {
+  /* .glass { */
     /* grid-template-columns: 10% 50% auto; */
     /* overflow-y: scroll; */
-  }
+  /* } */
 
   .dash-board {
     background-image: url("https://images.pexels.com/photos/5845709/pexels-photo-5845709.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");

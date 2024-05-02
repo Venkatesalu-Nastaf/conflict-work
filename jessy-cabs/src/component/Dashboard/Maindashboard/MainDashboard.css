@@ -63,7 +63,7 @@
 
 .glass {
   display: grid;
-  height: 97%;
+  height: 95%;
   width: 97%;
   /* background: var(--glass); */
   backdrop-filter: blur(5px);
@@ -72,16 +72,18 @@
   gap: 16px;
   grid-template-columns: 11rem auto 20rem;
   overflow: hidden;
+  padding-bottom: 20px;
 }
 
 @media screen and (max-width: 1200px) {
   .glass {
     /* grid-template-columns: 10% 50% auto; */
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
   }
 
   .dash-board {
     background-image: url("https://images.pexels.com/photos/5845709/pexels-photo-5845709.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+    overflow: hidden;
   }
 }
 
@@ -106,7 +108,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 5px;
+  margin: 5px 5px 20px 5px;
   padding: 0px 10px;
   right: 30px;
   border-radius: 10px;
@@ -147,6 +149,7 @@
 .logout-icon {
   cursor: pointer;
   color: #000;
+  font-size: 25px;
 }
 
 .cards-container .card-filter {

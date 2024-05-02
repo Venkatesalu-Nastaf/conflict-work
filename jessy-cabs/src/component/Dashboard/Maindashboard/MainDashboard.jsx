@@ -15,6 +15,10 @@ import Button from "@mui/material/Button";
 import { useData } from "./DataContext"; //- data contaxt
 import Logo from "../../../assets/img/logonas.png"
 import { PiWarningCircleBold } from "react-icons/pi";
+import { FaPowerOff } from "react-icons/fa";
+import { IoPower } from "react-icons/io5";
+import { FaUser } from "react-icons/fa";
+
 
 // import axios from "axios";
 
@@ -23,6 +27,10 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { APIURL } from "../../url";
+import Tooltip from '@mui/material/Tooltip';
+
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 
 const MainDashboard = () => {
   const apiUrl = APIURL;
@@ -216,9 +224,48 @@ const MainDashboard = () => {
     }
   }, [data1, data2, data4, data5, setUserdashboard, data6, selectedImage, storedusertheme]);
 
+  const [openmodal, setOpenmodal] = useState(false);
+
+  const handleClickOpenmodal = () => {
+    setOpenmodal(true);
+  };
+
+  const handleClosemodal = () => {
+    setOpenmodal(false);
+  };
+
 
   return (
     <>
+
+<Modal open={openmodal} onClose={handleClosemodal}>
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 4,
+        }}>
+          <h2>This is a Popup</h2>
+          <p>
+            You can put any content or components inside this popup.
+          </p>
+          <Button onClick={handleClosemodal} variant="contained">
+            Close
+          </Button>
+        </Box>
+      </Modal>
+
+
+
+
+
+
+
       {userdashboard ? (
         <div className={userdashboard ? "loading-container" : ""}>
           <div className="loading-spinners">
@@ -232,20 +279,28 @@ const MainDashboard = () => {
           className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme
             }`}
         >
+
+
           <div className="glass">
             <Sidebar expanded={expanded} />
             <div className="header-user">
               <div className="avatar-item">
-                <StyledBadge
+              <Tooltip title= {`Hi ${ storedUsername}`} arrow>
+              <StyledBadge
                   overlap="circular"
                   anchorOrigin={{ vertical: "top", horizontal: "right" }}
                   variant="dot"
+                 
                 >
                   <Avatar
                     alt="userimage"
                     src={`${apiUrl}/public/user_profile/${selectedImage}`}
                   />
                 </StyledBadge>
+
+</Tooltip>
+
+               
 
                 { }
               </div>
@@ -273,8 +328,17 @@ const MainDashboard = () => {
                 )}
               </div>
               <div className="logout-item">
-                <FiLogOut className="logout-icon" onClick={handleLogout} />
+                {/* <FiLogOut className="logout-icon" onClick={handleLogout} /> */}
+                <IoPower className="logout-icon" onClick={handleLogout} />
               </div>
+
+              {/* <div className="user-icon-update"> */}
+                
+              <div className="user-icon-update" onClick={handleClickOpenmodal}>
+              <FaUser />
+              <div  className="user-icon-update-dot"></div>
+              </div>
+              
             </div>
             <Outlet />
           </div>

@@ -15,10 +15,10 @@ const Updates = () => {
             </span>
             <div className="noti">
               <div style={{ marginBottom: "0.5rem" }}>
-                <span>{update.name}</span>
+                <span className="update-username">{update.name}</span>
                 <span> {update.noti}</span>
               </div>
-              <span>{update.time}</span>
+              <span className="update-time">{update.time}..</span>
             </div>
           </div>
         );

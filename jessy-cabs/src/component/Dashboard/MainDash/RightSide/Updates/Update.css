@@ -29,3 +29,12 @@
 .noti>div>span:nth-of-type(1){
     font-weight: bold;
 }
+
+.update-username{
+    font-weight: 800 !important;
+    color: #000000;
+}
+
+.update-time{
+    color: red;
+}

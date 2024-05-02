@@ -57,7 +57,7 @@
   }
   .copy-title-btn-AppUserList {
     background: var(--glass);
-    width: 100%;
+    /* width: 100%; */
     margin-top: 30px;
     padding: 15px;
     border: 2px solid #ccc;
@@ -77,13 +77,13 @@
 
 @media only screen and (min-width:850px) and (max-width:979px){
   .table-bookingCopys{
-width: 75vw;
+/* width: 75vw; */
   }
 }
 
 @media only screen and (min-width:320px) and (max-width:849.99px){
   .table-bookingCopys{
-width: 84vw;
+/* width: 84vw; */
   }
 }
 

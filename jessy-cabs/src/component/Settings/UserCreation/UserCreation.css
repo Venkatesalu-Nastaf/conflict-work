@@ -72,10 +72,10 @@
   }
 
   @media only screen and (max-width: 768px) {
-    .main-setting-main { 
-       padding-left: 20px;
+    /* .main-setting-main {  */
+       /* padding-left: 20px; */
        /* padding-right: 10px; */
-    }
+    /* } */
 
     .main-setting-main .main-setting-form-container { 
       width: 90%;

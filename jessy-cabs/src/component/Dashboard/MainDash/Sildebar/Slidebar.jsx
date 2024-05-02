@@ -109,6 +109,13 @@ const Sidebar = () => {
     "@keyframes ripple": {},
   }));
 
+  const closeMenuFunction = ()=>{
+    setExpanded(false);
+    setIsRegisterdropdownclicked(false);
+    setIssettingdropdownclicked(false);
+    setIsinfodropdownclicked(false);
+  }
+
   //--------------------------to show logo-----------
 
   const { sharedData } = useData();
@@ -193,6 +200,7 @@ const Sidebar = () => {
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false);
     setRegistrationDropdownVisible(false);
+    setExpanded(false);
 
 
     // const currentPageName = name;
@@ -374,6 +382,7 @@ const Sidebar = () => {
         className="sidebar desktop-view-sidebar"
       // variants={sidebarVariants}
       // animate={window.innerWidth <= 768.99 ? `${!expanded}` : ""}
+      
       >
         {/* <p>aaaaaaaaaaaaa</p> */}
         <div className="logo">
@@ -407,6 +416,7 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiHomeAlt}
+            
           />
           <MenuItem
             label="Booking"
@@ -743,7 +753,7 @@ const Sidebar = () => {
         // animate={window.innerWidth <= 768 ? `${expanded}` : ""}
         >
           {/* <p>mobile</p> */}
-          <div className="logo">
+          <div className="logo" onClick={closeMenuFunction}>
             {selectedImage !== null ? (
               <>
                 {!isImageLoaded && (
@@ -867,7 +877,7 @@ const Sidebar = () => {
                     className="dropdown-links"
                   >
 
-                    <p className="dropdown-icon">
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
                       <span>
                         <MdGroup />
                       </span>
@@ -900,7 +910,7 @@ const Sidebar = () => {
 
                   >
 
-                    <p className="dropdown-icon">
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
                       <span>
                         <MdGroupRemove />
                       </span>
@@ -927,7 +937,7 @@ const Sidebar = () => {
                     onClick={handleRegistermenuClick}
 
                   >
-                    <p className="dropdown-icon">
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
                       <span>
                         <HiOutlineUserGroup />
                       </span>
@@ -1017,7 +1027,7 @@ const Sidebar = () => {
                     className="dropdown-links"
                   >
 
-                    <p className="dropdown-icon">
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
                       <span>
                         <GrUserSettings />
                       </span>
@@ -1041,7 +1051,7 @@ const Sidebar = () => {
                     handleMenuItemClick={handleSettingsClick}
                     icon={AiOutlineSetting}
                   >
-                    <p className="dropdown-icon">
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
                       <span>
                         <FaCodeBranch />
                       </span>
@@ -1071,7 +1081,7 @@ const Sidebar = () => {
                     className="dropdown-links "
                   >
 
-                    <p className="dropdown-icon">
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
                       <span>
                         <GrSettingsOption />
                       </span>
@@ -1156,7 +1166,7 @@ const Sidebar = () => {
                     className="dropdown-links"
 
                   >
-                    <p className="dropdown-icon">
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
                       <span>
                         <GiDuration />
                       </span>
@@ -1184,7 +1194,7 @@ const Sidebar = () => {
                     icon={AiOutlineSetting}
                   >
 
-                    <p className="dropdown-icon">
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
                       <span>
                         <GiReceiveMoney />
                       </span>
@@ -1212,7 +1222,7 @@ const Sidebar = () => {
                     icon={AiOutlineSetting}
                   >
 
-                    <p className="dropdown-icon">
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
                       <span>
                         <SiMinutemailer />
                       </span>
@@ -1241,7 +1251,7 @@ const Sidebar = () => {
                     handleMenuItemClick={handleinfoClick}
                     icon={AiOutlineSetting}
                   >
-                    <p className="dropdown-icon">
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
                       <span>
                         <BsFillFuelPumpFill />
                       </span>
@@ -1295,7 +1305,7 @@ const Sidebar = () => {
               handleMenuItemClick={handleMenuItemClick}
               icon={FaUserAstronaut}
             />
-            <div className="header-user-mobile">
+            <div className="header-user-mobile" onClick={closeMenuFunction}>
               <div className="logout-item">
                 <FiLogOut className="logout-icon" />
               </div>

@@ -45,6 +45,8 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  /* height: 63vh;
+  overflow-y: auto; */
 }
 
 .menuItem {
@@ -104,7 +106,7 @@
     background: var(--glass);
     width: 30%;
     padding-right: 1rem;
-    height: initial;
+    height: 92vh;
   }
 }
 @media only screen and (min-width:430px) and (max-width: 578.99px) {
@@ -114,7 +116,7 @@
     background: var(--glass);
     width: 50% !important;
     padding-right: 1rem;
-    height: initial;
+    height: 92vh;
   }
 }
 
@@ -130,7 +132,7 @@
     background: var(--glass);
     width: 60% !important;
     padding-right: 1rem;
-    height: initial;
+    height: 92vh;
   }
 
 }

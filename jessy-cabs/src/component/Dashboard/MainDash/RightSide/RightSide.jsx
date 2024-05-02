@@ -11,7 +11,7 @@ const RightSide = () => {
         <Updates/>
       </div>
       <div className="area-chart">
-        <h3>Area Chart</h3>
+        <h3 className="area-chart-text">Area Chart</h3>
         <CustomerReview />
       </div>
     </div>

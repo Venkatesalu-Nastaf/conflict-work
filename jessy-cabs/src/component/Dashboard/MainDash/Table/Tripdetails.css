@@ -21,3 +21,12 @@
     border-radius:10px ;
     border: 2px solid rgb(145 254 159 / 47%);
 }
+
+.MuiBackdrop-root {
+    background:  #00000005 !important;
+    /* opacity: 0.1 !important; */
+}
+
+.MuiPaper-elevation24 {
+    box-shadow: none !important;
+}

@@ -20,8 +20,10 @@ const Card = (props) => {
   );
 };
 
-// Compact Card
 
+
+
+// Compact Card
 function CompactCard({ param, setExpanded }) {
 
   // const user_id = localStorage.getItem('useridno');

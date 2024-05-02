@@ -2,9 +2,9 @@
   padding: 10px;
 }
 
-.MuiTableRow-root.MuiTableRow-head > * {
+/* .MuiTableRow-root.MuiTableRow-head > * {
   font-weight: bold !important;
-}
+} */
 .Table {
   padding: 0px 10px;
 }
@@ -58,4 +58,40 @@ th {
 .dialog-close-btn{
   position: absolute;
   right: 0;
+}
+
+.driverdetails-table-head{
+  /* background-color: #d2c8c8 !important; */
+  background-color: rgb(255, 255, 255) !important;
+  /* color: #9f9fa8 !important; */
+  /* color: rgba(255, 255, 255, 0.87) !important; */
+  color: rgba(0, 0, 0, 0.87) !important;
+  font-size: 15px !important;
+  z-index: 2;
+  font-weight: 600 !important;
+  text-align: center !important;
+  /* box-shadow: 10px 13px #888888 !important; */
+
+}
+
+.driverdetails-table-header{
+  /* box-shadow: 3px 3px red !important; */
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+}
+
+.driver-name{
+  background-color: transparent;
+  color: #168bff !important;
+  text-align: center !important;
+  font-weight: 700 !important;
+}
+
+.driver-trip-id , .driver-trip-date{
+  color: #9f9fa8 !important;
+  text-align: center !important;
+}
+
+.driver-tripstatus , .driver-details{
+  text-align: center !important;
 }

@@ -285,7 +285,7 @@ const useTripsheet = () => {
         const params = new URLSearchParams(location.search);
 
 
-        const statusValue =  'Opened';
+        // const statusValue =  'Opened';
         const request = params.get('request') || "";
         setRequest(request);
 
@@ -308,13 +308,15 @@ const useTripsheet = () => {
         const totalcalcAmount = params.get('totalcalcAmount');
 
         const escort = params.get('escort') || "No";
+        const tranreport=params.get('transferreport') || "No";
+        setTransferreport(tranreport)
         setEscort(escort)
         //----------------------
 
         const formData = {};
 
         const parameterKeys = [
-            'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload','Groups'
+            'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps','status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort','transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload','Groups'
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -325,10 +327,12 @@ const useTripsheet = () => {
 
         let appsValue = params.get('apps') || 'Waiting';
 
+          console.log(formData['status'],"form")
 
-
-        // Check if dispatchcheck is true
-        if (formData['dispatchcheck'] === 'true') {
+        // Check if dispatchcheck is 
+        
+        if (formData['dispatchcheck'] === 'true' && formData['status']=== "pending") {
+           formData['status']="Opened"
             setIsEditMode(false);
         } else {
             setIsEditMode(true);
@@ -337,7 +341,7 @@ const useTripsheet = () => {
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
 
-        formData['status'] = statusValue;
+        // formData['status'] = statusValue;
         formData['apps'] = appsValue;
         setTripSheetData(formData);
         setBook(formData);
@@ -369,6 +373,7 @@ const useTripsheet = () => {
         const initialFormData = {};
         setFormData(initialFormData);
     }, []);
+    console.log(formData,"fo")
 
     const [book, setBook] = useState({
         tripid: '',
@@ -709,7 +714,7 @@ const useTripsheet = () => {
                     pack: packageDetails[0]?.package,
                     minhrs: packageDetails[0]?.Hours,
                     minkm: packageDetails[0]?.KMS,
-                    calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, request, escort, minHour, minKM,
+                    calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount, request, escort, minHour, minKM,transferreport
 
                 };
 
@@ -870,7 +875,7 @@ const useTripsheet = () => {
                 minhrs: packageDetails[0]?.Hours,
                 minkm: packageDetails[0]?.KMS,
                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
-                request, escort, minHour, minKM,
+                request, escort, minHour, minKM,transferreport
             };
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
             handleCancel();
@@ -1311,6 +1316,7 @@ const useTripsheet = () => {
                         //---------------------------
                         setRequest(bookingDetails.request)
                         setEscort(bookingDetails.escort)
+                        setTransferreport(bookingDetails.transferreport)
                         //----------
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
@@ -1905,8 +1911,12 @@ const useTripsheet = () => {
 
 
     const [escort, setEscort] = useState('No');
+    const [transferreport,setTransferreport]=useState('No')
     const handleEscortChange = (event) => {
         setEscort(event.target.value);
+    };
+    const handleTransferChange = (event) => {
+        setTransferreport(event.target.value);
     };
 
     /// fro cal dialog box
@@ -2030,7 +2040,7 @@ const useTripsheet = () => {
         handleEdit,
         SignPage,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
-        setNightBeta, setNightCount, request, setRequest, calcCheck,
+        setNightBeta, setNightCount, request, setRequest, calcCheck, handleTransferChange,transferreport
 
 
 

@@ -263,7 +263,7 @@ const TripSheet = () => {
     SignPage,
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
-    totalcalcAmount, escort, handleEscortChange, handleClickOpen, open, handleClose,
+    totalcalcAmount, escort, handleEscortChange, handleClickOpen, open, handleClose, handleTransferChange,transferreport
 
   } = useTripsheet();
 
@@ -1798,6 +1798,29 @@ const TripSheet = () => {
                     value="No"
                     checked={escort === "No"}
                     onChange={handleEscortChange}
+                  />
+                  No
+                </label>
+              </div>
+
+              <div className='input'>
+                <label>Transferreport</label>
+
+                <label>
+                  <input
+                    type="radio"
+                    value="Yes"
+                    checked={transferreport === "Yes"}
+                    onChange={ handleTransferChange}
+                  />
+                  Yes
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="No"
+                    checked={transferreport === "No"}
+                    onChange={handleTransferChange}
                   />
                   No
                 </label>

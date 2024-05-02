@@ -118,7 +118,7 @@ router.post('/tripsheet-add', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, } = req.body;
+        manualbillss,Groups,transferreport } = req.body;
 
 
 
@@ -231,21 +231,37 @@ router.post('/tripsheet-add', (req, res) => {
         booker,
         reload,
         manualbillss,
+        Groups,
+        transferreport
     };
 
 
     db.query('INSERT INTO tripsheet SET ?', addCustomerData, (err, result) => {
         if (err) {
+            console.log(err,"dta")
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
 
         if (result.affectedRows > 0) {
-            if(status === "Opened" || status === "Cancelled"){
+            // console.log(result.affectedRows,status)
+            // if(status === "Opened" || status === "Cancelled" ){
+            //     console.log(status)
 
-            db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${bookingno}; `)
-            }
+            db.query(`UPDATE booking SET status = 'Opened' WHERE bookingno=${bookingno}; `,(err,result5)=>{
+                if (err) {
+                    console.log(err)
+                    return res.status(500).json({ error: "Failed to insert data into MySQL" });
+                }
+                if (result.affectedRows > 0) {
+                    console.log(result,"aa",result5)
+                    return res.status(200).json({ message: "Data inserted successfully" });
+
+                }
+                console.log(result,"bb")
+            })
+            // }
         
-        return res.status(200).json({ message: "Data inserted successfully" });
+        // return res.status(200).json({ message: "Data inserted successfully" });
         }
     });
 });
@@ -375,7 +391,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, } = req.body;
+        manualbillss, Groups,transferreport} = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -485,6 +501,8 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         booker,
         reload,
         manualbillss,
+        Groups,
+        transferreport
     };
 
 
@@ -497,8 +515,10 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
             return res.status(404).json({ error: "Customer not found" });
         }
         if (result.affectedRows > 0) {
+            console.log(result.affectedRows,status)
             if(status === "Opened" || status === "Cancelled"){
-            db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${bookingno}; `)
+                console.log(status)
+            db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${bookingno};`)
             }
         
        
@@ -620,7 +640,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, } = req.body;
+        manualbillss,Groups,transferreport } = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -730,6 +750,8 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         booker,
         reload,
         manualbillss,
+        Groups,
+        transferreport
     };
 
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {

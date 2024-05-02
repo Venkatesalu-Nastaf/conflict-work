@@ -209,6 +209,9 @@ router.get('/pending_tripsheet-show', (req, res) => {
   // }
 
 
+  console.log(tripsheetParams,tripsheetQuery)
+  console.log(bookingParams,"d",bookingQuery)
+
 
   db.query(tripsheetQuery, tripsheetParams, (err, tripsheetResult) => {
     if (err) {
@@ -220,7 +223,7 @@ router.get('/pending_tripsheet-show', (req, res) => {
         return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
       }
 
-     
+       console.log(tripsheetResult.length,bookingResult.length)
 
       const combinedResult = {
         tripsheet: tripsheetResult,

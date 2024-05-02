@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
 
     flexDirection: 'row',
     // marginTop:"20px",
-    marginTop: "10px",
-    marginBottom: "10px",
+    marginTop: "8px",
+    marginBottom: "8px",
 
 
   },
@@ -368,7 +368,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
   const [totalpermit, setTotalpermit] = useState('')
   const [totaltoll, setTotaltoll] = useState('')
   const [totalparking, setTotalParking] = useState('')
-  const [tripCustomercode,setTripCustomercode]=useState('')
+  const [tripCustomercode, setTripCustomercode] = useState('')
+  const [category, setCategory] = useState('')
 
   const [remark, setRemark] = useState('')
   const apiUrl = APIURL;
@@ -430,7 +431,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     let TotalParking = ''
     let TotalToll = ''
     let TotalPermit = ''
-    let CustomerCode=''
+    let CustomerCode = ''
+    let Categorygroups = ''
     let routemapdata = []
     let attachedimagedata = []
     if (Array.isArray(particularPdf)) {
@@ -472,7 +474,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         TotalParking = li.parking
         TotalToll = li.toll
         TotalPermit = li.permit
-        CustomerCode=li.customercode
+        CustomerCode = li.customercode
+        Categorygroups = li.Groups
 
 
 
@@ -517,12 +520,13 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setTotalpermit(TotalPermit)
     setTotaltoll(TotalToll)
     setTripCustomercode(CustomerCode)
+    setCategory(Categorygroups)
 
     setCalcPackages(packages)
     setAttachedimage(attachedimagedata)
   }, [particularPdf])
 
-console.log(tripsheetdate,dayjs(tripsheetdate).format('DD/MM/YYYY') )
+ 
 
   return (
     <>
@@ -570,48 +574,39 @@ console.log(tripsheetdate,dayjs(tripsheetdate).format('DD/MM/YYYY') )
 
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Client Name  :</Text>
-
-                      <Text style={styles.clientName}> {customer}</Text>
+                        <Text style={styles.clientName}> {customer}</Text>
                     </View>
 
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Address        :</Text>
-
-                      <Text style={styles.clientName}> {address1},{'\n'} {address3},{address2}</Text>
+                     <Text style={styles.clientName}> {address1},{'\n'} {address3},{address2}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Category      :</Text>
-
-                      <Text style={styles.clientName}> {fuel}</Text>
+                      <Text style={styles.clientName}> {category}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Fuel Type      :</Text>
-
                       <Text style={styles.clientName}> {fuel}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Emp.No         :</Text>
-
-                      <Text style={styles.clientName}> {empno}</Text>
+                         <Text style={styles.clientName}> {empno}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Emp.Name    :</Text>
-
                       <Text style={styles.clientName}> {guestname}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Report Add    :</Text>
-
-                      <Text style={styles.clientName}> {guestname}</Text>
+                    <Text style={styles.clientName}> {guestname}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Client Mobile :</Text>
-
                       <Text style={styles.clientName}> {customermobile}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Drop Address :</Text>
-
                       <Text style={styles.clientName}> {dropaddress}</Text>
                     </View>
 
@@ -630,7 +625,7 @@ console.log(tripsheetdate,dayjs(tripsheetdate).format('DD/MM/YYYY') )
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Ccode              :</Text>
-                      <Text style={styles.clientName}> {tripCustomercode? tripCustomercode:'No'}</Text>
+                      <Text style={styles.clientName}> {tripCustomercode ? tripCustomercode : 'No'}</Text>
                     </View>
 
                   </View>
@@ -644,7 +639,7 @@ console.log(tripsheetdate,dayjs(tripsheetdate).format('DD/MM/YYYY') )
                     <View style={styles.deatilssection}>
 
                       <Text style={styles.labeltag}>Date            :</Text>
-                      <Text style={styles.clientName}> {tripsheetdate?dayjs(tripsheetdate).format('DD/MM/YYYY'):""}</Text>
+                      <Text style={styles.clientName}> {tripsheetdate ? dayjs(tripsheetdate).format('DD/MM/YYYY') : ""}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Duty Type     :</Text>
@@ -742,7 +737,7 @@ console.log(tripsheetdate,dayjs(tripsheetdate).format('DD/MM/YYYY') )
 
 
                       <View style={styles.labeltag6}>
-                        <Text>{tripStartDate?dayjs(tripStartDate).format('DD/MM/YYYY'):''}</Text>
+                        <Text>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</Text>
 
                       </View>
 
@@ -769,14 +764,14 @@ console.log(tripsheetdate,dayjs(tripsheetdate).format('DD/MM/YYYY') )
 
 
                       <View style={styles.labeltag10}>
-                        <Text>{tripStartDate?dayjs(tripStartDate).format('DD/MM/YYYY'):''}</Text>
+                        <Text>{tripStartDate ? dayjs(tripStartDate).format('DD/MM/YYYY') : ''}</Text>
 
                       </View>
 
 
 
                       <View style={styles.labeltag10}>
-                        <Text>{tripReporttime?tripReporttime:0.00}</Text>
+                        <Text>{tripReporttime ? tripReporttime : 0.00}</Text>
 
                       </View>
                       <View style={styles.labeltag10}>
@@ -794,7 +789,7 @@ console.log(tripsheetdate,dayjs(tripsheetdate).format('DD/MM/YYYY') )
 
 
                       <View style={styles.labeltag14}>
-                        <Text>{tripCloseDate?dayjs(tripCloseDate).format('DD/MM/YYYY'):''}</Text>
+                        <Text>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</Text>
 
                       </View>
 
@@ -820,7 +815,7 @@ console.log(tripsheetdate,dayjs(tripsheetdate).format('DD/MM/YYYY') )
 
 
                       <View style={styles.labeltag18}>
-                        <Text>{tripCloseDate?dayjs(tripCloseDate).format('DD/MM/YYYY'):''}</Text>
+                        <Text>{tripCloseDate ? dayjs(tripCloseDate).format('DD/MM/YYYY') : ''}</Text>
 
                       </View>
 
@@ -844,18 +839,18 @@ console.log(tripsheetdate,dayjs(tripsheetdate).format('DD/MM/YYYY') )
 
 
                       <View style={styles.labeltag22}>
-                        <Text>{triptotaldays?triptotaldays:0}</Text>
+                        <Text>{triptotaldays ? triptotaldays : 0}</Text>
 
                       </View>
 
 
 
                       <View style={styles.labeltag22}>
-                        <Text>{triptotaltime?triptotaltime:0.00}</Text>
+                        <Text>{triptotaltime ? triptotaltime : 0.00}</Text>
 
                       </View>
                       <View style={styles.labeltag22}>
-                        <Text>{triptotalkms?triptotalkms:0}</Text>
+                        <Text>{triptotalkms ? triptotalkms : 0}</Text>
 
                       </View>
 
@@ -889,18 +884,18 @@ console.log(tripsheetdate,dayjs(tripsheetdate).format('DD/MM/YYYY') )
 
 
                 <View style={styles.topmap}>
-                  <View style={{flexDirection:'row'}}>
+                  <View style={{ flexDirection: 'row' }}>
                     <Text style={{ fontSize: '13px' }}>Total Parking:</Text>
-                    <Text style={{ fontSize: '11px',marginTop:'2px',marginRight:'2px' }}>{ totalparking?totalparking:0}</Text>
+                    <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totalparking ? totalparking : 0}</Text>
                   </View>
-                  <View style={{flexDirection:'row'}}>
+                  <View style={{ flexDirection: 'row' }}>
                     <Text style={{ fontSize: '13px' }}>Total Permit:</Text>
-                    <Text style={{ fontSize: '11px' ,marginTop:'2px',marginRight:'2px'}}>{ totalpermit?totalpermit:0}</Text>
+                    <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totalpermit ? totalpermit : 0}</Text>
 
                   </View>
-                  <View style={{flexDirection:'row'}}>
+                  <View style={{ flexDirection: 'row' }}>
                     <Text style={{ fontSize: '13px' }}>Total Fastag/Toll:</Text>
-                    <Text style={{ fontSize: '11px',marginTop:'2px',marginRight:'2px' }}>{ totaltoll?totaltoll:0}</Text>
+                    <Text style={{ fontSize: '11px', marginTop: '2px', marginRight: '2px' }}>{totaltoll ? totaltoll : 0}</Text>
                   </View>
 
                 </View>

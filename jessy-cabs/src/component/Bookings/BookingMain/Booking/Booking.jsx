@@ -303,7 +303,7 @@ const Booking = () => {
                         label="Pending"
                       />
                       <FormControlLabel
-                        value="cancelled"
+                        value="Cancelled"
                         control={<Radio />}
                         label="Cancelled"
                       />

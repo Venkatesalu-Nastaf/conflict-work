@@ -2978,6 +2978,7 @@ const Booking = () => {
               </Button>
             </DialogActions>
           </Dialog>
+          <div className="alert-popup-main">
           {error && (
             <div className="alert-popup Error">
               <div className="popup-icon">
@@ -3026,6 +3027,7 @@ const Booking = () => {
               <p>{successMessage}</p>
             </div>
           )}
+          </div>
 
 
 

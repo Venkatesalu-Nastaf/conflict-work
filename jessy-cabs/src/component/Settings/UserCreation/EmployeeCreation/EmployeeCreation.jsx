@@ -16,6 +16,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import Avatar from "../../../../assets/img/avatar.png"
 import { UserPermission } from '../../../UserPermission/UserPermission'
+// import { PermissionContext } from '../../../context/permissionContext';
 
 //material ui
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -84,7 +85,7 @@ const EmployeeCreation = () => {
     book,
     handleClick,
     handleChange,
-    handleRowClick,
+    handleRowClick, handleRowClickUser,
     handleAdd,
     hidePopup,
     handleAutocompleteChange,
@@ -94,6 +95,8 @@ const EmployeeCreation = () => {
     columns,
     isEditMode,
     handleEdit,
+
+    permissionsData, handleSwitchChange, handleCheckboxChange,
   } = useEmplyeecreation();
 
   useEffect(() => {
@@ -102,6 +105,12 @@ const EmployeeCreation = () => {
     }
   }, [actionName, handleClick]);
 
+
+
+  //permission 
+
+  // const { permissions } = useContext(PermissionContext)
+  // // console.log("employee permission ", permissions[0])
 
 
   // for search input
@@ -115,9 +124,11 @@ const EmployeeCreation = () => {
 
   //  for showing table
   const [showPermission, setShowPermission] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState('');
 
-  const togglePermission = () => {
+  const togglePermission = (row) => {
     setShowPermission(!showPermission);
+    setSelectedUserId(row.userid)
   };
   //table completed
 
@@ -339,7 +350,15 @@ const EmployeeCreation = () => {
 
                 {rows.map((row, index) => (
 
-                  <div className='user-table-permission' onClick={togglePermission} id={index}>
+                  <div className='user-table-permission' onClick={() => {
+
+                    togglePermission(row);
+                    handleRowClickUser(row)
+
+                  }
+                  }
+
+                    key={index}>
                     <img src={Avatar} alt="profile" width="50" />
                     <div>
                       <h3 className="user-name-text">{row.username}</h3>
@@ -348,6 +367,7 @@ const EmployeeCreation = () => {
                   </div>
 
                 ))}
+
 
                 {/* <div>
 
@@ -386,7 +406,7 @@ const EmployeeCreation = () => {
 
               </div>
 
-              {showPermission && <UserPermission />}
+              {showPermission && <UserPermission userid={selectedUserId} permissionsData={permissionsData} handleSwitchChange={handleSwitchChange} handleCheckboxChange={handleCheckboxChange} />}
 
             </div>
 

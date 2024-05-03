@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import "./EmployeeCreation.css";
 import Box from "@mui/material/Box";
 import Input from '@mui/material/Input';
@@ -16,7 +16,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import Avatar from "../../../../assets/img/avatar.png"
 import { UserPermission } from '../../../UserPermission/UserPermission'
-// import { PermissionContext } from '../../../context/permissionContext';
+import { PermissionContext } from '../../../context/permissionContext';
 
 //material ui
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -59,13 +59,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
 
 const EmployeeCreation = () => {
 
@@ -106,13 +99,6 @@ const EmployeeCreation = () => {
   }, [actionName, handleClick]);
 
 
-
-  //permission 
-
-  // const { permissions } = useContext(PermissionContext)
-  // // console.log("employee permission ", permissions[0])
-
-
   // for search input
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -131,6 +117,14 @@ const EmployeeCreation = () => {
     setSelectedUserId(row.userid)
   };
   //table completed
+
+  // Permission ------------
+  const { permissions } = useContext(PermissionContext)
+
+  const UserCreation_read = permissions[13]?.read;
+  const UserCreation_new = permissions[13]?.new;
+  const UserCreation_modify = permissions[13]?.modify;
+  const UserCreation_delete = permissions[13]?.delete;
 
   return (
     <div className="EmployeeCreation-main">
@@ -275,43 +269,43 @@ const EmployeeCreation = () => {
               </div>
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
-                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  <Button variant="contained" disabled={!UserCreation_modify} onClick={handleEdit}>Edit</Button>
                 ) : (
-                  <Button variant="contained" onClick={handleAdd} >Add</Button>
+                  <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} >Add</Button>
                 )}
               </div>
             </div>
 
           </div>
           <div className='alert-popup-main'>
-          {error &&
-            <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errorMessage}</p>
-            </div>
-          }
-          {warning &&
-            <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{warningMessage}</p>
-            </div>
-          }
-          {success &&
-            <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{successMessage}</p>
-            </div>
-          }
-          {info &&
-            <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{infoMessage}</p>
-            </div>
-          }
+            {error &&
+              <div className='alert-popup Error' >
+                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{errorMessage}</p>
+              </div>
+            }
+            {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{warningMessage}</p>
+              </div>
+            }
+            {success &&
+              <div className='alert-popup Success' >
+                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{successMessage}</p>
+              </div>
+            }
+            {info &&
+              <div className='alert-popup Info' >
+                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{infoMessage}</p>
+              </div>
+            }
           </div>
 
           <Box sx={{ mt: 3, }}
@@ -322,14 +316,47 @@ const EmployeeCreation = () => {
               direction="left"
 
             >
-              {actions.map((action) => (
+
+              {UserCreation_read === 1 && (
                 <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
+                  key="list"
+                  icon={<ChecklistIcon />}
+                  tooltipTitle="List"
+                  onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                 />
-              ))}
+              )}
+              {UserCreation_modify === 1 && (
+                <SpeedDialAction
+                  key="edit"
+                  icon={<ModeEditIcon />}
+                  tooltipTitle="Edit"
+                  onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                />
+              )}
+              {UserCreation_delete === 1 && (
+                <SpeedDialAction
+                  key="delete"
+                  icon={<DeleteIcon />}
+                  tooltipTitle="Delete"
+                  onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                />
+              )}
+              {UserCreation_new === 1 && (
+                <SpeedDialAction
+                  key="Add"
+                  icon={<BookmarkAddedIcon />}
+                  tooltipTitle="Add"
+                  onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                />
+              )}
+              <SpeedDialAction
+                key="Cancel"
+                icon={<CancelPresentationIcon />}
+                tooltipTitle="Cancel"
+                onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+              />
+
+
             </StyledSpeedDial>
           </Box>
 

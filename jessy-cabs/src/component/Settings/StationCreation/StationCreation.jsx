@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./StationCreation.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -24,6 +24,7 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import useStationCreation from './useStationCreation';
+import { PermissionContext } from '../../context/permissionContext';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -47,13 +48,6 @@ const columns = [
   { field: "ownbranch", headerName: "Own_Branch", width: 130 },
 ];
 // TABLE END
-const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
 
 const StationCreation = () => {
   const {
@@ -85,14 +79,23 @@ const StationCreation = () => {
     }
   }, [actionName, handleClick]);
 
+
+  // Permission ------------
+  const { permissions } = useContext(PermissionContext)
+
+  const StationCreation_read = permissions[16]?.read;
+  const StationCreation_new = permissions[16]?.new;
+  const StationCreation_modify = permissions[16]?.modify;
+  const StationCreation_delete = permissions[16]?.delete;
+
   return (
     <div className="stationcreation-main">
       <div className="stationcreation-form-container">
         <form action="">
-        <p className="station-creation-heading">
-        <span className="Title-Name ">Station Creation</span>
+          <p className="station-creation-heading">
+            <span className="Title-Name ">Station Creation</span>
 
-        </p>
+          </p>
           <div className="stationcreation-header">
             <div className="input-field station-creation-inputfeilds">
               <div className="input">
@@ -144,7 +147,7 @@ const StationCreation = () => {
                 />
 
               </div>
-            {/* </div>
+              {/* </div>
             <div className="input-field"> */}
               <div className="input radio">
                 <FormControl>
@@ -200,42 +203,42 @@ const StationCreation = () => {
               </div>
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
-                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  <Button variant="contained" disabled={!StationCreation_modify} onClick={handleEdit}>Edit</Button>
                 ) : (
-                  <Button variant="contained" onClick={handleAdd} >Add</Button>
+                  <Button variant="contained" disabled={!StationCreation_new} onClick={handleAdd} >Add</Button>
                 )}
               </div>
             </div>
           </div>
           <div className='alert-popup-main'>
-          {error &&
-            <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errorMessage}</p>
-            </div>
-          }
-          {warning &&
-            <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{warningMessage}</p>
-            </div>
-          }
-          {success &&
-            <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{successMessage}</p>
-            </div>
-          }
-          {info &&
-            <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{infoMessage}</p>
-            </div>
-          }
+            {error &&
+              <div className='alert-popup Error' >
+                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{errorMessage}</p>
+              </div>
+            }
+            {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{warningMessage}</p>
+              </div>
+            }
+            {success &&
+              <div className='alert-popup Success' >
+                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{successMessage}</p>
+              </div>
+            }
+            {info &&
+              <div className='alert-popup Info' >
+                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{infoMessage}</p>
+              </div>
+            }
           </div>
 
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
@@ -244,14 +247,55 @@ const StationCreation = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {actions.map((action) => (
+              {/* {actions.map((action) => (
                 <SpeedDialAction
                   key={action.name}
                   icon={action.icon}
                   tooltipTitle={action.name}
                   onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                 />
-              ))}
+              ))} */}
+
+              {StationCreation_read === 1 && (
+                <SpeedDialAction
+                  key="list"
+                  icon={<ChecklistIcon />}
+                  tooltipTitle="List"
+                  onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                />
+              )}
+              {StationCreation_modify === 1 && (
+                <SpeedDialAction
+                  key="edit"
+                  icon={<ModeEditIcon />}
+                  tooltipTitle="Edit"
+                  onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                />
+              )}
+              {StationCreation_delete === 1 && (
+                <SpeedDialAction
+                  key="delete"
+                  icon={<DeleteIcon />}
+                  tooltipTitle="Delete"
+                  onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                />
+              )}
+              {StationCreation_new === 1 && (
+                <SpeedDialAction
+                  key="Add"
+                  icon={<BookmarkAddedIcon />}
+                  tooltipTitle="Add"
+                  onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                />
+              )}
+              <SpeedDialAction
+                key="Cancel"
+                icon={<CancelPresentationIcon />}
+                tooltipTitle="Cancel"
+                onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+              />
+
+
             </StyledSpeedDial>
           </Box>
           <div className="stationcreation-table-container">

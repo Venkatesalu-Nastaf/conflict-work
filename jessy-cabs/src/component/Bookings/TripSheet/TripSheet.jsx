@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./TripSheet.css";
 import {
   Apps,
@@ -98,12 +98,12 @@ import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
+import { PermissionContext } from '../../context/permissionContext';
 
-// ggggg
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-// import Slide from '@mui/material/Slide';
-// import { TransitionProps } from '@mui/material/transitions';
+import ChecklistIcon from "@mui/icons-material/Checklist";
+
 
 import useTripsheet from './useTripsheet';
 
@@ -149,15 +149,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-
-const actions = [
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
-
-
 
 
 const maplogcolumns = [
@@ -236,11 +227,6 @@ const TripSheet = () => {
     calculateNightAmount,
     calculateTotalAmount,
     calculatedriverconvienceAmount,
-    // calculateExkmAmount2,
-    // calculateExHrsAmount2,
-    // calculateNightAmount2,
-    // calculatedriverconvienceAmount2,
-    // calculateTotalAmount2,
     handleTripmapClick,
     mapimgpopupOpen,
     handleimgPopupClose,
@@ -263,7 +249,7 @@ const TripSheet = () => {
     SignPage,
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
-    totalcalcAmount, escort, handleEscortChange, handleClickOpen, open, handleClose, handleTransferChange,transferreport
+    totalcalcAmount, escort, handleEscortChange, handleClickOpen, open, handleClose, handleTransferChange, transferreport
 
   } = useTripsheet();
 
@@ -273,22 +259,15 @@ const TripSheet = () => {
     }
   }, [actionName, handleClick]);
 
-  // ayyanar.action
 
-  // Filter the actions array based on the editMode variable
-  const filteredActions = isEditMode ? actions.filter(action => action.name !== "Add") : actions;
+  // Permission ------------ayyan
+  const { permissions } = useContext(PermissionContext)
 
+  const Tripsheet_read = permissions[3]?.read;
+  const Tripsheet_new = permissions[3]?.new;
+  const Tripsheet_modify = permissions[3]?.modify;
+  const Tripsheet_delete = permissions[3]?.delete;
 
-  //gggggggggggg
-  // const [open, setOpen] = React.useState(false);
-
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
 
 
   return (
@@ -733,36 +712,36 @@ const TripSheet = () => {
                   name="category"
                   autoComplete="password"
                 /> */}
-                 <div className="icone">
-                    <EmailIcon color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    // value={book?.Groups || selectedCustomerData?.Groups || ''}
-                    
-                    value={(formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups|| packageData.Groups || book.Groups) : null}
-                    
-                    options={GroupTypes?.map((option) => ({
-                      label: option?.Option,
-                    }))}
-                    // onChange={(event, value) => setVechiclebook((prevBook) => ({
-                    //   ...prevBook,
-                    //   "Groups": value?.label,
-                    // }))}
-
-                    onChange={(event, value) => handleAutocompleteChange(event, value,"Groups")}
-                    
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Groups" inputRef={params.inputRef} />
-                      );
-                    }}
-                  />
+                <div className="icone">
+                  <EmailIcon color="action" />
                 </div>
-              
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  size="small"
+                  // value={book?.Groups || selectedCustomerData?.Groups || ''}
+
+                  value={(formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
+
+                  options={GroupTypes?.map((option) => ({
+                    label: option?.Option,
+                  }))}
+                  // onChange={(event, value) => setVechiclebook((prevBook) => ({
+                  //   ...prevBook,
+                  //   "Groups": value?.label,
+                  // }))}
+
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
+
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                    );
+                  }}
+                />
+              </div>
+
               <div className="input">
                 <div className="icone">
                   <NoCrashIcon color="action" />
@@ -1804,14 +1783,14 @@ const TripSheet = () => {
               </div>
 
               <div className='input'>
-                <label>Transferreport</label>
+                <label>Airport Transfer</label>
 
                 <label>
                   <input
                     type="radio"
                     value="Yes"
                     checked={transferreport === "Yes"}
-                    onChange={ handleTransferChange}
+                    onChange={handleTransferChange}
                   />
                   Yes
                 </label>
@@ -1867,52 +1846,52 @@ const TripSheet = () => {
               {/* // ayyanar calc */}
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (<>
-                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
-                  {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
+                  <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
+                  {calcCheck ? <Button variant="contained" disabled={!Tripsheet_modify} style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
 
                 </>
                 ) : (
-                  <Button variant="contained" onClick={handleAdd} >Add</Button>
+                  <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
                 )}
 
 
-                  {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
                   {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""} */}
 
-               
-              
+
+
               </div>
             </div>
           </div>
           <div className='alert-popup-main'>
-          {error &&
-            <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errorMessage}</p>
-            </div>
-          }
-          {warning &&
-            <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{warningMessage}</p>
-            </div>
-          }
-          {success &&
-            <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{successMessage}</p>
-            </div>
-          }
-          {info &&
-            <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{infoMessage}</p>
-            </div>
-          }
+            {error &&
+              <div className='alert-popup Error' >
+                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{errorMessage}</p>
+              </div>
+            }
+            {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{warningMessage}</p>
+              </div>
+            }
+            {success &&
+              <div className='alert-popup Success' >
+                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{successMessage}</p>
+              </div>
+            }
+            {info &&
+              <div className='alert-popup Info' >
+                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{infoMessage}</p>
+              </div>
+            }
           </div>
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
@@ -1920,14 +1899,55 @@ const TripSheet = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {filteredActions.map((action) => (
+              {/* {filteredActions.map((action) => (
                 <SpeedDialAction
                   key={action.name}
                   icon={action.icon}
                   tooltipTitle={action.name}
                   onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                 />
-              ))}
+              ))} */}
+
+              {Tripsheet_read === 1 && (
+                <SpeedDialAction
+                  key="list"
+                  icon={<ChecklistIcon />}
+                  tooltipTitle="List"
+                  onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                />
+              )}
+              {Tripsheet_modify === 1 && (
+                <SpeedDialAction
+                  key="edit"
+                  icon={<ModeEditIcon />}
+                  tooltipTitle="Edit"
+                  onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                />
+              )}
+              {Tripsheet_delete === 1 && (
+                <SpeedDialAction
+                  key="delete"
+                  icon={<DeleteIcon />}
+                  tooltipTitle="Delete"
+                  onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                />
+              )}
+              {Tripsheet_new === 1 && (
+                <SpeedDialAction
+                  key="Add"
+                  icon={<BookmarkAddedIcon />}
+                  tooltipTitle="Add"
+                  onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                />
+              )}
+              <SpeedDialAction
+                key="Cancel"
+                icon={<CancelPresentationIcon />}
+                tooltipTitle="Cancel"
+                onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+              />
+
+
             </StyledSpeedDial>
           </Box>
           <div className="Tipsheet-content-table-main">

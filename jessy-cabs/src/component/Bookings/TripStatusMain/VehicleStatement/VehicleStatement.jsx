@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./VehicleStatement.css";
 
 import Menu from '@mui/material/Menu';
@@ -25,6 +25,7 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import { PermissionContext } from '../../../context/permissionContext';
 
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -36,19 +37,8 @@ import useVehiclestatement from './useVehiclestatement';
 import { IoBusinessSharp } from "react-icons/io5";
 import { MdDateRange } from "react-icons/md";
 
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-
-
-
-
-
-
-
-
 
 
 
@@ -63,13 +53,8 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
+
+
 
 
 
@@ -114,6 +99,9 @@ const VehicleStatement = () => {
     }
   }, [actionName, handleClick]);
 
+  const { permissions } = useContext(PermissionContext)
+  const TripStatus_read = permissions[2]?.read;
+
   return (
     <div className="VehicleStatement-form Scroll-Style-hide">
       <form action="">
@@ -121,10 +109,10 @@ const VehicleStatement = () => {
           <div className="container-left">
             <div className="SearchContainer-VehicleStatement">
               <div className="input-field vehiclestatement-inputfeild">
-                <div className="input" style={{width:'200px'}}>
-                    <div className="icone" style={{fontSize:'25px'}}>
-                      <IoBusinessSharp  color="action" />
-                    </div>
+                <div className="input" style={{ width: '200px' }}>
+                  <div className="icone" style={{ fontSize: '25px' }}>
+                    <IoBusinessSharp color="action" />
+                  </div>
 
                   <Autocomplete
                     fullWidth
@@ -142,10 +130,10 @@ const VehicleStatement = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{width:'200px'}}>
-                    <div className="icone" style={{fontSize:'25px'}}>
-                      <IoBusinessSharp  color="action" />
-                    </div>
+                <div className="input" style={{ width: '200px' }}>
+                  <div className="icone" style={{ fontSize: '25px' }}>
+                    <IoBusinessSharp color="action" />
+                  </div>
 
                   <Autocomplete
                     fullWidth
@@ -165,10 +153,10 @@ const VehicleStatement = () => {
                 </div>
 
 
-                <div className="input vehiecle-date" style={{ width:"250px"}}>
-                    <div className="icone" style={{fontSize:'25px'}}>
-                      <MdDateRange  color="action" />
-                    </div>
+                <div className="input vehiecle-date" style={{ width: "250px" }}>
+                  <div className="icone" style={{ fontSize: '25px' }}>
+                    <MdDateRange color="action" />
+                  </div>
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
@@ -177,19 +165,19 @@ const VehicleStatement = () => {
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
                       />
-                   
+
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
 
-                <div className="input vehiecle-date" style={{ width:"250px"}}>
-                    <div className="icone" style={{fontSize:'25px'}}>
-                      <MdDateRange  color="action" />
-                    </div>
+                <div className="input vehiecle-date" style={{ width: "250px" }}>
+                  <div className="icone" style={{ fontSize: '25px' }}>
+                    <MdDateRange color="action" />
+                  </div>
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
-                    
+
                       <DatePicker
                         label="To Date"
                         value={toDate}
@@ -203,10 +191,10 @@ const VehicleStatement = () => {
               </div>
               <div className="input-field show-btn-vehicle" style={{ justifyContent: "center" }}>
                 <div className="input" style={{ width: "130px" }} >
-                  <Button variant="outlined" onClick={handleShow} >Show</Button>
+                  <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                 </div>
                 <div className="input" style={{ width: "110px" }} >
-                  <Button variant="contained" onClick={handleShowAll} >Show All</Button>
+                  <Button variant="contained" disabled={!TripStatus_read} onClick={handleShowAll} >Show All</Button>
                 </div>
               </div>
               <div className="input-field" style={{ justifyContent: "end" }}>
@@ -225,54 +213,73 @@ const VehicleStatement = () => {
           </div>
         </div>
 
-        <div className="SpeedDial" style={{ padding: '26px', margin:' 15px 10px 0px 0px'}}>
-              <Box sx={{ position: "relative", mt: 2, }}>
-                <StyledSpeedDial
-                  ariaLabel="SpeedDial playground example"
-                  icon={<SpeedDialIcon />}
-                  direction="left"
-                >
-                  {actions.map((action) => (
+        <div className="SpeedDial" style={{ padding: '26px', margin: ' 15px 10px 0px 0px' }}>
+          <Box sx={{ position: "relative", mt: 2, }}>
+            <StyledSpeedDial
+              ariaLabel="SpeedDial playground example"
+              icon={<SpeedDialIcon />}
+              direction="left"
+            >
+              {/* {actions.map((action) => (
                     <SpeedDialAction
                       key={action.name}
                       icon={action.icon}
                       tooltipTitle={action.name}
                       onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                     />
-                  ))}
-                </StyledSpeedDial>
-              </Box>
-            </div>
+                  ))} */}
+
+
+              {TripStatus_read === 1 && (
+                <SpeedDialAction
+                  key="list"
+                  icon={<ChecklistIcon />}
+                  tooltipTitle="List"
+                  onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                />
+              )}
+
+              <SpeedDialAction
+                key="Cancel"
+                icon={<CancelPresentationIcon />}
+                tooltipTitle="Cancel"
+                onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+              />
+
+
+            </StyledSpeedDial>
+          </Box>
+        </div>
 
         <div className='alert-popup-main'>
-        {error &&
-          <div className='alert-popup Error' >
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{errorMessage}</p>
-          </div>
-        }
-        {warning &&
-          <div className='alert-popup Warning' >
-            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{warningMessage}</p>
-          </div>
-        }
-        {success &&
-          <div className='alert-popup Success' >
-            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{successMessage}</p>
-          </div>
-        }
-        {info &&
-          <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{infoMessage}</p>
-          </div>
-        }
+          {error &&
+            <div className='alert-popup Error' >
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
+            </div>
+          }
         </div>
         <div className="table-bookingCopy-VehicleStatement">
           <div className="Download-btn">

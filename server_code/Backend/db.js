@@ -17,3 +17,26 @@ db.connect((err) => {
 });
 
 module.exports = db;
+
+
+// const mysql = require('mysql');
+
+// const db = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: '',
+//   database: 'dzupsnmy_taaf',
+//   port: 3306
+// });
+
+// db.connect((err) => {
+//   if (err) {
+//     console.error('Error connecting to MySQL:', err);
+//     return;
+//   }
+//   console.log('Connected to MySQL database');
+// });
+
+// module.exports = db;
+
+

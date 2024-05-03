@@ -16,6 +16,7 @@ export const DataProvider = ({ children }) => {
     const [organizationName, setOrganizationName] = useState([])
     const [filteredData, setFilteredData] = useState([])
 
+
     useEffect(() => {
         const handleImageView = () => {
             const userid = localStorage.getItem('useridno');

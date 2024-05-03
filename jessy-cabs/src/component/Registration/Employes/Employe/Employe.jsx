@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import "./Employe.css";
 import "jspdf-autotable";
 import dayjs from "dayjs";
@@ -54,6 +54,7 @@ import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import { APIURL } from "../../../url";
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import { PermissionContext } from "../../../context/permissionContext";
 
 
 
@@ -125,6 +126,14 @@ const Employe = () => {
     }
   }, [actionName, handleClick]);
 
+  // permissions
+  const { permissions } = useContext(PermissionContext)
+
+  const Employee_read = permissions[11]?.read;
+  const Employee_new = permissions[11]?.new;
+  const Employee_modify = permissions[11]?.modify;
+  const Employee_delete = permissions[11]?.delete;
+
   return (
     <div className="Employe-form Scroll-Style-hide">
       <form onSubmit={handleClick}>
@@ -187,7 +196,7 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-            {/* </div>
+              {/* </div>
             <div className="input-field"> */}
               <div className="input">
                 <div className="icone">
@@ -205,9 +214,9 @@ const Employe = () => {
               </div>
               <div className="input">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <div className="icone">
-                  <DateRangeIcon color="action" />
-                </div>
+                  <div className="icone">
+                    <DateRangeIcon color="action" />
+                  </div>
                   <DatePicker
                     label="Joining Date"
                     format="DD/MM/YYYY"
@@ -256,7 +265,7 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-            {/* </div>
+              {/* </div>
             <div className="input-field"> */}
               <div className="input input-address" style={{ width: "415px" }}>
                 <div className="icone">
@@ -302,7 +311,7 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-            {/* </div>
+              {/* </div>
             <div className="input-field"> */}
               <div className="input input-address" style={{ width: "415px" }}>
                 <div className="icone">
@@ -347,7 +356,7 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-            {/* </div>
+              {/* </div>
             <div className="input-field"> */}
               <div className="input" style={{ width: "260px" }}>
                 <div className="icone">
@@ -377,7 +386,7 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{ width: "250px",display:'flex',flexWrap:'nowrap',alignItems:'center',marginTop:'20px' }}>
+              <div className="input" style={{ width: "250px", display: 'flex', flexWrap: 'nowrap', alignItems: 'center', marginTop: '20px' }}>
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
                 </div>
@@ -391,27 +400,27 @@ const Employe = () => {
                   onChange={handleChange}
                 />
 
-              <div>
-                {selectedCustomerData?.empid || book.empid ? (
-                  <Button component="label">
-                    <UploadFileIcon />
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(e) => setFile(e.target.files[0])}
-                    />
-                  </Button>
-                ) : (
-                  <Button color="primary" variant="contained" onClick={() => {
-                    setError(true);
-                    setErrorMessage("Please Enter Booking No");
-                  }}>
-                    <UploadFileIcon />
-                  </Button>
-                )}
+                <div>
+                  {selectedCustomerData?.empid || book.empid ? (
+                    <Button component="label">
+                      <UploadFileIcon />
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={(e) => setFile(e.target.files[0])}
+                      />
+                    </Button>
+                  ) : (
+                    <Button color="primary" variant="contained" onClick={() => {
+                      setError(true);
+                      setErrorMessage("Please Enter Booking No");
+                    }}>
+                      <UploadFileIcon />
+                    </Button>
+                  )}
+                </div>
               </div>
-              </div>
-              
+
               {/* <div className="input" style={{ width: "20px" }}>
                 {selectedCustomerData?.empid || book.empid ? (
                   <Button component="label">
@@ -435,63 +444,63 @@ const Employe = () => {
             <div className="input-field">
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
-                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  <Button variant="contained" disabled={!Employee_new} onClick={handleEdit}>Edit</Button>
                 ) : (
-                  <Button variant="contained" onClick={handleAdd} >Add</Button>
+                  <Button variant="contained" disabled={!Employee_modify} onClick={handleAdd} >Add</Button>
                 )}
               </div>
             </div>
           </div>
         </div>
         <div className='alert-popup-main'>
-        {error && (
-          <div className="alert-popup Error">
-            <div className="popup-icon">
-              {" "}
-              <ClearIcon style={{ color: "#fff" }} />{" "}
+          {error && (
+            <div className="alert-popup Error">
+              <div className="popup-icon">
+                {" "}
+                <ClearIcon style={{ color: "#fff" }} />{" "}
+              </div>
+              <span className="cancel-btn" onClick={hidePopup}>
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              </span>
+              <p>{errorMessage}</p>
             </div>
-            <span className="cancel-btn" onClick={hidePopup}>
-              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-            </span>
-            <p>{errorMessage}</p>
-          </div>
-        )}
-        {warning && (
-          <div className="alert-popup Warning">
-            <div className="popup-icon">
-              {" "}
-              <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
+          )}
+          {warning && (
+            <div className="alert-popup Warning">
+              <div className="popup-icon">
+                {" "}
+                <ErrorOutlineIcon style={{ color: "#fff" }} />{" "}
+              </div>
+              <span className="cancel-btn" onClick={hidePopup}>
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              </span>
+              <p>{warningMessage}</p>
             </div>
-            <span className="cancel-btn" onClick={hidePopup}>
-              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-            </span>
-            <p>{warningMessage}</p>
-          </div>
-        )}
-        {success && (
-          <div className="alert-popup Success">
-            <div className="popup-icon">
-              {" "}
-              <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+          )}
+          {success && (
+            <div className="alert-popup Success">
+              <div className="popup-icon">
+                {" "}
+                <FileDownloadDoneIcon style={{ color: "#fff" }} />{" "}
+              </div>
+              <span className="cancel-btn" onClick={hidePopup}>
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              </span>
+              <p>{successMessage}</p>
             </div>
-            <span className="cancel-btn" onClick={hidePopup}>
-              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-            </span>
-            <p>{successMessage}</p>
-          </div>
-        )}
-        {info && (
-          <div className="alert-popup Info">
-            <div className="popup-icon">
-              {" "}
-              <BsInfo style={{ color: "#fff" }} />{" "}
+          )}
+          {info && (
+            <div className="alert-popup Info">
+              <div className="popup-icon">
+                {" "}
+                <BsInfo style={{ color: "#fff" }} />{" "}
+              </div>
+              <span className="cancel-btn" onClick={hidePopup}>
+                <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
+              </span>
+              <p>{infoMessage}</p>
             </div>
-            <span className="cancel-btn" onClick={hidePopup}>
-              <ClearIcon color="action" style={{ fontSize: "14px" }} />{" "}
-            </span>
-            <p>{infoMessage}</p>
-          </div>
-        )}
+          )}
         </div>
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
@@ -499,7 +508,7 @@ const Employe = () => {
             icon={<SpeedDialIcon />}
             direction="left"
           >
-            {actions.map((action) => (
+            {/* {actions.map((action) => (
               <SpeedDialAction
                 key={action.name}
                 icon={action.icon}
@@ -508,7 +517,48 @@ const Employe = () => {
                   handleClick(event, action.name, selectedCustomerId)
                 }
               />
-            ))}
+            ))} */}
+
+            {Employee_read === 1 && (
+              <SpeedDialAction
+                key="list"
+                icon={<ChecklistIcon />}
+                tooltipTitle="List"
+                onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+              />
+            )}
+            {Employee_modify === 1 && (
+              <SpeedDialAction
+                key="edit"
+                icon={<ModeEditIcon />}
+                tooltipTitle="Edit"
+                onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+              />
+            )}
+            {Employee_delete === 1 && (
+              <SpeedDialAction
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+              />
+            )}
+            {Employee_new === 1 && (
+              <SpeedDialAction
+                key="Add"
+                icon={<BookmarkAddedIcon />}
+                tooltipTitle="Add"
+                onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+              />
+            )}
+            <SpeedDialAction
+              key="Cancel"
+              icon={<CancelPresentationIcon />}
+              tooltipTitle="Cancel"
+              onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+            />
+
+
           </StyledSpeedDial>
         </Box>
         <div className="Employe-search-container">

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import dayjs from "dayjs";
 import "./Ratevalidity.css";
 import Box from "@mui/material/Box";
@@ -28,6 +28,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import useRatevalidity from './useRatevalidity';
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import { PermissionContext } from '../../../context/permissionContext';
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -83,6 +84,15 @@ const Ratevalidity = () => {
         }
     }, [actionName, handleClick]);
 
+
+    // Permission ------------
+    const { permissions } = useContext(PermissionContext)
+
+    const INFO_read = permissions[16]?.read;
+    const INFO_new = permissions[16]?.new;
+    const INFO_modify = permissions[16]?.modify;
+    const INFO_delete = permissions[16]?.delete;
+
     return (
         <div className="RateValidity-form Scroll-Style-hide">
             <form action="">
@@ -119,9 +129,9 @@ const Ratevalidity = () => {
                                     />
                                 </div>
                                 <div className="input RateValidity-input" >
-                                <div className="icone">
-                                    <DateRangeIcon color="action" />
-                                </div>
+                                    <div className="icone">
+                                        <DateRangeIcon color="action" />
+                                    </div>
 
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
@@ -137,9 +147,9 @@ const Ratevalidity = () => {
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input RateValidity-input" >
-                                <div className="icone">
-                                    <DateRangeIcon color="action" />
-                                </div>
+                                    <div className="icone">
+                                        <DateRangeIcon color="action" />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             label="To Date"
@@ -153,7 +163,7 @@ const Ratevalidity = () => {
                                         </DatePicker>
                                     </LocalizationProvider>
                                 </div>
-                            {/* </div>
+                                {/* </div>
                             <div className="input-field"> */}
                                 <div className="input RateValidity-input" style={{ width: "300px" }}>
                                     <div className="icone">
@@ -197,9 +207,9 @@ const Ratevalidity = () => {
                                 </div>
                                 <div className="input RateValidity-input" style={{ width: "160px" }}>
                                     {isEditMode ? (
-                                        <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                                        <Button variant="contained" disabled={!INFO_modify} onClick={handleEdit}>Edit</Button>
                                     ) : (
-                                        <Button variant="contained" onClick={handleAdd} >Add</Button>
+                                        <Button variant="contained" disabled={!INFO_new} onClick={handleAdd} >Add</Button>
                                     )}
                                 </div>
                             </div>
@@ -207,49 +217,91 @@ const Ratevalidity = () => {
                     </div>
                 </div>
                 <div className='alert-popup-main'>
-                {error &&
-                    <div className='alert-popup Error' >
-                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{errorMessage}</p>
-                    </div>
-                }
-                {warning &&
-                    <div className='alert-popup Warning' >
-                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{warningMessage}</p>
-                    </div>
-                }
-                {success &&
-                    <div className='alert-popup Success' >
-                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{successMessage}</p>
-                    </div>
-                }
-                {info &&
-                    <div className='alert-popup Info' >
-                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{infoMessage}</p>
-                    </div>
-                }
+                    {error &&
+                        <div className='alert-popup Error' >
+                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{errorMessage}</p>
+                        </div>
+                    }
+                    {warning &&
+                        <div className='alert-popup Warning' >
+                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{warningMessage}</p>
+                        </div>
+                    }
+                    {success &&
+                        <div className='alert-popup Success' >
+                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{successMessage}</p>
+                        </div>
+                    }
+                    {info &&
+                        <div className='alert-popup Info' >
+                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{infoMessage}</p>
+                        </div>
+                    }
                 </div>
-                <Box  className="box-mui-icons" sx={{ position: "relative", mt: 3, height: 320 }}>
+                <Box className="box-mui-icons" sx={{ position: "relative", mt: 3, height: 320 }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
                         icon={<SpeedDialIcon />}
                         direction="left"
                     >
-                        {actions.map((action) => (
+                        {/* {actions.map((action) => (
                             <SpeedDialAction
                                 key={action.name}
                                 icon={action.icon}
                                 tooltipTitle={action.name}
                                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                             />
-                        ))}
+                        ))} */}
+
+
+                        {INFO_read === 1 && (
+                            <SpeedDialAction
+                                key="list"
+                                icon={<ChecklistIcon />}
+                                tooltipTitle="List"
+                                onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                            />
+                        )}
+                        {INFO_modify === 1 && (
+                            <SpeedDialAction
+                                key="edit"
+                                icon={<ModeEditIcon />}
+                                tooltipTitle="Edit"
+                                onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                            />
+                        )}
+                        {INFO_delete === 1 && (
+                            <SpeedDialAction
+                                key="delete"
+                                icon={<DeleteIcon />}
+                                tooltipTitle="Delete"
+                                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                            />
+                        )}
+                        {INFO_new === 1 && (
+                            <SpeedDialAction
+                                key="Add"
+                                icon={<BookmarkAddedIcon />}
+                                tooltipTitle="Add"
+                                onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                            />
+                        )}
+                        <SpeedDialAction
+                            key="Cancel"
+                            icon={<CancelPresentationIcon />}
+                            tooltipTitle="Cancel"
+                            onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                        />
+
+
                     </StyledSpeedDial>
                 </Box>
                 <div className="table-bookingCopy-RateValidity">

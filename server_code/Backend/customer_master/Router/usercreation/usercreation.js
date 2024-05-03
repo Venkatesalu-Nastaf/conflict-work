@@ -58,22 +58,36 @@ router.delete('/usercreation-delete/:userid', (req, res) => {
 
 // update user creation ---------------------------------------------------
 
-router.put('/usercreation-edit/:userid', (req, res) => {
-  // const userid = req.params.userid;
-  const updatedCustomerData = req.body;
-  // console.log('edit', updatedCustomerData)
-  const { userid, username, stationname, designation, organizationname, userpassword, active } = req.body;
-  // console.log("data ", username, organizationname)
-  db.query('UPDATE usercreation SET  username=?, stationname=?, designation=?,organizationname=?, userpassword=?, active=? WHERE userid = ?', [username, stationname, designation, organizationname, userpassword, active, userid], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: "Failed to update data in MySQL" });
+router.put('/usercreation-edit/:userid', async (req, res) => {
+  const { updatedCustomer, permissionsData } = req.body;
+  // console.log(permissionsData[0])
+  const { userid, username, stationname, designation, organizationname, userpassword, active } = updatedCustomer;
+
+  try {
+    // Clear existing permissions for the user
+    await db.query('DELETE FROM user_permissions WHERE user_id = ?', [userid]);
+
+    // Insert new permissions
+    for (const permission of permissionsData) {
+      await db.query(
+        'INSERT INTO user_permissions(user_id, page_name, `read`, `new`, `modify`, `delete`) VALUES (?, ?, ?, ?, ?, ?)',
+        [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete]
+      );
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Customer not found" });
-    }
-    return res.status(200).json({ message: "Data updated successfully" });
-  });
+
+    // Update user details
+    await db.query(
+      'UPDATE usercreation SET  username=?, stationname=?, designation=?, organizationname=?, userpassword=?, active=? WHERE userid = ?',
+      [username, stationname, designation, organizationname, userpassword, active, userid]
+    );
+
+    res.status(200).json({ message: 'Permissions saved successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
+
 
 //  -----------------------------------------------
 

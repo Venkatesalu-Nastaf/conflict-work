@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useData } from "../../MainDash/Sildebar/DataContext2";
 import axios from "axios";
 import "./Sidebar.css";
@@ -9,6 +9,8 @@ import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
+
+import { PermissionContext } from "../../../context/permissionContext";
 
 
 // ICONS
@@ -69,7 +71,7 @@ const MenuItem = ({
       <Link
         className={isActive(value) ? "menuItem active" : "menuItem"}
         to={to}
-        onClick={() => handleMenuItemClick(menuItemKey, name, alt)}
+        onClick={(e) => handleMenuItemClick(menuItemKey, name, alt, e)}
       >
         <Icon />
         <span>{label}</span>
@@ -81,8 +83,8 @@ const MenuItem = ({
               key={index}
               to={item.to}
               className={`dropdownMenuItem ${isActive(value) ? 'active ' : ' '}`}
-              onClick={() =>
-                handleMenuItemClick(item.menuItemKey, item.name, item.alt)
+              onClick={(e) =>
+                handleMenuItemClick(item.menuItemKey, item.name, item.alt, e)
               }
             >
               {item.label}
@@ -109,7 +111,7 @@ const Sidebar = () => {
     "@keyframes ripple": {},
   }));
 
-  const closeMenuFunction = ()=>{
+  const closeMenuFunction = () => {
     setExpanded(false);
     setIsRegisterdropdownclicked(false);
     setIssettingdropdownclicked(false);
@@ -196,23 +198,65 @@ const Sidebar = () => {
 
   }
 
-  const handleMenuItemClick = async (menuItemKey, name, alt) => {
+
+  const { permissions } = useContext(PermissionContext)
+
+  const BOOKING = permissions[0]?.read;
+  const BILLING = permissions[4]?.read;
+  const REGISTER = permissions[8]?.read;
+  const SETTING = permissions[12]?.read || permissions[13]?.read;
+  const INFO = permissions[16]?.read;
+
+  const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false);
     setRegistrationDropdownVisible(false);
-    setExpanded(false);
+    setExpanded(false)
+    e.preventDefault();
+
+    var hasPermission = false;
+
+    switch (name) {
+      case "Booking page":
+        hasPermission = BOOKING;
+        break;
+      case "Billing page":
+        hasPermission = BILLING;
+        break;
+      case "Register page":
+        hasPermission = REGISTER;
+        break;
+      case "Settings page":
+        hasPermission = 1;
+        break;
+      case "Info page":
+        hasPermission = INFO;
+        break;
+      case "Dashboard page":
+        hasPermission = 1;
+      case "User page":
+        hasPermission = 1;
+      default:
+        break;
+    }
 
 
     // const currentPageName = name;
     localStorage.setItem("selectedMenuItem", menuItemKey);
     try {
-      const per = true;
-      if (per) {
+
+      if (hasPermission === 1) {
+        console.log("if ", hasPermission)
         navigate(alt);
-      } else {
+
+      } else if (hasPermission === 0) {
+
         setInfo(true);
-        setInfoMessage("Tthere is catch issue..");
+        setInfoMessage("You do not have Permission for this page ..!");
+
+        return;
       }
+
     } catch {
     }
 
@@ -382,7 +426,7 @@ const Sidebar = () => {
         className="sidebar desktop-view-sidebar"
       // variants={sidebarVariants}
       // animate={window.innerWidth <= 768.99 ? `${!expanded}` : ""}
-      
+
       >
         {/* <p>aaaaaaaaaaaaa</p> */}
         <div className="logo">
@@ -416,11 +460,11 @@ const Sidebar = () => {
             isActive={isActive}
             handleMenuItemClick={handleMenuItemClick}
             icon={BiHomeAlt}
-            
+
           />
           <MenuItem
             label="Booking"
-            to={"/home/bookings/booking"}
+            to={BOOKING && ("/home/bookings/booking")}
             alt="/home/bookings/booking"
             value="/home/bookings"
             menuItemKey="/home/bookings"
@@ -431,7 +475,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Billing"
-            to={"/home/billing/billing"}
+            to={BILLING && ("/home/billing/billing")}
             alt="/home/billing/billing"
             value="/home/billing"
             menuItemKey="/home/billing"
@@ -442,7 +486,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Register"
-            to={"/home/registration/customer"}
+            to={REGISTER && ("/home/registration/customer")}
             alt="/home/registration/customer"
             value="/home/registration"
             menuItemKey="/home/registration"
@@ -453,7 +497,7 @@ const Sidebar = () => {
           />
           <MenuItem
             label="Settings"
-            to={"/home/settings/usercreation"}
+            to={SETTING && ("/home/settings/usercreation")}
             alt="/home/settings/usercreation"
             value="/home/settings"
             menuItemKey="/home/settings"
@@ -662,7 +706,7 @@ const Sidebar = () => {
       )} */}
           <MenuItem
             label="Info"
-            to={"/home/info/ratetype"}
+            to={INFO && ("/home/info/ratetype")}
             alt="/home/info/ratetype"
             value="/home/info"
             menuItemKey="/home/info"

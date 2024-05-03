@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import "./MainDashboard.css";
 import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
@@ -18,6 +18,7 @@ import { PiWarningCircleBold } from "react-icons/pi";
 import { FaPowerOff } from "react-icons/fa";
 import { IoPower } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
+import { PermissionContext } from "../../context/permissionContext";
 
 
 // import axios from "axios";
@@ -51,7 +52,7 @@ const MainDashboard = () => {
   const data5 = localStorage.getItem("profileimages")
   const data6 = localStorage.getItem("organizationimages")
 
-
+  const { setUser_id } = useContext(PermissionContext)
 
   useEffect(() => {
 
@@ -184,6 +185,7 @@ const MainDashboard = () => {
 
   const useridno = routeData[0]?.userid;
   const usercompany = routeData[0]?.organizationname;
+  setUser_id(useridno);
 
   localStorage.setItem("useridno", useridno);
 
@@ -238,7 +240,7 @@ const MainDashboard = () => {
   return (
     <>
 
-<Modal open={openmodal} onClose={handleClosemodal}>
+      <Modal open={openmodal} onClose={handleClosemodal}>
         <Box sx={{
           position: 'absolute',
           top: '50%',
@@ -285,22 +287,22 @@ const MainDashboard = () => {
             <Sidebar expanded={expanded} />
             <div className="header-user">
               <div className="avatar-item">
-              <Tooltip title= {`Hi ${ storedUsername}`} arrow>
-              <StyledBadge
-                  overlap="circular"
-                  anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                  variant="dot"
-                 
-                >
-                  <Avatar
-                    alt="userimage"
-                    src={`${apiUrl}/public/user_profile/${selectedImage}`}
-                  />
-                </StyledBadge>
+                <Tooltip title={`Hi ${storedUsername}`} arrow>
+                  <StyledBadge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    variant="dot"
 
-</Tooltip>
+                  >
+                    <Avatar
+                      alt="userimage"
+                      src={`${apiUrl}/public/user_profile/${selectedImage}`}
+                    />
+                  </StyledBadge>
 
-               
+                </Tooltip>
+
+
 
                 { }
               </div>
@@ -333,12 +335,12 @@ const MainDashboard = () => {
               </div>
 
               {/* <div className="user-icon-update"> */}
-                
+
               <div className="user-icon-update" onClick={handleClickOpenmodal}>
-              <FaUser />
-              <div  className="user-icon-update-dot"></div>
+                <FaUser />
+                <div className="user-icon-update-dot"></div>
               </div>
-              
+
             </div>
             <Outlet />
           </div>

@@ -2,6 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { APIURL } from "../../../url";
 
+
+
+
+
 const useEmplyeecreation = () => {
     const apiUrl = APIURL;
     // const user_id = localStorage.getItem('useridno');
@@ -34,6 +38,65 @@ const useEmplyeecreation = () => {
         { field: "designation", headerName: "Designation", width: 150 },
         { field: "organizationname", headerName: "Organization", width: 130 }
     ];
+
+
+    ////-------------permission --------------------------
+
+    const initialPermissionsData = [
+
+        { id: 0, name: 'BOOKING', read: false, new: false, modify: false, delete: false },
+        { id: 1, name: 'Booking', read: false, new: false, modify: false, delete: false },
+        { id: 2, name: 'Trip Status', read: false, new: false, modify: false, delete: false },
+        { id: 3, name: 'Trip sheet', read: false, new: false, modify: false, delete: false },
+        { id: 4, name: 'BILLING', read: false, new: false, modify: false, delete: false },
+        { id: 5, name: 'Billing', read: false, new: false, modify: false, delete: false },
+        { id: 6, name: 'Transfer', read: false, new: false, modify: false, delete: false },
+        { id: 7, name: 'Covering Bill', read: false, new: false, modify: false, delete: false },
+        { id: 8, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
+        { id: 9, name: 'Customer', read: false, new: false, modify: false, delete: false },
+        { id: 10, name: 'Supllier', read: false, new: false, modify: false, delete: false },
+        { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+        { id: 12, name: 'SETTING', read: false, new: false, modify: false, delete: false },
+        { id: 13, name: 'User Creation', read: false, new: false, modify: false, delete: false },
+        { id: 14, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
+        { id: 15, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
+        { id: 16, name: 'INFO', read: false, new: false, modify: false, delete: false },
+        { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
+        { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
+        { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
+
+    ];
+
+
+    const [permissionsData, setPermissionsData] = useState(initialPermissionsData);
+
+    const handleSwitchChange = (permissionType) => () => {
+        setPermissionsData(prevData =>
+            prevData.map(permission => ({
+                ...permission,
+                [permissionType]: !permission[permissionType],
+            }))
+        );
+    };
+
+
+
+    const handleCheckboxChange = (id, field) => (event) => {
+        const { checked } = event.target;
+        setPermissionsData(prevData =>
+            prevData.map(permission => {
+                if (permission.id === id) {
+                    return { ...permission, [field]: checked };
+                }
+                return permission;
+            })
+        );
+    };
+
+
+
+
+    ///----------------------------------------------------
 
     const [book, setBook] = useState({
         userid: '',
@@ -92,6 +155,7 @@ const useEmplyeecreation = () => {
         }));
         // setBook({});
         setIsEditMode(false);
+        setPermissionsData(initialPermissionsData);
     };
 
     // add
@@ -104,7 +168,6 @@ const useEmplyeecreation = () => {
                 return;
             }
             try {
-                console.log("book123 ", book)
 
                 await axios.post(`${apiUrl}/usercreation-add`, book);
                 handleCancel();
@@ -124,10 +187,12 @@ const useEmplyeecreation = () => {
     // edit
     const handleEdit = async (userid) => {
         try {
+
             const selectedCustomer = rows.find((row) => row.userid === userid);
             const updatedCustomer = { ...selectedCustomer, ...book };
-            console.log(updatedCustomer, "update c")
-            await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, updatedCustomer);
+            const data = { updatedCustomer: updatedCustomer, permissionsData }
+
+            await axios.put(`${apiUrl}/usercreation-edit/${book.userid}`, data);
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
@@ -231,8 +296,15 @@ const useEmplyeecreation = () => {
         }
     });
 
+    const handleRowClickUser = useCallback((params) => {
+        setBook(params)
+        setSelectedCustomerId(params.customerId);
+        setIsEditMode(true);
+    }, []);
+
+
     const handleRowClick = useCallback((params) => {
-        const customerData = params.row;
+        const customerData = params?.row;
         setBook(customerData)
         setSelectedCustomerId(params.row.customerId);
         setIsEditMode(true);
@@ -254,10 +326,6 @@ const useEmplyeecreation = () => {
         event.preventDefault();
     };
 
-    // console.log("roews", rows)
-    // console.log("roews", rows[0].username)
-    // console.log("roews", rows[0].designation)
-
     return {
 
         selectedCustomerId,
@@ -273,7 +341,7 @@ const useEmplyeecreation = () => {
         book,
         handleClick,
         handleChange,
-        handleRowClick,
+        handleRowClick, handleRowClickUser,
         handleAdd,
         hidePopup,
         handleAutocompleteChange,
@@ -287,6 +355,9 @@ const useEmplyeecreation = () => {
         columns,
         isEditMode,
         handleEdit,
+
+        //ffor permission
+        permissionsData, handleSwitchChange, handleCheckboxChange
     };
 };
 

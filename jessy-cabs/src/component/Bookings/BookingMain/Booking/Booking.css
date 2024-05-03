@@ -300,3 +300,10 @@
     width: 71vw;
   }
 }
+.booking-form .input{
+  transition: transform 0.3s ease;
+}
+
+.booking-form .input:hover{
+  transform: translateY(-5px) scale(1.05);
+}

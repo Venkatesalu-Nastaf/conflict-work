@@ -96,6 +96,7 @@ const MenuItem = ({
   );
 };
 
+
 const Sidebar = () => {
 
   const apiUrl = APIURL;
@@ -117,6 +118,27 @@ const Sidebar = () => {
     setIssettingdropdownclicked(false);
     setIsinfodropdownclicked(false);
   }
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if the clicked element is not within the MainDashboard component
+      if (!event.target.closest('.mobile-view-sidebar') && !event.target.closest('.closedsidebar') && expanded == true) {
+        // Call closeMenuFunction when clicked outside of MainDashboard
+        closeMenuFunction();
+      }
+    };
+
+    
+
+    // Add event listener to handle clicks outside of MainDashboard
+    document.addEventListener('click', handleClickOutside);
+
+    // Cleanup function to remove event listener
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [closeMenuFunction]);
 
   //--------------------------to show logo-----------
 

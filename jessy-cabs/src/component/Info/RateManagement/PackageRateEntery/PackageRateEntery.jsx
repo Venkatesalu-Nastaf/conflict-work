@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./PackageRateEntery.css";
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { RateType, PriceTag, VehicleType, Duty } from "./PackageRateEnteryData.js";
+import { PermissionContext } from '../../../context/permissionContext.js';
 
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -88,6 +89,14 @@ const PackageRateEntery = () => {
 
   const startdate = dayjs(datevalidity?.startdate).format(" MMMM YYYY");
   const enddate = dayjs(datevalidity?.enddate).format(" MMMM YYYY");
+
+
+  const { permissions } = useContext(PermissionContext)
+
+  const RateManagement_read = permissions[17]?.read;
+  const RateManagement_new = permissions[17]?.new;
+  const RateManagement_modify = permissions[17]?.modify;
+  const RateManagement_delete = permissions[17]?.delete;
 
 
 
@@ -177,7 +186,7 @@ const PackageRateEntery = () => {
 
 
 
-              {/* </div>
+                {/* </div>
 
               <div className="input-field"> */}
                 <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
@@ -320,7 +329,7 @@ const PackageRateEntery = () => {
                       onChange={(e) => handleChange(e, index)}
                     />
                   </div>
-                {/* </div>
+                  {/* </div>
                 <div className='first'> */}
 
                   <div className="input" style={{ width: "200px" }}>
@@ -406,57 +415,101 @@ const PackageRateEntery = () => {
 
           <div className="input" style={{ width: "100px", marginTop: '10px', marginLeft: '10px' }}>
             {isEditMode ? (
-              <Button variant="contained" onClick={handleEdit}>Edit</Button>
+              <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
             ) : (
-              <Button variant="contained" onClick={handleAdd} >Save</Button>
+              <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
             )}
+
           </div>
         </div>
 
         {/* //--------------------------------------------------------------------------------------- */}
         <div className='alert-popup-main'>
-        {error &&
-          <div className='alert-popup Error' >
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{errorMessage}</p>
-          </div>
-        }
-        {warning &&
-          <div className='alert-popup Warning' >
-            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{warningMessage}</p>
-          </div>
-        }
-        {success &&
-          <div className='alert-popup Success' >
-            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{successMessage}</p>
-          </div>
-        }
-        {info &&
-          <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{infoMessage}</p>
-          </div>
-        }
+          {error &&
+            <div className='alert-popup Error' >
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
+            </div>
+          }
         </div>
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
           >
-            {actions.map((action) => (
+            {/* {actions.map((action) => (
               <SpeedDialAction
                 key={action.name}
                 icon={action.icon}
                 tooltipTitle={action.name}
                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
               />
-            ))}
+            ))} */}
+
+
+            {RateManagement_read === 1 && (
+              <SpeedDialAction
+                key="list"
+                icon={<ChecklistIcon />}
+                tooltipTitle="List"
+                onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+              />
+            )}
+            {RateManagement_modify === 1 && (
+              <SpeedDialAction
+                key="edit"
+                icon={<ModeEditIcon />}
+                tooltipTitle="Edit"
+                onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+              />
+            )}
+            {RateManagement_delete === 1 && (
+              <SpeedDialAction
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+              />
+            )}
+
+            <SpeedDialAction
+              key="Cancel"
+              icon={<CancelPresentationIcon />}
+              tooltipTitle="Cancel"
+              onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+            />
+            {RateManagement_new === 1 && (
+              <SpeedDialAction
+                key="Add"
+                icon={<BookmarkAddedIcon />}
+                tooltipTitle="Add"
+                onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+              />
+            )}
+
+
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-PackageRateEntery">

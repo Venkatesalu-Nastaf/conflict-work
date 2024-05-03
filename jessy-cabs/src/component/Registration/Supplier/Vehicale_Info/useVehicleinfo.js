@@ -5,11 +5,11 @@ import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
 import Button from "@mui/material/Button";
 import { APIURL } from "../../../url";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+// import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+// import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 const useVehicleinfo = () => {
     const apiUrl = APIURL;
@@ -106,12 +106,12 @@ const useVehicleinfo = () => {
         // { field: "OwnerType", headerName: "Owner Type", width: 130 },
     ];
 
-    const actions = [
-        { icon: <CancelPresentationIcon />, name: "Cancel" },
-        { icon: <DeleteIcon />, name: "Delete" },
-        { icon: <ModeEditIcon />, name: "Edit" },
-        edit ? "" : { icon: <BookmarkAddedIcon />, name: "Add" }
-    ];
+    // const actions = [
+    //     { icon: <CancelPresentationIcon />, name: "Cancel" },
+    //     { icon: <DeleteIcon />, name: "Delete" },
+    //     { icon: <ModeEditIcon />, name: "Edit" },
+    //     edit ? "" : { icon: <BookmarkAddedIcon />, name: "Add" }
+    // ];
 
     const handleSelectAll = () => {
         if (selectAll) {
@@ -732,45 +732,6 @@ const useVehicleinfo = () => {
             // Handle error if needed
         }
     };
-    // in this code file save in downloads
-
-    // const handleDocumentDownload = async () => {
-    //     try {
-    //         // Filter selected files
-    //         const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
-
-    //         // Download each file
-    //         for (const file of selectedFiles) {
-    //             const response = await axios.get(`${apiUrl}/public/vehicle_doc/` + file.fileName, {
-    //                 responseType: 'blob', // Important to get a binary response
-    //             });
-
-    //             // Save the file to the downloads directory
-    //             saveAs(response.data, file.fileName);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error downloading files:', error);
-    //         // Handle error if needed
-    //     }
-    // };
-
-
-
-    // in this code browser print
-
-    // const handleDocumentDownload = () => {
-    //     // Filter selected files
-    //     const selectedFiles = allFile.filter((img) => deletefile.includes(img.fileName));
-
-    //     // Open each file URL in a new tab
-    //     selectedFiles.forEach((file, index) => {
-    //         const url = `${apiUrl}/public/vehicle_doc/${file.fileName}`;
-    //         console.log(url);
-    //         window.open(url, '_blank');
-
-
-    //     });
-    // };
 
 
 
@@ -803,7 +764,10 @@ const useVehicleinfo = () => {
         event.preventDefault();
         try {
             if (actionName === 'List') {
-            } else if (actionName === 'Cancel') {
+
+            }
+
+            else if (actionName === 'Cancel') {
                 handleCancel();
                 setRows1([]);
                 setRows([]);
@@ -1010,7 +974,7 @@ const useVehicleinfo = () => {
         setSelectAll,
         selectAll,
         handleSelectAll,
-        handleDocumentDownload, drivername, handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, actions
+        handleDocumentDownload, drivername, handleAutocompleteChange, handleKeyEnter, handleenterSearch, rows1, edit,
     };
 };
 

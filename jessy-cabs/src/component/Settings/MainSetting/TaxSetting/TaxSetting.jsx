@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import './TaxSetting.css';
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
@@ -13,6 +13,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { PermissionContext } from '../../../context/permissionContext.js';
 
 
 // FontAwesomeIcon Link
@@ -32,6 +33,7 @@ import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useTaxsettings from './useTaxsettings.js';
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
 
 
@@ -47,14 +49,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
         left: theme.spacing(2),
     },
 }));
-
-const actions = [
-    { icon: <ChecklistIcon />, name: "List" },
-    { icon: <CancelPresentationIcon />, name: "Cancel" },
-    { icon: <DeleteIcon />, name: "Delete" },
-    { icon: <ModeEditIcon />, name: "Edit" },
-    // { icon: <BookmarkAddedIcon />, name: "Add" },
-];
 
 // Table End
 
@@ -92,6 +86,15 @@ const TaxSetting = () => {
             handleClick(null, 'List');
         }
     }, [actionName, handleClick]);
+
+
+    // Permission-------------------------------------------
+    const { permissions } = useContext(PermissionContext)
+
+    const MainSetting_read = permissions[15]?.read;
+    const MainSetting_new = permissions[15]?.new;
+    const MainSetting_modify = permissions[15]?.modify;
+    const MainSetting_delete = permissions[15]?.delete;
 
     return (
         <div className="TaxSetting-form">
@@ -168,7 +171,7 @@ const TaxSetting = () => {
                                 variant="standard"
                             />
                         </div>
-                    {/* </div>
+                        {/* </div>
                     <div className="input-field" style={{ padding: '0px 15px' }}> */}
                         <div className="input">
                             <div className="icone">
@@ -239,9 +242,9 @@ const TaxSetting = () => {
 
                         <div className="input" style={{ width: "70px" }}>
                             {isEditMode ? (
-                                <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                                <Button variant="contained" disabled={!MainSetting_modify} onClick={handleEdit}>Edit</Button>
                             ) : (
-                                <Button variant="contained" onClick={handleAdd}>Add</Button>
+                                <Button variant="contained" disabled={!MainSetting_new} onClick={handleAdd}>Add</Button>
                             )}
                         </div>
                     </div>
@@ -282,14 +285,55 @@ const TaxSetting = () => {
                                 icon={<SpeedDialIcon />}
                                 direction="left"
                             >
-                                {actions.map((action) => (
+                                {/* {actions.map((action) => (
                                     <SpeedDialAction
                                         key={action.name}
                                         icon={action.icon}
                                         tooltipTitle={action.name}
                                         onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                                     />
-                                ))}
+                                ))} */}
+
+
+                                {MainSetting_read === 1 && (
+                                    <SpeedDialAction
+                                        key="list"
+                                        icon={<ChecklistIcon />}
+                                        tooltipTitle="List"
+                                        onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                                    />
+                                )}
+                                {MainSetting_modify === 1 && (
+                                    <SpeedDialAction
+                                        key="edit"
+                                        icon={<ModeEditIcon />}
+                                        tooltipTitle="Edit"
+                                        onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                                    />
+                                )}
+                                {MainSetting_delete === 1 && (
+                                    <SpeedDialAction
+                                        key="delete"
+                                        icon={<DeleteIcon />}
+                                        tooltipTitle="Delete"
+                                        onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                                    />
+                                )}
+                                {MainSetting_new === 1 && (
+                                    <SpeedDialAction
+                                        key="Add"
+                                        icon={<BookmarkAddedIcon />}
+                                        tooltipTitle="Add"
+                                        onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                                    />
+                                )}
+                                <SpeedDialAction
+                                    key="Cancel"
+                                    icon={<CancelPresentationIcon />}
+                                    tooltipTitle="Cancel"
+                                    onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                                />
+
                             </StyledSpeedDial>
                         </Box>
                     </div>
@@ -316,7 +360,7 @@ const TaxSetting = () => {
                 </div>
             </form>
 
-          
+
         </div>
     )
 }

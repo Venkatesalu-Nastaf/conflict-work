@@ -244,7 +244,7 @@ const VehicleStatement = () => {
               </Box>
             </div>
 
-
+        <div className='alert-popup-main'>
         {error &&
           <div className='alert-popup Error' >
             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -273,6 +273,7 @@ const VehicleStatement = () => {
             <p>{infoMessage}</p>
           </div>
         }
+        </div>
         <div className="table-bookingCopy-VehicleStatement">
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">

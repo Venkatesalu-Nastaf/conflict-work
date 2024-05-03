@@ -75,3 +75,6 @@ npm install react-icons - for react icons
 npm install react-to-pdf - for pdf download 
 
 npm install react-apexcharts apexcharts -for apex chart
+
+
+npm install apexcharts - for apex charts

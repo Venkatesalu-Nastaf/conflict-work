@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import "./Booking.css";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
@@ -21,7 +21,7 @@ import {
   PayType,
   Report,
   Service_Station,
-  GroupTypes ,
+  GroupTypes,
   vehicaleinfos
 } from "./Booking";
 import {
@@ -79,12 +79,20 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import HomeRepairServiceTwoToneIcon from "@mui/icons-material/HomeRepairServiceTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@mui/icons-material/AccountBalanceWalletTwoTone";
 import useBooking from "./useBooking";
+import { PermissionContext } from "../../../context/permissionContext";
 
 //dialog box
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { APIURL } from "../../../url";
+
+// spped dial 
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -138,7 +146,7 @@ const Booking = () => {
     setGuestSms,
     sendEmail,
     setSendEmail,
-    
+
     lastBookingNo,
     currentYear,
     setTripTime,
@@ -180,16 +188,25 @@ const Booking = () => {
     handleKeyEnterdriver,
     vehileName,
     selectedCustomerdriver
-    
+
   } = useBooking();
 
-  console.log(rowdriver,"driver");
+  console.log(rowdriver, "driver");
 
   useEffect(() => {
     if (actionName === "List") {
       handleClick(null, "List");
     }
   }, [actionName, handleClick]);
+
+
+  // Permission ------------
+  const { permissions } = useContext(PermissionContext)
+
+  const Booking_read = permissions[1]?.read;
+  const Booking_new = permissions[1]?.new;
+  const Booking_modify = permissions[1]?.modify;
+  const Booking_delete = permissions[1]?.delete;
 
   return (
     <div className="booking-form Scroll-Style-hide">
@@ -198,9 +215,9 @@ const Booking = () => {
         <div className="booking-main-section1">
           <div className="sub-section1 ">
 
-            <div className="first-division" style={{display: 'flex', flexWrap: 'wrap'}}>
+            <div className="first-division" style={{ display: 'flex', flexWrap: 'wrap' }}>
 
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
@@ -222,138 +239,138 @@ const Booking = () => {
                 />
               </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoItem label="Booking Date">
-                      <DatePicker
-                        value={
-                          formData.bookingdate || selectedCustomerData.bookingdate
-                            ? dayjs(selectedCustomerData.bookingdate)
-                            : null || book.bookingdate
-                              ? dayjs(book.bookingdate)
-                              : dayjs()
-                        }
-                        format="DD/MM/YYYY"
-                        onChange={(date) => handleDateChange(date, "bookingdate")}
-                      >
-                        {({ inputProps, inputRef }) => (
-                          <TextField
-                            {...inputProps}
-                            inputRef={inputRef}
-                            value={selectedCustomerData?.bookingdate}
-                          />
-                        )}
-                      </DatePicker>
-                    </DemoItem>
-                  </LocalizationProvider>
-                </div>
-
-                <div className="input-field" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                  <div className="input time">
-                    <label>Booking Time</label>
-                    <input
-                      type="time"
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoItem label="Booking Date">
+                    <DatePicker
                       value={
-                        formData.bookingtime ||
-                        selectedCustomerData.bookingtime ||
-                        book.bookingtime ||
-                        getCurrentTime() ||
-                        ""
+                        formData.bookingdate || selectedCustomerData.bookingdate
+                          ? dayjs(selectedCustomerData.bookingdate)
+                          : null || book.bookingdate
+                            ? dayjs(book.bookingdate)
+                            : dayjs()
                       }
                       format="DD/MM/YYYY"
-                      onChange={(event) => {
-                        setBook({ ...book, bookingtime: event.target.value });
-                        setSelectedCustomerData({
-                          ...selectedCustomerData,
-                          bookingtime: event.target.value,
-                        });
-                        setBookingTime(event.target.value);
-                      }}
-                      name="bookingtime"
-                    />
-                  </div>
+                      onChange={(date) => handleDateChange(date, "bookingdate")}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField
+                          {...inputProps}
+                          inputRef={inputRef}
+                          value={selectedCustomerData?.bookingdate}
+                        />
+                      )}
+                    </DatePicker>
+                  </DemoItem>
+                </LocalizationProvider>
+              </div>
+
+              <div className="input-field" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+                <div className="input time">
+                  <label>Booking Time</label>
+                  <input
+                    type="time"
+                    value={
+                      formData.bookingtime ||
+                      selectedCustomerData.bookingtime ||
+                      book.bookingtime ||
+                      getCurrentTime() ||
+                      ""
+                    }
+                    format="DD/MM/YYYY"
+                    onChange={(event) => {
+                      setBook({ ...book, bookingtime: event.target.value });
+                      setSelectedCustomerData({
+                        ...selectedCustomerData,
+                        bookingtime: event.target.value,
+                      });
+                      setBookingTime(event.target.value);
+                    }}
+                    name="bookingtime"
+                  />
                 </div>
+              </div>
 
               {/* </div>
 
 
               <div style={{display: 'flex', flexWrap: 'wrap'}}> */}
 
-                <div className="input radio" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Status
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="status"
-                      autoComplete="new-password"
-                      value={
-                        formData.status ||
-                        selectedCustomerData.status ||
-                        book.status ||
-                        ""
-                      }
-                      onChange={handleChange}
-                    >
-                      <FormControlLabel
-                        value="pending"
-                        control={<Radio />}
-                        label="Pending"
-                      />
-                      <FormControlLabel
-                        value="Cancelled"
-                        control={<Radio />}
-                        label="Cancelled"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
-
-                <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                  <div className="icone">
-                    <SellIcon color="action" />
-                  </div>
-                  <TextField
-                    name="tripid"
+              <div className="input radio" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Status
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="status"
                     autoComplete="new-password"
                     value={
-                      formData.tripid ||
-                      selectedCustomerData.tripid ||
-                      book.tripid ||
+                      formData.status ||
+                      selectedCustomerData.status ||
+                      book.status ||
                       ""
                     }
                     onChange={handleChange}
-                    label="Trip Id"
-                    id="standard-size-normal"
-                    variant="standard"
-                  />
-                </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                  <div className="icone">
-                    <PermIdentityIcon color="action" />
-                  </div>
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    id="customer"
-                    label="Customer"
-                    name="customer"
-                    value={
-                      formData.customer ||
-                      selectedCustomerData.customer ||
-                      selectedCustomerDatas.customer ||
-                      book.customer ||
-                      ""
-                    }
-                    onChange={handleChange}
-                    onKeyDown={handleKeyEnter}
-                    autoComplete="new-password"
-                  />
-                </div>
-                
+                  >
+                    <FormControlLabel
+                      value="pending"
+                      control={<Radio />}
+                      label="Pending"
+                    />
+                    <FormControlLabel
+                      value="Cancelled"
+                      control={<Radio />}
+                      label="Cancelled"
+                    />
+                  </RadioGroup>
+                </FormControl>
               </div>
+
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+                <div className="icone">
+                  <SellIcon color="action" />
+                </div>
+                <TextField
+                  name="tripid"
+                  autoComplete="new-password"
+                  value={
+                    formData.tripid ||
+                    selectedCustomerData.tripid ||
+                    book.tripid ||
+                    ""
+                  }
+                  onChange={handleChange}
+                  label="Trip Id"
+                  id="standard-size-normal"
+                  variant="standard"
+                />
+              </div>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+                <div className="icone">
+                  <PermIdentityIcon color="action" />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="customer"
+                  label="Customer"
+                  name="customer"
+                  value={
+                    formData.customer ||
+                    selectedCustomerData.customer ||
+                    selectedCustomerDatas.customer ||
+                    book.customer ||
+                    ""
+                  }
+                  onChange={handleChange}
+                  onKeyDown={handleKeyEnter}
+                  autoComplete="new-password"
+                />
+              </div>
+
+            </div>
 
           </div>
           <div className="sub-section2">
@@ -399,7 +416,7 @@ const Booking = () => {
               </div>
             </div>
             <div className="input">
-                {/* <FormControlLabel
+              {/* <FormControlLabel
                   value="guestsms"
                   control={
                     <Checkbox
@@ -418,25 +435,25 @@ const Booking = () => {
                   label="Guest SMS"
                 /> */}
 
-                <FormControlLabel
-                  value="guestsms"
-                  control={
-                    <Checkbox
-                      size="small"
-                      checked={guestsms}
-                      defaultChecked
-                      onChange={(event) => setGuestSms(event.target.checked)}
-                    />
-                  }
-                  label="Guest SMS"
-                />
+              <FormControlLabel
+                value="guestsms"
+                control={
+                  <Checkbox
+                    size="small"
+                    checked={guestsms}
+                    defaultChecked
+                    onChange={(event) => setGuestSms(event.target.checked)}
+                  />
+                }
+                label="Guest SMS"
+              />
 
-                {/* <FormControlLabel
+              {/* <FormControlLabel
                   value="bookingsms"
                   control={<Checkbox size="small" />}
                   label="Booking SMS"
                 /> */}
-                {/* <FormControlLabel
+              {/* <FormControlLabel
                   id="sendMailCheckbox"
                   value="sendemail"
                   control={
@@ -458,323 +475,323 @@ const Booking = () => {
                   label="Send Email"
                 /> */}
 
-                <FormControlLabel
-                  id="sendMailCheckbox"
-                  value="sendemail"
-                  control={
-                    <Checkbox
-                      size="small"
-                      checked={sendEmail}
-                      defaultChecked
-                      onChange={(event) => setSendEmail(event.target.checked)}
-                    />
-                  }
-                  label="Send Email"
-                />
+              <FormControlLabel
+                id="sendMailCheckbox"
+                value="sendemail"
+                control={
+                  <Checkbox
+                    size="small"
+                    checked={sendEmail}
+                    defaultChecked
+                    onChange={(event) => setSendEmail(event.target.checked)}
+                  />
+                }
+                label="Send Email"
+              />
 
-              </div>
+            </div>
           </div>
         </div>
 
-{/* ----_____________________________________________ */}
+        {/* ----_____________________________________________ */}
 
-        
-        
+
+
         <div>
-          <div className="second-division" style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
+          <div className="second-division" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
 
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <HomeRepairServiceTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  name="orderedby"
-                  autoComplete="new-password"
-                  value={
-                    formData.orderedby ||
-                    selectedCustomerData.orderedby ||
-                    selectedCustomerDatas.name ||
-                    book.orderedby ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Ordered by"
-                  id="orderedby"
-                  variant="standard"
-                />
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <HomeRepairServiceTwoToneIcon color="action" />
               </div>
+              <TextField
+                name="orderedby"
+                autoComplete="new-password"
+                value={
+                  formData.orderedby ||
+                  selectedCustomerData.orderedby ||
+                  selectedCustomerDatas.name ||
+                  book.orderedby ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Ordered by"
+                id="orderedby"
+                variant="standard"
+              />
+            </div>
 
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <AddIcCallTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  name="mobile"
-                  autoComplete="new-password"
-                  value={
-                    formData.mobile ||
-                    selectedCustomerData.mobile ||
-                    selectedCustomerDatas.phoneno ||
-                    book.mobile ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Mobile No"
-                  id="mobile"
-                  variant="standard"
-                />
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <AddIcCallTwoToneIcon color="action" />
               </div>
+              <TextField
+                name="mobile"
+                autoComplete="new-password"
+                value={
+                  formData.mobile ||
+                  selectedCustomerData.mobile ||
+                  selectedCustomerDatas.phoneno ||
+                  book.mobile ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Mobile No"
+                id="mobile"
+                variant="standard"
+              />
+            </div>
 
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <AccountCircleTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  name="guestname"
-                  autoComplete="new-password"
-                  value={
-                    formData.guestname ||
-                    selectedCustomerData.guestname ||
-                    book.guestname ||
-                    formValues.guestname ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Guest Name"
-                  id="guestname"
-                  variant="standard"
-                  required
-                />
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <AccountCircleTwoToneIcon color="action" />
               </div>
+              <TextField
+                name="guestname"
+                autoComplete="new-password"
+                value={
+                  formData.guestname ||
+                  selectedCustomerData.guestname ||
+                  book.guestname ||
+                  formValues.guestname ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Guest Name"
+                id="guestname"
+                variant="standard"
+                required
+              />
+            </div>
 
-              <div className="input">
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="usage"
-                  label="Usage"
-                  name="useage"
-                  autoComplete="new-password"
-                  value={
-                    formData.useage ||
-                    selectedCustomerData.useage ||
-                    formValues.useage ||
-                    book.useage ||
-                    ""
-                  }
-                  onChange={handleChange}
-                />
-              </div>
+            <div className="input">
+              <TextField
+                margin="normal"
+                size="small"
+                id="usage"
+                label="Usage"
+                name="useage"
+                autoComplete="new-password"
+                value={
+                  formData.useage ||
+                  selectedCustomerData.useage ||
+                  formValues.useage ||
+                  book.useage ||
+                  ""
+                }
+                onChange={handleChange}
+              />
+            </div>
 
-          {/* </div>
+            {/* </div>
 
           <div style={{display: 'flex', flexWrap: 'wrap'}}> */}
 
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <ContactPhoneIcon color="action" />
-                </div>
-                <TextField
-                  name="guestmobileno"
-                  autoComplete="new-password"
-                  value={
-                    formData.guestmobileno ||
-                    selectedCustomerData.guestmobileno ||
-                    formValues.guestmobileno ||
-                    book.guestmobileno ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Guest Mobile No"
-                  id="guestmobileno"
-                  variant="standard"
-                />
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <ContactPhoneIcon color="action" />
               </div>
-              <div className="input radio" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <AttachEmailIcon color="action" />
-                </div>
-                <TextField
-                  name="email"
-                  autoComplete="new-password"
-                  value={
-                    formData.email ||
-                    selectedCustomerData.email ||
-                    formValues.email ||
-                    book.email ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Email"
-                  id="email"
-                  variant="standard"
-                />
+              <TextField
+                name="guestmobileno"
+                autoComplete="new-password"
+                value={
+                  formData.guestmobileno ||
+                  selectedCustomerData.guestmobileno ||
+                  formValues.guestmobileno ||
+                  book.guestmobileno ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Guest Mobile No"
+                id="guestmobileno"
+                variant="standard"
+              />
+            </div>
+            <div className="input radio" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <AttachEmailIcon color="action" />
               </div>
-              <div className="input radio" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <RateReviewIcon color="action" />
-                </div>
-                <TextField
-                  name="employeeno"
-                  autoComplete="new-password"
-                  value={
-                    formData.employeeno ||
-                    selectedCustomerData.employeeno ||
-                    book.employeeno ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Employee No"
-                  id="employeeno"
-                  variant="standard"
-                />
+              <TextField
+                name="email"
+                autoComplete="new-password"
+                value={
+                  formData.email ||
+                  selectedCustomerData.email ||
+                  formValues.email ||
+                  book.email ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Email"
+                id="email"
+                variant="standard"
+              />
+            </div>
+            <div className="input radio" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <RateReviewIcon color="action" />
               </div>
+              <TextField
+                name="employeeno"
+                autoComplete="new-password"
+                value={
+                  formData.employeeno ||
+                  selectedCustomerData.employeeno ||
+                  book.employeeno ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Employee No"
+                id="employeeno"
+                variant="standard"
+              />
+            </div>
 
-              <div className="input">
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="username"
-                  label="User Name"
-                  name="username"
-                  autoComplete="new-password"
-                  value={
-                    formData.username ||
-                    selectedCustomerData.username ||
-                    book.username ||
-                    storedUsername ||
-                    ""
-                  }
-                  onChange={handleChange}
-                />
-              </div>
+            <div className="input">
+              <TextField
+                margin="normal"
+                size="small"
+                id="username"
+                label="User Name"
+                name="username"
+                autoComplete="new-password"
+                value={
+                  formData.username ||
+                  selectedCustomerData.username ||
+                  book.username ||
+                  storedUsername ||
+                  ""
+                }
+                onChange={handleChange}
+              />
+            </div>
 
-          {/* </div>
-
-          <div style={{display: 'flex', flexWrap: 'wrap'}}> */}
-
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <AddHomeWorkIcon color="action" />
-                </div>
-                <TextField
-                  margin="normal"
-                  size="small"
-                  id="streetname"
-                  label="No.Street Name"
-                  name="address1"
-                  autoComplete="new-password"
-                  style={{width: '194px'}}
-                  value={
-                    formData.address1 ||
-                    selectedCustomerData.address1 ||
-                    book.address1 ||
-                    ""
-                  }
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <HomeTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  name="streetno"
-                  autoComplete="new-password"
-                  value={
-                    formData.streetno ||
-                    selectedCustomerData.streetno ||
-                    book.streetno ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="Address"
-                  id="address"
-                  variant="standard"
-                />
-              </div>
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <LocationCityIcon color="action" />
-                </div>
-                <TextField
-                  name="city"
-                  autoComplete="new-password"
-                  value={
-                    formData.city ||
-                    selectedCustomerData.city ||
-                    book.city ||
-                    ""
-                  }
-                  onChange={handleChange}
-                  label="City"
-                  id="standard-size-normal"
-                  variant="standard"
-                />
-              </div>
-
-              <div className="input" style={{ width: "223px", display: 'flex', alignItems: 'center' }}>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  value={currentYear}
-                  options={[currentYear]}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Fin Years" />
-                  )}
-                />
-              </div>
-
-          {/* </div>
-
+            {/* </div>
 
           <div style={{display: 'flex', flexWrap: 'wrap'}}> */}
 
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <LocationCityIcon color="action" />
-                </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) =>
-                    handleAutocompleteChange(event, value, "report")
-                  }
-                  value={
-                    Report.find((option) => option.Option)?.label ||
-                    formData.report ||
-                    selectedCustomerData.report ||
-                    book.report ||
-                    ""
-                  }
-                  options={Report.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) =>
-                    option.label ||
-                    formData.report ||
-                    selectedCustomerData.report ||
-                    book.report ||
-                    ""
-                  }
-                  renderInput={(params) => {
-                    return (
-                      <TextField
-                        {...params}
-                        label="Report"
-                        autoComplete="password"
-                        name="report"
-                        inputRef={params.inputRef}
-                      />
-                    );
-                  }}
-                />
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <AddHomeWorkIcon color="action" />
               </div>
-              {/* <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+              <TextField
+                margin="normal"
+                size="small"
+                id="streetname"
+                label="No.Street Name"
+                name="address1"
+                autoComplete="new-password"
+                style={{ width: '194px' }}
+                value={
+                  formData.address1 ||
+                  selectedCustomerData.address1 ||
+                  book.address1 ||
+                  ""
+                }
+                onChange={handleChange}
+              />
+            </div>
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <HomeTwoToneIcon color="action" />
+              </div>
+              <TextField
+                name="streetno"
+                autoComplete="new-password"
+                value={
+                  formData.streetno ||
+                  selectedCustomerData.streetno ||
+                  book.streetno ||
+                  ""
+                }
+                onChange={handleChange}
+                label="Address"
+                id="address"
+                variant="standard"
+              />
+            </div>
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <LocationCityIcon color="action" />
+              </div>
+              <TextField
+                name="city"
+                autoComplete="new-password"
+                value={
+                  formData.city ||
+                  selectedCustomerData.city ||
+                  book.city ||
+                  ""
+                }
+                onChange={handleChange}
+                label="City"
+                id="standard-size-normal"
+                variant="standard"
+              />
+            </div>
+
+            <div className="input" style={{ width: "223px", display: 'flex', alignItems: 'center' }}>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo"
+                value={currentYear}
+                options={[currentYear]}
+                renderInput={(params) => (
+                  <TextField {...params} label="Fin Years" />
+                )}
+              />
+            </div>
+
+            {/* </div>
+
+
+          <div style={{display: 'flex', flexWrap: 'wrap'}}> */}
+
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <LocationCityIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "report")
+                }
+                value={
+                  Report.find((option) => option.Option)?.label ||
+                  formData.report ||
+                  selectedCustomerData.report ||
+                  book.report ||
+                  ""
+                }
+                options={Report.map((option) => ({
+                  label: option.Option,
+                }))}
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.report ||
+                  selectedCustomerData.report ||
+                  book.report ||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label="Report"
+                      autoComplete="password"
+                      name="report"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
+              />
+            </div>
+            {/* <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
                 <div className="icone">
                   <TaxiAlertTwoToneIcon color="action" />
                 </div>
@@ -816,76 +833,76 @@ const Booking = () => {
                   }}
                 />
               </div> */}
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <AccountBalanceWalletTwoToneIcon color="action" />
-                </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) =>
-                    handleAutocompleteChange(event, value, "paymenttype")
-                  }
-                  value={
-                    PayType.find((option) => option.Option)?.label ||
-                    formData.paymenttype ||
-                    selectedCustomerData.paymenttype ||
-                    book.paymenttype ||
-                    ""
-                  }
-                  options={PayType.map((option) => ({
-                    label: option.Option,
-                  }))}
-                  getOptionLabel={(option) =>
-                    option.label ||
-                    formData.paymenttype ||
-                    selectedCustomerData.paymenttype ||
-                    book.paymenttype ||
-                    ""
-                  }
-                  renderInput={(params) => {
-                    return (
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <AccountBalanceWalletTwoToneIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "paymenttype")
+                }
+                value={
+                  PayType.find((option) => option.Option)?.label ||
+                  formData.paymenttype ||
+                  selectedCustomerData.paymenttype ||
+                  book.paymenttype ||
+                  ""
+                }
+                options={PayType.map((option) => ({
+                  label: option.Option,
+                }))}
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.paymenttype ||
+                  selectedCustomerData.paymenttype ||
+                  book.paymenttype ||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label="Payment Type"
+                      name="paymenttype"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
+              />
+            </div>
+
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoItem label="Trip Date">
+                  <DatePicker
+                    value={book.tripdate ? dayjs(book.tripdate) : dayjs()}
+                    onChange={(date) => handleDateChange(date, "tripdate")}
+                    format="DD/MM/YYYY"
+                  >
+                    {({ inputProps, inputRef }) => (
                       <TextField
-                        {...params}
-                        label="Payment Type"
-                        name="paymenttype"
-                        inputRef={params.inputRef}
+                        {...inputProps}
+                        inputRef={inputRef}
+                        value={selectedCustomerData?.tripdate}
                       />
-                    );
-                  }}
-                />
-              </div>
+                    )}
+                  </DatePicker>
+                </DemoItem>
+              </LocalizationProvider>
+            </div>
 
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoItem label="Trip Date">
-                    <DatePicker
-                      value={book.tripdate ? dayjs(book.tripdate) : dayjs()}
-                      onChange={(date) => handleDateChange(date, "tripdate")}
-                      format="DD/MM/YYYY"
-                    >
-                      {({ inputProps, inputRef }) => (
-                        <TextField
-                          {...inputProps}
-                          inputRef={inputRef}
-                          value={selectedCustomerData?.tripdate}
-                        />
-                      )}
-                    </DatePicker>
-                  </DemoItem>
-                </LocalizationProvider>
-              </div>
-
-          {/* </div>
+            {/* </div>
 
 
           <div style={{display: 'flex', flexWrap: 'wrap'}}> */}
 
             <div className="input-field">
-              <div className="input time" style={{paddingRight: '15px', marginTop: '0px'}}>
+              <div className="input time" style={{ paddingRight: '15px', marginTop: '0px' }}>
                 <label>Trip Time</label>
                 <input
                   type="time"
@@ -904,142 +921,142 @@ const Booking = () => {
               </div>
             </div>
 
-            <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Report Date"
-                    value={
-                      formData.startdate || selectedCustomerData.startdate
-                        ? dayjs(selectedCustomerData.startdate)
-                        : dayjs() || book.startdate
-                          ? dayjs(book.startdate)
-                          : dayjs()
-                    }
-                    format="DD/MM/YYYY"
-                    onChange={(date) => handleDateChange(date, "startdate")}
-                  >
-                    {({ inputProps, inputRef }) => (
-                      <TextField
-                        {...inputProps}
-                        inputRef={inputRef}
-                        value={selectedCustomerData?.startdate}
-                      />
-                    )}
-                  </DatePicker>
-                </LocalizationProvider>
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Report Date"
+                  value={
+                    formData.startdate || selectedCustomerData.startdate
+                      ? dayjs(selectedCustomerData.startdate)
+                      : dayjs() || book.startdate
+                        ? dayjs(book.startdate)
+                        : dayjs()
+                  }
+                  format="DD/MM/YYYY"
+                  onChange={(date) => handleDateChange(date, "startdate")}
+                >
+                  {({ inputProps, inputRef }) => (
+                    <TextField
+                      {...inputProps}
+                      inputRef={inputRef}
+                      value={selectedCustomerData?.startdate}
+                    />
+                  )}
+                </DatePicker>
+              </LocalizationProvider>
+            </div>
+            <div className="input-field" style={{ paddingRight: '15px' }}>
+              <div className="input time" style={{ marginTop: '0px' }}>
+                <label>Start Time</label>
+                <input
+                  type="time"
+                  value={
+                    formData.starttime ||
+                    selectedCustomerData.starttime ||
+                    book.starttime ||
+                    ""
+                  }
+                  onChange={(event) => {
+                    setFormData({ ...formData, starttime: event.target.value });
+                    setSelectedCustomerData({
+                      ...selectedCustomerData,
+                      starttime: event.target.value,
+                    });
+                    setBook({ ...book, starttime: event.target.value });
+                    setStartTime(event.target.value);
+                  }}
+                  name="starttime"
+                />
               </div>
-              <div className="input-field" style={{paddingRight: '15px'}}>
-                <div className="input time" style={{marginTop: '0px'}}>
-                  <label>Start Time</label>
-                  <input
-                    type="time"
-                    value={
-                      formData.starttime ||
-                      selectedCustomerData.starttime ||
-                      book.starttime ||
-                      ""
-                    }
-                    onChange={(event) => {
-                      setFormData({ ...formData, starttime: event.target.value });
-                      setSelectedCustomerData({
-                        ...selectedCustomerData,
-                        starttime: event.target.value,
-                      });
-                      setBook({ ...book, starttime: event.target.value });
-                      setStartTime(event.target.value);
-                    }}
-                    name="starttime"
-                  />
-                </div>
-              </div>
-              
-              <div className="input-field" style={{paddingRight: '15px'}}>
-                <div className="input time" style={{marginTop: '0px'}}>
-                  <label>Report Time</label>
-                  <input
-                    type="time"
-                    name="reporttime"
-                    value={
-                      formData.reporttime ||
-                      selectedCustomerData.reporttime ||
-                      book.reporttime ||
-                      ""
-                    }
-                    onChange={(event) => {
-                      setBook({ ...book, reporttime: event.target.value });
-                      setreporttime(event.target.value);
-                      setFormData({
-                        ...formData,
-                        reporttime: event.target.value,
-                      });
-                      setSelectedCustomerData({
-                        ...selectedCustomerData,
-                        reporttime: event.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-              
+            </div>
 
-          {/* </div>
+            <div className="input-field" style={{ paddingRight: '15px' }}>
+              <div className="input time" style={{ marginTop: '0px' }}>
+                <label>Report Time</label>
+                <input
+                  type="time"
+                  name="reporttime"
+                  value={
+                    formData.reporttime ||
+                    selectedCustomerData.reporttime ||
+                    book.reporttime ||
+                    ""
+                  }
+                  onChange={(event) => {
+                    setBook({ ...book, reporttime: event.target.value });
+                    setreporttime(event.target.value);
+                    setFormData({
+                      ...formData,
+                      reporttime: event.target.value,
+                    });
+                    setSelectedCustomerData({
+                      ...selectedCustomerData,
+                      reporttime: event.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+
+
+            {/* </div>
 
           <div style={{display: 'flex', flexWrap: 'wrap'}}> */}
 
-           <div style={{width: '100%'}}>
-           <div className="input-field">
-              <div className="input-btn">
-                <span onClick={handleClickHide} className="btn">
-                  Hide
-                </span>
-                <span className="btn">Copy</span>
+            <div style={{ width: '100%' }}>
+              <div className="input-field">
+                <div className="input-btn">
+                  <span onClick={handleClickHide} className="btn">
+                    Hide
+                  </span>
+                  <span className="btn">Copy</span>
+                </div>
               </div>
-            </div>
 
-            <div className="input-field">
-              <div className="input">
-                {formData.bookingno ||
-                  selectedCustomerData.bookingno ||
-                  book.bookingno ? (
+              <div className="input-field">
+                <div className="input">
+                  {formData.bookingno ||
+                    selectedCustomerData.bookingno ||
+                    book.bookingno ? (
+                    <Button
+                      color="primary"
+                      variant="contained"
+
+                      component="label"
+                    >
+                      Attach File
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onClick={handleprevent}
+                        onChange={(e) => setFile(e.target.files[0])}
+                      />
+                    </Button>
+                  ) : (
+                    <Button
+                      color="primary"
+                      variant="contained"
+
+                      onClick={() => {
+                        setError(true);
+                        setErrorMessage("Please Enter Booking No");
+                      }}
+                    >
+                      Attach File
+                    </Button>
+                  )}
+                </div>
+                <div className="input">
                   <Button
-                    color="primary"
-                    variant="contained"
-                 
-                    component="label"
+                    variant="outlined"
+                    onClick={handleButtonClick}
+
                   >
-                    Attach File
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onClick={handleprevent}
-                      onChange={(e) => setFile(e.target.files[0])}
-                    />
+                    View
                   </Button>
-                ) : (
-                  <Button
-                    color="primary"
-                    variant="contained"
-             
-                    onClick={() => {
-                      setError(true);
-                      setErrorMessage("Please Enter Booking No");
-                    }}
-                  >
-                    Attach File
-                  </Button>
-                )}
-              </div>
-              <div className="input">
-                <Button
-                  variant="outlined"
-                  onClick={handleButtonClick}
-            
-                >
-                  View
-                </Button>
+                </div>
               </div>
             </div>
-           </div>
 
           </div>
 
@@ -1048,10 +1065,10 @@ const Booking = () => {
 
           <div className="booking-main-section2">
 
-            <div className="sub-section1 sub-section-second-division" style={{display: 'flex', flexWrap: 'wrap'}}>
-              
+            <div className="sub-section1 sub-section-second-division" style={{ display: 'flex', flexWrap: 'wrap' }}>
 
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
                   <EngineeringIcon color="action" />
                 </div>
@@ -1093,7 +1110,7 @@ const Booking = () => {
                   }}
                 />
               </div>
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
                   <LocationCityIcon color="action" />
                 </div>
@@ -1114,7 +1131,7 @@ const Booking = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
                   <QrCodeIcon color="action" />
                 </div>
@@ -1134,7 +1151,7 @@ const Booking = () => {
                 />
               </div>
 
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
                   <AppRegistrationIcon color="action" />
                 </div>
@@ -1154,11 +1171,11 @@ const Booking = () => {
                 />
               </div>
 
-          {/* </div>
+              {/* </div>
 
           <div style={{display: 'flex', flexWrap: 'wrap'}}> */}
 
-            <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
                   <AirplaneTicketIcon color="action" />
                 </div>
@@ -1177,7 +1194,7 @@ const Booking = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
                   <ForwardToInboxIcon color="action" />
                 </div>
@@ -1197,7 +1214,7 @@ const Booking = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px'}}>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
                 <div className="icone">
                   <FmdBadIcon color="action" />
                 </div>
@@ -1216,7 +1233,7 @@ const Booking = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px'}}>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
@@ -1260,11 +1277,11 @@ const Booking = () => {
                 />
               </div>
 
-          {/* </div>
+              {/* </div>
 
           <div style={{display: 'flex', flexWrap: 'wrap'}}> */}
 
-            <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px'}}>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
                 <div className="icone">
                   <InfoIcon color="action" />
                 </div>
@@ -1294,7 +1311,7 @@ const Booking = () => {
 
             <div className="sub-section2">
 
-              <div className="booking-update-main driver-table" style={{marginTop:'20px'}}>
+              <div className="booking-update-main driver-table" style={{ marginTop: '20px' }}>
                 <div className="booking-update">
                   <div
                     className="Scroll-Style"
@@ -1364,7 +1381,7 @@ const Booking = () => {
 
 
 
-{/* ______________________________________________________________ */}
+        {/* ______________________________________________________________ */}
 
 
 
@@ -2179,7 +2196,7 @@ const Booking = () => {
             </div>
             <div className="inpu-field">
               <div className="input"> */}
-                {/* <FormControlLabel
+        {/* <FormControlLabel
                   value="guestsms"
                   control={
                     <Checkbox
@@ -2198,7 +2215,7 @@ const Booking = () => {
                   label="Guest SMS"
                 /> */}
 
-                {/* <FormControlLabel
+        {/* <FormControlLabel
                   value="guestsms"
                   control={
                     <Checkbox
@@ -2211,12 +2228,12 @@ const Booking = () => {
                   label="Guest SMS"
                 /> */}
 
-                {/* <FormControlLabel
+        {/* <FormControlLabel
                   value="bookingsms"
                   control={<Checkbox size="small" />}
                   label="Booking SMS"
                 /> */}
-                {/* <FormControlLabel
+        {/* <FormControlLabel
                   id="sendMailCheckbox"
                   value="sendemail"
                   control={
@@ -2238,7 +2255,7 @@ const Booking = () => {
                   label="Send Email"
                 /> */}
 
-                {/* <FormControlLabel
+        {/* <FormControlLabel
                   id="sendMailCheckbox"
                   value="sendemail"
                   control={
@@ -2402,7 +2419,7 @@ const Booking = () => {
     </div> */}
 
 
-    {/* ____________________________________________________ */}
+        {/* ____________________________________________________ */}
 
 
 
@@ -2426,26 +2443,67 @@ const Booking = () => {
             ))}
           </StyledSpeedDial>
         </Box> */}
-         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-      <StyledSpeedDial
-        ariaLabel="SpeedDial playground example"
-        icon={<SpeedDialIcon />}
-        direction="left"
-      >
-        {actions.map((action) => (
-          action.icon ? (
+        <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+          <StyledSpeedDial
+            ariaLabel="SpeedDial playground example"
+            icon={<SpeedDialIcon />}
+            direction="left"
+          >
+            {/* {actions.map((action) => (
+              action.icon ? (
+                <SpeedDialAction
+                  key={action.name}
+                  icon={action.icon}
+                  tooltipTitle={action.name}
+                  onClick={(event) =>
+                    handleClick(event, action.name, selectedCustomerId)
+                  }
+                />
+              ) : null
+            ))} */}
+
+            {Booking_read === 1 && (
+              <SpeedDialAction
+                key="list"
+                icon={<ChecklistIcon />}
+                tooltipTitle="List"
+                onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+              />
+            )}
+            {Booking_modify === 1 && (
+              <SpeedDialAction
+                key="edit"
+                icon={<ModeEditIcon />}
+                tooltipTitle="Edit"
+                onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+              />
+            )}
+            {Booking_delete === 1 && (
+              <SpeedDialAction
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+              />
+            )}
+            {Booking_new === 1 && (
+              <SpeedDialAction
+                key="Add"
+                icon={<BookmarkAddedIcon />}
+                tooltipTitle="Add"
+                onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+              />
+            )}
             <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.name}
-              onClick={(event) =>
-                handleClick(event, action.name, selectedCustomerId)
-              }
+              key="Cancel"
+              icon={<CancelPresentationIcon />}
+              tooltipTitle="Cancel"
+              onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
             />
-          ) : null
-        ))}
-      </StyledSpeedDial>
-    </Box>
+
+
+          </StyledSpeedDial>
+        </Box>
 
 
 
@@ -2453,8 +2511,8 @@ const Booking = () => {
 
 
 
-        <div className="vehicle-confirm" style={{marginTop: '25px'}}>
-          <div className="input-field" style={{flexWrap: 'wrap'}}>
+        <div className="vehicle-confirm" style={{ marginTop: '25px' }}>
+          <div className="input-field" style={{ flexWrap: 'wrap' }}>
 
             <div className="input">
               <div className="icone">
@@ -2473,7 +2531,7 @@ const Booking = () => {
                   Hire.find((option) => option.Option)?.label ||
                   formData.hireTypes ||
                   selectedCustomerData.hireTypes ||
-                  book.hireTypes ||selectedCustomerdriver.hireTypes||
+                  book.hireTypes || selectedCustomerdriver.hireTypes ||
                   ""
                 }
                 options={Hire.map((option) => ({
@@ -2483,7 +2541,7 @@ const Booking = () => {
                   option.label ||
                   formData.hireTypes ||
                   selectedCustomerData.hireTypes ||
-                  book.hireTypes ||selectedCustomerdriver.hireTypes||
+                  book.hireTypes || selectedCustomerdriver.hireTypes ||
                   ""
                 }
                 renderInput={(params) => {
@@ -2527,7 +2585,7 @@ const Booking = () => {
                 value={
                   formData.vehRegNo ||
                   selectedCustomerData.vehRegNo ||
-                  book.vehRegNo || selectedCustomerdriver.vehRegNo||
+                  book.vehRegNo || selectedCustomerdriver.vehRegNo ||
                   ""
                 }
                 onChange={handleChange}
@@ -2556,118 +2614,118 @@ const Booking = () => {
                 variant="standard"
                 required
               /> */}
-               <div className="icone">
-                    <PiCarSimpleFill color="action" />
-                  </div>
-
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={
-                      formData.vehiclemodule ||
-                      selectedCustomerData.vehiclemodule ||
-                      book.vehiclemodule || selectedCustomerdriver.vehiclemodule||
-                      ""
-                    }
-                    options={vehicaleinfos?.map((option) => ({
-                      label: option?.Option,
-                    }))}
-                    // onChange={(event, value) => setVechiclebook((prevBook) => ({
-                    //   ...prevBook,
-                    //   "vechtype": value?.label,
-                    // }))}
-                    onChange={(event, value) =>
-                      handleAutocompleteChange(event, value, "vehiclemodule")
-                    }
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Vehicle Type" inputRef={params.inputRef} />
-                      );
-                    }}
-                  />
-                
-            </div>
-            <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
-                <div className="icone">
-                  <TaxiAlertTwoToneIcon color="action" />
-                </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) =>
-                    handleAutocompleteChange(event, value, "vehType")
-                  }
-                  value={
-                    // vehileName.find((option) => option.carmodel)?.label ||
-                    formData.vehType ||
-                    selectedCustomerData.vehType ||
-                    book.vehType ||selectedCustomerdriver.vehType||
-                    ""
-                  }
-                  options={vehileName.map((option) => ({
-                    label: option,
-                  }))}
-                  getOptionLabel={(option) =>
-                    option.label ||
-                    formData.vehType ||
-                    selectedCustomerData.vehType ||
-                    book.vehType ||selectedCustomerdriver.vehType||
-                    ""
-                  }
-                  renderInput={(params) => {
-                    return (
-                      <TextField
-                        {...params}
-                        // label="Vehicle Type"
-                        label="Vehicle Name"
-                        name="vehType"
-                        inputRef={params.inputRef}
-                      />
-                    );
-                  }}
-                />
+              <div className="icone">
+                <PiCarSimpleFill color="action" />
               </div>
-              <div className="input">
-                  <div className="icone">
-                    <EmailIcon color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    // value={book?.Groups || selectedCustomerData?.Groups || ''}
-                    value={
-                      // vehileName.find((option) => option.carmodel)?.label ||
-                      formData.Groups ||
-                      selectedCustomerData.Groups ||
-                      book.Groups|| selectedCustomerdriver.Groups||
-                      ""
-                    }
-                    
-                    options={GroupTypes?.map((option) => ({
-                      label: option?.Option,
-                    }))}
-                    // onChange={(event, value) => setVechiclebook((prevBook) => ({
-                    //   ...prevBook,
-                    //   "Groups": value?.label,
-                    // }))}
-                    onChange={(event, value) =>
-                      handleAutocompleteChange(event, value, "Groups")
-                    }
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Groups" inputRef={params.inputRef} />
-                      );
-                    }}
-                  />
-                </div>
-                
+
+              <Autocomplete
+                fullWidth
+                id="free-solo-demo"
+                freeSolo
+                size="small"
+                value={
+                  formData.vehiclemodule ||
+                  selectedCustomerData.vehiclemodule ||
+                  book.vehiclemodule || selectedCustomerdriver.vehiclemodule ||
+                  ""
+                }
+                options={vehicaleinfos?.map((option) => ({
+                  label: option?.Option,
+                }))}
+                // onChange={(event, value) => setVechiclebook((prevBook) => ({
+                //   ...prevBook,
+                //   "vechtype": value?.label,
+                // }))}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "vehiclemodule")
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params} label="Vehicle Type" inputRef={params.inputRef} />
+                  );
+                }}
+              />
+
+            </div>
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <TaxiAlertTwoToneIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                size="small"
+                id="free-solo-demo"
+                freeSolo
+                sx={{ width: "20ch" }}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "vehType")
+                }
+                value={
+                  // vehileName.find((option) => option.carmodel)?.label ||
+                  formData.vehType ||
+                  selectedCustomerData.vehType ||
+                  book.vehType || selectedCustomerdriver.vehType ||
+                  ""
+                }
+                options={vehileName.map((option) => ({
+                  label: option,
+                }))}
+                getOptionLabel={(option) =>
+                  option.label ||
+                  formData.vehType ||
+                  selectedCustomerData.vehType ||
+                  book.vehType || selectedCustomerdriver.vehType ||
+                  ""
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      // label="Vehicle Type"
+                      label="Vehicle Name"
+                      name="vehType"
+                      inputRef={params.inputRef}
+                    />
+                  );
+                }}
+              />
+            </div>
+            <div className="input">
+              <div className="icone">
+                <EmailIcon color="action" />
+              </div>
+              <Autocomplete
+                fullWidth
+                id="free-solo-demo"
+                freeSolo
+                size="small"
+                // value={book?.Groups || selectedCustomerData?.Groups || ''}
+                value={
+                  // vehileName.find((option) => option.carmodel)?.label ||
+                  formData.Groups ||
+                  selectedCustomerData.Groups ||
+                  book.Groups || selectedCustomerdriver.Groups ||
+                  ""
+                }
+
+                options={GroupTypes?.map((option) => ({
+                  label: option?.Option,
+                }))}
+                // onChange={(event, value) => setVechiclebook((prevBook) => ({
+                //   ...prevBook,
+                //   "Groups": value?.label,
+                // }))}
+                onChange={(event, value) =>
+                  handleAutocompleteChange(event, value, "Groups")
+                }
+                renderInput={(params) => {
+                  return (
+                    <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                  );
+                }}
+              />
+            </div>
+
 
             <div className="input">
               <div className="icone">
@@ -2679,7 +2737,7 @@ const Booking = () => {
                 value={
                   formData.driverName ||
                   selectedCustomerData.driverName ||
-                  book.driverName || selectedCustomerdriver.driverName||
+                  book.driverName || selectedCustomerdriver.driverName ||
                   ""
                 }
                 onChange={handleChange}
@@ -2699,7 +2757,7 @@ const Booking = () => {
                 value={
                   formData.mobileNo ||
                   selectedCustomerData.mobileNo ||
-                  book.mobileNo || selectedCustomerdriver.mobileNo||
+                  book.mobileNo || selectedCustomerdriver.mobileNo ||
                   ""
                 }
                 onChange={handleChange}
@@ -2730,14 +2788,15 @@ const Booking = () => {
             <div className="input" style={{ width: "100px" }}>
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
-                  <Button variant="contained" onClick={handleEdit}>
+                  <Button variant="contained" disabled={!Booking_modify} onClick={handleEdit}>
                     Edit
                   </Button>
                 ) : (
                   <Button
+                    disabled={!Booking_new}
                     variant="contained"
                     onClick={handleAdd}
-             
+
                   >
                     Add
                   </Button>
@@ -2746,13 +2805,13 @@ const Booking = () => {
             </div>
             <div>
               {
-                edit?
-                <Button
-                variant="contained"
-                onClick={handleAdd}
-                >
-                  Add New</Button>:<></>
-                
+                edit ?
+                  <Button
+                    variant="contained"
+                    onClick={handleAdd}
+                  >
+                    Add New</Button> : <></>
+
               }
             </div>
 
@@ -2963,22 +3022,22 @@ const Booking = () => {
           
         </div> */}
 
-<Dialog open={popupOpen} onClose={handlePopupClose}>
-            <DialogContent>
-              Booking Number:
-              <br /> <h1>{lastBookingNo}</h1>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={handlePopupClose}
-                variant="contained"
-                color="primary"
-              >
-                OK
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <div className="alert-popup-main">
+        <Dialog open={popupOpen} onClose={handlePopupClose}>
+          <DialogContent>
+            Booking Number:
+            <br /> <h1>{lastBookingNo}</h1>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handlePopupClose}
+              variant="contained"
+              color="primary"
+            >
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <div className="alert-popup-main">
           {error && (
             <div className="alert-popup Error">
               <div className="popup-icon">
@@ -3027,7 +3086,7 @@ const Booking = () => {
               <p>{successMessage}</p>
             </div>
           )}
-          </div>
+        </div>
 
 
 
@@ -3036,7 +3095,7 @@ const Booking = () => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-Booking">
-              <div className="input-field" style={{ justifyContent: "center", flexWrap: 'wrap'}}>
+              <div className="input-field" style={{ justifyContent: "center", flexWrap: 'wrap' }}>
                 <div className="input" style={{ width: "230px" }}>
                   <div className="icone">
                     <AiOutlineFileSearch

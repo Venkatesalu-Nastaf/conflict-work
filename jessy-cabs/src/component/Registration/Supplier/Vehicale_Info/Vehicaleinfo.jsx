@@ -1094,14 +1094,7 @@ const Vehicaleinfo = () => {
             icon={<SpeedDialIcon />}
             direction="left"
           >
-            {/* {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) => handleClick(event, action.name)}
-              />
-            ))} */}
+
             {/* {actions.map((action) => (
               action.icon ? (
                 <SpeedDialAction

@@ -5,7 +5,7 @@ import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 import Sidebar from "../MainDash/Sildebar/Slidebar";
 import { useNavigate, Outlet } from "react-router-dom";
-import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
+// import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { useThemes } from "../../UserSettings/Themes/ThemesContext";
 import ClearIcon from "@mui/icons-material/Clear";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
@@ -15,7 +15,7 @@ import Button from "@mui/material/Button";
 import { useData } from "./DataContext"; //- data contaxt
 import Logo from "../../../assets/img/logonas.png"
 import { PiWarningCircleBold } from "react-icons/pi";
-import { FaPowerOff } from "react-icons/fa";
+// import { FaPowerOff } from "react-icons/fa";
 import { IoPower } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { PermissionContext } from "../../context/permissionContext";
@@ -31,8 +31,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import { APIURL } from "../../url";
 import Tooltip from '@mui/material/Tooltip';
 
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
+// import Modal from '@mui/material/Modal';
+// import Box from '@mui/material/Box';
 
 const MainDashboard = () => {
   const apiUrl = APIURL;

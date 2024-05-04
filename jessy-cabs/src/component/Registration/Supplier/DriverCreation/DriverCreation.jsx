@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./DriverCreation.css";
 import Box from "@mui/material/Box";
 import Input from '@mui/material/Input';
@@ -19,6 +19,17 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Checkbox from '@mui/material/Checkbox';
 import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
+
+
+import { PermissionContext } from '../../../context/permissionContext';
+
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+
+
 
 
 
@@ -130,7 +141,7 @@ const DriverCreation = () => {
         selectAll,
         handleSelectAll,
         handleDocumentDownload,
-        searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, actions
+        searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll
     } = useDrivercreation();
 
     useEffect(() => {
@@ -141,19 +152,28 @@ const DriverCreation = () => {
 
 
 
+    // Permission ------------
+    const { permissions } = useContext(PermissionContext)
+
+    const Supllier_read = permissions[10]?.read;
+    const Supllier_new = permissions[10]?.new;
+    const Supllier_modify = permissions[10]?.modify;
+    const Supllier_delete = permissions[10]?.delete;
+
+
 
     return (
         <div className="DriverCreation-main">
             <div className="DriverCreation-form-container">
                 <form onSubmit={handleClick}>
                     <div className="DriverCreation-header">
-                        
+
                         <div className="input-field driver-info-inputs">
                             <div className="input driver-input">
                                 <div className="icone">
                                     <BadgeIcon color="action" />
                                 </div>
-                                
+
                                 <TextField
                                     margin="normal"
                                     size="small"
@@ -261,7 +281,7 @@ const DriverCreation = () => {
                                 </FormControl>
                             </div>
 
-                        {/* </div>
+                            {/* </div>
                       
                         <div className="input-field"> */}
                             <div className="input driver-input" style={{ width: "400px" }}>
@@ -362,7 +382,7 @@ const DriverCreation = () => {
                                     variant="standard"
                                 />
                             </div>
-                        {/* </div>
+                            {/* </div>
 
                         <div className="input-field"> */}
                             {/* <div className="input" style={{ width: "400px" }}>
@@ -470,7 +490,7 @@ const DriverCreation = () => {
                                     </DatePicker>
                                 </LocalizationProvider>
                             </div>
-                        {/* </div>
+                            {/* </div>
                         <div className="input-field"> */}
                             {/* <div className="input" style={{ width: "400px" }}>
                                 <div className="icone">
@@ -611,98 +631,98 @@ const DriverCreation = () => {
                             </div> */}
                             <div className="input" style={{ width: "160px" }}>
                                 {isEditMode ? (
-                                    <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                                    <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
                                 ) : (
-                                    <Button variant="contained" onClick={handleAdd}>Add</Button>
+                                    <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd}>Add</Button>
                                 )}
                             </div>
                         </div>
 
                         <div className="detail-container-main detail-container-main-crivercreation">
-                        <div className="container-left">
-                            <div className="copy-title-btn-Booking">
-                                <div className="input-field" style={{ justifyContent: "center", flexWrap:'wrap' }}>
-                                    <div className="input" style={{ width: "230px" }}>
-                                        <div className="icone">
-                                            <AiOutlineFileSearch
-                                                color="action"
-                                                style={{ fontSize: "27px" }}
+                            <div className="container-left">
+                                <div className="copy-title-btn-Booking">
+                                    <div className="input-field" style={{ justifyContent: "center", flexWrap: 'wrap' }}>
+                                        <div className="input" style={{ width: "230px" }}>
+                                            <div className="icone">
+                                                <AiOutlineFileSearch
+                                                    color="action"
+                                                    style={{ fontSize: "27px" }}
+                                                />
+                                            </div>
+                                            <TextField
+                                                size="small"
+                                                id="id"
+                                                label="Search"
+                                                name="searchText"
+                                                value={searchText || ""}
+                                                onKeyDown={handleenterSearch}
+                                                onChange={(e) => setSearchText(e.target.value)}
                                             />
                                         </div>
-                                        <TextField
-                                            size="small"
-                                            id="id"
-                                            label="Search"
-                                            name="searchText"
-                                            value={searchText || ""}
-                                            onKeyDown={handleenterSearch}
-                                            onChange={(e) => setSearchText(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="input">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                label="From Date"
-                                                name="fromDate"
-                                                format="DD/MM/YYYY"
-                                                value={fromDate}
-                                                onChange={(date) => setFromDate(date)}
-                                            />
-                                        </LocalizationProvider>
-                                    </div>
-                                    <div className="input">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                label="To Date"
-                                                name="toDate"
-                                                format="DD/MM/YYYY"
-                                                value={toDate}
-                                                onChange={(date) => setToDate(date)}
-                                            />
-                                        </LocalizationProvider>
-                                    </div>
-                                    <div className="input" style={{ width: "140px" }}>
-                                        <Button variant="contained"
-                                            onClick={handleShowAll}
-                                        >
-                                            Search
-                                        </Button>
+                                        <div className="input">
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DatePicker
+                                                    label="From Date"
+                                                    name="fromDate"
+                                                    format="DD/MM/YYYY"
+                                                    value={fromDate}
+                                                    onChange={(date) => setFromDate(date)}
+                                                />
+                                            </LocalizationProvider>
+                                        </div>
+                                        <div className="input">
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DatePicker
+                                                    label="To Date"
+                                                    name="toDate"
+                                                    format="DD/MM/YYYY"
+                                                    value={toDate}
+                                                    onChange={(date) => setToDate(date)}
+                                                />
+                                            </LocalizationProvider>
+                                        </div>
+                                        <div className="input" style={{ width: "140px" }}>
+                                            <Button variant="contained"
+                                                onClick={handleShowAll}
+                                            >
+                                                Search
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </div>
                     <div className='alert-popup-main'>
-                    {error &&
-                        <div className='alert-popup Error' >
-                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                            <p>{errorMessage}</p>
-                        </div>
-                    }
-                    {warning &&
-                        <div className='alert-popup Warning' >
-                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                            <p>{warningMessage}</p>
-                        </div>
-                    }
-                    {success &&
-                        <div className='alert-popup Success' >
-                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                            <p>{successMessage}</p>
-                        </div>
-                    }
-                    {info &&
-                        <div className='alert-popup Info' >
-                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                            <p>{infoMessage}</p>
-                        </div>
-                    }
-                    {/* {passwordsMatch &&
+                        {error &&
+                            <div className='alert-popup Error' >
+                                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <p>{errorMessage}</p>
+                            </div>
+                        }
+                        {warning &&
+                            <div className='alert-popup Warning' >
+                                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <p>{warningMessage}</p>
+                            </div>
+                        }
+                        {success &&
+                            <div className='alert-popup Success' >
+                                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <p>{successMessage}</p>
+                            </div>
+                        }
+                        {info &&
+                            <div className='alert-popup Info' >
+                                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <p>{infoMessage}</p>
+                            </div>
+                        }
+                        {/* {passwordsMatch &&
                         <div className='alert-popup Warning' >
                             <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
                             <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
@@ -711,7 +731,7 @@ const DriverCreation = () => {
                     } */}
 
 
-                    
+
                     </div>
                     <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                         <StyledSpeedDial
@@ -719,7 +739,7 @@ const DriverCreation = () => {
                             icon={<SpeedDialIcon />}
                             direction="left"
                         >
-                            {actions.map((action) => (
+                            {/* {actions.map((action) => (
                                 action.icon ? (
                                     <SpeedDialAction
                                         key={action.name}
@@ -730,64 +750,55 @@ const DriverCreation = () => {
                                         }
                                     />
                                 ) : null
-                            ))}
+                            ))} */}
+
+
+
+                            {Supllier_read === 1 && (
+                                <SpeedDialAction
+                                    key="list"
+                                    icon={<ChecklistIcon />}
+                                    tooltipTitle="List"
+                                    onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                                />
+                            )}
+
+                            {Supllier_modify === 1 && (
+                                <SpeedDialAction
+                                    key="edit"
+                                    icon={<ModeEditIcon />}
+                                    tooltipTitle="Edit"
+                                    onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                                />
+                            )}
+                            {Supllier_delete === 1 && (
+                                <SpeedDialAction
+                                    key="delete"
+                                    icon={<DeleteIcon />}
+                                    tooltipTitle="Delete"
+                                    onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                                />
+                            )}
+
+                            {Supllier_new === 1 && (
+                                <SpeedDialAction
+                                    key="Add"
+                                    icon={<BookmarkAddedIcon />}
+                                    tooltipTitle="Add"
+                                    onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                                />
+                            )}
+                            <SpeedDialAction
+                                key="Cancel"
+                                icon={<CancelPresentationIcon />}
+                                tooltipTitle="Cancel"
+                                onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                            />
+
                         </StyledSpeedDial>
                     </Box>
 
-                    {/* <div className="detail-container-main detail-container-main-crivercreation">
-                        <div className="container-left">
-                            <div className="copy-title-btn-Booking">
-                                <div className="input-field" style={{ justifyContent: "center", flexWrap:'wrap' }}>
-                                    <div className="input" style={{ width: "230px" }}>
-                                        <div className="icone">
-                                            <AiOutlineFileSearch
-                                                color="action"
-                                                style={{ fontSize: "27px" }}
-                                            />
-                                        </div>
-                                        <TextField
-                                            size="small"
-                                            id="id"
-                                            label="Search"
-                                            name="searchText"
-                                            value={searchText || ""}
-                                            onKeyDown={handleenterSearch}
-                                            onChange={(e) => setSearchText(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="input">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                label="From Date"
-                                                name="fromDate"
-                                                format="DD/MM/YYYY"
-                                                value={fromDate}
-                                                onChange={(date) => setFromDate(date)}
-                                            />
-                                        </LocalizationProvider>
-                                    </div>
-                                    <div className="input">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                label="To Date"
-                                                name="toDate"
-                                                format="DD/MM/YYYY"
-                                                value={toDate}
-                                                onChange={(date) => setToDate(date)}
-                                            />
-                                        </LocalizationProvider>
-                                    </div>
-                                    <div className="input" style={{ width: "140px" }}>
-                                        <Button variant="contained"
-                                            onClick={handleShowAll}
-                                        >
-                                            Search
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
+
                     <div className="DriverCreation-table-container">
                         <div className="table-DriverCreations">
                             <DataGrid

@@ -99,15 +99,6 @@ const EmployeeCreation = () => {
   }, [actionName, handleClick]);
 
 
-  // for search input
-
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-    // Perform search logic or update search results here
-  };
-
   //  for showing table
   const [showPermission, setShowPermission] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState('');
@@ -125,6 +116,16 @@ const EmployeeCreation = () => {
   const UserCreation_new = permissions[13]?.new;
   const UserCreation_modify = permissions[13]?.modify;
   const UserCreation_delete = permissions[13]?.delete;
+
+  // search operation ----------------
+  const [searchUser, setSearchUser] = useState("")
+
+  const handleSearchUser = (e) => {
+    setSearchUser(e.target.value);
+
+  }
+
+  const filteruser = rows.filter(user => user.username.toLowerCase().includes(searchUser.toLowerCase()))
 
   return (
     <div className="EmployeeCreation-main">
@@ -271,7 +272,10 @@ const EmployeeCreation = () => {
                 {isEditMode ? (
                   <Button variant="contained" disabled={!UserCreation_modify} onClick={handleEdit}>Edit</Button>
                 ) : (
-                  <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} >Add</Button>
+                  <>
+                    <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} >Add</Button>
+                    <Button variant="contained" disabled={!UserCreation_new} style={{ marginLeft: 10 }} onClick={togglePermission} >Give Permission</Button>
+                  </>
                 )}
               </div>
             </div>
@@ -369,15 +373,15 @@ const EmployeeCreation = () => {
                   id="search-input"
                   label="Search"
                   variant="outlined"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
+                  value={searchUser}
+                  onChange={handleSearchUser}
                   InputProps={{
                     endAdornment: <AiOutlineSearch />,
                   }}
                 />
 
 
-                {rows.map((row, index) => (
+                {filteruser.map((row, index) => (
 
                   <div className='user-table-permission' onClick={() => {
 

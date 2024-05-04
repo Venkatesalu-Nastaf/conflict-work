@@ -5,12 +5,7 @@ import { APIURL } from "../../../url";
 // import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import dayjs from "dayjs";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
-import ChecklistIcon from "@mui/icons-material/Checklist";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 const useDrivercreation = () => {
     const apiUrl = APIURL;
@@ -39,16 +34,6 @@ const useDrivercreation = () => {
     const [selectAll, setSelectAll] = useState(false);
     const [edit, setEdit] = useState(false)
     // venkat
-
-
-    const actions = [
-        { icon: <ChecklistIcon />, name: "List" },
-        { icon: <CancelPresentationIcon />, name: "Cancel" },
-        { icon: <DeleteIcon />, name: "Delete" },
-        { icon: <ModeEditIcon />, name: "Edit" },
-        edit ? "" : { icon: <BookmarkAddedIcon />, name: "Add" }
-
-    ];
 
 
     // venkat
@@ -273,7 +258,7 @@ const useDrivercreation = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleButtonClick = (params) => {
-        console.log(params,'params');
+        console.log(params, 'params');
         const { driverid } = params.row;
         if (!driverid) {
             setError(true);
@@ -726,7 +711,7 @@ const useDrivercreation = () => {
         setSelectAll,
         handleSelectAll,
         handleDocumentDownload,
-        searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, edit, actions
+        searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, edit,
         // venkat
     };
 };

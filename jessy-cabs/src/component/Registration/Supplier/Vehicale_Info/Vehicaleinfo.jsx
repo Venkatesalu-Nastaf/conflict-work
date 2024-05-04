@@ -664,19 +664,19 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input">
               {/* {selectedCustomerData.vehicleId || book.vehicleId ? ( */}
-              <Button color="primary" variant="contained" size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <FiUpload />
-                <span>
-                  Insurance Copy
-
+              <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                
+                <span class="button-29">
+                  <FiUpload />
+                  <span>
+                    Insurance Copy
+                  </span>
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setInsurance(e.target.files[0])}
+                  />
                 </span>
-
-
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => setInsurance(e.target.files[0])}
-                />
               </Button>
               {/* ) : (
                 <Button color="primary" variant="contained" onClick={() => {
@@ -777,10 +777,10 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input" style={{ width: "220px" }}>
 
-              <Button color="primary" variant="contained" size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {/* <Button color="primary" variant="contained" size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <FiUpload />
-                <span>
-                  National PermitCopy
+                <span style={{whiteSpace: 'nowrap'}}>
+                  National Permit Copy
                 </span>
 
                 <input
@@ -788,7 +788,22 @@ const Vehicaleinfo = () => {
                   style={{ display: "none" }}
                   onChange={(e) => setNationalPermit(e.target.files[0])}
                 />
+              </Button> */}
+
+              <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span class="button-29">
+                  <FiUpload /> 
+                  <span>National Permit Copy</span>
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setNationalPermit(e.target.files[0])}
+                  />
+                </span>
               </Button>
+
+              
+              
 
 
             </div>
@@ -844,19 +859,18 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input" style={{ width: "220px" }}>
 
-              <Button color="primary" variant="contained" size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <FiUpload />
-                <span>
-                  State Permit Copy
-
+              <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span class="button-29">
+                  <FiUpload />
+                  <span>
+                    State Permit Copy
+                  </span>
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setStatePermit(e.target.files[0])}
+                  />
                 </span>
-
-
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => setStatePermit(e.target.files[0])}
-                />
               </Button>
 
             </div>
@@ -913,35 +927,35 @@ const Vehicaleinfo = () => {
             </div>
             <div className="input">
 
-              <Button color="primary" variant="contained" size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <FiUpload />
-                <span>
-                  RC-Book Copy
-
+              <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span class="button-29">
+                  <FiUpload />
+                  <span>
+                    RC-Book Copy
+                  </span>
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setRcbook(e.target.files[0])}
+                  />
                 </span>
-
-
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => setRcbook(e.target.files[0])}
-                />
               </Button>
 
             </div>
             <div className="input" style={{ width: "160px" }}>
 
-              <Button color="primary" variant="contained" size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <FiUpload />
-                <span>
-                  FC Copy
+              <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span class="button-29">
+                  <FiUpload />
+                  <span>
+                    FC Copy
+                  </span>
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setFcCopy(e.target.files[0])}
+                  />
                 </span>
-
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => setFcCopy(e.target.files[0])}
-                />
               </Button>
 
             </div>

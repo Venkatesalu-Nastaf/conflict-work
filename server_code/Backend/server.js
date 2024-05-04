@@ -488,7 +488,7 @@ app.get('/get-attachedmailimage/:bookingno', (req, res) => {
       // No record found for the given tripid
       return res.status(404).send('Images not found');
     }
-   
+
 
     const files = results.map(result => ({
       path: result.path,

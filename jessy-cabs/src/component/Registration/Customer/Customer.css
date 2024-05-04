@@ -3,7 +3,7 @@
   border-top: solid 1px #ccc;
   background: var(--glass);
   padding: 20px;
-  margin-top: 10px;
+  margin-top: 0px;
   margin-bottom: -10px;
 }
 
@@ -96,8 +96,8 @@
   padding-top: 28px;
   border-radius: 20px;
   color: #000;
-  /* background-color: var(--glass); */
-  background-color: #f0ece2;
+  background-color: var(--glass);
+  /* background-color: #f0ece2; */
 }
 
 /* Drop-Down */
@@ -182,7 +182,8 @@
   position: sticky;
   top: -27px;
   z-index: 5;
-  background-color: #f0ece2;
+  /* background-color: #f0ece2; */
+  /* background-color: var(--glass); */
   padding: 10px ;
   margin: 0px;
 

@@ -68,8 +68,8 @@
   padding-top: 20px;
   border-radius: 20px;
   color: #000;
-  /* background-color: var(--glass); */
-  background-color: #f0ece2;
+  background-color: var(--glass);
+  /* background-color: #f0ece2; */
 }
 
 /* TextBox */
@@ -190,4 +190,39 @@
   .vehicleinfo-inputfeild{
 justify-content: center;
   }
+}
+
+.button-29 {
+    align-items: center;
+    background-image: radial-gradient(100% 100% at 100% 0, #7199ff 0, #1976d2 100%);
+    border-radius: 6px;
+    box-shadow: rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, rgba(58, 65, 111, .5) 0 -3px 0 inset;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    height: 48px;
+    justify-content: center;
+    padding: 0px 16px;
+    transition: box-shadow .15s, transform .15s;
+    user-select: none;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.button-29 span{
+  padding-left: 10px;
+}
+
+.button-29:focus {
+  box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+}
+
+.button-29:hover {
+  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.button-29:active {
+  box-shadow: #3c4fe0 0 3px 7px inset;
+  transform: translateY(2px);
 }

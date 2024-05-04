@@ -81,3 +81,6 @@ npm install apexcharts - for apex charts
 
 
 npm install @mui/material @emotion/react @emotion/styled - for mui styles
+
+npm install react-pdf -for pdf document
+npm install pdf-lib

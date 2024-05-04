@@ -516,7 +516,7 @@ useEffect(() => {
       const storedCustomer = localStorage.getItem("selectedcustomer");
       const customer = decodeURIComponent(storedCustomer);
       // console.log(tripid,customer,"transfer",rowSelectionModel)
-      console.log(tripid,"objtripid",typeof(tripid))
+      // console.log(tripid,"objtripid",typeof(tripid))
 
       if(tripid.length>=1)
       {
@@ -537,7 +537,7 @@ useEffect(() => {
       //       ...row,
         
       //     }));
-      console.log(tripData,"pdfobjneee")
+      // console.log(tripData,"pdfobjneee")
          
           setPdfzipdata(tripData)
           // setSuccess(true);

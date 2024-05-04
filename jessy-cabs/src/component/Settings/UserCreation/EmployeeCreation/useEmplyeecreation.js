@@ -6,6 +6,7 @@ import { APIURL } from "../../../url";
 
 
 
+
 const useEmplyeecreation = () => {
     const apiUrl = APIURL;
     // const user_id = localStorage.getItem('useridno');
@@ -24,6 +25,7 @@ const useEmplyeecreation = () => {
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
     // const [infoMessage, setInfoMessage] = useState({});
+
 
 
     // TABLE START
@@ -160,16 +162,16 @@ const useEmplyeecreation = () => {
 
     // add
     const handleAdd = async () => {
-        const stationname = book.userid;
+        const username = book.username;
         if (password) {
-            if (!stationname) {
+            if (!username) {
                 setError(true);
                 setErrorMessage("Fill mandatory fields");
                 return;
             }
             try {
-
-                await axios.post(`${apiUrl}/usercreation-add`, book);
+                const data = { book, permissionsData }
+                await axios.post(`${apiUrl}/usercreation-add`, data);
                 handleCancel();
                 setRows([]);
                 // setBook({})
@@ -207,6 +209,7 @@ const useEmplyeecreation = () => {
     const handleDelete = async () => {
         try {
             await axios.delete(`${apiUrl}/usercreation-delete/${book.userid}`);
+            // await axios.delete(`${apiUrl}/permission-delete/${book.userid}`)
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
             handleCancel();
@@ -296,11 +299,35 @@ const useEmplyeecreation = () => {
         }
     });
 
-    const handleRowClickUser = useCallback((params) => {
+    const permissiondata = async (userId) => {
+        const userid = userId;
+        // console.log("userid,set", userid)
+        if (userid) {
+            try {
+                const response = await axios.get(`${apiUrl}/user-permissionget/${userid}`);
+                const permissiondata = response?.data;
+                // console.log("permission9999", permissiondata)
+                if (permissiondata.length > 0) {
+                    return permissiondata;
+                }
+            }
+            catch {
+            }
+        }
+        return;
+    }
+
+    const handleRowClickUser = async (params) => {
         setBook(params)
+
+        const user_permission = await permissiondata(params.userid);
+        if (user_permission?.length > 0) {
+            setPermissionsData(user_permission);
+        }
+
         setSelectedCustomerId(params.customerId);
         setIsEditMode(true);
-    }, []);
+    };
 
 
     const handleRowClick = useCallback((params) => {

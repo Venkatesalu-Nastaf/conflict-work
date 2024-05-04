@@ -44,8 +44,7 @@ import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortaweso
 import useTransferreport from './useTransferreport';
 import useExeclpage from './ExcelPage';
 import { PdfData } from './PdfContext';
-import JSZip from 'jszip';
-import PdfzipParticularData from './Pdfpatricularzipdata'
+
 
 
 export const PDFbill = [
@@ -105,7 +104,7 @@ const TransferReport = () => {
     npopupOpen,
     lxpopupOpen,
     // handleExcelDownload,
-    handlePdfDownload,
+    // handlePdfDownload,
     routeData,
     roundedAmount,
     sumTotalAndRounded,
@@ -137,7 +136,7 @@ const TransferReport = () => {
   const [particularPdf,setParticularPdf] = useState([])
   const [imageorganisation, setSelectedImageorganisation] = useState(null);
   const [tripno,setTripno] = useState('')
-const {pdfPrint,setPdfPrint,setPdfzip} = PdfData()
+const {pdfPrint,setPdfPrint} = PdfData()
   useEffect(() => {
     setSelectedImageorganisation(sharedData)
   }, [sharedData])
@@ -162,7 +161,8 @@ const {pdfPrint,setPdfPrint,setPdfzip} = PdfData()
   
     fetchdata();
   }, [apiUrl, customer]);
-  console.log(rowSelectionModel,"model")
+//   console.log(pdfzipdata,"zippppp")
+//  console.log(rowSelectionModel,"mpdel")
 
 
   useEffect(() => {

@@ -333,6 +333,25 @@
       left: 5% !important;
     }
 
+    .user-icon-update{
+      font-size: 19px;
+     position: relative;
+      display: inline-block;
+     margin-right: 10px;
+    }
+    
+    .user-icon-update-dot{
+    
+    position: absolute;
+     top: -3px; 
+     right: 0px;
+      background-color: red; 
+      width: 8px; height: 8px;
+       border-radius: 50%;
+        box-shadow: rgba(255, 0, 0, 0.5) 0px 0px 6px 0px;
+    }
+
+    
 
 
 

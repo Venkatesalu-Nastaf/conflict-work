@@ -21,7 +21,7 @@ const Mailer = () => {
             <div className="container-main">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
-                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab-mailer">
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Mailer" value="Mailer" />
                                 <Tab label="SMS Report" value="SMSReport" />

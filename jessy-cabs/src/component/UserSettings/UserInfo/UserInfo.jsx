@@ -344,6 +344,7 @@ const UserSetting = () => {
                     </IconButton>
                   </div>
                 )}
+                <div className="alert-popup-main">
                 {error && (
                   <div className="alert-popup Error">
                     <div className="popup-icon">
@@ -392,6 +393,7 @@ const UserSetting = () => {
                     <p>{infoMessage}</p>
                   </div>
                 )}
+                </div>
               </div>
             </div>
           </div>

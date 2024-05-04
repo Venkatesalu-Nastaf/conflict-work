@@ -3,20 +3,20 @@
     padding: 0px !important;
 }
 
-.BackUp-form {
+/* .BackUp-form {
     width: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
     color: #000;
-}
+} */
 
 .BackUp-header {
-    height: 100vh;
+    height: fit-content;
     background: var(--glass);
-    padding: 10px;
-    margin-bottom: -10px;
+    padding: 20px;
+    /* margin-bottom: -10px; */
 }
 
 .css-1c4hl6u {
@@ -72,5 +72,10 @@
     100% {
       transform: rotate(360deg);
     }
+  }
+
+
+  .backup-inputs{
+    flex-wrap: wrap;
   }
   

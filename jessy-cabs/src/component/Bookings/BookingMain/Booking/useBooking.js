@@ -78,6 +78,7 @@ const useBooking = () => {
   const [actionName] = useState("");
   const [rows, setRows] = useState([]);
   const [row, setRow] = useState([]);
+  const [rowdriver, setRowsdriver] = useState([]);
   const [displayCopy, setDisplayCopy] = useState(false);
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
@@ -124,10 +125,34 @@ const useBooking = () => {
   });
 
   const { user } = useUser();
+  
 
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
     customer: "",
   });
+  const [selectedCustomerdriver, setSelectedCustomerdriver] = useState({
+    // driverName: "",
+    // vehRegNo:"",
+  
+
+  });
+  const transformRow = (originalRow) => {
+    return {
+       driverName:originalRow.driverName,
+       vehRegNo:originalRow.vehRegNo,
+       hireTypes:originalRow.hiretypes,
+       vehType:originalRow.vehiclename,
+       vehiclemodule:originalRow.vechtype,
+       mobileNo:originalRow.driverno,
+       active:originalRow.active,
+       Groups:originalRow.Groups
+
+
+
+    
+    
+    };
+};
 
   const hidePopup = () => {
     setSuccess(false);
@@ -200,6 +225,7 @@ const useBooking = () => {
       "driverName",
       "mobileNo",
       "travelsemail",
+      "Groups"
     ];
 
     parameterKeys.forEach((key) => {
@@ -272,6 +298,7 @@ const useBooking = () => {
     driverName: "",
     mobileNo: "",
     travelsemail: "",
+    Groups:""
   });
 
   const handleCancel = () => {
@@ -322,11 +349,14 @@ const useBooking = () => {
       driverName: "",
       mobileNo: "",
       travelsemail: "",
+      Groups:""
     }));
     setFormValues({});
     setSelectedCustomerData({});
     setSelectedCustomerDatas({});
     setFormData({});
+    setSelectedCustomerdriver({})
+  
     setIsEditMode(false);
   };
   const convertToCSV = (data) => {
@@ -456,6 +486,10 @@ const useBooking = () => {
           ...prevValues,
           [name]: fieldValue,
         }));
+        setSelectedCustomerdriver((prevValues) => ({
+          ...prevValues,
+          [name]: fieldValue,
+        }));
       }
     },
     [
@@ -464,6 +498,7 @@ const useBooking = () => {
       setFormData,
       setFormValues,
       setSelectedCustomerDatas,
+      setSelectedCustomerdriver,
     ]
   );
 
@@ -499,6 +534,27 @@ const useBooking = () => {
       [name]: parsedDate,
     }));
   };
+
+  const [vehileName, setVehicleName] = useState([])
+
+   
+    useEffect(() => {
+      const fetchgetvehicleName = async () => {
+          try {
+            const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
+              const data = response.data
+              const name = data?.map((res) => res.vehiclename)
+
+              setVehicleName(name)
+
+
+          }
+          catch (error) {
+              console.log(error, "error");
+          }
+      };
+      fetchgetvehicleName()
+  }, [apiUrl])
 
   // ------its for dialog--------------------
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -710,7 +766,7 @@ const useBooking = () => {
       setErrorMessage("Enter Email Field")
       return
     }
-    if (!selectedCustomerData.vehType) {
+    if ( !selectedCustomerData.vehType) {
       setError(true)
       setErrorMessage("Enter VehicleType")
       return
@@ -747,6 +803,7 @@ const useBooking = () => {
 
       const selectedBookingDate =
         selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
+        console.log(selectedBookingDate,"dateeeeee")
 
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       // Create a new object without the 'id' field from selectedCustomerData
@@ -774,7 +831,7 @@ const useBooking = () => {
         streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
         city: formData.city || selectedCustomerData.city || book.city,
         report: formData.report || selectedCustomerData.report || book.report,
-        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType,
+        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType|| selectedCustomerdriver.vehType,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
         startdate: bookingstartdate,
         duty: formData.duty || selectedCustomerData.duty || book.duty,
@@ -787,16 +844,17 @@ const useBooking = () => {
         remarks: formData.remarks || selectedCustomerData.remarks || book.remarks,
         servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation,
         advance: formData.advance || selectedCustomerData.advance || book.advance,
-        hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
+        hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes|| selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
-        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo,
-        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule,
-        driverName: formData.driverName || selectedCustomerData.driverName || book.driverName,
-        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo,
+        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo|| selectedCustomerdriver.vehRegNo,
+        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule|| selectedCustomerdriver.vehiclemodule,
+        driverName: formData.driverName || selectedCustomerData.driverName || book.driverName|| selectedCustomerdriver.driverName,
+        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo||selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
         reporttime: restSelectedCustomerData.reporttime,
         triptime: triptime,
         username: storedUsername,
+        Groups:selectedCustomerData.Groups||book.Groups||formData.Groups||selectedCustomerdriver.Groups,
 
         orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
         customer: restSelectedCustomerData.customer
@@ -810,6 +868,7 @@ const useBooking = () => {
       setLastBookingNo(lastBookingno);
       setPopupOpen(true);
       handleCancel();
+      setRowsdriver([])
       addPdf();
       setRow([]);
       setRows([]);
@@ -843,7 +902,7 @@ const useBooking = () => {
 
       const selectedBookingDate =
         selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
-
+         
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
       let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
@@ -868,7 +927,7 @@ const useBooking = () => {
         streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
         city: formData.city || selectedCustomerData.city || book.city,
         report: formData.report || selectedCustomerData.report || book.report,
-        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType,
+        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType|| selectedCustomerdriver.vehType,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
         startdate: bookingstartdate,
         duty: formData.duty || selectedCustomerData.duty || book.duty,
@@ -881,16 +940,18 @@ const useBooking = () => {
         remarks: formData.remarks || selectedCustomerData.remarks || book.remarks,
         servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation,
         advance: formData.advance || selectedCustomerData.advance || book.advance,
-        hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
+        hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes||selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
-        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo,
-        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule,
-        driverName: formData.driverName || selectedCustomerData.driverName || book.driverName,
-        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo,
+        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo|| selectedCustomerdriver.vehRegNo,
+        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule|| selectedCustomerdriver.vehiclemodule,
+        driverName: formData.driverName || selectedCustomerData.driverName || book.driverName|| selectedCustomerdriver.driverName,
+        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo|| selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
         reporttime: restSelectedCustomerData.reporttime,
         triptime: triptime,
         username: storedUsername,
+        Groups:formData.Groups || selectedCustomerData.Groups || book.Groups|| selectedCustomerdriver.Groups,
+
 
         orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
         customer: restSelectedCustomerData.customer
@@ -909,6 +970,7 @@ const useBooking = () => {
       handleCancel();
       addPdf();
       setRow([]);
+      setRowsdriver([])
       setRows([]);
       setSuccess(true);
 
@@ -931,6 +993,7 @@ const useBooking = () => {
         handleCancel();
         setRows([]);
         setRow([]);
+        setRowsdriver([])
       } else if (actionName === "Delete") {
         ;
 
@@ -945,6 +1008,7 @@ const useBooking = () => {
         handleCancel();
         setRow([]);
         setRows([]);
+        setRowsdriver([])
 
       } else if (actionName === "Modify") {
         setGuestSms(false)
@@ -1025,6 +1089,7 @@ const useBooking = () => {
               `${apiUrl}/name-customers/${event.target.value}`
             );
             const vehicleData = response.data;
+           
             setRows([vehicleData]);
           } catch (error) {
             setError(true);
@@ -1048,6 +1113,33 @@ const useBooking = () => {
     [handleChange, rows, enterPressCount, apiUrl]
   );
 
+  const handleKeyEnterdriver = useCallback(
+    async (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+    
+          try {
+            const response = await axios.get(
+              `${apiUrl}/drivername-details/${event.target.value}`
+            );
+            const vehicleData = response.data;
+             const transformedRows = vehicleData.map(transformRow);
+             
+         
+            setRowsdriver(transformedRows)
+            setSuccess(true);
+            setSuccessMessage("successfully listed");
+         
+          } catch (error) {
+            setError(true);
+            setErrorMessage("Error retrieving vehicle details.");
+          }
+        } 
+     
+    },
+    [apiUrl]
+  );
+
   const handleRowClick = useCallback(
     (params) => {
       setSelectedCustomerDatas(params);
@@ -1055,6 +1147,24 @@ const useBooking = () => {
     },
     [handleChange]
   );
+  const handleRowClickdriver = (params) => {
+    
+      setSelectedCustomerdriver(params);
+      setSelectedCustomerDatas(params);
+      const keys = Object.keys(params);
+  
+      // Iterate over the keys using forEach
+      keys.forEach(key => {
+        const value = params[key];
+       
+        handleChange({ target: { name: key, value: value } });
+      });
+    
+      // handleChange({ target: { name: "driverName", value: params.driverName } });
+      // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
+    }
+    
+
 
   const handletableClick = useCallback((params) => {
     setGuestSms(false)
@@ -1256,7 +1366,12 @@ const useBooking = () => {
     edit,
     setEdit,
     reporttime,
-    starttime
+    starttime,
+    handleKeyEnterdriver,
+    rowdriver,
+    handleRowClickdriver,
+    selectedCustomerdriver,
+    vehileName
   };
 };
 

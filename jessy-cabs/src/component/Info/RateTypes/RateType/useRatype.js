@@ -34,6 +34,7 @@ const useRatype = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
     const [infoMessage, setInfoMessage] = useState({});
+    const [organizationNames, setOrganizationName] = useState([])
 
 
     // handlechange-----------------
@@ -156,6 +157,19 @@ const useRatype = () => {
         }));
     };
 
+    useEffect(() => {
+        const organizationNames = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/customers`);
+                const organisationData = response?.data;
+                const names = organisationData.map(res => res.customer);
+                setOrganizationName(names);
+            } catch (error) {
+                console.error('Error fetching organization names:', error);
+            }
+        };
+        organizationNames();
+    }, [apiUrl, setOrganizationName, organizationNames])
     const handleCancel = () => {
         setBook((prevBook) => ({
             ...prevBook,
@@ -333,7 +347,8 @@ const useRatype = () => {
         columns,
         isEditMode,
         handleEdit,
-        handleDateChange
+        handleDateChange,
+        organizationNames,
     };
 };
 

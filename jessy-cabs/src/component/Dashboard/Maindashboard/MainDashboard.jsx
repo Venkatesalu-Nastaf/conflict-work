@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import "./MainDashboard.css";
 import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
@@ -14,6 +14,13 @@ import { useUser } from "../../form/UserContext";
 import Button from "@mui/material/Button";
 import { useData } from "./DataContext"; //- data contaxt
 import Logo from "../../../assets/img/logonas.png"
+import { PiWarningCircleBold } from "react-icons/pi";
+import { FaPowerOff } from "react-icons/fa";
+import { IoPower } from "react-icons/io5";
+import { FaUser } from "react-icons/fa";
+import { PermissionContext } from "../../context/permissionContext";
+import update from "../../../assets/img/update.png"
+import { FaTimes } from 'react-icons/fa'; // Import the close icon from react-icons/fa
 
 // import axios from "axios";
 
@@ -22,6 +29,10 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { APIURL } from "../../url";
+import Tooltip from '@mui/material/Tooltip';
+
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 
 const MainDashboard = () => {
   const apiUrl = APIURL;
@@ -42,7 +53,7 @@ const MainDashboard = () => {
   const data5 = localStorage.getItem("profileimages")
   const data6 = localStorage.getItem("organizationimages")
 
-
+  const { setUser_id } = useContext(PermissionContext)
 
   useEffect(() => {
 
@@ -175,31 +186,17 @@ const MainDashboard = () => {
 
   const useridno = routeData[0]?.userid;
   const usercompany = routeData[0]?.organizationname;
+  setUser_id(useridno);
 
   localStorage.setItem("useridno", useridno);
 
   localStorage.setItem("usercompany", usercompany);
 
-  // to show icon image
 
-  // useEffect(() => {
-  //   const handleImageView = () => {
-  //     const userid = localStorage.getItem("useridno");
-  //     axios.get(`${apiUrl}/userprofileview/${userid}`).then((res) => {
-  //       if (res.status === 200) {
-  //         setSelectedImage(res.data[0]?.filename); // Assuming res.data.prof contains the image data
-  //       } else {
-  //         const timer = setTimeout(handleImageView, 100);
-  //         return () => clearTimeout(timer);
-  //       }
-  //     });
-  //   };
-  //   handleImageView();
-  // }, [sharedData, selectedImage, apiUrl]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/tripsheet`);
+        const response = await fetch(`${apiUrl}/tripsheet-maindash`);
         if (response.status === 200) {
           if (response.ok) {
             const data = await response.json();
@@ -230,9 +227,48 @@ const MainDashboard = () => {
     }
   }, [data1, data2, data4, data5, setUserdashboard, data6, selectedImage, storedusertheme]);
 
+  const [isPopupVisible, setPopupVisible] = useState(false);
+
+  const handleIconClick = () => {
+    setPopupVisible(!isPopupVisible);
+  };
+
+  const handlePopupmodalClose = () => {
+    setPopupVisible(false);
+  };
+
 
   return (
     <>
+
+     
+
+
+      {isPopupVisible && (
+                  <div className="popup" onClick={handlePopupmodalClose}>
+                    <div className="update-card ">
+
+                    <div className="close-button-container">
+              <button className="close-button" onClick={handlePopupmodalClose}>
+                {/* Close icon */}
+                <FaTimes />
+              </button>
+            </div>
+                      <img src={update} alt="update" className="whats-new-image" />
+                      <h3 className="text-black update-text py-3">
+                        Update for more Features
+                      </h3>
+                      <button className="update-button">update</button>
+                    </div>
+                  </div>
+                )}
+
+
+
+
+
+
+
       {userdashboard ? (
         <div className={userdashboard ? "loading-container" : ""}>
           <div className="loading-spinners">
@@ -246,20 +282,28 @@ const MainDashboard = () => {
           className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme
             }`}
         >
+
+
           <div className="glass">
             <Sidebar expanded={expanded} />
             <div className="header-user">
               <div className="avatar-item">
-                <StyledBadge
-                  overlap="circular"
-                  anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                  variant="dot"
-                >
-                  <Avatar
-                    alt="userimage"
-                    src={`${apiUrl}/public/user_profile/${selectedImage}`}
-                  />
-                </StyledBadge>
+                <Tooltip title={`Hi ${storedUsername}`} arrow>
+                  <StyledBadge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    variant="dot"
+
+                  >
+                    <Avatar
+                      alt="userimage"
+                      src={`${apiUrl}/public/user_profile/${selectedImage}`}
+                    />
+                  </StyledBadge>
+
+                </Tooltip>
+
+
 
                 { }
               </div>
@@ -267,6 +311,7 @@ const MainDashboard = () => {
                 {storedUsername ? (
                   <div>
                     <p onClick={navigateToUserSettings}>{storedUsername}</p>
+                    <div className="alert-popup-main">
                     {success && (
                       <div className="alert-popup Success">
                         <div className="popup-icon">
@@ -279,6 +324,7 @@ const MainDashboard = () => {
                         <p>{success}</p>
                       </div>
                     )}
+                    </div>
                   </div>
                 ) : (
                   <div>
@@ -287,32 +333,50 @@ const MainDashboard = () => {
                 )}
               </div>
               <div className="logout-item">
-                <FiLogOut className="logout-icon" onClick={handleLogout} />
+                {/* <FiLogOut className="logout-icon" onClick={handleLogout} /> */}
+                <IoPower className="logout-icon" onClick={handleLogout} />
               </div>
+
+              {/* <div className="user-icon-update"> */}
+
+              <div className="user-icon-update" onClick={handleIconClick}>
+                <FaUser />
+                <div className="user-icon-update-dot"></div>
+              </div>
+
             </div>
             <Outlet />
           </div>
+
+
+
+
+
           <Dialog open={popupOpen} onClose={handlePopupClose}>
+            {/* <p>sdfghjkl;'</p> */}
             <DialogContent>
-              <p>Do you want to logout</p>
+              <p className="modal-warning-icon">< PiWarningCircleBold className="warning-icon" /></p>
+              <p className="modal-warning-text">Are you sure want to logout from this <br /> application ?</p>
             </DialogContent>
-            <DialogActions>
+            <DialogActions className="yes-no-buttons">
               <Button
                 onClick={handleLogoutdialog}
                 variant="contained"
-                color="primary"
+                className="logout-btn"
               >
-                Yes
+                Yes, I'm Sure
               </Button>
               <Button
                 onClick={handlePopupClose}
                 variant="contained"
-                color="primary"
+                className="logout-cancel-btn"
               >
-                NO
+                NO, Cancel
               </Button>
             </DialogActions>
           </Dialog>
+
+
         </section>
       }
     </>

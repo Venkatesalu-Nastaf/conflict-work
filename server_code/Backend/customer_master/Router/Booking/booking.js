@@ -137,6 +137,55 @@ router.get('/name-customers/:customer', (req, res) => {
         return res.status(200).json(customerDetails);
     });
 });
+
+router.get('/drivername-details/:driver', (req, res) => {
+    const customer = req.params.driver;
+    console.log(customer,"re") // Access the parameter using req.params
+    // Modify the query to use the LIKE operator for partial matching
+    // db.query('SELECT * FROM  vehicleinfo WHERE driverName OR  vehRegNo LIKE ? ', [`${customer}%`], (err, result) => {
+ db.query('SELECT * FROM  vehicleinfo WHERE driverName LIKE ? OR vehRegNo LIKE ?', [`${customer}%`, `${customer}%`], (err, result) => {
+
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Customer not found' });
+        }
+        // Assuming there is only one matching customer
+    
+        
+    let vehderivername= result.map(obj => obj.driverName);
+    
+    // console.log(vehderivername,"name")
+    db.query('select Mobileno,driverName from drivercreation where driverName in (?)',[vehderivername],(err,result1)=>{
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve customer details from MySQL' });
+        }
+        if (result1.length === 0) {
+            return res.status(404).json({ error: 'Customer not found' });
+        }
+        // console.log(result1,"da")
+        const vehicleDataname= {};
+
+      result1.forEach(row => {
+        vehicleDataname[row.driverName] = { MobileNo:row.Mobileno };
+
+      });
+      
+      result.forEach(obj => {
+        const vehicle = vehicleDataname[obj.driverName];
+       
+        obj.driverno= vehicle? vehicle.MobileNo : 'Unknown'; // Set default value if fueltype not found
+    
+      }); 
+    //   console.log(result)
+        return res.status(200).json(result);
+    })
+   
+        // return res.status(200).json(result);
+    });
+});
+
 //send email from booking page
 router.post('/send-email', async (req, res) => {
     try {
@@ -301,6 +350,7 @@ router.get('/table-for-booking', (req, res) => {
             'travelsemail',
             'triptime',
             'tripdate',
+            'Groups'
         ];
 
         const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
@@ -334,7 +384,8 @@ router.get('/table-for-booking', (req, res) => {
 // its for multer file- 1
 const booking_storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './customer_master/public/booking_doc')
+        // cb(null, './customer_master/public/booking_doc')
+        cb(null, './uploads')
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
@@ -346,9 +397,12 @@ const booking_uploadfile = multer({ storage: booking_storage });
 
 router.post('/bookingpdf/:id', booking_uploadfile.single("file"), async (req, res) => {
     const booking_id = req.params.id;
-    const fileName = req.file.filename;
+    const path = req.file.filename;
     const fileType = req.file.mimetype;
-    const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
+    const fileName = req.file.filename;
+    const documenttype = "mail"
+    // const sql = `insert into booking_doc(booking_id, fileName, file_type)values(${booking_id}, '${fileName}', '${fileType}')`;
+    const sql = `insert into tripsheetupload(bookingno, path, mimetype,name,documenttype)values(${booking_id}, '${path}', '${fileType}','${fileName}','${documenttype}')`;
     db.query(sql, (err, result) => {
         if (err) return res.json({ Message: "Error" });
         return res.json({ Status: "success" });

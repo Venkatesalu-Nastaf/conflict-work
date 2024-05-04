@@ -61,12 +61,11 @@ const useTransferdataentry = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [servicestation, setServiceStation] = useState("");
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
-    const [rowselect, setRowselect] = useState()
+    // const [rowselect, setRowselect] = useState()
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
     const [info, setInfo] = useState(false);
-    const [infoMessage, setInfoMessage] = useState({});
+    // const [infoMessage, setInfoMessage] = useState({});
     const location = useLocation();
-    const [formDataTransfer, setFormDataTransfer] = useState({});
     const [transferId, setTransferId] = useState([])
 
 
@@ -174,35 +173,35 @@ const useTransferdataentry = () => {
             });
     }, []);
 
-    const transformRow = (originalRow) => {
-        return {
-            id: originalRow.id,
-            startdate: originalRow.startdate,
-            apps: originalRow.apps,
-            tripid: originalRow.tripid,
-            customer: originalRow.customer,
-            department: originalRow.department,
-            vehRegNo: originalRow.vehRegNo,
-            vehType: originalRow.vehType,
-            guestname: originalRow.guestname,
-            groupname: originalRow.groupname,
-            totaltime: originalRow.totaltime,
-            totaldays: originalRow.totaldays,
-            totalkm1: originalRow.totalkm1,
-            duty: originalRow.duty,
-            permit: originalRow.permit,
-            parking: originalRow.parking,
-            billno: originalRow.billno,
-            exHrs: originalRow.exHrs,
-            exkm: originalRow.exkm,
-            netamount: originalRow.netamount,
-            grouptripno: originalRow.grouptripno,
-            billtype: originalRow.billtype,
-            advancepaidtovendor: originalRow.advancepaidtovendor,
-            taxStatus: originalRow.taxStatus,
-            status: originalRow.status,
-        };
-    };
+    // const transformRow = (originalRow) => {
+    //     return {
+    //         id: originalRow.id,
+    //         startdate: originalRow.startdate,
+    //         apps: originalRow.apps,
+    //         tripid: originalRow.tripid,
+    //         customer: originalRow.customer,
+    //         department: originalRow.department,
+    //         vehRegNo: originalRow.vehRegNo,
+    //         vehType: originalRow.vehType,
+    //         guestname: originalRow.guestname,
+    //         groupname: originalRow.groupname,
+    //         totaltime: originalRow.totaltime,
+    //         totaldays: originalRow.totaldays,
+    //         totalkm1: originalRow.totalkm1,
+    //         duty: originalRow.duty,
+    //         permit: originalRow.permit,
+    //         parking: originalRow.parking,
+    //         billno: originalRow.billno,
+    //         exHrs: originalRow.exHrs,
+    //         exkm: originalRow.exkm,
+    //         netamount: originalRow.netamount,
+    //         grouptripno: originalRow.grouptripno,
+    //         billtype: originalRow.billtype,
+    //         advancepaidtovendor: originalRow.advancepaidtovendor,
+    //         taxStatus: originalRow.taxStatus,
+    //         status: originalRow.status,
+    //     };
+    // };
     const [book, setBook] = useState({
         Billdate: '',
         Groupid: '',
@@ -234,29 +233,32 @@ const useTransferdataentry = () => {
         setFromDate(formData.FromDate)
         setEndDate(formData.EndDate)
         setBillingdate(formData.Billdate)
-    }, [location, formDataTransfer])
+    }, [location])
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/tripsheetiddata/${transferId}`);
-                const tripData = await response.data;
-                if (Array.isArray(tripData)) {
-                    //  const transformedRows = tripData.map(transformRow);
-                    const rowsWithUniqueId = tripData.map((row, index) => ({
-                        ...row,
-                        id: index + 1,
-                    }));
-                    setTripData(rowsWithUniqueId);
-                    setRows(rowsWithUniqueId);
-                }
 
+                if (transferId?.length > 0 && transferId !== undefined) {
+
+                    const response = await axios.get(`${apiUrl}/tripsheetiddata/${transferId}`);
+                    const tripData = await response.data;
+
+                    if (Array.isArray(tripData)) {
+                        const rowsWithUniqueId = tripData.map((row, index) => ({
+                            ...row,
+                            id: index + 1,
+                        }));
+                        setTripData(rowsWithUniqueId);
+                        setRows(rowsWithUniqueId);
+                    }
+                }
             }
             catch (error) {
                 console.log(error, "error");
             }
         }
         fetchData()
-    }, [transferId])
+    }, [transferId, apiUrl])
 
     //calculate total amount in column
     useEffect(() => {
@@ -332,7 +334,7 @@ const useTransferdataentry = () => {
                 return selectedRow ? selectedRow.tripid : null;
             })
             .filter((tripid) => tripid !== null);
-        setRowselect(selectedTripIds)
+        // setRowselect(selectedTripIds)
 
 
         const tripsheetid = selectedTripIds;
@@ -343,9 +345,10 @@ const useTransferdataentry = () => {
         localStorage.setItem('selectedrowcount', selectedRowCount);
     };
     const handleClickGenerateBill = () => {
-        handleAdd();
-        handleButtonClickTripsheet();
+
         // handleBillGenerate();
+        //   handleAdd();
+        handleButtonClickTripsheet();
     };
 
     const handleButtonClickTripsheet = () => {
@@ -365,6 +368,7 @@ const useTransferdataentry = () => {
             setErrorMessage('Please select rows before generating the bill.');
             return;
         }
+
         try {
             const tripids = rowSelectionModel;
             if (tripids.some((tripid) => tripid === null || tripid === undefined)) {
@@ -372,6 +376,8 @@ const useTransferdataentry = () => {
                 setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
                 return;
             }
+            handleAdd();
+            handleButtonClickTripsheet();
             const response = await axios.post(`${apiUrl}/updateStatus`, {
                 tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),
                 status: 'CBilled',
@@ -387,6 +393,7 @@ const useTransferdataentry = () => {
             setError(true);
             setErrorMessage('An error occurred. Please try again later.');
         }
+
     };
 
 
@@ -449,7 +456,6 @@ const useTransferdataentry = () => {
             const billDate = dayjs(billdate).format('YYYY-MM-DD');
 
             const OrganizationName = selectedCustomerDatas.customer || customer;
-            const status = 'Be_Closed';
             const Trips = rows.length;
             const billstatus = "notbilled";
 
@@ -549,7 +555,7 @@ const useTransferdataentry = () => {
             const customerValue = encodeURIComponent(customer) || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '');
             const fromDateValue = (selectedCustomerDatas?.fromdate ? dayjs(selectedCustomerDatas.fromdate) : fromDate).format('YYYY-MM-DD');
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
-            const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
+            // const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
 
             const response = await axios.get(`${apiUrl}/Group-Billing`, {
                 params: {
@@ -651,7 +657,6 @@ const useTransferdataentry = () => {
         handleShow,
         handleCancel,
         handleClickGenerateBill,
-        infoMessage,
         handleExcelDownload,
         handlePdfDownload,
         handleBillRemove,
@@ -662,7 +667,6 @@ const useTransferdataentry = () => {
         columns,
         setRowSelectionModel,
         handleRowSelection,
-        formDataTransfer,
         handlechnageinvoice,
         groupId,
         setGroupId

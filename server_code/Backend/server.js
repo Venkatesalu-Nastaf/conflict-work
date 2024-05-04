@@ -39,7 +39,7 @@ const accountinfoRoutes = require('./customer_master/Router/supplier/accountingi
 const vehicleinfoRouter = require('./customer_master/Router/vehicle Info/vehicleinfo');
 const vehicletypeRouter = require('./customer_master/Router/vehicletype/vehicletype')
 const bookingRouter = require('./customer_master/Router/Booking/booking');
-const bookingcopyRouter = require('./customer_master/Router/Booking/bookingcopy');
+
 const bookingchartRouter = require('./customer_master/Router/Booking/bookingchart');
 const tripsheetRouter = require('./customer_master/Router/tripsheet/tripsheet');
 const pendingRouter = require('./customer_master/Router/Recieved/pending');
@@ -84,7 +84,7 @@ app.use('/', vehicletypeRouter); // vehicle_info page database
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', bookingRouter); // Booking page database:-
 // -----------------------------------------------------------------------------------------------------------
-app.use('/', bookingcopyRouter); // booking copy page database: 
+
 // -----------------------------------------------------------------------------------------------------------
 app.use('/', transferlistRouter); // Transfer lsit Database:
 // -----------------------------------------------------------------------------------------------------------
@@ -192,16 +192,11 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
       });
     }
 
-    // console.log(fileData,"HKFVHKBJHKB VBHJ")
-
-
-
     else {
       db.query(updatequery, [fileData.path, fileData.tripid], (err, results) => {
         if (err) {
           return res.status(500).json({ error: 'Error storing file in the database.' });
         }
-        console.log(results, "update")
         return res.status(200).json({ message: 'File uploaded and data inserted successfully.' });
       });
     }
@@ -211,13 +206,12 @@ app.post('/mapuploads', upload2.single('file'), (req, res) => {
 
 //get map image from the folder
 // const mapimageDirectory = path.join('./','customer_master','public', 'map_images');
-// console.log(path.join(__dirname,'customer_master','public','map_images'),"lllll")
 const mapimageDirectory = path.join(__dirname, 'customer_master', 'public', 'map_images')
-// console.log(mapimageDirectory,"jj")
+
 app.use('/mapimages', express.static(mapimageDirectory));
 app.get('/getmapimages/:tripid', (req, res) => {
   const { tripid } = req.params;
-  // console.log(tripid,"jj")
+
 
   const query = 'SELECT path FROM mapimage WHERE tripid = ?';
   db.query(query, [tripid], (err, results) => {
@@ -229,7 +223,7 @@ app.get('/getmapimages/:tripid', (req, res) => {
       return res.status(404).send('Image not found');
     }
     const imagePath = path.join(mapimageDirectory, results[0].path);
-    // console.log(imagePath,"mm")
+
     res.sendFile(imagePath, (err) => {
       if (err) {
         return res.status(500).send('Internal Server Error');
@@ -301,43 +295,49 @@ const uploadtripsheet = multer({
   storage: storagetripsheet
 })
 
-app.put('/tripsheet_uploads/:id', uploadtripsheet.single('image'), (req, res) => {
+app.put('/tripsheet_uploads/:id/:documentType', uploadtripsheet.single('image'), (req, res) => {
   const userId = req.params.id;
   const fileName = req.file.filename;
+  const documentType = req.params.documentType;
   const filename = req.file.originalname;
 
-  const insertQuery = `INSERT INTO tripsheetupload (tripid, path, name) VALUES (?, ?, ?)`;
-  db.query(insertQuery, [userId, fileName, filename], (err, result) => {
-    if (err) {
-      return res.status(500).json({ Message: "Error inserting profile picture", err });
-    }
-    return res.status(200).json({ Status: "success" });
-  })
+
+  if (userId, fileName, filename, documentType) {
+    const insertQuery = `INSERT INTO tripsheetupload (tripid, path, name,documenttype) VALUES (?, ?, ?,?)`;
+    db.query(insertQuery, [userId, fileName, filename, documentType], (err, result) => {
+      if (err) {
+        return res.status(500).json({ Message: "Error inserting profile picture", err });
+      }
+      return res.status(200).json({ Status: "success" });
+    })
+
+  } else {
+    return res.status(500).json({ Message: "some data undefind" })
+  }
+
 });
 
 // login page databse fetch:
 app.post('/login', (req, res) => {
   const { username, userpassword } = req.body;
-  // console.log(username, "user", userpassword)
+
   if (!username || !userpassword) {
     return res.status(400).json({ error: 'Username and userpassword are required.' });
   }
   db.query('SELECT * FROM usercreation WHERE username = ? AND userpassword = ?', [username, userpassword], (err, result) => {
     if (err) {
-      console.log(err, "whu")
       return res.status(500).json({ error: 'Failed to retrieve user details from MySQL' });
     }
     if (result.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials. Please check your username and userpassword.' });
     }
-    console.log(result, "id")
+
     return res.status(200).json({ message: 'Login successful', user: result[0] });
   });
 });
 // for save map image
-// const basemapImagePath = path.join(__dirname, 'path_to_save_mapimages');
 const basemapImagePath = path.join(__dirname, 'customer_master', 'public', 'map_images');
-// console.log(basemapImagePath,"jjj")
+
 
 app.post('/api/savemapimage', (req, res) => {
   const { mapData } = req.body;
@@ -345,7 +345,7 @@ app.post('/api/savemapimage', (req, res) => {
   const imageBuffer = Buffer.from(base64Data, 'base64');
   const imageName = `map-${Date.now()}.png`;
   const imagePath = path.join(basemapImagePath, imageName); // Use the base path
-  console.log(imagePath,)
+
   fs.writeFile(imagePath, imageBuffer, (error) => {
     if (error) {
       res.status(500).json({ error: 'Failed to save map image' });
@@ -366,7 +366,6 @@ app.post('/api/savemapimage', (req, res) => {
 
 
 const signatureDirectory = path.join(__dirname, 'customer_master', 'public', 'signature_images');
-// console.log(signatureDirectory,"kk")
 app.use('/signimages', express.static(signatureDirectory));
 // app.use('/signimages', express.static('customer_master'));
 app.get('/get-signimage/:tripid', (req, res) => {
@@ -395,7 +394,7 @@ app.get('/get-signimage/:tripid', (req, res) => {
 
     fs.access(imagePath, fs.constants.F_OK, (err) => {
       if (err) {
-        // console.error('File does not exist:', err);
+
         return res.status(404).send('File not found');
       }
 
@@ -406,14 +405,55 @@ app.get('/get-signimage/:tripid', (req, res) => {
   });
 });
 
+
+// app.use('/signimages', express.static('customer_master'));
+app.get('/get-signimageforpdfrendered/:tripid', (req, res) => {
+  const { tripid } = req.params;
+  // const query = 'SELECT signature_path FROM signatures WHERE tripid = ?';
+  const query = 'SELECT signature_path AS path FROM signatures WHERE tripid = ?';
+  db.query(query, [tripid], (err, results) => {
+    if (err) {
+      return res.status(500).send('Internal Server Error');
+    }
+    if (results.length === 0) {
+      // No record found for the given tripid
+      return res.status(404).send('Image not found');
+    }
+    if (!results[0].path) {
+      // Handle the case where the path is null or undefined
+      return res.status(500).send('Internal Server Error: Image path is missing');
+    }
+    // const imagePath = path.join(signatureDirectory, results[0].path);
+    const data = results[0].path
+    res.json(data);
+
+
+    // res.sendFile(imagePath, (err) => {
+    //   if (err) {
+    //     return res.status(500).send('Internal Server Error');
+    //   }
+
+    // fs.access(imagePath, fs.constants.F_OK, (err) => {
+    //   if (err) {
+
+    //     return res.status(404).send('File not found');
+    //   }
+
+    //   // Send the file
+    //   res.sendFile(imagePath);
+
+    // });
+  });
+});
+
 const attachedDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
 app.use('/images', express.static(attachedDirectory));
 // Example route to serve an image by its filename
 app.get('/get-attachedimage/:tripid', (req, res) => {
   const { tripid } = req.params;
-  const query = 'SELECT path FROM tripsheetupload WHERE tripid = ?';
-
+  const query = 'SELECT path FROM tripsheetupload WHERE tripid = ? ';
+  // const query = `SELECT path FROM tripsheetupload WHERE tripid = ? AND documenttype IN ('TripSheet', 'Parking', 'Toll', 'Permit', 'Sign')`;
   db.query(query, [tripid], (err, results) => {
     if (err) {
       return res.status(500).send('Internal Server Error');
@@ -464,11 +504,12 @@ const companyattachedDirectory = path.join(__dirname, 'uploads');
 // Serve static files from the imageDirectory
 app.use('/images', express.static(companyattachedDirectory));
 // Example route to serve an image by its filename
-app.get('/get-companyimage/:tripid', (req, res) => {
-  const { tripid } = req.params;
-  const query = 'SELECT path FROM tripsheetupload WHERE organizationname = ?';
+app.get('/get-companyimage/:organizationname', (req, res) => {
+  const { organizationname } = req.params;
+  const query = 'SELECT * FROM organisation_logo WHERE organisation_name = ?';
+  // const query = 'SELECT fileName FROM organisation_logo WHERE organisation_name = ?';
 
-  db.query(query, [tripid], (err, results) => {
+  db.query(query, [organizationname], (err, results) => {
     if (err) {
       return res.status(500).send('Internal Server Error');
     }
@@ -477,8 +518,7 @@ app.get('/get-companyimage/:tripid', (req, res) => {
       // No record found for the given tripid
       return res.status(404).send('Images not found');
     }
-
-    const imagePaths = results.map(result => result.path);
+    const imagePaths = results.map(result => result.fileName);
     res.json({ imagePaths });
   });
 });
@@ -551,16 +591,33 @@ function generateUniqueNumber() {
 app.get('/log-imageview/:sharedData', (req, res) => {
   const imageNAme = req.params.sharedData;
   if (imageNAme !== "undefined") {
-    console.log("share data", imageNAme)
+
     const sql = 'select * from organisation_logo where organisation_name=?';
     db.query(sql, [imageNAme], (err, result) => {
       if (err) return res.json({ Message: "error" })
       return res.json(result);
     })
-
   }
-
 })
+
+
+
+// Permission 
+
+app.get('/use-permissions/:userid', (req, res) => {
+  const userid = req.params.userid;
+  console.log(userid)
+
+  const sql = `select * from user_permissions where user_id=?`;
+  db.query(sql, [userid], (err, result) => {
+    if (err) return res.json({ Message: "error" })
+    return res.json(result);
+  })
+})
+
+
+
+
 
 
 

@@ -20,26 +20,37 @@ import { useData } from "../../Maindashboard/DataContext";
 
 // ICON
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { BiBorderRadius } from "react-icons/bi";
 
 const apiUrl = APIURL;
 
 const makeStyle = (status) => {
   if (status === 'Waiting' || status === 'On_Going') {
     return {
-      background: 'rgb(145 254 159 / 47%)',
+      background: 'rgb(145, 254, 159, 47%)',
       color: 'green',
+      borderRadius: '24px',
+      padding: '10px 20px',
+      fontWeight: '600',
+      
     }
   }
   else if (status === 'Closed') {
     return {
       background: '#ffadad8f',
       color: 'red',
+      borderRadius: '24px',
+      padding: '10px 20px',
+      fontWeight: '600',
     }
   }
   else {
     return {
       background: '#59bfff',
       color: 'white',
+      borderRadius: '24px',
+      padding: '10px 20px',
+      fontWeight: '600',
     }
   }
 }
@@ -49,35 +60,9 @@ export default function BasicTable() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
 
-  const { filteredData, setFilteredData } = useData();
+  const { filteredData } = useData();
+
   const data1 = filteredData;
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/tripsheet`);
-        if (response.status === 200) {
-          if (response.ok) {
-            const data = await response.json();
-            if (data.length > 0) {
-              setFilteredData(data);
-            } else {
-              setFilteredData([]);
-            }
-          } else {
-          }
-        } else {
-          const timer = setTimeout(fetchData, 2000);
-          return () => clearTimeout(timer);
-        }
-      } catch {
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const handlePopupClose = () => {
     setPopupOpen(false);
   };
@@ -92,18 +77,18 @@ export default function BasicTable() {
       <h1>Live Driver Status</h1>
 
       <TableContainer
-        className="Scroll-Style"
+        className="Scroll-Style total-table"
         component={Paper}
         style={{ boxShadow: "0px 13px 20px 0px #80808029" }}
       >
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
-            <TableRow>
-              <TableCell>Driver</TableCell>
-              <TableCell align="left">Tracking ID</TableCell>
-              <TableCell align="left">Date</TableCell>
-              <TableCell align="left">Status</TableCell>
-              <TableCell align="left"></TableCell>
+            <TableRow className="driverdetails-table-header">
+              <TableCell align="left" className="driverdetails-table-head">Driver Name</TableCell>
+              <TableCell align="left" className="driverdetails-table-head">Tracking ID</TableCell>
+              <TableCell align="left" className="driverdetails-table-head">Date</TableCell>
+              <TableCell align="left" className="driverdetails-table-head">Status</TableCell>
+              <TableCell align="left" className="driverdetails-table-head">View</TableCell>
             </TableRow>
           </TableHead>
           <TableBody style={{ color: "white" }}>
@@ -114,12 +99,12 @@ export default function BasicTable() {
                     key={trip.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">{trip.driverName ? trip.driverName : 'Not Assigned'}</TableCell>
-                    <TableCell align="left">TS{trip.tripid}</TableCell>
+                    <TableCell component="th" scope="row" className="driver-name">{trip.driverName ? trip.driverName : 'Not Assigned'}</TableCell>
+                    <TableCell align="left" className="driver-trip-id">TS{trip.tripid}</TableCell>
                     {/* <TableCell align="left">{trip.startdate}</TableCell> */}
-                    <TableCell align="left">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
-                    <TableCell align="left"><span className="status" style={makeStyle(trip.apps)}>{trip.apps ? trip.apps : "Not Mentioned"}</span></TableCell>
-                    <TableCell align="left" className="Details">
+                    <TableCell align="left" className="driver-trip-date">{trip.startdate ? format(new Date(trip.startdate), 'dd/MM/yyyy') : "dd/mm/yy"}</TableCell>
+                    <TableCell className="driver-tripstatus"><span className="status" style={makeStyle(trip.apps)}>{trip.apps ? trip.apps : "Not Mentioned"}</span></TableCell>
+                    <TableCell  className="Details driver-details">
                       <Button onClick={() => handleButtonClickTripsheet(trip)}>Details</Button>
                     </TableCell>
 

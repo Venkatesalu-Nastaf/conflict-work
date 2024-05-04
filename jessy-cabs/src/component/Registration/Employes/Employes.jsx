@@ -6,6 +6,7 @@ import TabList from "@mui/lab/TabList";
 import Employe from './Employe/Employe';
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
+// import zIndex from '@mui/material/styles/zIndex';
 
 const Employes = () => {
     const [value, setValue] = React.useState("employes");
@@ -18,7 +19,7 @@ const Employes = () => {
             <div className="container-main ">
                 <Box sx={{ width: "100%", typography: "body1" }}>
                     <TabContext value={value}>
-                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="head-tab" >
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Employes" value="employes" />
                             </TabList>

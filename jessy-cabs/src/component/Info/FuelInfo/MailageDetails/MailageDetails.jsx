@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import './MailageDetails.css';
 import "jspdf-autotable";
 import dayjs from "dayjs";
@@ -14,6 +14,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { PermissionContext } from '../../../context/permissionContext';
 
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,6 +37,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useMailagedetails from './useMailagedetails';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -98,13 +100,24 @@ const MailageDetails = () => {
     }
   }, [actionName, handleClick]);
 
+
+  // Permission ---------------------
+  const { permissions } = useContext(PermissionContext)
+
+
+  const FuelInfo_read = permissions[19]?.read;
+  const FuelInfo_new = permissions[19]?.new;
+  const FuelInfo_modify = permissions[19]?.modify;
+  const FuelInfo_delete = permissions[19]?.delete;
+
   return (
+
     <div className="form-container-FuelInfo">
       <div className="MailageDetails-Main">
         <form >
           <div className="MailageDetails-page-header">
             <div className="detailsFuel">
-              <div className="input-field">
+              <div className="input-field detailsFuel-inputs">
                 <div className="input" >
                   <div className="icone">
                     <CarCrashIcon color="action" />
@@ -136,6 +149,9 @@ const MailageDetails = () => {
                 <div className="input">
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <div className="icone">
+                      <DateRangeIcon color="action" />
+                    </div>
                     <DatePicker
                       label="Fill Date"
                       format="DD/MM/YYYY"
@@ -151,6 +167,9 @@ const MailageDetails = () => {
                 <div className="input">
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <div className="icone">
+                      <DateRangeIcon color="action" />
+                    </div>
                     <DatePicker
                       label="Empty Date"
                       format="DD/MM/YYYY"
@@ -163,8 +182,8 @@ const MailageDetails = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-              </div>
-              <div className="input-field">
+                {/* </div>
+              <div className="input-field"> */}
                 <div className="input" >
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -231,8 +250,8 @@ const MailageDetails = () => {
                     }}
                   />
                 </div>
-              </div>
-              <div className="input-field">
+                {/* </div>
+              <div className="input-field"> */}
                 <div className="input" style={{ width: "250px" }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faGasPump} size="xl" />
@@ -260,9 +279,9 @@ const MailageDetails = () => {
                 <div className="input" style={{ width: "70px" }}>
                   <div className="input" style={{ width: "160px" }}>
                     {isEditMode ? (
-                      <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                      <Button variant="contained" disabled={!FuelInfo_modify} onClick={handleEdit}>Edit</Button>
                     ) : (
-                      <Button variant="contained" onClick={handleAdd} >Add</Button>
+                      <Button variant="contained" disabled={!FuelInfo_new} onClick={handleAdd} >Add</Button>
                     )}
                   </div>
                 </div>
@@ -277,48 +296,90 @@ const MailageDetails = () => {
                 {mileage.toFixed(2)} km/L
               </p>
             </div>
-            {error &&
-              <div className='alert-popup Error' >
-                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                <p>{errorMessage}</p>
-              </div>
-            }
-            {warning &&
-              <div className='alert-popup Warning' >
-                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                <p>{warningMessage}</p>
-              </div>
-            }
-            {success &&
-              <div className='alert-popup Success' >
-                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                <p>{successMessage}</p>
-              </div>
-            }
-            {info &&
-              <div className='alert-popup Info' >
-                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                <p>{infoMessage}</p>
-              </div>
-            }
+            <div className='alert-popup-main'>
+              {error &&
+                <div className='alert-popup Error' >
+                  <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{errorMessage}</p>
+                </div>
+              }
+              {warning &&
+                <div className='alert-popup Warning' >
+                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{warningMessage}</p>
+                </div>
+              }
+              {success &&
+                <div className='alert-popup Success' >
+                  <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{successMessage}</p>
+                </div>
+              }
+              {info &&
+                <div className='alert-popup Info' >
+                  <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>{infoMessage}</p>
+                </div>
+              }
+            </div>
             <Box sx={{ position: "relative", mt: 3, height: 320 }}>
               <StyledSpeedDial
                 ariaLabel="SpeedDial playground example"
                 icon={<SpeedDialIcon />}
                 direction="left"
               >
-                {actions.map((action) => (
+                {/* {actions.map((action) => (
                   <SpeedDialAction
                     key={action.name}
                     icon={action.icon}
                     tooltipTitle={action.name}
                     onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                   />
-                ))}
+                ))} */}
+
+                {FuelInfo_read === 1 && (
+                  <SpeedDialAction
+                    key="list"
+                    icon={<ChecklistIcon />}
+                    tooltipTitle="List"
+                    onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                  />
+                )}
+                {FuelInfo_modify === 1 && (
+                  <SpeedDialAction
+                    key="edit"
+                    icon={<ModeEditIcon />}
+                    tooltipTitle="Edit"
+                    onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                  />
+                )}
+                {FuelInfo_delete === 1 && (
+                  <SpeedDialAction
+                    key="delete"
+                    icon={<DeleteIcon />}
+                    tooltipTitle="Delete"
+                    onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                  />
+                )}
+                {FuelInfo_new === 1 && (
+                  <SpeedDialAction
+                    key="Add"
+                    icon={<BookmarkAddedIcon />}
+                    tooltipTitle="Add"
+                    onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                  />
+                )}
+                <SpeedDialAction
+                  key="Cancel"
+                  icon={<CancelPresentationIcon />}
+                  tooltipTitle="Cancel"
+                  onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                />
+
               </StyledSpeedDial>
             </Box>
             <div className="Download-btn">

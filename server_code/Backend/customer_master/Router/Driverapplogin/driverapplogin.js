@@ -2,35 +2,40 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
 const moment = require('moment');
+
 // user creation database
 // add user creation database
+
+
 router.post('/drivercreation', (req, res) => {
   const bookData = req.body;
-  // const  username=bookData.username
 
-  // console.log(bookData,"book")
+  // console.log(bookData, "book")
+  db.query('INSERT INTO drivercreation SET ?', bookData, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Failed to insert data into MySQL" });
 
-
-
-       db.query('INSERT INTO drivercreation SET ?', bookData, (err, result) => {
-        if (err) {
-          return res.status(500).json({ error: "Failed to insert data into MySQL" });
-        
-        }
-        // console.log(result,"innsertdriver")
-        return res.status(200).json({ message: "Data inserted successfully" });
-      });
-      
-    
-  
-    
-     
-   
-  
-   
+    }
+    // console.log(result,"innsertdriver")
+    return res.status(200).json({ message: "Data inserted successfully" });
   });
+});
 
-  // })
+
+router.get('/lastdrivergetid', (req, res) => {
+  db.query('SELECT   driverid  FROM  drivercreation ORDER BY  driverid DESC LIMIT    1', (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'driverid not found' });
+    }
+    const lastdriverid = result[0];
+    return res.status(200).json(lastdriverid);
+  });
+});
+
+// })
 //   db.query('INSERT INTO drivercreation SET ?', bookData, (err, result) => {
 //     if (err) {
 //       return res.status(500).json({ error: "Failed to insert data into MySQL" });
@@ -66,7 +71,7 @@ router.put('/drivercreation/:driverid', (req, res) => {
     // console.log(result,"updatedriver")
     return res.status(200).json({ message: "Data updated successfully" });
   });
-  
+
 });
 
 router.get('/drivercreation', (req, res) => {
@@ -91,47 +96,47 @@ router.get('/searchfordriver', (req, res) => {
   // console.log(searchText,"ss",fromDate, toDate)
   let query = 'SELECT * FROM drivercreation WHERE 1=1';
   let params = [];
-  
+
 
   if (searchText) {
-      const columnsToSearch = [
-          'drivername',
-           'driverid',
-            'city',
-            'Mobileno',
-            'stations',
-            'username',
-            'licenseno',
-            'badgeno',
-            'aadharno',
-            'active',
-            'address1',
-            ];
+    const columnsToSearch = [
+      'drivername',
+      'driverid',
+      'city',
+      'Mobileno',
+      'stations',
+      'username',
+      'licenseno',
+      'badgeno',
+      'aadharno',
+      'active',
+      'address1',
+    ];
 
-      const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
+    const likeConditions = columnsToSearch.map(column => `${column} LIKE ?`).join(' OR ');
 
-      query += ` AND (${likeConditions})`;
-      params = columnsToSearch.map(() => `${searchText}%`);
+    query += ` AND (${likeConditions})`;
+    params = columnsToSearch.map(() => `${searchText}%`);
   }
 
   // if (fromDate && moment(fromDate, 'YYYY/MM/DD', true).isValid() && toDate && moment(toDate, 'YYYY/MM/DD', true).isValid())
   if (fromDate && toDate) {
-      // const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
-      // const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
-      const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
-      const formattedToDate = moment(toDate).format('YYYY-MM-DD');
+    // const formattedFromDate = moment(fromDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
+    // const formattedToDate = moment(toDate, 'YYYY/MM/DD').format('YYYY-MM-DD');
+    const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
+    const formattedToDate = moment(toDate).format('YYYY-MM-DD');
 
-      query += ' AND joiningdate >= DATE_ADD(?, INTERVAL 0 DAY) AND joiningdate <= DATE_ADD(?, INTERVAL 1 DAY)';
-      params.push(formattedFromDate, formattedToDate);
+    query += ' AND joiningdate >= DATE_ADD(?, INTERVAL 0 DAY) AND joiningdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+    params.push(formattedFromDate, formattedToDate);
   }
-  console.log(params,query)
+  // console.log(params, query)
   db.query(query, params, (err, result) => {
-      if (err) {
-        // console.log(err,"y")
-          return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
-      }
-      // console.log(result,"searef")
-      return res.status(200).json(result);
+    if (err) {
+      // console.log(err,"y")
+      return res.status(500).json({ error: 'Failed to retrieve vehicle details from MySQL' });
+    }
+    // console.log(result,"searef")
+    return res.status(200).json(result);
   });
 });
 

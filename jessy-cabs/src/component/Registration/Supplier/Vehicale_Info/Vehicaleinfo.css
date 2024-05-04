@@ -68,7 +68,8 @@
   padding-top: 20px;
   border-radius: 20px;
   color: #000;
-  background-color: var(--glass);
+  /* background-color: var(--glass); */
+  background-color: #f0ece2;
 }
 
 /* TextBox */
@@ -109,11 +110,11 @@
   border-color: #456ddc !important;
 }
 .vehicaleinfo-container-left{
-  width: 45%;
+  width: 99%;
 }
 .vehicaleinfo-container-right {
   margin: 20px 0px;
-  width: 50%;
+  width: 100%;
 }
 .vehicaleinfo-update-main {
   border-radius: 10px;
@@ -147,4 +148,46 @@
   width: 50px;
   cursor: pointer;
   border-radius: 20px;
+}
+
+.vehicleinfo-inputfeild{
+  flex-wrap: wrap;
+  /* justify-content: center; */
+}
+
+.vehicaleinfo-container-left{
+  display: flex;
+  /* flex-wrap: wrap; */
+  /* justify-content: center; */
+}
+
+@media screen  and (max-width:701px){
+  .copy-title-btn-Booking {
+    width: 86% !important;
+  }
+}
+
+@media screen  and (min-width:320px)  and (max-width:380px){
+  .copy-title-btn-Booking {
+   border: none !important;
+   background-color: transparent !important;
+  }
+}
+
+/* @media screen and (max-width:1168px) {
+  .vehicleinfo-inputfeild{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+} */
+
+
+@media screen and (max-width:1168px) {
+  .vehicaleinfo-container-left{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .vehicleinfo-inputfeild{
+justify-content: center;
+  }
 }

@@ -19,6 +19,7 @@ const useOrganization = () => {
     const [info, setInfo] = useState(false);
     // const [infoMessage, setInfoMessage] = useState({});
     const { setSharedData, sharedData } = useData();
+    const [dataclose,setDataclose]=useState(false)
 
     // for logo-------------------
     useEffect(() => {
@@ -71,6 +72,7 @@ const useOrganization = () => {
         sustainabilityCSR: '',
         customerReviewsFeedback: '',
         industrySpecificDetails: '',
+        telephone:''
     });
 
 
@@ -137,6 +139,9 @@ const useOrganization = () => {
             [name]: value,
         }));
     };
+    const handleCancel=async()=>{
+        setDataclose(true)
+    }
 
 
     useEffect(() => {
@@ -150,6 +155,7 @@ const useOrganization = () => {
                     const userDataArray = await response.json();
                     if (userDataArray.length > 0) {
                         setSelectedCustomerData(userDataArray[0]);
+                        setDataclose(false)
                     } else {
                         setErrorMessage('User data not found.');
                         setError(true);
@@ -163,7 +169,7 @@ const useOrganization = () => {
             }
         };
         fetchData();
-    }, [apiUrl, selectedCustomerData]);
+    }, [apiUrl,dataclose]);
 
 
 
@@ -228,7 +234,8 @@ const useOrganization = () => {
         handleUpload,
         toggleEditMode,
         handleKeyDown,
-        handleUpdate
+        handleUpdate,
+        handleCancel
     };
 };
 

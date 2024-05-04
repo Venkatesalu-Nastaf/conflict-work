@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import dayjs from "dayjs";
 import "./DriverBataRate.css";
 import Box from "@mui/material/Box";
@@ -28,6 +28,8 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import useDriverbatarate from './useDriverbatarate.js';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import { PermissionContext } from '../../../context/permissionContext.js';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -40,14 +42,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
-
 
 const DriverBataRate = () => {
 
@@ -83,14 +77,26 @@ const DriverBataRate = () => {
     }
   }, [actionName, handleClick]);
 
+
+  // Permission ---------------------
+  const { permissions } = useContext(PermissionContext)
+
+  const RateManagement_read = permissions[17]?.read;
+  const RateManagement_new = permissions[17]?.new;
+  const RateManagement_modify = permissions[17]?.modify;
+  const RateManagement_delete = permissions[17]?.delete;
+
   return (
     <div className="ratetype-form Scroll-Style-hide">
       <form action="">
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-DriverBataRate">
-              <div className="input-field">
-                <div className="input" >
+              <div className="input-field DriverBataRate-inputfeild">
+                <div className="input DriverBataRate-input">
+                  <div className="icone">
+                    <DateRangeIcon color="action" />
+                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="From Date"
@@ -104,7 +110,11 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" >
+                <div className="input DriverBataRate-input">
+
+                  <div className="icone">
+                    <DateRangeIcon color="action" />
+                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="To Date"
@@ -118,7 +128,7 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{ width: "300px" }}>
+                <div className="input DriverBataRate-input" style={{ width: "300px" }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -145,7 +155,7 @@ const DriverBataRate = () => {
                   <Button variant="contained">Show</Button>
                 </div>
               </div>
-              <div className="input-field">
+              <div className="input-field DriverBataRate-inputfeild">
                 <div className="input" style={{ width: "200px" }}>
                   <div className="icone">
                     <EngineeringIcon color="action" />
@@ -193,8 +203,8 @@ const DriverBataRate = () => {
                     onChange={handleChange}
                   />
                 </div>
-              </div>
-              <div className="input-field">
+                {/* </div>
+              <div className="input-field"> */}
                 <div className="input">
                   <TextField
                     type='number'
@@ -245,57 +255,102 @@ const DriverBataRate = () => {
                 </div>
                 <div className="input" style={{ width: "160px" }}>
                   {isEditMode ? (
-                    <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                    <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
                   ) : (
-                    <Button variant="contained" onClick={handleAdd} >Add</Button>
+                    <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Add</Button>
                   )}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {error &&
-          <div className='alert-popup Error' >
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{errorMessage}</p>
-          </div>
-        }
-        {warning &&
-          <div className='alert-popup Warning' >
-            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{warningMessage}</p>
-          </div>
-        }
-        {success &&
-          <div className='alert-popup Success' >
-            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{successMessage}</p>
-          </div>
-        }
-        {info &&
-          <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{infoMessage}</p>
-          </div>
-        }
+        <div className='alert-popup-main'>
+          {error &&
+            <div className='alert-popup Error' >
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
+            </div>
+          }
+        </div>
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
             direction="left"
           >
-            {actions.map((action) => (
+            {/* {actions.map((action) => (
               <SpeedDialAction
                 key={action.name}
                 icon={action.icon}
                 tooltipTitle={action.name}
                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
               />
-            ))}
+            ))} */}
+
+            {RateManagement_read === 1 && (
+              <SpeedDialAction
+                key="list"
+                icon={<ChecklistIcon />}
+                tooltipTitle="List"
+                onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+              />
+            )}
+            {RateManagement_modify === 1 && (
+              <SpeedDialAction
+                key="edit"
+                icon={<ModeEditIcon />}
+                tooltipTitle="Edit"
+                onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+              />
+            )}
+            {RateManagement_delete === 1 && (
+              <SpeedDialAction
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+              />
+            )}
+
+            <SpeedDialAction
+              key="Cancel"
+              icon={<CancelPresentationIcon />}
+              tooltipTitle="Cancel"
+              onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+            />
+            {RateManagement_new === 1 && (
+              <SpeedDialAction
+                key="Add"
+                icon={<BookmarkAddedIcon />}
+                tooltipTitle="Add"
+                onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+              />
+            )}
+
+
+
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-DriverBataRate">

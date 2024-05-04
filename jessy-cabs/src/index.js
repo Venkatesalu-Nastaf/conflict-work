@@ -7,21 +7,39 @@ import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from './component/form/UserContext';
 import { DataProvider } from './component/Dashboard/Maindashboard/DataContext'
 import { DataProvider2 } from './component/Dashboard/MainDash/Sildebar/DataContext2'
+import { PdfDataProvider } from "./component/Billings/Transfer/TransferReport/PdfContext";
+import { RefPdfDataProvider } from "./component/Billings/CoveringBill/GroupBilling/GroupBillingContext";
+import { MailerTemplateDataProvider } from "./component/Info/Mailer/MailerContext";
+import { PermissionProvider } from "./component/context/permissionContext";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <DataProvider2>
-        <DataProvider>
-          <UserProvider>
 
-            <App />
+      <RefPdfDataProvider>
+        <PdfDataProvider>
+          <MailerTemplateDataProvider>
 
-          </UserProvider>
-        </DataProvider>
-      </DataProvider2>
+
+            <DataProvider2>
+              <DataProvider>
+                <UserProvider>
+                  <PermissionProvider>
+                    <App />
+                  </PermissionProvider>
+
+                </UserProvider>
+              </DataProvider>
+            </DataProvider2>
+
+
+          </MailerTemplateDataProvider>
+
+        </PdfDataProvider>
+      </RefPdfDataProvider>
+
     </BrowserRouter>
   </React.StrictMode>
 );

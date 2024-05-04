@@ -82,6 +82,13 @@
 .booking-update-main {
   border-radius: 10px;
   border: 2px solid #ccc;
+  margin-top: 17px;
+}
+
+@media screen and (max-width: 625px) {
+  .booking-update-main {
+    width: 71vw;
+  }
 }
 
 .booking-update {
@@ -183,5 +190,120 @@
   border: 2px solid #ccc;
   border-radius: 15px;
   background-color: var(--glass);
-  margin: 0px 20px;
+  /* margin: 0px 20px; */
+}
+
+.booking-main-section1{
+  display: flex;
+}
+
+.sub-section1{
+  width: 70%;
+  padding-right: 20px;
+}
+
+.sub-section2{
+  width: 30%;
+}
+
+@media screen and (max-width: 1200px) {
+  .booking-main-section1, .booking-main-section2{
+    display: grid !important;
+  }
+  .sub-section1{
+    width: 100%;
+  }
+  
+  .sub-section2{
+    width: 100%;
+  }
+}
+
+.icone{
+  padding: 27px 8px 0px 0px;
+}
+
+/* .input-field .time input{
+  width: 11vw !important;
+} */
+
+@media screen and (max-width: 575px) {
+  .booking-main-section1 .sub-section1 .first-division{
+    width: 92%;
+    justify-content: center;
+  }
+  .booking-main-section1 .sub-section1{
+    width: 80vw;
+  }
+}
+
+@media screen and (max-width: 944px) {
+  .second-division{
+    justify-content: center;
+  } 
+  .sub-section-second-division{
+    width: 74vw !important;
+    justify-content: center;
+  }
+}
+
+.booking-main-section2{
+  display: flex;
+}
+
+@keyframes zigzag {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Apply the zigzag animation on hover */
+
+.icone:hover {
+  animation: zigzag 0.5s ease;
+}
+
+@media screen and (max-width: 987px) {
+  .detail-container-main .container-left{
+    position: relative;
+    left: -20px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .detail-container-main .container-left{
+    position: relative;
+    left: 10px;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 944px) {
+  .driver-table{
+    width: 65vw;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .driver-table{
+    width: 71vw;
+  }
+}
+.booking-form .input{
+  transition: transform 0.3s ease;
+}
+
+.booking-form .input:hover{
+  transform: translateY(-5px) scale(1.05);
 }

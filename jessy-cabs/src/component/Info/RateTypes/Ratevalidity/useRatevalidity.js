@@ -121,6 +121,8 @@ const useRatevalidity = () => {
 
 
     const handleAdd = async () => {
+
+
         const ratename = book.ratename;
         if (!ratename) {
             setError(true);

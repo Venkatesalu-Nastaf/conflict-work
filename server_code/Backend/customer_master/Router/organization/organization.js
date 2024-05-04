@@ -36,6 +36,21 @@ router.get('/organizationdata/:organizationname', (req, res) => {
         return res.status(200).json(routeData);
     });
 });
+router.get('/organisationpdfdata',(req,res)=>{
+    db.query('SELECT * FROM organizationdetails ', (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve route data from MySQL' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Route data not found' });
+        }
+
+    
+        return res.status(200).json(result);
+    });
+
+})
 
 
 router.put('/companyupdate/:organizationname', (req, res) => {

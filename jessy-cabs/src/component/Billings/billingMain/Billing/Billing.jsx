@@ -69,7 +69,7 @@ const actions = [
 const Billing = () => {
 
     const {
-        selectedCustomerData,
+
         actionName,
         error,
         success,
@@ -83,20 +83,8 @@ const Billing = () => {
         handleClick,
         handleChange,
         hidePopup,
-        formData,
-        selectedCustomerDatas,
         handleKeyDown,
-        handleKeyenter,
         handleDateChange,
-        calculateTotalAmount,
-        calculateTotalAmount2,
-        calculateTotalAmount3,
-        calculateTotalAmount4,
-        calculateGrossAmount,
-        calculatePayableAmount,
-        calculateRoundOff,
-        calculateroundedPayableAmount,
-        calculatePendingAmount,
         setSelectedBankAccount,
         handleAutocompleteChange,
         selectedBankAccount,
@@ -104,14 +92,10 @@ const Billing = () => {
         popupOpen,
         handlePopupClose,
         organizationdata,
-        tripSheetData,
         triprequest,
         tripcode,
         tripdepartment,
         routeData,
-        BalanceValue,
-        TotalAmountValue,
-        roundOffValue,
         tripShedkm,
         tripshedin,
         tripshedout,
@@ -122,7 +106,6 @@ const Billing = () => {
         tripstartkm,
         tripclosekm,
         tripstarttime,
-        handleKeyenter2,
         tripclosetime,
         tripstartdate,
         tripclosedate,
@@ -131,7 +114,8 @@ const Billing = () => {
         organizationcity,
         organizationgstnumber,
         GmapimageUrl,
-        mapimageUrl,
+        mapimageUrl, total_GrossAmount, total_DriverBEta_Amount, total_Nighthalt_Amount, handleKeyenterBilling, discound_PercentageCalc,
+        balanceRecivable, roundOffCalc, netAmountCalc, pendingAmountCalc, gst_taxAmountCalc, customerData,
 
         // ... (other state variables and functions)
     } = useBilling();
@@ -160,10 +144,10 @@ const Billing = () => {
                                     name="tripid"
                                     autoFocus
                                     autoComplete="off"
-                                    value={formData.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || book.tripid || ''}
+                                    value={book.tripid || ''}
                                     onChange={handleChange}
                                     onKeyDown={handleKeyDown}
-                        
+
                                 />
                             </div>
                             <div className="input">
@@ -177,11 +161,12 @@ const Billing = () => {
                                     label="Billing No"
                                     name="billingno"
                                     autoComplete="new-password"
-                                    value={formData.billingno || selectedCustomerData.billingno || selectedCustomerDatas.billingno || book.billingno || ''}
+                                    value={book.billingno || ''}
                                     onChange={handleChange}
-                                    onKeyDown={handleKeyenter2}
+                                    onKeyDown={handleKeyenterBilling}
                                 />
                             </div>
+
                             <div className="input">
                                 <div className="icone">
                                     <BadgeIcon color="action" />
@@ -190,24 +175,24 @@ const Billing = () => {
                                     margin="normal"
                                     size="small"
                                     id="invoiceno"
-                                    label="Invoice No"
-                                    name="invoiceno"
+                                    label="Station"
+                                    name="department"
                                     autoComplete="new-password"
-                                    value={formData.invoiceno || selectedCustomerData.invoiceno || selectedCustomerDatas.invoiceno || book.invoiceno || ''}
+                                    value={book.department || ''}
                                     onChange={handleChange}
-                                    onKeyDown={handleKeyenter}
                                 />
                             </div>
+
                             <div className="input">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Billing Date"
-                                        value={formData.Billingdate || selectedCustomerDatas.Billingdate ? dayjs(selectedCustomerDatas.Billingdate) : null || selectedCustomerData.Billingdate ? dayjs(selectedCustomerData.Billingdate) : null || book.Billingdate ? dayjs(book.Billingdate) : dayjs() || ''}
+                                        value={book.Billingdate ? dayjs(book.Billingdate) : dayjs() || ''}
                                         format="DD/MM/YYYY"
                                         onChange={(date) => handleDateChange(date, 'Billingdate')}
                                     >
                                         {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.Billingdate} />
+                                            <TextField {...inputProps} inputRef={inputRef} value={book?.Billingdate} />
                                         )}
                                     </DatePicker>
                                 </LocalizationProvider>
@@ -219,7 +204,7 @@ const Billing = () => {
                                     size="small"
                                     label="Total Kms"
                                     name="totalkm1"
-                                    value={formData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1 || book.totalkm1 || ''}
+                                    value={book.totalkm1 || ''}
                                     autoComplete="new-password"
                                     onChange={handleChange}
                                 />
@@ -232,7 +217,7 @@ const Billing = () => {
                                     label="Total Hours"
                                     name="totaltime"
                                     autoComplete="new-password"
-                                    value={formData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || ''}
+                                    value={book.totaltime || ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -250,7 +235,7 @@ const Billing = () => {
                                     label="Customer"
                                     name="customer"
                                     autoComplete="new-password"
-                                    value={formData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || ''}
+                                    value={book.customer || ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -266,7 +251,7 @@ const Billing = () => {
                                     label="Supplier"
                                     name="supplier"
                                     autoComplete="new-password"
-                                    value={formData.supplier || selectedCustomerData.supplier || selectedCustomerDatas.supplier || book.supplier || ''}
+                                    value={book.supplier || ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -274,12 +259,12 @@ const Billing = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Trip Date"
-                                        value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || selectedCustomerDatas.startdate ? dayjs(selectedCustomerDatas.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
+                                        value={book.startdate ? dayjs(book.startdate) : null}
                                         format="DD/MM/YYYY"
                                         onChange={(date) => handleDateChange(date, 'startdate')}
                                     >
                                         {({ inputProps, inputRef }) => (
-                                            <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                                            <TextField {...inputProps} inputRef={inputRef} value={book?.startdate} />
                                         )}
                                     </DatePicker>
                                 </LocalizationProvider>
@@ -293,7 +278,7 @@ const Billing = () => {
                                     label="Total Days"
                                     name="totaldays"
                                     autoComplete="new-password"
-                                    value={formData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays || ''}
+                                    value={book.totaldays || ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -311,7 +296,7 @@ const Billing = () => {
                                     label="Gust Name"
                                     name="guestname"
                                     autoComplete="new-password"
-                                    value={formData.guestname || selectedCustomerData.guestname || selectedCustomerDatas.guestname || book.guestname || ''}
+                                    value={book.guestname || ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -327,10 +312,12 @@ const Billing = () => {
                                     label="Rate Type"
                                     name="rateType"
                                     autoComplete="new-password"
-                                    value={formData.rateType || selectedCustomerData.rateType || selectedCustomerDatas.rateType || book.rateType || ''}
+                                    value={book.rateType || customerData?.rateType || ''}
                                     onChange={handleChange}
+                                // customerData.rateType || 
                                 />
                             </div>
+
                             <div className="input">
                                 <div className="icone">
                                     <DirectionsCarFilledIcon color="action" />
@@ -342,7 +329,7 @@ const Billing = () => {
                                     label="Vehicle No"
                                     name="vehRegNo"
                                     autoComplete="new-password"
-                                    value={formData.vehRegNo || selectedCustomerData.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
+                                    value={book.vehRegNo || ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -357,7 +344,7 @@ const Billing = () => {
                                     label="Trips"
                                     name="trips"
                                     autoComplete="new-password"
-                                    value={formData.trips || selectedCustomerData.trips || selectedCustomerDatas.trips || book.trips || ''}
+                                    value={book.trips || ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -373,7 +360,7 @@ const Billing = () => {
                                     <TextField
                                         name="vehType"
                                         autoComplete="new-password"
-                                        value={formData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType || ''}
+                                        value={book.vehType || ''}
                                         onChange={handleChange}
                                         label="Vehicle Type"
                                         id="vehType"
@@ -389,7 +376,7 @@ const Billing = () => {
                                         label='Duty'
                                         name="duty"
                                         autoComplete="new-password"
-                                        value={formData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty || ''}
+                                        value={book.duty || ''}
                                         onChange={handleChange}
                                         size="small"
                                         id="duty"
@@ -402,9 +389,9 @@ const Billing = () => {
                                         <Inventory2Icon color="action" />
                                     </div>
                                     <TextField
-                                        name="MinCharges"
+                                        name="calcPackage"
                                         autoComplete="new-password"
-                                        value={formData.MinCharges || selectedCustomerData.package || selectedCustomerDatas.MinCharges || book.MinCharges || ''}
+                                        value={book.calcPackage || ''}
                                         onChange={handleChange}
                                         label="Min.Charges"
                                         id="MinCharges"
@@ -413,14 +400,16 @@ const Billing = () => {
                                         sx={{ m: 1, width: "60ch" }}
                                     />
                                 </div>
+
+
                                 <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
                                     <TextField
-                                        name="minchargeamount"
+                                        name="package_amount"
                                         autoComplete="new-password"
-                                        value={formData.minchargeamount || selectedCustomerData.netamount || selectedCustomerDatas.minchargeamount || book.minchargeamount || ''}
+                                        value={book.package_amount || ''}
                                         onChange={handleChange}
                                         size="small"
                                         id="amount"
@@ -433,11 +422,13 @@ const Billing = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faRoad} />
                                     </div>
+
+
                                     <TextField
                                         type='number'
-                                        name="ChargesForExtra"
+                                        name="extraKM"
                                         autoComplete="new-password"
-                                        value={formData.ChargesForExtra || selectedCustomerData.totalkm1 || selectedCustomerDatas.ChargesForExtra || book?.ChargesForExtra || ''}
+                                        value={book?.extraKM || ''}
                                         onChange={handleChange}
                                         label="Charges For Extra"
                                         id="ChargesForExtra"
@@ -456,9 +447,9 @@ const Billing = () => {
                                     </div>
                                     <TextField size="small"
                                         type='number'
-                                        name='ChargesForExtraamount'
+                                        name='extrakm_amount'
                                         autoComplete="new-password"
-                                        value={formData.ChargesForExtraamount || selectedCustomerData.ChargesForExtraamount || selectedCustomerDatas.ChargesForExtraamount || book.ChargesForExtraamount || ''}
+                                        value={book.extrakm_amount || ''}
                                         onChange={handleChange}
                                         variant="standard"
                                         InputProps={{
@@ -474,9 +465,9 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
                                     <TextField
-                                        name="cfeamount"
+                                        name="ex_kmAmount"
                                         autoComplete="new-password"
-                                        value={calculateTotalAmount() || ''}
+                                        value={book.ex_kmAmount || ''}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount1"
@@ -491,9 +482,9 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faStopwatch} />
                                     </div>
                                     <TextField
-                                        name="ChargesForExtraHRS"
+                                        name="extraHR"
                                         autoComplete="new-password"
-                                        value={formData.ChargesForExtraHRS || selectedCustomerData.totaltime || selectedCustomerDatas.ChargesForExtraHRS || book.ChargesForExtraHRS || ''}
+                                        value={book.extraHR || ''}
                                         onChange={handleChange}
                                         label="Charges For Extra"
                                         id="ChargesForExtra"
@@ -512,9 +503,9 @@ const Billing = () => {
                                     </div>
                                     <TextField size="small"
                                         type='number'
-                                        name='ChargesForExtraHRSamount'
+                                        name='extrahr_amount'
                                         autoComplete="new-password"
-                                        value={formData.ChargesForExtraHRSamount || selectedCustomerData.ChargesForExtraHRSamount || selectedCustomerDatas.ChargesForExtraHRSamount || book.ChargesForExtraHRSamount || ''}
+                                        value={book.extrahr_amount || ''}
                                         onChange={handleChange}
                                         variant="standard"
                                         InputProps={{
@@ -530,9 +521,9 @@ const Billing = () => {
                                         <FontAwesomeIcon icon={faEquals} />
                                     </div>
                                     <TextField
-                                        name="cfehamount"
+                                        name="ex_hrAmount"
                                         autoComplete="new-password"
-                                        value={calculateTotalAmount2()}
+                                        value={book.ex_hrAmount || ""}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount2"
@@ -548,9 +539,9 @@ const Billing = () => {
                                     </div>
                                     <TextField
                                         type='number'
-                                        name="NightHalt"
+                                        name="nightBta"
                                         autoComplete="new-password"
-                                        value={formData.NightHalt || selectedCustomerData.night || selectedCustomerDatas.NightHalt || book.NightHalt || ''}
+                                        value={book.nightBta || ''}
                                         onChange={handleChange}
                                         label="Night Halt"
                                         id="NightHalt"
@@ -564,9 +555,9 @@ const Billing = () => {
                                     </div>
                                     <TextField size="small" variant="standard"
                                         type='number'
-                                        name='NightHaltamount'
+                                        name='nightCount'
                                         autoComplete="new-password"
-                                        value={formData.NightHaltamount || selectedCustomerData.NightHaltamount || selectedCustomerDatas.NightHaltamount || book.NightHaltamount || ''}
+                                        value={book.nightCount || ''}
                                         onChange={handleChange}
                                         InputProps={{
                                             startAdornment: (
@@ -583,7 +574,7 @@ const Billing = () => {
                                         type='number'
                                         name="nhamount"
                                         autoComplete="new-password"
-                                        value={book.nhamount || calculateTotalAmount3() || ''}
+                                        value={total_Nighthalt_Amount() || book.nhamount || ''}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
@@ -600,9 +591,10 @@ const Billing = () => {
                                     <TextField
                                         type='number'
                                         label="Driver Bata"
-                                        name='driverbata'
+                                        name='driverBeta'
                                         autoComplete="new-password"
-                                        value={formData.driverbata || selectedCustomerData.driverbata || selectedCustomerDatas.driverbata || book.driverbata || ''}
+
+                                        value={book.driverBeta || ''}
                                         onChange={handleChange}
                                         id="driverbata"
                                         size="small"
@@ -615,9 +607,9 @@ const Billing = () => {
                                     </div>
                                     <TextField size="small" variant="standard"
                                         type='number'
-                                        name='driverbataamount'
+                                        name='driverbeta_Count'
                                         autoComplete="new-password"
-                                        value={formData.driverbataamount || selectedCustomerData.driverbataamount || selectedCustomerDatas.driverbataamount || book.driverbataamount || ''}
+                                        value={book.driverbeta_Count || ''}
                                         onChange={handleChange}
                                         InputProps={{
                                             startAdornment: (
@@ -632,9 +624,9 @@ const Billing = () => {
                                     </div>
                                     <TextField
                                         type='number'
-                                        name="dbamount"
+                                        name="driverBeta_amount"
                                         autoComplete="new-password"
-                                        value={book.dbamount || calculateTotalAmount4() || ''}
+                                        value={total_DriverBEta_Amount() || book.driverBeta_amount || ''}
                                         onChange={handleChange}
                                         size="small"
                                         label="Amount"
@@ -651,7 +643,7 @@ const Billing = () => {
                                     <TextField
                                         name="OtherCharges"
                                         autoComplete="new-password"
-                                        value={formData.OtherCharges || selectedCustomerData.OtherCharges || selectedCustomerDatas.OtherCharges || book.OtherCharges || ''}
+                                        value={book.OtherCharges || ''}
                                         onChange={handleChange}
                                         label="Other Charges"
                                         id="OtherCharges"
@@ -668,7 +660,7 @@ const Billing = () => {
                                         type='number'
                                         name="OtherChargesamount"
                                         autoComplete="new-password"
-                                        value={formData.OtherChargesamount || selectedCustomerData.OtherChargesamount || selectedCustomerDatas.OtherChargesamount || book.OtherChargesamount || ''}
+                                        value={book.OtherChargesamount || ''}
                                         onChange={handleChange}
                                         size="small"
                                         id="amount"
@@ -683,10 +675,10 @@ const Billing = () => {
                                     </div>
                                     <TextField
                                         type='number'
-                                        name='permitothertax'
-                                        label="Permit / Other Tax"
+                                        name='permit'
+                                        label="Permit"
                                         autoComplete="new-password"
-                                        value={formData.permitothertax || selectedCustomerData.permitothertax || selectedCustomerDatas.permitothertax || book.permitothertax || ''}
+                                        value={book.permit || ''}
                                         onChange={handleChange}
                                         size="small"
                                         id="amount"
@@ -698,15 +690,79 @@ const Billing = () => {
                                     </div>
                                     <TextField
                                         type='number'
-                                        label="Parking / Toll Charges"
-                                        name='parkingtollcharges'
+                                        label="Parking"
+                                        name='parking'
                                         autoComplete="new-password"
-                                        value={formData.parkingtollcharges || selectedCustomerData.parkingtollcharges || selectedCustomerDatas.parkingtollcharges || book.parkingtollcharges || ''}
+                                        value={book.parking || ''}
                                         onChange={handleChange}
                                         size="small"
                                         id="amount"
                                     />
                                 </div>
+                            </div>
+                            <div className="input-field">
+                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faFileContract} size="lg" />
+                                    </div>
+                                    <TextField
+                                        type='number'
+                                        name='toll'
+                                        label="Toll"
+                                        autoComplete="new-password"
+                                        value={book.toll || ''}
+                                        onChange={handleChange}
+                                        size="small"
+                                        id="amount"
+                                    />
+                                </div>
+                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faWindowRestore} size="lg" />
+                                    </div>
+                                    <TextField
+                                        type='number'
+                                        label="V-Permit-TO-Vendor"
+                                        name='vpermettovendor'
+                                        autoComplete="new-password"
+                                        value={book.vpermettovendor || ''}
+                                        onChange={handleChange}
+                                        size="small"
+                                        id="amount"
+                                    />
+                                </div>
+                            </div>
+                            <div className="input-field">
+                                <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faFileContract} size="lg" />
+                                    </div>
+                                    <TextField
+                                        type='number'
+                                        name='vendortoll'
+                                        label="Vendor Toll"
+                                        autoComplete="new-password"
+                                        value={book.vendortoll || ''}
+                                        onChange={handleChange}
+                                        size="small"
+                                        id="amount"
+                                    />
+                                </div>
+                                {/* <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faWindowRestore} size="lg" />
+                                    </div>
+                                    <TextField
+                                        type='number'
+                                        label="Customer-Advance"
+                                        name='customeradvance'
+                                        autoComplete="new-password"
+                                        value={book.customeradvance || ''}
+                                        onChange={handleChange} 
+                                        size="small"
+                                        id="amount"
+                                    />
+                                </div> */}
                             </div>
                         </div>
                         <div className="Billing-secend-right">
@@ -720,9 +776,9 @@ const Billing = () => {
                                         size="small"
                                         id="MinKilometers"
                                         label="Min Kilometers"
-                                        name="MinKilometers"
+                                        name="minKM"
                                         autoComplete="new-password"
-                                        value={formData.MinKilometers || selectedCustomerData.minkm || selectedCustomerDatas.MinKilometers || book.MinKilometers || ''}
+                                        value={book?.minKM || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -735,9 +791,9 @@ const Billing = () => {
                                         size="small"
                                         id="MinHours"
                                         label="Min Hours"
-                                        name="MinHours"
+                                        name="minHour"
                                         autoComplete="new-password"
-                                        value={formData.MinHours || selectedCustomerData.minhrs || selectedCustomerDatas.MinHours || book.MinHours || ''}
+                                        value={book?.minHour || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -755,7 +811,8 @@ const Billing = () => {
                                         label="Gross Amount"
                                         name="GrossAmount"
                                         autoComplete="new-password"
-                                        value={calculateGrossAmount() || book.GrossAmount || ''}
+                                        // value={calculateGrossAmount() || book.GrossAmount || ''}
+                                        value={total_GrossAmount() || book.GrossAmount || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -770,7 +827,7 @@ const Billing = () => {
                                         label="After Tax Amount"
                                         name="AfterTaxAmount"
                                         autoComplete="new-password"
-                                        value={formData.AfterTaxAmount || selectedCustomerData.AfterTaxAmount || selectedCustomerDatas.AfterTaxAmount || book.AfterTaxAmount || ''}
+                                        value={book.AfterTaxAmount || gst_taxAmountCalc() || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -787,7 +844,9 @@ const Billing = () => {
                                         label="Discount Amount"
                                         name="DiscountAmount"
                                         autoComplete="new-password"
-                                        value={formData.DiscountAmount || selectedCustomerData.DiscountAmount || selectedCustomerDatas.DiscountAmount || book.DiscountAmount || ''}
+                                        // value={discound_PercentageCalc() || book.DiscountAmount || ''}
+                                        value={book.DiscountAmount || discound_PercentageCalc() || ''}
+
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -800,7 +859,7 @@ const Billing = () => {
                                         name='DiscountAmount2'
                                         size="small"
                                         autoComplete="new-password"
-                                        value={formData.DiscountAmount2 || selectedCustomerData.DiscountAmount2 || selectedCustomerDatas.DiscountAmount2 || book.DiscountAmount2 || ''}
+                                        value={book.DiscountAmount2 || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -815,9 +874,9 @@ const Billing = () => {
                                         size="small"
                                         id="AdvanceReceived"
                                         label="Advance Received"
-                                        name="AdvanceReceived"
+                                        name="customeradvance"
                                         autoComplete="new-password"
-                                        value={formData.AdvanceReceived || selectedCustomerData.AdvanceReceived || selectedCustomerDatas.AdvanceReceived || book.AdvanceReceived || ''}
+                                        value={book.customeradvance || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -832,7 +891,7 @@ const Billing = () => {
                                         label="Balance Receivable"
                                         name="BalanceReceivable"
                                         autoComplete="new-password"
-                                        value={calculatePayableAmount() || ''}
+                                        value={balanceRecivable() || book.BalanceReceivable || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -849,7 +908,7 @@ const Billing = () => {
                                         label="Rounded Off"
                                         name="RoundedOff"
                                         autoComplete="new-password"
-                                        value={calculateRoundOff() || ''}
+                                        value={roundOffCalc() || book.RoundedOff || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -864,7 +923,7 @@ const Billing = () => {
                                         label="Net Amount"
                                         name="NetAmount"
                                         autoComplete="new-password"
-                                        value={calculateroundedPayableAmount() || ''}
+                                        value={netAmountCalc() || book.NetAmount || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -881,7 +940,7 @@ const Billing = () => {
                                         label="Total Amount"
                                         name="Totalamount"
                                         autoComplete="new-password"
-                                        value={calculateroundedPayableAmount() || selectedCustomerDatas.Totalamount || ''}
+                                        value={netAmountCalc() || book.NetAmount || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -896,7 +955,7 @@ const Billing = () => {
                                         label="Paid Amount"
                                         name="paidamount"
                                         autoComplete="new-password"
-                                        value={formData.paidamount || selectedCustomerData.paidamount || selectedCustomerDatas.paidamount || book.paidamount || ''}
+                                        value={book.paidamount || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -913,7 +972,7 @@ const Billing = () => {
                                         label="Pending Amount"
                                         name="pendingamount"
                                         autoComplete="new-password"
-                                        value={calculatePendingAmount() || ''}
+                                        value={pendingAmountCalc() || book.pendingamount || ''}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -931,7 +990,7 @@ const Billing = () => {
                                             setSelectedBankAccount(value);
                                             handleAutocompleteChange(event, value, "BankAccount")
                                         }}
-                                        value={formData.BankAccount || selectedBankAccount || selectedCustomerData.BankAccount || selectedCustomerDatas.BankAccount || book.BankAccount || ''}
+                                        value={selectedBankAccount || book.BankAccount || ''}
                                         options={bankOptions}
                                         renderInput={(params) => {
                                             return (
@@ -945,18 +1004,19 @@ const Billing = () => {
                     </div>
                     <Dialog open={popupOpen} onClose={handlePopupClose}>
                         <DialogContent>
-                            <Paymentinvoice tripSheetData={tripSheetData}
+                            <Paymentinvoice
+                                //  tripSheetData={tripSheetData}
                                 triprequest={triprequest}
                                 tripcode={tripcode}
                                 selectedImage={selectedImage}
                                 organizationdata={organizationdata}
                                 tripdepartment={tripdepartment}
                                 routeData={routeData}
-                                BalanceValue={BalanceValue}
-                                TotalAmountValue={TotalAmountValue}
-                                roundOff={roundOffValue}
+                                // BalanceValue={BalanceValue}
+                                // TotalAmountValue={TotalAmountValue}
+                                // roundOff={roundOffValue}
                                 book={book}
-                                selectedCustomerData={selectedCustomerData}
+                                // selectedCustomerData={book}
                                 tripShedkm={tripShedkm}
                                 tripshedin={tripshedin}
                                 tripshedout={tripshedout}
@@ -969,7 +1029,7 @@ const Billing = () => {
                                 tripclosetime={tripclosetime}
                                 tripstartdate={tripstartdate}
                                 tripclosedate={tripclosedate}
-                                selectedCustomerDatas={selectedCustomerDatas}
+                                selectedCustomerDatas={book}
                                 organizationaddress1={organizationaddress1}
                                 organizationaddress2={organizationaddress2}
                                 organizationcity={organizationcity}

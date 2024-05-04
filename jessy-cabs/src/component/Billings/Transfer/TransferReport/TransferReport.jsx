@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState} from 'react';
 import "./TransferReport.css";
-
+import { APIURL } from '../../../url';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -15,7 +15,15 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 import Mailpdf from './Mailpdf/Mailpdf';
-
+import PdfPage from './PdfPage';
+import { saveAs } from 'file-saver';
+import {  pdf } from '@react-pdf/renderer';
+// import PdfContent2 from './PdfContent2.';
+import PdfContent2 from './PdfContent2';
+import {useData} from "../../../Dashboard/MainDash/Sildebar/DataContext2"
+import PdfParticularData from './PdfParticularData';
+import Modal from '@mui/material/Modal';
+import { Box } from '@mui/material';
 //for popup
 import ClearIcon from '@mui/icons-material/Clear';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
@@ -34,15 +42,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortawesome/free-solid-svg-icons";
 import useTransferreport from './useTransferreport';
+import useExeclpage from './ExcelPage';
+import { PdfData } from './PdfContext';
+import JSZip from 'jszip';
+import PdfzipParticularData from './Pdfpatricularzipdata'
 
-const columns = [
-  { field: "id", headerName: "Sno", width: 70 },
-  { field: "vcode", headerName: "VCode", width: 130 },
-  { field: "guestname", headerName: "Guest Name", width: 130 },
-  { field: "tripid", headerName: "Trip No", width: 130 },
-  { field: "status", headerName: "Status", width: 130 },
-  { field: "view", headerName: "View", width: 130 },
-];
 
 export const PDFbill = [
   {
@@ -70,7 +74,7 @@ const TransferReport = () => {
 
   const {
     invoiceno,
-    grouptTripid,
+    groupTripid,
     fromDate,
     endDate,
     invoiceDate,
@@ -93,17 +97,14 @@ const TransferReport = () => {
     bankOptions,
     selectedImage,
     setCustomer,
+    misformat,setMisformat,
     servicestation,
     handleserviceInputChange,
-    handleEInvoiceClick,
-    handleMapInvoiceClick,
-    handleLuxuryInvoiceClick,
     pbpopupOpen,
     handlePopupClose,
     npopupOpen,
-    handleETripsheetClick,
     lxpopupOpen,
-    handleExcelDownload,
+    // handleExcelDownload,
     handlePdfDownload,
     routeData,
     roundedAmount,
@@ -115,16 +116,186 @@ const TransferReport = () => {
     popupOpen,
     organizationcity,
     organizationgstnumber,
-
+    pdfBillList,
+    setPdfBillList,
+    setError,
+    setErrorMessage,
+    handleRowSelection,
+    // rowzip,
+    rowSelectionModel,
+    setRowSelectionModel,
+    pdfzipdata
   } = useTransferreport();
+  const {
+        handleExcelDownload,error1,errormessage1,
+        handledatazipDownload} = useExeclpage()
+  const [invoicedata,setInvoicedata] = useState([])
+  const [addressDetails,setAddressDetails] = useState([])
+  const apiUrl = APIURL;
+  const [organizationsdetail1,setOrganisationDetail]=useState([]);
+  const { sharedData } = useData();
+  const [particularPdf,setParticularPdf] = useState([])
+  const [imageorganisation, setSelectedImageorganisation] = useState(null);
+  const [tripno,setTripno] = useState('')
+const {pdfPrint,setPdfPrint,setPdfzip} = PdfData()
+  useEffect(() => {
+    setSelectedImageorganisation(sharedData)
+  }, [sharedData])
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/customeraddress/${customer}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const addressdetail = await response.json();
+        setAddressDetails(addressdetail);
+      } catch (err) {
+        console.error('Error fetching customer address:', err);
+      }
+    };
+  
+    fetchdata();
+  }, [apiUrl, customer]);
+  console.log(rowSelectionModel,"model")
+
+
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/organisationpdfdata`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const organizationdetails = await response.json();
+        setOrganisationDetail(organizationdetails)
+       
+      } catch (err) {
+        console.error('Error fetching customer address:', err);
+      }
+    };
+  
+    fetchdata();
+  }, [apiUrl, customer]);
+  
+  useEffect(()=>{
+    const fetchData = async () => {
+
+    try {
+        const tripid = localStorage.getItem("selectedtripsheetid");
+        const encoded = localStorage.getItem("selectedcustomerdata");
+        localStorage.setItem("selectedcustomer", encoded);
+        const storedCustomer = localStorage.getItem("selectedcustomer");
+        const customer = decodeURIComponent(storedCustomer);
+        const response = await fetch(
+          `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const tripData = await response.json();
+        setInvoicedata(tripData)
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+fetchData()
+},[apiUrl])
+// useEffect(()=>{
+//   const fetchData = async () =>{
+//     const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
+//   }
+// })
+
+const handleDownloadPdf = async () => {
+  if(!pdfBillList){
+       setError(true)
+       setErrorMessage('Select PDF Format')
+       return
+  }
+
+  else if (pdfBillList === "PDF 1") {
+    const fileName = 'test.pdf';
+    const blob = await pdf(<PdfPage invdata={invoicedata} invoiceno={invoiceno} invoiceDate={invoiceDate} groupTripid={groupTripid} customeraddress={addressDetails} customer={customer} organisationdetail={organizationsdetail1} imagedata={imageorganisation} />).toBlob();
+    saveAs(blob, fileName);
+    localStorage.removeItem("selectedcustomerdata");
+    localStorage.removeItem("selectedtripsheetid");
+  }
+  else if (pdfBillList === "PDF 2") {
+    const fileName = 'test.pdf';
+    const blob = await pdf(<PdfContent2 invdata={invoicedata} invoiceDate={invoiceDate} customeraddress={addressDetails} invoiceno={invoiceno} customer={customer} fromDate={fromDate} enddate={endDate} organisationname={organizationsdetail1} imagename={imageorganisation}/>).toBlob();
+    saveAs(blob, fileName);
+    localStorage.removeItem("selectedcustomerdata");
+    localStorage.removeItem("selectedtripsheetid");
+  }
+
+}
+
+const handlePopup= ()=>{
+  setPdfPrint(false)
+}
+
+const columns = [
+  { field: "id", headerName: "Sno", width: 70 },
+  { field: "vcode", headerName: "VCode", width: 130 },
+  { field: "guestname", headerName: "Guest Name", width: 130 },
+  { field: "tripid", headerName: "Trip No", width: 130 },
+  { field: "status", headerName: "Status", width: 130 },
+  // { field: "view", headerName: "View", width: 130 },
+  {
+    field: 'actions',
+    headerName: 'Actions',
+    width: 130,
+    renderCell: (params) => (
+        <Button
+            onClick={() => handleButtonClick(params)}
+            aria-label="open-dialog"
+        >
+            <Button variant="contained" color="primary">
+                view
+            </Button>
+
+        </Button>
+    ),
+},
+];
+
+
+const handleButtonClick = async(params) => {
+  setPdfPrint(true)
+const {tripid,customer} = params.row;
+setTripno(tripid)
+const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
+const pdfdetails = await response.json()
+setParticularPdf(pdfdetails)
+
+};
+const handleBothDownload = (misformat1, invoicedata1, invoiceDate1) => {
+  if(!misformat){
+    setError(true)
+    setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
+  return
+  }
+  if(!pdfBillList){
+    setError(true)
+    setErrorMessage("SELECT MIS FORMAT AND PDF FORMAT")
+  return
+  }
+  handleExcelDownload(misformat1, invoicedata1, invoiceDate1);
+  handleDownloadPdf();
+};
+
+
+
 
   return (
     <div className="TransferReport-form Scroll-Style-hide">
+    
       <form >
         <div className="detail-container-main">
           <div className="container-left">
@@ -140,7 +311,7 @@ const TransferReport = () => {
                     label="GroupTrip Id"
                     name="referenceno"
                     autoComplete='off'
-                    value={grouptTripid}
+                    value={groupTripid}
                   />
                 </div>
                 <div className="input" style={{ width: "230px" }}>
@@ -167,7 +338,7 @@ const TransferReport = () => {
                     name="misformat"
                     autoComplete='off'
                   /> */}
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
@@ -175,13 +346,31 @@ const TransferReport = () => {
                     options={MISformat.map((option) => ({
                       label: option.Option,
                     }))}
-                    onChange={(event, value) => setCustomer(value)}
+                    onChange={(event, value) => setMisformat(value.label)}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="MIS Format" inputRef={params.inputRef} />
+                      );
+                    }}
+                  /> */}
+
+<Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    options={MISformat?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    onChange={(event, value) => setMisformat(value?.label)}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="MIS Format" inputRef={params.inputRef} />
                       );
                     }}
                   />
+
+                
 
                 </div>
                 <div className="input">
@@ -299,7 +488,7 @@ const TransferReport = () => {
                     name="misformat"
                     autoComplete='off'
                   /> */}
-                  <Autocomplete
+                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
@@ -307,7 +496,8 @@ const TransferReport = () => {
                     options={PDFbill.map((option) => ({
                       label: option.Option,
                     }))}
-                    onChange={(event, value) => setCustomer(value)}
+                    value={pdfBillList} // Set the value to the state variable pdfBillList
+                    onChange={(event, value) => setPdfBillList(value.label)}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="PDF Bill" inputRef={params.inputRef} />
@@ -363,9 +553,9 @@ const TransferReport = () => {
                             Download
                           </Button>
                           <Menu {...bindMenu(popupState)}>
-                            <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                            <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                            <MenuItem onClick={handlePdfDownload}>Both</MenuItem>
+                            <MenuItem onClick={()=>handleExcelDownload(misformat,invoicedata,invoiceDate)}>Excel</MenuItem>
+                            <MenuItem onClick={handleDownloadPdf}>PDF</MenuItem>
+                            <MenuItem onClick={()=>handleBothDownload(misformat, invoicedata, invoiceDate)}>Both</MenuItem>
                           </Menu>
                         </React.Fragment>
                       )}
@@ -444,7 +634,9 @@ const TransferReport = () => {
                     </Button>
                     <Menu {...bindMenu(popupState)}>
                       {/* <MenuItem onClick={handleExcelDownload}>Excel</MenuItem> */}
-                      <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem>
+                      <MenuItem onClick={()=>handledatazipDownload(misformat,pdfzipdata,invoiceDate,customer,organizationsdetail1,imageorganisation,rowSelectionModel) }>  ZIP </MenuItem>
+                      {/* <MenuItem onClick={handleDownloadZippdf}> PDF ZIP</MenuItem> */}
+                      {/* <MenuItem onClick={handlePdfDownload}>ZIP</MenuItem> */}
                     </Menu>
                   </React.Fragment>
                 )}
@@ -462,8 +654,16 @@ const TransferReport = () => {
                 rows={rows}
                 columns={columns}
                 pageSize={5}
+                onRowSelectionModelChange={(newRowSelectionModel) => {
+                  setRowSelectionModel(newRowSelectionModel);
+                  handleRowSelection(newRowSelectionModel);
+                }}
                 checkboxSelection
                 disableRowSelectionOnClick
+                selectionModel={rowSelectionModel} // Pass the selection model to maintain selection
+
+               
+
               />
             </div>
           </div>
@@ -503,6 +703,13 @@ const TransferReport = () => {
               <p>{errorMessage}</p>
             </div>
           }
+          {error1 &&
+            <div className='alert-popup Error'>
+              <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errormessage1}</p>
+            </div>
+          }
           {success &&
             <div className='alert-popup Success'>
               <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
@@ -518,6 +725,46 @@ const TransferReport = () => {
             </div>
           }
         </div>
+        {/* <Dialog open={popup} onClose={handlePopup}>
+                <DialogContent style={{ width: 1000 }}>
+                  <PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handlePopup} variant="contained" color="primary">
+                    Cancel
+                  </Button>
+                </DialogActions>
+              </Dialog> */}
+               <Modal
+        open={pdfPrint}
+        onClose={handlePopup}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '854px',
+            height: '700px',
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+            overflowY:'auto'
+          }}
+        >
+      
+          <PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} tripno={tripno}/>
+
+          {/* <Button onClick={handlePopup} variant="contained" color="primary">
+                    Cancel
+                  </Button> */}
+        </Box>
+      </Modal>
+     
       </form>
     </div>
   )

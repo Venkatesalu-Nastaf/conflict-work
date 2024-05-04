@@ -24,10 +24,23 @@ const MainSetting = () => {
               <TabList
                 onChange={handleChange}
                 aria-label="lab API tabs example"
+                
               >
-                <Tab label="Organization Details" value="Organization" />
-                <Tab label="Tax Setting" value="Tax_Setting" />
-                <Tab label="BackUp" value="Back_Up" />
+
+                
+                <Tab label="Organization Details" className="tablists" value="Organization" />
+
+              
+                <Tab label="Tax Setting" className="tablists" value="Tax_Setting" />
+
+              
+                <Tab label="BackUp" className="tablists" value="Back_Up" />
+
+               
+                
+                {/* <Tab label="Organization Details" className="tablists" value="Organization" />
+                <Tab label="Tax Setting" className="tablists" value="Tax_Setting" />
+                <Tab label="BackUp" className="tablists" value="Back_Up" /> */}
               </TabList>
             </Box>
             <TabPanel value="Organization">
@@ -36,7 +49,7 @@ const MainSetting = () => {
             <TabPanel value="Tax_Setting">
               <TaxSetting />
             </TabPanel>
-            <TabPanel value="Back_Up">
+            <TabPanel value="Back_Up" className="back-up-component">
               <BackUp />
             </TabPanel>
           </TabContext>

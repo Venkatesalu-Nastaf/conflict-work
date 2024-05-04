@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./TripSheet.css";
 import {
   Apps,
@@ -11,6 +11,7 @@ import {
   Pickup,
   Email,
   Select,
+  GroupTypes
 } from "./TripSheetdata";
 import dayjs from "dayjs";
 import { Table } from "@mui/joy";
@@ -33,6 +34,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { TextField, FormControlLabel, Checkbox } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import EmailIcon from "@mui/icons-material/Email";
 //dialog box
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -96,6 +98,13 @@ import { faSquareParking } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
+import { PermissionContext } from '../../context/permissionContext';
+
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import ChecklistIcon from "@mui/icons-material/Checklist";
+
+
 import useTripsheet from './useTripsheet';
 
 // UpdateTbaleRowsGPSSlider TABLE START
@@ -141,15 +150,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const actions = [
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
-
-
-
 
 const maplogcolumns = [
   { field: "id", headerName: "Sno", width: 70 },
@@ -165,7 +165,7 @@ const TripSheet = () => {
 
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
-    selectedCustomerId, setNightBeta, setNightCount, request, setRequest, calcCheck,
+    selectedCustomerId, setNightBeta, setNightCount, request, setRequest, calcCheck, vehileName,
     rows,
     actionName,
     error,
@@ -179,7 +179,6 @@ const TripSheet = () => {
     book,
     handleClick,
     handleChange,
-    isFieldReadOnly,
     handleRowClick,
     handleAdd,
     hidePopup,
@@ -228,11 +227,6 @@ const TripSheet = () => {
     calculateNightAmount,
     calculateTotalAmount,
     calculatedriverconvienceAmount,
-    // calculateExkmAmount2,
-    // calculateExHrsAmount2,
-    // calculateNightAmount2,
-    // calculatedriverconvienceAmount2,
-    // calculateTotalAmount2,
     handleTripmapClick,
     mapimgpopupOpen,
     handleimgPopupClose,
@@ -255,7 +249,7 @@ const TripSheet = () => {
     SignPage,
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
-    totalcalcAmount,
+    totalcalcAmount, escort, handleEscortChange, handleClickOpen, open, handleClose, handleTransferChange, transferreport
 
   } = useTripsheet();
 
@@ -265,10 +259,15 @@ const TripSheet = () => {
     }
   }, [actionName, handleClick]);
 
-  // ayyanar.action
 
-  // Filter the actions array based on the editMode variable
-  const filteredActions = isEditMode ? actions.filter(action => action.name !== "Add") : actions;
+  // Permission ------------ayyan
+  const { permissions } = useContext(PermissionContext)
+
+  const Tripsheet_read = permissions[3]?.read;
+  const Tripsheet_new = permissions[3]?.new;
+  const Tripsheet_modify = permissions[3]?.modify;
+  const Tripsheet_delete = permissions[3]?.delete;
+
 
 
   return (
@@ -293,7 +292,6 @@ const TripSheet = () => {
                   onKeyDown={handleKeyDown}
                   autoComplete="password"
                   autoFocus
-                  disabled={isFieldReadOnly("read")}
                 />
               </div>
               <div className="input">
@@ -706,19 +704,49 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input" style={{ width: "150px" }}>
-                <TextField
+                {/* <TextField
                   margin="normal"
                   size="small"
                   id="category"
                   label="category"
                   name="category"
                   autoComplete="password"
+                /> */}
+                <div className="icone">
+                  <EmailIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  id="free-solo-demo"
+                  freeSolo
+                  size="small"
+                  // value={book?.Groups || selectedCustomerData?.Groups || ''}
+
+                  value={(formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
+
+                  options={GroupTypes?.map((option) => ({
+                    label: option?.Option,
+                  }))}
+                  // onChange={(event, value) => setVechiclebook((prevBook) => ({
+                  //   ...prevBook,
+                  //   "Groups": value?.label,
+                  // }))}
+
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
+
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                    );
+                  }}
                 />
               </div>
+
               <div className="input">
                 <div className="icone">
                   <NoCrashIcon color="action" />
                 </div>
+                {/* 
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -726,9 +754,11 @@ const TripSheet = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
+                
                   value={VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
-                  options={VehicleRate.map((option) => ({
-                    label: option.option,
+
+                  options={vehileName?.map((option) => ({
+                    label: option,
                   }))}
                   getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                   renderInput={(params) => {
@@ -737,7 +767,29 @@ const TripSheet = () => {
                     )
                   }
                   }
+                /> */}
+
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
+                  // value={formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
+                  value={(formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType) ? (formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType) : null}
+                  // options={vehileName || []}
+                  options={vehileName?.map((option) => ({
+                    label: option,
+                  }))}
+                  // getOptionLabel={(option) => option.label || ''}
+                  getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Vehicle Rate" autoComplete="password" name="vehType" inputRef={params.inputRef} />
+                  )}
                 />
+
               </div>
             </div>
             <div className="input-field">
@@ -769,23 +821,10 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div>
+
+
               <div className="input radio">
-                {/* <FormControlLabel
-                  id="DriverSMS"
-                  value="DriverSMS"
-                  control={
-                    <Checkbox
-                      size="small"
-                      checked={DriverSMS || formData.DriverSMS || book.DriverSMS}
-                      onChange={(event) => {
-                        setBook({ ...book, DriverSMS: event.target.checked });
-                        setFormData({ ...formData, DriverSMS: event.target.checked });
-                        setDriverSMS(event.target.checked);
-                      }}
-                    />
-                  }
-                  label="Driver SMS"
-                /> */}
+
                 <FormControlLabel
                   value="DriverSMS"
                   control={
@@ -1236,10 +1275,416 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
-                <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
+
+                {/* ggggggggg */}
+                {/* <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
+                  calculate
+                </Button> */}
+                <Button style={{ marginLeft: "10px" }} variant="contained"
+                  onClick={() => {
+                    handleCalc();
+                    handleClickOpen();
+                  }}
+                >
                   calculate
                 </Button>
               </div>
+              {/* ////gggggggggggg */}
+
+              <React.Fragment>
+
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title" style={{ paddingBottom: 0 }}>
+                    {"Customer Bill"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      <div className="Customer-Customer-Bill-Slider">
+                        <div className="input-field">
+                          <div className="input" style={{ width: "390px" }}>
+                            <div className="icone">
+                              <Inventory2Icon color="action" />
+                            </div>
+                            {/* ayyanar */}
+                            {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
+
+
+
+                            <TextField
+                              name="pack"
+                              // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
+                              value={calcPackage || formData.calcPackage || ''}
+                              // onChange={handleChange}
+
+                              label="Pack"
+                              id="pack"
+                              size="small"
+                              variant="standard"
+                              autoComplete="password"
+                              sx={{ m: 1, width: "60ch" }}
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faEquals} />
+                            </div>
+                            <TextField
+                              name="amount5"
+                              // value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate || ''}
+                              value={package_amount || formData.calcPackage || ''}
+                              // onChange={handleChange}
+                              size="small"
+                              label="Amount"
+                              autoComplete="password"
+                              id="amount"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+                        <div className="input-field">
+                          <div className="input" style={{ width: "186px" }}>
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faRoad} />
+                            </div>
+                            <TextField
+                              name="exkm1"
+                              className='customer-bill-input'
+                              // value={book.exkm1 || packageDetails[0]?.extraKMS || ''}
+                              // onChange={handleChange} 
+                              value={extraKM || formData.calcPackage || 0}
+                              label="Ex.Km"
+                              id="ex-km"
+                              autoComplete="password"
+                              size="small"
+                              variant="standard"
+                            />
+                          </div>
+                          <div className="input" style={{ width: "187px" }}>
+                            <div className="icone">
+                              <TollTwoToneIcon color="action" />
+                            </div>
+                            <TextField size="small"
+                              name='exkmTkm2'
+                              className='customer-bill-input'
+                              // value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2 || ''}
+                              value={extrakm_amount || formData.calcPackage || ''}
+                              // onChange={handleChange}
+                              id="exkmTkm"
+                              variant="standard"
+                              autoComplete="password"
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faEquals} />
+                            </div>
+                            <TextField
+                              name="amount6"
+                              className='customer-bill-input'
+                              // value={book.amount6 || calculateExkmAmount2() || ''}
+                              value={ex_kmAmount || formData.calcPackage || 0}
+                              size="small"
+                              label="Amount"
+                              autoComplete="password"
+                              id="amount"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="input-field">
+                          <div className="input" style={{ width: "186px" }}>
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faStopwatch} />
+                            </div>
+                            <TextField
+                              name="exHrs1"
+                              className='customer-bill-input'
+                              // value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours || ''}
+                              value={extraHR || formData.calcPackage || ''}
+                              // onChange={handleChange}
+                              label="Ex.Hrs"
+                              id="ex-Hrs"
+                              size="small"
+                              autoComplete="password"
+                              variant="standard"
+                            />
+                          </div>
+                          <div className="input" style={{ width: "187px" }}>
+                            <div className="icone">
+                              <TollTwoToneIcon color="action" />
+                            </div>
+                            <TextField
+                              size="small"
+                              name='exHrsTHrs2'
+                              className='customer-bill-input'
+                              // value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2 || ''}  extrahr_amount
+                              value={extrahr_amount || formData.calcPackage || ''}
+                              // onChange={handleChange}
+                              variant="standard"
+                            />
+
+                            {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
+
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faEquals} />
+                            </div>
+                            <TextField
+                              name="amount7"
+                              className='customer-bill-input'
+                              // value={book.amount7 || calculateExHrsAmount2() || ''}
+                              // onChange={caculate_extraHR}
+                              value={ex_hrAmount || formData.calcPackage || 0}
+                              size="small"
+                              label="Amount"
+                              autoComplete="password"
+                              id="amount"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+                        <div className="input-field">
+                          <div className="input" style={{ width: "186px" }}>
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faCloudMoon} />
+                            </div>
+
+                            <TextField
+                              name="night1"
+                              className='customer-bill-input'
+                              value={nightBta || ''}
+                              onChange={(e) => setNightBeta(e.target.value)}
+                              label="Night"
+                              id="night"
+                              autoComplete="password"
+                              size="small"
+                              variant="standard"
+                            />
+                          </div>
+                          <div className="input" style={{ width: "187px" }}>
+                            <div className="icone">
+                              <TollTwoToneIcon color="action" />
+                            </div>
+                            <TextField
+                              size="small"
+                              className='customer-bill-input'
+                              name='nightThrs2'
+                              value={nightCount || ''}
+                              onChange={(e) => setNightCount(e.target.value)}
+                              variant="standard"
+                              autoComplete="password"
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faEquals} />
+                            </div>
+                            <TextField
+                              name="amount8"
+                              className='customer-bill-input'
+                              value={night_totalAmount || 0}
+                              size="small"
+                              autoComplete="password"
+                              label="Amount"
+                              id="amount"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+                        <div className="input-field">
+                          <div className="input" style={{ width: "186px" }}>
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                            </div>
+                            <TextField
+                              name="driverconvenience1"
+                              className='customer-bill-input'
+                              value={driverBeta || formData.driverBeta || ''}
+                              onChange={driverBeta_calc}
+                              label="Driver Convenience"
+                              autoComplete="password"
+                              id="driver-convenience"
+                              size="small"
+                              variant="standard"
+                            />
+                          </div>
+                          <div className="input" style={{ width: "187px" }}>
+                            <div className="icone">
+                              <TollTwoToneIcon color="action" />
+                            </div>
+                            <TextField
+                              size="small"
+                              name='dtc2'
+                              className='customer-bill-input'
+                              value={driverbeta_Count || formData.driverbeta_Count || ''}
+                              onChange={driverbeta_Count_calc}
+                              variant="standard"
+                              autoComplete="password"
+                            />
+                          </div>
+                          <div className="input">
+                            <div className="icone">
+                              <FontAwesomeIcon icon={faEquals} />
+                            </div>
+                            <TextField
+                              name="amount9"
+                              className='customer-bill-input'
+                              value={driverBeta_amount || 0}
+                              size="small"
+                              label="Amount"
+                              id="amount"
+                              autoComplete="password"
+                              variant="standard"
+                            />
+                          </div>
+                        </div>
+
+                        <TextField
+                          name="amount9"
+                          value={totalcalcAmount || 0}
+                          size="small"
+                          label="Total Amount"
+                          id="amount"
+                          autoComplete="password"
+                          variant="standard"
+                          style={{ marginTop: '25px', marginLeft: '15px' }}
+                        />
+                        <div className="input-field">
+                          {/* <div className="input" style={{ width: "390px" }}>
+                      <div className="icone">
+                        <TollTwoToneIcon color="action" />
+                      </div>
+                      <TextField
+                        name="rud"
+                        value={formData.rud || selectedCustomerData.rud || book.rud || ''}
+                        onChange={handleChange}
+                        label="Rud"
+                        id="rud"
+                        size="small"
+                        autoComplete="password"
+                        variant="standard"
+                        sx={{ m: 1, width: "60ch" }}
+                      />
+                    </div> */}
+                          {/* <div className="input">
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faEquals} />
+                      </div>
+                      <TextField
+                        name="netamount1"
+                        value={book.netamount1 || calculateTotalAmount2() || ''}
+                        onChange={handleChange}
+                        size="small"
+                        label="Net Amount"
+                        id="net-amount"
+                        autoComplete="password"
+                        variant="standard"
+                      />
+                    </div> */}
+                        </div>
+                        <div className="input-field">
+                          {/* <div className="input" style={{ width: "186px" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faTags} />
+                      </div>
+                      <TextField
+                        name="discount"
+                        value={formData.discount || selectedCustomerData.discount || book.discount || ''}
+                        onChange={handleChange}
+                        label="Discount"
+                        id="discount"
+                        size="small"
+                        autoComplete="password"
+                        variant="standard"
+                      />
+                    </div> */}
+                          {/* <div className="input" style={{ width: "187px" }}>
+                      <div className="icone">
+                        <TollTwoToneIcon color="action" />
+                      </div>
+                      <TextField size="small" variant="standard" />
+                    </div> */}
+                          {/* <div className="input">
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faEquals} />
+                      </div>
+                      <TextField
+                        name="ons"
+                        value={formData.ons || selectedCustomerData.ons || book.ons || ''}
+                        onChange={handleChange}
+                        size="small"
+                        label="On"
+                        autoComplete="password"
+                        id="on"
+                        variant="standard"
+                      />
+                    </div> */}
+                        </div>
+                        <div className="input-field">
+                          {/* <div className="input radio">
+                      <FormControlLabel
+                        name="manualbills"
+                        value="manualbills"
+                        control={<Checkbox size="small" />}
+                        label="Manual Bills"
+                        autoComplete="new-password"
+                        onChange={handleChange}
+                        checked={Boolean(formData.manualbills || selectedCustomerData?.manualbills || book.manualbills)}
+                      />
+                    </div> */}
+                          {/* <div className="input">
+                      <div className="icone">
+                        <AccountBalanceWalletIcon color="action" />
+                      </div>
+                      <TextField
+                        name="balance"
+                        value={formData.balance || selectedCustomerData.balance || book.balance || ''}
+                        onChange={handleChange}
+                        size="small"
+                        autoComplete="password"
+                        label="Balance"
+                        id="balance"
+                      />
+                    </div> */}
+                        </div>
+                        {/* <div className="input-field">
+                    <div className="input">
+                      <TextField size="small" variant="standard" autoComplete="password" />
+                    </div>
+                    <div className="input">
+                      <div
+                        className="icone"
+                        style={{
+                          padding: "0px 10px 0px 0px",
+                          "font-size": "20px",
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                      </div>
+                      <TextField size="small" variant="standard" autoComplete="password" />
+                    </div>
+                  </div> */}
+                      </div>
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions style={{ padding: '20px' }}>
+                    <Button onClick={handleClose} style={{ backgroundColor: 'red', color: 'white' }}>Cancel</Button>
+                    <Button variant="contained" onClick={handleClose} autoFocus>
+                      Save
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </React.Fragment>
+
+              {/* //ggggggggggggggg */}
+
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "250px" }}>
@@ -1287,7 +1732,7 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input">
-                <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} disabled={isFieldReadOnly("new")}>
+                <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
                   E-Tripsheet
                 </Button>
 
@@ -1313,9 +1758,83 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div>
-              <Dialog open={popupOpen} onClose={handlePopupClose}>
-                <DialogContent>
-                  <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} />
+
+              <div className='input'>
+                <label>Escort</label>
+
+                <label>
+                  <input
+                    type="radio"
+                    value="Yes"
+                    checked={escort === "Yes"}
+                    onChange={handleEscortChange}
+                  />
+                  Yes
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="No"
+                    checked={escort === "No"}
+                    onChange={handleEscortChange}
+                  />
+                  No
+                </label>
+              </div>
+
+              <div className='input'>
+                <label>Airport Transfer</label>
+
+                <label>
+                  <input
+                    type="radio"
+                    value="Yes"
+                    checked={transferreport === "Yes"}
+                    onChange={handleTransferChange}
+                  />
+                  Yes
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="No"
+                    checked={transferreport === "No"}
+                    onChange={handleTransferChange}
+                  />
+                  No
+                </label>
+              </div>
+
+              {/* <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Active
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="active"
+                    onChange={handleChange}
+                    value={selectedCustomerData?.active || book.active}
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div> */}
+
+              {/* aaaaaaa */}
+              <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                  <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -1323,61 +1842,112 @@ const TripSheet = () => {
                   </Button>
                 </DialogActions>
               </Dialog>
+
               {/* // ayyanar calc */}
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (<>
-                  <Button variant="contained" onClick={handleEdit}>Edit</Button>
-                  {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
+                  <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
+                  {calcCheck ? <Button variant="contained" disabled={!Tripsheet_modify} style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
 
                 </>
                 ) : (
-                  <Button variant="contained" onClick={handleAdd} disabled={isFieldReadOnly("new")}>Add</Button>
+                  <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
                 )}
+
+
+                {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""} */}
+
+
+
               </div>
             </div>
           </div>
-          {error &&
-            <div className='alert-popup Error' >
-              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errorMessage}</p>
-            </div>
-          }
-          {warning &&
-            <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{warningMessage}</p>
-            </div>
-          }
-          {success &&
-            <div className='alert-popup Success' >
-              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{successMessage}</p>
-            </div>
-          }
-          {info &&
-            <div className='alert-popup Info' >
-              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{infoMessage}</p>
-            </div>
-          }
+          <div className='alert-popup-main'>
+            {error &&
+              <div className='alert-popup Error' >
+                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{errorMessage}</p>
+              </div>
+            }
+            {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{warningMessage}</p>
+              </div>
+            }
+            {success &&
+              <div className='alert-popup Success' >
+                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{successMessage}</p>
+              </div>
+            }
+            {info &&
+              <div className='alert-popup Info' >
+                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{infoMessage}</p>
+              </div>
+            }
+          </div>
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {filteredActions.map((action) => (
+              {/* {filteredActions.map((action) => (
                 <SpeedDialAction
                   key={action.name}
                   icon={action.icon}
                   tooltipTitle={action.name}
                   onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                 />
-              ))}
+              ))} */}
+
+              {Tripsheet_read === 1 && (
+                <SpeedDialAction
+                  key="list"
+                  icon={<ChecklistIcon />}
+                  tooltipTitle="List"
+                  onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                />
+              )}
+              {Tripsheet_modify === 1 && (
+                <SpeedDialAction
+                  key="edit"
+                  icon={<ModeEditIcon />}
+                  tooltipTitle="Edit"
+                  onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                />
+              )}
+              {Tripsheet_delete === 1 && (
+                <SpeedDialAction
+                  key="delete"
+                  icon={<DeleteIcon />}
+                  tooltipTitle="Delete"
+                  onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                />
+              )}
+              {Tripsheet_new === 1 && (
+                <SpeedDialAction
+                  key="Add"
+                  icon={<BookmarkAddedIcon />}
+                  tooltipTitle="Add"
+                  onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                />
+              )}
+              <SpeedDialAction
+                key="Cancel"
+                icon={<CancelPresentationIcon />}
+                tooltipTitle="Cancel"
+                onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+              />
+
+
             </StyledSpeedDial>
           </Box>
           <div className="Tipsheet-content-table-main">

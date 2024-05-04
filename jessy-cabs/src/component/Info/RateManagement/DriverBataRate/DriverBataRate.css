@@ -84,3 +84,60 @@
     background-color: #457cdc;
     /* Adjust color as needed */
 }
+
+@media screen and (min-width:970px) and (max-width:1240px) {
+    .form-container-PackageRateEntery .container-main {
+      width: 76vw !important;
+    }
+  }
+  
+  @media screen and (min-width:769px) and (max-width:969.99px) {
+    .form-container-PackageRateEntery .container-main {
+      width: 70vw !important;
+    }
+  }
+
+  .DriverBataRate-inputfeild{
+    flex-wrap: wrap !important;
+    /* justify-content: center; */
+    margin-top: 30px;
+  }
+  /* @media only screen and (min-width:950px) and (max-width:1068px) {
+    .copy-title-btn-DriverBataRate {
+        width: 80% !important;
+    }
+    } */
+
+
+    /* @media only screen and (min-width:843px) and (max-width:949.99px) {
+        .copy-title-btn-DriverBataRate {
+            width: 70% !important;
+        }
+        } */
+
+        /* @media only screen and (min-width:769px) and (max-width:842.99px) {
+            .copy-title-btn-DriverBataRate {
+                width: 60% !important;
+            }
+        } */
+
+        @media only screen and (min-width:654px) and (max-width:768.99px)  {
+            .copy-title-btn-DriverBataRate {
+                width: 71vw !important;
+            }
+        }
+
+        @media only screen and (min-width:320px) and (max-width:654.99px)  {
+            .copy-title-btn-DriverBataRate {
+                width: 61vw !important;
+            }
+        }
+
+
+        @media only screen and (min-width:320px) and (max-width:380px)  {
+            .copy-title-btn-DriverBataRate {
+               margin-top: 0px;
+               background-color: transparent;
+               border: none !important;
+            }
+        }

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import "./Bookings.css";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
+import { PermissionContext } from '../context/permissionContext';
 
 
-const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
+const MenuItem = ({ label, to, alt, activeMenuItem, handleMenuItemClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
@@ -11,7 +12,7 @@ const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
     <Link
       className={`menu-link ${isActive ? "actives" : ""}`}
       to={to}
-      onClick={() => handleMenuItemClick(label)}
+      onClick={(e) => handleMenuItemClick(label, alt, e)}
     >
       {label}
     </Link>
@@ -19,10 +20,49 @@ const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
 };
 
 const Bookings = () => {
+
+  const { permissions } = useContext(PermissionContext);
+
+  // const BOOKING = permissions[0]?.read;
+  const Booking = permissions[1]?.read || permissions[0]?.read;;
+  const Trip_Status = permissions[2]?.read;
+  const Trip_sheet = permissions[3]?.read;
+
   const [activeMenuItem, setActiveMenuItem] = useState('');
-  const handleMenuItemClick = (menuItem) => {
-    localStorage.setItem('activeMenuItem', menuItem);
-    setActiveMenuItem(menuItem);
+  const handleMenuItemClick = (label, alt, e) => {
+    localStorage.setItem('activeMenuItem', label);
+    setActiveMenuItem(label);
+
+
+    let hasPermission = 0
+
+    switch (label) {
+
+      case "Booking":
+        hasPermission = Booking;
+        break;
+      case "Trip Status":
+        hasPermission = Trip_Status;
+        break;
+      case "Trip Sheet":
+        hasPermission = Trip_sheet;
+        break;
+      default:
+        break;
+
+    }
+    try {
+
+      if (hasPermission === 1) {
+        Navigate(alt);
+      }
+      else if (hasPermission === 0) {
+        e.preventDefault();
+        alert("You do not have Permission ..!");
+      }
+    }
+    catch {
+    }
   };
 
   return (
@@ -31,35 +71,29 @@ const Bookings = () => {
       <div className="menu-bar">
         <MenuItem
           label="Booking"
-          to="/home/bookings/booking"
+          to={Booking && ("/home/bookings/booking")}
+          alt="/home/bookings/booking"
           menuItemKey="Booking"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
-
         <MenuItem
-          label="Received"
-          to="/home/bookings/received"
-          menuItemKey="Received"
+          label="Trip Status"
+          to={Trip_Status && ("/home/bookings/tripstatus")}
+          alt="/home/bookings/tripstatus"
+          menuItemKey="TripStatus"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
-
         <MenuItem
           label="Trip Sheet"
-          to="/home/bookings/tripsheet"
+          to={Trip_sheet && ("/home/bookings/tripsheet")}
+          alt="/home/bookings/tripsheet"
           menuItemKey="Trip Sheet"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
 
-        <MenuItem
-          label="Dispatched"
-          to="/home/bookings/dispatched"
-          menuItemKey="Dispatched"
-          activeMenuItem={activeMenuItem}
-          handleMenuItemClick={handleMenuItemClick}
-        />
       </div>
 
       <Outlet />

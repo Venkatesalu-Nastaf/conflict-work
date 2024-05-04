@@ -1,63 +1,112 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import "./Settings.css";
-// import { Link, Outlet, useLocation } from "react-router-dom";
-import {  Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
+import { PermissionContext } from '../context/permissionContext';
 
-// const MenuItem = ({ label, to, handleMenuItemClick }) => {
-//   const location = useLocation();
-//   const isActive = location.pathname === to;
+const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
 
-//   return (
-//     <Link
-//       className={`menu-link ${isActive ? "actives" : ""}`}
-//       to={to}
-//       onClick={() => handleMenuItemClick(label)}
-//     >
-//       {label}
-//     </Link>
-//   );
-// };
+  return (
+    <Link
+      className={`menu-link ${isActive ? "actives" : ""}`}
+      to={to}
+      onClick={(e) => handleMenuItemClick(label, alt, e)}
+    >
+      {label}
+    </Link>
+  );
+};
 
 const Settings = () => {
-  // const [activeMenuItem, setActiveMenuItem] = useState('');
+  const [activeMenuItem, setActiveMenuItem] = useState('');
 
-  // const handleMenuItemClick = (menuItem) => {
-  //   localStorage.setItem('activeMenuItem', menuItem);
-  //   setActiveMenuItem(menuItem);
-  // };
+  // permission ------------------------
+
+  const { permissions } = useContext(PermissionContext)
+
+  const SETTING = permissions[12]?.read;
+  const User_Creation = permissions[13]?.read;
+  const Station_Creation = permissions[14]?.read;
+  const Main_Setting = permissions[15]?.read;
+
+
+
+
+  const handleMenuItemClick = (menuItem, alt, e) => {
+    localStorage.setItem('activeMenuItem', menuItem);
+    setActiveMenuItem(menuItem);
+
+    let hasPermission = 0
+
+    switch (menuItem) {
+
+      case "User Creation":
+        hasPermission = User_Creation || SETTING;
+        break;
+      case "Station Creation":
+        hasPermission = Station_Creation;
+        break;
+      case "Main setting":
+        hasPermission = Main_Setting;
+        break;
+      default:
+        break;
+
+    }
+    try {
+
+      if (hasPermission === 1) {
+        Navigate(alt);
+      }
+      else if (hasPermission === 0) {
+        e.preventDefault();
+        alert("You do not have Permission ..!");
+      }
+
+    }
+    catch {
+
+    }
+
+
+  };
 
   return (
     <div className="Settings-main">
-      {/* <div className="menu-bar">
+      <div className="menu-bar">
         <MenuItem
           label="User Creation"
-          to="/home/settings/usercreation"
+          to={User_Creation && ("/home/settings/usercreation")}
+          alt="/home/settings/usercreation"
           menuItemKey="User Creation"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
-        <MenuItem
+        {/* <MenuItem
           label="Permission"
           to="/home/settings/permission"
           menuItemKey="Permission"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
-        />
+        /> */}
         <MenuItem
           label="Station Creation"
-          to="/home/settings/stationcreation"
+          to={Station_Creation && ("/home/settings/stationcreation")}
+          alt="/home/settings/stationcreation"
           menuItemKey="Station Creation"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
         <MenuItem
           label="Main setting"
-          to="/home/settings/mainsetting"
+          to={Main_Setting && ("/home/settings/mainsetting")}
+          alt="/home/settings/mainsetting"
           menuItemKey="Main setting"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
-      </div> */}
+      </div>
       <Outlet />
     </div>
 

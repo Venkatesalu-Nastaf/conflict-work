@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import "./Billings.css";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
+import { PermissionContext } from '../context/permissionContext';
 
-const MenuItem = ({ label, to, handleMenuItemClick }) => {
+const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
@@ -10,7 +11,7 @@ const MenuItem = ({ label, to, handleMenuItemClick }) => {
     <Link
       className={`menu-link ${isActive ? "actives" : ""}`}
       to={to}
-      onClick={() => handleMenuItemClick(label)}
+      onClick={(e) => handleMenuItemClick(label, alt, e)}
     >
       {label}
     </Link>
@@ -18,10 +19,54 @@ const MenuItem = ({ label, to, handleMenuItemClick }) => {
 };
 
 const Billings = () => {
+
+  //permission --------------
+
+  const { permissions } = useContext(PermissionContext)
+
+
+  const Billing = permissions[5]?.read || permissions[4]?.read;;
+  const Transfer = permissions[6]?.read;
+  const Covering_Bill = permissions[7]?.read;
+
   const [activeMenuItem, setActiveMenuItem] = useState('');
-  const handleMenuItemClick = (menuItem) => {
-    localStorage.setItem('activeMenuItem', menuItem);
-    setActiveMenuItem(menuItem);
+
+  const handleMenuItemClick = (label, alt, e) => {
+    localStorage.setItem('activeMenuItem', label);
+    setActiveMenuItem(label);
+
+
+    let hasPermission = 0
+
+    switch (label) {
+
+      case "Billing":
+        hasPermission = Billing;
+        break;
+      case "Transfer":
+        hasPermission = Transfer;
+        break;
+      case "Covering Bill":
+        hasPermission = Covering_Bill;
+        break;
+      default:
+        break;
+
+    }
+    try {
+
+      if (hasPermission === 1) {
+        Navigate(alt);
+      }
+      else if (hasPermission === 0) {
+        e.preventDefault();
+        alert("You do not have Permission ..!");
+      }
+
+    }
+    catch {
+
+    }
   };
 
   return (
@@ -30,21 +75,24 @@ const Billings = () => {
       <div className="menu-bar">
         <MenuItem
           label="Billing"
-          to="/home/billing/billing"
+          to={Billing && ("/home/billing/billing")}
+          alt="/home/billing/billing"
           menuItemKey="Billing"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
         <MenuItem
           label="Transfer"
-          to="/home/billing/transfer"
+          to={Transfer && ("/home/billing/transfer")}
+          alt="/home/billing/transfer"
           menuItemKey="Transfer"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
         <MenuItem
           label="Covering Bill"
-          to="/home/billing/coveringbill"
+          to={Covering_Bill && ("/home/billing/coveringbill")}
+          alt="/home/billing/coveringbill"
           menuItemKey="Covering Bill"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}

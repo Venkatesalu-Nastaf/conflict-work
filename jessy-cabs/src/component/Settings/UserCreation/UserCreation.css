@@ -40,7 +40,8 @@
     padding-top: 28px;
     border-radius: 20px;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
+    background-color: #f0ece2;
   }
 
   @media only screen and (min-width: 850px) and (max-width: 1230px) {
@@ -72,10 +73,10 @@
   }
 
   @media only screen and (max-width: 768px) {
-    .main-setting-main { 
-       padding-left: 20px;
+    /* .main-setting-main {  */
+       /* padding-left: 20px; */
        /* padding-right: 10px; */
-    }
+    /* } */
 
     .main-setting-main .main-setting-form-container { 
       width: 90%;
@@ -121,4 +122,12 @@
     height: 400px;
     width: 100%;
     overflow: scroll;
+  }
+
+  .head-tab-userpermission{
+    position: sticky;
+    top:-28px ;
+    z-index: 5;
+    padding: 10px 10px 0px 10px;
+    background-color: #f0ece2;
   }

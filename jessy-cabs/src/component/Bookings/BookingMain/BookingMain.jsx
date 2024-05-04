@@ -5,7 +5,6 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Booking from "./Booking/Booking.jsx";
 import TabContext from "@mui/lab/TabContext";
-import BookingCopy from "./BookingCopy/BookingCopy.jsx";
 import BokkingChart from "./BookingChart/BookingChart.jsx";
 
 const BookingMain = () => {
@@ -25,19 +24,11 @@ const BookingMain = () => {
                 aria-label="lab API tabs example"
               >
                 <Tab label="Booking" value="booking" />
-                <Tab label="Booking Copy" value="bookingcopy" />
-                {/* <Tab label="Excel Import" value="excelimport" /> */}
                 <Tab label="Booking Chart" value="bookingchart" />
               </TabList>
             </Box>
             <TabPanel value="booking">
               <Booking />
-            </TabPanel>
-            <TabPanel value="bookingcopy">
-              <BookingCopy />
-            </TabPanel>
-            <TabPanel value="excelimport">
-              {/* <Excelimport /> */}
             </TabPanel>
             <TabPanel value="bookingchart">
               <BokkingChart />

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import 'jspdf-autotable';
 import dayjs from "dayjs";
 import "./Accountinfo.css";
@@ -16,6 +16,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { PermissionContext } from '../../../context/permissionContext';
 
 // ICONS
 import StoreIcon from "@mui/icons-material/Store";
@@ -43,6 +44,8 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useAccountinfo from './useAccountinfo';
 
+
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -55,13 +58,13 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
+// const actions = [
+//   { icon: <ChecklistIcon />, name: "List" },
+//   { icon: <CancelPresentationIcon />, name: "Cancel" },
+//   { icon: <DeleteIcon />, name: "Delete" },
+//   { icon: <ModeEditIcon />, name: "Edit" },
+//   { icon: <BookmarkAddedIcon />, name: "Add" },
+// ];
 const Accuntinfo = () => {
 
   const {
@@ -98,12 +101,22 @@ const Accuntinfo = () => {
     }
   }, [actionName, handleClick]);
 
+
+  // Permission ------------
+  const { permissions } = useContext(PermissionContext)
+
+  const Supllier_read = permissions[10]?.read;
+  const Supllier_new = permissions[10]?.new;
+  const Supllier_modify = permissions[10]?.modify;
+  const Supllier_delete = permissions[10]?.delete;
+
+
   return (
     <div className="account-form">
       <form onSubmit={handleClick}>
         <div className="detail-container-main-account">
           <div className="container-left-account">
-            <div className="input-field">
+            <div className="input-field account-info-input-feild">
               <div className="input">
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
@@ -162,8 +175,8 @@ const Accuntinfo = () => {
                   variant="standard"
                 />
               </div>
-            </div>
-            <div className="input-field">
+              {/* </div>
+            <div className="input-field"> */}
               <div className="input" style={{ width: "415px" }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
@@ -215,8 +228,8 @@ const Accuntinfo = () => {
                   }
                 />
               </div>
-            </div>
-            <div className="input-field">
+              {/* </div>
+            <div className="input-field"> */}
               <div className="input" style={{ width: "415px" }}>
                 <div className="icone">
                   <HomeTwoToneIcon color="action" />
@@ -264,8 +277,8 @@ const Accuntinfo = () => {
                   }}
                 />
               </div>
-            </div>
-            <div className="input-field">
+              {/* </div>
+            <div className="input-field"> */}
               <div className="input" style={{ width: "415px" }}>
                 <div className="icone">
                   <LocationCityIcon color="action" />
@@ -319,7 +332,7 @@ const Accuntinfo = () => {
             </div>
           </div>
         </div>
-        <div className="input-field">
+        <div className="input-field account-info-label">
           <div className="input">
             <FormControl>
               <FormLabel id="demo-row-radio-buttons-group-label">
@@ -376,40 +389,42 @@ const Accuntinfo = () => {
           </div>
           <div className="input" style={{ width: "160px" }}>
             {isEditMode ? (
-              <Button variant="contained" onClick={handleEdit}>Edit</Button>
+              <Button variant="contained" disabled={!Supllier_modify} onClick={handleEdit}>Edit</Button>
             ) : (
-              <Button variant="contained" onClick={handleAdd} >Add</Button>
+              <Button variant="contained" disabled={!Supllier_new} onClick={handleAdd} >Add</Button>
             )}
           </div>
         </div>
-        {error &&
-          <div className='alert-popup Error' >
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{errorMessage}</p>
-          </div>
-        }
-        {warning &&
-          <div className='alert-popup Warning' >
-            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{warningMessage}</p>
-          </div>
-        }
-        {info &&
-          <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{infoMessage}</p>
-          </div>
-        }
-        {success &&
-          <div className='alert-popup Success' >
-            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{successMessage}</p>
-          </div>
-        }
+        <div className='alert-popup-main'>
+          {error &&
+            <div className='alert-popup Error' >
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
+        </div>
         <div className="SpeedDial" style={{ "paddingTop": "96px" }}>
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
@@ -417,14 +432,55 @@ const Accuntinfo = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {actions.map((action) => (
+              {/* {actions.map((action) => (
                 <SpeedDialAction
                   key={action.name}
                   icon={action.icon}
                   tooltipTitle={action.name}
                   onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                 />
-              ))}
+              ))} */}
+
+              {Supllier_read === 1 && (
+                <SpeedDialAction
+                  key="list"
+                  icon={<ChecklistIcon />}
+                  tooltipTitle="List"
+                  onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                />
+              )}
+              {Supllier_modify === 1 && (
+                <SpeedDialAction
+                  key="edit"
+                  icon={<ModeEditIcon />}
+                  tooltipTitle="Edit"
+                  onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                />
+              )}
+              {Supllier_delete === 1 && (
+                <SpeedDialAction
+                  key="delete"
+                  icon={<DeleteIcon />}
+                  tooltipTitle="Delete"
+                  onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                />
+              )}
+              {Supllier_new === 1 && (
+                <SpeedDialAction
+                  key="Add"
+                  icon={<BookmarkAddedIcon />}
+                  tooltipTitle="Add"
+                  onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                />
+              )}
+              <SpeedDialAction
+                key="Cancel"
+                icon={<CancelPresentationIcon />}
+                tooltipTitle="Cancel"
+                onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+              />
+
+
             </StyledSpeedDial>
           </Box>
         </div>

@@ -6,7 +6,7 @@ import TabList from "@mui/lab/TabList";
 import Pending from './Pending/Pending';
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
-import VehicleStatement from './VehicleStatement/VehicleStatement';
+// import VehicleStatement from './VehicleStatement/VehicleStatement';
 
 const Receiveds = () => {
     const [value, setValue] = React.useState("pending");
@@ -23,11 +23,11 @@ const Receiveds = () => {
                             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                                 <TabList onChange={handleChange} aria-label="lab API tabs example">
                                     <Tab label="Pending" value="pending" />
-                                    <Tab label="Vehicle Statement" value="vehiclestatement" />
+                                    {/* <Tab label="Vehicle Statement" value="vehiclestatement" /> */}
                                 </TabList>
                             </Box>
                             <TabPanel value="pending"><Pending /></TabPanel>
-                            <TabPanel value="vehiclestatement"><VehicleStatement /></TabPanel>
+                            {/* <TabPanel value="vehiclestatement"><VehicleStatement /></TabPanel> */}
                         </TabContext>
                     </Box>
                 </div>

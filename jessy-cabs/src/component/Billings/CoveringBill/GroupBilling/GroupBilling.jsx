@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import dayjs from "dayjs";
 import "./GroupBilling.css";
 import Button from "@mui/material/Button";
@@ -13,8 +13,11 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-
-
+import Modal from '@mui/material/Modal';
+import { Box } from '@mui/material';
+import { APIURL } from '../../../url';
+import { useData } from '../../../Dashboard/MainDash/Sildebar/DataContext2';
+import axios from 'axios';
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,7 +25,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { faBuilding, faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useGroupbilling from './useGroupbilling';
-
+import { RefPdfData } from './GroupBillingContext';
+import RefPdfParticularData from './RefPdfParticularData';
 
 const GroupBilling = () => {
 
@@ -37,11 +41,10 @@ const GroupBilling = () => {
         warningMessage,
         book,
         handleClick,
-        handleChange,
         hidePopup,
         invoiceno,
+        setInvoiceno,
         selectedCustomerDatas,
-        handleKeyenter,
         customer,
         tripData,
         bankOptions,
@@ -56,17 +59,71 @@ const GroupBilling = () => {
         handleserviceInputChange,
         handleShow,
         handleExcelDownload,
-        handleCoverPDFDownload,
-        columns
-
+        columns,
+        setRowSelectionModel,
+        handleRowSelection,
+        handlegroupData,
+        handleButtonClickTripsheet,
+        referenceNo,
+        handleKeyDown,
+        handleGstPdf,
+        handlePopup,
+        refPdfData,
+        refFromDate,
+        refToDate,
+        gstno,
+        setGstno,
+        handleRemoveData
     } = useGroupbilling();
-
+const {refPdfPrint,refCustomer,referNo} = RefPdfData()
+const [organizationsdetail,setOrganizationDetail]=useState([]);
+const [imageorganisation, setSelectedImageorganisation] = useState(null);
+const { sharedData } = useData();
+const apiUrl = APIURL
+ useEffect(() => {
+    setSelectedImageorganisation(sharedData)
+  }, [sharedData])
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
         }
     }, [actionName, handleClick]);
 
+    useEffect(() => {
+        const fetchdata = async () => {
+          try {
+            const response = await fetch(`${APIURL}/organisationpdfdata`);
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const organizationdetails = await response.json();
+            setOrganizationDetail(organizationdetails)
+           
+          } catch (err) {
+            console.error('Error fetching customer address:', err);
+          }
+        };
+      
+        fetchdata();
+      }, [APIURL, customer]);
+
+
+      useEffect(()=>{
+        const fetchData = async()=>{
+            const customer = refCustomer[0]
+            if(refCustomer!==""){
+            try {
+                const response = await axios.get(`${apiUrl}/gstdetails/${customer}`);
+                setGstno(response.data)
+              } catch (error) {
+                console.error('Errorgst', error);
+                throw error;
+              }
+        }
+    }
+   
+        fetchData()
+    },[apiUrl,refCustomer])
     return (
         <div className="GroupBilling-form Scroll-Style-hide">
             <form >
@@ -78,15 +135,31 @@ const GroupBilling = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
-                                    <TextField
+                                    {/* <TextField
                                         size="small"
                                         id="id"
-                                        label="Invoice No"
+                                        label="Reference No"
                                         name="invoiceno"
                                         value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
-                                        onChange={handleChange}
+                                        options={referenceNo}
+                                        onChange={(event,value)=>setInvoiceno(value)}
                                         autoComplete='off'
                                         onKeyDown={handleKeyenter}
+                                    /> */}
+                                       <Autocomplete
+                                        fullWidth
+                                        id="free-solo-demo"
+                                        freeSolo
+                                        size="small"
+                                        value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}   
+                                        options={referenceNo || []}
+                                        onKeyDown={handleKeyDown}                                  
+                                        onChange={(event,value)=>setInvoiceno(value)}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField {...params} label="Reference No" name='ReferenceNo' inputRef={params.inputRef} />
+                                            );
+                                        }}
                                     />
                                 </div>
                                 <div className="input" style={{ width: "230px" }}>
@@ -175,6 +248,7 @@ const GroupBilling = () => {
                                         options={Stations.map((option) => ({
                                             label: option.optionvalue,
                                         }))}
+                                    
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {
                                             return (
@@ -202,7 +276,7 @@ const GroupBilling = () => {
                                     </Button>
                                     <Menu {...bindMenu(popupState)}>
                                         <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                                        <MenuItem onClick={handleCoverPDFDownload}>GST PDF</MenuItem>
+                                        <MenuItem onClick={handleGstPdf}>GST PDF</MenuItem>
                                     </Menu>
                                 </React.Fragment>
                             )}
@@ -210,10 +284,10 @@ const GroupBilling = () => {
                     </div>
                     <div className="input-field">
                         <div className="input" style={{ width: "140px" }}>
-                            <Button variant="contained">Delete Invoice</Button>
+                            <Button variant="contained" onClick={handlegroupData}>Save</Button>
                         </div>
                         <div className="input" >
-                            <Button variant="contained">Delete Selected Bill</Button>
+                            <Button variant="contained"  onClick={handleRemoveData} >Remove</Button>
                         </div>
                     </div>
                 </div>
@@ -224,6 +298,12 @@ const GroupBilling = () => {
                             rows={rows}
                             columns={columns}
                             pageSize={5}
+                            onRowClick={handleButtonClickTripsheet}
+                            onRowSelectionModelChange={(newRowSelectionModel) => {
+                                setRowSelectionModel(newRowSelectionModel);
+                                handleRowSelection(newRowSelectionModel);
+                              }}
+                            getRowId={(row)=>row.id}
                             checkboxSelection
                             disableRowSelectionOnClick
                         />
@@ -250,6 +330,31 @@ const GroupBilling = () => {
                         </div>
                     }
                 </div>
+                <Modal
+        open={refPdfPrint}
+        onClose={handlePopup}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '854px',
+            height: '700px',
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+            overflowY:'auto'
+          }}
+        >
+      <RefPdfParticularData pdfData={refPdfData} organizationdetails = {organizationsdetail}  imagename={imageorganisation} refFromDate={refFromDate} refToDate={refToDate} gstno={gstno} referenceno={referNo} />
+
+        </Box>
+      </Modal>
             </form>
         </div>
     )

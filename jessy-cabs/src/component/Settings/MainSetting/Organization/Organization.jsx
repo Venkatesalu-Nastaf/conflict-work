@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./Organization.css";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
@@ -16,6 +16,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import useOrganization from './useOrganization';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
+import { PermissionContext } from '../../../context/permissionContext';
 // REACT ICONS
 import { BiBuildings } from "@react-icons/all-files/bi/BiBuildings";
 import { APIURL } from "../../../url";
@@ -45,6 +46,7 @@ const Organization = () => {
         toggleEditMode,
         handleKeyDown,
         handleUpdate,
+        handleCancel,
     } = useOrganization();
 
     useEffect(() => {
@@ -52,6 +54,13 @@ const Organization = () => {
             handleClick(null, 'List');
         }
     }, [actionName, handleClick]);
+
+
+
+    // Permission ------------
+    const { permissions } = useContext(PermissionContext)
+    const MainSetting_modify = permissions[15]?.modify;
+
 
 
     return (
@@ -83,15 +92,15 @@ const Organization = () => {
                                     <div className="input-field">
                                         <div className='input'>
                                             <div className='input-field'>
-                                                <Button color="primary" size='small' variant="contained" onClick={handleUpload} component="label" > update</Button>
+                                                <Button color="primary" size='small' variant="contained" disabled={!MainSetting_modify} onClick={handleUpload} component="label" > update</Button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className='container-organisation-right'>
-                                <div className="input-field">
-                                    <div className="input" style={{ width: "310px" }}>
+                                <div className="input-field organisation-details-input-feilds">
+                                    <div className="input input-buttons-small" style={{ width: "310px" }}>
                                         <div className="icone">
                                             <BadgeIcon color="action" />
                                         </div>
@@ -108,7 +117,7 @@ const Organization = () => {
                                             disabled={!editMode}
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "310px" }}>
+                                    <div className="input input-buttons-small" style={{ width: "310px" }}>
                                         <div className="icone">
                                             <WorkspacePremiumIcon color="action" />
                                         </div>
@@ -125,8 +134,8 @@ const Organization = () => {
                                         />
                                     </div>
                                 </div>
-                                <div className="input-field">
-                                    <div className="input" style={{ width: "310px" }}>
+                                <div className="input-field organisation-details-input-feilds">
+                                    <div className="input input-buttons-small" style={{ width: "310px" }}>
                                         <div className="icone">
                                             <SettingsPhoneIcon color="action" />
                                         </div>
@@ -143,7 +152,7 @@ const Organization = () => {
                                             disabled={!editMode}
                                         />
                                     </div>
-                                    <div className="input" style={{ width: "310px" }}>
+                                    <div className="input input-buttons-small" style={{ width: "310px" }}>
                                         <div className="icone">
                                             <AttachEmailIcon color="action" />
                                         </div>
@@ -161,16 +170,14 @@ const Organization = () => {
                                     </div>
                                 </div>
                                 {editMode ? (
-                                    <div className="input-field">
+                                    <div className="input-field save-cancel-inputs">
                                         <div className="input" style={{ width: "150px" }}>
                                             <Button variant="outlined" onClick={toggleEditMode}>
                                                 Cancel
                                             </Button>
                                         </div>
                                         <div className="input" style={{ width: "150px" }}>
-                                            <Button variant="contained"
-                                                onClick={handleUpdate}
-                                            >
+                                            <Button variant="contained" onClick={handleUpdate} disabled={!MainSetting_modify}   >
                                                 Update
                                             </Button>
                                         </div>
@@ -182,373 +189,284 @@ const Organization = () => {
                                         </IconButton>
                                     </div>
                                 )}
-                                {error &&
-                                    <div className='alert-popup Error' >
-                                        <div className="popup-icon"> <ClearIcon styleName={{ color: '#fff' }} /> </div>
-                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                        <p>{errorMessage}</p>
-                                    </div>
-                                }
-                                {success &&
-                                    <div className='alert-popup Success' >
-                                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                        <p>{successMessage}</p>
-                                    </div>
-                                }
-                                {warning &&
-                                    <div className='alert-popup Warning' >
-                                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                                        <p>{warningMessage}</p>
-                                    </div>
-                                }
+                                <div className='alert-popup-main'>
+                                    {error &&
+                                        <div className='alert-popup Error' >
+                                            <div className="popup-icon"> <ClearIcon styleName={{ color: '#fff' }} /> </div>
+                                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                            <p>{errorMessage}</p>
+                                        </div>
+                                    }
+                                    {success &&
+                                        <div className='alert-popup Success' >
+                                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                            <p>{successMessage}</p>
+                                        </div>
+                                    }
+                                    {warning &&
+                                        <div className='alert-popup Warning' >
+                                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                            <p>{warningMessage}</p>
+                                        </div>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="organisation-details">
-                    <div className="input-field">
-                        {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Organization Name</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "250ch" }}
-                                size="small"
-                                id="organizationName"
-                                name="organizationname"
-                                value={selectedCustomerData?.organizationname || book.organizationname}
-                                onChange={handleChange}
-                            />
-                        </div> */}
-                        <div className="input" style={{ width: "160px" }}>
+                <div className="organisation-details ">
+                    <div className="input-field organisation-details-input">
+
+                        {/* <div className="input" style={{ width: "160px" }}>
                             <p className='input-title'>Type of Organization</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="organizationType"
-                                name="organizationtype"
-                                value={selectedCustomerData?.organizationtype || book.organizationtype}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Website</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="website"
-                                name="website"
-                                value={selectedCustomerData?.website || book.website}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="input-field">
-                        <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Office Address</p>
-                        </div>
-                        <div className='address-block'>
-                            <div className="input" style={{ width: "250px" }}>
-                                <TextField
-                                    sx={{ width: "230ch" }}
-                                    size="small"
-                                    id="addressLine1"
-                                    name="addressLine1"
-                                    value={selectedCustomerData?.addressLine1 || book.addressLine1}
-                                    onChange={handleChange}
-                                    label="Address"
-                                    variant="standard"
-                                />
+                        </div> */}
+                        <div className='organisation-input-row'>
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <div className="input organization-input">
+                                    <label htmlFor="">Type of Organization:</label>
+                                    <TextField
+                                        sx={{ width: "300px" }}
+                                        size="small"
+                                        id="organizationType"
+                                        name="organizationtype"
+                                        className='organisation-input-field'
+                                        value={selectedCustomerData?.organizationtype || book.organizationtype}
+                                        onChange={handleChange}
+                                    />
+                                </div>
                             </div>
-                            <div className="input" style={{ width: "250px" }}>
-                                <TextField
-                                    sx={{ width: "230ch" }}
-                                    size="small"
-                                    id="addressLine2"
-                                    name="addressLine2"
-                                    value={selectedCustomerData?.addressLine2 || book.addressLine2}
-                                    onChange={handleChange}
-                                    variant="standard"
-                                />
-                            </div>
-
-                            {/* <div className="input" style={{ width: "250px" }}>
-                                <TextField
-                                    sx={{ width: "230ch" }}
-                                    size="small"
-                                    id="city"
-                                    name="city"
-                                    value={selectedCustomerData?.city || book.city}
-                                    onChange={handleChange}
-                                    variant="standard"
-                                />
+                            {/* <div className="input" style={{ width: "150px" }}>
+                                <p className='input-title'>Website</p>
                             </div> */}
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <div className="input organization-input">
+                                    <label htmlFor="">Website:</label>
+
+                                    <TextField
+                                        sx={{ width: "300px" }}
+                                        size="small"
+                                        id="website"
+                                        name="website"
+                                        className='organisation-input-field'
+                                        value={selectedCustomerData?.website || book.website}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
                         </div>
-                        <div className="input" style={{ width: "150px" }}>
+                        {/* </div>
+                    <div className="input-field"> */}
+                        {/* <div className="input" style={{ width: "150px" }}>
+                            <p className='input-title'>Office Address</p>
+                        </div> */}
+                        <div className='organisation-input-row'>
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <div className='office-address'>
+                                    {/* <label htmlFor="">Office Address:</label> */}
+                                    <div className='address-block'>
+
+                                        <div className="input " style={{ width: "100%", display: 'flex', gap: '10px' }}>
+                                            <TextField
+                                                sx={{ width: "300px" }}
+                                                size="small"
+                                                id="addressLine1"
+                                                name="addressLine1"
+                                                className='organisation-input-field'
+                                                value={selectedCustomerData?.addressLine1 || book.addressLine1}
+                                                onChange={handleChange}
+                                                label="Office Address"
+                                                variant="standard"
+                                            />
+                                        </div>
+                                        <div className="input" style={{ width: "100%", display: 'flex', gap: '10px', }}>
+                                            <TextField
+                                                sx={{ width: "300px" }}
+                                                size="small"
+                                                id="addressLine2"
+                                                name="addressLine2"
+                                                className='organisation-input-field'
+                                                value={selectedCustomerData?.addressLine2 || book.addressLine2}
+                                                onChange={handleChange}
+                                                variant="standard"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>Organization PAN Number</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="taxIDNumber"
-                                name="pannumber"
-                                value={selectedCustomerData?.pannumber || book.pannumber}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Contact Information</p>
-                        </div>
-                        <div className='address-block'>
-                            <div className="input" style={{ width: "250px" }}>
-                                <TextField
-                                    sx={{ width: "230ch" }}
-                                    size="small"
-                                    id="contactPhoneNumber"
-                                    name="contactPhoneNumber"
-                                    value={selectedCustomerData?.contactPhoneNumber || book.contactPhoneNumber}
-                                    onChange={handleChange}
-                                    label="Phone Number"
-                                />
-                            </div>
-                            <div className="input" style={{ width: "250px" }}>
-                                <TextField
-                                    sx={{ width: "230ch" }}
-                                    size="small"
-                                    id="contactEmail"
-                                    name="contactEmail"
-                                    value={selectedCustomerData?.contactEmail || book.contactEmail}
-                                    onChange={handleChange}
-                                    label="Email Address"
-                                />
-                            </div>
                         </div> */}
-                    </div>
-                    <div className="input-field">
-                        <div className="input" style={{ width: "150px" }}>
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <div className="input organization-input">
+                                    <label htmlFor="">PAN Number:</label>
+
+                                    <TextField
+                                        sx={{ width: "300px" }}
+                                        size="small"
+                                        id="taxIDNumber"
+                                        name="pannumber"
+                                        className='organisation-input-field'
+                                        value={selectedCustomerData?.pannumber || book.pannumber}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* </div>
+                    <div className="input-field"> */}
+                        {/* <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>Location</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="location"
-                                name="location"
-                                value={selectedCustomerData?.location || book.location}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="input" style={{ width: "150px" }}>
+                        </div> */}
+
+                        <div className='organisation-input-row'>
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <div className="input organization-input">
+                                    <label htmlFor="">Location:</label>
+                                    <TextField
+                                        sx={{ width: "300px" }}
+                                        size="small"
+                                        id="location"
+                                        name="location"
+                                        className='organisation-input-field'
+                                        value={selectedCustomerData?.location || book.location}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>Employees</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="employees"
-                                name="employees"
-                                value={selectedCustomerData?.employees || book.employees}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="input-field">
-                        {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Ownership and Leadership</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="ownershipLeadership"
-                                name="ownershipLeadership"
-                                value={selectedCustomerData?.ownershipLeadership || book.ownershipLeadership}
-                                onChange={handleChange}
-                            />
                         </div> */}
-                        {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Products/Services</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="productsServices"
-                                name="productsServices"
-                                value={selectedCustomerData?.productsServices || book.productsServices}
-                                onChange={handleChange}
-                            />
-                        </div> */}
-                    </div>
-                    <div className="input-field">
-                        {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Market Presence</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="marketPresence"
-                                name="marketPresence"
-                                value={selectedCustomerData?.marketPresence || book.marketPresence}
-                                onChange={handleChange}
-                            />
-                        </div> */}
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <div className="input organization-input">
+                                    <label htmlFor="">Employees:</label>
 
-                    </div>
-                    <div className="input-field">
-                        {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Legal Structure</p>
+                                    <TextField
+                                        sx={{ width: "300px" }}
+                                        size="small"
+                                        id="employees"
+                                        name="employees"
+                                        className='organisation-input-field'
+                                        value={selectedCustomerData?.employees || book.employees}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
                         </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="legalStructure"
-                                name="legalStructure"
-                                value={selectedCustomerData?.legalStructure || book.legalStructure}
-                                onChange={handleChange}
-                            />
-                        </div> */}
+                        {/* </div>                 
+                    <div className="input-field"> */}
                         {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Customer Base</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="customerBase"
-                                name="customerBase"
-                                value={selectedCustomerData?.customerBase || book.customerBase}
-                                onChange={handleChange}
-                            />
-                        </div> */}
-                    </div>
-                    <div className="input-field">
-                        <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>Organisation Type</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="partnershipsAlliances"
-                                name="partnershipsAlliances"
-                                value={selectedCustomerData?.partnershipsAlliances || book.partnershipsAlliances}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Recent News and Developments</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField  
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="recentNewsDevelopments"
-                                name="recentNewsDevelopments"
-                                value={selectedCustomerData?.recentNewsDevelopments || book.recentNewsDevelopments}
-                                onChange={handleChange}
-                            />
                         </div> */}
-                        <div className="input" style={{ width: "150px" }}>
+                        <div className='organisation-input-row'>
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <div className="input organization-input">
+                                    <label htmlFor="">Organisation Type: </label>
+
+                                    <TextField
+                                        sx={{ width: "300px" }}
+                                        size="small"
+                                        id="partnershipsAlliances"
+                                        name="partnershipsAlliances"
+                                        className='organisation-input-field'
+                                        value={selectedCustomerData?.partnershipsAlliances || book.partnershipsAlliances}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>GST Number</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="taxIDNumber"
-                                name="gstnumber"
-                                value={selectedCustomerData?.gstnumber || book.gstnumber}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="input-field" style={{ justifyContent: "center" }}>
-                        <div className="input" style={{ width: "150px" }}>
-                            <Button variant="contained" onClick={handleAdd} >
-                                Save
-                            </Button>
+                        </div> */}
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <div className="input organization-input">
+                                    <label htmlFor="">GST Number:</label>
 
+                                    <TextField
+                                        sx={{ width: "300px" }}
+                                        size="small"
+                                        id="taxIDNumber"
+                                        name="gstnumber"
+                                        className='organisation-input-field'
+                                        value={selectedCustomerData?.gstnumber || book.gstnumber}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
                         </div>
-                        <div className="input" style={{ width: "150px" }}>
-                            <Button variant="outlined" onClick={handleUpdate}  >
-                                Update
-                            </Button>
-                        </div>
-                    </div>
-                    <div className="input-field">
+                        {/* </div>
+                    <div className="input-field" style={{ justifyContent: "center" }}> */}
+
                         {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Social Media Presence</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="socialMediaPresence"
-                                name="socialMediaPresence"
-                                value={selectedCustomerData?.socialMediaPresence || book.socialMediaPresence}
-                                onChange={handleChange}
-                            />
+                            <p className='input-title'>Telephone no</p>
                         </div> */}
-                        {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Sustainability and CSR</p>
+                        <div className='organisation-input-row'>
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <div className="input organization-input">
+                                    <label htmlFor="">Telephone no:</label>
+
+                                    <TextField
+                                        sx={{ width: "300px" }}
+                                        size="small"
+                                        id="telephone"
+                                        name="telephone"
+                                        className='organisation-input-field'
+                                        value={selectedCustomerData.telephone || book.telephone || ''}
+                                        // value={ book.telephone||''}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+                            {selectedCustomerData?.length === 0 ?
+                                <div className='organisation-btn-row' style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                    <div className="input organisation-btn" style={{ width: "150px" }}>
+
+                                        <Button variant="contained" onClick={handleAdd} >
+                                            Save
+                                        </Button>
+
+
+                                    </div>
+                                </div> :
+                                <>
+                                    <div className='organisation-btn-row' style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                        <div className='organisation-btn' style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
+                                            <div className="input" style={{ width: "150px" }}>
+                                                <Button variant="outlined" disabled={!MainSetting_modify} onClick={handleCancel}>
+                                                    Cancel
+                                                </Button>
+                                            </div>
+
+                                            <div className="input" style={{ width: "150px" }}>
+                                                <Button variant="contained" disabled={!MainSetting_modify} onClick={handleUpdate}  >
+                                                    Update
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+
+
+                            }
                         </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="sustainabilityCSR"
-                                name="sustainabilityCSR"
-                                value={selectedCustomerData?.sustainabilityCSR || book.sustainabilityCSR}
-                                onChange={handleChange}
-                            />
-                        </div> */}
-                    </div>
-                    <div className="input-field">
-                        {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Customer Reviews and Feedback</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"    
-                                id="customerReviewsFeedback"
-                                name="customerReviewsFeedback"
-                                value={selectedCustomerData?.customerReviewsFeedback || book.customerReviewsFeedback}
-                                onChange={handleChange}
-                            />
-                        </div> */}
-                        {/* <div className="input" style={{ width: "150px" }}>
-                            <p className='input-title'>Industry-Specific Details</p>
-                        </div>
-                        <div className="input" style={{ width: "250px" }}>
-                            <TextField
-                                sx={{ width: "230ch" }}
-                                size="small"
-                                id="industrySpecificDetails"
-                                name="industrySpecificDetails"
-                                value={selectedCustomerData?.industrySpecificDetails || book.industrySpecificDetails}
-                                onChange={handleChange}
-                            />
-                        </div> */}
+
+
 
                     </div>
-                    {info &&
-                        <div className='alert-popup Info' >
-                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                            <p>{infoMessage}</p>
-                        </div>
-                    }
+
+                    <div className='alert-popup-main'>
+                        {info &&
+                            <div className='alert-popup Info' >
+                                <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <p>{infoMessage}</p>
+                            </div>
+                        }
+                    </div>
                 </div>
             </form>
         </div>

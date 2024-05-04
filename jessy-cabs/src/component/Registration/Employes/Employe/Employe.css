@@ -63,7 +63,8 @@
     padding-top: 20px;
     border-radius: 20px;
     color: #000;
-    background-color: var(--glass);
+    /* background-color: var(--glass); */
+    background-color: #f0ece2;
 }
 
 .Employe-form .Title-Name {
@@ -97,4 +98,72 @@
     padding: 10px 20px 35px;
     /* border: 2px solid #ccc; */
     border-radius: 15px;
+    width: 100% ;
+    display: flex;
+    justify-content: center;
   }
+
+
+
+
+  @media screen and (min-width:970px) and (max-width:1240px) {
+    .form-container-Emplyes .container-main { 
+      width: 76vw !important;
+    }
+  }
+  
+  @media screen and (min-width:769px) and (max-width:969.99px) {
+    .form-container-Emplyes .container-main  { 
+      width: 70vw !important;
+    }
+  }
+
+  .employee-input-feilds{
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+
+  @media screen and (max-width:570px) {
+    .input-address{
+      width: 200px !important;
+    }
+  }
+  
+
+  .Employe-search-input{
+    /* flex-wrap: wrap; */
+    margin-top: 30px;
+    background-color: var(--glass);
+    padding: 10px 20px 35px;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+  }
+
+  @media screen and (max-width:500px) {
+    .Employe-search-input{
+      flex-wrap: wrap;
+      margin-top: 30px;
+      background-color: var(--glass);
+      padding: 10px 20px 35px;
+      border: 2px solid #ccc;
+      border-radius: 15px;
+    }
+  }
+
+
+@media screen and (min-width:320px)  and (max-width:380px){
+    .container-Employe{
+        background-color: transparent !important;
+        border: none !important;
+      }
+}
+  
+
+.head-tab{
+  /* position:'sticky'top:"-19px", backgroundColor:'#f0ece2', zIndex:'1' */
+  position: sticky;
+  top: -19px;
+  z-index: 5;
+  background-color: #f0ece2;
+
+}

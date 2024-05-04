@@ -1,0 +1,189 @@
+.organisationtext{
+font-size: 17px;
+margin: 0px;
+}
+.organisationnametext{
+    font-size: 22px;
+    font-weight:900;
+    margin: 0px;
+}
+.Taxinvoicetext{
+font-size: 22px;
+/* margin: 0px; */
+display: flex;
+flex-wrap: nowrap ;
+align-items: center;
+font-weight:900;
+}
+.image{
+    height:100px;
+    width: 110px;
+}
+.Taxinvoicediv{
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.invoice{
+    margin-left: 3px;
+}
+.mobilediv{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.detailstext{
+    font-size: 14px;
+    white-space: nowrap; /* Prevents wrapping */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  /* gap: 10px; */
+  margin: 0%;
+  padding: 0%;
+}
+.clientName {
+    /* display: inline-block;  */
+    width: 170px; /* Adjust the maximum width as needed */
+    white-space: normal;
+    font-weight: 400; /* Allows wrapping within the span */
+    /* justify-content: center;
+    align-items: center;
+    align-content: center; */
+    /* margin-left: 5px; */
+    /* padding-left: 10px; */
+    text-align: left;
+}
+.colontag{
+  padding-left: 10px;
+
+  padding-right: 10px;
+  /* padding: 9px 10px 2px 9px; */
+margin: 9px  9px;
+}
+.labeltag{
+  width: 80px;
+  padding: 0px;
+  margin-left: 5px;
+  text-align: left;
+
+}
+.clientSecondDiv{
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    
+}
+.labeltagsecond{
+  width: 90px;
+}
+.remarksdiv{
+    border: 1.5px solid black;
+    border-bottom: none;
+    border-top: 0px;
+}
+.remarks{
+    font-size: 14px;
+    font-weight: bold;
+}
+.remarksdata{
+    font-size: 14px;
+}
+.table {
+    width: 60%;
+    border-collapse: collapse;
+  }
+ 
+  .table th{
+    border: 1px solid #000;
+    border-top: none;
+    padding: 8px;
+    text-align: center;
+  }
+  .table td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .table thead th {
+    background-color: #f2f2f2;
+    border:1px solid black !important;
+
+  }
+  
+  .table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  .tablediv{
+    display: flex;
+    flex-direction: row;
+  }
+
+.sign{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    justify-items: center;
+    align-items: center;
+    align-content: center;
+    border-right: 1.5px solid black;
+    border-bottom: 1.5px solid black;
+    border-top: 1px solid black;
+}
+.dialogboximg {
+    height: 100px;
+    width: 100px;
+
+  }.parkingdiv{
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+  }
+  .mapimage{
+    height: 290px;
+    width: 100%;
+    border: 1px solid black;
+
+  }
+  .attachimage{
+    height: 200px;
+    width: 49%;
+    padding: 3px;
+    /* border: 1px solid black; */
+    /* padding: 0px; */
+  }
+  .attachtext{
+    text-align: center;
+font-weight: bold;
+margin-top: 50px;
+  }
+.print{
+  width: 100px;
+  padding: 10px;
+  background-color: #1976d2 ;
+  color: white;
+  border: 0px;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: bold;
+}
+.printdiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+  
+.tripsheet-RouteSummary {
+  width: 80%;
+  font-size: 13px;
+}
+
+.tripsheet-RouteSummary p {
+  font-weight: 600;
+}
+

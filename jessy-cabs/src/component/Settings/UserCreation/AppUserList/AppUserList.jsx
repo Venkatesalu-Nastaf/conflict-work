@@ -46,7 +46,7 @@ const AppUserList = () => {
         <div className="detail-container-main">
           <div className="container-left">
             <div className="copy-title-btn-AppUserList">
-              <div className="input-field appuser-inputs">
+              <div className="input-field appuser-inputs" style={{flexWrap: 'wrap', justifyContent: 'center'}}>
                 <div className="input radio">
                   <FormControl>
                     <FormLabel style={{ textAlign: 'center' }} id="demo-row-radio-buttons-group-label">
@@ -96,6 +96,7 @@ const AppUserList = () => {
           </div>
         </div>
 
+        <div className='alert-popup-main'>
         {error &&
           <div className='alert-popup Error' >
             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -124,6 +125,7 @@ const AppUserList = () => {
             <p>{infoMessage}</p>
           </div>
         }
+        </div>
         <div className="table-bookingCopys">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid

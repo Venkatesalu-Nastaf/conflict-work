@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import axios from 'axios';
 import dayjs from "dayjs";
@@ -9,15 +9,15 @@ import { APIURL } from "../../../url";
 
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
-    { field: "status", headerName: "Status", width: 130 },
-    { field: "invoiceno", headerName: "Invoice No", width: 130 },
-    { field: "Billingdate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
-    { field: "customer", headerName: "Customer", width: 130 },
-    { field: "fromdate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
-    { field: "todate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY') },
-    { field: "guestname", headerName: "UserName", width: 150 },
-    { field: "trips", headerName: "Trips", width: 150 },
-    { field: "Totalamount", headerName: "Amount", width: 130 },
+    { field: "Status", headerName: "Status", width: 130 },
+    { field: "ReferenceNo", headerName: "Reference No", width: 130 },
+    { field: "InvoiceDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'DD/MM/YYYY').format('DD/MM/YYYY') }, 
+   { field: "Customer", headerName: "Customer", width: 130 },
+    { field: "FromDate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'DD/MM/YYYY').format('DD/MM/YYYY') },
+    { field: "ToDate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value, 'DD/MM/YYYY').format('DD/MM/YYYY') },
+    // { field: "guestname", headerName: "UserName", width: 150 },
+    { field: "Trips", headerName: "Trips", width: 150 },
+    { field: "Amount", headerName: "Amount", width: 130 },
 ];
 
 const useCoversubmit = () => {
@@ -36,6 +36,7 @@ const useCoversubmit = () => {
     const [servicestation, setServiceStation] = useState("");
     const [successMessage, setSuccessMessage] = useState({});
     const [warning, setWarning] = useState(false);
+    const [invoiceColumn,setInvoiceColumn] = useState(false)
     const [warningMessage] = useState({});
 
 
@@ -57,18 +58,17 @@ const useCoversubmit = () => {
         pdf.text("Cover Submit", 10, 10);
         const tableData = rows.map((row) => [
             row['id'],
-            row['status'],
-            row['invoiceno'],
-            row['Billingdate'],
-            row['customer'],
+            row['Status'],
+            row['InvoiceNo'],
+            row['InvoiceDate'],
+            row['Customer'],
             row['fromdate'],
             row['todate'],
-            row['guestname'],
             row['trips'],
             row['Totalamount']
         ]);
         pdf.autoTable({
-            head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'From Date', 'To Date', 'UserName', 'Trips', 'Amount']],
+            head: [['Sno', 'Status', 'Invoice No', 'Date', 'Customer', 'From Date', 'To Date',  'Trips', 'Amount']],
             body: tableData,
             startY: 20,
         });
@@ -120,40 +120,83 @@ const useCoversubmit = () => {
             });
     }, []);
 
-    const handleShow = useCallback(async () => {
+ 
 
-        try {
-            const response = await axios.get(`${apiUrl}/payment-detail`, {
-                params: {
-                    customer: encodeURIComponent(customer),
-                    fromDate: fromDate.format('YYYY-MM-DD'),
-                    toDate: toDate.format('YYYY-MM-DD'),
-                    servicestation: encodeURIComponent(servicestation),
-                },
-            });
+    const handleShow = async()=>{
+        const startDate = dayjs(fromDate).format('DD-MM-YYYY')
+        const endDate = dayjs(toDate).format('DD-MM-YYYY')
 
-            const data = response.data;
+try{
+const response = await axios.get(`${apiUrl}/ListDetails`,
+{
+    params:{
+        Customer:customer,
+        FromDate:startDate,
+        ToDate:endDate,
+    },
+});
+const data = response.data;
+setInvoiceColumn(true)
+if (data.length > 0) {
+    const rowsWithUniqueId = data.map((row, index) => ({
+      ...row,
+      id: index + 1,
+    }));
+    setRows(rowsWithUniqueId);
+    setSuccess(true);
+    setSuccessMessage("Successfully listed");
+  } else {
+    setRows([]);
+    setError(true);
+    setErrorMessage("No data found");
+  }
+}
 
-            if (data.length > 0) {
-                const rowsWithUniqueId = data.map((row, index) => ({
-                    ...row,
-                    id: index + 1,
-                }));
-                setRows(rowsWithUniqueId);
-                setSuccess(true);
-                setSuccessMessage("Successfully listed");
-            } else {
-                setRows([]);
-                setError(true);
-                setErrorMessage("No data found");
-            }
-        } catch {
-            setRows([]);
-            setError(true);
-            setErrorMessage("Check your Network Connection");
-        }
+catch(err){
+console.log(err,'error');
+}
+    }
 
-    }, [customer, fromDate, toDate, servicestation, apiUrl]);
+
+    const handleButtonClickTripsheet = (params) => {
+        const data = params.row;
+        const groupbillingurl = `/home/billing/coveringbill?tab=groupbilling&Tripid=${data.Trip_id || ''}&InvoiceNo=${data.InvoiceNo || ''}&InvoiceColumn=${invoiceColumn || ''}&InvoiceDate=${data.InvoiceDate}&FromDate=${data.FromDate || ''}&ToDate=${data.ToDate || ''}&ReferenceNo=${data.ReferenceNo}`
+        window.location.href = groupbillingurl
+      };
+    // const handleShow = useCallback(async () => {
+
+    //     try {
+    //         const response = await axios.get(`${apiUrl}/payment-detail`, {
+    //             params: {
+    //                 customer: encodeURIComponent(customer),
+    //                 fromDate: fromDate.format('YYYY-MM-DD'),
+    //                 toDate: toDate.format('YYYY-MM-DD'),
+    //                 servicestation: encodeURIComponent(servicestation),
+    //             },
+    //         });
+
+    //         const data = response.data;
+
+    //         if (data.length > 0) {
+    //             const rowsWithUniqueId = data.map((row, index) => ({
+    //                 ...row,
+    //                 id: index + 1,
+    //             }));
+    //             setRows(rowsWithUniqueId);
+    //             setSuccess(true);
+    //             setSuccessMessage("Successfully listed");
+    //         } else {
+    //             setRows([]);
+    //             setError(true);
+    //             setErrorMessage("No data found");
+    //         }
+    //     } catch {
+    //         setRows([]);
+    //         setError(true);
+    //         setErrorMessage("Check your Network Connection");
+    //     }
+
+    // }, [customer, fromDate, toDate, servicestation, apiUrl]);
 
     return {
         rows,
@@ -180,6 +223,7 @@ const useCoversubmit = () => {
         handleExcelDownload,
         handlePdfDownload,
         columns,
+        handleButtonClickTripsheet
     };
 };
 

@@ -163,7 +163,7 @@ const useDrivercreation = () => {
     const handleDateChange = (date, name) => {
         const formattedDate = dayjs(date).format("YYYY-MM-DD");
         const parsedDate = dayjs(formattedDate).format("YYYY-MM-DD");
-        console.log(formattedDate, "driver", parsedDate)
+        // console.log(formattedDate, "driver", parsedDate)
         setBook((prevBook) => ({
             ...prevBook,
             [name]: parsedDate,
@@ -208,16 +208,17 @@ const useDrivercreation = () => {
         setIsEditMode(false);
     };
 
-    const user__id = selectedCustomerData?.driverid || book.driverid;
+    // const user__id = selectedCustomerData?.driverid || book.driverid;
     const [file, setFile] = useState(null);
 
     // adhar
-    const addPdf = async () => {
+    const addPdf = async (driveruserid) => {
         if (file !== null) {
             const formData = new FormData();
             formData.append("file", file);
+
             try {
-                await axios.post(`${apiUrl}/driver-pdf/${user__id}`, formData);
+                await axios.post(`${apiUrl}/driver-pdf/${driveruserid}`, formData);
                 setFile(null);
             }
             catch {
@@ -231,15 +232,16 @@ const useDrivercreation = () => {
     }
 
 
+
     // licence
     const [licencepdf, setLicencepdf] = useState(null)
 
-    const licenceSubmit = async () => {
+    const licenceSubmit = async (driveruserid) => {
         if (licencepdf !== null) {
             const formData = new FormData();
             formData.append("file", licencepdf);
             try {
-                await axios.post(`${apiUrl}/driver-licencepdf/${user__id}`, formData);
+                await axios.post(`${apiUrl}/driver-licencepdf/${driveruserid}`, formData);
                 setFile(null);
             }
             catch {
@@ -271,6 +273,7 @@ const useDrivercreation = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleButtonClick = (params) => {
+        console.log(params,'params');
         const { driverid } = params.row;
         if (!driverid) {
             setError(true);
@@ -318,14 +321,17 @@ const useDrivercreation = () => {
         try {
 
             const data = { ...book }
-            console.log(data, "bookadd")
+            // console.log(data, "bookadd")
             await axios.post(`${apiUrl}/drivercreation`, data);
-            handleCancel();
-            addPdf();
-            licenceSubmit();
+            const response = await axios.get(`${apiUrl}/lastdrivergetid`);
+            const lastdriveridno = response.data.driverid;
+            licenceSubmit(lastdriveridno);
+            addPdf(lastdriveridno);
             setRows([]);
             setSuccess(true);
             setSuccessMessage("Successfully Added");
+            // addPdf(lastdriveridno);
+            handleCancel();
         } catch (error) {
             setError(true)
             setErrorMessage("Check your Network Connection");
@@ -368,7 +374,6 @@ const useDrivercreation = () => {
                     `${apiUrl}/searchfordriver?searchText=${searchText}`
                 );
                 const data = await response.json();
-                console.log(data, "search")
                 if (data.length > 0) {
                     const rowsWithUniqueId = data.map((row, index) => ({
                         ...row,
@@ -392,6 +397,7 @@ const useDrivercreation = () => {
 
     const handleEdit = async (userid) => {
         setEdit(true)
+        const data = selectedCustomerData.driverid
         const updatedriver = {
             drivername: selectedCustomerData.drivername,
             username: selectedCustomerData.username,
@@ -413,8 +419,8 @@ const useDrivercreation = () => {
         setSuccess(true);
         setSuccessMessage('Successfully updated');
         handleCancel();
-        addPdf();
-        licenceSubmit();
+        addPdf(data);
+        licenceSubmit(data);
         setRows([]);
         setEdit(true)
     };
@@ -457,12 +463,12 @@ const useDrivercreation = () => {
 
             else if (actionName === 'Edit') {
                 handleEdit()
-                setSuccess(true);
-                setSuccessMessage('Successfully updated');
-                handleCancel();
-                addPdf();
-                licenceSubmit();
-                setRows([]);
+                // setSuccess(true);
+                // setSuccessMessage('Successfully updated');
+                // handleCancel();
+                // addPdf();
+                // licenceSubmit();
+                // setRows([]);
             } else {
                 setInfo(true);
                 setInfoMessage('There is some issue ');
@@ -533,12 +539,12 @@ const useDrivercreation = () => {
     const [imagedata, setImagedata] = useState([]);
 
     const handleimagedelete = (imageName) => {
-        console.log(deletefile, 'fileeee');
-        console.log(deletefile.length, 'lennnnn');
+        // console.log(deletefile, 'fileeee');
+        // console.log(deletefile.length, 'lennnnn');
         setSelectAll(false)
         if (deletefile.length > 0) {
             setSelectAll(false)
-            console.log(imageName, 'val---')
+            // console.log(imageName, 'val---')
             setImagedata(prevDeleteFile => [...prevDeleteFile, imageName]);
             setDialogdeleteOpen(true);
             setDeleteFile([])
@@ -570,7 +576,7 @@ const useDrivercreation = () => {
             // Assuming imagedata is the filename or identifier of the image to be deleted
             axios.delete(`${apiUrl}/driver_proof/` + imagedata)
                 .then(response => {
-                    console.log("Image deleted:", imagedata);
+                    // console.log("Image deleted:", imagedata);
                     setDialogdeleteOpen(false);
                     setDialogOpen(false);
                     setImagedata([]);

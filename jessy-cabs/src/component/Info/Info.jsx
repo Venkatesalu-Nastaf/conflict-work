@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import "./Info.css";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
+import { PermissionContext } from '../context/permissionContext';
 
-
-const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
+const MenuItem = ({ label, to, alt, activeMenuItem, handleMenuItemClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
@@ -11,7 +11,7 @@ const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
     <Link
       className={`menu-link ${isActive ? "actives" : ""}`}
       to={to}
-      onClick={() => handleMenuItemClick(label)}
+      onClick={(e) => handleMenuItemClick(label, alt, e)}
     >
       {label}
     </Link>
@@ -21,10 +21,92 @@ const MenuItem = ({ label, to, activeMenuItem, handleMenuItemClick }) => {
 const Info = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('');
 
-  const handleMenuItemClick = (menuItem) => {
+  //------------------popup------------------------
+
+  const [info, setInfo] = useState(false);
+  const [infoMessage, setInfoMessage] = useState({});
+
+  const hidePopup = () => {
+    setInfo(false);
+    setInfoMessage("");
+  };
+
+  useEffect(() => {
+    if (info) {
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [info]);
+
+  //end-----------------------------------
+
+  // permission -----------------
+
+  const { permissions } = useContext(PermissionContext)
+
+  const INFO = permissions[16]?.read;
+  const Rate_Management = permissions[17]?.read;
+  const Mailers = permissions[18]?.read;
+  const Fuel_Info = permissions[19]?.read;
+
+  const handleMenuItemClick = (menuItem, alt, e) => {
+
     localStorage.setItem('activeMenuItem', menuItem);
     setActiveMenuItem(menuItem);
+
+    let hasPermission = 0;
+
+    switch (menuItem) {
+      case "Rate Management":
+        hasPermission = Rate_Management;
+        break;
+      case "Mailers":
+        hasPermission = Mailers;
+        break;
+      case "Fuel Info":
+        hasPermission = Fuel_Info;
+        break;
+      case "Rate Type":
+        hasPermission = INFO;
+        break;
+      default:
+        break;
+    }
+
+    try {
+      if (hasPermission === 1) {
+        Navigate(alt)
+      }
+      else if (hasPermission === 0)
+        e.preventDefault();
+      setInfo(true);
+      setInfoMessage("You do not have Permission ..!")
+      alert("You do not have Permission ..!");
+    }
+    catch {
+
+    }
+
+
   };
+
+  //---------------------------------------
+
+  const myLocation = useLocation();
+  var myTo = ''
+  if (myLocation.pathname == '/home/info/mailer/TemplateSelection') {
+    myTo = '/home/info/mailer/TemplateSelection';
+  }
+  else if (myLocation.pathname == '/home/info/mailer/TemplateCreation') {
+    myTo = '/home/info/mailer/TemplateCreation'
+  }
+  else {
+    myTo = '/home/info/mailer';
+  }
+
+
 
 
   return (
@@ -33,28 +115,32 @@ const Info = () => {
       <div className="menu-bar">
         <MenuItem
           label="Rate Type"
-          to="/home/info/ratetype"
+          to={INFO && ("/home/info/ratetype")}
+          alt="/home/info/ratetype"
           menuItemKey="Rate Type"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
         <MenuItem
           label="Rate Management"
-          to="/home/info/ratemanagement"
+          to={Rate_Management && ("/home/info/ratemanagement")}
+          alt="/home/info/ratemanagement"
           menuItemKey="Rate Management"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
         <MenuItem
           label="Mailers"
-          to="/home/info/mailer"
+          to={Mailers && myTo}
+          alt={myTo}
           menuItemKey="Mailers"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
         <MenuItem
           label="Fuel Info"
-          to="/home/info/fuelinfo"
+          to={Fuel_Info && ("/home/info/fuelinfo")}
+          alt={"/home/info/fuelinfo"}
           menuItemKey="FuelInfo"
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}

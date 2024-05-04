@@ -97,15 +97,6 @@
     gap: 10px;
 }
 
-.feild-inputs{
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
-}
-.first{
-    display: flex;
-    gap :10px;
-}
 
 .add-details{
     margin-top: 20px;
@@ -119,4 +110,65 @@
 
 .cancel-icon{
     margin-left: 10px;
+    margin-top: 24px;
+}
+
+.PackageRateEntery-input-feild{
+    flex-wrap: wrap;
+}
+
+@media only screen and (min-width:800px) and (max-width:1066px) {
+   .PackageRateEntery-input{
+    width: 200px !important;
+   } 
+}
+
+@media only screen and (max-width:799.99px) {
+    .PackageRateEntery-input-feild {
+        justify-content: center;
+    }
+}
+
+
+@media only screen and (min-width:300px) and (max-width:380px) {
+.copy-title-btn-PackageRateEntery {
+    width: 100%;
+    margin-top: 0px !important;
+    border: none !important;
+}}
+
+
+.feild-inputs{
+    display: flex;
+    /* flex-wrap: wrap; */
+    align-items: center;
+    margin-top: 40px;
+    gap: 30px;
+}
+
+@media screen and (max-width:1122px){
+    .feild-inputs{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 20px;
+        justify-content: center;
+    }
+    .first{
+        display: flex;
+        flex-wrap: wrap;
+        gap :10px;
+        justify-content: center;  
+      }
+}
+.first{
+    display: flex;
+    flex-wrap: wrap;
+    gap :10px;
+    /* justify-content: center; */
+}
+@media screen and (max-width:1122px){
+.PackageRateEntery-input-feild {
+    justify-content: center !important;
+}
 }

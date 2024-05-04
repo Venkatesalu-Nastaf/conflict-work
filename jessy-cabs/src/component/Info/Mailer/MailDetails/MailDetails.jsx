@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./MailDetails.css";
 import { Table } from "@mui/joy";
 import Box from "@mui/material/Box";
@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
-
+import { useNavigate } from "react-router-dom";
 // ICONS
 import SmsIcon from '@mui/icons-material/Sms';
 import SendIcon from '@mui/icons-material/Send';
@@ -20,6 +20,8 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+
+import xlsx from "../../../../assets/files/SampleXLSXFile.xlsx"
 
 
 const rows = [
@@ -64,6 +66,28 @@ const actions = [
 
 
 const MailDetails = () => {
+
+  const handleIconClick = () => {
+    // Trigger click event of the input field
+    document.getElementById('fileInput').click();
+  };
+
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (e) => {
+
+    const selectedFile = e.target.files[0].name;
+    console.log(selectedFile);
+    setFile(selectedFile);
+    // Perform any additional actions with the selected file, such as uploading to a server
+  };
+
+  const navigate = useNavigate();
+
+  const handleTemplateCreation = () =>{
+    navigate("/home/info/mailer/TemplateSelection");
+  }
+
   return (
     <div className="mailDetails-form-container">
       <div className="mailDetails-form Scroll-Style-hide">
@@ -73,12 +97,19 @@ const MailDetails = () => {
               <div className="mailDetails-header">
                 <div className="input-field" style={{ justifyContent: "center" }}>
                   <div className="input" style={{ width: "180px" }}>
-                    <Button variant="outlined">Excel Format</Button>
+                    <a href={xlsx} download><Button variant="outlined">Excel Format</Button></a>
                   </div>
-                  <div className="input" style={{ width: "100px" }}>
+                  <div className="input" style={{ width: "100px" }}  onClick={handleIconClick}>
                     <Button variant="contained">Upload</Button>
                   </div>
+                  <input
+                    type="file"
+                    id="fileInput"
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                  />
                 </div>
+                <div style={{textAlign: "center", marginTop: '10px', color: 'green', fontWeight: '600'}}>{file}</div>
                 <div className="input-field ">
                   <div className="input" style={{ width: "400px" }}>
                     <div className="icone">
@@ -90,11 +121,12 @@ const MailDetails = () => {
                       name="MailMessage"
                       label="Mail Message"
                       id="MailMessage"
+                      className="mail-textarea1"
                       sx={{ m: 1, width: "200ch" }}
                     />
                   </div>
                 </div>
-                <div className="input-field">
+                <div className="input-field mail-textarea1-btn">
                   <div className="input" >
                     <Button variant="contained" endIcon={<SendIcon />}>
                       Send
@@ -110,21 +142,28 @@ const MailDetails = () => {
               <div className="textbox">
                 <div className="textboxlist">
                   <div className="textboxlist-customer ">
-                    <div className="input-field">
-                      <div className="input" style={{ width: "300px" }}>
-                        <div className="icone">
-                          <AiOutlineFileSearch style={{ fontSize: '23px' }} />
+                    <div className="input-field" style={{justifyContent: 'center', flexWrap: 'wrap'}}>
+                      <div>
+                        <div className="input template-input" style={{ width: "300px" }}>
+                          <div className="icone">
+                            <AiOutlineFileSearch style={{ fontSize: '23px' }} />
+                          </div>
+                          <TextField
+                            size="small"
+                            id="templatename"
+                            label="Template Name"
+                            name="templatename"
+                            sx={{ m: 1, width: "200ch" }}
+                          />
                         </div>
-                        <TextField
-                          size="small"
-                          id="templatename"
-                          label="Template Name"
-                          name="templatename"
-                          sx={{ m: 1, width: "200ch" }}
-                        />
                       </div>
-                      <div className="input" style={{ width: "100px" }}>
-                        <Button variant="contained">Search</Button>
+                      <div className="template-search-btn" style={{display: 'flex'}}>
+                        <div className="input" style={{ width: "100px" }}>
+                          <Button variant="contained">Search</Button>
+                        </div>
+                        <div className="input" onClick={handleTemplateCreation}>
+                          <Button variant="contained">Create Template</Button>
+                        </div>
                       </div>
                     </div>
                     <div className="mailDetails-list-update">
@@ -152,7 +191,7 @@ const MailDetails = () => {
               </div>
             </div>
           </div>
-          <div className="detail-container-main-mailDetails">
+          {/* <div className="detail-container-main-mailDetails">
             <div className="container-left-mailDetails">
               <div className="mailDetails-header">
                 <div className="input-field" style={{ justifyContent: "center" }}>
@@ -205,7 +244,7 @@ const MailDetails = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

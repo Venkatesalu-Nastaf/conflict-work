@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./RateType.css";
 import "jspdf-autotable";
 
@@ -39,6 +39,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 
+import { PermissionContext } from '../../../context/permissionContext.js';
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
     "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -50,13 +52,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
         left: theme.spacing(2),
     },
 }));
-const actions = [
-    { icon: <ChecklistIcon />, name: "List" },
-    { icon: <CancelPresentationIcon />, name: "Cancel" },
-    { icon: <DeleteIcon />, name: "Delete" },
-    { icon: <ModeEditIcon />, name: "Edit" },
-    { icon: <BookmarkAddedIcon />, name: "Add" },
-];
 
 const RateType = () => {
 
@@ -88,6 +83,8 @@ const RateType = () => {
         isEditMode,
         handleEdit,
         handleDateChange,
+        organizationNames,
+
     } = useRatype();
 
     useEffect(() => {
@@ -97,13 +94,25 @@ const RateType = () => {
     }, [actionName, handleClick]);
 
 
+
+    // Permission ------------
+    const { permissions } = useContext(PermissionContext)
+
+    const INFO_read = permissions[16]?.read;
+    const INFO_new = permissions[16]?.new;
+    const INFO_modify = permissions[16]?.modify;
+    const INFO_delete = permissions[16]?.delete;
+
+
+
+
     return (
         <div className="ratetype-form Scroll-Style-hide">
             <form onSubmit={handleClick}>
                 <div className="detail-container-main">
                     <div className="container-left">
                         <div className="copy-title-btn-RateType">
-                            <div className="input-field">
+                            <div className="input-field rate-type-inputs">
                                 <div className="input">
                                     <div className="icone">
                                         <BadgeIcon color="action" />
@@ -118,7 +127,7 @@ const RateType = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input" style={{ width: "300px" }}>
+                                <div className="input" style={{}}>
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
@@ -146,7 +155,7 @@ const RateType = () => {
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
-                                    <TextField
+                                    {/* <TextField
                                         size="small"
                                         id="id"
                                         label="Organization Name"
@@ -154,10 +163,31 @@ const RateType = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ratename || book.ratename}
                                         onChange={handleChange}
+                                    /> */}
+                                    <Autocomplete
+                                        fullWidth
+                                        size="small"
+                                        id="free-solo-demo-pricetag"
+                                        freeSolo
+                                        sx={{ width: "20ch" }}
+                                        onChange={(event, value) => handleAutocompleteChange(event, value, "ratename")}
+                                        // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
+                                        value={selectedCustomerData?.ratename || book.selectedCustomerData || ""}
+                                        // options={PriceTag.map((option) => ({
+                                        //   label: option.option,
+                                        // }))}
+                                        options={organizationNames?.map((option) => ({ label: option }))} // Use organizationName here
+                                        getOptionLabel={(option) => option.label || selectedCustomerData?.ratename || ''}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField {...params} label="Organization Name" name="ratename" inputRef={params.inputRef} />
+                                            )
+                                        }
+                                        }
                                     />
                                 </div>
-                            </div>
-                            <div className="input-field">
+                                {/* </div>
+                            <div className="input-field"> */}
                                 <div className="input" style={{ width: "300px" }}>
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
@@ -172,7 +202,7 @@ const RateType = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="input radio" style={{ width: "120px" }}>
+                                <div className="input radio" style={{ width: "120px", paddingLeft: '10px' }}>
                                     <FormControl>
                                         <FormLabel id="demo-row-radio-buttons-group-label">
                                             Active
@@ -250,47 +280,49 @@ const RateType = () => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                            </div>
-                            <div className="input-field">
+                                {/* </div>
+                            <div className="input-field"> */}
                                 <div className="input" style={{ width: "160px" }}>
                                     {isEditMode ? (
-                                        <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                                        <Button variant="contained" disabled={INFO_modify} onClick={handleEdit}>Edit</Button>
                                     ) : (
-                                        <Button variant="contained" onClick={handleAdd} >Add</Button>
+                                        <Button variant="contained" disabled={!INFO_new} onClick={handleAdd} >Add</Button>
                                     )}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {error &&
-                    <div className='alert-popup Error' >
-                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{errorMessage}</p>
-                    </div>
-                }
-                {warning &&
-                    <div className='alert-popup Warning' >
-                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{warningMessage}</p>
-                    </div>
-                }
-                {success &&
-                    <div className='alert-popup Success' >
-                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{successMessage}</p>
-                    </div>
-                }
-                {info &&
-                    <div className='alert-popup Info' >
-                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{infoMessage}</p>
-                    </div>
-                }
+                <div className='alert-popup-main'>
+                    {error &&
+                        <div className='alert-popup Error' >
+                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{errorMessage}</p>
+                        </div>
+                    }
+                    {warning &&
+                        <div className='alert-popup Warning' >
+                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{warningMessage}</p>
+                        </div>
+                    }
+                    {success &&
+                        <div className='alert-popup Success' >
+                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{successMessage}</p>
+                        </div>
+                    }
+                    {info &&
+                        <div className='alert-popup Info' >
+                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{infoMessage}</p>
+                        </div>
+                    }
+                </div>
                 <div className="Download-btn">
                     <PopupState variant="popover" popupId="demo-popup-menu">
                         {(popupState) => (
@@ -306,20 +338,69 @@ const RateType = () => {
                         )}
                     </PopupState>
                 </div>
-                <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+                <Box
+                    className="click-menu-icon"
+                    sx={{ position: "relative", mt: 3, height: 320 }}>
                     <StyledSpeedDial
                         ariaLabel="SpeedDial playground example"
                         icon={<SpeedDialIcon />}
                         direction="left"
                     >
-                        {actions.map((action) => (
+                        {/* {actions.map((action) => (
                             <SpeedDialAction
                                 key={action.name}
                                 icon={action.icon}
                                 tooltipTitle={action.name}
                                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                             />
-                        ))}
+                        ))} */}
+
+
+                        {INFO_read === 1 && (
+                            <SpeedDialAction
+                                key="list"
+                                icon={<ChecklistIcon />}
+                                tooltipTitle="List"
+                                onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+                            />
+                        )}
+
+                        {INFO_modify === 1 && (
+                            <SpeedDialAction
+                                key="edit"
+                                icon={<ModeEditIcon />}
+                                tooltipTitle="Edit"
+                                onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                            />
+                        )}
+                        {INFO_delete === 1 && (
+                            <SpeedDialAction
+                                key="delete"
+                                icon={<DeleteIcon />}
+                                tooltipTitle="Delete"
+                                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+                            />
+                        )}
+
+                        {INFO_new === 1 && (
+                            <SpeedDialAction
+                                key="Add"
+                                icon={<BookmarkAddedIcon />}
+                                tooltipTitle="Add"
+                                onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+                            />
+                        )}
+
+
+                        <SpeedDialAction
+                            key="Cancel"
+                            icon={<CancelPresentationIcon />}
+                            tooltipTitle="Cancel"
+                            onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                        />
+
+
+
                     </StyledSpeedDial>
                 </Box>
                 <div className="table-bookingCopy-RateType">

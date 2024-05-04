@@ -54,6 +54,19 @@
     color: #000;
     background-color: var(--glass);
   }
+
+  @media screen and (min-width:970px) and (max-width:1240px) {
+    .form-container-booking .container-main{ 
+      width: 76vw !important;
+    }
+  }
+  
+  @media screen and (min-width:769px) and (max-width:969.99px) {
+    .form-container-booking .container-main { 
+      width: 70vw !important;
+    }
+  }
+
   .BookingChart-form .Title-Name {
     position: relative;
   }

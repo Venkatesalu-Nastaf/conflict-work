@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./PackageRateEntery.css";
 import Box from "@mui/material/Box";
 import { TextField } from "@mui/material";
@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import { RateType, PriceTag, VehicleType, Duty } from "./PackageRateEnteryData.js";
+import { PermissionContext } from '../../../context/permissionContext.js';
 
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
@@ -42,18 +43,10 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
 
 const PackageRateEntery = () => {
 
   const {
-    selectedCustomerData,
     selectedCustomerId,
     rows,
     actionName,
@@ -65,7 +58,6 @@ const PackageRateEntery = () => {
     errorMessage,
     warningMessage,
     infoMessage,
-    book,
     handleClick,
     handleChange,
     handleRowClick,
@@ -75,7 +67,8 @@ const PackageRateEntery = () => {
     columns,
     isEditMode,
     handleEdit,
-    datevalidity
+    datevalidity,
+    fieldSets, commonData, handleCancelUI, handleAddExtra,
 
   } = usePackagerateentry();
 
@@ -91,242 +84,16 @@ const PackageRateEntery = () => {
   const enddate = dayjs(datevalidity?.enddate).format(" MMMM YYYY");
 
 
-  // for add details
-  const [details, setDetails] = useState([]);
+  const { permissions } = useContext(PermissionContext)
 
-  const handleDetailsClick = () => {
-    const newDetail = (
-      <div key={details.length} className="input-field feild-inputs">
-        <div>
-          <div className="input" style={{ width: "200px" }}>
-            <div className="icone">
-              <EngineeringIcon color="action" />
-            </div>
-            <Autocomplete
-              fullWidth
-              size="small"
-              id="free-solo-demo-duty"
-              freeSolo
-              sx={{ width: "20ch" }}
-              onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-              value={Duty.find((option) => option.optionvalue)?.label || selectedCustomerData?.duty || ''}
-              options={Duty.map((option) => ({
-                label: option.option,
-              }))}
-              getOptionLabel={(option) => option.label || selectedCustomerData?.duty || ''}
-              renderInput={(params) => {
-                return (
-                  <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
-                )
-              }
-              }
-            />
-          </div>
-        </div>
-
-
-        <div>
-          <div className='first'>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="Hours"
-                name="Hours"
-                autoComplete="new-password"
-                value={selectedCustomerData?.Hours || book.Hours}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="KMS"
-                name="KMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.KMS || book.KMS}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="Rate"
-                name="Rate"
-                autoComplete="new-password"
-                value={selectedCustomerData?.Rate || book.Rate}
-                onChange={handleChange}
-              />
-            </div>
-            {/* <div className="input" style={{ width: "100px" }}>
-                <TextField
-                  type='number'
-                  size="small"
-                  id="id"
-                  label="PerHour"
-                  name="PerHour"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.PerHour || book.PerHour}
-                  onChange={handleChange}
-                />
-              </div> */}
-            {/* <div className="input" style={{ width: "100px" }}>
-                <TextField
-                  type='number'
-                  size="small"
-                  id="id"
-                  label="PerKMS"
-                  name="PerKMS"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.PerKMS || book.PerKMS}
-                  onChange={handleChange}
-                />
-              </div> */}
-            <div className="input" style={{ width: "110px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="UptoHours  "
-                name="UptoHours"
-                autoComplete="new-password"
-                value={selectedCustomerData?.extraHours || book.extraHours}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="UptoKMS"
-                name="ChKMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.ChKMS || book.ChKMS}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className='first'>
-            {/* <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="chtime"
-                    label="ChTime"
-                    name="chtime"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.chtime || book.chtime}
-                    onChange={handleChange}
-                  />
-                </div> */}
-
-            {/* <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="ChKMS"
-                    name="ChKMS"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.ChKMS || book.ChKMS}
-                    onChange={handleChange}
-                  />
-                </div> */}
-            <div className="input" style={{ width: "110px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="ExtraHours"
-                name="extraHours"
-                autoComplete="new-password"
-                value={selectedCustomerData?.extraHours || book.extraHours}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="ExtraKMS"
-                name="extraKMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.extraKMS || book.extraKMS}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="A.KMS"
-                name="AKMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.AKMS || book.AKMS}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="N.Halt"
-                name="NHalt"
-                autoComplete="new-password"
-                value={selectedCustomerData?.NHalt || book.NHalt}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="Bata"
-                name="Bata"
-                autoComplete="new-password"
-                value={selectedCustomerData?.Bata || book.Bata}
-                onChange={handleChange}
-              />
-            </div>
-
-
-            {/* <div className="input" style={{ width: "100px" }}>
-                  {isEditMode ? (
-                    <Button variant="contained" onClick={handleEdit}>Edit</Button>
-                  ) : (
-                    <Button variant="contained" onClick={handleAdd} >Save</Button>
-                  )}
-                </div> */}
-            <div onClick={() => handleCancel(details.length)} className='cancel-icon'>
-              <MdCancelPresentation className='icon-cancel' />
-            </div>
-          </div>
-        </div>
+  const RateManagement_read = permissions[17]?.read;
+  const RateManagement_new = permissions[17]?.new;
+  const RateManagement_modify = permissions[17]?.modify;
+  const RateManagement_delete = permissions[17]?.delete;
 
 
 
-      </div>
-
-
-
-    );
-    setDetails([...details, newDetail]);
-  };
-
-  const handleCancel = (index) => {
-    setDetails((prevDetails) => prevDetails.filter((_, idx) => idx !== index));
-  };
+  //--------------------------------------------------------------------
 
   return (
     <div className="PackageRateEntery-form Scroll-Style-hide">
@@ -334,8 +101,8 @@ const PackageRateEntery = () => {
         <div className="PackageRateEntery-container-main">
           <div className="container-left">
             <div className="copy-title-btn-PackageRateEntery">
-              <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
+              <div className="input-field PackageRateEntery-input-feild">
+                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
                   <div className="icone">
                     <TypeSpecimenOutlinedIcon color="action" />
                   </div>
@@ -345,11 +112,13 @@ const PackageRateEntery = () => {
                     id="free-solo-demo-ratetype"
                     freeSolo
                     onChange={(event, value) => handleAutocompleteChange(event, value, "ratetype")}
-                    value={RateType.find((option) => option.optionvalue)?.label || selectedCustomerData?.ratetype || ''}
-                    options={RateType.map((option) => ({
+
+                    value={RateType?.find((option) => option.optionvalue)?.label || commonData?.ratetype || ''}
+                    options={RateType?.map((option) => ({
                       label: option.Option,
                     }))}
-                    getOptionLabel={(option) => option.label || selectedCustomerData?.ratetype || ''}
+
+                    getOptionLabel={(option) => option.label || commonData?.ratetype || ''}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="RateType" name="ratetype" inputRef={params.inputRef} />
@@ -358,7 +127,7 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{ width: "300px" }}>
+                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
@@ -368,36 +137,22 @@ const PackageRateEntery = () => {
                     id="free-solo-demo-pricetag"
                     freeSolo
                     sx={{ width: "20ch" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "pricetag")}
-                    value={PriceTag.find((option) => option.optionvalue)?.label || selectedCustomerData?.pricetag || ''}
-                    // options={PriceTag.map((option) => ({
-                    //   label: option.option,
-                    // }))}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "OrganizationName")}
+                    value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
+
                     options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
-                    getOptionLabel={(option) => option.label || selectedCustomerData?.pricetag || ''}
+                    getOptionLabel={(option) => option.label || commonData?.OrganizationName || ''}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="Organization Name" name="pricetag" inputRef={params.inputRef} />
+                        <TextField {...params} label="Organization Name" name="OrganizationName" inputRef={params.inputRef} />
                       )
                     }
                     }
                   />
                 </div>
-                <div className="input">
-                  <TextField
-                    size="small"
-                    id="id"
-                    sx={{ width: "300px" }}
-                    label="Package"
-                    name="package"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.package || book.package}
-                    onChange={handleChange}
-                    variant="standard"
-                  />
-                </div>
 
-                <div className="input" style={{ width: "300px" }}>
+
+                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -408,11 +163,11 @@ const PackageRateEntery = () => {
                     freeSolo
                     sx={{ width: "20ch" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleType")}
-                    value={VehicleType.find((option) => option.optionvalue)?.label || selectedCustomerData?.vehicleType || ''}
+                    value={VehicleType.find((option) => option.optionvalue)?.label || commonData?.vehicleType || ''}
                     options={VehicleType.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || selectedCustomerData?.vehicleType || ''}
+                    getOptionLabel={(option) => option.label || commonData?.vehicleType || ''}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="VehicleType" name="vehicleType" inputRef={params.inputRef} />
@@ -424,10 +179,10 @@ const PackageRateEntery = () => {
 
 
 
-              </div>
+                {/* </div>
 
-              <div className="input-field">
-                <div className="input" style={{ width: "300px" }}>
+              <div className="input-field"> */}
+                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -438,7 +193,6 @@ const PackageRateEntery = () => {
                     label="Validity"
                     name="Validity"
                     autoComplete="new-password"
-                    // value={selectedCustomerData?.Validity || book.Validity}
                     value={`datevalidity ? ${startdate}--${enddate} : ''`}
                     onChange={handleChange}
                     variant="standard"
@@ -449,478 +203,306 @@ const PackageRateEntery = () => {
             </div>
           </div>
         </div>
+
+        {/* //-----------------------------------------addpackage------------------------------- */}
+
         <div className='PackageRateEntery-container-bottom add-details'>
-          <Button variant="contained" onClick={handleDetailsClick} >Add Packages</Button>
-          <div className="input-field feild-inputs">
-            <div>
-              <div className="input" style={{ width: "200px" }}>
-                <div className="icone">
-                  <EngineeringIcon color="action" />
+
+          {!isEditMode && <Button variant="contained" onClick={handleAddExtra} >Add Packages</Button>}
+
+
+          {/* //-------------------- */}
+
+          {fieldSets.map((fieldSet, index) => (
+
+            <div key={index} className="input-field feild-inputs">
+              <div>
+                <div className="input" style={{ width: "200px" }}>
+                  <div className="icone">
+                    <EngineeringIcon color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    size="small"
+                    id="free-solo-demo-duty"
+                    freeSolo
+                    sx={{ width: "20ch" }}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, "duty", index)}
+                    value={Duty.find((option) => option.optionvalue)?.label || fieldSet?.duty || ''}
+                    options={Duty.map((option) => ({
+                      label: option.option,
+                    }))}
+                    getOptionLabel={(option) => option.label || fieldSet?.duty || ''}
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
+                      )
+                    }
+                    }
+                  />
                 </div>
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  id="free-solo-demo-duty"
-                  freeSolo
-                  sx={{ width: "20ch" }}
-                  onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                  value={Duty.find((option) => option.optionvalue)?.label || selectedCustomerData?.duty || ''}
-                  options={Duty.map((option) => ({
-                    label: option.option,
-                  }))}
-                  getOptionLabel={(option) => option.label || selectedCustomerData?.duty || ''}
-                  renderInput={(params) => {
-                    return (
-                      <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
-                    )
-                  }
-                  }
-                />
+              </div>
+
+
+              <div>
+                <div className='first'>
+
+                  <div className="input">
+                    <TextField
+                      size="small"
+                      id="id"
+                      sx={{ width: "300px" }}
+                      label="Package"
+                      name="package"
+                      autoComplete="new-password"
+                      value={fieldSet.package || ""}
+                      onChange={(e) => handleChange(e, index)}
+                      variant="standard"
+                    />
+                  </div>
+
+                  <div className="input" style={{ width: "200px" }}>
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="id"
+                      label="Hours"
+                      name="Hours"
+                      autoComplete="new-password"
+                      value={fieldSet.Hours || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  <div className="input" style={{ width: "200px" }}>
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="id"
+                      label="KMS"
+                      name="KMS"
+                      autoComplete="new-password"
+                      value={fieldSet.KMS || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  <div className="input" style={{ width: "200px" }}>
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="id"
+                      label="Rate"
+                      name="Rate"
+                      autoComplete="new-password"
+                      value={fieldSet.Rate || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+
+                  <div className="input" style={{ width: "200px" }}>
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="id"
+                      label="UptoHours  "
+                      name="UptoHours"
+                      autoComplete="new-password"
+                      value={fieldSet.UptoHours || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  <div className="input" style={{ width: "200px" }}>
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="id"
+                      label="UptoKMS"
+                      name="UptoKMS"
+                      autoComplete="new-password"
+                      value={fieldSet.UptoKMS || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  {/* </div>
+                <div className='first'> */}
+
+                  <div className="input" style={{ width: "200px" }}>
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="id"
+                      label="ExtraHours"
+                      name="extraHours"
+                      autoComplete="new-password"
+                      value={fieldSet.extraHours || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+
+                  <div className="input" style={{ width: "200px" }}>
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="id"
+                      label="ExtraKMS"
+                      name="extraKMS"
+                      autoComplete="new-password"
+                      value={fieldSet.extraKMS || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  <div className="input" style={{ width: "200px" }}>
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="id"
+                      label="A.KMS"
+                      name="AKMS"
+                      autoComplete="new-password"
+                      value={fieldSet.AKMS || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  <div className="input" style={{ width: "200px" }}>
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="id"
+                      label="N.Halt"
+                      name="NHalt"
+                      autoComplete="new-password"
+                      value={fieldSet.NHalt || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  <div className="input" style={{ width: "200px" }}>
+                    <TextField
+                      type='number'
+                      size="small"
+                      id="id"
+                      label="Bata"
+                      name="Bata"
+                      autoComplete="new-password"
+                      value={fieldSet.Bata || ""}
+                      onChange={(e) => handleChange(e, index)}
+                    />
+                  </div>
+                  {/* {index > 0 && <button onClick={() => handleCancel(index)}>R</button>} */}
+                  {index > 0 && <div onClick={() => handleCancelUI(index)} className='cancel-icon'>
+                    <MdCancelPresentation className='icon-cancel' />
+                  </div>}
+
+
+
+                </div>
               </div>
             </div>
 
-
-            <div>
-              <div className='first'>
-                <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="Hours"
-                    name="Hours"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.Hours || book.Hours}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="KMS"
-                    name="KMS"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.KMS || book.KMS}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="Rate"
-                    name="Rate"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.Rate || book.Rate}
-                    onChange={handleChange}
-                  />
-                </div>
-                {/* <div className="input" style={{ width: "100px" }}>
-                <TextField
-                  type='number'
-                  size="small"
-                  id="id"
-                  label="PerHour"
-                  name="PerHour"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.PerHour || book.PerHour}
-                  onChange={handleChange}
-                />
-              </div> */}
-                {/* <div className="input" style={{ width: "100px" }}>
-                <TextField
-                  type='number'
-                  size="small"
-                  id="id"
-                  label="PerKMS"
-                  name="PerKMS"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.PerKMS || book.PerKMS}
-                  onChange={handleChange}
-                />
-              </div> */}
-                <div className="input" style={{ width: "110px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="UptoHours  "
-                    name="UptoHours"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.extraHours || book.extraHours}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="UptoKMS"
-                    name="ChKMS"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.ChKMS || book.ChKMS}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              <div className='first'>
-                {/* <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="chtime"
-                    label="ChTime"
-                    name="chtime"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.chtime || book.chtime}
-                    onChange={handleChange}
-                  />
-                </div> */}
-
-                {/* <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="ChKMS"
-                    name="ChKMS"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.ChKMS || book.ChKMS}
-                    onChange={handleChange}
-                  />
-                </div> */}
-                <div className="input" style={{ width: "110px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="ExtraHours"
-                    name="extraHours"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.extraHours || book.extraHours}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="ExtraKMS"
-                    name="extraKMS"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.extraKMS || book.extraKMS}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="A.KMS"
-                    name="AKMS"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.AKMS || book.AKMS}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="N.Halt"
-                    name="NHalt"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.NHalt || book.NHalt}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="input" style={{ width: "100px" }}>
-                  <TextField
-                    type='number'
-                    size="small"
-                    id="id"
-                    label="Bata"
-                    name="Bata"
-                    autoComplete="new-password"
-                    value={selectedCustomerData?.Bata || book.Bata}
-                    onChange={handleChange}
-                  />
-                </div>
-
-
-                {/* <div className="input" style={{ width: "100px" }}>
-                  {isEditMode ? (
-                    <Button variant="contained" onClick={handleEdit}>Edit</Button>
-                  ) : (
-                    <Button variant="contained" onClick={handleAdd} >Save</Button>
-                  )}
-                </div> */}
-              </div>
-            </div>
-
-
-
-          </div>
-
-          {details.map((detail, index) => (
-            <React.Fragment key={index}>{detail}</React.Fragment>
           ))}
+
+          {/* //-------------------------------- */}
+
+          {/* {details.map((detail, index) => (
+            <React.Fragment key={index}>{detail}</React.Fragment>
+          ))} */}
 
 
           <div className="input" style={{ width: "100px", marginTop: '10px', marginLeft: '10px' }}>
             {isEditMode ? (
-              <Button variant="contained" onClick={handleEdit}>Edit</Button>
+              <Button variant="contained" disabled={!RateManagement_modify} onClick={handleEdit}>Edit</Button>
             ) : (
-              <Button variant="contained" onClick={handleAdd} >Save</Button>
+              <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
             )}
+
           </div>
         </div>
-        {/* <div className='PackageRateEntery-container-bottom'>
-          <div className="input-field">
-            <div className="input" style={{ width: "200px" }}>
-              <div className="icone">
-                <EngineeringIcon color="action" />
-              </div>
-              <Autocomplete
-                fullWidth
-                size="small"
-                id="free-solo-demo-duty"
-                freeSolo
-                sx={{ width: "20ch" }}
-                onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                value={Duty.find((option) => option.optionvalue)?.label || selectedCustomerData?.duty || ''}
-                options={Duty.map((option) => ({
-                  label: option.option,
-                }))}
-                getOptionLabel={(option) => option.label || selectedCustomerData?.duty || ''}
-                renderInput={(params) => {
-                  return (
-                    <TextField {...params} label="Duty" name="duty" inputRef={params.inputRef} />
-                  )
-                }
-                }
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="Hours"
-                name="Hours"
-                autoComplete="new-password"
-                value={selectedCustomerData?.Hours || book.Hours}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="KMS"
-                name="KMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.KMS || book.KMS}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="Rate"
-                name="Rate"
-                autoComplete="new-password"
-                value={selectedCustomerData?.Rate || book.Rate}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="PerHour"
-                name="PerHour"
-                autoComplete="new-password"
-                value={selectedCustomerData?.PerHour || book.PerHour}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="PerKMS"
-                name="PerKMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.PerKMS || book.PerKMS}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "110px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="extraHours"
-                name="extraHours"
-                autoComplete="new-password"
-                value={selectedCustomerData?.extraHours || book.extraHours}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="input-field">
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="extraKMS"
-                name="extraKMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.extraKMS || book.extraKMS}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="chtime"
-                label="ChTime"
-                name="chtime"
-                autoComplete="new-password"
-                value={selectedCustomerData?.chtime || book.chtime}
-                onChange={handleChange}
-              />
-            </div>
 
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="ChKMS"
-                name="ChKMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.ChKMS || book.ChKMS}
-                onChange={handleChange}
-              />
+        {/* //--------------------------------------------------------------------------------------- */}
+        <div className='alert-popup-main'>
+          {error &&
+            <div className='alert-popup Error' >
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errorMessage}</p>
             </div>
-
-            <div className="input" style={{ width: "110px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="UptoHours"
-                name="UptoHours"
-                autoComplete="new-password"
-                value={selectedCustomerData?.UptoHours || book.UptoHours}
-                onChange={handleChange}
-              />
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
             </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="A.KMS"
-                name="AKMS"
-                autoComplete="new-password"
-                value={selectedCustomerData?.AKMS || book.AKMS}
-                onChange={handleChange}
-              />
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
             </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="N.Halt"
-                name="NHalt"
-                autoComplete="new-password"
-                value={selectedCustomerData?.NHalt || book.NHalt}
-                onChange={handleChange}
-              />
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
             </div>
-            <div className="input" style={{ width: "100px" }}>
-              <TextField
-                type='number'
-                size="small"
-                id="id"
-                label="Bata"
-                name="Bata"
-                autoComplete="new-password"
-                value={selectedCustomerData?.Bata || book.Bata}
-                onChange={handleChange}
-              />
-            </div>
-
-
-            <div className="input" style={{ width: "100px" }}>
-              {isEditMode ? (
-                <Button variant="contained" onClick={handleEdit}>Edit</Button>
-              ) : (
-                <Button variant="contained" onClick={handleAdd} >Save</Button>
-              )}
-            </div>
-          </div>
-        </div> */}
-        {error &&
-          <div className='alert-popup Error' >
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{errorMessage}</p>
-          </div>
-        }
-        {warning &&
-          <div className='alert-popup Warning' >
-            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{warningMessage}</p>
-          </div>
-        }
-        {success &&
-          <div className='alert-popup Success' >
-            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{successMessage}</p>
-          </div>
-        }
-        {info &&
-          <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{infoMessage}</p>
-          </div>
-        }
+          }
+        </div>
         <Box sx={{ position: "relative", mt: 3, height: 320 }}>
           <StyledSpeedDial
             ariaLabel="SpeedDial playground example"
             icon={<SpeedDialIcon />}
           >
-            {actions.map((action) => (
+            {/* {actions.map((action) => (
               <SpeedDialAction
                 key={action.name}
                 icon={action.icon}
                 tooltipTitle={action.name}
                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
               />
-            ))}
+            ))} */}
+
+
+            {RateManagement_read === 1 && (
+              <SpeedDialAction
+                key="list"
+                icon={<ChecklistIcon />}
+                tooltipTitle="List"
+                onClick={(event) => handleClick(event, "List", selectedCustomerId)}
+              />
+            )}
+            {RateManagement_modify === 1 && (
+              <SpeedDialAction
+                key="edit"
+                icon={<ModeEditIcon />}
+                tooltipTitle="Edit"
+                onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+              />
+            )}
+            {RateManagement_delete === 1 && (
+              <SpeedDialAction
+                key="delete"
+                icon={<DeleteIcon />}
+                tooltipTitle="Delete"
+                onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
+              />
+            )}
+
+            <SpeedDialAction
+              key="Cancel"
+              icon={<CancelPresentationIcon />}
+              tooltipTitle="Cancel"
+              onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+            />
+            {RateManagement_new === 1 && (
+              <SpeedDialAction
+                key="Add"
+                icon={<BookmarkAddedIcon />}
+                tooltipTitle="Add"
+                onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
+              />
+            )}
+
+
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-PackageRateEntery">

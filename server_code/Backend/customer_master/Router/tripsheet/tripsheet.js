@@ -76,7 +76,7 @@ router.post('/tripsheet-add', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort, minHour, minKM,
 
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
@@ -118,7 +118,7 @@ router.post('/tripsheet-add', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, } = req.body;
+        manualbillss,Groups,transferreport } = req.body;
 
 
 
@@ -189,7 +189,7 @@ router.post('/tripsheet-add', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort, minHour, minKM,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -231,18 +231,38 @@ router.post('/tripsheet-add', (req, res) => {
         booker,
         reload,
         manualbillss,
+        Groups,
+        transferreport
     };
 
 
     db.query('INSERT INTO tripsheet SET ?', addCustomerData, (err, result) => {
         if (err) {
+            console.log(err,"dta")
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
 
         if (result.affectedRows > 0) {
-            db.query(`UPDATE booking SET status = "Opened" WHERE bookingno=${bookingno}; `)
+            // console.log(result.affectedRows,status)
+            // if(status === "Opened" || status === "Cancelled" ){
+            //     console.log(status)
+
+            db.query(`UPDATE booking SET status = 'Opened' WHERE bookingno=${bookingno}; `,(err,result5)=>{
+                if (err) {
+                    console.log(err)
+                    return res.status(500).json({ error: "Failed to insert data into MySQL" });
+                }
+                if (result.affectedRows > 0) {
+                    console.log(result,"aa",result5)
+                    return res.status(200).json({ message: "Data inserted successfully" });
+
+                }
+                console.log(result,"bb")
+            })
+            // }
+        
+        // return res.status(200).json({ message: "Data inserted successfully" });
         }
-        return res.status(200).json({ message: "Data inserted successfully" });
     });
 });
 
@@ -330,7 +350,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort, minHour, minKM,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -371,7 +391,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, } = req.body;
+        manualbillss, Groups,transferreport} = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -439,7 +459,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort, minHour, minKM,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -481,6 +501,8 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         booker,
         reload,
         manualbillss,
+        Groups,
+        transferreport
     };
 
 
@@ -489,9 +511,19 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }
         if (result.affectedRows === 0) {
+        
             return res.status(404).json({ error: "Customer not found" });
         }
+        if (result.affectedRows > 0) {
+            console.log(result.affectedRows,status)
+            if(status === "Opened" || status === "Cancelled"){
+                console.log(status)
+            db.query(`UPDATE booking SET status = '${status}' WHERE bookingno=${bookingno};`)
+            }
+        
+       
         return res.status(200).json({ message: "Data updated successfully" });
+        }
     });
 });
 
@@ -567,7 +599,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort, minHour, minKM,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -608,7 +640,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, } = req.body;
+        manualbillss,Groups,transferreport } = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -676,7 +708,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         startkm1,
         closekm1,
         totalkm1,
-        remark1,
+        remark1, escort, minHour, minKM,
         calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
         nightThrs,
         dtc,
@@ -718,6 +750,8 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         booker,
         reload,
         manualbillss,
+        Groups,
+        transferreport
     };
 
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
@@ -741,6 +775,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
 // collect data from tripsheet database------------------------------------
 router.get('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
+
     db.query('SELECT * FROM tripsheet WHERE tripid = ? AND status != "CBilled"', tripid, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
@@ -750,6 +785,22 @@ router.get('/tripsheet/:tripid', (req, res) => {
         }
         const bookingDetails = result[0]; // Assuming there is only one matching booking
         return res.status(200).json(bookingDetails);
+    });
+});
+
+
+
+router.get('/tripsheet-maindash', (req, res) => {
+
+    db.query('SELECT * FROM tripsheet ', (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+        // const bookingDetails = result[0]; // Assuming there is only one matching booking
+        return res.status(200).json(result);
     });
 });
 
@@ -832,7 +883,7 @@ router.post('/send-tripsheet-email', async (req, res) => {
 //collect data
 router.get('/tripuploadcollect/:tripid', (req, res) => {
     const tripid = req.params.tripid;
-    db.query("SELECT * FROM tripsheetupload where tripid=?", [tripid], (err, results) => {
+    db.query("SELECT * FROM tripsheetupload where tripid=? or bookingno=?", [tripid, tripid], (err, results) => {
         if (err) {
             return res.status(500).json({ error: "Failed to fetch data from MySQL" });
         }
@@ -842,25 +893,26 @@ router.get('/tripuploadcollect/:tripid', (req, res) => {
 //end collect data
 // End tripsheet database
 //get data from ratemanagement for package database
-router.get('/getPackageDetails', (req, res) => {
-    const { vehType, customer, duty, totaltime, totalkm1 } = req.query;
-    const query = `SELECT * FROM ratemanagement WHERE vehicleType = ? AND pricetag = ? AND duty = ? ORDER BY ABS(Hours - ?), ABS(KMS - ?) LIMIT 1;`;
-    const params = [vehType, customer, duty, totaltime, totalkm1];
+// router.get('/getPackageDetails', (req, res) => {
+//     const { vehType, customer, duty, totaltime, totalkm1 } = req.query;
 
-    db.query(query, params, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to retrieve package details from MySQL' });
-        }
-        // Check if there are matching records
-        if (result.length > 0) {
-            // Send the matching records as a response
-            return res.status(200).json(result);
-        } else {
-            // No matching records found
-            return res.status(404).json({ message: 'No matching records found' });
-        }
-    });
-});
+//     const query = `SELECT * FROM ratemanagement WHERE vehicleType = ? AND pricetag = ? AND duty = ? ORDER BY ABS(Hours - ?), ABS(KMS - ?) LIMIT 1;`;
+//     const params = [vehType, customer, duty, totaltime, totalkm1];
+
+//     db.query(query, params, (err, result) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Failed to retrieve package details from MySQL' });
+//         }
+//         // Check if there are matching records
+//         if (result.length > 0) {
+//             // Send the matching records as a response
+//             return res.status(200).json(result);
+//         } else {
+//             // No matching records found
+//             return res.status(404).json({ message: 'No matching records found' });
+//         }
+//     });
+// });
 //end package database
 //for map database
 router.post('/gmap-submitForm', (req, res) => {
@@ -895,32 +947,58 @@ router.get('/get-gmapdata/:tripid', (req, res) => {
 
 //ayyanar 4hr and 8hr pack fetch
 
-router.get(`/t4hr-pack`, (req, res) => {
+//------------------------------------
 
-    const total_km = parseInt(req.query.totkm);
-    const { tothr, vehiletype, duty } = req.query.totalHours;
-    let hr;
-    if (total_km <= 49 && tothr <= 6) {
-        hr = 4;
-        db.query("select * from ratemanagement where Hours=?", [hr], (err, result) => {
-            if (err) {
-                return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-            }
-            return res.status(200).json(result[0]);
-        })
+router.get(`/t4hr-pack`, (req, res) => {
+    // Extract dynamic inputs from query parameters
+    const totalHours = req.query.totalHours;
+    // const vehicletype = req.query.vehicletype;
+    const vehicletype = "AUDI A6";
+    const duty = req.query.duty;
+    const totkm = req.query.totkm;
+    const OrganizationName = req.query.organizationname;
+
+    if (!totalHours || !vehicletype || !duty || !totkm || !OrganizationName) {
+        res.status(400).json({ error: 'Missing required parameters' });
+        return;
     }
-    else if (total_km > 49 || tothr > 6) {
-        hr = 8;
-        db.query("select * from ratemanagement where Hours=?", [hr], (err, result) => {
-            if (err) {
-                return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
-            }
-            return res.status(200).json(result[0]);
-        })
-    }
-    else {
-        res.json("wrong data")
-    }
+
+    const sql = `SELECT * 
+                    FROM ratemanagement
+                    WHERE duty = ?
+                        AND vehicleType = ?
+                        AND OrganizationName =?
+                        AND ((? <= UptoHours AND ? <= UptoKMS) OR UptoHours = (SELECT MAX(UptoHours) FROM ratemanagement WHERE duty = ? AND vehicleType = ? AND OrganizationName =?))
+                    ORDER BY UptoHours 
+                    LIMIT 1;`
+
+    // Execute the query with dynamic parameters 
+    db.query(sql, [duty, vehicletype, OrganizationName, totalHours, totkm, duty, vehicletype, OrganizationName], (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        // Check if any rows were returned
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'No data found' });
+        }
+
+        // Send the fetched row in the response
+        res.json(results[0]);
+    });
+});
+
+
+router.get(`/ge-tVehicleName`, (req, res) => {
+    const sql = `select * from vehicleinfo `;
+    db.query(sql, (error, result) => {
+        if (error) {
+            return res.status(500).json({ error: "Internal Server Error" })
+        }
+        return res.status(200).json(result)
+
+    })
+
 })
 
 

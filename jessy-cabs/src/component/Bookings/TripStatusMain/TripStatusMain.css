@@ -1,0 +1,161 @@
+.css-13xfq8m-MuiTabPanel-root {
+    display: flex;
+    padding: 0px !important;
+  }
+  .detail-container-main {
+    display: flex;
+    width: 70%;
+  }
+  .form-container-TripStatus .Title-Name {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .form-container-TripStatus .TripStatus-form {
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: #000;
+    background-color: var(--glass);
+  }
+  .form-container-TripStatus {
+    display: flex;
+    border-radius: 10px;
+  }
+  .form-container-TripStatus .container-main::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    overflow-x: hidden;
+  }
+  .table-bookingCopy {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-top: 30px;
+  }
+  
+  .form-container-TripStatus .container-main::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    outline: 1px solid transparent;
+  }
+  .form-container-TripStatus .container-main {
+    border: 2px solid #ccc;
+    overflow: scroll;
+    height: 77vh;
+    width: 81vw;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    border-radius: 20px;
+    color: #000;
+    /* background-color: var(--glass); */
+    background-color: #f0ece2;
+  }
+  .TripStatus-form .Title-Name {
+    position: relative;
+  }
+  .copy-title-btn {
+    width: 100%;
+    margin-top: 30px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  .TripStatus-form .Title-Name::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    border-radius: 20px;
+    height: 3px;
+    background-color: #457cdc; /* Adjust color as needed */
+  }
+
+  @media screen and (min-width:970px) and (max-width:1240px) {
+    .form-container-TripStatus .container-main{ 
+      width: 76vw !important;
+    }
+  }
+  
+  @media screen and (min-width:769px) and (max-width:969.99px) {
+    .form-container-TripStatus .container-main { 
+      width: 70vw !important;
+    }
+  }
+
+  .TripStatus-input-feilds{
+    flex-wrap: wrap;
+    /* justify-content: center; */
+  }
+
+  .TripStatus-input-feilds .input{
+    width: fit-content;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  .show-all-button{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 220px;
+  }
+
+  .dispatch-input{
+display: flex;
+align-items: center;
+/* gap: 2px; */
+  }
+
+  @media screen and (max-width:1209px) {
+
+      .TripStatus-input-feilds{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  }
+
+  @media screen  and (max-width:700px){
+    .copy-title-btn-Dispatched {
+      width: 75% !important;
+    }
+  }
+
+  @media screen and (min-width:320px) and (max-width:380.99px){
+    .copy-title-btn-Dispatched {
+      background-color: transparent;
+      width: 100% !important;
+      border:none !important;
+      
+    }
+
+    .show-all-button{
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      width: 190px !important;
+    }
+   
+    .TripStatus-input-feilds .input{
+      width: 200px !important;
+      justify-content: space-around;
+      /* gap: 2px; */
+    }
+  }
+
+  .tripstatus-header{
+    top: -28px;
+    z-index: 5;
+    background-color: #f0ece2;
+    padding: 10px 10px 0px 10px;
+
+  }
+  
+  

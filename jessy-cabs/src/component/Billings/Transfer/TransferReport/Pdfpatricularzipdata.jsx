@@ -1,11 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { APIURL } from "../../../url";
 import dayjs from "dayjs";
-// import './PdfParticularData.css'
-import { Page, Text, View, Document as PDFDocument, StyleSheet, Image } from '@react-pdf/renderer';
+import { Page, Text, View, Document as PDFDocument, StyleSheet, Image,} from '@react-pdf/renderer';
 
-
-// import generatePDF from 'react-to-pdf';
 
 const styles = StyleSheet.create({
   page: {
@@ -93,11 +90,11 @@ const styles = StyleSheet.create({
     fontSize: '11px'
 
   },
-  labeltag1: {
-    fontSize: '13px',
-    textAlign: 'center'
+  // labeltag1: {
+  //   fontSize: '13px',
+  //   textAlign: 'center'
 
-  },
+  // },
   clientName1: {
     marginTop: '2px',
     fontSize: '11px',
@@ -313,7 +310,7 @@ const styles = StyleSheet.create({
 
   imagedivadd: {
 
-    height: '200px',
+    height: '170px',
   },
 
   imgwidth: {
@@ -324,9 +321,7 @@ const styles = StyleSheet.create({
 
 });
 
-
 const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, }) => {
-
 
   const [orgname, setOrgname] = useState('')
   const [orgaddress1, setOrgaddress1] = useState('')
@@ -370,6 +365,11 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
   const [totalparking, setTotalParking] = useState('')
   const [tripCustomercode, setTripCustomercode] = useState('')
   const [category, setCategory] = useState('')
+  const [addresscustomer, setAddresscustomer] = useState('')
+  const [addresscustomer1, setAddresscustomer1] = useState('')
+  const [addresscustomer2, setAddresscustomer2] = useState('')
+  const [bookimage,setBookingimage]=useState([])
+ 
 
   const [remark, setRemark] = useState('')
   const apiUrl = APIURL;
@@ -383,7 +383,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     let addresstwo = ''
     let addressthree = ''
     let organisationname = ''
-    organisationdetail?.map((li) => {
+    organisationdetail?.forEach((li) => {
       addressone = li.addressLine1
       addresstwo = li.addressLine2
       addressthree = li.location
@@ -435,6 +435,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     let Categorygroups = ''
     let routemapdata = []
     let attachedimagedata = []
+    let customeraddress1 = ""
+    let customeraddress2 = ''
+    let customeraddress3 = ""
+    let bookingimagedata=[]
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
         addressone = li.address1
@@ -456,9 +460,10 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         mapimage = JSON.parse(li.map_data)
         routemapdata = JSON.parse(li.gmapdata)
         attachedimagedata = JSON.parse(li.Attachedimage)
+        bookingimagedata=JSON.parse(li.bookattachedimage)
         packages = li.calcPackage
         Dropaddress = li.useage
-        Report = li.report
+        Report = li.transferreport
         Segment = li.segment
         Department = li.department
         Escort = li.escort
@@ -476,12 +481,30 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         TotalPermit = li.permit
         CustomerCode = li.customercode
         Categorygroups = li.Groups
+        customeraddress1 = li.Customeraddress1
+        customeraddress2 = li.Customeraddress2
+        customeraddress3 = li.Customeraddress3
 
 
 
 
       })
     }
+
+    
+    
+    const uniqueArray = Array.from(new Set(attachedimagedata?.filter(item => item.attachedimageurl !== null)?.map(JSON.stringify)))?.map(JSON.parse);
+
+    const uniqueArraybook = Array.from(new Set(bookingimagedata?.filter(item => item.imagees !== null)?.map(JSON.stringify)))?.map(JSON.parse);
+
+
+    // const uniqueArraybook = Array.from(new Set(bookingimagedata?.map(JSON.stringify)))?.map(JSON.parse);
+
+    // Convert the unique array back to a JSON string
+    const uniqueJsonString = JSON.stringify(uniqueArray);
+    const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+   
+
     const { signature_path } = signatureimage
     const { map_path } = mapimage
     setAddress1(addressone)
@@ -521,12 +544,17 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setTotaltoll(TotalToll)
     setTripCustomercode(CustomerCode)
     setCategory(Categorygroups)
+    setAddresscustomer(customeraddress1)
+    setAddresscustomer1(customeraddress2)
+    setAddresscustomer2(customeraddress3)
 
     setCalcPackages(packages)
-    setAttachedimage(attachedimagedata)
+    setBookingimage(JSON.parse(uniqueJsonStringbook))
+ 
+    setAttachedimage(JSON.parse(uniqueJsonString))
   }, [particularPdf])
 
- 
+  
 
   return (
     <>
@@ -574,12 +602,12 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Client Name  :</Text>
-                        <Text style={styles.clientName}> {customer}</Text>
+                      <Text style={styles.clientName}> {customer}</Text>
                     </View>
 
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Address        :</Text>
-                     <Text style={styles.clientName}> {address1},{'\n'} {address3},{address2}</Text>
+                      <Text style={styles.clientName}> {addresscustomer},{'\n'} {addresscustomer1},{addresscustomer2}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Category      :</Text>
@@ -591,7 +619,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Emp.No         :</Text>
-                         <Text style={styles.clientName}> {empno}</Text>
+                      <Text style={styles.clientName}> {empno}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Emp.Name    :</Text>
@@ -599,7 +627,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Report Add    :</Text>
-                    <Text style={styles.clientName}> {guestname}</Text>
+                      <Text style={styles.clientName}> {address1},{'\n'} {address3},{address2}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Client Mobile :</Text>
@@ -621,7 +649,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Airport Transfer:</Text>
-                      <Text style={styles.clientName}> {report === "APT" ? "Yes" : "No"}</Text>
+                      <Text style={styles.clientName}> {report ? "Yes" : "No"}</Text>
                     </View>
                     <View style={styles.deatilssection}>
                       <Text style={styles.labeltag}>Ccode              :</Text>
@@ -929,31 +957,62 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                 </View>
 
 
-                <View style={{ flexDirection: 'column', width: '100%' }}>
 
-                  <View style={{ width: "100%" }}>
-                    <Text style={styles.atimg}>Attached image</Text>
-                  </View>
+<View style={{ flexDirection: 'column', width: '100%' }}>
+  {attachedImage && attachedImage.length > 0 ? (
+    <>
+      <View style={{ width: "100%" }}>
+        <Text style={styles.atimg}>Attached image</Text>
+      </View>
+      <View style={[styles.addimg, { width: '100%' }]}>
+        {attachedImage.map((item, index) => (
+          <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
+            <Image src={`${apiUrl}/images/${item.attachedimageurl}`} style={[styles.imagedivadd]} />
+          </View>
+        ))}
+      </View>
+    </>
+  ) : (
+    
+    <View style={{ width: "100%" ,margin:'auto',marginTop:'100px',backgroundColor:'red'}}>
+        <Text style={styles.atimg}>  No Attached image</Text>
+      </View>
+  )}
+</View>
 
-                  <View style={[styles.addimg, { width: '100%' }]}>
-                    {attachedImage?.map((item, index) => (
-                      <View key={index} style={[styles.imgwidth, { padding: '3px' }]} >
-                        <Image src={`${apiUrl}/images/${item.attachedimageurl}`} style={[styles.imagedivadd]} />
-                      </View>
-                    ))
-                    }
-                  </View>
 
-                </View>
+<View style={{ flexDirection: 'column', width: '100%' }}>
+  {bookimage&&bookimage.length > 0 && (
+    <>
+      <View style={{ width: '100%' }}>
+
+            {bookimage.map((item, index) => {
+      const dataimgetype = item.imagees.split('.').pop();
+
+      if (dataimgetype !== "pdf") {
+        return (
+          <View key={index} style={{width:'100%',backgroundColor:'green'}}>
+            <Image src={`${apiUrl}/images/${item.imagees}`} style={{height:'500px'}}  />
+          </View>
+        );
+      } else {
+        return null;
+      }
+    })}
+
+      </View>
+    </>
+  ) 
+}
+    
+  
+</View>
 
 
 
+             
 
-
-
-
-
-
+        
                 {/* </View> */}
 
 
@@ -981,3 +1040,4 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
 }
 export default PdfzipParticularData
+

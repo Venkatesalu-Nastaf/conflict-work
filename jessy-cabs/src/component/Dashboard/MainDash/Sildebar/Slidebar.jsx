@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useData } from "../../MainDash/Sildebar/DataContext2";
 import axios from "axios";
 import "./Sidebar.css";
@@ -45,6 +45,20 @@ import { MdGroupRemove } from "react-icons/md";
 import { HiOutlineUserGroup } from "react-icons/hi";
 
 import { APIURL } from "../../../url";
+
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+
+import { PiWarningCircleBold } from "react-icons/pi";
+
+import Button from "@mui/material/Button";
+
+import { FaUser } from "react-icons/fa";
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+
+import update from "../../../../assets/img/update.png";
 
 const MenuItem = ({
   label,
@@ -96,7 +110,6 @@ const MenuItem = ({
   );
 };
 
-
 const Sidebar = () => {
 
   const apiUrl = APIURL;
@@ -119,27 +132,13 @@ const Sidebar = () => {
     setIsinfodropdownclicked(false);
   }
 
+  document.addEventListener('click', function(event) {
+    if ((!event.target.closest('.mobile-view-sidebar') && !event.target.closest('.bars')) && (!event.target.closest('.menu'))) {
+      closeMenuFunction();
+    }
+  });
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // Check if the clicked element is not within the MainDashboard component
-      if (!event.target.closest('.mobile-view-sidebar') && !event.target.closest('.closedsidebar') && expanded == true) {
-        // Call closeMenuFunction when clicked outside of MainDashboard
-        closeMenuFunction();
-      }
-    };
-
-    
-
-    // Add event listener to handle clicks outside of MainDashboard
-    document.addEventListener('click', handleClickOutside);
-
-    // Cleanup function to remove event listener
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [closeMenuFunction]);
-
+  
   //--------------------------to show logo-----------
 
   const { sharedData } = useData();
@@ -423,6 +422,49 @@ const Sidebar = () => {
   //     return "82%";
   //   } 
   // }
+
+  const [popupOpen, setPopupOpen] = useState(false);
+
+  const handlePopupClose = () => {
+    setPopupOpen(false);
+  };
+
+  const handleLogout = useCallback(() => {
+    setPopupOpen(true);
+  }, []);
+
+  
+const handleLogoutdialog = useCallback(
+  (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    localStorage.removeItem("auth");
+    localStorage.removeItem("username");
+    localStorage.removeItem("useridno");
+    localStorage.removeItem("selectedImage");
+    localStorage.removeItem("selectedprofileImage");
+    localStorage.removeItem("usercompany");
+    localStorage.removeItem("selectedMenuItem");
+    localStorage.removeItem("profileimages")
+    localStorage.removeItem("organizationimages")
+    localStorage.removeItem("selectedusertheme")
+
+    setExpanded(true);
+    navigate("/");
+  },
+  [navigate]
+);
+
+const [openmodal, setOpenmodal] = useState(false);
+
+  const handleClickOpenmodal = () => {
+    setOpenmodal(true);
+  };
+
+  const handleClosemodal = () => {
+    setOpenmodal(false);
+  };
 
   return (
     <>
@@ -1373,7 +1415,7 @@ const Sidebar = () => {
             />
             <div className="header-user-mobile" onClick={closeMenuFunction}>
               <div className="logout-item">
-                <FiLogOut className="logout-icon" />
+                <FiLogOut className="logout-icon"  onClick={handleLogout} />
               </div>
               <div className="user-name-item">
                 <div>
@@ -1405,7 +1447,7 @@ const Sidebar = () => {
                   )}
                 </div>
               </div>
-              <div className="avatar-item">
+              <div className="avatar-item" style={{display: 'flex', alignItems: 'center'}}>
                 <StyledBadge
                   overlap="circular"
                   anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -1416,6 +1458,12 @@ const Sidebar = () => {
                     src={`${apiUrl}/images/${selectedprofileImage}`}
                   />
                 </StyledBadge>
+
+                <div className="user-icon-update" onClick={handleClickOpenmodal}>
+                  <FaUser />
+                  <div className="user-icon-update-dot"></div>
+                </div>
+                
               </div>
             </div>
           </div>
@@ -1434,6 +1482,52 @@ const Sidebar = () => {
         </motion.div>
       )}
 
+
+      <Modal open={openmodal} onClose={handleClosemodal}>
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '70%',
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 4,
+        }}>
+          <div>
+            <img src={update} alt="update-image" style={{width: '100%'}}/>
+          </div>
+          <Button onClick={handleClosemodal} variant="contained">
+            Close
+          </Button>
+        </Box>
+      </Modal>
+
+
+          <Dialog open={popupOpen} onClose={handlePopupClose}>
+            {/* <p>sdfghjkl;'</p> */}
+            <DialogContent>
+              <p className="modal-warning-icon">< PiWarningCircleBold className="warning-icon" /></p>
+              <p className="modal-warning-text">Are you sure want to logout from this <br /> application ?</p>
+            </DialogContent>
+            <DialogActions className="yes-no-buttons">
+              <Button
+                onClick={handleLogoutdialog}
+                variant="contained"
+                className="logout-btn"
+              >
+                Yes, I'm Sure
+              </Button>
+              <Button
+                onClick={handlePopupClose}
+                variant="contained"
+                className="logout-cancel-btn"
+              >
+                NO, Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
 
     </>
   );

@@ -77,7 +77,7 @@ export default function BasicTable() {
       <h1>Live Driver Status</h1>
 
       <TableContainer
-        className="Scroll-Style"
+        className="Scroll-Style total-table"
         component={Paper}
         style={{ boxShadow: "0px 13px 20px 0px #80808029" }}
       >

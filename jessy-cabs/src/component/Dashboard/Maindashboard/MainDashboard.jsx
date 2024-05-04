@@ -19,7 +19,8 @@ import { FaPowerOff } from "react-icons/fa";
 import { IoPower } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { PermissionContext } from "../../context/permissionContext";
-
+import update from "../../../assets/img/update.png"
+import { FaTimes } from 'react-icons/fa'; // Import the close icon from react-icons/fa
 
 // import axios from "axios";
 
@@ -226,41 +227,41 @@ const MainDashboard = () => {
     }
   }, [data1, data2, data4, data5, setUserdashboard, data6, selectedImage, storedusertheme]);
 
-  const [openmodal, setOpenmodal] = useState(false);
+  const [isPopupVisible, setPopupVisible] = useState(false);
 
-  const handleClickOpenmodal = () => {
-    setOpenmodal(true);
+  const handleIconClick = () => {
+    setPopupVisible(!isPopupVisible);
   };
 
-  const handleClosemodal = () => {
-    setOpenmodal(false);
+  const handlePopupmodalClose = () => {
+    setPopupVisible(false);
   };
 
 
   return (
     <>
 
-      <Modal open={openmodal} onClose={handleClosemodal}>
-        <Box sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 4,
-        }}>
-          <h2>This is a Popup</h2>
-          <p>
-            You can put any content or components inside this popup.
-          </p>
-          <Button onClick={handleClosemodal} variant="contained">
-            Close
-          </Button>
-        </Box>
-      </Modal>
+     
+
+
+      {isPopupVisible && (
+                  <div className="popup" onClick={handlePopupmodalClose}>
+                    <div className="update-card ">
+
+                    <div className="close-button-container">
+              <button className="close-button" onClick={handlePopupmodalClose}>
+                {/* Close icon */}
+                <FaTimes />
+              </button>
+            </div>
+                      <img src={update} alt="update" className="whats-new-image" />
+                      <h3 className="text-black update-text py-3">
+                        Update for more Features
+                      </h3>
+                      <button className="update-button">update</button>
+                    </div>
+                  </div>
+                )}
 
 
 
@@ -310,6 +311,7 @@ const MainDashboard = () => {
                 {storedUsername ? (
                   <div>
                     <p onClick={navigateToUserSettings}>{storedUsername}</p>
+                    <div className="alert-popup-main">
                     {success && (
                       <div className="alert-popup Success">
                         <div className="popup-icon">
@@ -322,6 +324,7 @@ const MainDashboard = () => {
                         <p>{success}</p>
                       </div>
                     )}
+                    </div>
                   </div>
                 ) : (
                   <div>
@@ -336,7 +339,7 @@ const MainDashboard = () => {
 
               {/* <div className="user-icon-update"> */}
 
-              <div className="user-icon-update" onClick={handleClickOpenmodal}>
+              <div className="user-icon-update" onClick={handleIconClick}>
                 <FaUser />
                 <div className="user-icon-update-dot"></div>
               </div>

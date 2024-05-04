@@ -6,19 +6,23 @@ import { UpdatesData } from "./Update-Data.js";
 const Updates = () => {
   return (
     <div className="Updates">
-      {UpdatesData.map((update) => {
+<h3 style={{color:'#000000'}}> Updates</h3>    
+  
+    {UpdatesData.map((update) => {
         return (
           <div className="update" key={update.id}>
             {/* <img src={CgProfile} alt="profile" /> */}
-            <span className="img">
+          
+            <div className="img">
               <CgProfile />
-            </span>
+            </div>
             <div className="noti">
               <div style={{ marginBottom: "0.5rem" }}>
                 <span className="update-username">{update.name}</span>
                 <span> {update.noti}</span>
-              </div>
               <span className="update-time">{update.time}..</span>
+
+              </div>
             </div>
           </div>
         );

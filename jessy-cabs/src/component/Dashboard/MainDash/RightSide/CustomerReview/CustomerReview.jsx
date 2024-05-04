@@ -162,7 +162,7 @@ const CustomerReview = () => {
     }
   };
   return (
-    <div id="chart" style={{ maxWidth: '650px'}}>
+    <div id="chart" className='weekly-chart'>
       <div style={{display:'flex', gap:'0px'}}>
         <button onClick={() => handleFilterChange('daily')}  className='graph-all-button'>All</button>
         <button onClick={() => handleFilterChange('weekly')} className='graph-weekly-button'>Weekly</button>

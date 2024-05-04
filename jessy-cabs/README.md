@@ -78,3 +78,6 @@ npm install react-apexcharts apexcharts -for apex chart
 
 
 npm install apexcharts - for apex charts
+
+
+npm install @mui/material @emotion/react @emotion/styled - for mui styles

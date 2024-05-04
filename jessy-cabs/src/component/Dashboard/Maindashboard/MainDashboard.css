@@ -98,7 +98,7 @@
 
 .glass::-webkit-scrollbar {
   width:3px;
-  color: red;
+  /* color: red; */
 }
 @media screen and (max-width: 1200px) {
   /* .glass { */

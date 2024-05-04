@@ -57,8 +57,8 @@
     padding-top: 20px;
     border-radius: 20px;
     color: #000;
-    /* background-color: var(--glass); */
-    background-color: #f0ece2;
+    background-color: var(--glass);
+    /* background-color: #f0ece2; */
 }
 
 .RateValidity-form .Title-Name {

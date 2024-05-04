@@ -38,10 +38,28 @@ th {
 .Details {
   color: #00b5ff !important;
 }
+@media screen and (min-width:769px) and (max-width: 804px) {
+  .Table{
+    width: 79% !important;
+  }
+}
+
+@media screen and (min-width:804.99px) and (max-width: 840px) {
+  .Table{
+    width: 83% !important;
+  }
+}
+
+@media screen and (min-width:841px) and (max-width: 881px) {
+  .Table{
+    width: 87% !important;
+  }
+}
 
 @media screen and (max-width: 1200px) {
   .Table {
-    width: 170%;
+    /* width: 170%; */
+    width: 97%;
     margin-top: 2rem;
   }
 }

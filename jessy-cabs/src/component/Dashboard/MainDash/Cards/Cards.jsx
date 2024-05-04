@@ -206,9 +206,9 @@ const Cards = () => {
           <option value="11">December</option>
         </select>
       </div>
-      <div className="Cards">
+      <div className="Cards" >
         {cardData.map((card, index) => (
-          <div className="parentContainer" key={index}>
+          <div className="parentContainer cards-dashboard" key={index} >
             <Card
               title={card.title}
               color={card.color}

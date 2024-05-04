@@ -64,3 +64,36 @@
 .graph-yesterday-button:hover {
     transform: scale(1.1); 
 }
+@media only screen and  (max-width:768px) {
+.weekly-chart{
+    width: 90% !important;
+}
+}
+@media only screen and (min-width:855px) and (max-width:888px) {
+    .weekly-chart{
+        width: 390px;
+    }
+}
+
+@media only screen and (min-width:888.99px) and (max-width:960px) {
+    .weekly-chart{
+        width: 430px;
+    }
+}
+
+@media only screen and (min-width:960.99px) and (max-width:1021px) {
+    .weekly-chart{
+        width: 470px;
+    }
+}
+@media only screen and (min-width:1021.99px) and (max-width:1103px) {
+    .weekly-chart{
+        width: 500px;
+    }
+}
+
+@media only screen and (min-width:1103.99px) and (max-width:1219px) {
+    .weekly-chart{
+        width: 600px;
+    }
+}

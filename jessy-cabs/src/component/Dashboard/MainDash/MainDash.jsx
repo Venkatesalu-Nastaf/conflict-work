@@ -38,7 +38,10 @@ const MainDash = () => {
             <Cards />
             <Table />
           </div>
+          <div>
           <RightSide />
+            
+          </div>
         </>
       )}
     </>

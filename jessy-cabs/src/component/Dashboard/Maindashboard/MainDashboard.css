@@ -90,9 +90,16 @@
     overflow: scroll;
     padding-bottom: 20px;
   }
-  
+  .glass::-webkit-scrollbar {
+  width:3px;
+  /* color: red; */
+}
 }
 
+.glass::-webkit-scrollbar {
+  width:3px;
+  color: red;
+}
 @media screen and (max-width: 1200px) {
   /* .glass { */
     /* grid-template-columns: 10% 50% auto; */

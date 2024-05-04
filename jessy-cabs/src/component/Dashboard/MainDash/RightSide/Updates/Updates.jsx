@@ -6,7 +6,7 @@ import { UpdatesData } from "./Update-Data.js";
 const Updates = () => {
   return (
     <div className="Updates">
-<h3 style={{color:'#000000'}}> Updates</h3>    
+<h3 style={{color:'#000000', margin: '0px'}}> Updates</h3>    
   
     {UpdatesData.map((update) => {
         return (

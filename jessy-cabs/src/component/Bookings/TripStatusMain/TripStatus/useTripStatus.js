@@ -222,6 +222,15 @@ const useDispatched = () => {
     };
 
     const handleButtonClick = (row) => {
+        console.log(row.status,"st")
+        
+        if(row.status === "Cancelled"){
+            setError(true);
+            setErrorMessage("booking cancelled")
+            return
+
+        }
+
         setSelectedRow(row);
         setPopupOpen(true);
     };

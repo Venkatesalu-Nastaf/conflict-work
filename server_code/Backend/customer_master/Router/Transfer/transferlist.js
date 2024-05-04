@@ -61,7 +61,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
         vehicleDataMap[row.vehiclename] = { fueltype: row.fueltype, segement: row.segement, Groups: row.Groups };
 
       });
-      db.query('select customer,gstTax from customers where customer=?', [customer], (err, result2) => {
+      db.query('select customer,gstTax,address1,address2,city from customers where customer=?', [customer], (err, result2) => {
         if (err) {
           return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
         }
@@ -73,7 +73,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
 
         result2.forEach(row => {
           // vehicleDataMap[row.customer]={gsttax:row.gstTax}
-          vehicleDataMap[row.customer] = { gsttax: row.gstTax };
+          vehicleDataMap[row.customer] = { gsttax: row.gstTax,Customeraddress1:row.address1,Customeraddress2:row.address2,Customercity:row.city };
 
         })
 
@@ -87,6 +87,9 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
           obj.segement = vehicleData ? vehicleData.segement : 'Unknown';
           obj.Groups = vehicleData ? vehicleData.Groups : 'unknown';
           obj.gstTax = customerdetails ? customerdetails.gsttax : 'unknown'
+          obj.CustomerAddress1 = customerdetails ? customerdetails.Customeraddress1 : 'unknown'
+          obj.CustomerAddress2= customerdetails ? customerdetails.Customeraddress2 : 'unknown'
+          obj.Customercity= customerdetails ? customerdetails.Customercity : 'unknown'
         });
 
 
@@ -292,36 +295,40 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
       db.query(
         `
         SELECT 
-          ts.*, 
-          vi.fueltype AS fueltype, 
-          vi.segement AS segment, 
-          vi.Groups AS Groups, 
-          c.gstTax AS gstTax,
-          bo.report AS Report,
-          JSON_ARRAYAGG(JSON_OBJECT('attachedimageurl', us.path)) AS Attachedimage,
-          JSON_ARRAYAGG(JSON_OBJECT('trip_type', gd.trip_type, 'place_name', gd.place_name)) AS gmapdata,
-          JSON_OBJECT('signature_path', s.signature_path) AS signature_data,
-          JSON_OBJECT('map_path', mi.path) AS map_data
-        FROM 
-          tripsheet AS ts
-        LEFT JOIN 
-          vehicleinfo AS vi ON ts.vehType = vi.vehiclename
-        LEFT JOIN 
-          customers AS c ON ts.customer = c.customer
-        LEFT JOIN 
-          gmapdata AS gd ON ts.tripid = gd.tripid
-        LEFT JOIN 
-          signatures AS s ON ts.tripid = s.tripid
-        LEFT JOIN 
-          mapimage AS mi ON ts.tripid = mi.tripid
-          LEFT JOIN 
-          tripsheetupload AS us ON ts.tripid = us.tripid
-          LEFT JOIN 
-          booking AS bo ON ts.tripid = bo.tripid
-        WHERE 
-          ts.customer = ? AND ts.tripid = ?
-        GROUP BY 
-          ts.tripid
+        ts.*, 
+        vi.fueltype AS fueltype, 
+        vi.segement AS segment, 
+        vi.Groups AS Groups, 
+        c.gstTax AS gstTax,
+        c.address1 AS Customeraddress1,
+        c.address2 AS Customeraddress2,
+        c.city AS Customeraddress3,
+        JSON_ARRAYAGG(JSON_OBJECT('imagees',tri.name)) AS bookattachedimage,
+        JSON_ARRAYAGG(JSON_OBJECT('attachedimageurl', us.path)) AS Attachedimage,
+        JSON_ARRAYAGG(JSON_OBJECT('trip_type', gd.trip_type, 'place_name', gd.place_name)) AS gmapdata,
+        JSON_OBJECT('signature_path', s.signature_path) AS signature_data,
+        JSON_OBJECT('map_path', mi.path) AS map_data
+    FROM 
+        tripsheet AS ts
+    LEFT JOIN 
+        vehicleinfo AS vi ON ts.vehType = vi.vehiclename
+    LEFT JOIN 
+        customers AS c ON ts.customer = c.customer
+    LEFT JOIN 
+        gmapdata AS gd ON ts.tripid = gd.tripid
+    LEFT JOIN 
+        signatures AS s ON ts.tripid = s.tripid
+    LEFT JOIN 
+        mapimage AS mi ON ts.tripid = mi.tripid
+    LEFT JOIN 
+        tripsheetupload AS us ON ts.tripid = us.tripid
+    LEFT JOIN 
+        tripsheetupload AS tri ON ts.tripid = tri.bookingno
+    WHERE 
+        ts.customer = ? AND ts.tripid = ?
+    GROUP BY 
+        ts.tripid;
+    
         `,
         [decodedCustomer, tripid],
         (err, result) => {
@@ -337,9 +344,11 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
 
   Promise.all(promises)
     .then(results => {
+    
       return res.status(200).json(results);
     })
     .catch(error => {
+      console.log(error)
       return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
     });
 });

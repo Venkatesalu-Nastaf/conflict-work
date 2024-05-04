@@ -7,7 +7,10 @@ import dayjs from 'dayjs';
 import JSZip from 'jszip';
 
 import {  pdf } from '@react-pdf/renderer';
+import { PDFDocument } from 'pdf-lib';
+
 import PdfzipParticularData from './Pdfpatricularzipdata'
+
 
 
 
@@ -16,6 +19,7 @@ const useExeclpage = () => {
     // const [misformat,setMisformat]=useState('')
     const [error1, setError1] = useState(false)
     const [errormessage1, setErrorMessage1] = useState({})
+    
     const columns2 = [
         { key: "SNo", header: "Ref", width: 130 },
         { key: "department", header: "Hub Location", width: 150 },
@@ -342,7 +346,7 @@ const useExeclpage = () => {
 
 
     const handledatazipDownload = async (misformat, invoice, invoicedate,customer,organizationsdetail1,imageorganisation,rowSelectionModel ) => {
-        console.log(misformat,"m", invoice,"in", invoicedate, customer,"zipexcel",rowSelectionModel,"mo")
+        // console.log(misformat,"m", invoice,"in", invoicedate, customer,"zipexcel",rowSelectionModel,"mo")
         const data = invoice;
         const customername=customer;
         const workbook = new Excel.Workbook();
@@ -532,10 +536,14 @@ const useExeclpage = () => {
              
 
             }
-            
-            const pdffolder = zip.folder("pdffolder");
+        
+
+            //  let dataimagebook=[]
+             const pdffolder = zip.folder("pdffolder");
             const pdfPromises = invoice?.map(async (pdfData, index) => {
-              console.log(pdfData,"modedata")
+            //   console.log(pdfData,"modedata")
+            //  dataimagebook=pdfData.bookattachedimage
+           
             
               const blob = await pdf(
                   <PdfzipParticularData
@@ -546,11 +554,96 @@ const useExeclpage = () => {
                      
                   />
               ).toBlob();
+             
+              const pdfBytes = await blob.arrayBuffer(); 
+              
+            const reactPDFDocument = await PDFDocument.load(pdfBytes);
+           
+            // const filePath="http://localhost:8081/images/file_1714625961618.pdf"
+            // const externalPDFBytes = await fetch(filePath).then((response) => response.arrayBuffer());
+            
+        
+            const data=  await JSON.parse(pdfData.bookattachedimage)
+            const uniqueArraybook = Array.from(new Set(data?.map(JSON.stringify)))?.map(JSON.parse);
+            const uniqueJsonStringbook = JSON.stringify(uniqueArraybook);
+            const datalink=JSON.parse(uniqueJsonStringbook)
           
+          
+            // return datalink
+            
+            
+            // console.log(pdfPromises1,"pmisddd")
+          
+            const pdfDocuments = [];
+            for (const data of datalink) {
+                if(data.imagees !== null){
+                    const data2=data.imagees.split('.').pop()
+                    if(data2 === "pdf"){
+
+                    
+                 
+
+                // Construct the file path for fetching the PDF
+                const filePath = `http://localhost:8081/images/${data.imagees}`;
+                
+                // Fetch the PDF file
+                const response = await fetch(filePath);
+                const pdfBytes = await response.arrayBuffer();
+               
+                // Load the PDF document
+                const pdfDocument = await PDFDocument.load(pdfBytes);
+                console.log(pdfDocument)
+            
+                // Add the PDF document to the array
+                pdfDocuments.push(pdfDocument);
+                }
+            }
+            }
+            
+           
+            // const filePath = `http://localhost:8081/images/${datalink.imagees}`;
+// const response = await fetch(filePath);
+// const pdfBytes3 = await response.arrayBuffer();
+            // console.log(pdfBytes3,"byyyy")
+            // const externalPDFDocument = await PDFDocument.load(pdfBytes3);
+            // console.log(externalPDFDocument,"external",typeof(externalPDFDocument))
+            const mergedPDFDocument = await PDFDocument.create();
+            // console.log(mergedPDFDocument)
+
+        // // Add pages from React PDF
+        const [firstReactPage, ...restReactPages] = await mergedPDFDocument.copyPages(reactPDFDocument, reactPDFDocument.getPageIndices());
+        mergedPDFDocument.addPage(firstReactPage);
+        for (const page of restReactPages) {
+            mergedPDFDocument.addPage(page);
+        }
+
+        // Add pages from external PDF
+
+       
+
+// Add pages from each PDF document to the merged PDF document
+for (const pdfDocument of pdfDocuments) {
+    // console.log(pdfDocument,"doc")
+    const pages = await mergedPDFDocument.copyPages(pdfDocument, pdfDocument.getPageIndices());
+    for (const page of pages) {
+        // console.log(page,"docpage")
+        mergedPDFDocument.addPage(page);
+    }
+}
+        // const externalPages = await mergedPDFDocument.copyPages(externalPDFDocument, externalPDFDocument.getPageIndices());
+        // for (const page of externalPages) {
+        //     mergedPDFDocument.addPage(page);
+        // }
+             
+              
+            
+              
+        
+        const mergedPDFBytes = await mergedPDFDocument.save();
               const fileName = `PDF_${index + 1}.pdf`; 
               // console.log(blob,"pdfblob")
               // zip.file(fileName, blob);
-              pdffolder.file(fileName, blob);
+              pdffolder.file(fileName,mergedPDFBytes);
           
               // Return the filename for tracking
           });

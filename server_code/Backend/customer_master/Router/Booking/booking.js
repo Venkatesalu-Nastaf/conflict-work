@@ -78,14 +78,35 @@ router.delete('/booking/:bookingno', (req, res) => {
 router.put('/booking/:bookingno', (req, res) => {
     const bookingno = req.params.bookingno;
     const updatedCustomerData = req.body;
+    console.log(updatedCustomerData.status,"sttt")
     db.query('UPDATE booking SET ? WHERE bookingno = ?', [updatedCustomerData, bookingno], (err, result) => {
         if (err) {
+        
             return res.status(500).json({ error: "Failed to update data in MySQL" });
         }
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Customer not found" });
         }
-        return res.status(200).json({ message: "Data updated successfully" });
+        if (updatedCustomerData.status === "Cancelled") {
+        
+            db.query('UPDATE tripsheet SET status = ? WHERE bookingno = ?', [updatedCustomerData.status, bookingno], (err, result1) => {
+                if (err) {
+                  
+                    return res.status(500).json({ error: "Failed to update data in MySQL" });
+                }
+
+                if (result1.affectedRows > 0) {
+                   
+                    return res.status(200).json({ message: "Data updated successfully" });
+                }
+            });
+        } else {
+            // If the status is not "Cancelled", simply send the response here
+            return res.status(200).json({ message: "Data updated successfully" });
+        }
+
+       
+        // return res.status(200).json({ message: "Data updated successfully" });
     });
 });
 //booking number change

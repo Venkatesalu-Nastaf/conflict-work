@@ -191,7 +191,6 @@ const Booking = () => {
 
   } = useBooking();
 
-  console.log(rowdriver, "driver");
 
   useEffect(() => {
     if (actionName === "List") {

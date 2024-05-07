@@ -41,7 +41,7 @@ export const PermissionProvider = ({ children }) => {
 
 
     return (
-        <PermissionContext.Provider value={{ permissions, makeRender, setMakeRender, setUser_id }}>
+        <PermissionContext.Provider value={{ permissions, setPermission, makeRender, setMakeRender, setUser_id }}>
             {children}
         </PermissionContext.Provider>
     )

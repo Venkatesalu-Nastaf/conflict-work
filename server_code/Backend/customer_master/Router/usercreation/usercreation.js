@@ -27,7 +27,6 @@ const upload = multer({
 
 router.post('/usercreation-add', async (req, res) => {
   const { book, permissionsData } = req.body;
-  // console.log(permissionsData[0])
   const { username, stationname, designation, organizationname, userpassword, active } = book;
 
   try {
@@ -40,10 +39,9 @@ VALUES (?,?,?,?,?,?)`, [username, stationname, designation, organizationname, us
         const userid = result[0]?.userid
 
         if (userid) {
-          console.log("userid ", res)
           for (const permission of permissionsData) {
             db.query(
-              'INSERT INTO user_permissions(user_id, page_name, `read`, `new`, `modify`, `delete`) VALUES (?, ?, ?, ?, ?, ?)',
+              'INSERT INTO user_permissions(user_id, name, `read`, `new`, `modify`, `delete`) VALUES (?, ?, ?, ?, ?, ?)',
               [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete]
             );
           }
@@ -63,38 +61,10 @@ VALUES (?,?,?,?,?,?)`, [username, stationname, designation, organizationname, us
 });
 
 
-
-//--------------------------------------------------------
-// delete user creation data
-// router.delete('/usercreation-delete/:userid', (req, res) => {
-//   const userid = req.params.userid;
-//   console.log("idd", userid)
-
-//   db.query('DELETE FROM usercreation WHERE userid = ?', userid, (err, result) => {
-//     if (err) {
-//       return res.status(500).json({ error: "Failed to delete data from MySQL" });
-//     }
-//     if (result.affectedRows === 0) {
-//       return res.status(404).json({ error: "Customer not found" });
-//     }
-
-
-//     db.query('delete from user_permissions where user_id=?', userid, (err, result) => {
-//       if (err) {
-//         return res.status(500).json({ error: "Failed to delete data from MySQL" });
-//       }
-//       if (result.affectedRows === 0) {
-//         return res.status(404).json({ error: "Customer not found" });
-//       }
-//     })
-//     return res.status(200).json({ message: "Data deleted successfully" });
-//   });
-// });
-
-
+// user Deletion
 router.delete('/usercreation-delete/:userid', (req, res) => {
+
   const userid = req.params.userid;
-  console.log("idd", userid);
 
   // Delete from user_permissions table
   db.query('DELETE FROM user_permissions WHERE user_id = ?', userid, (err, permissionResult) => {
@@ -102,7 +72,7 @@ router.delete('/usercreation-delete/:userid', (req, res) => {
       return res.status(500).json({ error: "Failed to delete permissions data from MySQL" });
     }
 
-    // Delete from usercreation table
+    // Delete from usercreation table------
     db.query('DELETE FROM usercreation WHERE userid = ?', userid, (err, userResult) => {
       if (err) {
         return res.status(500).json({ error: "Failed to delete user data from MySQL" });
@@ -126,7 +96,6 @@ router.delete('/usercreation-delete/:userid', (req, res) => {
 router.put('/usercreation-edit/:userid', async (req, res) => {
 
   const { updatedCustomer, permissionsData } = req.body;
-  // console.log(permissionsData[0])
   const { userid, username, stationname, designation, organizationname, userpassword, active } = updatedCustomer;
 
   try {
@@ -136,7 +105,7 @@ router.put('/usercreation-edit/:userid', async (req, res) => {
     // Insert new permissions
     for (const permission of permissionsData) {
       await db.query(
-        'INSERT INTO user_permissions(user_id, page_name, `read`, `new`, `modify`, `delete`) VALUES (?, ?, ?, ?, ?, ?)',
+        'INSERT INTO user_permissions(user_id, name, `read`, `new`, `modify`, `delete`) VALUES (?, ?, ?, ?, ?, ?)',
         [userid, permission.name, permission.read, permission.new, permission.modify, permission.delete]
       );
     }

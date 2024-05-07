@@ -40,6 +40,13 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
 
               </td>
             </tr>
+
+            <tr >
+              <td className='td-content Booking-table'>Dashbord </td>
+              <td className='td-content'><input type="checkbox" checked={permissionsData[20]?.read} onChange={handleCheckboxChange(20, 'read')} /></td>
+            </tr>
+
+
             <tr >
               {/* <td className='td-content Booking-table' onClick={toggleDropdown}> <span>BOOKING</span>{isDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)} */}
               <td className='td-content Booking-table'>BOOKING </td>

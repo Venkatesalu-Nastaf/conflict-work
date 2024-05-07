@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./Form.css";
 import axios from "axios";
 import { useUser } from './UserContext';
@@ -15,6 +15,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 // import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";
 // import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircleFill";
 import { APIURL } from "../url.js";
+import { PermissionContext } from "../context/permissionContext.js";
 
 
 const Login = () => {
@@ -43,38 +44,14 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (error) {
+    if (error || success || warning || info) {
       const timer = setTimeout(() => {
         hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [error]);
+  }, [error, success, warning, info]);
 
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
-  useEffect(() => {
-    if (warning) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [warning]);
-  useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [info]);
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -82,7 +59,15 @@ const Login = () => {
 
   useEffect(() => {
     if (localStorage.getItem("auth")) navigate("/");
+
   });
+
+
+
+  // Permission ------------
+  const { permissions } = useContext(PermissionContext)
+
+  const Dashbord_read = permissions[20]?.read;
 
   const formSubmitter = async (e) => {
     e.preventDefault();
@@ -92,7 +77,16 @@ const Login = () => {
         setUserdashboard(true)
         loginUser(input.username);
         setSuccessMessage("Successfully Added");
-        navigate("/home/dashboard");
+
+        if (Dashbord_read === 1) {
+          navigate("/home/dashboard");
+          console.log("/ home / dashboard", Dashbord_read)
+        } else {
+          navigate("/home/bookings/booking");
+          console.log("home/bookings/booking", Dashbord_read)
+        }
+
+        console.log("Dashbord_read-login", Dashbord_read)
         localStorage.setItem("auth", true);
       } else {
         setError(true);

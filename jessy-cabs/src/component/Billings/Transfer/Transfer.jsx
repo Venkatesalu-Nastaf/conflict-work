@@ -28,7 +28,7 @@ const Transfer = () => {
       <div className="container-main">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Box className='head-tab-transfer' sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="Transfer List" value="transferlist" />
                 <Tab label="Data Entry" value="dataentry" />

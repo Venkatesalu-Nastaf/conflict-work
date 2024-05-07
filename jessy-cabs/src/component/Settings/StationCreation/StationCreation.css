@@ -39,7 +39,7 @@
   width: 81vw;
   display: flex;
   flex-direction: column;
-  padding-top: 28px;
+  /* padding-top: 28px; */
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
@@ -139,9 +139,9 @@
 
 .station-creation-heading{
   position: sticky;
-  top: -27px;
+  top: 0px;
   z-index: 5;
-  /* background-color: #f0ece2; */
-  padding: 10px 10px 10px 10px ;
+  background-color: #ffffff;
+  padding: 40px 10px 10px 0px ;
   margin: 0px;
 }

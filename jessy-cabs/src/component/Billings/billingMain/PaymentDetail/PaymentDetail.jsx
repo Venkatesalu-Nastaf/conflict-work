@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./PaymentDetail.css";
 
 import Button from "@mui/material/Button";
@@ -20,6 +20,7 @@ import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import usePaymentdetails from './usePaymentdetails';
+import { PermissionContext } from '../../../context/permissionContext';
 
 
 const PaymentDetail = () => {
@@ -62,6 +63,12 @@ const PaymentDetail = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+
+
+  const { permissions } = useContext(PermissionContext)
+
+  const Billing_read = permissions[5]?.read;
+
 
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
@@ -122,7 +129,7 @@ const PaymentDetail = () => {
               </div>
               <div className="input-field" style={{ justifyContent: 'center' }}>
                 <div className="input" style={{ width: "140px" }}>
-                  <Button variant="contained" onClick={handleShow} >Search</Button>
+                  <Button variant="contained" disabled={!Billing_read} onClick={handleShow} >Search</Button>
                 </div>
               </div>
             </div>
@@ -162,7 +169,7 @@ const PaymentDetail = () => {
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
                 <React.Fragment>
-                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  <Button variant="contained" disabled={!Billing_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                     Download
                   </Button>
                   <Menu {...bindMenu(popupState)}>

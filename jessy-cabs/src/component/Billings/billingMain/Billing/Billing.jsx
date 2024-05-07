@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./Billing.css";
 import {
     Autocomplete,
@@ -46,6 +46,7 @@ import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import { faArrowRightArrowLeft, faMoneyBillTransfer, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
 import useBilling from './useBilling';
+import { PermissionContext } from '../../../context/permissionContext';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -58,13 +59,13 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
         left: theme.spacing(2),
     },
 }));
-const actions = [
-    { icon: <PrintIcon />, name: "Print" },
-    { icon: <CancelPresentationIcon />, name: "Cancel" },
-    { icon: <DeleteIcon />, name: "Delete" },
-    { icon: <ModeEditIcon />, name: "Edit" },
-    { icon: <BookmarkAddedIcon />, name: "Add" },
-];
+// const actions = [
+//     { icon: <PrintIcon />, name: "Print" },
+//     { icon: <CancelPresentationIcon />, name: "Cancel" },
+//     { icon: <DeleteIcon />, name: "Delete" },
+//     { icon: <ModeEditIcon />, name: "Edit" },
+//     { icon: <BookmarkAddedIcon />, name: "Add" },
+// ];
 
 const Billing = () => {
 
@@ -125,6 +126,14 @@ const Billing = () => {
             handleClick(null, 'List');
         }
     }, [actionName, handleClick]);
+
+
+    const { permissions } = useContext(PermissionContext)
+
+    const Billing_read = permissions[5]?.read;
+    const Billing_new = permissions[5]?.new;
+    const Billing_modify = permissions[5]?.modify;
+    const Billing_delete = permissions[5]?.delete;
 
     return (
         <div className="form-container">
@@ -748,21 +757,7 @@ const Billing = () => {
                                         id="amount"
                                     />
                                 </div>
-                                {/* <div className="input" style={{ width: "260px", paddingTop: "10px" }}>
-                                    <div className="icone">
-                                        <FontAwesomeIcon icon={faWindowRestore} size="lg" />
-                                    </div>
-                                    <TextField
-                                        type='number'
-                                        label="Customer-Advance"
-                                        name='customeradvance'
-                                        autoComplete="new-password"
-                                        value={book.customeradvance || ''}
-                                        onChange={handleChange} 
-                                        size="small"
-                                        id="amount"
-                                    />
-                                </div> */}
+
                             </div>
                         </div>
                         <div className="Billing-secend-right">
@@ -811,7 +806,6 @@ const Billing = () => {
                                         label="Gross Amount"
                                         name="GrossAmount"
                                         autoComplete="new-password"
-                                        // value={calculateGrossAmount() || book.GrossAmount || ''}
                                         value={total_GrossAmount() || book.GrossAmount || ''}
                                         onChange={handleChange}
                                     />
@@ -1079,7 +1073,7 @@ const Billing = () => {
                         icon={<SpeedDialIcon />}
                         direction="left"
                     >
-                        {actions.map((action) => (
+                        {/* {actions.map((action) => (
                             <SpeedDialAction
                                 key={action.name}
                                 icon={action.icon}
@@ -1087,7 +1081,54 @@ const Billing = () => {
                                 onClick={(event) => handleClick(event, action.name)}
 
                             />
-                        ))}
+                        ))} */}
+
+                        {Billing_new === 1 && (
+                            <SpeedDialAction
+                                key="Add"
+                                icon={<BookmarkAddedIcon />}
+                                tooltipTitle="Add"
+                                onClick={(event) => handleClick(event, "Add")}
+                            />
+                        )}
+
+                        {Billing_modify === 1 && (
+                            <SpeedDialAction
+                                key="edit"
+                                icon={<ModeEditIcon />}
+                                tooltipTitle="Edit"
+                                onClick={(event) => handleClick(event, "Edit")}
+                            />
+                        )}
+
+                        {Billing_delete === 1 && (
+                            <SpeedDialAction
+                                key="delete"
+                                icon={<DeleteIcon />}
+                                tooltipTitle="Delete"
+                                onClick={(event) => handleClick(event, "Delete")}
+                            />
+                        )}
+
+
+
+                        <SpeedDialAction
+                            key="Cancel"
+                            icon={<CancelPresentationIcon />}
+                            tooltipTitle="Cancel"
+                            onClick={(event) => handleClick(event, "Cancel")}
+                        />
+
+
+                        {Billing_read === 1 && (
+                            <SpeedDialAction
+                                key="Print"
+                                icon={<PrintIcon />}
+                                tooltipTitle="Print"
+                                onClick={(event) => handleClick(event, "Print")}
+                            />
+                        )}
+
                     </StyledSpeedDial>
                 </Box>
             </div>

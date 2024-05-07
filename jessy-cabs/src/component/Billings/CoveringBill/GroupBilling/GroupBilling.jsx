@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import dayjs from "dayjs";
 import "./GroupBilling.css";
 import Button from "@mui/material/Button";
@@ -27,6 +27,7 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import useGroupbilling from './useGroupbilling';
 import { RefPdfData } from './GroupBillingContext';
 import RefPdfParticularData from './RefPdfParticularData';
+import { PermissionContext } from '../../../context/permissionContext';
 
 const GroupBilling = () => {
 
@@ -76,14 +77,14 @@ const GroupBilling = () => {
         setGstno,
         handleRemoveData
     } = useGroupbilling();
-const {refPdfPrint,refCustomer,referNo} = RefPdfData()
-const [organizationsdetail,setOrganizationDetail]=useState([]);
-const [imageorganisation, setSelectedImageorganisation] = useState(null);
-const { sharedData } = useData();
-const apiUrl = APIURL
- useEffect(() => {
-    setSelectedImageorganisation(sharedData)
-  }, [sharedData])
+    const { refPdfPrint, refCustomer, referNo } = RefPdfData()
+    const [organizationsdetail, setOrganizationDetail] = useState([]);
+    const [imageorganisation, setSelectedImageorganisation] = useState(null);
+    const { sharedData } = useData();
+    const apiUrl = APIURL
+    useEffect(() => {
+        setSelectedImageorganisation(sharedData)
+    }, [sharedData])
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
@@ -92,39 +93,49 @@ const apiUrl = APIURL
 
     useEffect(() => {
         const fetchdata = async () => {
-          try {
-            const response = await fetch(`${APIURL}/organisationpdfdata`);
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const organizationdetails = await response.json();
-            setOrganizationDetail(organizationdetails)
-           
-          } catch (err) {
-            console.error('Error fetching customer address:', err);
-          }
-        };
-      
-        fetchdata();
-      }, [APIURL, customer]);
-
-
-      useEffect(()=>{
-        const fetchData = async()=>{
-            const customer = refCustomer[0]
-            if(refCustomer!==""){
             try {
-                const response = await axios.get(`${apiUrl}/gstdetails/${customer}`);
-                setGstno(response.data)
-              } catch (error) {
-                console.error('Errorgst', error);
-                throw error;
-              }
+                const response = await fetch(`${APIURL}/organisationpdfdata`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const organizationdetails = await response.json();
+                setOrganizationDetail(organizationdetails)
+
+            } catch (err) {
+                console.error('Error fetching customer address:', err);
+            }
+        };
+
+        fetchdata();
+    }, [APIURL, customer]);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const customer = refCustomer[0]
+            if (refCustomer !== "") {
+                try {
+                    const response = await axios.get(`${apiUrl}/gstdetails/${customer}`);
+                    setGstno(response.data)
+                } catch (error) {
+                    console.error('Errorgst', error);
+                    throw error;
+                }
+            }
         }
-    }
-   
+
         fetchData()
-    },[apiUrl,refCustomer,setGstno])
+    }, [apiUrl, refCustomer, setGstno])
+
+    // Permission ------------
+    const { permissions } = useContext(PermissionContext)
+
+    const CoveringBill_read = permissions[7]?.read;
+    const CoveringBill_new = permissions[7]?.new;
+
+
+
+
     return (
         <div className="GroupBilling-form Scroll-Style-hide">
             <form >
@@ -147,15 +158,15 @@ const apiUrl = APIURL
                                         autoComplete='off'
                                         onKeyDown={handleKeyenter}
                                     /> */}
-                                       <Autocomplete
+                                    <Autocomplete
                                         fullWidth
                                         id="free-solo-demo"
                                         freeSolo
                                         size="small"
-                                        value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}   
+                                        value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
                                         options={referenceNo || []}
-                                        onKeyDown={handleKeyDown}                                  
-                                        onChange={(event,value)=>setInvoiceno(value)}
+                                        onKeyDown={handleKeyDown}
+                                        onChange={(event, value) => setInvoiceno(value)}
                                         renderInput={(params) => {
                                             return (
                                                 <TextField {...params} label="Reference No" name='ReferenceNo' inputRef={params.inputRef} />
@@ -249,7 +260,7 @@ const apiUrl = APIURL
                                         options={Stations.map((option) => ({
                                             label: option.optionvalue,
                                         }))}
-                                    
+
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {
                                             return (
@@ -261,7 +272,7 @@ const apiUrl = APIURL
                             </div>
                             <div className="input-field">
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow} >View Bill</Button>
+                                    <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >View Bill</Button>
                                 </div>
                             </div>
                         </div>
@@ -272,7 +283,7 @@ const apiUrl = APIURL
                         <PopupState variant="popover" popupId="demo-popup-menu">
                             {(popupState) => (
                                 <React.Fragment>
-                                    <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                    <Button variant="contained" disabled={!CoveringBill_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                                         Download
                                     </Button>
                                     <Menu {...bindMenu(popupState)}>
@@ -285,10 +296,10 @@ const apiUrl = APIURL
                     </div>
                     <div className="input-field">
                         <div className="input" style={{ width: "140px" }}>
-                            <Button variant="contained" onClick={handlegroupData}>Save</Button>
+                            <Button variant="contained" disabled={!CoveringBill_new} onClick={handlegroupData}>Save</Button>
                         </div>
                         <div className="input" >
-                            <Button variant="contained"  onClick={handleRemoveData} >Remove</Button>
+                            <Button variant="contained" onClick={handleRemoveData} >Remove</Button>
                         </div>
                     </div>
                 </div>
@@ -303,9 +314,9 @@ const apiUrl = APIURL
                             onRowSelectionModelChange={(newRowSelectionModel) => {
                                 setRowSelectionModel(newRowSelectionModel);
                                 handleRowSelection(newRowSelectionModel);
-                              }}
-                              selectionModel = {rowSelectionModel}
-                            getRowId={(row)=>row.id}
+                            }}
+                            selectionModel={rowSelectionModel}
+                            getRowId={(row) => row.id}
                             checkboxSelection
                             disableRowSelectionOnClick
                         />
@@ -333,30 +344,30 @@ const apiUrl = APIURL
                     }
                 </div>
                 <Modal
-        open={refPdfPrint}
-        onClose={handlePopup}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '854px',
-            height: '700px',
-            bgcolor: 'background.paper',
-            border: '2px solid #000',
-            boxShadow: 24,
-            p: 4,
-            overflowY:'auto'
-          }}
-        >
-      <RefPdfParticularData pdfData={refPdfData} organizationdetails = {organizationsdetail}  imagename={imageorganisation} refFromDate={refFromDate} refToDate={refToDate} gstno={gstno} referenceno={referNo} />
+                    open={refPdfPrint}
+                    onClose={handlePopup}
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                >
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: '854px',
+                            height: '700px',
+                            bgcolor: 'background.paper',
+                            border: '2px solid #000',
+                            boxShadow: 24,
+                            p: 4,
+                            overflowY: 'auto'
+                        }}
+                    >
+                        <RefPdfParticularData pdfData={refPdfData} organizationdetails={organizationsdetail} imagename={imageorganisation} refFromDate={refFromDate} refToDate={refToDate} gstno={gstno} referenceno={referNo} />
 
-        </Box>
-      </Modal>
+                    </Box>
+                </Modal>
             </form>
         </div>
     )

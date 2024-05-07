@@ -17,7 +17,7 @@
   border-top: solid 1px #ccc;
   background: var(--glass);
   padding: 10px;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   margin-bottom: -10px;
 }
 
@@ -67,7 +67,7 @@
   width: 81vw;
   display: flex;
   flex-direction: column;
-  padding-top: 28px;
+  /* padding-top: 28px; */
   border-radius: 20px;
   color: #000;
   /* background-color: var(--glass); */
@@ -150,4 +150,28 @@
   background-color: #f0ece2;
   padding: 10px ;
   margin: 0px;
+}
+
+.head-tab-tripsheet{
+  position: sticky !important;
+  top: 0px;
+  z-index: 5;
+  background-color: #ffffff;
+  padding: 40px 10px 10px 10px !important;
+  margin: 0px;
+}
+
+.head-tab-tripsheet::after {
+  content: "";
+  position: absolute;
+  bottom: 0px !important;
+  left: 0px !important;
+  width: 100%;
+  border-radius: 20px;
+  height: 3px;
+  background-color: #457cdc;
+}
+
+.form-container .Title-Name{
+  padding-left: 10px !important;
 }

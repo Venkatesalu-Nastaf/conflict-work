@@ -60,11 +60,11 @@
     width: 81vw;
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
+    /* padding-top: 20px; */
     border-radius: 20px;
     color: #000;
-    /* background-color: var(--glass); */
-    background-color: #f0ece2;
+    background-color: var(--glass);
+    /* background-color: #f0ece2; */
 }
 
 .Employe-form .Title-Name {
@@ -164,6 +164,5 @@
   position: sticky;
   top: -19px;
   z-index: 5;
-  background-color: #f0ece2;
-
+  /* background-color: #f0ece2; */
 }

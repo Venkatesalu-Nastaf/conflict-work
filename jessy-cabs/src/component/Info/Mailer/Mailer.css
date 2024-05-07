@@ -47,7 +47,7 @@
     width: 70vw;
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
+    /* padding-top: 20px; */
     border-radius: 20px;
     color: #000;
     background-color: var(--glass);
@@ -81,7 +81,8 @@
 
   .head-tab-mailer{
     position: sticky;
-    top: -28px;
+    top: 0px;
     z-index: 5;
-    background-color: #f0ece2;
+    background-color: #ffffff;
+    padding: 30px 10px 0px 0px;
   }

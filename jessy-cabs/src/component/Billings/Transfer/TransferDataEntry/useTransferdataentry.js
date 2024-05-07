@@ -48,7 +48,7 @@ const useTransferdataentry = () => {
     const [success, setSuccess] = useState(false);
     const [totalTime, setTotalTime] = useState('');
     const [invoiceno, setInvoiceno] = useState("");
-    const [groupId, setGroupId] = useState("")
+    const [groupId, setGroupId] = useState()
     const [fromDate, setFromDate] = useState(dayjs());
     const [endDate, setEndDate] = useState(dayjs());
     const [Billingdate, setBillingdate] = useState(dayjs());
@@ -61,14 +61,17 @@ const useTransferdataentry = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [servicestation, setServiceStation] = useState("");
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
+    const [selectedRow,setSelectedRow] = useState([])
+    const [totalValue,setTotalValue] = useState(0)
     // const [rowselect, setRowselect] = useState()
     const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({});
     const [info, setInfo] = useState(false);
     // const [infoMessage, setInfoMessage] = useState({});
     const location = useLocation();
     const [transferId, setTransferId] = useState([])
-
-
+    const [tripAmount,setTripAmount] = useState('')
+    const [latestTripNo,setLatestTripNo] = useState([])
+    const [latestGroupNo,setLatestGroupNo] = useState(0)
     const { setOrganizationName } = useData()
 
     const convertToCSV = (data) => {
@@ -233,6 +236,7 @@ const useTransferdataentry = () => {
         setFromDate(formData.FromDate)
         setEndDate(formData.EndDate)
         setBillingdate(formData.Billdate)
+        setTotalValue(parseInt(formData.Amount))
     }, [location])
     useEffect(() => {
         const fetchData = async () => {
@@ -242,7 +246,6 @@ const useTransferdataentry = () => {
 
                     const response = await axios.get(`${apiUrl}/tripsheetiddata/${transferId}`);
                     const tripData = await response.data;
-
                     if (Array.isArray(tripData)) {
                         const rowsWithUniqueId = tripData.map((row, index) => ({
                             ...row,
@@ -258,7 +261,7 @@ const useTransferdataentry = () => {
             }
         }
         fetchData()
-    }, [transferId, apiUrl])
+    }, [transferId, apiUrl,location])
 
     //calculate total amount in column
     useEffect(() => {
@@ -336,7 +339,29 @@ const useTransferdataentry = () => {
             .filter((tripid) => tripid !== null);
         // setRowselect(selectedTripIds)
 
+        const selectedTrips = newSelectionModel
+        .filter((selectedId) => selectedId !== null)
+        .map((selectedId) => {
+            const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+            return selectedRow ? selectedRow : null;
+        })
+        .filter((tripid) => tripid !== null);
 
+        const selectedTripAmount = newSelectionModel
+        .filter((selectedId) => selectedId !== null)
+        .map((selectedId) => {
+            const selectedRow = rows.find((row) => row.id === parseInt(selectedId));
+            return selectedRow ? parseInt(selectedRow.netamount) : null;
+        })
+        .filter((tripid) => tripid !== null);
+        // selected trips
+
+        const totalSelectedTripAmount = selectedTripAmount.reduce((total, amount) => total + amount, 0);
+        setTripAmount(totalSelectedTripAmount)
+
+        const handleselectTrips = selectedTrips;
+        console.log(handleselectTrips,'selectes Trips');
+        setSelectedRow(selectedTrips)
         const tripsheetid = selectedTripIds;
         setRowSelectionModel(tripsheetid);
         localStorage.setItem('selectedtripsheetid', tripsheetid);
@@ -351,16 +376,51 @@ const useTransferdataentry = () => {
         handleButtonClickTripsheet();
     };
 
-    const handleButtonClickTripsheet = () => {
+    // const handleButtonClickTripsheet = async() => {
+    //     const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
+    //     const customername = customerdata;
+    //     const response = await axios.put(`${apiUrl}/statusChangeTransfer/${invoiceno}`)
+    //     localStorage.setItem('selectedcustomer', customername);
+    //     const storedCustomer = localStorage.getItem('selectedcustomer');
+    //     const decodedCustomer = decodeURIComponent(storedCustomer);
+    //     localStorage.setItem('selectedcustomerdata', decodedCustomer);
+    //     const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&BillDate=${Billingdate}`;
+    //     window.location.href = billingPageUrl;
+    // }
+const handleButtonClickTripsheet = async () => {
+    try {
+        // Validate rowSelectionModel
+        if (!rowSelectionModel) {
+            console.error('Error: rowSelectionModel is undefined or null');
+            return;
+        }
+        
+        const id = rowSelectionModel;
         const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
         const customername = customerdata;
+
+        // Sending PUT requests
+        const response = await axios.put(`${apiUrl}/statusChangeTransfer/${invoiceno}`);
+        const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
+
+        // Setting selected customer data in local storage
         localStorage.setItem('selectedcustomer', customername);
         const storedCustomer = localStorage.getItem('selectedcustomer');
         const decodedCustomer = decodeURIComponent(storedCustomer);
         localStorage.setItem('selectedcustomerdata', decodedCustomer);
+
+        // Constructing billing page URL
         const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&BillDate=${Billingdate}`;
+
+        // Redirecting to billing page
         window.location.href = billingPageUrl;
+    } catch (error) {
+        // Handle any errors that occurred during the requests
+        console.error('Error:', error.message); // You can add custom error handling here
     }
+};
+
+    
 
     const handleBillGenerate = async () => {
         if (rowSelectionModel.length === 0) {
@@ -436,7 +496,6 @@ const useTransferdataentry = () => {
         }));
     };
     const handleAddOrganization = async () => {
-
         if (rowSelectionModel.length === 0) {
             setError(true)
             setErrorMessage("Please select the Row")
@@ -456,9 +515,8 @@ const useTransferdataentry = () => {
             const billDate = dayjs(billdate).format('YYYY-MM-DD');
 
             const OrganizationName = selectedCustomerDatas.customer || customer;
-            const Trips = rows.length;
+            const Trips = rowSelectionModel.length;
             const billstatus = "notbilled";
-
 
 
             const transferlist = {
@@ -469,13 +527,16 @@ const useTransferdataentry = () => {
                 FromDate: fromDate,
                 EndDate: EndDate,
                 Trips: Trips,
-                Amount: totalAmount,
+                Amount: tripAmount,
 
             }
-
             await axios.post(`${apiUrl}/transferlistdatatrip`, transferlist);
             setSuccess(true);
             setSuccessMessage("Successfully added");
+            setRows([])
+            const billingPageUrl = `/home/billing/transfer`
+            window.location.href = billingPageUrl
+
 
 
         } catch (error) {
@@ -484,41 +545,115 @@ const useTransferdataentry = () => {
         }
     }
 
+const lengthofrow = latestTripNo.length-selectedRow.length
+
+useEffect(()=>{
+    const fetchData = async()=>{
+
+        if(lengthofrow===0){
+
+        const getresponse = await axios.delete(`${apiUrl}/deleteTransfer/${latestGroupNo}`)
+        console.log(getresponse,'Delted Successfully');
+
+    }
+    }
+    
+    fetchData()
+},[apiUrl,latestTripNo,lengthofrow])
+
+useEffect(()=>{
+    const fetchData = async()=>{
+
+        if(groupId){
+        const result =   await axios.get(`${apiUrl}/updateTransferListdata/${groupId}`)
+        const response = result.data
+        const trip = response?.map(li => li.Trip_id);
+                    const tripString = trip.join(','); // Join the trip IDs with commas
+        const a = tripString.split(','); // Split the string into an array
+        const b = a.map((li)=>parseInt(li))
+        setLatestTripNo(b)
+        const groupid = response?.map(li => li.Grouptrip_id)[0];
+        const groupTripid = parseInt(groupid)
+        setLatestGroupNo(groupTripid)
+
+    }
+}
+    fetchData()
+},[apiUrl,groupId])
+
 
     const handleBillRemove = async () => {
+        const tripid = selectedRow?.map(row => row.tripid.toString());
+        // const tripid = selectedRow?.map((li)=>li.tripid.toString())
+        const selectId= selectedRow?.map(row => row.id)
+        const Amount = selectedRow?.map(li=>li.netamount.split(',')).flat();
+        const trips =transferId.length -  tripid.length
+        const Trips = trips.toString()
+        const totalAmount = Amount.reduce((acc, curr) => acc + parseFloat(curr), 0);
+        const amount = totalValue - totalAmount
+        const TotalAmount = amount.toString()
+        const updatedRows = rows.filter(row => !selectId.includes(row.id));
+
         if (rowSelectionModel.length === 0) {
             setError(true);
             setErrorMessage('Please select rows before generating the bill.');
             return;
         }
+        setRows(updatedRows);
+        setSelectedRow([]); 
         try {
             const tripids = rowSelectionModel;
+            const TransferUpdate = {
+                Trip_id:tripid,
+                Amount:TotalAmount,
+                Trips:Trips,
+                
+            }
+
             if (tripids.some((tripid) => tripid == null)) {
                 setError(true);
                 setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
                 return;
             }
-            const response = await axios.post(`${apiUrl}/updateStatusremove`, {
-                tripids: tripids,
-                status: 'Opened',
-            });
-            if (response.status === 200) {
-                setSuccess(true);
-                setSuccessMessage('Removed successfully!');
-                setRows([])
-            } else {
-                setError(true);
-                setErrorMessage('Failed to Remove bill. Please try again.');
+         
+            const updatedRows = rows.filter(row => !selectId.includes(row.id));
+
+            setRows(updatedRows);
+            setSelectedRow([]);      
+         try{
+            const resultresponse = await axios.put(`${apiUrl}/updateList`,TransferUpdate)
+            const updatedRows = rows.filter(row => !selectId.includes(row.id));
+
+            setRows(updatedRows);
+            setSelectedRow([]);
+            const responsedata = resultresponse.data
+              if(responsedata.affectedRows>0){
+            const updatedRows = rows.filter(row => !selectId.includes(row.id));
+
+            setRows(updatedRows);
+            setSelectedRow([]);
+            if(latestTripNo.length===0){
+                const getresponse = await axios.delete(`${apiUrl}/deleteTransfer/${latestGroupNo}`)
+                console.log(getresponse,'Deleeeted Successfully');
+             }
+              }
+          
             }
-        } catch {
+            catch(err){
+                console.log(err,'error');
+            }    
+
+            
+          
+      
+        } catch(err) {
             setError(true);
             setErrorMessage('An error occurred. Please try again later.');
+            console.log(err,'error');
         }
+        setRows(updatedRows);
+        setSelectedRow([]);
     };
-
-    // const reversedRows = [...rows].reverse();
-
-
 
     const handleKeyenter = useCallback(async (event) => {
 
@@ -557,7 +692,7 @@ const useTransferdataentry = () => {
             const toDateValue = (selectedCustomerDatas?.todate ? dayjs(selectedCustomerDatas.todate) : toDate).format('YYYY-MM-DD');
             // const servicestationValue = servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || '';
 
-            const response = await axios.get(`${apiUrl}/Group-Billing`, {
+            const response = await axios.get(`${apiUrl}/Transfer-Billing`, {
                 params: {
                     customer: customerValue,
                     fromDate: fromDateValue,

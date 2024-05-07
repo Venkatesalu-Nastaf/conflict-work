@@ -134,7 +134,7 @@ router.get('/tripsheetiddata/:id', (req, res) => {
 
 
   // Prepare the query with placeholders
-  const query = 'SELECT * FROM tripsheet WHERE status = "Closed" AND  tripid IN (?)';
+  const query = 'SELECT * FROM tripsheet WHERE status = "Transfer_Closed" AND  tripid IN (?)';
 
   // Execute the query with tripIds as parameters
   db.query(query, [tripIds], (err, result) => {
@@ -248,6 +248,165 @@ router.get('/gettransfer_list', (req, res) => {
   });
 
 })
+router.put('/updateList', async (req, res) => {
+  try {
+    const { Trip_id, Trips, Amount } = req.body;
+    console.log(typeof(Trip_id), Trip_id, Trips, Amount, 'response');
+
+    const sqlUpdateTransferList = "UPDATE Transfer_list SET Trips = ?, Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
+    
+    const updatePromises = Trip_id.map(tripId => {
+      return new Promise((resolve, reject) => {
+        db.query(sqlUpdateTransferList, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
+          if (err) {
+            console.log(err, 'error');
+            reject(err);
+          } else {
+            console.log(updateGroupBillingResult, 'result');
+            if (updateGroupBillingResult.affectedRows > 0) {
+              resolve(updateGroupBillingResult);
+            } else {
+              reject(new Error("No rows affected"));
+            }
+          }
+        });
+      });
+    });
+
+    // Wait for all update queries to finish
+    const updateResults = await Promise.all(updatePromises);
+    res.status(200).json(updateResults);
+  } catch (err) {
+    console.log(err, 'error');
+    res.status(500).json({ error: "An error occurred. Please try again later." });
+  }
+});
+
+
+router.post('/tripsheetUpdate', (req, res) => {
+  const { tripids, status } = req.body;
+  console.log(tripids, status,'rrrrrrrrrr');
+  const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
+  db.query(query, [status, tripids], (err, results) => {
+    if (err) {
+      res.status(500).json({ message: 'Internal server error' });
+      return;
+    }
+    res.status(200).json({ message: 'Status updated successfully' });
+  });
+});
+
+
+// router.put('/updateList',(req,res)=>{
+//   const {Trip_id,Trips,Amount}= req.body;
+//   console.log(typeof(Trip_id),Trip_id,Trips,Amount,'response');
+//   const sqlUpdateTransferList =  "UPDATE Transfer_list SET Trips = ?, Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
+//   Trip_id.forEach(tripId => {
+//     console.log(tripId, 'tttt');
+//     db.query(sqlUpdateTransferList, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
+//       console.log(Trips, Amount, tripId, 'wwwww');
+//       if (err) {
+//         console.log(err, 'error');
+//         return res.status(500).json({ error: "Failed to update data in MySQL" });
+//       }
+//       console.log(updateGroupBillingResult, 'result');
+//       if(updateGroupBillingResult.affectedRows>0){
+//       res.status(200).json(updateGroupBillingResult)
+//       }
+//     });
+//   });
+// })
+
+// router.put('/statusupdate', (req, res) => {
+//   const { Trips, Amount, Trip_id } = req.body;
+//   console.log(Trips,Amount,Trip_id,typeof(Trip_id),'reqqqqqqqq');
+//   const sqlUpdate = "UPDATE tripsheet SET status = 'Covering_Closed', apps = 'Closed' WHERE tripid = ?";
+//   const sqlUpdateGroupBilling = "UPDATE Group_billing SET Trips=?, Amount=?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0 ";
+
+//   db.query(sqlUpdate, [Trip_id], (err, updateResult) => {
+//     if (err) {
+//       return res.status(500).json({ error: "Failed to update data in MySQL" });
+//     }
+
+//     db.query(sqlUpdateGroupBilling, [Trips, Amount, Trip_id, Trip_id], (err, updateGroupBillingResult) => {
+//       console.log(Trips, Amount, Trip_id,Trip_id,'wwwww');
+//       if (err) {
+//         return res.status(500).json({ error: "Failed to update data in MySQL" });
+//       }
+// console.log(updateGroupBillingResult,'result');
+//       return res.status(200).json({ message: "Data updated successfully" });
+//     });
+//   });
+// });
+
+
+
+router.get('/updateTransferListdata/:groupId', (req, res) => {
+  const groupId= req.params.groupId;
+  console.log(groupId,'gid');
+  const sqlquery = "SELECT * FROM Transfer_list where Grouptrip_id = ?";
+  
+  db.query(sqlquery,[groupId], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    console.log(result,'getlist');
+    return res.status(200).json(result);
+  });
+});
+
+router.delete('/deleteTransfer/:groupid', (req, res) => {
+  const groupid = req.params.groupid;
+  console.log(groupid,'idddd');
+  const sql = "DELETE FROM Transfer_list WHERE Grouptrip_id = ?";
+  
+  db.query(sql, [groupid], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+
+
+
+
+router.put('/statusChangeTransfer/:invoiceno',(req,res)=>{
+  const {invoiceno} = req.params;
+  const sqlquery = 'update Transfer_list set Status="Billed" where Invoice_no = ? ';
+  db.query(sqlquery,[invoiceno],(err,result)=>{
+    if(err){
+      console.log(err,'error');
+    }
+    return res.status(200).json({ message: "Data updated successfully" });
+
+  })
+})
+
+router.put('/statusChangeTripsheet/:tripid', (req, res) => {
+  const { tripid } = req.params;
+
+  // Check if tripid is defined
+  if (!tripid) {
+    return res.status(400).json({ error: "Trip ID is required" });
+  }
+
+  const tripIds = tripid.split(',');
+
+  const sqlquery = 'UPDATE tripsheet SET status="Transfer_Billed" AND apps="Closed" WHERE tripid IN (?)';
+
+  db.query(sqlquery, [tripIds], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.status(200).json({ message: "Data updated successfully" });
+  });
+});
+
 
 
 

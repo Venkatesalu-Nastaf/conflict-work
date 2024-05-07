@@ -106,17 +106,48 @@ router.put('/billing/:tripid', (req, res) => {
   });
 });
 
-router.put('/statusupdate/:tripid',(req,res)=>{
-  const tripid = req.params.tripid;
-db.query('update tripsheet set status="Closed",apps="Be_Closed" where tripid=?',[tripid],(err,result)=>{
-  if (err) {
-    return res.status(500).json({ error: "Failed to update data in MySQL" });
+router.put('/statusupdate', (req, res) => {
+  const { Trips, Amount, Trip_id } = req.body;
+  console.log(Trips, Amount, Trip_id, 'req bodyy');
+  console.log(Trip_id,typeof(Trip_id),'venkiiiiii');
+ 
+  // Check if Trip_id is an array
+  if (!Array.isArray(Trip_id)) {
+    return res.status(400).json({ error: "Trip_id must be an array" });
   }
-  return res.status(200).json({ message: "Data updated successfully" });
+  const sqlUpdateGroupBilling = "UPDATE Group_billing SET Trips = ?, Amount = ?, Trip_id = TRIM(BOTH ',' FROM REPLACE(REPLACE(CONCAT(',', Trip_id, ','), CONCAT(',', ?, ','), ','), ',,', ',')) WHERE FIND_IN_SET(?, Trip_id) > 0";
 
-})
-})
-// collect data for Billing table
+  // Iterate over the Trip_id array
+  Trip_id.forEach(tripId => {
+    console.log(tripId, 'tttt');
+    db.query(sqlUpdateGroupBilling, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
+      console.log(Trips, Amount, tripId, 'wwwww');
+      if (err) {
+        console.log(err, 'error');
+        return res.status(500).json({ error: "Failed to update data in MySQL" });
+      }
+      console.log(updateGroupBillingResult, 'result');
+    });
+  });
+
+  return res.status(200).json({ message: "Data updated successfully" });
+});
+
+router.post('/tripsheetstatusupdate', (req, res) => {
+  const { tripids, status } = req.body;
+  console.log(tripids, status,'rrrrrrrrrr');
+  const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
+  db.query(query, [status, tripids], (err, results) => {
+    if (err) {
+      res.status(500).json({ message: 'Internal server error' });
+      return;
+    }
+    res.status(200).json({ message: 'Status updated successfully' });
+  });
+});
+
+
+
 router.get('/billing', (req, res) => {
   db.query('SELECT * FROM billing', (err, results) => {
     if (err) {
@@ -203,11 +234,55 @@ router.get('/ParticularLists/:tripno', (req, res) => {
 
 })
 
+
+router.get('/getGroupList/:groupid', (req, res) => {
+  const groupid = req.params.groupid;
+  const sqlquery = "SELECT * FROM Group_billing where ReferenceNo = ?";
+  
+  db.query(sqlquery,[groupid], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+      return res.status(500).json({ error: "Failed to fetch data from MySQL" });
+    }
+    return res.status(200).json(result);
+  });
+});
+
+router.delete('/deleteGroup/:groupid', (req, res) => {
+  const groupid = req.params.groupid;
+  console.log(groupid,'giddd');
+  const sql = "DELETE FROM Group_billing WHERE id = ?";
+  
+  db.query(sql, [groupid], (err, result) => {
+    if (err) {
+      console.log(err, 'error');
+      return res.status(500).json({ error: "Failed to delete data from MySQL" });
+    }
+    return res.status(200).json({ message: "Data deleted successfully" });
+  });
+});
+
+
 //cover billing
+router.get('/Transfer-Billing', (req, res) => {
+  const { customer, fromDate, toDate } = req.query;
+
+  let query = 'SELECT * FROM tripsheet WHERE  apps="Closed" and status="Transfer_Closed" and customer=?  AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+
+
+  db.query(query, [customer, fromDate, toDate], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    return res.status(200).json(result);
+  });
+});
+
+
 router.get('/Group-Billing', (req, res) => {
   const { customer, fromDate, toDate } = req.query;
 
-  let query = 'SELECT * FROM tripsheet WHERE  apps="Be_Closed" and status="Closed" and customer=?  AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
+  let query = 'SELECT * FROM tripsheet WHERE  apps="Closed" and status="Covering_Closed" and customer=?  AND startdate >= DATE_ADD(?, INTERVAL 0 DAY) AND startdate <= DATE_ADD(?, INTERVAL 1 DAY)';
 
 
   db.query(query, [customer, fromDate, toDate], (err, result) => {

@@ -46,7 +46,7 @@ const CustomInput = () => {
                     {option}
                 </li>
             )}
-            style={{ width: 500 }}
+            style={{ width: 170 }}
             renderInput={(params) => (
                 <TextField {...params} label="BillingGroup" placeholder="Organization" />
             )}

@@ -46,7 +46,7 @@
     width: 81vw;
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
+    /* padding-top: 20px; */
     border-radius: 20px;
     color: #000;
     /* background-color: var(--glass); */
@@ -155,7 +155,13 @@ align-items: center;
     z-index: 5;
     background-color: #f0ece2;
     padding: 10px 10px 0px 10px;
-
+  }
+  .head-tab-tripstatus{
+    position: sticky;
+    top: 0px;
+    z-index: 5;
+    background-color: #ffffff;
+    padding: 30px 10px 0px 0px;
   }
   
   

@@ -37,7 +37,7 @@
   width: 81vw !important;
   display: flex;
   flex-direction: column;
-  padding-top: 28px;
+  /* padding-top: 28px; */
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
@@ -123,4 +123,11 @@ font-size: 11px !important;
 padding: 2px !important;
   }
 } */
+
+.head-tab{
+  position: sticky;
+  top: 0px;
+  background-color: #ffffff;
+  padding: 30px 10x 0px 0px;
+}
 

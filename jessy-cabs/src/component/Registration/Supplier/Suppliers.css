@@ -28,7 +28,8 @@
 
 .head-tab{
     position: sticky;
-    top: -19px;
+    top: 0px;
     z-index: 1;
-    /* background-color: #f0ece2; */
+    background-color: #ffffff;
+    padding: 30px 10px 0px 0px;
 }

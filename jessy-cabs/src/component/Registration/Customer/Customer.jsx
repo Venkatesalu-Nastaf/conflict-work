@@ -490,9 +490,11 @@ const Customer = () => {
           </div>
           <div className="detail-container-main-customer">
             <div className="input-field customer-input-feild-add">
-              <div className="input" >
-                <FormLabel>BillingGroup</FormLabel>
-                <Switch label='' onClick={handleButtonClick} />
+              <div className="input" style={{display: 'grid'}}>
+                <div style={{display: 'flex', alignItems: 'center'}}>
+                  <FormLabel>BillingGroup</FormLabel>
+                  <Switch label='' onClick={handleButtonClick} />
+                </div>
                 {isInputVisible && (
                   <CustomInput />
                 )}

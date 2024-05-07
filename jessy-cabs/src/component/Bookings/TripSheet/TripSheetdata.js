@@ -12,10 +12,26 @@ export const Status = [
     Option: "Cancelled",
     optionvalue: "cancelled",
   },
-  {
-  Option:"Billed",
-  optionvalue: "Billed",
-  }
+  // {
+  // Option:"Billed",
+  // optionvalue: "Billed",
+  // },
+{
+  Option:"Transfer_Billed",
+  optionvalue:"Transfer_Billed"
+},
+ {
+  Option:"Transfer_Closed",
+  optionvalue:"Transfer_Closed"
+ },
+ { 
+  Option:"Covering_Billed",
+  optionvalue:"Covering_Billed"
+},
+{
+  Option:"Covering_Closed",
+  optionvalue:"Covering_Closed"
+}
 ];
 
 export const GroupTypes = [
@@ -56,10 +72,10 @@ export const Apps = [
     Option: "Closed",
     optionvalue: "closed",
   },
-  {
-    Option: "Be_Closed",
-    optionvalue: "beclosed",
-  },
+  // {
+  //   Option: "Be_Closed",
+  //   optionvalue: "beclosed",
+  // },
 ];
 
 // Hire Types

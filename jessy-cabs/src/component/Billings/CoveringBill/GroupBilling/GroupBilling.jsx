@@ -61,6 +61,7 @@ const GroupBilling = () => {
         handleExcelDownload,
         columns,
         setRowSelectionModel,
+        rowSelectionModel,
         handleRowSelection,
         handlegroupData,
         handleButtonClickTripsheet,
@@ -123,7 +124,7 @@ const apiUrl = APIURL
     }
    
         fetchData()
-    },[apiUrl,refCustomer])
+    },[apiUrl,refCustomer,setGstno])
     return (
         <div className="GroupBilling-form Scroll-Style-hide">
             <form >
@@ -303,6 +304,7 @@ const apiUrl = APIURL
                                 setRowSelectionModel(newRowSelectionModel);
                                 handleRowSelection(newRowSelectionModel);
                               }}
+                              selectionModel = {rowSelectionModel}
                             getRowId={(row)=>row.id}
                             checkboxSelection
                             disableRowSelectionOnClick

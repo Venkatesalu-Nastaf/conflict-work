@@ -74,6 +74,30 @@
   background-color: #f0ece2;
 }
 
+@media screen and (min-width: 1113px) and (max-width: 1267px) {
+  .form-container .Tripsheet-form {
+    width: 79vw;
+  }
+}
+
+@media screen and (min-width: 957px) and (max-width: 1112.9px) {
+  .form-container .Tripsheet-form {
+    width: 76vw;
+  }
+}
+
+@media screen and (min-width: 829px) and (max-width: 956.9px) {
+  .form-container .Tripsheet-form {
+    width: 73vw;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 828.9px) {
+  .form-container .Tripsheet-form {
+    width: 70vw;
+  }
+}
+
 .secend-container {
   border-top: solid 1px #ccc;
   border-bottom: solid 1px #ccc;
@@ -84,7 +108,7 @@
 /* TRIPSHEET CONETNT */
 .Tipsheet-content-table-main {
   background: var(--glass);
-  padding: 40px;
+  padding: 15px;
 }
 
 .Tipsheet-content-table-main .Tipsheet-content-table {
@@ -155,7 +179,7 @@
 .head-tab-tripsheet{
   position: sticky !important;
   top: 0px;
-  z-index: 5;
+  z-index: 1051;
   background-color: #ffffff;
   padding: 40px 10px 10px 10px !important;
   margin: 0px;
@@ -175,3 +199,135 @@
 .form-container .Title-Name{
   padding-left: 10px !important;
 }
+
+.time input {
+  /* width: 181px; */
+  margin-top: 10px;
+  margin-bottom: 25px;
+  background: transparent;
+  text-align: inherit;
+  border: 1px solid #457cdc;
+  padding: 15px 8px 15px 10px;
+  border-radius: 4px;
+  font-size: 17px;
+}
+
+.icone{
+  padding: 10px 8px 0px 0px !important;
+}
+
+.input{
+  width: 255px !important;
+}
+
+.tripsheet-table1 {
+  width: 500px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  height: 250px;
+  overflow: scroll;
+}
+
+@media screen and (max-width: 667px) {
+  .tripsheet-table1 {
+    width: auto;
+  }
+}
+
+.tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 1px solid;
+  justify-content: space-around;
+  padding: 30px 0px;
+  width: 80vw;
+}
+
+@media screen and (min-width: 1113px) and (max-width: 1266px) {
+  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+    width: 77vw;
+  }
+}
+
+@media screen and (min-width: 909px) and (max-width: 1112.99px) {
+  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+    width: 73vw;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 910px) {
+  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+    width: 68vw;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 768.99px) {
+  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+    width: 75vw;
+  }
+}
+
+/* .tripsheet-division2{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 12px;
+  border-bottom: 1px solid;
+  padding: 30px 0px;
+  width: 75vw;
+} */
+
+/* @media screen and (min-width: 769px) and (max-width: 910px) {
+  .tripsheet-division2{
+    width: 68vw;
+  }
+} */
+
+/* .tripsheet-division3{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 1px solid;
+  justify-content: space-around;
+  padding: 30px 0px;
+  width: 75vw;
+} */
+
+/* @media screen and (min-width: 769px) and (max-width: 910px) {
+  .tripsheet-division3{
+    width: 68vw;
+  }
+} */
+
+@media screen and (min-width: 910px) and (max-width: 956px) {
+  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+    width: 71vw;
+  }
+}
+
+.tripsheet-address{
+  width: 20vw;
+}
+
+@media screen and (max-width: 1060px) {
+  .tripsheet-address{
+    width: 40vw;
+  }
+}
+.table-input-field{
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+@media screen and (max-width: 673px) {
+  .tripsheet-tab{
+    width: 150vw;
+  }
+}
+

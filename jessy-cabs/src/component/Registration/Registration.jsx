@@ -36,6 +36,7 @@ const Registration = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('');
 
   const handleMenuItemClick = (label, alt, e) => {
+
     localStorage.setItem('activeMenuItem', label);
     setActiveMenuItem(label);
 

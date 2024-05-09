@@ -49,8 +49,6 @@ VALUES (?,?,?,?,?,?)`, [username, stationname, designation, organizationname, us
           res.status(200).json({ message: 'Permissions saved successfully' });
 
         }
-
-
       });
 
 

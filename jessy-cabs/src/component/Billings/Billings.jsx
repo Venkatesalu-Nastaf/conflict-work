@@ -32,14 +32,13 @@ const Billings = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('');
 
   const handleMenuItemClick = (label, alt, e) => {
+
     localStorage.setItem('activeMenuItem', label);
     setActiveMenuItem(label);
-
 
     let hasPermission = 0
 
     switch (label) {
-
       case "Billing":
         hasPermission = Billing;
         break;
@@ -51,8 +50,8 @@ const Billings = () => {
         break;
       default:
         break;
-
     }
+
     try {
 
       if (hasPermission === 1) {
@@ -76,6 +75,7 @@ const Billings = () => {
         <MenuItem
           label="Billing"
           to={Billing && ("/home/billing/billing")}
+          // to={("/home/billing/billing")}
           alt="/home/billing/billing"
           menuItemKey="Billing"
           activeMenuItem={activeMenuItem}

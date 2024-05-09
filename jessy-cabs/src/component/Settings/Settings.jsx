@@ -34,6 +34,7 @@ const Settings = () => {
 
 
   const handleMenuItemClick = (menuItem, alt, e) => {
+
     localStorage.setItem('activeMenuItem', menuItem);
     setActiveMenuItem(menuItem);
 

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./index.css";
 import Info from "./component/Info/Info";
 import Login from "./component/form/LoginForm";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Page404 from "./component/Page404/page404";
 import Logo from "./assets/img/logonas.png";
 import Mailer from "./component/Info/Mailer/Mailer";
@@ -41,6 +41,7 @@ import OnlineLoginForm from "./component/OnlineBooking/OnlineLoginForm/OnlineLog
 import TemplateSelection from "./component/Info/Mailer/TemplateSelection/TemplateSelection";
 import TemplateCreation from "./component/Info/Mailer/TemplateCreation/TemplateCreation";
 import TripStatusMain from "./component/Bookings/TripStatusMain/TripStatusMain";
+import { PermissionContext } from "./component/context/permissionContext";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -51,12 +52,42 @@ function App() {
     }, 1000);
   }, []);
 
+
+
+  const { permissions } = useContext(PermissionContext)
+
+  const BOOKING = permissions[0]?.read || permissions[1]?.read;;
+  const TripStatus = permissions[2]?.read;
+  const TriSheet = permissions[3]?.read;
+
+
+  const BILLING = permissions[4]?.read || permissions[5]?.read;;
+  const Billing_Transfer = permissions[6]?.read;
+  const Billing_CoveringBill = permissions[7]?.read;
+
+  const REGISTER = permissions[8]?.read || permissions[9]?.read;
+  const R_Supllier = permissions[10]?.read;
+  const R_Employee = permissions[11]?.read;
+
+
+  const SETTING = permissions[12]?.read || permissions[13]?.read;
+  const Station_Creation = permissions[14]?.read;
+  const Main_Setting = permissions[15]?.read;
+
+
+  const INFO = permissions[16]?.read || permissions[17]?.read;
+  const Mailers = permissions[18]?.read;
+  const INFO_FuelInfo = permissions[19]?.read;
+  const Dashbord_read = permissions[20]?.read;
+
+
+
+
   return (
     <>
       <div className={isLoading ? "loading-container" : ""}>
         {isLoading ? (
           <div className="loading-spinners">
-            {/* <ThreeCircles color="#3d92f3" height={80} width={80} /> */}
             <div className="logo-loading">
               <img src={Logo} alt="logo" />
             </div>
@@ -65,68 +96,66 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/home" element={<MainDashboard />}>
-              <Route path="/home/dashboard" element={<MainDash />} />
+              <Route path="/home/dashboard" element={Dashbord_read !== 0 ? <MainDash /> : <Navigate to="/home/bookings/booking" />} />
+
               <Route path="/home/bookings" element={<Bookings />}>
                 <Route
                   path="/home/bookings/booking"
-                  element={<BookingMain />}
+                  element={BOOKING !== 0 ? <BookingMain /> : "You dont have  permission for Booking"}
                 />
                 <Route
                   path="/home/bookings/tripsheet"
-                  element={<TripSheet />}
+                  element={TriSheet !== 0 ? <TripSheet /> : "You dont have  permission for TriSheet"}
                 />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route
                   path="/home/bookings/tripstatus"
-                  element={<TripStatusMain />}
+                  element={TripStatus !== 0 ? <TripStatusMain /> : "You dont have  permission for TripStatus"}
                 />
               </Route>
               <Route path="/home/registration" element={<Registration />}>
                 <Route
                   path="/home/registration/customer"
-                  element={<Customer />}
+                  element={REGISTER !== 0 ? <Customer /> : "You dont have  permission for REGISTER"}
                 />
                 <Route
                   path="/home/registration/supplier"
-                  element={<Suppliers />}
+                  element={R_Supllier !== 0 ? <Suppliers /> : "You dont have  permission for Supllier"}
                 />
                 <Route
                   path="/home/registration/employes"
-                  element={<Employes />}
+                  element={R_Employee !== 0 ? <Employes /> : "You dont have  permission for Employee"}
                 />
               </Route>
+
               <Route path="/home/info" element={<Info />}>
-                <Route path="/home/info/ratetype" element={<RateTypes />} />
-                <Route
-                  path="/home/info/ratemanagement"
-                  element={<RateManagement />}
-                />
-                <Route path="/home/info/mailer" element={<Mailer />} />
+                <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes /> : "INFO"} />
+                <Route path="/home/info/ratemanagement" element={<RateManagement />} />
+                <Route path="/home/info/mailer" element={Mailers !== 0 ? <Mailer /> : "You dont have  permission for Mailers"} />
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
-                <Route path="/home/info/fuelinfo" element={<FuelInfo />} />
+                <Route path="/home/info/fuelinfo" element={INFO_FuelInfo !== 0 ? <FuelInfo /> : "You dont have  permission for FuelInfo"} />
               </Route>
               <Route path="/home/billing" element={<Billings />}>
-                <Route path="/home/billing/billing" element={<BillingMain />} />
-                <Route path="/home/billing/transfer" element={<Transfer />} />
+
+                <Route path="/home/billing/billing" element={BILLING !== 0 ? <BillingMain /> : "You dont have  permission for Billing "} />
+                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 ? <Transfer /> : "You dont have  permission for Transfer "} />
                 <Route
                   path="/home/billing/coveringbill"
-                  element={<CoveringBill />}
+                  element={Billing_CoveringBill !== 0 ? <CoveringBill /> : "You dont have  permission for CoveringBill "}
                 />
               </Route>
               <Route path="/home/accounts" element={<Accounts />}>
-                {/* <Route path="/home/accounts/expense" element={<Expense />} />
-                <Route path="/home/accounts/income" element={<Income />} />
-                <Route path="/home/accounts/profitandloss" element={<ProfiteLoss />} /> */}
+
               </Route>
               <Route path="/home/settings" element={<Settings />}>
                 <Route
                   path="/home/settings/usercreation"
-                  element={<UserCreation />}
+                  element={SETTING !== 0 ? <UserCreation /> : "You dont have  permission for SETTING"}
                 />
                 <Route
                   path="/home/settings/stationcreation"
-                  element={<StationCreation />}
+                  element={Station_Creation !== 0 ? <StationCreation /> : " You dont have  permission for StationCreation"}
                 />
                 <Route
                   path="/home/settings/permission"
@@ -134,7 +163,7 @@ function App() {
                 />
                 <Route
                   path="/home/settings/mainsetting"
-                  element={<MainSetting />}
+                  element={Main_Setting !== 0 ? <MainSetting /> : "You dont have  permission for MainSetting"}
                 />
               </Route>
               <Route path="/home/usersettings" element={<UserSettings />}>
@@ -165,7 +194,7 @@ function App() {
             />
           </Routes>
         )}
-      </div>
+      </div >
     </>
   );
 }

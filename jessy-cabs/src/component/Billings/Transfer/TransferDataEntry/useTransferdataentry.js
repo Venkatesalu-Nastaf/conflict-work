@@ -7,7 +7,7 @@ import jsPDF from 'jspdf';
 import { APIURL } from "../../../url";
 import { useData } from '../../../Dashboard/Maindashboard/DataContext';
 import { useLocation } from "react-router-dom";
-
+import { PdfData } from '../TransferReport/PdfContext';
 const columns = [
     { field: "id", headerName: "Sno", width: 70 },
     { field: "status", headerName: "Status", width: 130 },
@@ -75,8 +75,7 @@ const useTransferdataentry = () => {
     const { setOrganizationName } = useData()
     const [lengthCheck,setLengthCheck] = useState()
     const [formData,setFormData] = useState({})
-    const [billingPage,setBillingPage] = useState()
-
+    const {billingPage,setBillingPage} = PdfData()
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -233,7 +232,6 @@ const useTransferdataentry = () => {
                 updatedFormData[key] = value; // Set the key-value pair in the new object
             }
         });
-    // if(updatedFormData.billingsheet===true){
         setFormData(updatedFormData); // Update formData state with the new object
         // Other state updates remain the same
         const transferlist = updatedFormData.Trip_id?.split(',');
@@ -246,22 +244,18 @@ const useTransferdataentry = () => {
         setBillingdate(updatedFormData.Billdate);
         setTotalValue(parseInt(updatedFormData.Amount));
         setBillingPage(updatedFormData.billingsheet)
-    // }
-    // else{
-    //     setFormData({})
-    // }
+  
 
         return () => {
             setFormData({}); // Reset formData state to an empty object
         };
-    }, [location]);
+    }, [location,setBillingPage]);
 
     window.addEventListener('click', (event) => {
         if (event.target === window) {
             setBillingPage(false) 
         }
     });
-    console.log(billingPage,'billing page');
     useEffect(()=>{
         if(billingPage===false){
         setInvoiceno('');
@@ -274,7 +268,7 @@ const useTransferdataentry = () => {
         setRows([])
         setRowSelectionModel([])
         }
-    },[billingPage])
+    },[billingPage,setBillingPage])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -592,7 +586,7 @@ const handleButtonClickTripsheet = async () => {
                     // Execute the delete query
                     const getresponse = await axios.delete(`${apiUrl}/deleteTransfer/${latestGroupNo}`);
                     console.log(getresponse, 'Deleted Successfully');
-                
+                    setBillingPage(false)
                    
                  
                 } catch (error) {
@@ -602,7 +596,7 @@ const handleButtonClickTripsheet = async () => {
             }
         };
         fetchData();
-    }, [apiUrl, lengthCheck, latestGroupNo,location]);
+    }, [apiUrl, lengthCheck, latestGroupNo,location,setBillingPage]);
     
 
 

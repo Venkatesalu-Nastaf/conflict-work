@@ -163,7 +163,8 @@ const TransferDataEntry = () => {
                       id="free-solo-demo"
                       freeSolo
                       size="small"
-                      value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || formDataTransfer?.Organization_name || ''}
+                      // value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || formDataTransfer?.Organization_name || ''}
+                      value={customer || ''}
                       options={organizationName}
                       onChange={(event, value) => setCustomer(value)}
                       renderInput={(params) => {

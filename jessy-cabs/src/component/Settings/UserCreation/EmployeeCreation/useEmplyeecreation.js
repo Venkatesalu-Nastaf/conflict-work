@@ -66,6 +66,7 @@ const useEmplyeecreation = () => {
         { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
         { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
         { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
+        { id: 20, name: 'Dashbord', read: false },
 
     ];
 
@@ -83,17 +84,18 @@ const useEmplyeecreation = () => {
 
 
 
-    const handleCheckboxChange = (id, field) => (event) => {
+
+    const handleCheckboxChange = (index, field) => (event) => {
         const { checked } = event.target;
         setPermissionsData(prevData =>
-            prevData.map(permission => {
-                if (permission.id === id) {
+            prevData.map((permission, i) => {
+                if (i === index) {
                     return { ...permission, [field]: checked };
                 }
                 return permission;
             })
         );
-    };
+    }
 
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./TransferDataEntry.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -14,6 +14,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 
 import { Autocomplete } from "@mui/material";
+import { PermissionContext } from '../../../context/permissionContext';
 
 //for pdf
 
@@ -88,6 +89,12 @@ const TransferDataEntry = () => {
     }
   }, [actionName, handleClick]);
 
+
+  const { permissions } = useContext(PermissionContext)
+
+  const Transfer_read = permissions[6]?.read;
+  const Transfer_new = permissions[6]?.new;
+
   return (
     <div className="TransferDataEntry-form Scroll-Style-hide">
       <form >
@@ -122,7 +129,7 @@ const TransferDataEntry = () => {
                         label="Bill Date"
                         name="Billingdate"
                         // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate || formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate) : null}
-                        value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate ) : null  }
+                        value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
 
                         format="DD/MM/YYYY"
                       />
@@ -232,13 +239,13 @@ const TransferDataEntry = () => {
                 </div>
                 <div className="input-field" >
                   <div className="input">
-                    <Button variant="contained" onClick={handleShow} >List</Button>
+                    <Button variant="contained" disabled={!Transfer_read} onClick={handleShow} >List</Button>
                   </div>
                   <div className="input">
                     <Button variant="contained" onClick={handleCancel}>Cancel</Button>
                   </div>
                   <div className="input">
-                    <Button variant="outlined" onClick={handleClickGenerateBill} >Bill Generate</Button>
+                    <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button>
                   </div>
                 </div>
                 <div className="input-field">
@@ -251,21 +258,21 @@ const TransferDataEntry = () => {
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
-                <React.Fragment>
-                  <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                <>
+                  <Button variant="contained" disabled={!Transfer_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                     Download
                   </Button>
                   <Menu {...bindMenu(popupState)}>
                     <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
                     <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
                   </Menu>
-                </React.Fragment>
+                </>
               )}
             </PopupState>
           </div>
           <div className='amount-calculator'>
             <div className="total-inputs" style={{ marginTop: '25px' }}>
-              <Button variant="contained" onClick={handleAddOrganization} >Add To List</Button>
+              <Button variant="contained" disabled={!Transfer_new} onClick={handleAddOrganization} >Add To List</Button>
             </div>
             <div className="total-inputs" style={{ marginTop: '25px' }}>
               <Button variant="outlined" onClick={handleBillRemove} >Remove Selected</Button>

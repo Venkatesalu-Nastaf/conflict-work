@@ -8,7 +8,7 @@ import { Sidebardata } from "./Sidebar";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { useMediaQuery } from "@mui/material";
+// import { useMediaQuery } from "@mui/material";
 
 import { PermissionContext } from "../../../context/permissionContext";
 
@@ -132,13 +132,13 @@ const Sidebar = () => {
     setIsinfodropdownclicked(false);
   }
 
-  document.addEventListener('click', function(event) {
+  document.addEventListener('click', function (event) {
     if ((!event.target.closest('.mobile-view-sidebar') && !event.target.closest('.bars')) && (!event.target.closest('.menu'))) {
       closeMenuFunction();
     }
   });
 
-  
+
   //--------------------------to show logo-----------
 
   const { sharedData } = useData();
@@ -227,6 +227,7 @@ const Sidebar = () => {
   const REGISTER = permissions[8]?.read;
   const SETTING = permissions[12]?.read || permissions[13]?.read;
   const INFO = permissions[16]?.read;
+  const Dashbord_read = permissions[20]?.read;
 
   const handleMenuItemClick = async (menuItemKey, name, alt, e) => {
     setSettingsDropdownVisible(false);
@@ -433,30 +434,30 @@ const Sidebar = () => {
     setPopupOpen(true);
   }, []);
 
-  
-const handleLogoutdialog = useCallback(
-  (e) => {
-    if (e) {
-      e.preventDefault();
-    }
-    localStorage.removeItem("auth");
-    localStorage.removeItem("username");
-    localStorage.removeItem("useridno");
-    localStorage.removeItem("selectedImage");
-    localStorage.removeItem("selectedprofileImage");
-    localStorage.removeItem("usercompany");
-    localStorage.removeItem("selectedMenuItem");
-    localStorage.removeItem("profileimages")
-    localStorage.removeItem("organizationimages")
-    localStorage.removeItem("selectedusertheme")
 
-    setExpanded(true);
-    navigate("/");
-  },
-  [navigate]
-);
+  const handleLogoutdialog = useCallback(
+    (e) => {
+      if (e) {
+        e.preventDefault();
+      }
+      localStorage.removeItem("auth");
+      localStorage.removeItem("username");
+      localStorage.removeItem("useridno");
+      localStorage.removeItem("selectedImage");
+      localStorage.removeItem("selectedprofileImage");
+      localStorage.removeItem("usercompany");
+      localStorage.removeItem("selectedMenuItem");
+      localStorage.removeItem("profileimages")
+      localStorage.removeItem("organizationimages")
+      localStorage.removeItem("selectedusertheme")
 
-const [openmodal, setOpenmodal] = useState(false);
+      setExpanded(true);
+      navigate("/");
+    },
+    [navigate]
+  );
+
+  const [openmodal, setOpenmodal] = useState(false);
 
   const handleClickOpenmodal = () => {
     setOpenmodal(true);
@@ -515,7 +516,7 @@ const [openmodal, setOpenmodal] = useState(false);
           )}
         </div>
         <div className="menu">
-          <MenuItem
+          {Dashbord_read === 1 && <MenuItem
             label="Dashboard"
             to="/home/dashboard"
             value="/home/dashboard"
@@ -525,7 +526,7 @@ const [openmodal, setOpenmodal] = useState(false);
             handleMenuItemClick={handleMenuItemClick}
             icon={BiHomeAlt}
 
-          />
+          />}
           <MenuItem
             label="Booking"
             to={BOOKING && ("/home/bookings/booking")}
@@ -1415,7 +1416,7 @@ const [openmodal, setOpenmodal] = useState(false);
             />
             <div className="header-user-mobile" onClick={closeMenuFunction}>
               <div className="logout-item">
-                <FiLogOut className="logout-icon"  onClick={handleLogout} />
+                <FiLogOut className="logout-icon" onClick={handleLogout} />
               </div>
               <div className="user-name-item">
                 <div>
@@ -1447,7 +1448,7 @@ const [openmodal, setOpenmodal] = useState(false);
                   )}
                 </div>
               </div>
-              <div className="avatar-item" style={{display: 'flex', alignItems: 'center'}}>
+              <div className="avatar-item" style={{ display: 'flex', alignItems: 'center' }}>
                 <StyledBadge
                   overlap="circular"
                   anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -1463,7 +1464,7 @@ const [openmodal, setOpenmodal] = useState(false);
                   <FaUser />
                   <div className="user-icon-update-dot"></div>
                 </div>
-                
+
               </div>
             </div>
           </div>
@@ -1496,7 +1497,7 @@ const [openmodal, setOpenmodal] = useState(false);
           p: 4,
         }}>
           <div>
-            <img src={update} alt="update-image" style={{width: '100%'}}/>
+            <img src={update} alt="update-image" style={{ width: '100%' }} />
           </div>
           <Button onClick={handleClosemodal} variant="contained">
             Close
@@ -1505,29 +1506,29 @@ const [openmodal, setOpenmodal] = useState(false);
       </Modal>
 
 
-          <Dialog open={popupOpen} onClose={handlePopupClose}>
-            {/* <p>sdfghjkl;'</p> */}
-            <DialogContent>
-              <p className="modal-warning-icon">< PiWarningCircleBold className="warning-icon" /></p>
-              <p className="modal-warning-text">Are you sure want to logout from this <br /> application ?</p>
-            </DialogContent>
-            <DialogActions className="yes-no-buttons">
-              <Button
-                onClick={handleLogoutdialog}
-                variant="contained"
-                className="logout-btn"
-              >
-                Yes, I'm Sure
-              </Button>
-              <Button
-                onClick={handlePopupClose}
-                variant="contained"
-                className="logout-cancel-btn"
-              >
-                NO, Cancel
-              </Button>
-            </DialogActions>
-          </Dialog>
+      <Dialog open={popupOpen} onClose={handlePopupClose}>
+        {/* <p>sdfghjkl;'</p> */}
+        <DialogContent>
+          <p className="modal-warning-icon">< PiWarningCircleBold className="warning-icon" /></p>
+          <p className="modal-warning-text">Are you sure want to logout from this <br /> application ?</p>
+        </DialogContent>
+        <DialogActions className="yes-no-buttons">
+          <Button
+            onClick={handleLogoutdialog}
+            variant="contained"
+            className="logout-btn"
+          >
+            Yes, I'm Sure
+          </Button>
+          <Button
+            onClick={handlePopupClose}
+            variant="contained"
+            className="logout-cancel-btn"
+          >
+            NO, Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
 
     </>
   );

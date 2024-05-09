@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./CoveringSubmit.css";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
@@ -22,6 +22,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useCoversubmit from './useCoversubmit';
+import { PermissionContext } from '../../../context/permissionContext';
 
 const CoveringSubmit = () => {
 
@@ -60,6 +61,13 @@ const CoveringSubmit = () => {
             handleClick(null, 'List');
         }
     }, [actionName, handleClick]);
+
+
+    // Permission ------------
+    const { permissions } = useContext(PermissionContext)
+
+    const CoveringBill_read = permissions[7]?.read;
+    const CoveringBill_new = permissions[7]?.new;
 
     return (
         <div className="CoveringSubmit-form Scroll-Style-hide">
@@ -151,7 +159,7 @@ const CoveringSubmit = () => {
                                     />
                                 </div>
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow} >Search</Button>
+                                    <Button variant="contained" disabled={!CoveringBill_read} onClick={handleShow} >Search</Button>
                                 </div>
                             </div>
                         </div>
@@ -161,7 +169,7 @@ const CoveringSubmit = () => {
                     <PopupState variant="popover" popupId="demo-popup-menu">
                         {(popupState) => (
                             <React.Fragment>
-                                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                <Button variant="contained" disabled={!CoveringBill_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                                     Download
                                 </Button>
                                 <Menu {...bindMenu(popupState)}>

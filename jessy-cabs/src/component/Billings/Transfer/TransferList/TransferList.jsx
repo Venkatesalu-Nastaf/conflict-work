@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./TransferList.css";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -22,6 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferlist from './useTransferlist';
 import { useData } from '../../../Dashboard/Maindashboard/DataContext';
+import { PermissionContext } from '../../../context/permissionContext';
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
@@ -62,6 +63,12 @@ const TransferList = () => {
             handleClick(null, 'List');
         }
     }, [actionName, handleClick]);
+
+
+    // Permission ------------
+    const { permissions } = useContext(PermissionContext)
+
+    const Transfer_read = permissions[6]?.read;
 
 
     return (
@@ -141,7 +148,7 @@ const TransferList = () => {
                                     />
                                 </div>
                                 <div className="input" style={{ width: "140px" }}>
-                                    <Button variant="contained" onClick={handleShow} >Search</Button>
+                                    <Button variant="contained" disabled={!Transfer_read} onClick={handleShow} >Search</Button>
                                 </div>
                             </div>
                         </div>
@@ -151,7 +158,7 @@ const TransferList = () => {
                     <PopupState variant="popover" popupId="demo-popup-menu">
                         {(popupState) => (
                             <React.Fragment>
-                                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                <Button variant="contained" disabled={!Transfer_read} endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
                                     Download
                                 </Button>
                                 <Menu {...bindMenu(popupState)}>

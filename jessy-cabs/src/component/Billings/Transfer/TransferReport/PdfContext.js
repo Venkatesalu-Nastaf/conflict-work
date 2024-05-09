@@ -10,6 +10,8 @@ export const PdfData = () => {
 
 export const PdfDataProvider = ({ children }) => {
     const [pdfPrint,setPdfPrint] = useState(false)
+    const [billingPage,setBillingPage] = useState(false)
+
    
     
     return (

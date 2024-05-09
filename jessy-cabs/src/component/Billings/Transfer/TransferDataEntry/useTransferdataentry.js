@@ -261,6 +261,7 @@ const useTransferdataentry = () => {
             setBillingPage(false) 
         }
     });
+    console.log(billingPage,'billing page');
     useEffect(()=>{
         if(billingPage===false){
         setInvoiceno('');
@@ -434,12 +435,11 @@ const handleButtonClickTripsheet = async () => {
         
         const id = rowSelectionModel;
         const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
-        const customername = customerdata;
 
         // Sending PUT requests
         const response = await axios.put(`${apiUrl}/statusChangeTransfer/${invoiceno}`);
         const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
-
+        console.log(response,Tripresponse,'check response');
         // Setting selected customer data in local storage
         // localStorage.setItem('selectedcustomer', customername);
         const storedCustomer = localStorage.getItem('selectedcustomer');
@@ -630,7 +630,6 @@ useEffect(()=>{
 
     const handleBillRemove = async () => {
         const tripid = selectedRow?.map(row => row.tripid.toString());
-        const Trip = selectedRow?.map(row=>row.tripid)
         // const tripid = selectedRow?.map((li)=>li.tripid.toString())
         const selectId= selectedRow?.map(row => row.id)
         const Amount = selectedRow?.map(li=>li.netamount.split(',')).flat();
@@ -653,6 +652,7 @@ useEffect(()=>{
                 tripids: tripid,
                 status: 'Opened',
             });
+            console.log(response,'Tripsheet Response Status');
             const tripids = rowSelectionModel;
             const TransferUpdate = {
                 Trip_id:tripid,

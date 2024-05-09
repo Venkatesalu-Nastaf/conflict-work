@@ -54,7 +54,7 @@ const BankAccount = () => {
     handleDelete,
     popupOpen,
     handlePopupClose,
-    handleDeleteBank,
+    // handleDeleteBank,
     handlesuredelete
 
 
@@ -67,8 +67,7 @@ const BankAccount = () => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
-  console.log(totalcapital,"datafrontend")
-  console.log(editingIndex,"editinginddex")
+ 
 
 
   return (
@@ -78,7 +77,7 @@ const BankAccount = () => {
           <div className='amount-calculate'>
             <div className='total-inputs' >
               <label htmlFor="">Total Capital:</label>
-              <input type="number" value={totalcapital - totalOut} readOnly />
+              <input type="number" value={totalcapital} readOnly />
             </div>
             <div className='total-inputs' id={`bank-btn-amountIN`} >
               <label htmlFor="">Total-In:</label>
@@ -185,6 +184,7 @@ const BankAccount = () => {
                   />
                 </div>
                 <div className="input">
+              
                   <div className="icone">
                     <AiFillBank color="action" style={{ fontSize: "27px" }} />
                   </div>
@@ -195,7 +195,7 @@ const BankAccount = () => {
                     type="number"
                     // value={bankDetails[index]?.netbalance || book.netbalance || ''}
                     // value={editingIndex === index ? bankDetail.netbalance : (bankDetail.netbalance || book.netbalance || '')}
-                    value={editingIndex === index ? (bankDetail.totalin-bankDetail.totalout)  : (bankDetail.netbalance || book.netbalance || '')}
+                    value={editingIndex === index ? (bankDetail.totalin-bankDetail.totalout)  :(bankDetail.totalin-bankDetail.totalout) }
                     // onChange={handleChange}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}

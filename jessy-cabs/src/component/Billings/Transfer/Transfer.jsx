@@ -8,9 +8,10 @@ import TabContext from "@mui/lab/TabContext";
 import TransferDataEntry from './TransferDataEntry/TransferDataEntry';
 import TransferList from './TransferList/TransferList';
 import TransferReport from './TransferReport/TransferReport';
-
+import { PdfData } from './TransferReport/PdfContext';
 const Transfer = () => {
   const [value, setValue] = useState("transferlist");
+  const {setBillingPage} = PdfData()
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -22,6 +23,7 @@ const Transfer = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    setBillingPage(false)
   };
   return (
     <div className="form-container-Transfer">

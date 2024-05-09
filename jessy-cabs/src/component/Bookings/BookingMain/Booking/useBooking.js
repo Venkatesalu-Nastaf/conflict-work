@@ -37,12 +37,12 @@ const columns = [
     field: "address1", // Assuming this is the key in your data for the address line 1
     headerName: "Address",
     width: 230,
-    valueGetter: (params) => {
-      const address1 = params.row && params.row.address1 ? params.row.address1 : '';
-      const streetno = params.row && params.row.streetno ? params.row.streetno : '';
-      const city = params.row && params.row.city ? params.row.city : '';
-      return `${address1}, ${streetno}, ${city}`.trim();
-    },
+    // valueGetter: (params) => {
+    //   const address1 = params.row && params.row.address1 ? params.row.address1 : '';
+    //   const streetno = params.row && params.row.streetno ? params.row.streetno : '';
+    //   const city = params.row && params.row.city ? params.row.city : '';
+    //   return `${address1}, ${streetno}, ${city}`.trim();
+    // },
   },
   { field: "report", headerName: "Report", width: 130 },
   { field: "vehType", headerName: "Vehicle Type", width: 130 },
@@ -210,14 +210,14 @@ const useBooking = () => {
       "remarks",
       "servicestation",
       "advance",
-      "nameupdate",
-      "address3",
-      "address4",
-      "cityupdate",
+      // "nameupdate",
+      // "address3",
+      // "address4",
+      // "cityupdate",
       "useage",
       "username",
-      "tripdate",
-      "triptime",
+      // "tripdate",
+      // "triptime",
       "emaildoggle",
       "hireTypes",
       "travelsname",
@@ -264,8 +264,8 @@ const useBooking = () => {
     email: "",
     employeeno: "",
     address1: "",
-    streetno: "",
-    city: "",
+    // streetno: "",
+    // city: "",
     report: "",
     vehType: "",
     paymenttype: "",
@@ -283,14 +283,14 @@ const useBooking = () => {
     remarks: "",
     servicestation: "",
     advance: "",
-    nameupdate: "",
-    address3: "",
-    address4: "",
-    cityupdate: "",
+    // nameupdate: "",
+    // address3: "",
+    // address4: "",
+    // cityupdate: "",
     useage: "",
     username: "",
-    tripdate: "",
-    triptime: "",
+    // tripdate: "",
+    // triptime: "",
     emaildoggle: "",
     hireTypes: "",
     travelsname: "",
@@ -317,8 +317,8 @@ const useBooking = () => {
       email: "",
       employeeno: "",
       address1: "",
-      streetno: "",
-      city: "",
+      // streetno: "",
+      // city: "",
       report: "",
       vehType: "",
       paymenttype: "",
@@ -334,14 +334,14 @@ const useBooking = () => {
       remarks: "",
       servicestation: "",
       advance: "",
-      nameupdate: "",
-      address3: "",
-      address4: "",
-      cityupdate: "",
+      // nameupdate: "",
+      // address3: "",
+      // address4: "",
+      // cityupdate: "",
       useage: "",
       username: "",
-      tripdate: "",
-      triptime: "",
+      // tripdate: "",
+      // triptime: "",
       emaildoggle: "",
       hireTypes: "",
       travelsname: "",
@@ -460,6 +460,7 @@ const useBooking = () => {
     }
 
 }
+console.log(row,"bookdata")
 
 
 const handlePdfDownload = () => {
@@ -471,7 +472,13 @@ const handlePdfDownload = () => {
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
     pdf.text("Booking Details", 10, 10);
-     const header = Object.keys(row[0]);
+    //  const header = Object.keys(row[0]);
+    const keysToRemove = ["orderedby", "useage", "mobile", "username"];
+
+const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
+
+     console.log(header,"remove")
+
 
     // Extracting body
     const body = row.map(row => Object.values(row));
@@ -495,11 +502,13 @@ const handlePdfDownload = () => {
         else if (header.length >= 27 && header.length <= 30) {
             fontdata = 6;
         }
-        else if (header.length >= 31 && header.length <= 35) {
+        else if (header.length >= 31 && header.length <= 33) {
             fontdata = 4;
-        }
+        }else if (header.length >= 34 && header.length <= 35) {
+          fontdata = 3;
+      }
         else if (header.length >= 36 && header.length <= 40) {
-            fontdata = 4;
+            fontdata = 3;
         }
         else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
@@ -849,18 +858,18 @@ const handlePdfDownload = () => {
             selectedCustomerData.address1 ||
             book.address1 ||
             "",
-          streetno:
-            formValues.streetno ||
-            formData.streetno ||
-            selectedCustomerData.streetno ||
-            book.streetno ||
-            "",
-          city:
-            formValues.city ||
-            formData.city ||
-            selectedCustomerData.city ||
-            book.city ||
-            "",
+          // streetno:
+          //   formValues.streetno ||
+          //   formData.streetno ||
+          //   selectedCustomerData.streetno ||
+          //   book.streetno ||
+          //   "",
+          // city:
+          //   formValues.city ||
+          //   formData.city ||
+          //   selectedCustomerData.city ||
+          //   book.city ||
+          //   "",
         };
 
         const response = await fetch(`${apiUrl}/send-sms`, {
@@ -1009,8 +1018,8 @@ const handlePdfDownload = () => {
         email: formData.email || selectedCustomerData.email || formValues.email || book.email,
         employeeno: formData.employeeno || selectedCustomerData.employeeno || book.employeeno,
         address1: formData.address1 || selectedCustomerData.address1 || book.address1,
-        streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
-        city: formData.city || selectedCustomerData.city || book.city,
+        // streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
+        // city: formData.city || selectedCustomerData.city || book.city,
         report: formData.report || selectedCustomerData.report || book.report,
         vehType: formData.vehType || selectedCustomerData.vehType || book.vehType|| selectedCustomerdriver.vehType,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
@@ -1033,7 +1042,7 @@ const handlePdfDownload = () => {
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo||selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
         reporttime: restSelectedCustomerData.reporttime,
-        triptime: triptime,
+        // triptime: triptime,
         username: storedUsername,
         Groups:selectedCustomerData.Groups||book.Groups||formData.Groups||selectedCustomerdriver.Groups,
 
@@ -1105,8 +1114,8 @@ const handlePdfDownload = () => {
         email: formData.email || selectedCustomerData.email || formValues.email || book.email,
         employeeno: formData.employeeno || selectedCustomerData.employeeno || book.employeeno,
         address1: formData.address1 || selectedCustomerData.address1 || book.address1,
-        streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
-        city: formData.city || selectedCustomerData.city || book.city,
+        // streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
+        // city: formData.city || selectedCustomerData.city || book.city,
         report: formData.report || selectedCustomerData.report || book.report,
         vehType: formData.vehType || selectedCustomerData.vehType || book.vehType|| selectedCustomerdriver.vehType,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
@@ -1129,7 +1138,7 @@ const handlePdfDownload = () => {
         mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo|| selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
         reporttime: restSelectedCustomerData.reporttime,
-        triptime: triptime,
+        // triptime: triptime,
         username: storedUsername,
         Groups:formData.Groups || selectedCustomerData.Groups || book.Groups|| selectedCustomerdriver.Groups,
 

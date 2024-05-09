@@ -1,5 +1,5 @@
 // DataContext.js
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 
 const DataContext = createContext();
@@ -10,12 +10,12 @@ export const PdfData = () => {
 
 export const PdfDataProvider = ({ children }) => {
     const [pdfPrint,setPdfPrint] = useState(false)
-    const [billingPage,setBillingPage] = useState(false)
+    const [billingPage,setBillingPage] = useState(null)
 
    
     
     return (
-        <DataContext.Provider value={{pdfPrint,setPdfPrint}}>
+        <DataContext.Provider value={{pdfPrint,setPdfPrint,billingPage,setBillingPage}}>
             {children}
         </DataContext.Provider>
     );

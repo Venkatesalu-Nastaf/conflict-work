@@ -16,14 +16,14 @@ const useBankaccount = () => {
     const [bankDetails, setBankDetails] = useState([]);
     const [popupOpen, setPopupOpen] = useState(false);
     const [editingIndex, setEditingIndex] = useState(null);
-    const [infoMessage, setInfoMessage] = useState('');
+    // const [infoMessage, setInfoMessage] = useState('');
     const [warningMessage] = useState('');
     const [info, setInfo] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [warning, setWarning] = useState(false);
     // const [deleteId, setDeleteId] = useState(null);
     const [deleteId, setDeleteId] = useState();
-    const [updatedata,setUpdatedata]=useState(true)
+    // const [updatedata,setUpdatedata]=useState(true)
     console.log(deleteId,"deleleleeleleleleeleeeeeeeeee")
     
 
@@ -93,7 +93,7 @@ const useBankaccount = () => {
         };
         setBankDetails((prevBankDetails) => [...prevBankDetails, newBank]);
         fetchData();
-        setUpdatedata(true)
+        // setUpdatedata(true)
         setEditingIndex(null);
 
     };
@@ -124,7 +124,7 @@ const useBankaccount = () => {
                 setSuccess(true);
                 setSuccessMessage('Successfully Updated');
                 setEditingIndex(null);
-                setUpdatedata(true)
+                // setUpdatedata(true)
             } else {
             }
         } catch {
@@ -172,7 +172,7 @@ const useBankaccount = () => {
             await axios.post(`${apiUrl}/bankdetails`, newBank);
             handleAddBank();
             handleCancel();
-            setUpdatedata(true)
+            // setUpdatedata(true)
         } catch {
             setError(true);
             setErrorMessage('Error adding bank account. Please check your Network Connection.');
@@ -294,6 +294,11 @@ const useBankaccount = () => {
         setTotalIn(calculatedTotalIn);
     }, [bankDetails, book]);
 
+    // useEffect(() => {
+    //     const calculatedTotalIn = bankDetails.reduce((total, bankDetail) => total + (parseInt(bankDetail.totalin, 10) || parseInt(book.totalin, 10) || 0), 0);
+    //     setTotalCapital(calculatedTotalIn);
+    // }, [bankDetails, book]);
+
 
     //calculate totalcapital amount
     // useEffect(() => {
@@ -332,7 +337,7 @@ const useBankaccount = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        infoMessage,
+        // infoMessage,
         book,
         handleChange,
         handleAdd,

@@ -94,6 +94,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
+
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -346,7 +348,7 @@ const Booking = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input" style={{width:'200px', display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -368,6 +370,69 @@ const Booking = () => {
                   autoComplete="new-password"
                 />
               </div>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
+                <div className="icone">
+                  <DomainAddIcon color="action" />
+                </div>
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) =>
+                    handleAutocompleteChange(event, value, "servicestation")
+                  }
+                  value={
+                    Service_Station.find((option) => option.optionvalue)
+                      ?.label ||
+                    formData.servicestation ||
+                    selectedCustomerData.servicestation ||
+                    book.servicestation ||
+                    ""
+                  }
+                  options={Service_Station.map((option) => ({
+                    label: option.optionvalue,
+                  }))}
+                  getOptionLabel={(option) =>
+                    option.label ||
+                    formData.servicestation ||
+                    selectedCustomerData.servicestation ||
+                    book.servicestation ||
+                    ""
+                  }
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        {...params}
+                        label="Service Station"
+                        name="servicestation"
+                        inputRef={params.inputRef}
+                      />
+                    );
+                  }}
+                />
+              </div>
+              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
+                <div className="icone">
+                  <FmdBadIcon color="action" />
+                </div>
+                <TextField
+                  name="remarks"
+                  autoComplete="new-password"
+                  value={
+                    formData.remarks ||
+                    selectedCustomerData.remarks ||
+                    book.remarks ||
+                    ""
+                  }
+                  onChange={handleChange}
+                  label="Remarks"
+                  id="remarks"
+                  variant="standard"
+                />
+              </div>
+
 
             </div>
 
@@ -675,12 +740,15 @@ const Booking = () => {
               </div>
               <TextField
                 margin="normal"
-                size="small"
+                // size="small"
                 id="streetname"
                 label="No.Street Name"
                 name="address1"
+                multiline
+                  rows={2}
+                  sx={{ m: 2, width: "400ch" }}
                 autoComplete="new-password"
-                style={{ width: '194px' }}
+                style={{ width: '300px' }}
                 value={
                   formData.address1 ||
                   selectedCustomerData.address1 ||
@@ -689,8 +757,10 @@ const Booking = () => {
                 }
                 onChange={handleChange}
               />
+              {/* <Textarea aria-label="minimum height" minRows={} placeholder="Minimum 3 rows" /> */}
+ 
             </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            {/* <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
               <div className="icone">
                 <HomeTwoToneIcon color="action" />
               </div>
@@ -708,8 +778,8 @@ const Booking = () => {
                 id="address"
                 variant="standard"
               />
-            </div>
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            </div> */}
+            {/* <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
               <div className="icone">
                 <LocationCityIcon color="action" />
               </div>
@@ -727,7 +797,7 @@ const Booking = () => {
                 id="standard-size-normal"
                 variant="standard"
               />
-            </div>
+            </div> */}
 
             <div className="input" style={{ width: "223px", display: 'flex', alignItems: 'center' }}>
               <Autocomplete
@@ -875,7 +945,7 @@ const Booking = () => {
               />
             </div>
 
-            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+            {/* <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoItem label="Trip Date">
                   <DatePicker
@@ -893,14 +963,14 @@ const Booking = () => {
                   </DatePicker>
                 </DemoItem>
               </LocalizationProvider>
-            </div>
+            </div> */}
 
             {/* </div>
 
 
           <div style={{display: 'flex', flexWrap: 'wrap'}}> */}
 
-            <div className="input-field">
+            {/* <div className="input-field">
               <div className="input time" style={{ paddingRight: '15px', marginTop: '0px' }}>
                 <label>Trip Time</label>
                 <input
@@ -918,7 +988,7 @@ const Booking = () => {
                   }}
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1213,7 +1283,7 @@ const Booking = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
+              {/* <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
                 <div className="icone">
                   <FmdBadIcon color="action" />
                 </div>
@@ -1231,8 +1301,8 @@ const Booking = () => {
                   id="remarks"
                   variant="standard"
                 />
-              </div>
-              <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
+              </div> */}
+              {/* <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
@@ -1274,7 +1344,7 @@ const Booking = () => {
                     );
                   }}
                 />
-              </div>
+              </div> */}
 
               {/* </div>
 

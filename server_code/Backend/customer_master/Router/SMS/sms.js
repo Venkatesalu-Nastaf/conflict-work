@@ -10,13 +10,15 @@ router.post('/send-sms', async (req, res) => {
 
 // // Your sendSMS function
 async function sendSMS(dataToSend) {
-    const { guestname, guestmobileno, tripid, reporttime, startdate, address1, streetno, city } = dataToSend;
-    console.log(guestname, guestmobileno, tripid, reporttime, startdate, address1, streetno, city,"sms......");
-    var d = " ";
+    // const { guestname, guestmobileno, tripid, reporttime, startdate, address1, streetno, city } = dataToSend;
+    const { guestname, guestmobileno, tripid, reporttime, startdate, address1 } = dataToSend;
+    console.log(guestname, guestmobileno, tripid, reporttime, startdate, address1,"sms......");
+    // var d = " ";
     const apiUrl = 'https://smsssl.dial4sms.com/api/v2/SendSMS';
     const params = {
         SenderId: 'JSYCAB',
-        Message: `Trip details from JESSY CABS Guest Name ${guestname} contact no ${guestmobileno} T.S no ${tripid} Reporting Date: ${startdate} Reporting Time ${reporttime} Reporting Address ${address1}${d}${streetno}${d}${city}.JESSYC`,
+        // Message: `Trip details from JESSY CABS Guest Name ${guestname} contact no ${guestmobileno} T.S no ${tripid} Reporting Date: ${startdate} Reporting Time ${reporttime} Reporting Address ${address1}${d}${streetno}${d}${city}.JESSYC`,
+        Message: `Trip details from JESSY CABS Guest Name ${guestname} contact no ${guestmobileno} T.S no ${tripid} Reporting Date: ${startdate} Reporting Time ${reporttime} Reporting Address ${address1}.JESSYC`,
         MobileNumbers: `${guestmobileno}`,
         TemplateId: '1107169000164228655',
         ApiKey: 'NxMzw4LY3K6d7KH0/6DKazua3Vga2LHipLkcQctUetk=',

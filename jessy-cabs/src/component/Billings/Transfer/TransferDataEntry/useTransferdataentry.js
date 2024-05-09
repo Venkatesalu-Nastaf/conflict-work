@@ -73,6 +73,10 @@ const useTransferdataentry = () => {
     const [latestTripNo,setLatestTripNo] = useState([])
     const [latestGroupNo,setLatestGroupNo] = useState(0)
     const { setOrganizationName } = useData()
+    const [lengthCheck,setLengthCheck] = useState()
+    const [formData,setFormData] = useState({})
+    const [billingPage,setBillingPage] = useState()
+
 
     const convertToCSV = (data) => {
         const header = columns.map((column) => column.headerName).join(",");
@@ -218,26 +222,59 @@ const useTransferdataentry = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const parameterKeys = [
-            "Groupid", "Invoice_no", "Status", "Billdate", "Organization_name", "Trip_id", "FromDate", "EndDate", "Amount"
+            "Groupid", "Invoice_no", "Status", "Billdate", "Organization_name", "Trip_id", "FromDate", "EndDate", "Amount","billingsheet"
         ];
-
-        const formData = {};
+    
+        const updatedFormData = {}; // New object to hold updated form data
+    
         parameterKeys.forEach(key => {
             const value = params.get(key);
             if (value !== null && value !== "null") {
-                formData[key] = value;
+                updatedFormData[key] = value; // Set the key-value pair in the new object
             }
         });
-        const transferlist = formData.Trip_id?.split(',')
-        setTransferId(transferlist)
-        setInvoiceno(formData.Invoice_no)
-        setGroupId(formData.Groupid)
-        setCustomer(formData.Organization_name)
-        setFromDate(formData.FromDate)
-        setEndDate(formData.EndDate)
-        setBillingdate(formData.Billdate)
-        setTotalValue(parseInt(formData.Amount))
-    }, [location])
+    // if(updatedFormData.billingsheet===true){
+        setFormData(updatedFormData); // Update formData state with the new object
+        // Other state updates remain the same
+        const transferlist = updatedFormData.Trip_id?.split(',');
+        setTransferId(transferlist);
+        setInvoiceno(updatedFormData.Invoice_no);
+        setGroupId(updatedFormData.Groupid);
+        setCustomer(updatedFormData.Organization_name);
+        setFromDate(updatedFormData.FromDate);
+        setEndDate(updatedFormData.EndDate);
+        setBillingdate(updatedFormData.Billdate);
+        setTotalValue(parseInt(updatedFormData.Amount));
+        setBillingPage(updatedFormData.billingsheet)
+    // }
+    // else{
+    //     setFormData({})
+    // }
+
+        return () => {
+            setFormData({}); // Reset formData state to an empty object
+        };
+    }, [location]);
+
+    window.addEventListener('click', (event) => {
+        if (event.target === window) {
+            setBillingPage(false) 
+        }
+    });
+    useEffect(()=>{
+        if(billingPage===false){
+        setInvoiceno('');
+        setTransferId([])
+        setCustomer('');
+        setGroupId('');
+        setBook('')
+        setSelectedCustomerDatas('');
+        setFormData({});
+        setRows([])
+        setRowSelectionModel([])
+        }
+    },[billingPage])
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -404,7 +441,7 @@ const handleButtonClickTripsheet = async () => {
         const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
 
         // Setting selected customer data in local storage
-        localStorage.setItem('selectedcustomer', customername);
+        // localStorage.setItem('selectedcustomer', customername);
         const storedCustomer = localStorage.getItem('selectedcustomer');
         const decodedCustomer = decodeURIComponent(storedCustomer);
         localStorage.setItem('selectedcustomerdata', decodedCustomer);
@@ -545,21 +582,30 @@ const handleButtonClickTripsheet = async () => {
         }
     }
 
-const lengthofrow = latestTripNo.length-selectedRow.length
 
-useEffect(()=>{
-    const fetchData = async()=>{
 
-        if(lengthofrow===0){
-
-        const getresponse = await axios.delete(`${apiUrl}/deleteTransfer/${latestGroupNo}`)
-        console.log(getresponse,'Delted Successfully');
-
-    }
-    }
+    useEffect(() => {
+        const fetchData = async () => {
+            // Execute the delete query and reset formData
+            if (lengthCheck === 0 || lengthCheck !== undefined) {
+                try {
+                    // Execute the delete query
+                    const getresponse = await axios.delete(`${apiUrl}/deleteTransfer/${latestGroupNo}`);
+                    console.log(getresponse, 'Deleted Successfully');
+                
+                   
+                 
+                } catch (error) {
+                    console.error(error, 'Error deleting transfer');
+                    // Handle error if necessary
+                }
+            }
+        };
+        fetchData();
+    }, [apiUrl, lengthCheck, latestGroupNo,location]);
     
-    fetchData()
-},[apiUrl,latestTripNo,lengthofrow])
+
+
 
 useEffect(()=>{
     const fetchData = async()=>{
@@ -584,6 +630,7 @@ useEffect(()=>{
 
     const handleBillRemove = async () => {
         const tripid = selectedRow?.map(row => row.tripid.toString());
+        const Trip = selectedRow?.map(row=>row.tripid)
         // const tripid = selectedRow?.map((li)=>li.tripid.toString())
         const selectId= selectedRow?.map(row => row.id)
         const Amount = selectedRow?.map(li=>li.netamount.split(',')).flat();
@@ -602,6 +649,10 @@ useEffect(()=>{
         setRows(updatedRows);
         setSelectedRow([]); 
         try {
+            const response = await axios.post(`${apiUrl}/tripsheetUpdate`, {
+                tripids: tripid,
+                status: 'Opened',
+            });
             const tripids = rowSelectionModel;
             const TransferUpdate = {
                 Trip_id:tripid,
@@ -619,7 +670,9 @@ useEffect(()=>{
             const updatedRows = rows.filter(row => !selectId.includes(row.id));
 
             setRows(updatedRows);
-            setSelectedRow([]);      
+            setSelectedRow([]);
+            const lengthofrow = selectedRow.length-latestTripNo.length;
+            setLengthCheck(lengthofrow)
          try{
             const resultresponse = await axios.put(`${apiUrl}/updateList`,TransferUpdate)
             const updatedRows = rows.filter(row => !selectId.includes(row.id));

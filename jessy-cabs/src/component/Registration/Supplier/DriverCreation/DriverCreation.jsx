@@ -19,6 +19,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Checkbox from '@mui/material/Checkbox';
 import AddIcCallTwoToneIcon from "@mui/icons-material/AddIcCallTwoTone";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
+
 
 
 import { PermissionContext } from '../../../context/permissionContext';
@@ -135,6 +140,8 @@ const DriverCreation = () => {
         dialogdeleteOpen,
         // setError,
         // setErrorMessage,
+        handleExcelDownload,
+    handlePdfDownload,
         handlecheckbox,
         deletefile,
         Deleted,
@@ -193,7 +200,7 @@ const DriverCreation = () => {
                                 <TextField
                                     margin="normal"
                                     size="small"
-                                    id="user-name"
+                                    id="drivername"
                                     label="Driver Name"
                                     name="drivername"
                                     value={selectedCustomerData?.drivername || book.drivername}
@@ -207,7 +214,7 @@ const DriverCreation = () => {
                                 <TextField
                                     margin="normal"
                                     size="small"
-                                    id="user-name"
+                                    id="username"
                                     label="User Mail-Id"
                                     name="username"
                                     value={selectedCustomerData?.username || book.username}
@@ -651,7 +658,7 @@ const DriverCreation = () => {
                                             </div>
                                             <TextField
                                                 size="small"
-                                                id="id"
+                                                id="search"
                                                 label="Search"
                                                 name="searchText"
                                                 value={searchText || ""}
@@ -797,6 +804,21 @@ const DriverCreation = () => {
 
                         </StyledSpeedDial>
                     </Box>
+                    <div className="Download-btn">
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                  Download
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
+        </div>
 
 
                     <div className="DriverCreation-table-container">

@@ -21,8 +21,14 @@ const useBankaccount = () => {
     const [info, setInfo] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [warning, setWarning] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
+    // const [deleteId, setDeleteId] = useState(null);
+    const [deleteId, setDeleteId] = useState();
+    const [updatedata,setUpdatedata]=useState(true)
+    console.log(deleteId,"deleleleeleleleleeleeeeeeeeee")
+    
 
+    
+    
 
 
 
@@ -87,6 +93,7 @@ const useBankaccount = () => {
         };
         setBankDetails((prevBankDetails) => [...prevBankDetails, newBank]);
         fetchData();
+        setUpdatedata(true)
         setEditingIndex(null);
 
     };
@@ -98,17 +105,26 @@ const useBankaccount = () => {
         try {
             if (index >= 0 && index < bankDetails.length) {
                 const updatedBank = bankDetails[index];
+                // const updateData = {
+                //     id: updatedBank.id,
+                //     bankname2: book.bankname2 || updatedBank.bankname2,
+                //     netbalance: book.netbalance || updatedBank.netbalance,
+                //     totalin: book.netbalance || updatedBank.totalin,
+                //     totalout: book.totalout || updatedBank.totalout,
+                // };
+
                 const updateData = {
                     id: updatedBank.id,
                     bankname2: book.bankname2 || updatedBank.bankname2,
-                    netbalance: book.netbalance || updatedBank.netbalance,
-                    totalin: book.netbalance || updatedBank.totalin,
+                    netbalance: updatedBank.totalin-updatedBank.totalout,
+                    totalin: book.totalin|| updatedBank.totalin,
                     totalout: book.totalout || updatedBank.totalout,
                 };
                 await axios.put(`${apiUrl}/updatebankdetails/${updatedBank.id}`, updateData);
                 setSuccess(true);
                 setSuccessMessage('Successfully Updated');
                 setEditingIndex(null);
+                setUpdatedata(true)
             } else {
             }
         } catch {
@@ -156,6 +172,7 @@ const useBankaccount = () => {
             await axios.post(`${apiUrl}/bankdetails`, newBank);
             handleAddBank();
             handleCancel();
+            setUpdatedata(true)
         } catch {
             setError(true);
             setErrorMessage('Error adding bank account. Please check your Network Connection.');
@@ -187,21 +204,48 @@ const useBankaccount = () => {
         fetchData();
     }, [fetchData]);
 
-    const handlePopupClose = useCallback(() => {
+    const handlePopupClose = () => {
         setPopupOpen(false);
-    }, []);
+    }
 
-    const handleDelete = (id) => {
-        setPopupOpen(true);
-        setEditingIndex(null);
-        setDeleteId(id);
-    };
+    // const handleDelete = (id) => {
+    //     console.log(id,"datadelete")
+    //     setPopupOpen(true);
+    //     setEditingIndex(null);
+    //     setDeleteId(id);
+    // };
+    const handlesuredelete=()=>{
+        const updatedBank = bankDetails[deleteId];
 
-    const handleDeleteBank = useCallback(async (id) => {
+         console.log(updatedBank,updatedBank.id,"jkkkkkj")
+        handleDeleteBank(updatedBank.id)
+        
+    }
+
+    // const handleDeleteBank = useCallback(async (id) => {
+    //     console.log(id,"handledeleteclodse")
+
+    //     if (!id) {
+    //         return;
+    //     }
+    //     try {
+    //         // await axios.delete(`${apiUrl}/deletebankdetails/${id}`);
+    //         fetchData();
+    //         handlePopupClose();
+    //     } catch (error) {
+    //         setError(true);
+    //         setErrorMessage('Error deleting bank account. Please check your Network Connection.');
+    //     }
+
+    // }, [fetchData, handlePopupClose, apiUrl]); // Add dependencies as needed
+
+     const handleDeleteBank = async (id) => {
+        
 
         if (!id) {
             return;
         }
+       
         try {
             await axios.delete(`${apiUrl}/deletebankdetails/${id}`);
             fetchData();
@@ -210,15 +254,26 @@ const useBankaccount = () => {
             setError(true);
             setErrorMessage('Error deleting bank account. Please check your Network Connection.');
         }
+    
 
-    }, [fetchData, handlePopupClose, apiUrl]); // Add dependencies as needed
+    }; // Add dependencies as needed
 
-    useEffect(() => {
-        if (deleteId !== null) {
-            handleDeleteBank(deleteId);
-            setDeleteId(null); // Reset deleteId after the operation is complete
-        }
-    }, [deleteId, handleDeleteBank]);
+
+    const handleDelete = (id) => {
+        console.log(id,"datadelete")
+        setPopupOpen(true);
+        setEditingIndex(null);
+        setDeleteId(id);
+        
+        
+    };
+
+    // useEffect(() => {
+    //     if (deleteId !== null) {
+    //         handleDeleteBank(deleteId);
+    //         setDeleteId(null); // Reset deleteId after the operation is complete
+    //     }
+    // }, [deleteId, handleDeleteBank]);
     const handleEditBank = (index) => {
         setEditingIndex(index);
     };
@@ -241,15 +296,33 @@ const useBankaccount = () => {
 
 
     //calculate totalcapital amount
+    // useEffect(() => {
+    //     // Make API request to fetch total capital amount
+    //     axios.get(`${apiUrl}/totalCapital_from_billing`)
+    //         .then(response => {
+    //             console.log(response.data.totalAmount,"JKJKKJKJKHJH")
+    //             setTotalCapital(response.data.totalAmount);
+    //         })
+    //         .catch(error => {
+    //         });
+    // }, [apiUrl]);
+    console.log(totalcapital,'totalcapital')
     useEffect(() => {
-        // Make API request to fetch total capital amount
-        axios.get(`${apiUrl}/totalCapital_from_billing`)
-            .then(response => {
-                setTotalCapital(response.data.totalAmount);
-            })
-            .catch(error => {
-            });
-    }, [apiUrl]);
+        const fetchOrganizationnames = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/totalCapital_from_billing`);
+                console.log(response.data,"ddd")
+                const data = response.data.totalAmount
+                console.log(data)
+                setTotalCapital(data)
+               
+            }
+            catch (error) {
+                console.log(error, "error");
+            }
+        };
+        fetchOrganizationnames()
+    }, [apiUrl,totalcapital,totalIn,totalOut,book,editingIndex])
 
     return {
         error,
@@ -279,6 +352,7 @@ const useBankaccount = () => {
         popupOpen,
         handlePopupClose,
         handleDeleteBank,
+        handlesuredelete
 
 
     };

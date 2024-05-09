@@ -112,7 +112,7 @@ const TransferDataEntry = () => {
                       id="id"
                       label="Group Trip ID"
                       name="tripid"
-                      value={groupId}
+                      value={groupId||''}
                       onChange={(e) => setGroupId(e.target.value)}
                       autoComplete='off'
                     />
@@ -146,7 +146,7 @@ const TransferDataEntry = () => {
                       id="id"
                       label="Invoice No"
                       name="invoiceno"
-                      value={invoiceno}
+                      value={invoiceno||''}
                       // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate||formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate):null}
 
                       onChange={(event) => handlechnageinvoice(event)}

@@ -249,15 +249,16 @@ const useTransferlist = () => {
 
   const handleButtonClickTripsheet = (params) => {
     const data = params.row;
+
     // const customername = encodeURIComponent(row.customer);
     // const encodedCustomer = customername;
     // localStorage.setItem("selectedcustomer", encodedCustomer);
-    const storedCustomer = localStorage.getItem("selectedcustomer");
-    const decodedCustomer = decodeURIComponent(storedCustomer);
-    localStorage.setItem("selectedcustomer", decodedCustomer);
+    // const storedCustomer = localStorage.getItem("selectedcustomer");
+    // const decodedCustomer = decodeURIComponent(storedCustomer);
+    // localStorage.setItem("selectedcustomer", decodedCustomer);
     // const billingPageUrl = `/home/billing/transfer?tab=dataentry`;
     // window.history.pushState({ path: billingPageUrl }, '', billingPageUrl);
-    const billingPageUrl = `/home/billing/transfer?tab=dataentry&Groupid=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=${data.Status || ''}&Billdate=${data.Billdate || ''}&Organization_name=${data.Organization_name || ''}&Trip_id=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}`
+    const billingPageUrl = `/home/billing/transfer?tab=dataentry&Groupid=${data.Grouptrip_id || ''}&Invoice_no=${data.Invoice_no || ''}&Status=${data.Status || ''}&Billdate=${data.Billdate || ''}&Organization_name=${data.Organization_name || ''}&Trip_id=${data.Trip_id || ''}&FromDate=${data.FromDate || ''}&EndDate=${data.EndDate || ''}&Amount=${data.Amount || ''}&billingsheet=true`
     // window.location.assign(billingPageUrl)
     window.location.href = billingPageUrl
   };

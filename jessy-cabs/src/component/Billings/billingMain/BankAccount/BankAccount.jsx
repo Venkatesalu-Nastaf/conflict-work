@@ -55,16 +55,20 @@ const BankAccount = () => {
     popupOpen,
     handlePopupClose,
     handleDeleteBank,
+    handlesuredelete
 
 
     // ... (other state variables and functions)
   } = useBankaccount();
+ 
 
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+  console.log(totalcapital,"datafrontend")
+  console.log(editingIndex,"editinginddex")
 
 
   return (
@@ -166,7 +170,7 @@ const BankAccount = () => {
             <div className="addedbanks-Details-BankAccount" key={index}>
               <div className="input-field">
                 <div className="input">
-                  <input type="hidden" name="id" value={bankDetails[index]?.id} />
+                  {/* <input  name="id" value={bankDetails[index]?.id} /> */}
                   <div className="icone">
                     <AiFillBank color="action" style={{ fontSize: "27px" }} />
                   </div>
@@ -190,7 +194,8 @@ const BankAccount = () => {
                     name="netbalance"
                     type="number"
                     // value={bankDetails[index]?.netbalance || book.netbalance || ''}
-                    value={editingIndex === index ? bankDetail.netbalance : (bankDetail.netbalance || book.netbalance || '')}
+                    // value={editingIndex === index ? bankDetail.netbalance : (bankDetail.netbalance || book.netbalance || '')}
+                    value={editingIndex === index ? (bankDetail.totalin-bankDetail.totalout)  : (bankDetail.netbalance || book.netbalance || '')}
                     // onChange={handleChange}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
@@ -204,7 +209,8 @@ const BankAccount = () => {
                     type="number"
                     id={`totalin-${index}`}
                     // value={bankDetails[index]?.totalin || book.netbalance || ''}
-                    value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || book.netbalance || '')}
+                    // value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || book.netbalance || '')}
+                    value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || '')}
                     // onChange={handleChange}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
@@ -222,6 +228,7 @@ const BankAccount = () => {
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
                   />
+                
                 </div>
                 <div className="button-container-bankAccount">
                   <div className="input" style={{ width: "80px" }}>
@@ -236,7 +243,9 @@ const BankAccount = () => {
                     )}
                   </div>
                   <div className="input" style={{ width: "80px" }}>
-                    <IconButton color="error" variant="contained" onClick={handleDelete}>
+                    
+                    {/* <IconButton color="error" variant="contained" onClick={handleDelete}> */}
+                    <IconButton color="error" variant="contained" onClick={() => handleDelete(index)}>
                       <DeleteIcon />
                     </IconButton>
                   </div>
@@ -245,7 +254,8 @@ const BankAccount = () => {
                       Are you sure you want to Delete this
                     </DialogContent>
                     <DialogActions>
-                      <Button onClick={() => handleDeleteBank(bankDetail.id)} variant="contained" color="primary">
+                      {/* <Button onClick={() => handleDeleteBank(bankDetail.id)} variant="contained" color="primary"> */}
+                      <Button onClick={() => handlesuredelete(bankDetail.id)} variant="contained" color="primary">
                         Yes
                       </Button>
                       <Button onClick={handlePopupClose} variant="contained" color="primary">

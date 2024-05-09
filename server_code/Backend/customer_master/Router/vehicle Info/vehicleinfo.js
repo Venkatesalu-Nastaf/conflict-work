@@ -33,6 +33,19 @@ router.get('/lastvechileinfogetid', (req, res) => {
     return res.status(200).json(lastdriverid);
   });
 });
+router.get('/vechileinfogetdata', (req, res) => {
+  db.query('SELECT * FROM  vehicleinfo ', (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'vehicleid not found' });
+    }
+   
+    
+    return res.status(200).json(result);
+  });
+});
 
 router.get('/vechiclenameinfo', (req, res) => {
   const { vehicletypename } = req.query; // Access the parameter using req.params

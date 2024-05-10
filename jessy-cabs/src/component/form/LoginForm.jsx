@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "./Form.css";
 import axios from "axios";
 import { useUser } from './UserContext';
@@ -9,13 +9,10 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { BiHide } from "@react-icons/all-files/bi/BiHide";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-// import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
 import { AiOutlineEye } from "@react-icons/all-files/ai/AiOutlineEye";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-// import { AiOutlineInstagram } from "@react-icons/all-files/ai/AiOutlineInstagram";
-// import { RiFacebookCircleFill } from "@react-icons/all-files/ri/RiFacebookCircleFill";
 import { APIURL } from "../url.js";
-import { PermissionContext } from "../context/permissionContext.js";
+
 
 
 const Login = () => {
@@ -62,13 +59,6 @@ const Login = () => {
 
   });
 
-
-
-  // Permission ------------
-  const { permissions } = useContext(PermissionContext)
-
-  const Dashbord_read = permissions[20]?.read;
-
   const formSubmitter = async (e) => {
     e.preventDefault();
     try {
@@ -77,18 +67,10 @@ const Login = () => {
         setUserdashboard(true)
         loginUser(input.username);
         setSuccessMessage("Successfully Added");
-
-        if (Dashbord_read === 1) {
-          navigate("/home/dashboard");
-          console.log("/ home / dashboard", Dashbord_read)
-        } else {
-          navigate("/home/bookings/booking");
-          console.log("home/bookings/booking", Dashbord_read)
-        }
-
-        console.log("Dashbord_read-login", Dashbord_read)
+        navigate("/home/dashboard");
         localStorage.setItem("auth", true);
-      } else {
+      }
+      else {
         setError(true);
         setErrorMessage("Check your Network Connection");
       }
@@ -172,23 +154,7 @@ const Login = () => {
                 Login
               </button>
             </div>
-            {/* <div className="social_media_container">
-              <a href="/" className="social facebook">
-                <i>
-                  <RiFacebookCircleFill />
-                </i>
-              </a>
-              <a href="/" className="social instagram">
-                <i>
-                  <AiOutlineInstagram />
-                </i>
-              </a>
-              <a href="/" className="social linkedin">
-                <i>
-                  <FaLinkedin />
-                </i>
-              </a>
-            </div> */}
+
           </form>
         </div>
       </div>

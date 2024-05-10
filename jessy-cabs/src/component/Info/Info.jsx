@@ -24,11 +24,11 @@ const Info = () => {
   //------------------popup------------------------
 
   const [info, setInfo] = useState(false);
-  const [infoMessage, setInfoMessage] = useState({});
+  // const [infoMessage, setInfoMessage] = useState({});
 
   const hidePopup = () => {
     setInfo(false);
-    setInfoMessage("");
+    // setInfoMessage("");
   };
 
   useEffect(() => {
@@ -52,7 +52,6 @@ const Info = () => {
   const Fuel_Info = permissions[19]?.read;
 
   const handleMenuItemClick = (menuItem, alt, e) => {
-
     localStorage.setItem('activeMenuItem', menuItem);
     setActiveMenuItem(menuItem);
 
@@ -82,7 +81,7 @@ const Info = () => {
       else if (hasPermission === 0)
         e.preventDefault();
       setInfo(true);
-      setInfoMessage("You do not have Permission ..!")
+      // setInfoMessage("You do not have Permission ..!")
       alert("You do not have Permission ..!");
     }
     catch {
@@ -96,10 +95,10 @@ const Info = () => {
 
   const myLocation = useLocation();
   var myTo = ''
-  if (myLocation.pathname == '/home/info/mailer/TemplateSelection') {
+  if (myLocation.pathname === '/home/info/mailer/TemplateSelection') {
     myTo = '/home/info/mailer/TemplateSelection';
   }
-  else if (myLocation.pathname == '/home/info/mailer/TemplateCreation') {
+  else if (myLocation.pathname === '/home/info/mailer/TemplateCreation') {
     myTo = '/home/info/mailer/TemplateCreation'
   }
   else {

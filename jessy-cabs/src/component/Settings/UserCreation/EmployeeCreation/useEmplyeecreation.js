@@ -50,18 +50,22 @@ const useEmplyeecreation = () => {
         { id: 1, name: 'Booking', read: false, new: false, modify: false, delete: false },
         { id: 2, name: 'Trip Status', read: false, new: false, modify: false, delete: false },
         { id: 3, name: 'Trip sheet', read: false, new: false, modify: false, delete: false },
+
         { id: 4, name: 'BILLING', read: false, new: false, modify: false, delete: false },
         { id: 5, name: 'Billing', read: false, new: false, modify: false, delete: false },
         { id: 6, name: 'Transfer', read: false, new: false, modify: false, delete: false },
         { id: 7, name: 'Covering Bill', read: false, new: false, modify: false, delete: false },
+
         { id: 8, name: 'REGISTER', read: false, new: false, modify: false, delete: false },
         { id: 9, name: 'Customer', read: false, new: false, modify: false, delete: false },
         { id: 10, name: 'Supllier', read: false, new: false, modify: false, delete: false },
         { id: 11, name: 'Employee', read: false, new: false, modify: false, delete: false },
+
         { id: 12, name: 'SETTING', read: false, new: false, modify: false, delete: false },
         { id: 13, name: 'User Creation', read: false, new: false, modify: false, delete: false },
         { id: 14, name: 'Station Creation', read: false, new: false, modify: false, delete: false },
         { id: 15, name: 'Main Setting', read: false, new: false, modify: false, delete: false },
+
         { id: 16, name: 'INFO', read: false, new: false, modify: false, delete: false },
         { id: 17, name: 'Rate Management', read: false, new: false, modify: false, delete: false },
         { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },

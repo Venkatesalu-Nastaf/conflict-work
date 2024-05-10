@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import Dialog from '@material-ui/core/Dialog';
 import MenuItem from '@mui/material/MenuItem';
-import { Department } from "./TripStatusData.js";
 import { Status } from "./TripStatusData.js";
 import Autocomplete from "@mui/material/Autocomplete";
 import useTripStatus from './useTripStatus.js';
@@ -52,7 +51,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 }));
 
 
-const TripStatus = () => {
+const TripStatus = ({ stationName }) => {
 
   const {
     statusvalue, handlestatusChange,
@@ -196,8 +195,8 @@ const TripStatus = () => {
                     freeSolo
                     size="small"
                     value={department}
-                    options={Department.map((option) => ({
-                      label: option.option,
+                    options={stationName.map((option) => ({
+                      label: option.Stationname,
                     }))}
                     onChange={(event, value) => handleInputChange(event, value)}
                     renderInput={(params) => {
@@ -208,11 +207,6 @@ const TripStatus = () => {
                   />
                 </div>
 
-                {/* <div className="input" style={{ width: '170px' }}>
-                  <Button variant="contained" onClick={handleButtontripsheet}>
-                    New TripSheet
-                  </Button>
-                </div> */}
               </div>
             </div>
             <div className='alert-popup-main'>
@@ -257,17 +251,6 @@ const TripStatus = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {/* {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                />
-              ))} */}
-
-
-
               {TripStatus_read === 1 && (
                 <SpeedDialAction
                   key="list"

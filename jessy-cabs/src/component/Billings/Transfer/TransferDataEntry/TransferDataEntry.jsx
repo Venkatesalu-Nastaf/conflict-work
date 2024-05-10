@@ -6,7 +6,6 @@ import ClearIcon from '@mui/icons-material/Clear';
 import dayjs from "dayjs";
 import MenuItem from '@mui/material/MenuItem';
 import { Menu, TextField } from "@mui/material";
-import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -29,7 +28,7 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import useTransferdataentry from './useTransferdataentry';
 import { useData } from '../../../Dashboard/Maindashboard/DataContext';
 
-const TransferDataEntry = () => {
+const TransferDataEntry = ({ stationName }) => {
 
   const {
     rows,
@@ -112,7 +111,7 @@ const TransferDataEntry = () => {
                       id="id"
                       label="Group Trip ID"
                       name="tripid"
-                      value={groupId||''}
+                      value={groupId || ''}
                       onChange={(e) => setGroupId(e.target.value)}
                       autoComplete='off'
                     />
@@ -146,7 +145,7 @@ const TransferDataEntry = () => {
                       id="id"
                       label="Invoice No"
                       name="invoiceno"
-                      value={invoiceno||''}
+                      value={invoiceno || ''}
                       // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate||formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate):null}
 
                       onChange={(event) => handlechnageinvoice(event)}
@@ -226,8 +225,8 @@ const TransferDataEntry = () => {
                       freeSolo
                       size="small"
                       value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                      options={Stations.map((option) => ({
-                        label: option.optionvalue,
+                      options={stationName.map((option) => ({
+                        label: option.Stationname,
                       }))}
                       onChange={(event, value) => handleserviceInputChange(event, value)}
                       renderInput={(params) => {

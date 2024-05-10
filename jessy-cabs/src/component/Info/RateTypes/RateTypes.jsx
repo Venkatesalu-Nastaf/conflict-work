@@ -9,7 +9,7 @@ import Division from './Division/Division';
 import TabContext from "@mui/lab/TabContext";
 import Ratevalidity from './Ratevalidity/Ratevalidity';
 
-const RateTypes = () => {
+const RateTypes = ({ stationName }) => {
 
   const [value, setValue] = React.useState("ratetype");
 
@@ -29,8 +29,8 @@ const RateTypes = () => {
                 <Tab label="Division" value="division" />
               </TabList>
             </Box>
-            <TabPanel value="ratetype"><RateType/></TabPanel>
-            <TabPanel value="ratevalidity"><Ratevalidity/></TabPanel>
+            <TabPanel value="ratetype"><RateType stationName={stationName} /></TabPanel>
+            <TabPanel value="ratevalidity"><Ratevalidity /></TabPanel>
             <TabPanel value="division"><Division /></TabPanel>
           </TabContext>
         </Box>

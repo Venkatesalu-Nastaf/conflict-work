@@ -42,10 +42,13 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "stationid", headerName: "Station_Id", width: 130 },
-  { field: "Stationname", headerName: "Station_Name", width: 130 },
-  { field: "active", headerName: "Active", width: 160 },
+  { field: "invoiceNo", headerName: "Invoice No", width: 130 },
+  { field: "Stationname", headerName: "Station_Name", width: 140 },
+  { field: "active", headerName: "Active", width: 80 },
   { field: "shortname", headerName: "Station", width: 130 },
   { field: "ownbranch", headerName: "Own_Branch", width: 130 },
+  { field: "address", headerName: "address", width: 130 },
+
 ];
 // TABLE END
 
@@ -147,6 +150,29 @@ const StationCreation = () => {
                 />
 
               </div>
+
+              <TextField
+                margin="normal"
+                size="small"
+                id="address"
+                label="Adress"
+                name="address"
+                value={selectedCustomerData?.address || book.address}
+                autoComplete="new-password"
+                onChange={handleChange}
+                variant="standard"
+              />
+              <TextField
+                margin="normal"
+                size="small"
+                id="invoiceNo"
+                label="Invoice No"
+                name="invoiceNo"
+                value={selectedCustomerData?.invoiceNo || book.invoiceNo}
+                autoComplete="new-password"
+                onChange={handleChange}
+                variant="standard"
+              />
               {/* </div>
             <div className="input-field"> */}
               <div className="input radio">

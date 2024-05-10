@@ -34,28 +34,17 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 // ICONS
 import SpeedIcon from "@mui/icons-material/Speed";
 import ClearIcon from '@mui/icons-material/Clear';
-// import DeleteIcon from "@mui/icons-material/Delete";
 import { AiOutlineFileSearch } from "react-icons/ai";
-// import CommuteIcon from "@mui/icons-material/Commute";
 import CarCrashIcon from "@mui/icons-material/CarCrash";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-// import AutoModeIcon from "@mui/icons-material/AutoMode";
-// import AltRouteIcon from "@mui/icons-material/AltRoute";
-// import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import MinorCrashIcon from "@mui/icons-material/MinorCrash";
-// import PriceChangeIcon from "@mui/icons-material/PriceChange";
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
-// import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-// import BatchPredictionIcon from '@mui/icons-material/BatchPrediction';
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
-// import SummarizeTwoToneIcon from "@mui/icons-material/SummarizeTwoTone";
-// import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
-// import AssignmentIndTwoToneIcon from "@mui/icons-material/AssignmentIndTwoTone";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AirlineSeatReclineExtraIcon from "@mui/icons-material/AirlineSeatReclineExtra";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
@@ -63,10 +52,8 @@ import useVehicleinfo from './useVehicleinfo';
 import EmailIcon from "@mui/icons-material/Email";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-import { StationName } from "../DriverCreation/DriverCreationData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuildingFlag } from "@fortawesome/free-solid-svg-icons";
-// import { faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PiCarSimpleFill } from "react-icons/pi";
 import { BsFillFuelPumpFill } from "react-icons/bs";
@@ -148,7 +135,7 @@ export const Hire = [
   },
 
 ];
-const Vehicaleinfo = () => {
+const Vehicaleinfo = ({ stationName }) => {
   const apiUrl = APIURL;
   const {
     selectedCustomerData,
@@ -424,10 +411,10 @@ const Vehicaleinfo = () => {
                     id="free-solo-demo-stationname"
                     freeSolo
                     sx={{ width: "20ch" }}
-                    value={StationName.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
+                    value={stationName?.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
-                    options={StationName.map((option) => ({
-                      label: option.Option,
+                    options={stationName?.map((option) => ({
+                      label: option.Stationname,
                     }))}
                     getOptionLabel={(option) => option.label || selectedCustomerData?.stations || ''}
                     renderInput={(params) => {
@@ -490,61 +477,6 @@ const Vehicaleinfo = () => {
               </div>
             </div>
 
-
-
-
-
-
-
-
-
-            {/* <div className="vehicaleinfo-container-right">
-              <div className="vehicaleinfo-update-main">
-                <div className="vehicaleinfo-update">
-                  <div
-                    className="Scroll-Style"
-                    style={{ overflow: "scroll", height: "220px" }}
-                  >
-                    <table>
-                      <thead id="update-header">
-                        <tr>
-                          <th>ID</th>
-                          <th>Vehicle_Name</th>
-                          <th>Owner</th>
-                          <th>Vehicle_Type</th>
-                          <th>status</th>
-                          <th>Group</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                        {rows1?.length === 0 ? (
-                          <tr>
-                            <td colSpan={6}>No data available.</td>
-                          </tr>
-                        ) : (
-                          rows1?.map((row) => (
-                            <tr
-                              id="update-row"
-                              key={row.id}
-                              onClick={() => handleRowClick(row)}
-
-                            >
-                              <td>{row.vehicleId}</td>
-                              <td>{row.vehiclename}</td>
-                              <td>{row.owner}</td>
-                              <td>{row.vechtype}</td>
-                              <td>{row.active}</td>
-                              <td>{row.Groups}</td>
-                            </tr>
-                          ))
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div> */}
           </div>
           <div className="input-field vehicleinfo-inputfeild">
             {/* <div className="input"> */}
@@ -618,22 +550,7 @@ const Vehicaleinfo = () => {
                 id="email"
               />
             </div>
-            {/* <div className="input">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Attached Date"
-                  format="DD/MM/YYYY"
-                  value={selectedCustomerData.doadate ? dayjs(selectedCustomerData.doadate) : null}
-                  onChange={(date) => handleDateChange(date, 'doadate')}
-                >
-                  {({ inputProps, inputRef }) => (
-                    <TextField {...inputProps} inputRef={inputRef} name='doadate' value={selectedCustomerData.doadate} />
-                  )}
-                </DatePicker>
-              </LocalizationProvider>
-            </div> */}
-            {/* </div>
-          <div className="input-field"> */}
+
             <div className="input">
               <div className="icone">
                 <ContactPhoneIcon color="action" />
@@ -665,7 +582,7 @@ const Vehicaleinfo = () => {
             <div className="input">
               {/* {selectedCustomerData.vehicleId || book.vehicleId ? ( */}
               <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                
+
                 <span class="button-29">
                   <FiUpload />
                   <span>
@@ -792,7 +709,7 @@ const Vehicaleinfo = () => {
 
               <Button size="md" component="label" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span class="button-29">
-                  <FiUpload /> 
+                  <FiUpload />
                   <span>National Permit Copy</span>
                   <input
                     type="file"
@@ -802,8 +719,8 @@ const Vehicaleinfo = () => {
                 </span>
               </Button>
 
-              
-              
+
+
 
 
             </div>

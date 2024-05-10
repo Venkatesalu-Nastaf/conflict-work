@@ -5,7 +5,6 @@ import {
   VehicleRate,
   Status,
   HireTypes,
-  Department,
   DocumentType,
   Duty,
   Pickup,
@@ -160,7 +159,9 @@ const maplogcolumns = [
   { field: "place_name", headerName: "Place Name", width: 600 },
 ];
 
-const TripSheet = () => {
+const TripSheet = ({ stationName }) => {
+
+  // console.log("333", stationName)
 
 
   const {
@@ -279,7 +280,7 @@ const TripSheet = () => {
 
             <div>
               <div className='tripsheet-division1'>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <ListAltIcon color="action" />
                   </div>
@@ -297,7 +298,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -313,7 +314,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex'}}>
+                <div className="input" style={{ display: 'flex' }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
 
                     <DatePicker
@@ -330,7 +331,7 @@ const TripSheet = () => {
                   </LocalizationProvider>
                 </div>
 
-                <div className="input" style={{display: 'flex'}}>
+                <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <QuizOutlinedIcon color="action" />
                   </div>
@@ -355,7 +356,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AccountBalanceWalletIcon color="action" />
                   </div>
@@ -372,7 +373,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex'}}>
+                <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <AppsOutageOutlinedIcon color="action" />
                   </div>
@@ -396,7 +397,7 @@ const TripSheet = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
@@ -411,7 +412,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -485,7 +486,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex'}}>
+                <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <PhoneIphoneIcon color="action" />
                   </div>
@@ -501,7 +502,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AssignmentIndIcon color="action" />
                   </div>
@@ -517,7 +518,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex'}}>
+                <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <CallIcon color="action" />
                   </div>
@@ -531,8 +532,8 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                
-                <div className="input" style={{display: 'flex'}}>
+
+                <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <AttachEmailIcon color="action" />
                   </div>
@@ -552,7 +553,7 @@ const TripSheet = () => {
               <div className='tripsheet-division2'>
 
                 <div>
-                  <div className="" style={{display: 'flex', alignItems: 'center'}}>
+                  <div className="" style={{ display: 'flex', alignItems: 'center' }}>
                     <div className="icone">
                       <AddHomeWorkIcon color="action" />
                     </div>
@@ -570,7 +571,7 @@ const TripSheet = () => {
                     />
                   </div>
 
-                  <div className="" style={{display: 'flex', alignItems: 'center'}}>
+                  <div className="" style={{ display: 'flex', alignItems: 'center' }}>
                     <div className="icone">
                       <HomeTwoToneIcon color="action" />
                     </div>
@@ -587,7 +588,7 @@ const TripSheet = () => {
                     />
                   </div>
 
-                  <div className="" style={{display: 'flex', alignItems: 'center'}}>
+                  <div className="" style={{ display: 'flex', alignItems: 'center' }}>
                     <div className="icone">
                       <LocationCityIcon color="action" />
                     </div>
@@ -604,47 +605,47 @@ const TripSheet = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <div className="Scroll-Style tripsheet-table1">
-                        <Table hoverRow borderAxis="y">
-                          <thead>
-                            <tr>
-                              <th>Vehicle_Name</th>
-                              <th>Vehicle_Type</th>
-                              <th>Driver_name</th>
-                              <th>Driver_phone</th>
-                              <th>Supplier</th>
-                              <th>Online_Access</th>
+                    <Table hoverRow borderAxis="y">
+                      <thead>
+                        <tr>
+                          <th>Vehicle_Name</th>
+                          <th>Vehicle_Type</th>
+                          <th>Driver_name</th>
+                          <th>Driver_phone</th>
+                          <th>Supplier</th>
+                          <th>Online_Access</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rows.length === 0 ? (
+                          <tr>
+                            <td colSpan={7}>No data available.</td>
+                          </tr>
+                        ) : (
+                          rows.map((row) => (
+                            <tr key={row.id} onClick={() => handleRowClick(row)}>
+                              <td>{row.vehRegNo}</td>
+                              <td>{row.vehType}</td>
+                              <td>{row.driverName}</td>
+                              <td>{row.mobileNo}</td>
+                              <td>{row.supplier}</td>
+                              <td>{row.onlineAccess}</td>
                             </tr>
-                          </thead>
-                          <tbody>
-                            {rows.length === 0 ? (
-                              <tr>
-                                <td colSpan={7}>No data available.</td>
-                              </tr>
-                            ) : (
-                              rows.map((row) => (
-                                <tr key={row.id} onClick={() => handleRowClick(row)}>
-                                  <td>{row.vehRegNo}</td>
-                                  <td>{row.vehType}</td>
-                                  <td>{row.driverName}</td>
-                                  <td>{row.mobileNo}</td>
-                                  <td>{row.supplier}</td>
-                                  <td>{row.onlineAccess}</td>
-                                </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </Table>
-                      </div>
+                          ))
+                        )}
+                      </tbody>
+                    </Table>
+                  </div>
                 </div>
 
               </div>
 
               <div className='tripsheet-division3'>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <HowToRegIcon color="action" />
                   </div>
@@ -669,7 +670,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <StoreIcon color="action" />
                   </div>
@@ -680,9 +681,9 @@ const TripSheet = () => {
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
-                    value={Department.find((option) => option.optionvalue)?.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
-                    options={Department.map((option) => ({
-                      label: option.option,
+                    value={stationName.find((option) => option.optionvalue)?.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
+                    options={stationName.map((option) => ({
+                      label: option.Stationname,
                     }))}
                     getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                     renderInput={(params) => {
@@ -694,7 +695,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center', width: '240px'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center', width: '240px' }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -711,7 +712,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center', width: '150px'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center', width: '150px' }}>
                   {/* <TextField
                     margin="normal"
                     size="small"
@@ -750,7 +751,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <NoCrashIcon color="action" />
                   </div>
@@ -800,7 +801,7 @@ const TripSheet = () => {
 
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <SensorOccupiedIcon color="action" />
                   </div>
@@ -814,7 +815,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <PhoneIphoneIcon color="action" />
                   </div>
@@ -863,7 +864,7 @@ const TripSheet = () => {
                   />
 
                 </div> */}
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AttachEmailIcon color="action" />
                   </div>
@@ -889,7 +890,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <EngineeringIcon color="action" />
                   </div>
@@ -913,7 +914,7 @@ const TripSheet = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AirlineStopsIcon color="action" />
                   </div>
@@ -937,7 +938,7 @@ const TripSheet = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <DataUsageIcon color="action" />
                   </div>
@@ -952,7 +953,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <StreamIcon color="action" />
                   </div>
@@ -968,7 +969,7 @@ const TripSheet = () => {
                   />
 
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -983,7 +984,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Start Date"
@@ -997,7 +998,7 @@ const TripSheet = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Close Date"
@@ -1011,7 +1012,7 @@ const TripSheet = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
@@ -1028,7 +1029,7 @@ const TripSheet = () => {
                     />
                   </DemoItem>
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <RecentActorsIcon color="action" />
                   </div>
@@ -1042,7 +1043,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center', width: "300px"}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "300px" }}>
                   <div className="icone">
                     <CurrencyRupeeTwoToneIcon color="action" />
                   </div>
@@ -1058,7 +1059,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input time" style={{display: 'grid', alignItems: 'center'}}>
+                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
                   <label>shed out Time</label>
                   <input
                     type="time"
@@ -1072,7 +1073,7 @@ const TripSheet = () => {
                     }}
                   />
                 </div>
-                <div className="input time" style={{display: 'grid', alignItems: 'center'}}>
+                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
                   <label>Report Time</label>
                   <input
                     type="time"
@@ -1086,7 +1087,7 @@ const TripSheet = () => {
                     }}
                   />
                 </div>
-                <div className="input time" style={{display: 'grid', alignItems: 'center'}}>
+                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
                   <label>Close Time</label>
                   <input
                     type="time"
@@ -1100,7 +1101,7 @@ const TripSheet = () => {
                     }}
                   />
                 </div>
-                <div className="input time" style={{display: 'grid', alignItems: 'center'}}>
+                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
                   <label>Shed-In Time</label>
                   <input
                     type="time"
@@ -1115,7 +1116,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
@@ -1130,7 +1131,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center', width: "180px"}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
                   <TextField
                     name="startkm"
                     value={formData.startkm || selectedCustomerData.startkm || book.startkm || ''}
@@ -1142,7 +1143,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center', width: "180px"}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
                   <TextField
                     name="closekm"
                     value={formData.closekm || selectedCustomerData.closekm || book.closekm || ''}
@@ -1154,7 +1155,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center', width: "180px"}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
@@ -1169,7 +1170,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
@@ -1184,7 +1185,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
@@ -1202,7 +1203,7 @@ const TripSheet = () => {
                   />
                 </div>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
@@ -1216,7 +1217,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
@@ -1231,7 +1232,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faStamp} />
                   </div>
@@ -1245,7 +1246,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faSquareParking} />
                   </div>
@@ -1259,7 +1260,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center'}}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <TollTwoToneIcon color="action" />
                   </div>
@@ -1288,7 +1289,7 @@ const TripSheet = () => {
                     calculate
                   </Button>
                 </div>
-              {/* ////gggggggggggg */}
+                {/* ////gggggggggggg */}
 
                 <React.Fragment>
 
@@ -1682,7 +1683,7 @@ const TripSheet = () => {
                   </Dialog>
                 </React.Fragment>
 
-                <div className="input" style={{display: 'flex', alignItems: 'center', width: "250px" }}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "250px" }}>
                   <div className="icone">
                     <BackupTableSharpIcon color="action" />
                   </div>
@@ -1697,7 +1698,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center', width: "250px" }}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "250px" }}>
                   <div className="icone">
                     <MinorCrashSharpIcon color="action" />
                   </div>
@@ -1712,7 +1713,7 @@ const TripSheet = () => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input" style={{display: 'flex', alignItems: 'center', width: "250px" }}>
+                <div className="input" style={{ display: 'flex', alignItems: 'center', width: "250px" }}>
                   <div className="icone">
                     <PaymentsIcon color="action" />
                   </div>
@@ -1732,73 +1733,73 @@ const TripSheet = () => {
                   </Button>
                 </div>
 
-                <div className="input" style={{display: 'flex', width: "400px" }}>
-                <div className="icone">
-                  <MarkChatReadIcon color="action" />
+                <div className="input" style={{ display: 'flex', width: "400px" }}>
+                  <div className="icone">
+                    <MarkChatReadIcon color="action" />
+                  </div>
+                  <TextField
+                    size="small"
+                    name="remark"
+                    value={formData.remark || selectedCustomerData.remark || book.remark || ''}
+                    onChange={handleChange}
+                    label="Remark"
+                    id="remark"
+                    multiline
+                    rows={5}
+                    sx={{ m: 2, width: "100%" }}
+                    autoComplete="password"
+                  />
                 </div>
-                <TextField
-                  size="small"
-                  name="remark"
-                  value={formData.remark || selectedCustomerData.remark || book.remark || ''}
-                  onChange={handleChange}
-                  label="Remark"
-                  id="remark"
-                  multiline
-                  rows={5}
-                  sx={{ m: 2, width: "100%" }}
-                  autoComplete="password"
-                />
-              </div>
 
-              <div className='input' style={{display: 'grid'}}>
-                <label>Escort</label>
-                <span>
-                  <label>
-                    <input
-                      type="radio"
-                      value="Yes"
-                      checked={escort === "Yes"}
-                      onChange={handleEscortChange}
-                    />
-                    Yes
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      value="No"
-                      checked={escort === "No"}
-                      onChange={handleEscortChange}
-                    />
-                    No
-                  </label>
-                </span>
-              </div>
+                <div className='input' style={{ display: 'grid' }}>
+                  <label>Escort</label>
+                  <span>
+                    <label>
+                      <input
+                        type="radio"
+                        value="Yes"
+                        checked={escort === "Yes"}
+                        onChange={handleEscortChange}
+                      />
+                      Yes
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value="No"
+                        checked={escort === "No"}
+                        onChange={handleEscortChange}
+                      />
+                      No
+                    </label>
+                  </span>
+                </div>
 
-              <div className='input' style={{display: 'grid'}}>
-                <label>Airport Transfer</label>
-                <span>
-                  <label>
-                    <input
-                      type="radio"
-                      value="Yes"
-                      checked={transferreport === "Yes"}
-                      onChange={handleTransferChange}
-                    />
-                    Yes
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      value="No"
-                      checked={transferreport === "No"}
-                      onChange={handleTransferChange}
-                    />
-                    No
-                  </label>
-                </span>
-              </div>
+                <div className='input' style={{ display: 'grid' }}>
+                  <label>Airport Transfer</label>
+                  <span>
+                    <label>
+                      <input
+                        type="radio"
+                        value="Yes"
+                        checked={transferreport === "Yes"}
+                        onChange={handleTransferChange}
+                      />
+                      Yes
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value="No"
+                        checked={transferreport === "No"}
+                        onChange={handleTransferChange}
+                      />
+                      No
+                    </label>
+                  </span>
+                </div>
 
-              {/* <div className="input radio">
+                {/* <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Active
@@ -1824,43 +1825,43 @@ const TripSheet = () => {
                 </FormControl>
               </div> */}
 
-              {/* aaaaaaa */}
-              <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
-                <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                  <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handlePopupClose} variant="contained" color="primary">
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog>
+                {/* aaaaaaa */}
+                <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+                  <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
+                    <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handlePopupClose} variant="contained" color="primary">
+                      Cancel
+                    </Button>
+                  </DialogActions>
+                </Dialog>
 
-              {/* // ayyanar calc */}
-              <div className="input" style={{ width: "160px" }}>
-                {isEditMode ? (<>
-                  <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
-                  {calcCheck ? <Button variant="contained" disabled={!Tripsheet_modify} style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
+                {/* // ayyanar calc */}
+                <div className="input" style={{ width: "160px" }}>
+                  {isEditMode ? (<>
+                    <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
+                    {calcCheck ? <Button variant="contained" disabled={!Tripsheet_modify} style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
 
-                </>
-                ) : (
-                  <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
-                )}
-                {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  </>
+                  ) : (
+                    <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
+                  )}
+                  {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
                   {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""} */}
-              </div>
+                </div>
 
               </div>
             </div>
 
             <div>
-                <Box sx={{ position: "relative", mt: 3, height: 320 }}>
-                  <StyledSpeedDial
-                    ariaLabel="SpeedDial playground example"
-                    icon={<SpeedDialIcon />}
-                    direction="left"
-                  >
-                    {/* {filteredActions.map((action) => (
+              <Box sx={{ position: "relative", mt: 3, height: 320 }}>
+                <StyledSpeedDial
+                  ariaLabel="SpeedDial playground example"
+                  icon={<SpeedDialIcon />}
+                  direction="left"
+                >
+                  {/* {filteredActions.map((action) => (
                       <SpeedDialAction
                         key={action.name}
                         icon={action.icon}
@@ -1892,950 +1893,950 @@ const TripSheet = () => {
                       tooltipTitle="Delete"
                       onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                     />
-                    )}
-                    {Tripsheet_new === 1 && (
-                      <SpeedDialAction
-                        key="Add"
-                        icon={<BookmarkAddedIcon />}
-                        tooltipTitle="Add"
-                        onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
-                      />
-                    )}
+                  )}
+                  {Tripsheet_new === 1 && (
                     <SpeedDialAction
-                      key="Cancel"
-                      icon={<CancelPresentationIcon />}
-                      tooltipTitle="Cancel"
-                      onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                      key="Add"
+                      icon={<BookmarkAddedIcon />}
+                      tooltipTitle="Add"
+                      onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
                     />
+                  )}
+                  <SpeedDialAction
+                    key="Cancel"
+                    icon={<CancelPresentationIcon />}
+                    tooltipTitle="Cancel"
+                    onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
+                  />
 
 
-                  </StyledSpeedDial>
-                </Box>
-              </div>
+                </StyledSpeedDial>
+              </Box>
+            </div>
 
-              <div className="Tipsheet-content-table-main">
-            <Tabs
-              className='Scroll-Style'
-              // size="sm"
-              aria-label="Pricing plan"
-              defaultValue={0}
-              sx={(theme) => ({
-                width: "100%",
-                height: "330px",
-                "--Tabs-gap": "0px",
-                borderRadius: "lg",
-                boxShadow: "sm",
-                overflow: "auto",
-                border: `2px solid #ccc`,
-              })}
-            >
-              <TabList
-              className='tripsheet-tab'
-                sx={{
-                  "--ListItem-radius": "0px",
-                  borderRadius: 0,
-                  [`& .${tabClasses.root}`]: {
-                    fontWeight: "lg",
-                    flex: 1,
-                    bgcolor: "background.body",
-                    position: "relative",
-                    [`&.${tabClasses.selected}`]: {
-                      color: "primary.500",
-                    },
-                    [`&.${tabClasses.selected}:before`]: {
-                      content: '""',
-                      display: "block",
-                      position: "absolute",
-                      bottom: -1,
-                      width: "100%",
-                      height: 2,
-                      bgcolor: "primary.400",
-                    },
-                    [`&.${tabClasses.focusVisible}`]: {
-                      outlineOffset: "-3px",
-                    },
-                  },
-                }}
+            <div className="Tipsheet-content-table-main">
+              <Tabs
+                className='Scroll-Style'
+                // size="sm"
+                aria-label="Pricing plan"
+                defaultValue={0}
+                sx={(theme) => ({
+                  width: "100%",
+                  height: "330px",
+                  "--Tabs-gap": "0px",
+                  borderRadius: "lg",
+                  boxShadow: "sm",
+                  overflow: "auto",
+                  border: `2px solid #ccc`,
+                })}
               >
-                <Tab>Booking</Tab>
-                <Tab>Vendor Info</Tab>
-                <Tab>Vendor Bill</Tab>
-                <Tab>Customer Bill</Tab>
-                <Tab>Alert</Tab>
-                <Tab>GPS Att</Tab>
-                <Tab>Message</Tab>
-              </TabList>
-              <TabPanel value={0} sx={{ p: 2 }}>
-                <div className="Customer-Booking-Slider">
-                  <div className="input-field table-input-field">
-                    <div className="input" style={{ width: "200px" }}>
-                      <Button
-                        variant="outlined"
-                        sx={{
-                          bgcolor: "#9fed64",
-                          color: "#fff",
-                          border: `2px solid #fff`,
-                          "&:hover": {
-                            bgcolor: "transparent",
-                            color: "#9fed64",
-                            border: `2px solid #9fed64`,
-                          },
-                        }}
-                      >
-                        SMS Waiting
-                      </Button>
-                    </div>
-                    <div className="input" style={{ width: "90px" }}>
-                      <Button
-                        variant="outlined"
-                        sx={{
-                          bgcolor: "#ed6464",
-                          color: "#fff",
-                          border: `2px solid #fff`,
-                          "&:hover": {
-                            bgcolor: "transparent",
-                            color: "#ed6464",
-                            border: `2px solid #ed6464`,
-                          },
-                        }}
-                      >
-                        Failed
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="input-field table-input-field">
-                    <div className="input">
-                      <div
-                        className="icone"
-                        style={{ padding: "0px 10px 0px 5px" }}
-                      >
-                        <FontAwesomeIcon icon={faFolderOpen} size="lg" />
+                <TabList
+                  className='tripsheet-tab'
+                  sx={{
+                    "--ListItem-radius": "0px",
+                    borderRadius: 0,
+                    [`& .${tabClasses.root}`]: {
+                      fontWeight: "lg",
+                      flex: 1,
+                      bgcolor: "background.body",
+                      position: "relative",
+                      [`&.${tabClasses.selected}`]: {
+                        color: "primary.500",
+                      },
+                      [`&.${tabClasses.selected}:before`]: {
+                        content: '""',
+                        display: "block",
+                        position: "absolute",
+                        bottom: -1,
+                        width: "100%",
+                        height: 2,
+                        bgcolor: "primary.400",
+                      },
+                      [`&.${tabClasses.focusVisible}`]: {
+                        outlineOffset: "-3px",
+                      },
+                    },
+                  }}
+                >
+                  <Tab>Booking</Tab>
+                  <Tab>Vendor Info</Tab>
+                  <Tab>Vendor Bill</Tab>
+                  <Tab>Customer Bill</Tab>
+                  <Tab>Alert</Tab>
+                  <Tab>GPS Att</Tab>
+                  <Tab>Message</Tab>
+                </TabList>
+                <TabPanel value={0} sx={{ p: 2 }}>
+                  <div className="Customer-Booking-Slider">
+                    <div className="input-field table-input-field">
+                      <div className="input" style={{ width: "200px" }}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            bgcolor: "#9fed64",
+                            color: "#fff",
+                            border: `2px solid #fff`,
+                            "&:hover": {
+                              bgcolor: "transparent",
+                              color: "#9fed64",
+                              border: `2px solid #9fed64`,
+                            },
+                          }}
+                        >
+                          SMS Waiting
+                        </Button>
                       </div>
-                      <Autocomplete
-                        fullWidth
-                        size="small"
-                        id="free-solo-demo"
-                        freeSolo
-                        sx={{ width: "20ch" }}
-                        onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
-                        value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
-                        options={DocumentType.map((option) => ({
-                          label: option.option,
-                        }))}
-                        getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
-                        renderInput={(params) => {
-                          return (
-                            <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
-                          )
-                        }
-                        }
-                      />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faFileLines} size="lg" />
+                      <div className="input" style={{ width: "90px" }}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            bgcolor: "#ed6464",
+                            color: "#fff",
+                            border: `2px solid #fff`,
+                            "&:hover": {
+                              bgcolor: "transparent",
+                              color: "#ed6464",
+                              border: `2px solid #ed6464`,
+                            },
+                          }}
+                        >
+                          Failed
+                        </Button>
                       </div>
-                      <TextField
-                        name="documentnotes"
-                        value={formData.documentnotes || selectedCustomerData.documentnotes || book.documentnotes || ''}
-                        onChange={handleChange}
-                        label="Document Notes"
-                        id="document-notes"
-                        variant="standard"
-                        autoComplete="password"
-                      />
                     </div>
-                    <div className="input" style={{ width: "90px" }}>
-                      <Button variant="outlined">Select</Button>
-                    </div>
-                    <div className="input" style={{ width: "90px" }}>
-                      <Button variant="contained">Refresh</Button>
-                    </div>
-                  </div>
-                  <div className="table-TripSheet">
-                    <div style={{ height: 400, width: "100%" }}>
-                      <DataGrid
-                        rows={UpdateTbaleRows}
-                        columns={UpdateTbaleColumns}
-                        pageSize={5}
-                        checkboxSelection
-                      />
-                    </div>
-                  </div>
-                </div>
-              </TabPanel>
-              <TabPanel value={1} sx={{ p: 2 }}>
-                <div className="Customer-Vendor-Info-Slider">
-                  <div className="input-field">
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faSuitcaseRolling} size="lg" />
-                      </div>
-                      <TextField
-                        name="VendorTripNo"
-                        value={formData.tripid || selectedCustomerData.tripid || book.tripid || ''}
-                        onChange={handleChange}
-                        label="Vendor Trip No"
-                        id="Vendor-Trip-No"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                    <div className="input" style={{ width: "250px" }}>
-                      <div className="icone">
-                        <NoCrashIcon color="action" />
-                      </div>
-                      <Autocomplete
-                        fullWidth
-                        size="small"
-                        id="free-solo-demo"
-                        freeSolo
-                        sx={{ width: "20ch" }}
-                        onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                        value={VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
-                        options={VehicleRate.map((option) => ({
-                          label: option.option,
-                        }))}
-                        getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
-                        renderInput={(params) => {
-                          return (
-                            <TextField {...params} label="Vehicle type" autoComplete="password" name="vehType" inputRef={params.inputRef} />
-                          )
-                        }
-                        }
-                      />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <EngineeringIcon color="action" />
-                      </div>
-                      <Autocomplete
-                        fullWidth
-                        size="small"
-                        id="free-solo-demo"
-                        freeSolo
-                        sx={{ width: "20ch" }}
-                        onChange={(event, value) => handleAutocompleteChange(event, value, "duty1")}
-                        value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
-                        options={Duty.map((option) => ({
-                          label: option.option,
-                        }))}
-                        getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
-                        renderInput={(params) => {
-                          return (
-                            <TextField {...params} label="Duty" autoComplete="password" name="duty1" inputRef={params.inputRef} />
-                          )
-                        }
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoItem label="Start Date">
-                          <DatePicker
-                            value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
-                            onChange={(date) => handleDateChange(date, 'startdate1')}
-                          >
-                            {({ inputProps, inputRef }) => (
-                              <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
-                            )}
-                          </DatePicker>
-                        </DemoItem>
-                      </LocalizationProvider>
-                    </div>
-                    <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoItem label="Close Date">
-                          <DatePicker
-                            value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
-                            onChange={(date) => handleDateChange(date, 'closedate1')}
-                          >
-                            {({ inputProps, inputRef }) => (
-                              <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.closedate} />
-                            )}
-                          </DatePicker>
-                        </DemoItem>
-                      </LocalizationProvider>
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <CalendarMonthIcon color="action" />
-                      </div>
-                      <DemoItem>
-                        <TextField
-                          name="totaldays"
-                          value={calculateTotalDays() || ''}
-                          label="Total Days"
+                    <div className="input-field table-input-field">
+                      <div className="input">
+                        <div
+                          className="icone"
+                          style={{ padding: "0px 10px 0px 5px" }}
+                        >
+                          <FontAwesomeIcon icon={faFolderOpen} size="lg" />
+                        </div>
+                        <Autocomplete
+                          fullWidth
                           size="small"
-                          type="number"
-                          id="total-days"
+                          id="free-solo-demo"
+                          freeSolo
+                          sx={{ width: "20ch" }}
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
+                          value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                          options={DocumentType.map((option) => ({
+                            label: option.option,
+                          }))}
+                          getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                          renderInput={(params) => {
+                            return (
+                              <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
+                            )
+                          }
+                          }
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faFileLines} size="lg" />
+                        </div>
+                        <TextField
+                          name="documentnotes"
+                          value={formData.documentnotes || selectedCustomerData.documentnotes || book.documentnotes || ''}
+                          onChange={handleChange}
+                          label="Document Notes"
+                          id="document-notes"
                           variant="standard"
                           autoComplete="password"
                         />
-                      </DemoItem>
+                      </div>
+                      <div className="input" style={{ width: "90px" }}>
+                        <Button variant="outlined">Select</Button>
+                      </div>
+                      <div className="input" style={{ width: "90px" }}>
+                        <Button variant="contained">Refresh</Button>
+                      </div>
+                    </div>
+                    <div className="table-TripSheet">
+                      <div style={{ height: 400, width: "100%" }}>
+                        <DataGrid
+                          rows={UpdateTbaleRows}
+                          columns={UpdateTbaleColumns}
+                          pageSize={5}
+                          checkboxSelection
+                        />
+                      </div>
                     </div>
                   </div>
-                  <div className="input-field">
-                    <div className="input time">
-                      <label>Start Time</label>
-                      <input
-                        type="time"
-                        value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
-                        onChange={(event) => {
-                          setSelectedCustomerData({ ...selectedCustomerData, starttime2: event.target.value });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, starttime2: event.target.value });
-                          setBook({ ...book, starttime2: event.target.value });
-                          setStartTime2(event.target.value);
-                        }}
-                        name="starttime2"
-                      />
-                    </div>
-                    <div className="input time">
-                      <label>Close Time</label>
-                      <input
-                        type="time"
-                        value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
-                        onChange={(event) => {
-                          setSelectedCustomerData({ ...selectedCustomerData, closetime2: event.target.value });
-                          setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime2: event.target.value });
-                          setBook({ ...book, closetime2: event.target.value });
-                          setCloseTime2(event.target.value);
-                        }}
-                        name="closetime2"
-                      />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                </TabPanel>
+                <TabPanel value={1} sx={{ p: 2 }}>
+                  <div className="Customer-Vendor-Info-Slider">
+                    <div className="input-field">
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faSuitcaseRolling} size="lg" />
+                        </div>
+                        <TextField
+                          name="VendorTripNo"
+                          value={formData.tripid || selectedCustomerData.tripid || book.tripid || ''}
+                          onChange={handleChange}
+                          label="Vendor Trip No"
+                          id="Vendor-Trip-No"
+                          variant="standard"
+                          autoComplete="password"
+                        />
                       </div>
-                      <TextField
-                        name="totaltime"
-                        value={formData.totaltime || calculateTotalTime() || book.totaltime || selectedCustomerData.totaltime || ''}
-                        label="Total Time"
-                        id="total-time"
-                        variant="standard"
-                        autoComplete="password"
-                      />
+                      <div className="input" style={{ width: "250px" }}>
+                        <div className="icone">
+                          <NoCrashIcon color="action" />
+                        </div>
+                        <Autocomplete
+                          fullWidth
+                          size="small"
+                          id="free-solo-demo"
+                          freeSolo
+                          sx={{ width: "20ch" }}
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
+                          value={VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
+                          options={VehicleRate.map((option) => ({
+                            label: option.option,
+                          }))}
+                          getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
+                          renderInput={(params) => {
+                            return (
+                              <TextField {...params} label="Vehicle type" autoComplete="password" name="vehType" inputRef={params.inputRef} />
+                            )
+                          }
+                          }
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <EngineeringIcon color="action" />
+                        </div>
+                        <Autocomplete
+                          fullWidth
+                          size="small"
+                          id="free-solo-demo"
+                          freeSolo
+                          sx={{ width: "20ch" }}
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "duty1")}
+                          value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                          options={Duty.map((option) => ({
+                            label: option.option,
+                          }))}
+                          getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
+                          renderInput={(params) => {
+                            return (
+                              <TextField {...params} label="Duty" autoComplete="password" name="duty1" inputRef={params.inputRef} />
+                            )
+                          }
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoItem label="Start Date">
+                            <DatePicker
+                              value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
+                              onChange={(date) => handleDateChange(date, 'startdate1')}
+                            >
+                              {({ inputProps, inputRef }) => (
+                                <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                              )}
+                            </DatePicker>
+                          </DemoItem>
+                        </LocalizationProvider>
+                      </div>
+                      <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoItem label="Close Date">
+                            <DatePicker
+                              value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
+                              onChange={(date) => handleDateChange(date, 'closedate1')}
+                            >
+                              {({ inputProps, inputRef }) => (
+                                <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.closedate} />
+                              )}
+                            </DatePicker>
+                          </DemoItem>
+                        </LocalizationProvider>
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <CalendarMonthIcon color="action" />
+                        </div>
+                        <DemoItem>
+                          <TextField
+                            name="totaldays"
+                            value={calculateTotalDays() || ''}
+                            label="Total Days"
+                            size="small"
+                            type="number"
+                            id="total-days"
+                            variant="standard"
+                            autoComplete="password"
+                          />
+                        </DemoItem>
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input time">
+                        <label>Start Time</label>
+                        <input
+                          type="time"
+                          value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
+                          onChange={(event) => {
+                            setSelectedCustomerData({ ...selectedCustomerData, starttime2: event.target.value });
+                            setSelectedCustomerDatas({ ...selectedCustomerDatas, starttime2: event.target.value });
+                            setBook({ ...book, starttime2: event.target.value });
+                            setStartTime2(event.target.value);
+                          }}
+                          name="starttime2"
+                        />
+                      </div>
+                      <div className="input time">
+                        <label>Close Time</label>
+                        <input
+                          type="time"
+                          value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                          onChange={(event) => {
+                            setSelectedCustomerData({ ...selectedCustomerData, closetime2: event.target.value });
+                            setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime2: event.target.value });
+                            setBook({ ...book, closetime2: event.target.value });
+                            setCloseTime2(event.target.value);
+                          }}
+                          name="closetime2"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                        </div>
+                        <TextField
+                          name="totaltime"
+                          value={formData.totaltime || calculateTotalTime() || book.totaltime || selectedCustomerData.totaltime || ''}
+                          label="Total Time"
+                          id="total-time"
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input">
+                        <TextField
+                          name="startkm1"
+                          value={formData.startkm || selectedCustomerData.startkm || book.startkm || ''}
+                          onChange={handleChange}
+                          size="small"
+                          label="Start KM"
+                          type="number"
+                          id="outlined-start-adornment"
+                          sx={{ m: 1, width: "23ch" }}
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <TextField
+                          name="closekm1"
+                          value={formData.closekm || selectedCustomerData.closekm || book.closekm || ''}
+                          onChange={handleChange}
+                          label="Close KM"
+                          size="small"
+                          type="number"
+                          id="outlined-start-adornment"
+                          sx={{ m: 1, width: "23ch" }}
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faRoad} size="lg" />
+                        </div>
+                        <TextField
+                          name="totalkm1"
+                          value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1 || packageData.totalkm1 || selectedCustomerData.totalkm1 || ''}
+                          label="Total KM"
+                          id="total-km"
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input">
+                        <div className="icone">
+                          <EditNoteIcon color="action" />
+                        </div>
+                        <TextField
+                          name="remark"
+                          value={formData.remark || selectedCustomerData.remark || book.remark || ''}
+                          onChange={handleChange}
+                          label="Remarks"
+                          id="remark"
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                        </div>
+                        <TextField
+                          name="caramount"
+                          value={formData.caramount || selectedCustomerData.caramount || book.caramount || ''}
+                          onChange={handleChange}
+                          label="Car Amount"
+                          id="car-amount"
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
                     </div>
                   </div>
-                  <div className="input-field">
-                    <div className="input">
-                      <TextField
-                        name="startkm1"
-                        value={formData.startkm || selectedCustomerData.startkm || book.startkm || ''}
-                        onChange={handleChange}
-                        size="small"
-                        label="Start KM"
-                        type="number"
-                        id="outlined-start-adornment"
-                        sx={{ m: 1, width: "23ch" }}
-                        autoComplete="password"
-                      />
-                    </div>
-                    <div className="input">
-                      <TextField
-                        name="closekm1"
-                        value={formData.closekm || selectedCustomerData.closekm || book.closekm || ''}
-                        onChange={handleChange}
-                        label="Close KM"
-                        size="small"
-                        type="number"
-                        id="outlined-start-adornment"
-                        sx={{ m: 1, width: "23ch" }}
-                        autoComplete="password"
-                      />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faRoad} size="lg" />
+                </TabPanel>
+                <TabPanel value={2} sx={{ p: 2 }}>
+                  <div className="Customer-Vendor-Bill-Slider">
+                    <div className="input-field">
+                      <div className="input">
+                        <div
+                          className="icone"
+                          style={{ padding: "0px 10px 0px 5px" }}
+                        >
+                          <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                        </div>
+                        <TextField
+                          name="minhrs"
+                          value={formData.minhrs || selectedCustomerData.minhrs || book.minhrs || packageDetails[0]?.Hours || ''}
+                          onChange={handleChange}
+                          label="Min.Hrs"
+                          id="min-hrs"
+                          size="small"
+                          autoComplete="password"
+                        />
                       </div>
-                      <TextField
-                        name="totalkm1"
-                        value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1 || packageData.totalkm1 || selectedCustomerData.totalkm1 || ''}
-                        label="Total KM"
-                        id="total-km"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input">
-                      <div className="icone">
-                        <EditNoteIcon color="action" />
+                      <div className="input">
+                        <div
+                          className="icone"
+                          style={{ padding: "0px 10px 0px 5px" }}
+                        >
+                          <FontAwesomeIcon icon={faRoad} size="lg" />
+                        </div>
+                        <TextField
+                          name="minkm"
+                          value={formData.minkm || packageDetails[0]?.KMS || book.minkm || selectedCustomerData.minkm || ''}
+                          label="Min.Km"
+                          id="minkm"
+                          size="small"
+                          autoComplete="password"
+                        />
                       </div>
-                      <TextField
-                        name="remark"
-                        value={formData.remark || selectedCustomerData.remark || book.remark || ''}
-                        onChange={handleChange}
-                        label="Remarks"
-                        id="remark"
-                        variant="standard"
-                        autoComplete="password"
-                      />
                     </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                    <div className="input-field">
+                      <div className="input" style={{ width: "390px" }}>
+                        <div className="icone">
+                          <Inventory2Icon color="action" />
+                        </div>
+                        <TextField
+                          name="package"
+                          value={formData.package || selectedCustomerData.package || book.package || packageDetails[0]?.package || ''}
+                          onChange={handleChange}
+                          label="Package"
+                          id="package"
+                          size="small"
+                          variant="standard"
+                          sx={{ m: 1, width: "60ch" }}
+                          autoComplete="password"
+                        />
                       </div>
-                      <TextField
-                        name="caramount"
-                        value={formData.caramount || selectedCustomerData.caramount || book.caramount || ''}
-                        onChange={handleChange}
-                        label="Car Amount"
-                        id="car-amount"
-                        variant="standard"
-                        autoComplete="password"
-                      />
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount"
+                          value={formData.amount || selectedCustomerData.amount || book.amount || packageDetails[0]?.Rate || ''}
+                          onChange={handleChange}
+                          size="small"
+                          label="Amount"
+                          id="amount"
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </TabPanel>
-              <TabPanel value={2} sx={{ p: 2 }}>
-                <div className="Customer-Vendor-Bill-Slider">
-                  <div className="input-field">
-                    <div className="input">
-                      <div
-                        className="icone"
-                        style={{ padding: "0px 10px 0px 5px" }}
-                      >
-                        <FontAwesomeIcon icon={faStopwatch} size="lg" />
+                    <div className="input-field">
+                      <div className="input" style={{ width: "186px" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faRoad} />
+                        </div>
+                        <TextField
+                          name="exkm"
+                          value={book.exkm || packageDetails[0]?.extraKMS || ''}
+                          onChange={handleChange}
+                          label="Ex.Km"
+                          id="ex-km"
+                          size="small"
+                          variant="standard"
+                          autoComplete="password"
+                        />
                       </div>
-                      <TextField
-                        name="minhrs"
-                        value={formData.minhrs || selectedCustomerData.minhrs || book.minhrs || packageDetails[0]?.Hours || ''}
-                        onChange={handleChange}
-                        label="Min.Hrs"
-                        id="min-hrs"
-                        size="small"
-                        autoComplete="password"
-                      />
-                    </div>
-                    <div className="input">
-                      <div
-                        className="icone"
-                        style={{ padding: "0px 10px 0px 5px" }}
-                      >
-                        <FontAwesomeIcon icon={faRoad} size="lg" />
-                      </div>
-                      <TextField
-                        name="minkm"
-                        value={formData.minkm || packageDetails[0]?.KMS || book.minkm || selectedCustomerData.minkm || ''}
-                        label="Min.Km"
-                        id="minkm"
-                        size="small"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "390px" }}>
-                      <div className="icone">
-                        <Inventory2Icon color="action" />
-                      </div>
-                      <TextField
-                        name="package"
-                        value={formData.package || selectedCustomerData.package || book.package || packageDetails[0]?.package || ''}
-                        onChange={handleChange}
-                        label="Package"
-                        id="package"
-                        size="small"
-                        variant="standard"
-                        sx={{ m: 1, width: "60ch" }}
-                        autoComplete="password"
-                      />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="amount"
-                        value={formData.amount || selectedCustomerData.amount || book.amount || packageDetails[0]?.Rate || ''}
-                        onChange={handleChange}
-                        size="small"
-                        label="Amount"
-                        id="amount"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "186px" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faRoad} />
-                      </div>
-                      <TextField
-                        name="exkm"
-                        value={book.exkm || packageDetails[0]?.extraKMS || ''}
-                        onChange={handleChange}
-                        label="Ex.Km"
-                        id="ex-km"
-                        size="small"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                    <div className="input" style={{ width: "187px" }}>
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
-                      </div>
-                      <TextField size="small"
-                        name='exkmTkm'
-                        value={formData.exkmTkm || selectedCustomerData.exkmTkm || book.exkmTkm || ''}
-                        onChange={handleChange}
-                        id="exkmTkm"
-                        variant="standard"
-                        autoComplete="password" />
+                      <div className="input" style={{ width: "187px" }}>
+                        <div className="icone">
+                          <TollTwoToneIcon color="action" />
+                        </div>
+                        <TextField size="small"
+                          name='exkmTkm'
+                          value={formData.exkmTkm || selectedCustomerData.exkmTkm || book.exkmTkm || ''}
+                          onChange={handleChange}
+                          id="exkmTkm"
+                          variant="standard"
+                          autoComplete="password" />
 
-                    </div>
-
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="amount1"
-                        value={book.amount1 || calculateExkmAmount() || ''}
-                        onChange={handleChange}
-                        size="small"
-                        label="Amount"
-                        id="amount"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "186px" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faStopwatch} />
-                      </div>
-                      <TextField
-                        name="exHrs"
-                        value={formData.exHrs || selectedCustomerData.exHrs || book.exHrs || packageDetails[0]?.extraHours || ''}
-                        onChange={handleChange}
-                        label="Ex.Hrs"
-                        id="ex-Hrs"
-                        size="small"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                    <div className="input" style={{ width: "187px" }}>
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
-                      </div>
-                      <TextField
-                        size="small"
-                        name='exHrsTHrs'
-                        value={formData.exHrsTHrs || selectedCustomerData.exHrsTHrs || book.exHrsTHrs || ''}
-                        onChange={handleChange}
-                        variant="standard" />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="amount2"
-                        value={book.amount2 || calculateExHrsAmount() || ''}
-                        onChange={handleChange}
-                        size="small"
-                        label="Amount"
-                        id="amount"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "186px" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faCloudMoon} />
-                      </div>
-                      <TextField
-                        name="night"
-                        value={formData.night || selectedCustomerData.night || book.night || packageDetails[0]?.NHalt || ''}
-                        onChange={handleChange}
-                        label="Night"
-                        id="night"
-                        size="small"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-
-                    </div>
-                    <div className="input" style={{ width: "187px" }}>
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
-                      </div>
-                      <TextField
-                        size="small"
-                        name='nightThrs'
-                        value={formData.nightThrs || selectedCustomerData.nightThrs || book.nightThrs || ''}
-                        onChange={handleChange}
-                        variant="standard"
-                        autoComplete="password" />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="amount3"
-                        value={book.amount3 || calculateNightAmount() || ''}
-                        onChange={handleChange}
-                        size="small"
-                        label="Amount"
-                        id="amount"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "186px" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faMoneyBill1Wave} />
-                      </div>
-                      <TextField
-                        name="driverconvenience"
-                        value={formData.driverconvenience || selectedCustomerData.driverconvenience || book.driverconvenience || ''}
-                        onChange={handleChange}
-                        label="Driver Convenience00"
-                        id="driver-convenience"
-                        size="small"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                    <div className="input" style={{ width: "187px" }}>
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
-                      </div>
-                      <TextField
-                        size="small"
-                        name='dtc'
-                        value={formData.dtc || selectedCustomerData.dtc || book.dtc || ''}
-                        onChange={handleChange}
-                        variant="standard"
-                        autoComplete="password" />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="amount4"
-                        value={book.amount4 || calculatedriverconvienceAmount() || ''}
-                        onChange={handleChange}
-                        size="small"
-                        label="Amount"
-                        id="amount"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-
-                    <div className="input">
-                      <div
-                        className="icone"
-                        style={{ padding: "0px 10px 0px 10px" }}
-                      >
-                        <FontAwesomeIcon icon={faMoneyBillTrendUp} size="lg" />
-                      </div>
-                      <TextField
-                        name="netamount"
-                        value={book.netamount || calculateTotalAmount() || ''}
-                        onChange={handleChange}
-                        size="small"
-                        label="Net Amount"
-                        id="net-amount"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input">
-                      <TextField
-                        name="vehcommission"
-                        value={formData.vehcommission || selectedCustomerData.vehcommission || book.vehcommission || ''}
-                        onChange={handleChange}
-                        type="number"
-                        label="Veh.Commission"
-                        size="small"
-                        id="outlined-start-adornment"
-                        autoComplete="password"
-                        sx={{ m: 1, width: "25ch" }}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">%</InputAdornment>
-                          ),
-                        }}
-                      />
-                    </div>
-                    <div className="input">
-                      <TextField
-                        name="caramount"
-                        value={formData.caramount || selectedCustomerData.caramount || book.caramount || ''}
-                        onChange={handleChange}
-                        size="small"
-                        label="Car Amount"
-                        id="car-amount"
-                        autoComplete="password"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </TabPanel>
-              <TabPanel value={3} sx={{ p: 2 }}>
-                <div className="Customer-Customer-Bill-Slider">
-                  <div className="input-field">
-                    <div className="input" style={{ width: "390px" }}>
-                      <div className="icone">
-                        <Inventory2Icon color="action" />
-                      </div>
-                      {/* ayyanar */}
-                      {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
-
-
-
-                      <TextField
-                        name="pack"
-                        // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
-                        value={calcPackage || formData.calcPackage || ''}
-                        // onChange={handleChange}
-
-                        label="Pack"
-                        id="pack"
-                        size="small"
-                        variant="standard"
-                        autoComplete="password"
-                        sx={{ m: 1, width: "60ch" }}
-                      />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="amount5"
-                        // value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate || ''}
-                        value={package_amount || formData.calcPackage || ''}
-                        // onChange={handleChange}
-                        size="small"
-                        label="Amount"
-                        autoComplete="password"
-                        id="amount"
-                        variant="standard"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "186px" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faRoad} />
-                      </div>
-                      <TextField
-                        name="exkm1"
-                        // value={book.exkm1 || packageDetails[0]?.extraKMS || ''}
-                        // onChange={handleChange} 
-                        value={extraKM || formData.calcPackage || 0}
-                        label="Ex.Km"
-                        id="ex-km"
-                        autoComplete="password"
-                        size="small"
-                        variant="standard"
-                      />
-                    </div>
-                    <div className="input" style={{ width: "187px" }}>
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
-                      </div>
-                      <TextField size="small"
-                        name='exkmTkm2'
-                        // value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2 || ''}
-                        value={extrakm_amount || formData.calcPackage || ''}
-                        // onChange={handleChange}
-                        id="exkmTkm"
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="amount6"
-                        // value={book.amount6 || calculateExkmAmount2() || ''}
-                        value={ex_kmAmount || formData.calcPackage || 0}
-                        size="small"
-                        label="Amount"
-                        autoComplete="password"
-                        id="amount"
-                        variant="standard"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="input-field">
-                    <div className="input" style={{ width: "186px" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faStopwatch} />
-                      </div>
-                      <TextField
-                        name="exHrs1"
-                        // value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours || ''}
-                        value={extraHR || formData.calcPackage || ''}
-                        // onChange={handleChange}
-                        label="Ex.Hrs"
-                        id="ex-Hrs"
-                        size="small"
-                        autoComplete="password"
-                        variant="standard"
-                      />
-                    </div>
-                    <div className="input" style={{ width: "187px" }}>
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
-                      </div>
-                      <TextField
-                        size="small"
-                        name='exHrsTHrs2'
-                        // value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2 || ''}  extrahr_amount
-                        value={extrahr_amount || formData.calcPackage || ''}
-                        // onChange={handleChange}
-                        variant="standard"
-                      />
-
-                      {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
-
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="amount7"
-                        // value={book.amount7 || calculateExHrsAmount2() || ''}
-                        // onChange={caculate_extraHR}
-                        value={ex_hrAmount || formData.calcPackage || 0}
-                        size="small"
-                        label="Amount"
-                        autoComplete="password"
-                        id="amount"
-                        variant="standard"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "186px" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faCloudMoon} />
                       </div>
 
-                      <TextField
-                        name="night1"
-                        value={nightBta || ''}
-                        onChange={(e) => setNightBeta(e.target.value)}
-                        label="Night"
-                        id="night"
-                        autoComplete="password"
-                        size="small"
-                        variant="standard"
-                      />
-                    </div>
-                    <div className="input" style={{ width: "187px" }}>
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount1"
+                          value={book.amount1 || calculateExkmAmount() || ''}
+                          onChange={handleChange}
+                          size="small"
+                          label="Amount"
+                          id="amount"
+                          variant="standard"
+                          autoComplete="password"
+                        />
                       </div>
-                      <TextField
-                        size="small"
-                        name='nightThrs2'
-                        value={nightCount || ''}
-                        onChange={(e) => setNightCount(e.target.value)}
-                        variant="standard"
-                        autoComplete="password"
-                      />
                     </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
+                    <div className="input-field">
+                      <div className="input" style={{ width: "186px" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faStopwatch} />
+                        </div>
+                        <TextField
+                          name="exHrs"
+                          value={formData.exHrs || selectedCustomerData.exHrs || book.exHrs || packageDetails[0]?.extraHours || ''}
+                          onChange={handleChange}
+                          label="Ex.Hrs"
+                          id="ex-Hrs"
+                          size="small"
+                          variant="standard"
+                          autoComplete="password"
+                        />
                       </div>
-                      <TextField
-                        name="amount8"
-                        value={night_totalAmount || 0}
-                        size="small"
-                        autoComplete="password"
-                        label="Amount"
-                        id="amount"
-                        variant="standard"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "186px" }}>
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                      <div className="input" style={{ width: "187px" }}>
+                        <div className="icone">
+                          <TollTwoToneIcon color="action" />
+                        </div>
+                        <TextField
+                          size="small"
+                          name='exHrsTHrs'
+                          value={formData.exHrsTHrs || selectedCustomerData.exHrsTHrs || book.exHrsTHrs || ''}
+                          onChange={handleChange}
+                          variant="standard" />
                       </div>
-                      <TextField
-                        name="driverconvenience1"
-                        value={driverBeta || formData.driverBeta || ''}
-                        onChange={driverBeta_calc}
-                        label="Driver Convenience"
-                        autoComplete="password"
-                        id="driver-convenience"
-                        size="small"
-                        variant="standard"
-                      />
-                    </div>
-                    <div className="input" style={{ width: "187px" }}>
-                      <div className="icone">
-                        <TollTwoToneIcon color="action" />
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount2"
+                          value={book.amount2 || calculateExHrsAmount() || ''}
+                          onChange={handleChange}
+                          size="small"
+                          label="Amount"
+                          id="amount"
+                          variant="standard"
+                          autoComplete="password"
+                        />
                       </div>
-                      <TextField
-                        size="small"
-                        name='dtc2'
-                        value={driverbeta_Count || formData.driverbeta_Count || ''}
-                        onChange={driverbeta_Count_calc}
-                        variant="standard"
-                        autoComplete="password"
-                      />
                     </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faEquals} />
-                      </div>
-                      <TextField
-                        name="amount9"
-                        value={driverBeta_amount || 0}
-                        size="small"
-                        label="Amount"
-                        id="amount"
-                        autoComplete="password"
-                        variant="standard"
-                      />
-                    </div>
-                  </div>
+                    <div className="input-field">
+                      <div className="input" style={{ width: "186px" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faCloudMoon} />
+                        </div>
+                        <TextField
+                          name="night"
+                          value={formData.night || selectedCustomerData.night || book.night || packageDetails[0]?.NHalt || ''}
+                          onChange={handleChange}
+                          label="Night"
+                          id="night"
+                          size="small"
+                          variant="standard"
+                          autoComplete="password"
+                        />
 
-                  <TextField
-                    name="amount9"
-                    value={totalcalcAmount || 0}
-                    size="small"
-                    label="Total Amount"
-                    id="amount"
-                    autoComplete="password"
-                    variant="standard"
-                  />
-                  <div className="input-field">
-                    {/* <div className="input" style={{ width: "390px" }}>
+                      </div>
+                      <div className="input" style={{ width: "187px" }}>
+                        <div className="icone">
+                          <TollTwoToneIcon color="action" />
+                        </div>
+                        <TextField
+                          size="small"
+                          name='nightThrs'
+                          value={formData.nightThrs || selectedCustomerData.nightThrs || book.nightThrs || ''}
+                          onChange={handleChange}
+                          variant="standard"
+                          autoComplete="password" />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount3"
+                          value={book.amount3 || calculateNightAmount() || ''}
+                          onChange={handleChange}
+                          size="small"
+                          label="Amount"
+                          id="amount"
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input" style={{ width: "186px" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                        </div>
+                        <TextField
+                          name="driverconvenience"
+                          value={formData.driverconvenience || selectedCustomerData.driverconvenience || book.driverconvenience || ''}
+                          onChange={handleChange}
+                          label="Driver Convenience00"
+                          id="driver-convenience"
+                          size="small"
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input" style={{ width: "187px" }}>
+                        <div className="icone">
+                          <TollTwoToneIcon color="action" />
+                        </div>
+                        <TextField
+                          size="small"
+                          name='dtc'
+                          value={formData.dtc || selectedCustomerData.dtc || book.dtc || ''}
+                          onChange={handleChange}
+                          variant="standard"
+                          autoComplete="password" />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount4"
+                          value={book.amount4 || calculatedriverconvienceAmount() || ''}
+                          onChange={handleChange}
+                          size="small"
+                          label="Amount"
+                          id="amount"
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                    <div className="input-field">
+
+                      <div className="input">
+                        <div
+                          className="icone"
+                          style={{ padding: "0px 10px 0px 10px" }}
+                        >
+                          <FontAwesomeIcon icon={faMoneyBillTrendUp} size="lg" />
+                        </div>
+                        <TextField
+                          name="netamount"
+                          value={book.netamount || calculateTotalAmount() || ''}
+                          onChange={handleChange}
+                          size="small"
+                          label="Net Amount"
+                          id="net-amount"
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input">
+                        <TextField
+                          name="vehcommission"
+                          value={formData.vehcommission || selectedCustomerData.vehcommission || book.vehcommission || ''}
+                          onChange={handleChange}
+                          type="number"
+                          label="Veh.Commission"
+                          size="small"
+                          id="outlined-start-adornment"
+                          autoComplete="password"
+                          sx={{ m: 1, width: "25ch" }}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">%</InputAdornment>
+                            ),
+                          }}
+                        />
+                      </div>
+                      <div className="input">
+                        <TextField
+                          name="caramount"
+                          value={formData.caramount || selectedCustomerData.caramount || book.caramount || ''}
+                          onChange={handleChange}
+                          size="small"
+                          label="Car Amount"
+                          id="car-amount"
+                          autoComplete="password"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel value={3} sx={{ p: 2 }}>
+                  <div className="Customer-Customer-Bill-Slider">
+                    <div className="input-field">
+                      <div className="input" style={{ width: "390px" }}>
+                        <div className="icone">
+                          <Inventory2Icon color="action" />
+                        </div>
+                        {/* ayyanar */}
+                        {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
+
+
+
+                        <TextField
+                          name="pack"
+                          // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
+                          value={calcPackage || formData.calcPackage || ''}
+                          // onChange={handleChange}
+
+                          label="Pack"
+                          id="pack"
+                          size="small"
+                          variant="standard"
+                          autoComplete="password"
+                          sx={{ m: 1, width: "60ch" }}
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount5"
+                          // value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate || ''}
+                          value={package_amount || formData.calcPackage || ''}
+                          // onChange={handleChange}
+                          size="small"
+                          label="Amount"
+                          autoComplete="password"
+                          id="amount"
+                          variant="standard"
+                        />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input" style={{ width: "186px" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faRoad} />
+                        </div>
+                        <TextField
+                          name="exkm1"
+                          // value={book.exkm1 || packageDetails[0]?.extraKMS || ''}
+                          // onChange={handleChange} 
+                          value={extraKM || formData.calcPackage || 0}
+                          label="Ex.Km"
+                          id="ex-km"
+                          autoComplete="password"
+                          size="small"
+                          variant="standard"
+                        />
+                      </div>
+                      <div className="input" style={{ width: "187px" }}>
+                        <div className="icone">
+                          <TollTwoToneIcon color="action" />
+                        </div>
+                        <TextField size="small"
+                          name='exkmTkm2'
+                          // value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2 || ''}
+                          value={extrakm_amount || formData.calcPackage || ''}
+                          // onChange={handleChange}
+                          id="exkmTkm"
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount6"
+                          // value={book.amount6 || calculateExkmAmount2() || ''}
+                          value={ex_kmAmount || formData.calcPackage || 0}
+                          size="small"
+                          label="Amount"
+                          autoComplete="password"
+                          id="amount"
+                          variant="standard"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="input-field">
+                      <div className="input" style={{ width: "186px" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faStopwatch} />
+                        </div>
+                        <TextField
+                          name="exHrs1"
+                          // value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours || ''}
+                          value={extraHR || formData.calcPackage || ''}
+                          // onChange={handleChange}
+                          label="Ex.Hrs"
+                          id="ex-Hrs"
+                          size="small"
+                          autoComplete="password"
+                          variant="standard"
+                        />
+                      </div>
+                      <div className="input" style={{ width: "187px" }}>
+                        <div className="icone">
+                          <TollTwoToneIcon color="action" />
+                        </div>
+                        <TextField
+                          size="small"
+                          name='exHrsTHrs2'
+                          // value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2 || ''}  extrahr_amount
+                          value={extrahr_amount || formData.calcPackage || ''}
+                          // onChange={handleChange}
+                          variant="standard"
+                        />
+
+                        {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
+
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount7"
+                          // value={book.amount7 || calculateExHrsAmount2() || ''}
+                          // onChange={caculate_extraHR}
+                          value={ex_hrAmount || formData.calcPackage || 0}
+                          size="small"
+                          label="Amount"
+                          autoComplete="password"
+                          id="amount"
+                          variant="standard"
+                        />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input" style={{ width: "186px" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faCloudMoon} />
+                        </div>
+
+                        <TextField
+                          name="night1"
+                          value={nightBta || ''}
+                          onChange={(e) => setNightBeta(e.target.value)}
+                          label="Night"
+                          id="night"
+                          autoComplete="password"
+                          size="small"
+                          variant="standard"
+                        />
+                      </div>
+                      <div className="input" style={{ width: "187px" }}>
+                        <div className="icone">
+                          <TollTwoToneIcon color="action" />
+                        </div>
+                        <TextField
+                          size="small"
+                          name='nightThrs2'
+                          value={nightCount || ''}
+                          onChange={(e) => setNightCount(e.target.value)}
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount8"
+                          value={night_totalAmount || 0}
+                          size="small"
+                          autoComplete="password"
+                          label="Amount"
+                          id="amount"
+                          variant="standard"
+                        />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input" style={{ width: "186px" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                        </div>
+                        <TextField
+                          name="driverconvenience1"
+                          value={driverBeta || formData.driverBeta || ''}
+                          onChange={driverBeta_calc}
+                          label="Driver Convenience"
+                          autoComplete="password"
+                          id="driver-convenience"
+                          size="small"
+                          variant="standard"
+                        />
+                      </div>
+                      <div className="input" style={{ width: "187px" }}>
+                        <div className="icone">
+                          <TollTwoToneIcon color="action" />
+                        </div>
+                        <TextField
+                          size="small"
+                          name='dtc2'
+                          value={driverbeta_Count || formData.driverbeta_Count || ''}
+                          onChange={driverbeta_Count_calc}
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="amount9"
+                          value={driverBeta_amount || 0}
+                          size="small"
+                          label="Amount"
+                          id="amount"
+                          autoComplete="password"
+                          variant="standard"
+                        />
+                      </div>
+                    </div>
+
+                    <TextField
+                      name="amount9"
+                      value={totalcalcAmount || 0}
+                      size="small"
+                      label="Total Amount"
+                      id="amount"
+                      autoComplete="password"
+                      variant="standard"
+                    />
+                    <div className="input-field">
+                      {/* <div className="input" style={{ width: "390px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
@@ -2851,7 +2852,7 @@ const TripSheet = () => {
                         sx={{ m: 1, width: "60ch" }}
                       />
                     </div> */}
-                    {/* <div className="input">
+                      {/* <div className="input">
                       <div className="icone">
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
@@ -2866,9 +2867,9 @@ const TripSheet = () => {
                         variant="standard"
                       />
                     </div> */}
-                  </div>
-                  <div className="input-field">
-                    {/* <div className="input" style={{ width: "186px" }}>
+                    </div>
+                    <div className="input-field">
+                      {/* <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
                         <FontAwesomeIcon icon={faTags} />
                       </div>
@@ -2883,13 +2884,13 @@ const TripSheet = () => {
                         variant="standard"
                       />
                     </div> */}
-                    {/* <div className="input" style={{ width: "187px" }}>
+                      {/* <div className="input" style={{ width: "187px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
                       <TextField size="small" variant="standard" />
                     </div> */}
-                    {/* <div className="input">
+                      {/* <div className="input">
                       <div className="icone">
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
@@ -2904,9 +2905,9 @@ const TripSheet = () => {
                         variant="standard"
                       />
                     </div> */}
-                  </div>
-                  <div className="input-field">
-                    {/* <div className="input radio">
+                    </div>
+                    <div className="input-field">
+                      {/* <div className="input radio">
                       <FormControlLabel
                         name="manualbills"
                         value="manualbills"
@@ -2917,7 +2918,7 @@ const TripSheet = () => {
                         checked={Boolean(formData.manualbills || selectedCustomerData?.manualbills || book.manualbills)}
                       />
                     </div> */}
-                    {/* <div className="input">
+                      {/* <div className="input">
                       <div className="icone">
                         <AccountBalanceWalletIcon color="action" />
                       </div>
@@ -2931,8 +2932,8 @@ const TripSheet = () => {
                         id="balance"
                       />
                     </div> */}
-                  </div>
-                  {/* <div className="input-field">
+                    </div>
+                    {/* <div className="input-field">
                     <div className="input">
                       <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
@@ -2949,191 +2950,298 @@ const TripSheet = () => {
                       <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
                   </div> */}
-                </div>
-              </TabPanel>
-              <TabPanel value={4} sx={{ p: 2 }}>
-                <div className="Customer-Alert-Slider">
-                  <div className="input-field">
-                    <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoItem label="FC">
-                          <DatePicker
-                            value={selectedCustomerDatas.fcdate || selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null || book.fcdate ? dayjs(book.fcdate) : null}
-                            onChange={(date) => handleDateChange(date, 'fcdate')}
-                          >
-                            {({ inputProps, inputRef }) => (
-                              <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerDatas.fcdate || selectedCustomerData?.fcdate} />
-                            )}
-                          </DatePicker>
-                        </DemoItem>
-                      </LocalizationProvider>
-                    </div>
-                    <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoItem label="Tax Date">
-                          <DatePicker
-                            value={selectedCustomerData.taxdate ? dayjs(selectedCustomerData.taxdate) : null || book.taxdate ? dayjs(book.taxdate) : null}
-                            onChange={(date) => handleDateChange(date, 'taxdate')}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                name="taxdate"
-                                autoComplete="password"
-                                value={selectedCustomerData.taxdate || ''}
-                                inputRef={params.inputRef}
-                              />
-                            )}
-                          />
-                        </DemoItem>
-                      </LocalizationProvider>
-                    </div>
                   </div>
-                  <div className="input-field">
-                    <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoItem label="Ins">
-                          <DatePicker
-                            value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null || book.insdate ? dayjs(book.insdate) : null}
-                            onChange={(date) => handleDateChange(date, 'insdate')}
-                          >
-                            {({ inputProps, inputRef }) => (
-                              <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.insdate} />
-                            )}
-                          </DatePicker>
-                        </DemoItem>
-                      </LocalizationProvider>
-                    </div>
-                    <div className="input">
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoItem label="St.Permit">
-                          <DatePicker
-                            value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null || book.stpermit ? dayjs(book.stpermit) : null}
-                            onChange={(date) => handleDateChange(date, 'stpermit')}
-                          >
-                            {({ inputProps, inputRef }) => (
-                              <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.stpermit} />
-                            )}
-                          </DatePicker>
-                        </DemoItem>
-                      </LocalizationProvider>
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "390px" }}>
-                      <TextField
-                        name="maintenancetype"
-                        value={formData.maintenancetype || selectedCustomerData.maintenancetype || book.maintenancetype || ''}
-                        onChange={handleChange}
-                        label="Maintenance Type"
-                        id="maintenance-type"
-                        autoComplete="password"
-                        size="small"
-                        sx={{ m: 1, width: "60ch" }}
-                      />
-                    </div>
-                    <div className="input">
-                      <TextField
-                        name="kilometer"
-                        value={formData.kilometer || selectedCustomerData.kilometer || book.kilometer || ''}
-                        onChange={handleChange}
-                        size="small"
-                        autoComplete="password"
-                        label="Kilometer"
-                        id="kilometer"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "390px" }}>
-                      <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
-                    </div>
-                    <div className="input">
-                      <TextField size="small" autoComplete="password" />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "390px" }}>
-                      <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
-                    </div>
-                    <div className="input">
-                      <TextField size="small" autoComplete="password" />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "390px" }}>
-                      <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
-                    </div>
-                    <div className="input">
-                      <TextField size="small" autoComplete="password" />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "390px" }}>
-                      <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
-                    </div>
-                    <div className="input">
-                      <TextField size="small" autoComplete="password" />
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input">
-                      <div className="icone">
-                        <EngineeringIcon color="action" />
+                </TabPanel>
+                <TabPanel value={4} sx={{ p: 2 }}>
+                  <div className="Customer-Alert-Slider">
+                    <div className="input-field">
+                      <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoItem label="FC">
+                            <DatePicker
+                              value={selectedCustomerDatas.fcdate || selectedCustomerData.fcdate ? dayjs(selectedCustomerData.fcdate) : null || book.fcdate ? dayjs(book.fcdate) : null}
+                              onChange={(date) => handleDateChange(date, 'fcdate')}
+                            >
+                              {({ inputProps, inputRef }) => (
+                                <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerDatas.fcdate || selectedCustomerData?.fcdate} />
+                              )}
+                            </DatePicker>
+                          </DemoItem>
+                        </LocalizationProvider>
                       </div>
-                      <Autocomplete
-                        fullWidth
-                        size="small"
-                        id="free-solo-demo"
-                        freeSolo
-                        sx={{ width: "20ch" }}
-                        onChange={(event, value) => handleAutocompleteChange(event, value, "selects")}
-                        value={Select.find((option) => option.optionvalue)?.label || formData.selects || selectedCustomerData.selects || book.selects || ''}
-                        options={Select.map((option) => ({
-                          label: option.option,
-                        }))}
-                        getOptionLabel={(option) => option.label || formData.selects || selectedCustomerData.selects || book.selects || ''}
-                        renderInput={(params) => {
-                          params.inputProps.value = formData.selects || selectedCustomerData.selects || book.selects || ''
-                          return (
-                            <TextField {...params} label="Select" autoComplete="password" name="selects" inputRef={params.inputRef} />
-                          )
-                        }
-                        }
-                      />
+                      <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoItem label="Tax Date">
+                            <DatePicker
+                              value={selectedCustomerData.taxdate ? dayjs(selectedCustomerData.taxdate) : null || book.taxdate ? dayjs(book.taxdate) : null}
+                              onChange={(date) => handleDateChange(date, 'taxdate')}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  name="taxdate"
+                                  autoComplete="password"
+                                  value={selectedCustomerData.taxdate || ''}
+                                  inputRef={params.inputRef}
+                                />
+                              )}
+                            />
+                          </DemoItem>
+                        </LocalizationProvider>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </TabPanel>
-              <TabPanel value={5} sx={{ p: 2 }}>
-                <div className="Customer-Gps-att-Slider">
-                  <div className="input-field">
-                    <div className="input">
-                      <Button>View GPS TripSheet</Button>
+                    <div className="input-field">
+                      <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoItem label="Ins">
+                            <DatePicker
+                              value={selectedCustomerData.insdate ? dayjs(selectedCustomerData.insdate) : null || book.insdate ? dayjs(book.insdate) : null}
+                              onChange={(date) => handleDateChange(date, 'insdate')}
+                            >
+                              {({ inputProps, inputRef }) => (
+                                <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.insdate} />
+                              )}
+                            </DatePicker>
+                          </DemoItem>
+                        </LocalizationProvider>
+                      </div>
+                      <div className="input">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoItem label="St.Permit">
+                            <DatePicker
+                              value={selectedCustomerData.stpermit ? dayjs(selectedCustomerData.stpermit) : null || book.stpermit ? dayjs(book.stpermit) : null}
+                              onChange={(date) => handleDateChange(date, 'stpermit')}
+                            >
+                              {({ inputProps, inputRef }) => (
+                                <TextField {...inputProps} inputRef={inputRef} autoComplete="password" value={selectedCustomerData?.stpermit} />
+                              )}
+                            </DatePicker>
+                          </DemoItem>
+                        </LocalizationProvider>
+                      </div>
                     </div>
-                    <div className="input">
-                      <Button onClick={handleTripmapClick}>View GPS Map</Button>
+                    <div className="input-field">
+                      <div className="input" style={{ width: "390px" }}>
+                        <TextField
+                          name="maintenancetype"
+                          value={formData.maintenancetype || selectedCustomerData.maintenancetype || book.maintenancetype || ''}
+                          onChange={handleChange}
+                          label="Maintenance Type"
+                          id="maintenance-type"
+                          autoComplete="password"
+                          size="small"
+                          sx={{ m: 1, width: "60ch" }}
+                        />
+                      </div>
+                      <div className="input">
+                        <TextField
+                          name="kilometer"
+                          value={formData.kilometer || selectedCustomerData.kilometer || book.kilometer || ''}
+                          onChange={handleChange}
+                          size="small"
+                          autoComplete="password"
+                          label="Kilometer"
+                          id="kilometer"
+                        />
+                      </div>
                     </div>
-                    <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
-                      <DialogContent>
-                        <img className='dialogboximg mapview' src={mapimageUrls} alt='imagess' />
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleimgPopupClose} variant="contained" color="primary">
-                          Cancel
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                    <div className="input">
-                      <Button onClick={handleTripmaplogClick}>View GPS Log</Button>
+                    <div className="input-field">
+                      <div className="input" style={{ width: "390px" }}>
+                        <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
+                      </div>
+                      <div className="input">
+                        <TextField size="small" autoComplete="password" />
+                      </div>
                     </div>
-                    <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
-                      <DialogContent>
-                        <div className="table-customer-lists">
-                          <DataGrid
-                            rows={row}
-                            columns={maplogcolumns}
-                          />
+                    <div className="input-field">
+                      <div className="input" style={{ width: "390px" }}>
+                        <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
+                      </div>
+                      <div className="input">
+                        <TextField size="small" autoComplete="password" />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input" style={{ width: "390px" }}>
+                        <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
+                      </div>
+                      <div className="input">
+                        <TextField size="small" autoComplete="password" />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input" style={{ width: "390px" }}>
+                        <TextField size="small" sx={{ m: 1, width: "60ch" }} autoComplete="password" />
+                      </div>
+                      <div className="input">
+                        <TextField size="small" autoComplete="password" />
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input">
+                        <div className="icone">
+                          <EngineeringIcon color="action" />
                         </div>
+                        <Autocomplete
+                          fullWidth
+                          size="small"
+                          id="free-solo-demo"
+                          freeSolo
+                          sx={{ width: "20ch" }}
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "selects")}
+                          value={Select.find((option) => option.optionvalue)?.label || formData.selects || selectedCustomerData.selects || book.selects || ''}
+                          options={Select.map((option) => ({
+                            label: option.option,
+                          }))}
+                          getOptionLabel={(option) => option.label || formData.selects || selectedCustomerData.selects || book.selects || ''}
+                          renderInput={(params) => {
+                            params.inputProps.value = formData.selects || selectedCustomerData.selects || book.selects || ''
+                            return (
+                              <TextField {...params} label="Select" autoComplete="password" name="selects" inputRef={params.inputRef} />
+                            )
+                          }
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel value={5} sx={{ p: 2 }}>
+                  <div className="Customer-Gps-att-Slider">
+                    <div className="input-field">
+                      <div className="input">
+                        <Button>View GPS TripSheet</Button>
+                      </div>
+                      <div className="input">
+                        <Button onClick={handleTripmapClick}>View GPS Map</Button>
+                      </div>
+                      <Dialog open={mapimgpopupOpen} onClose={handleimgPopupClose}>
+                        <DialogContent>
+                          <img className='dialogboximg mapview' src={mapimageUrls} alt='imagess' />
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                            Cancel
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                      <div className="input">
+                        <Button onClick={handleTripmaplogClick}>View GPS Log</Button>
+                      </div>
+                      <Dialog open={maplogimgpopupOpen} onClose={handleimgPopupClose}>
+                        <DialogContent>
+                          <div className="table-customer-lists">
+                            <DataGrid
+                              rows={row}
+                              columns={maplogcolumns}
+                            />
+                          </div>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleimgPopupClose} variant="contained" color="primary">
+                            Cancel
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                      <div className="input">
+                        <Button>View Closing</Button>
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faFolderOpen} size="lg" />
+                        </div>
+                        <Autocomplete
+                          fullWidth
+                          size="small"
+                          id="free-solo-demo"
+                          freeSolo
+                          sx={{ width: "20ch" }}
+                          onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
+                          value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                          options={DocumentType.map((option) => ({
+                            label: option.option,
+                          }))}
+                          getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                          renderInput={(params) => {
+                            return (
+                              <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
+                            )
+                          }
+                          }
+                        />
+                      </div>
+                      <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faFileLines} size="lg" />
+                        </div>
+                        <TextField
+                          name="on1"
+                          value={selectedCustomerData.on1 || book.on1 || ''}
+                          onChange={handleChange}
+                          size="document-notes"
+                          label="Document Notes"
+                          autoComplete="password"
+                          id="document-notes"
+                          variant="standard"
+                        />
+                      </div>
+                      <div className="input" style={{ width: "220px" }}>
+                        <Button variant="contained" onClick={handleUpload}>Select File & Upload</Button>
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input" style={{ width: "400px" }}>
+                        <div className="icone">
+                          <MarkChatReadIcon color="action" />
+                        </div>
+                        <TextField
+                          size="small"
+                          sx={{ m: 1, width: "300ch" }}
+                          variant="standard"
+                          autoComplete="password"
+                        />
+                      </div>
+                      <div className="input">
+                        <Button variant="outlined" onClick={handleRefresh}>Refresh</Button>
+                      </div>
+                    </div>
+                    <div className="input-field">
+                      <div className="input">
+                        <Button onClick={handleButtonClick}>Manual Marking</Button>
+                      </div>
+                      <div className="input">
+                        <Button>Delete GPS Log</Button>
+                      </div>
+                      <div className="input radio">
+                        <FormControlLabel
+                          name="reload"
+                          value="reload"
+                          control={<Checkbox size="small" />}
+                          label="Reload"
+                          autoComplete="new-password"
+                          onChange={handleChange}
+                          checked={Boolean(formData.reload || selectedCustomerData?.reload || book.reload)}
+                        />
+                      </div>
+                    </div>
+                    <div className="table-TripSheet">
+                      <div style={{ height: 400, width: "100%" }}>
+                        <DataGrid
+                          rows={rows}
+                          columns={columns}
+                          onRowClick={handleTripRowClick}
+                          pageSize={5}
+                          checkboxSelection
+                        />
+                      </div>
+                    </div>
+                    <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
+                      <DialogContent>
+                        {selectedRow && (
+                          // <img className='dialogboximg' src={imageUrl} alt={selectedRow.name} />
+                          <embed src={imageUrl} type="application/pdf" width="100%" height="600px" />
+                        )}
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleimgPopupClose} variant="contained" color="primary">
@@ -3141,142 +3249,35 @@ const TripSheet = () => {
                         </Button>
                       </DialogActions>
                     </Dialog>
-                    <div className="input">
-                      <Button>View Closing</Button>
-                    </div>
                   </div>
-                  <div className="input-field">
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faFolderOpen} size="lg" />
-                      </div>
-                      <Autocomplete
-                        fullWidth
-                        size="small"
-                        id="free-solo-demo"
-                        freeSolo
-                        sx={{ width: "20ch" }}
-                        onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
-                        value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
-                        options={DocumentType.map((option) => ({
-                          label: option.option,
-                        }))}
-                        getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
-                        renderInput={(params) => {
-                          return (
-                            <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
-                          )
-                        }
-                        }
-                      />
-                    </div>
-                    <div className="input">
-                      <div className="icone">
-                        <FontAwesomeIcon icon={faFileLines} size="lg" />
-                      </div>
-                      <TextField
-                        name="on1"
-                        value={selectedCustomerData.on1 || book.on1 || ''}
-                        onChange={handleChange}
-                        size="document-notes"
-                        label="Document Notes"
-                        autoComplete="password"
-                        id="document-notes"
-                        variant="standard"
-                      />
-                    </div>
-                    <div className="input" style={{ width: "220px" }}>
-                      <Button variant="contained" onClick={handleUpload}>Select File & Upload</Button>
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input" style={{ width: "400px" }}>
-                      <div className="icone">
-                        <MarkChatReadIcon color="action" />
-                      </div>
-                      <TextField
-                        size="small"
-                        sx={{ m: 1, width: "300ch" }}
-                        variant="standard"
-                        autoComplete="password"
-                      />
-                    </div>
-                    <div className="input">
-                      <Button variant="outlined" onClick={handleRefresh}>Refresh</Button>
-                    </div>
-                  </div>
-                  <div className="input-field">
-                    <div className="input">
-                      <Button onClick={handleButtonClick}>Manual Marking</Button>
-                    </div>
-                    <div className="input">
-                      <Button>Delete GPS Log</Button>
-                    </div>
-                    <div className="input radio">
-                      <FormControlLabel
-                        name="reload"
-                        value="reload"
-                        control={<Checkbox size="small" />}
-                        label="Reload"
-                        autoComplete="new-password"
-                        onChange={handleChange}
-                        checked={Boolean(formData.reload || selectedCustomerData?.reload || book.reload)}
-                      />
-                    </div>
-                  </div>
-                  <div className="table-TripSheet">
-                    <div style={{ height: 400, width: "100%" }}>
-                      <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        onRowClick={handleTripRowClick}
-                        pageSize={5}
-                        checkboxSelection
-                      />
-                    </div>
-                  </div>
-                  <Dialog open={imgpopupOpen} onClose={handleimgPopupClose}>
-                    <DialogContent>
-                      {selectedRow && (
-                        // <img className='dialogboximg' src={imageUrl} alt={selectedRow.name} />
-                        <embed src={imageUrl} type="application/pdf" width="100%" height="600px" />
-                      )}
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleimgPopupClose} variant="contained" color="primary">
-                        Cancel
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </div>
-              </TabPanel>
-              <TabPanel value={6} sx={{ p: 2 }}>
-                <div className="Customer-Message-Slider">
-                  <div className="input-field">
-                    <div>
-                      <Button onClick={generateLink}>Generate Link</Button>
-                    </div>
-                    {link && (
+                </TabPanel>
+                <TabPanel value={6} sx={{ p: 2 }}>
+                  <div className="Customer-Message-Slider">
+                    <div className="input-field">
                       <div>
-                        {isSignatureSubmitted ? (
-                          <p>Signature already submitted. Cannot access this link.</p>
-                        ) : (
-                          <div>
-                            <p>Copy this link to send to the passenger:</p>
-                            <div className='link-blank-button'>
-                              <textarea readOnly style={{ width: '400px', height: '8  0px' }}>{link}</textarea>
-                              <button onClick={SignPage} className='signature'>Copy </button>
-                            </div>
-                            {sign ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
-                          </div>
-                        )}
+                        <Button onClick={generateLink}>Generate Link</Button>
                       </div>
-                    )}
+                      {link && (
+                        <div>
+                          {isSignatureSubmitted ? (
+                            <p>Signature already submitted. Cannot access this link.</p>
+                          ) : (
+                            <div>
+                              <p>Copy this link to send to the passenger:</p>
+                              <div className='link-blank-button'>
+                                <textarea readOnly style={{ width: '400px', height: '8  0px' }}>{link}</textarea>
+                                <button onClick={SignPage} className='signature'>Copy </button>
+                              </div>
+                              {sign ? <p style={{ color: 'green' }}>Link Copied......</p> : <></>}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </TabPanel>
-            </Tabs>
-          </div>
+                </TabPanel>
+              </Tabs>
+            </div>
 
 
 
@@ -3439,7 +3440,7 @@ const TripSheet = () => {
                   required
                 />
               </div> */}
-              {/* <FormControlLabel
+            {/* <FormControlLabel
                 value="smsguest"
                 control={
                   <Checkbox
@@ -3455,7 +3456,7 @@ const TripSheet = () => {
                 }
                 label="Guest SMS"
               /> */}
-              {/* <FormControlLabel
+            {/* <FormControlLabel
                 value="smsguest"
                 control={
                   <Checkbox
@@ -3466,7 +3467,7 @@ const TripSheet = () => {
                 }
                 label="Guest SMS"
               /> */}
-              {/* <FormControlLabel
+            {/* <FormControlLabel
                 name="booker"
                 value="booker"
                 control={<Checkbox size="small" />}
@@ -3475,7 +3476,7 @@ const TripSheet = () => {
                 onChange={handleChange}
                 checked={Boolean(formData.booker || selectedCustomerData?.booker || book.booker)}
               /> */}
-              {/* <FormControlLabel
+            {/* <FormControlLabel
                 name="emailcheck"
                 value="email"
                 label="Email"
@@ -3484,7 +3485,7 @@ const TripSheet = () => {
                 checked={Boolean(formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck)}
                 control={<Checkbox size="small" checked={sendEmail || formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck} onChange={(event) => setSendEmail(event.target.checked)} />}
               /> */}
-              {/* <FormControlLabel
+            {/* <FormControlLabel
                 value="email"
                 control={
                   <Checkbox
@@ -3731,7 +3732,7 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input" style={{ width: "150px" }}> */}
-                {/* <TextField
+          {/* <TextField
                   margin="normal"
                   size="small"
                   id="category"
@@ -3739,7 +3740,7 @@ const TripSheet = () => {
                   name="category"
                   autoComplete="password"
                 /> */}
-                {/* <div className="icone">
+          {/* <div className="icone">
                   <EmailIcon color="action" />
                 </div>
                 <Autocomplete
@@ -3773,7 +3774,7 @@ const TripSheet = () => {
                 <div className="icone">
                   <NoCrashIcon color="action" />
                 </div> */}
-                {/* 
+          {/* 
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -3796,7 +3797,7 @@ const TripSheet = () => {
                   }
                 /> */}
 
-                {/* <Autocomplete
+          {/* <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -3866,7 +3867,7 @@ const TripSheet = () => {
                 />
               </div>
               <div className="input radio"> */}
-                {/* <FormControlLabel
+          {/* <FormControlLabel
                   id="DriverSMS"
                   value="DriverSMS"
                   control={
@@ -3882,7 +3883,7 @@ const TripSheet = () => {
                   label="GPS"
                 /> */}
 
-              {/* </div>
+          {/* </div>
               <div className="input">
                 <div className="icone">
                   <AttachEmailIcon color="action" />
@@ -4178,7 +4179,7 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div> */}
-              {/* <div className="input" style={{ width: "180px" }}>
+          {/* <div className="input" style={{ width: "180px" }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faRoad} size="lg" />
                 </div>
@@ -4193,7 +4194,7 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div> */}
-              {/* <div className="input">
+          {/* <div className="input">
                 <div className="icone">
                   <FontAwesomeIcon icon={faRoad} size="lg" />
                 </div>
@@ -4209,7 +4210,7 @@ const TripSheet = () => {
                 />
 
               </div> */}
-              {/* <div className="input">
+          {/* <div className="input">
                 <div className="icone">
                   <FontAwesomeIcon icon={faRoad} size="lg" />
                 </div>
@@ -4226,8 +4227,8 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div> */}
-            {/* </div> */}
-            {/* <div className="input-field">
+          {/* </div> */}
+          {/* <div className="input-field">
               <div className="input">
                 <div className="icone">
                   <FontAwesomeIcon icon={faStopwatch} size="lg" />
@@ -4243,7 +4244,7 @@ const TripSheet = () => {
                 />
 
               </div> */}
-              {/* <div className="input">
+          {/* <div className="input">
                 <div className="icone">
                   <FontAwesomeIcon icon={faStopwatch} size="lg" />
                 </div>
@@ -4259,7 +4260,7 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div> */}
-              {/* <div className="input">
+          {/* <div className="input">
                 <div className="icone">
                   <FontAwesomeIcon icon={faStamp} />
                 </div>
@@ -4273,7 +4274,7 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div> */}
-              {/* <div className="input">
+          {/* <div className="input">
                 <div className="icone">
                   <FontAwesomeIcon icon={faSquareParking} />
                 </div>
@@ -4287,7 +4288,7 @@ const TripSheet = () => {
                   autoComplete="password"
                 />
               </div> */}
-              {/* <div className="input">
+          {/* <div className="input">
                 <div className="icone">
                   <TollTwoToneIcon color="action" />
                 </div>
@@ -4303,11 +4304,11 @@ const TripSheet = () => {
               </div>
               <div className="input"> */}
 
-                {/* ggggggggg */}
-                {/* <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
+          {/* ggggggggg */}
+          {/* <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
                   calculate
                 </Button> */}
-                {/* <Button style={{ marginLeft: "10px" }} variant="contained"
+          {/* <Button style={{ marginLeft: "10px" }} variant="contained"
                   onClick={() => {
                     handleCalc();
                     handleClickOpen();
@@ -4316,9 +4317,9 @@ const TripSheet = () => {
                   calculate
                 </Button>
               </div> */}
-              {/* ////gggggggggggg */}
+          {/* ////gggggggggggg */}
 
-              {/* <React.Fragment>
+          {/* <React.Fragment>
 
                 <Dialog
                   open={open}
@@ -4326,7 +4327,7 @@ const TripSheet = () => {
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                 > */}
-                  {/* <DialogTitle id="alert-dialog-title" style={{ paddingBottom: 0 }}>
+          {/* <DialogTitle id="alert-dialog-title" style={{ paddingBottom: 0 }}>
                     {"Customer Bill"}
                   </DialogTitle>
                   <DialogContent>
@@ -4337,12 +4338,12 @@ const TripSheet = () => {
                             <div className="icone">
                               <Inventory2Icon color="action" />
                             </div> */}
-                            {/* ayyanar */}
-                            {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
+          {/* ayyanar */}
+          {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
 
 
 
-                            {/* <TextField
+          {/* <TextField
                               name="pack"
                               // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
                               value={calcPackage || formData.calcPackage || ''}
@@ -4356,7 +4357,7 @@ const TripSheet = () => {
                               sx={{ m: 1, width: "60ch" }}
                             />
                           </div> */}
-                          {/* <div className="input">
+          {/* <div className="input">
                             <div className="icone">
                               <FontAwesomeIcon icon={faEquals} />
                             </div>
@@ -4373,7 +4374,7 @@ const TripSheet = () => {
                             />
                           </div>
                         </div> */}
-                        {/* <div className="input-field">
+          {/* <div className="input-field">
                           <div className="input" style={{ width: "186px" }}>
                             <div className="icone">
                               <FontAwesomeIcon icon={faRoad} />
@@ -4424,7 +4425,7 @@ const TripSheet = () => {
                           </div>
                         </div> */}
 
-                        {/* <div className="input-field">
+          {/* <div className="input-field">
                           <div className="input" style={{ width: "186px" }}>
                             <div className="icone">
                               <FontAwesomeIcon icon={faStopwatch} />
@@ -4442,7 +4443,7 @@ const TripSheet = () => {
                               variant="standard"
                             />
                           </div> */}
-                          {/* <div className="input" style={{ width: "187px" }}>
+          {/* <div className="input" style={{ width: "187px" }}>
                             <div className="icone">
                               <TollTwoToneIcon color="action" />
                             </div>
@@ -4456,10 +4457,10 @@ const TripSheet = () => {
                               variant="standard"
                             /> */}
 
-                            {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
+          {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
 
-                          {/* </div> */}
-                          {/* <div className="input">
+          {/* </div> */}
+          {/* <div className="input">
                             <div className="icone">
                               <FontAwesomeIcon icon={faEquals} />
                             </div>
@@ -4476,8 +4477,8 @@ const TripSheet = () => {
                               variant="standard"
                             />
                           </div> */}
-                        {/* </div> */}
-                        {/* <div className="input-field">
+          {/* </div> */}
+          {/* <div className="input-field">
                           <div className="input" style={{ width: "186px" }}>
                             <div className="icone">
                               <FontAwesomeIcon icon={faCloudMoon} />
@@ -4525,7 +4526,7 @@ const TripSheet = () => {
                             />
                           </div>
                         </div> */}
-                        {/* <div className="input-field">
+          {/* <div className="input-field">
                           <div className="input" style={{ width: "186px" }}>
                             <div className="icone">
                               <FontAwesomeIcon icon={faMoneyBill1Wave} />
@@ -4573,7 +4574,7 @@ const TripSheet = () => {
                           </div>
                         </div> */}
 
-                        {/* <TextField
+          {/* <TextField
                           name="amount9"
                           value={totalcalcAmount || 0}
                           size="small"
@@ -4583,8 +4584,8 @@ const TripSheet = () => {
                           variant="standard"
                           style={{ marginTop: '25px', marginLeft: '15px' }}
                         /> */}
-                        {/* <div className="input-field"> */}
-                          {/* <div className="input" style={{ width: "390px" }}>
+          {/* <div className="input-field"> */}
+          {/* <div className="input" style={{ width: "390px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
@@ -4600,7 +4601,7 @@ const TripSheet = () => {
                         sx={{ m: 1, width: "60ch" }}
                       />
                     </div> */}
-                          {/* <div className="input">
+          {/* <div className="input">
                       <div className="icone">
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
@@ -4615,9 +4616,9 @@ const TripSheet = () => {
                         variant="standard"
                       />
                     </div> */}
-                        {/* </div>
+          {/* </div>
                         <div className="input-field"> */}
-                          {/* <div className="input" style={{ width: "186px" }}>
+          {/* <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
                         <FontAwesomeIcon icon={faTags} />
                       </div>
@@ -4632,13 +4633,13 @@ const TripSheet = () => {
                         variant="standard"
                       />
                     </div> */}
-                          {/* <div className="input" style={{ width: "187px" }}>
+          {/* <div className="input" style={{ width: "187px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
                       <TextField size="small" variant="standard" />
                     </div> */}
-                          {/* <div className="input">
+          {/* <div className="input">
                       <div className="icone">
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
@@ -4653,9 +4654,9 @@ const TripSheet = () => {
                         variant="standard"
                       />
                     </div> */}
-                        {/* </div>
+          {/* </div>
                         <div className="input-field"> */}
-                          {/* <div className="input radio">
+          {/* <div className="input radio">
                       <FormControlLabel
                         name="manualbills"
                         value="manualbills"
@@ -4666,7 +4667,7 @@ const TripSheet = () => {
                         checked={Boolean(formData.manualbills || selectedCustomerData?.manualbills || book.manualbills)}
                       />
                     </div> */}
-                          {/* <div className="input">
+          {/* <div className="input">
                       <div className="icone">
                         <AccountBalanceWalletIcon color="action" />
                       </div>
@@ -4680,8 +4681,8 @@ const TripSheet = () => {
                         id="balance"
                       />
                     </div> */}
-                        {/* </div> */}
-                        {/* <div className="input-field">
+          {/* </div> */}
+          {/* <div className="input-field">
                     <div className="input">
                       <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
@@ -4698,7 +4699,7 @@ const TripSheet = () => {
                       <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
                   </div> */}
-                      {/* </div>
+          {/* </div>
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions style={{ padding: '20px' }}>
@@ -4710,10 +4711,10 @@ const TripSheet = () => {
                 </Dialog>
               </React.Fragment> */}
 
-              {/* //ggggggggggggggg */}
+          {/* //ggggggggggggggg */}
 
-            {/* </div> */}
-            {/* <div className="input-field">
+          {/* </div> */}
+          {/* <div className="input-field">
               <div className="input" style={{ width: "250px" }}>
                 <div className="icone">
                   <BackupTableSharpIcon color="action" />
@@ -4767,7 +4768,7 @@ const TripSheet = () => {
 
 
             </div> */}
-            {/* <div className="input-field">
+          {/* <div className="input-field">
               <div className="input" style={{ width: "400px" }}>
                 <div className="icone">
                   <MarkChatReadIcon color="action" />
@@ -4786,7 +4787,7 @@ const TripSheet = () => {
                 />
               </div> */}
 
-              {/* <div className='input'>
+          {/* <div className='input'>
                 <label>Escort</label>
                 <label>
                   <input
@@ -4808,7 +4809,7 @@ const TripSheet = () => {
                 </label>
               </div> */}
 
-              {/* <div className='input'>
+          {/* <div className='input'>
                 <label>Airport Transfer</label>
 
                 <label>
@@ -4831,7 +4832,7 @@ const TripSheet = () => {
                 </label>
               </div> */}
 
-              {/* <div className="input radio">
+          {/* <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Active
@@ -4857,8 +4858,8 @@ const TripSheet = () => {
                 </FormControl>
               </div> */}
 
-              {/* aaaaaaa */}
-              {/* <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
+          {/* aaaaaaa */}
+          {/* <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                 <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
                   <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
                 </DialogContent>
@@ -4869,8 +4870,8 @@ const TripSheet = () => {
                 </DialogActions>
               </Dialog> */}
 
-              {/* // ayyanar calc */}
-              {/* <div className="input" style={{ width: "160px" }}>
+          {/* // ayyanar calc */}
+          {/* <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (<>
                   <Button variant="contained" disabled={!Tripsheet_modify} onClick={handleEdit}>Edit</Button>
                   {calcCheck ? <Button variant="contained" disabled={!Tripsheet_modify} style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""}
@@ -4881,12 +4882,12 @@ const TripSheet = () => {
                 )} */}
 
 
-                {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
+          {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
                   {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""} */}
 
 
 
-              {/* </div>
+          {/* </div>
             </div>
           </div> */}
           <div className='alert-popup-main'>
@@ -4925,7 +4926,7 @@ const TripSheet = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             > */}
-              {/* {filteredActions.map((action) => (
+          {/* {filteredActions.map((action) => (
                 <SpeedDialAction
                   key={action.name}
                   icon={action.icon}
@@ -4934,7 +4935,7 @@ const TripSheet = () => {
                 />
               ))} */}
 
-              {/* {Tripsheet_read === 1 && (
+          {/* {Tripsheet_read === 1 && (
                 <SpeedDialAction
                   key="list"
                   icon={<ChecklistIcon />}
@@ -4977,7 +4978,7 @@ const TripSheet = () => {
             </StyledSpeedDial>
           </Box> */}
 
-{/* ------------------------------------------ */}
+          {/* ------------------------------------------ */}
 
 
           {/* <div className="Tipsheet-content-table-main">
@@ -5667,12 +5668,12 @@ const TripSheet = () => {
                       <div className="icone">
                         <Inventory2Icon color="action" />
                       </div> */}
-                      {/* ayyanar */}
-                      {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
+          {/* ayyanar */}
+          {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
 
 
 
-                      {/* <TextField
+          {/* <TextField
                         name="pack"
                         // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
                         value={calcPackage || formData.calcPackage || ''}
@@ -5781,9 +5782,9 @@ const TripSheet = () => {
                         variant="standard"
                       /> */}
 
-                      {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
+          {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
 
-                    {/* </div>
+          {/* </div>
                     <div className="input">
                       <div className="icone">
                         <FontAwesomeIcon icon={faEquals} />
@@ -5901,7 +5902,7 @@ const TripSheet = () => {
                     variant="standard"
                   />
                   <div className="input-field"> */}
-                    {/* <div className="input" style={{ width: "390px" }}>
+          {/* <div className="input" style={{ width: "390px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
@@ -5917,7 +5918,7 @@ const TripSheet = () => {
                         sx={{ m: 1, width: "60ch" }}
                       />
                     </div> */}
-                    {/* <div className="input">
+          {/* <div className="input">
                       <div className="icone">
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
@@ -5932,9 +5933,9 @@ const TripSheet = () => {
                         variant="standard"
                       />
                     </div> */}
-                  {/* </div>
+          {/* </div>
                   <div className="input-field"> */}
-                    {/* <div className="input" style={{ width: "186px" }}>
+          {/* <div className="input" style={{ width: "186px" }}>
                       <div className="icone">
                         <FontAwesomeIcon icon={faTags} />
                       </div>
@@ -5949,13 +5950,13 @@ const TripSheet = () => {
                         variant="standard"
                       />
                     </div> */}
-                    {/* <div className="input" style={{ width: "187px" }}>
+          {/* <div className="input" style={{ width: "187px" }}>
                       <div className="icone">
                         <TollTwoToneIcon color="action" />
                       </div>
                       <TextField size="small" variant="standard" />
                     </div> */}
-                    {/* <div className="input">
+          {/* <div className="input">
                       <div className="icone">
                         <FontAwesomeIcon icon={faEquals} />
                       </div>
@@ -5970,9 +5971,9 @@ const TripSheet = () => {
                         variant="standard"
                       />
                     </div> */}
-                  {/* </div>
+          {/* </div>
                   <div className="input-field"> */}
-                    {/* <div className="input radio">
+          {/* <div className="input radio">
                       <FormControlLabel
                         name="manualbills"
                         value="manualbills"
@@ -5983,7 +5984,7 @@ const TripSheet = () => {
                         checked={Boolean(formData.manualbills || selectedCustomerData?.manualbills || book.manualbills)}
                       />
                     </div> */}
-                    {/* <div className="input">
+          {/* <div className="input">
                       <div className="icone">
                         <AccountBalanceWalletIcon color="action" />
                       </div>
@@ -5997,8 +5998,8 @@ const TripSheet = () => {
                         id="balance"
                       />
                     </div> */}
-                  {/* </div> */}
-                  {/* <div className="input-field">
+          {/* </div> */}
+          {/* <div className="input-field">
                     <div className="input">
                       <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
@@ -6015,7 +6016,7 @@ const TripSheet = () => {
                       <TextField size="small" variant="standard" autoComplete="password" />
                     </div>
                   </div> */}
-                {/* </div>
+          {/* </div>
               </TabPanel>
               <TabPanel value={4} sx={{ p: 2 }}>
                 <div className="Customer-Alert-Slider">

@@ -11,7 +11,6 @@ import InputLabel from '@mui/material/InputLabel';
 import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
-import { StationName } from "./DriverCreationData";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { AiOutlineFileSearch } from "react-icons/ai";
@@ -96,7 +95,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 
 
-const DriverCreation = () => {
+const DriverCreation = ({ stationName }) => {
     const apiUrl = APIURL;
     const {
         selectedCustomerData,
@@ -122,11 +121,7 @@ const DriverCreation = () => {
         showPasswords,
         handleClickShowPasswords,
         handleMouseDownPasswords,
-        // passwordsMatch,
         columns,
-        // showPassword,
-        // handleClickShowPassword,
-        // handleMouseDownPassword,
         handleCloseDialog,
         dialogOpen,
         allFile,
@@ -138,10 +133,8 @@ const DriverCreation = () => {
         handleimagedelete,
         handleClosedeleteDialog,
         dialogdeleteOpen,
-        // setError,
-        // setErrorMessage,
         handleExcelDownload,
-    handlePdfDownload,
+        handlePdfDownload,
         handlecheckbox,
         deletefile,
         Deleted,
@@ -231,10 +224,10 @@ const DriverCreation = () => {
                                     id="free-solo-demo-stationname"
                                     freeSolo
                                     sx={{ width: "20ch" }}
-                                    value={StationName.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
+                                    value={stationName.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
                                     onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
-                                    options={StationName.map((option) => ({
-                                        label: option.Option,
+                                    options={stationName.map((option) => ({
+                                        label: option.Stationname,
                                     }))}
                                     getOptionLabel={(option) => option.label || selectedCustomerData?.stations || ''}
                                     renderInput={(params) => {
@@ -245,27 +238,12 @@ const DriverCreation = () => {
                                     }
                                 />
                             </div>
-                            {/* <div className="input" style={{ width: "330px" }}>
-                                <div className="icone">
-                                    <ListAltIcon color="action" />
-                                </div>
-                                <TextField
-                                    size="small"
-                                    name="designation"
-                                    value={selectedCustomerData?.designation || book.designation}
-                                    onChange={handleChange}
-                                    label="Designation"
-                                    id="designation"
-                                    sx={{ m: 1, width: "200ch" }}
-                                />
-                            </div> */}
+
                             <div className="input driver-input" >
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                                 </div>
-                                <FormControl sx={{ m: 1, width: '35ch' }}
-                                // variant="standard"
-                                >
+                                <FormControl sx={{ m: 1, width: '35ch' }}     >
                                     <InputLabel htmlFor="password">Password</InputLabel>
                                     <Input
                                         name="userpassword"
@@ -805,20 +783,20 @@ const DriverCreation = () => {
                         </StyledSpeedDial>
                     </Box>
                     <div className="Download-btn">
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <React.Fragment>
-                <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                  Download
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                  <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                </Menu>
-              </React.Fragment>
-            )}
-          </PopupState>
-        </div>
+                        <PopupState variant="popover" popupId="demo-popup-menu">
+                            {(popupState) => (
+                                <React.Fragment>
+                                    <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                        Download
+                                    </Button>
+                                    <Menu {...bindMenu(popupState)}>
+                                        <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                                        <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                                    </Menu>
+                                </React.Fragment>
+                            )}
+                        </PopupState>
+                    </div>
 
 
                     <div className="DriverCreation-table-container">

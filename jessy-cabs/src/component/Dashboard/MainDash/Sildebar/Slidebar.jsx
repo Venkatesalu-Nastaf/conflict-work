@@ -7,9 +7,7 @@ import { motion } from "framer-motion";
 import { Sidebardata } from "./Sidebar";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
-import { useNavigate, Link, useLocation, Navigate } from "react-router-dom";
-// import { useMediaQuery } from "@mui/material";
-
+import { useNavigate, Link, useLocation, } from "react-router-dom";
 import { PermissionContext } from "../../../context/permissionContext";
 
 
@@ -25,7 +23,6 @@ import { FaUserAstronaut } from "@react-icons/all-files/fa/FaUserAstronaut";
 import { BiBarChartSquare } from "@react-icons/all-files/bi/BiBarChartSquare";
 import { AiOutlineSetting } from "@react-icons/all-files/ai/AiOutlineSetting";
 import { AiOutlineInfoCircle } from "@react-icons/all-files/ai/AiOutlineInfoCircle";
-// import { FaChevronDown } from "react-icons/fa";
 import { GrUserSettings } from "react-icons/gr";
 import { GrSettingsOption } from "react-icons/gr";
 import { FaCodeBranch } from "react-icons/fa6";
@@ -240,8 +237,10 @@ const Sidebar = () => {
         break;
       case "Dashboard page":
         hasPermission = Dashbord_read;
+        break;
       case "User page":
         hasPermission = 1;
+        break;
       default:
         break;
     }
@@ -252,7 +251,7 @@ const Sidebar = () => {
     try {
 
       if (hasPermission === 1) {
-        console.log("if ", hasPermission)
+
         navigate(alt);
 
       } else if (hasPermission === 0) {
@@ -274,14 +273,14 @@ const Sidebar = () => {
     }
   }, [navigate]);
 
-  const sidebarVariants = {
-    true: {
-      left: "0",
-    },
-    false: {
-      left: "-60%",
-    },
-  };
+  // const sidebarVariants = {
+  //   true: {
+  //     left: "0",
+  //   },
+  //   false: {
+  //     left: "-60%",
+  //   },
+  // };
 
   useEffect(() => {
     if (user && user.username) {

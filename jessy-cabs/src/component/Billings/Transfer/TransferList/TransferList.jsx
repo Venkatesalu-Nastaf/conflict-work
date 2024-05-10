@@ -26,8 +26,6 @@ import { PermissionContext } from '../../../context/permissionContext';
 
 const TransferList = ({ stationName }) => {
 
-    console.log("list ", stationName)
-
     const {
         rows,
         actionName,

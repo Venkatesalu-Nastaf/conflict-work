@@ -107,7 +107,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const Booking = ({ stationName }) => {
 
-  console.log("stationName booking", stationName)
 
   const apiUrl = APIURL;
   const {

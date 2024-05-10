@@ -42,7 +42,7 @@ router.post('/GroupBillingList', (req, res) => {
 
 router.get('/ListDetails', (req, res) => {
   const { Customer, FromDate, ToDate } = req.query;
-  const sqlquery = "SELECT * FROM Group_billing WHERE Customer = ? AND FromDate >= ? AND FromDate <= ?";
+  const sqlquery = "SELECT * FROM Group_billing WHERE Customer=? AND FromDate >= DATE_ADD(?, INTERVAL 0 DAY) AND  FromDate <= DATE_ADD(?, INTERVAL 0 DAY)"   
   db.query(sqlquery, [Customer, FromDate, ToDate], (err, result) => {
     if (err) {
       console.log(err, 'error');
@@ -108,9 +108,7 @@ router.put('/billing/:tripid', (req, res) => {
 
 router.put('/statusupdate', (req, res) => {
   const { Trips, Amount, Trip_id } = req.body;
-  console.log(Trips, Amount, Trip_id, 'req bodyy');
-  console.log(Trip_id,typeof(Trip_id),'venkiiiiii');
- 
+
   // Check if Trip_id is an array
   if (!Array.isArray(Trip_id)) {
     return res.status(400).json({ error: "Trip_id must be an array" });
@@ -119,9 +117,7 @@ router.put('/statusupdate', (req, res) => {
 
   // Iterate over the Trip_id array
   Trip_id.forEach(tripId => {
-    console.log(tripId, 'tttt');
     db.query(sqlUpdateGroupBilling, [Trips, Amount, tripId, tripId], (err, updateGroupBillingResult) => {
-      console.log(Trips, Amount, tripId, 'wwwww');
       if (err) {
         console.log(err, 'error');
         return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -135,7 +131,6 @@ router.put('/statusupdate', (req, res) => {
 
 router.post('/tripsheetstatusupdate', (req, res) => {
   const { tripids, status } = req.body;
-  console.log(tripids, status,'rrrrrrrrrr');
   const query = 'UPDATE tripsheet SET status = ? WHERE tripid IN (?)';
   db.query(query, [status, tripids], (err, results) => {
     if (err) {
@@ -250,7 +245,6 @@ router.get('/getGroupList/:groupid', (req, res) => {
 
 router.delete('/deleteGroup/:groupid', (req, res) => {
   const groupid = req.params.groupid;
-  console.log(groupid,'giddd');
   const sql = "DELETE FROM Group_billing WHERE id = ?";
   
   db.query(sql, [groupid], (err, result) => {

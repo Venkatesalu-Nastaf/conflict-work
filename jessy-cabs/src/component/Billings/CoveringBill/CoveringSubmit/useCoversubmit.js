@@ -13,8 +13,8 @@ const columns = [
     { field: "ReferenceNo", headerName: "Reference No", width: 130 },
     { field: "InvoiceDate", headerName: "Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'DD/MM/YYYY').format('DD/MM/YYYY') }, 
    { field: "Customer", headerName: "Customer", width: 130 },
-    { field: "FromDate", headerName: "From Date", width: 130, valueFormatter: (params) => dayjs(params.value, 'DD/MM/YYYY').format('DD/MM/YYYY') },
-    { field: "ToDate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value, 'DD/MM/YYYY').format('DD/MM/YYYY') },
+    { field: "FromDate", headerName: "From Date", width: 130,valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY')},
+    { field: "ToDate", headerName: "To Date", width: 150, valueFormatter: (params) => dayjs(params.value, 'YYYY-MM-DD').format('DD/MM/YYYY') },
     // { field: "guestname", headerName: "UserName", width: 150 },
     { field: "Trips", headerName: "Trips", width: 150 },
     { field: "Amount", headerName: "Amount", width: 130 },
@@ -123,10 +123,10 @@ const useCoversubmit = () => {
  
 
     const handleShow = async()=>{
-        const startDate = dayjs(fromDate).format('DD-MM-YYYY')
-        const endDate = dayjs(toDate).format('DD-MM-YYYY')
+        const startDate = dayjs(fromDate).format('YYYY-MM-DD')
+        const endDate = dayjs(toDate).format('YYYY-MM-DD')        
 
-try{
+try{ 
 const response = await axios.get(`${apiUrl}/ListDetails`,
 {
     params:{

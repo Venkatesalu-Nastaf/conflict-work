@@ -311,6 +311,7 @@ const GroupBilling = ({ stationName }) => {
                             disableRowSelectionOnClick
                         />
                     </div>
+                    <div className='alert-popup-main'>
                     {error &&
                         <div className='alert-popup Error' >
                             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -332,6 +333,7 @@ const GroupBilling = ({ stationName }) => {
                             <p>{warningMessage}</p>
                         </div>
                     }
+                    </div>
                 </div>
                 <Modal
                     open={refPdfPrint}

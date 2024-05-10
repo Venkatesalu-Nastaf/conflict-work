@@ -177,6 +177,7 @@ const BackUp = () => {
                     </div>
                 </div>
             </form>
+            <div className='alert-popup-main'>
             {error &&
                 <div className='alert-popup Error' >
                     <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -205,6 +206,7 @@ const BackUp = () => {
                     <p>{successMessage}</p>
                 </div>
             }
+            </div>
         </div>
     )
 }

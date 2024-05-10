@@ -268,6 +268,7 @@ const BankAccount = () => {
             </div>
           ))}
         </div>
+        <div className='alert-popup-main'>
         {error && (
           <div className='alert-popup Error' >
             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -300,6 +301,7 @@ const BankAccount = () => {
           </div>
         )
         }
+        </div>
       </form>
     </div>
   )

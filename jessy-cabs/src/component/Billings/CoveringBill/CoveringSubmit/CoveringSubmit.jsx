@@ -191,6 +191,7 @@ const CoveringSubmit = ({ stationName }) => {
                     </div>
                 </div>
             </form>
+            <div className='alert-popup-main'>
             {error &&
                 <div className='alert-popup Error' >
                     <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -212,6 +213,7 @@ const CoveringSubmit = ({ stationName }) => {
                     <p>{warningMessage}</p>
                 </div>
             }
+            </div>
         </div>
     )
 }

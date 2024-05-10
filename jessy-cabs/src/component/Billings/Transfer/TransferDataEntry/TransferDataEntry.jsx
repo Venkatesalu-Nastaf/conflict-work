@@ -305,6 +305,7 @@ const TransferDataEntry = ({ stationName }) => {
               disableRowSelectionOnClick
             />
           </div>
+          <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error'>
               <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
@@ -333,6 +334,7 @@ const TransferDataEntry = ({ stationName }) => {
               <p>{infoMessage}</p>
             </div>
           }
+          </div>
         </div>
       </form>
     </div>

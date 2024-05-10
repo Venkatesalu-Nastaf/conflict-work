@@ -557,7 +557,7 @@ const TripSheet = ({ stationName }) => {
                     <div className="icone">
                       <AddHomeWorkIcon color="action" />
                     </div>
-                    <TextField
+                    {/* <TextField
                       size="small"
                       name="address1"
                       className='tripsheet-address'
@@ -568,10 +568,24 @@ const TripSheet = ({ stationName }) => {
                       sx={{ m: 1 }}
                       variant="standard"
                       autoComplete="password"
+                    /> */}
+
+                    <TextField
+                      size="small"
+                      name="remark"
+                      className='address-field'
+                      value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
+                      onChange={handleChange}
+                      label="Address"
+                      id="remark"
+                      multiline
+                      rows={5}
+                      sx={{ m: 2 }}
+                      autoComplete="password"
                     />
                   </div>
 
-                  <div className="" style={{ display: 'flex', alignItems: 'center' }}>
+                  {/* <div className="" style={{ display: 'flex', alignItems: 'center' }}>
                     <div className="icone">
                       <HomeTwoToneIcon color="action" />
                     </div>
@@ -586,9 +600,9 @@ const TripSheet = ({ stationName }) => {
                       variant="standard"
                       autoComplete="password"
                     />
-                  </div>
+                  </div> */}
 
-                  <div className="" style={{ display: 'flex', alignItems: 'center' }}>
+                  {/* <div className="" style={{ display: 'flex', alignItems: 'center' }}>
                     <div className="icone">
                       <LocationCityIcon color="action" />
                     </div>
@@ -603,10 +617,10 @@ const TripSheet = ({ stationName }) => {
                       variant="standard"
                       autoComplete="password"
                     />
-                  </div>
+                  </div> */}
                 </div>
 
-                <div>
+                <div style={{margin: '0px 10px'}}>
                   <div className="Scroll-Style tripsheet-table1">
                     <Table hoverRow borderAxis="y">
                       <thead>
@@ -1727,13 +1741,13 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-                <div className="input">
+                <div className="">
                   <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
                     E-Tripsheet
                   </Button>
                 </div>
 
-                <div className="input" style={{ display: 'flex', width: "400px" }}>
+                <div className="remark-textfield" style={{ display: 'flex' }}>
                   <div className="icone">
                     <MarkChatReadIcon color="action" />
                   </div>

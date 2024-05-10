@@ -658,6 +658,7 @@ const TransferReport = ({ stationName }) => {
             </div> */}
 
           </div>
+          <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error'>
               <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
@@ -686,6 +687,7 @@ const TransferReport = ({ stationName }) => {
               <p>{warningMessage}</p>
             </div>
           }
+          </div>
         </div>
         {/* <Dialog open={popup} onClose={handlePopup}>
                 <DialogContent style={{ width: 1000 }}>

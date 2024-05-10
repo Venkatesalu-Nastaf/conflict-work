@@ -379,21 +379,21 @@ const Employe = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{ width: "250px", display: 'flex', flexWrap: 'nowrap', alignItems: 'center', marginTop: '20px' }}>
+              <div className="" style={{ width: "250px", display: 'flex', flexWrap: 'nowrap', alignItems: 'center', marginTop: '20px' }}>
                 <div className="icone">
                   <DirectionsCarIcon color="action" />
                 </div>
                 <TextField
                   size="small"
                   id="drivinglicence no"
-                  label="Drving Licence No"
+                  label="Driving Licence No"
                   name="licenceno"
                   autoComplete="new-password"
                   value={selectedCustomerData?.licenceno || book.licenceno}
                   onChange={handleChange}
                 />
 
-                <div>
+                <div style={{paddingLeft: '20px'}}>
                   {selectedCustomerData?.empid || book.empid ? (
                     <Button component="label">
                       <UploadFileIcon />

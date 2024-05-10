@@ -9,6 +9,7 @@ import { APIURL } from "../../../url";
 import { useLocation } from 'react-router-dom';
 import { ReferenceNo } from './RefenceNo';
 import { RefPdfData } from './GroupBillingContext';
+import Excel from 'exceljs';
 
 const useGroupbilling = () => {
     const apiUrl = APIURL;
@@ -319,16 +320,104 @@ const useGroupbilling = () => {
     }, [customer, fromDate, toDate, servicestation, selectedCustomerDatas, tripData, calculateNetAmountSum, apiUrl]);
 
 
-    const convertToCSV = (data) => {
-        const header = columns.map((column) => column.headerName).join(",");
-        const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-        return [header, ...rows].join("\n");
-    };
-    const handleExcelDownload = () => {
-        const csvData = convertToCSV(rows);
-        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-        saveAs(blob, "Group Billing.csv");
-    };
+    // const convertToCSV = (data) => {
+    //     const header = columns.map((column) => column.headerName).join(",");
+    //     const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
+    //     return [header, ...rows].join("\n");
+    // };
+    // const handleExcelDownload = () => {
+    //     const csvData = convertToCSV(rows);
+    //     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+    //     saveAs(blob, "Group Billing.csv");
+    // };
+
+    const handleExcelDownload = async () => {
+        const workbook = new Excel.Workbook();
+        const workSheetName = 'Worksheet-1';
+      
+
+        try {
+
+            const fileName = "Group Billing"
+            // creating one worksheet in workbook
+            const worksheet = workbook.addWorksheet(workSheetName);
+            const headers = Object.keys(rows[0]);
+    //         console.log(headers,"hed")
+            const columns = headers.map(key => ({ key, header: key }));
+    //         worksheet.columns = columnsexcel
+          
+            worksheet.columns = columns;
+
+
+            // updated the font for first row.
+            worksheet.getRow(1).font = { bold: true };
+
+            // Set background color for header cells
+            worksheet.getRow(1).eachCell((cell, colNumber) => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '9BB0C1' } // Green background color
+                };
+            });
+
+
+            worksheet.getRow(1).height = 30;
+            // loop through all of the columns and set the alignment with width.
+            worksheet.columns.forEach((column) => {
+                column.width = column.header.length + 5;
+                column.alignment = { horizontal: 'center', vertical: 'middle' };
+            });
+
+            rows.forEach((singleData, index) => {
+
+
+                worksheet.addRow(singleData);
+
+                // Adjust column width based on the length of the cell values in the added row
+                worksheet.columns.forEach((column) => {
+                    const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+                    const cellLength = cellValue.toString().length; // Get length of cell value as a string
+                    const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+                    // Set column width to the maximum of current width and cell length plus extra space
+                    column.width = Math.max(currentColumnWidth, cellLength + 5);
+                });
+            });
+
+            // loop through all of the rows and set the outline style.
+            worksheet.eachRow({ includeEmpty: false }, (row) => {
+                // store each cell to currentCell
+                const currentCell = row._cells;
+
+                // loop through currentCell to apply border only for the non-empty cell of excel
+                currentCell.forEach((singleCell) => {
+
+                    const cellAddress = singleCell._address;
+
+                    // apply border
+                    worksheet.getCell(cellAddress).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                });
+            });
+            // write the content using writeBuffer
+            const buf = await workbook.xlsx.writeBuffer();
+
+            // download the processed file
+            saveAs(new Blob([buf]), `${fileName}.xlsx`);
+        } catch (error) {
+            console.error('<<<ERRROR>>>', error);
+            console.error('Something Went Wrong', error.message);
+        } finally {
+            // removing worksheet's instance to create new one
+            workbook.removeWorksheet(workSheetName);
+        }
+
+    }
 
     const handleCoverPDFDownload = () => {
         if (rows.length === 0) {
@@ -508,8 +597,8 @@ const useGroupbilling = () => {
         rowSelectedValues?.map((li) => {
             TotalAmount += li;
         });
-        const FromDate = dayjs(fromDate).format('DD-MM-YYYY')
-        const ToDate = dayjs(toDate).format('DD-MM-YYYY')
+        const FromDate = dayjs(fromDate).format('YYYY-MM-DD')
+        const ToDate = dayjs(toDate).format('YYYY-MM-DD')
         const InvoiceDate = dayjs(Billingdate).format('DD-MM-YYYY')
         if (rowSelectionModel.length === 0) {
             setError(true);

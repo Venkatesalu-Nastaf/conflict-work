@@ -3,7 +3,6 @@ import "./EmployeeCreation.css";
 import Box from "@mui/material/Box";
 import Input from '@mui/material/Input';
 import Button from "@mui/material/Button";
-import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import IconButton from '@mui/material/IconButton';
@@ -77,18 +76,17 @@ const EmployeeCreation = ({ stationName }) => {
     book,
     handleClick,
     handleChange,
-    handleRowClick, handleRowClickUser,
+    handleRowClickUser,
     handleAdd,
     hidePopup,
     handleAutocompleteChange,
     showPasswords,
     handleClickShowPasswords,
     handleMouseDownPasswords,
-    columns,
     isEditMode,
     handleEdit,
 
-    permissionsData, handleSwitchChange, handleCheckboxChange,
+    permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,
   } = useEmplyeecreation();
 
   useEffect(() => {
@@ -274,7 +272,7 @@ const EmployeeCreation = ({ stationName }) => {
                   <div className='add-permission'>
                     <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Add</Button>
                     <Button variant="contained" disabled={!UserCreation_new} onClick={togglePermission} className='user-permission-button' >Give Permission</Button>
-               </div>
+                  </div>
                 )}
               </div>
             </div>
@@ -401,60 +399,23 @@ const EmployeeCreation = ({ stationName }) => {
                 ))}
 
 
-                {/* <div>
-
-                  <div className='user-table-permission' onClick={togglePermission}>
-                    <img src={Avatar} alt="profile" width="50" />
-                    <div>
-                      <h3 className="user-name-text">Ajay</h3>
-                      <p className="user-details-text">frontend Developer</p>
-                    </div>
-                  </div>
-
-                  <div className='user-table-permission'>
-                    <img src={Avatar} alt="profile" width="50" />
-                    <div>
-                      <h3 className="user-name-text">Ajay</h3>
-                      <p className="user-details-text">frontend Developer</p>
-                    </div>
-                  </div>
-
-                  <div className='user-table-permission'>
-                    <img src={Avatar} alt="profile" width="50" />
-                    <div>
-                      <h3 className="user-name-text">Ajay</h3>
-                      <p className="user-details-text">frontend Developer</p>
-                    </div>
-                  </div>
-
-                  <div className='user-table-permission'>
-                    <img src={Avatar} alt="profile" width="50" />
-                    <div>
-                      <h3 className="user-name-text">Ajay</h3>
-                      <p className="user-details-text">frontend Developer</p>
-                    </div>
-                  </div>
-                </div> */}
 
               </div>
 
-              {showPermission && <UserPermission userid={selectedUserId} permissionsData={permissionsData} handleSwitchChange={handleSwitchChange} handleCheckboxChange={handleCheckboxChange} />}
+              {showPermission && <UserPermission
+                userid={selectedUserId}
+                permissionsData={permissionsData}
+                handleSwitchChange={handleSwitchChange}
+                handleCheckboxChange={handleCheckboxChange}
+                setReadState={setReadState}
+                readState={readState}
+                newState={newState}
+                modifyState={modifyState}
+                deleteState={deleteState}
 
+              />}
             </div>
 
-            <div className="table-EmployeeCreations">
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                onRowClick={handleRowClick}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                pageSizeOptions={[5, 10]}
-              />
-            </div>
           </div>
         </form>
       </div>

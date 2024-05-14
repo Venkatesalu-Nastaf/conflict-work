@@ -84,7 +84,9 @@ const TripStatus = ({ stationName }) => {
     handlePopupClose,
     selectedRow,
     handleTripsheetClick,
-    columns
+    columns,
+    filteredColumns,
+    columnshowall
   } = useTripStatus();
 
   useEffect(() => {
@@ -295,7 +297,7 @@ const TripStatus = ({ stationName }) => {
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={reversedRows}
-              columns={columns}
+              columns={ columnshowall?columns:filteredColumns}
               onRowClick={(event) => handleButtonClick(event.row)}
               pageSize={5}
             />

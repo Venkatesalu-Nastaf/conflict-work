@@ -753,7 +753,6 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         Groups,
         transferreport
     };
-
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
             return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -762,7 +761,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
             return res.status(404).json({ error: "Customer not found" });
         }
         // for BE_closed
-        db.query(`UPDATE tripsheet SET apps='Be_Closed' WHERE tripid=${tripid}`, (err, result) => {
+        db.query(`UPDATE tripsheet SET apps='Closed' WHERE tripid=${tripid}`, (err, result) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to update tripsheet details in MySQL' });
             }
@@ -776,7 +775,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
 router.get('/tripsheet/:tripid', (req, res) => {
     const tripid = req.params.tripid;
 
-    db.query('SELECT * FROM tripsheet WHERE tripid = ? AND status != "CBilled"', tripid, (err, result) => {
+    db.query('SELECT * FROM tripsheet WHERE tripid = ? AND status != "Transfer_Billed" AND status !="Covering_Billed"', tripid, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
         }

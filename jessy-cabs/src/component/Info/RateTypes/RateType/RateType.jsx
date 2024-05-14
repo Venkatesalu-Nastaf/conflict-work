@@ -40,6 +40,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 
 import { PermissionContext } from '../../../context/permissionContext.js';
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -111,7 +113,7 @@ const RateType = ({ stationName }) => {
                     <div className="container-left">
                         <div className="copy-title-btn-RateType">
                             <div className="input-field rate-type-inputs">
-                                <div className="input">
+                                <div className="input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
                                         <BadgeIcon color="action" />
                                     </div>
@@ -123,9 +125,10 @@ const RateType = ({ stationName }) => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
                                         onChange={handleChange}
+                                        style={{width: '100%'}}
                                     />
                                 </div>
-                                <div className="input" style={{}}>
+                                <div className="input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
@@ -149,7 +152,7 @@ const RateType = ({ stationName }) => {
                                         }
                                     />
                                 </div>
-                                <div className="input" style={{ width: 250 }}>
+                                <div className="input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
@@ -167,7 +170,7 @@ const RateType = ({ stationName }) => {
                                         size="small"
                                         id="free-solo-demo-pricetag"
                                         freeSolo
-                                        sx={{ width: "20ch" }}
+                                        sx={{ width: "100%" }}
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "ratename")}
                                         // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
                                         value={selectedCustomerData?.ratename || book.selectedCustomerData || ""}
@@ -186,7 +189,7 @@ const RateType = ({ stationName }) => {
                                 </div>
                                 {/* </div>
                             <div className="input-field"> */}
-                                <div className="input" style={{ width: "300px" }}>
+                                <div className="input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
                                     </div>
@@ -198,6 +201,7 @@ const RateType = ({ stationName }) => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.validity || book.validity}
                                         onChange={handleChange}
+                                        style={{width: '100%'}}
                                     />
                                 </div>
                                 <div className="input radio" style={{ width: "120px", paddingLeft: '10px' }}>
@@ -228,7 +232,10 @@ const RateType = ({ stationName }) => {
                                 </div>
 
 
-                                <div className="input">
+                                <div className="input" style={{paddingRight: '15px'}}>
+                                    <div className='icone'>
+                                        <CalendarMonthIcon />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
                                             <DatePicker
@@ -253,7 +260,10 @@ const RateType = ({ stationName }) => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input">
+                                <div className="input" style={{paddingRight: '15px'}}>
+                                    <div className='icone'>
+                                        <CalendarMonthIcon />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
                                             <DatePicker

@@ -42,6 +42,10 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CustomInput from './CustomInput';
 import useCustomer from './useCustomer';
 import { PermissionContext } from '../../context/permissionContext';
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { GrSelect } from "react-icons/gr";
+
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -111,7 +115,7 @@ const Customer = ({ stationName }) => {
           </p>
           <div className="Customer-page-header">
             <div className="input-field Customer-page-input-field">
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <AccountBalanceWalletIcon color="action" />
                 </div>
@@ -123,9 +127,10 @@ const Customer = ({ stationName }) => {
                   value={selectedCustomerData?.customerId || book.customerId}
                   onChange={handleChange}
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -139,9 +144,13 @@ const Customer = ({ stationName }) => {
                   variant="standard"
                   onChange={handleChange}
                   name="customer"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
+                <div className="icone">
+                  <PermIdentityIcon color="action" />
+                </div>
                 <TextField
                   margin="normal"
                   size="small"
@@ -153,13 +162,16 @@ const Customer = ({ stationName }) => {
                   name="name"
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
+                <div className="icone">
+                  <PermIdentityIcon color="action" />
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-customerType"
                   freeSolo
-                  sx={{ width: "20ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "customerType")}
                   value={Customertype.find((option) => option.Option)?.label || selectedCustomerData?.customerType || ''}
                   options={Customertype.map((option) => ({
@@ -174,7 +186,10 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
+                <div className="icone">
+                  <CalendarMonthIcon color="action" />
+                </div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
@@ -190,7 +205,7 @@ const Customer = ({ stationName }) => {
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <AttachEmailIcon color="action" />
                 </div>
@@ -202,9 +217,10 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <RateReviewIcon color="action" />
                 </div>
@@ -216,9 +232,10 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <AccountBalanceWalletIcon color="action" />
                 </div>
@@ -230,9 +247,10 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <LocalPhoneIcon color="action" />
                 </div>
@@ -244,6 +262,7 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   id="Phone"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
               <div className="input radio">
@@ -355,7 +374,7 @@ const Customer = ({ stationName }) => {
                   variant="standard"
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
@@ -364,7 +383,7 @@ const Customer = ({ stationName }) => {
                   size="small"
                   id="free-solo-demo"
                   freeSolo
-                  sx={{ width: "20ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
                   value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
                   options={stationName?.map((option) => ({
@@ -379,13 +398,16 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
+                <div className='icone'>
+                  <GrSelect style={{fontSize: '25px'}}/>
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-select"
                   freeSolo
-                  sx={{ width: "20ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "selectOption")}
                   value={Select.find((option) => option.Option)?.label || selectedCustomerData?.selectOption || ''}
                   options={Select.map((option) => ({
@@ -400,7 +422,7 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <StoreIcon color="action" />
                 </div>
@@ -412,11 +434,12 @@ const Customer = ({ stationName }) => {
                   label="Entity"
                   id="standard-size-normal"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input" style={{ width: "400px" }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <LocationCityIcon color="action" />
                 </div>
@@ -429,9 +452,13 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
+                <div className='icone'>
+                  <GrSelect style={{fontSize: '25px'}}/>
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -451,7 +478,10 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
+                <div className='icone'>
+                  <GrSelect style={{fontSize: '25px'}}/>
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
@@ -471,14 +501,14 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input dropdown">
+              <div className="input dropdown" style={{paddingRight: '15px'}}>
                 <label htmlFor="">GST</label>
                 {/* <select name="" id="">
                   <option value="">None</option>
                   <option value="">5%</option>
                   <option value="">12.5%</option>
                 </select> */}
-                <select name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange}>
+                <select name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange} style={{width: '100%'}}>
                   {/* <option value="" disabled>Select GST</option> */}
                   <option value="" >None</option>
                   <option value="5%">5%</option>

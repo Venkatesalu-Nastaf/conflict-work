@@ -93,7 +93,7 @@ const Ratevalidity = () => {
                     <div className="container-left">
                         <div className="copy-title-btn-RateValidity">
                             <div className="input-field RateValidity-input-feilds">
-                                <div className="input RateValidity-input">
+                                <div className="input RateValidity-input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
                                         <BadgeIcon color="action" />
                                     </div>
@@ -105,9 +105,10 @@ const Ratevalidity = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
                                         onChange={handleChange}
+                                        style={{width: '100%'}}
                                     />
                                 </div>
-                                <div className="input RateValidity-input">
+                                <div className="input RateValidity-input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
@@ -119,9 +120,10 @@ const Ratevalidity = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.ratename || book.ratename}
                                         onChange={handleChange}
+                                        style={{width: '100%'}}
                                     />
                                 </div>
-                                <div className="input RateValidity-input" >
+                                <div className="input RateValidity-input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
                                         <DateRangeIcon color="action" />
                                     </div>
@@ -139,7 +141,7 @@ const Ratevalidity = () => {
                                         </DatePicker>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input RateValidity-input" >
+                                <div className="input RateValidity-input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
                                         <DateRangeIcon color="action" />
                                     </div>
@@ -158,7 +160,7 @@ const Ratevalidity = () => {
                                 </div>
                                 {/* </div>
                             <div className="input-field"> */}
-                                <div className="input RateValidity-input" style={{ width: "300px" }}>
+                                <div className="input RateValidity-input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
                                     </div>
@@ -170,6 +172,7 @@ const Ratevalidity = () => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.Remarks || book.Remarks}
                                         onChange={handleChange}
+                                        style={{width: '100%'}}
                                     />
                                 </div>
                                 <div className="input radio" style={{ width: "120px" }}>

@@ -43,6 +43,11 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useAccountinfo from './useAccountinfo';
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { GrSelect } from "react-icons/gr";
+import { FaCarOn } from "react-icons/fa6";
+
+
 
 
 
@@ -110,7 +115,7 @@ const Accuntinfo = () => {
         <div className="detail-container-main-account">
           <div className="container-left-account">
             <div className="input-field account-info-input-feild">
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
@@ -124,9 +129,13 @@ const Accuntinfo = () => {
                   value={selectedCustomerData?.accountNo || book.accountNo}
                   onChange={handleChange}
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
+                <div className="icone">
+                  <CalendarMonthIcon color="action" />
+                </div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
@@ -140,7 +149,7 @@ const Accuntinfo = () => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <MinorCrashIcon color="action" />
                 </div>
@@ -152,9 +161,10 @@ const Accuntinfo = () => {
                   label="Vehicle/Travels"
                   id="standard-size-normal"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <ContactPhoneIcon color="action" />
                 </div>
@@ -166,11 +176,12 @@ const Accuntinfo = () => {
                   label="Phone"
                   id="phone"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input" style={{ width: "415px" }}>
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
@@ -186,7 +197,7 @@ const Accuntinfo = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -198,15 +209,19 @@ const Accuntinfo = () => {
                   label="C Person"
                   id="cperson"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input radio">
+              <div className="input radio" style={{paddingRight: '15px'}}>
+                <div className='icone'>
+                  <GrSelect style={{fontSize: '25px'}}/>
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-vehicleInfo"
                   freeSolo
-                  sx={{ width: "20ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "underGroup")}
                   value={Undergroup.find((option) => option.Option)?.label || selectedCustomerData?.underGroup || ''}
                   options={Undergroup.map((option) => ({
@@ -223,7 +238,7 @@ const Accuntinfo = () => {
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input" style={{ width: "415px" }}>
+              <div className="input" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <HomeTwoToneIcon color="action" />
                 </div>
@@ -234,11 +249,11 @@ const Accuntinfo = () => {
                   value={selectedCustomerData?.streetNo || book.streetNo}
                   onChange={handleChange}
                   id="remark"
-                  sx={{ m: 1, width: "200ch" }}
+                  sx={{ width: "100%" }}
                   variant="standard"
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <AttachEmailIcon color="action" />
                 </div>
@@ -250,9 +265,13 @@ const Accuntinfo = () => {
                   label="Email"
                   id="standard-size-normal"
                   variant="standard"
+                  style={{ width: "100%" }}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{ paddingRight: "15px" }}>
+                <div className='icone'>
+                  <FaCarOn style={{fontSize: '25px'}} />
+                </div>
                 <TextField
                   type="number"
                   name='vehCommission'
@@ -262,7 +281,7 @@ const Accuntinfo = () => {
                   label="Veh.Commission"
                   size="small"
                   id="outlined-start-adornment"
-                  sx={{ m: 1, width: "25ch" }}
+                  sx={{ width: "100%" }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">%</InputAdornment>
@@ -272,7 +291,7 @@ const Accuntinfo = () => {
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input" style={{ width: "415px" }}>
+              <div className="input" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <LocationCityIcon color="action" />
                 </div>
@@ -283,11 +302,11 @@ const Accuntinfo = () => {
                   value={selectedCustomerData?.city || book.city}
                   onChange={handleChange}
                   id="address3"
-                  sx={{ m: 1, width: "200ch" }}
+                  sx={{ width: "100%" }}
                   variant="standard"
                 />
               </div>
-              <div className="input radio">
+              <div className="input radio" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <StoreIcon color="action" />
                 </div>
@@ -299,15 +318,19 @@ const Accuntinfo = () => {
                   label="Opening Balance"
                   id="standard-size-normal"
                   variant="standard"
+                  style={{ width: "100%" }}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
+                <div className='icone'>
+                  <FaCarOn style={{fontSize: '25px'}} />
+                </div>
                 <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo-vehicleInfo"
                   freeSolo
-                  sx={{ m: 1, width: "25ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleInfo")}
                   value={Vehicleinfo.find((option) => option.Option)?.label || selectedCustomerData?.vehicleInfo || ''}
                   options={Vehicleinfo.map((option) => ({
@@ -366,7 +389,7 @@ const Accuntinfo = () => {
               </RadioGroup>
             </FormControl>
           </div>
-          <div className="input">
+          <div className="input" style={{paddingRight: '15px'}}>
             <div className="icone">
               <RateReviewIcon color="action" />
             </div>
@@ -378,6 +401,7 @@ const Accuntinfo = () => {
               label="Rate Type"
               id="standard-size-normal"
               variant="standard"
+              style={{width: '100%'}}
             />
           </div>
           <div className="input" style={{ width: "160px" }}>

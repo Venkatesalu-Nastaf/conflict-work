@@ -90,6 +90,9 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { MdOutlineAccessTimeFilled } from "react-icons/md";
+import { MdDataUsage } from "react-icons/md";
 
 
 
@@ -233,10 +236,14 @@ const Booking = ({ stationName }) => {
                   onKeyDown={handleKeyDown}
                   variant="standard"
                   autoFocus
+                  style={{width: '100%'}}
                 />
               </div>
 
               <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+                <div className="icone">
+                  <CalendarMonthIcon color="action" />
+                </div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">
                     <DatePicker
@@ -262,29 +269,35 @@ const Booking = ({ stationName }) => {
                 </LocalizationProvider>
               </div>
 
-              <div className="input-field" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
-                <div className="input time">
-                  <label>Booking Time</label>
-                  <input
-                    type="time"
-                    value={
-                      formData.bookingtime ||
-                      selectedCustomerData.bookingtime ||
-                      book.bookingtime ||
-                      getCurrentTime() ||
-                      ""
-                    }
-                    format="DD/MM/YYYY"
-                    onChange={(event) => {
-                      setBook({ ...book, bookingtime: event.target.value });
-                      setSelectedCustomerData({
-                        ...selectedCustomerData,
-                        bookingtime: event.target.value,
-                      });
-                      setBookingTime(event.target.value);
-                    }}
-                    name="bookingtime"
-                  />
+              <div className="" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+                
+                <div className="input time" style={{display: 'flex', alignItems: 'center'}}>
+                  <div className="icone">
+                    <MdOutlineAccessTimeFilled style={{fontSize: '25px'}}/>
+                  </div>
+                  <div style={{display: 'grid', width: '100%'}}>
+                    <label>Booking Time</label>
+                    <input
+                      type="time"
+                      value={
+                        formData.bookingtime ||
+                        selectedCustomerData.bookingtime ||
+                        book.bookingtime ||
+                        getCurrentTime() ||
+                        ""
+                      }
+                      format="DD/MM/YYYY"
+                      onChange={(event) => {
+                        setBook({ ...book, bookingtime: event.target.value });
+                        setSelectedCustomerData({
+                          ...selectedCustomerData,
+                          bookingtime: event.target.value,
+                        });
+                        setBookingTime(event.target.value);
+                      }}
+                      name="bookingtime"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -342,6 +355,7 @@ const Booking = ({ stationName }) => {
                   label="Trip Id"
                   id="standard-size-normal"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
               <div className="input" style={{ width: '200px', display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
@@ -375,7 +389,7 @@ const Booking = ({ stationName }) => {
                   size="small"
                   id="free-solo-demo"
                   freeSolo
-                  sx={{ width: "20ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) =>
                     handleAutocompleteChange(event, value, "servicestation")
                   }
@@ -426,6 +440,7 @@ const Booking = ({ stationName }) => {
                   label="Remarks"
                   id="remarks"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
 
@@ -578,6 +593,7 @@ const Booking = ({ stationName }) => {
                 label="Ordered by"
                 id="orderedby"
                 variant="standard"
+                style={{width: '100%'}}
               />
             </div>
 
@@ -599,6 +615,7 @@ const Booking = ({ stationName }) => {
                 label="Mobile No"
                 id="mobile"
                 variant="standard"
+                style={{width: '100%'}}
               />
             </div>
 
@@ -621,10 +638,14 @@ const Booking = ({ stationName }) => {
                 id="guestname"
                 variant="standard"
                 required
+                style={{width: '100%'}}
               />
             </div>
 
-            <div className="input">
+            <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+              <div className="icone">
+                <MdDataUsage style={{fontSize: '25px'}}/>
+              </div>
               <TextField
                 margin="normal"
                 size="small"
@@ -665,6 +686,7 @@ const Booking = ({ stationName }) => {
                 label="Guest Mobile No"
                 id="guestmobileno"
                 variant="standard"
+                style={{width: '100%'}}
               />
             </div>
             <div className="input radio" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
@@ -685,6 +707,7 @@ const Booking = ({ stationName }) => {
                 label="Email"
                 id="email"
                 variant="standard"
+                style={{width: '100%'}}
               />
             </div>
             <div className="input radio" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
@@ -704,10 +727,14 @@ const Booking = ({ stationName }) => {
                 label="Employee No"
                 id="employeeno"
                 variant="standard"
+                style={{width: '100%'}}
               />
             </div>
 
-            <div className="input">
+            <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+              <div className="icone">
+                <PermIdentityIcon color="action" />
+              </div>
               <TextField
                 margin="normal"
                 size="small"
@@ -738,13 +765,13 @@ const Booking = ({ stationName }) => {
                 margin="normal"
                 // size="small"
                 id="streetname"
-                label="No.Street Name"
+                label="Address"
                 name="address1"
                 multiline
                 rows={2}
-                sx={{ m: 2, width: "400ch" }}
+                sx={{ width: "100%" }}
                 autoComplete="new-password"
-                style={{ width: '300px' }}
+                style={{ width: '100%' }}
                 value={
                   formData.address1 ||
                   selectedCustomerData.address1 ||
@@ -795,7 +822,10 @@ const Booking = ({ stationName }) => {
               />
             </div> */}
 
-            <div className="input" style={{ width: "223px", display: 'flex', alignItems: 'center' }}>
+            <div className="input" style={{ width: "223px", display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <CalendarMonthIcon color="action" />
+              </div>
               <Autocomplete
                 fullWidth
                 size="small"
@@ -822,7 +852,7 @@ const Booking = ({ stationName }) => {
                 size="small"
                 id="free-solo-demo"
                 freeSolo
-                sx={{ width: "20ch" }}
+                sx={{ width: "100%" }}
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "report")
                 }
@@ -907,7 +937,7 @@ const Booking = ({ stationName }) => {
                 size="small"
                 id="free-solo-demo"
                 freeSolo
-                sx={{ width: "20ch" }}
+                sx={{ width: "100%" }}
                 onChange={(event, value) =>
                   handleAutocompleteChange(event, value, "paymenttype")
                 }
@@ -987,6 +1017,9 @@ const Booking = ({ stationName }) => {
             </div> */}
 
             <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="icone">
+                <CalendarMonthIcon color="action" />
+              </div>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Report Date"
@@ -1010,56 +1043,66 @@ const Booking = ({ stationName }) => {
                 </DatePicker>
               </LocalizationProvider>
             </div>
-            <div className="input-field" style={{ paddingRight: '15px' }}>
-              <div className="input time" style={{ marginTop: '0px' }}>
-                <label>Start Time</label>
-                <input
-                  type="time"
-                  value={
-                    formData.starttime ||
-                    selectedCustomerData.starttime ||
-                    book.starttime ||
-                    ""
-                  }
-                  onChange={(event) => {
-                    setFormData({ ...formData, starttime: event.target.value });
-                    setSelectedCustomerData({
-                      ...selectedCustomerData,
-                      starttime: event.target.value,
-                    });
-                    setBook({ ...book, starttime: event.target.value });
-                    setStartTime(event.target.value);
-                  }}
-                  name="starttime"
-                />
+            <div className="" style={{ paddingRight: '15px' }}>
+              <div className="input time" style={{ marginTop: '0px', display: 'flex', alignItems: 'center' }}>
+                <div className="icone">
+                  <MdOutlineAccessTimeFilled style={{fontSize: '25px'}}/>
+                </div>
+                <div style={{display: 'grid', width: '100%'}}>
+                  <label>Start Time</label>
+                  <input
+                    type="time"
+                    value={
+                      formData.starttime ||
+                      selectedCustomerData.starttime ||
+                      book.starttime ||
+                      ""
+                    }
+                    onChange={(event) => {
+                      setFormData({ ...formData, starttime: event.target.value });
+                      setSelectedCustomerData({
+                        ...selectedCustomerData,
+                        starttime: event.target.value,
+                      });
+                      setBook({ ...book, starttime: event.target.value });
+                      setStartTime(event.target.value);
+                    }}
+                    name="starttime"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="input-field" style={{ paddingRight: '15px' }}>
-              <div className="input time" style={{ marginTop: '0px' }}>
-                <label>Report Time</label>
-                <input
-                  type="time"
-                  name="reporttime"
-                  value={
-                    formData.reporttime ||
-                    selectedCustomerData.reporttime ||
-                    book.reporttime ||
-                    ""
-                  }
-                  onChange={(event) => {
-                    setBook({ ...book, reporttime: event.target.value });
-                    setreporttime(event.target.value);
-                    setFormData({
-                      ...formData,
-                      reporttime: event.target.value,
-                    });
-                    setSelectedCustomerData({
-                      ...selectedCustomerData,
-                      reporttime: event.target.value,
-                    });
-                  }}
-                />
+            <div className="" style={{ paddingRight: '15px' }}>
+              <div className="input time" style={{ marginTop: '0px', display: 'flex', alignItems: 'center' }}>
+                <div className="icone">
+                  <MdOutlineAccessTimeFilled style={{fontSize: '25px'}}/>
+                </div>
+                <div style={{display: 'grid', width: '100%'}}>
+                  <label>Report Time</label>
+                  <input
+                    type="time"
+                    name="reporttime"
+                    value={
+                      formData.reporttime ||
+                      selectedCustomerData.reporttime ||
+                      book.reporttime ||
+                      ""
+                    }
+                    onChange={(event) => {
+                      setBook({ ...book, reporttime: event.target.value });
+                      setreporttime(event.target.value);
+                      setFormData({
+                        ...formData,
+                        reporttime: event.target.value,
+                      });
+                      setSelectedCustomerData({
+                        ...selectedCustomerData,
+                        reporttime: event.target.value,
+                      });
+                    }}
+                  />
+                </div>
               </div>
             </div>
 
@@ -1130,7 +1173,7 @@ const Booking = ({ stationName }) => {
 
           <div className="booking-main-section2">
 
-            <div className="sub-section1 sub-section-second-division" style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div className="sub-section1 sub-section-second-division" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
 
 
               <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
@@ -1142,7 +1185,7 @@ const Booking = ({ stationName }) => {
                   size="small"
                   id="free-solo-demo"
                   freeSolo
-                  sx={{ width: "20ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) =>
                     handleAutocompleteChange(event, value, "duty")
                   }
@@ -1213,6 +1256,7 @@ const Booking = ({ stationName }) => {
                   label="Customer code"
                   id="customercode"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
 
@@ -1233,6 +1277,7 @@ const Booking = ({ stationName }) => {
                   label="Request No"
                   id="registerno"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
 
@@ -1257,6 +1302,7 @@ const Booking = ({ stationName }) => {
                   label="Flight No"
                   id="flight"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
               <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
@@ -1277,6 +1323,7 @@ const Booking = ({ stationName }) => {
                   label="Order By Email"
                   id="orederbyemail"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
               {/* <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
@@ -1363,7 +1410,7 @@ const Booking = ({ stationName }) => {
                   onChange={handleChange}
                   label="Advance"
                   id="advance"
-                  sx={{ m: 1, width: "25ch" }}
+                  sx={{ width: "100%" }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">₹</InputAdornment>

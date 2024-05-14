@@ -6,6 +6,7 @@ import jsPDF from "jspdf";
 import { Organization } from "../../billingMain/PaymentDetail/PaymentDetailData";
 import { APIURL } from "../../../url";
 import {  useLocation } from "react-router-dom";
+import { PdfData } from "./PdfContext";
 const useTransferreport = () => {
   const apiUrl = APIURL;
   // const user_id = localStorage.getItem("useridno");
@@ -38,12 +39,12 @@ const useTransferreport = () => {
   // const[rowzip,setRowszipdata]=useState([])
   const[pdfzipdata,setPdfzipdata]=useState([])
   const location = useLocation()
-  
+  const {transferReport,setTransferReport} = PdfData()
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const parameterKeys = [
-      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate"
+      "Invoice_no", "Group_id", "Customer", "FromDate", "EndDate", "BillDate","TransferReport","TripId"
     ];
 
     const formData = {};
@@ -59,13 +60,32 @@ const useTransferreport = () => {
     setGroupTripid(formData.Group_id)
     setInvoiceno(formData.Invoice_no)
     setInvoiceDate(formData.BillDate)
+    setTransferReport(formData.TransferReport)
   }, [location])
 
-
+  window.addEventListener('click', (event) => {
+    if (event.target === window) {
+        setTransferReport(false) 
+    }
+});
+useEffect(()=>{
+    if(transferReport===false || transferReport===undefined ){
+      setCustomer('')
+      setFromDate('')
+      setEndDate('')
+      setGroupTripid('')
+      setRatetypeforpage("")
+      setInvoiceno('')
+      setInvoiceDate('')
+    setGroupTripid('');
+    setCustomerData("")
+    setRows([])
+    setRowSelectionModel([])
+    }
+},[transferReport,setTransferReport])
   useEffect(() => {
     window.history.replaceState(null, document.title, window.location.pathname);
   }, []);
-
   const tableData = rows.map((row) => [
     row["id"],
     row["tripid"],
@@ -244,6 +264,7 @@ const useTransferreport = () => {
   const [totalValue, setTotalValue] = useState("");
   const [roundedAmount, setRoundedAmount] = useState("");
   const [sumTotalAndRounded, setSumTotalAndRounded] = useState("");
+    const [ratetypeforpage, setRatetypeforpage] = useState("");
 
   const calculateNetAmountSum = (data) => {
     return data.reduce((sum, item) => {
@@ -304,17 +325,20 @@ const useTransferreport = () => {
         }
         const customerData = await response.json();
         setCustomerData(customerData);
+        const ratetype = customerData.rateType;
+        setRatetypeforpage(ratetype)
       } catch { }
     };
     fetchData();
   }, [apiUrl]);
 
+
+
   const organizationaddress1 = customerData.address1;
   const organizationaddress2 = customerData.address2;
   const organizationcity = customerData.city;
   const organizationgstnumber = customerData.gstnumber;
-  const ratetypeforpage = customerData.rateType;
-
+ 
   useEffect(() => {
     Organization()
       .then((data) => {
@@ -515,8 +539,6 @@ useEffect(() => {
       localStorage.setItem("selectedcustomer", encoded);
       const storedCustomer = localStorage.getItem("selectedcustomer");
       const customer = decodeURIComponent(storedCustomer);
-      // console.log(tripid,customer,"transfer",rowSelectionModel)
-      // console.log(tripid,"objtripid",typeof(tripid))
 
       if(tripid.length>=1)
       {

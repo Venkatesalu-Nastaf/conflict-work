@@ -21,6 +21,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import usePaymentdetails from './usePaymentdetails';
 import { PermissionContext } from '../../../context/permissionContext';
+import { FaRegCalendarAlt } from "react-icons/fa";
 
 
 const PaymentDetail = () => {
@@ -72,12 +73,13 @@ const PaymentDetail = () => {
 
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
+      
       <form >
-        <div className="detail-container-main">
+        <div className="detail-container-main detail-container-main-payment">
           <div className="container-left">
             <div className="copy-title-btn-PaymentDetail">
-              <div className="input-field" style={{ justifyContent: 'center' }}>
-                <div className="input" style={{ width: "230px" }}>
+              <div className="input-field input-field-payment" style={{ flexWrap:'wrap', alignItems:'baseline' }}>
+                <div className="input input-payment"  >
                   <div className="icone">
                     <ListAltIcon color="action" style={{ fontSize: "27px" }} />
                   </div>
@@ -91,7 +93,7 @@ const PaymentDetail = () => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input" style={{ width: "230px" }}>
+                <div className="input input-payment" >
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
@@ -109,23 +111,49 @@ const PaymentDetail = () => {
                       );
                     }}
                   />
-                </div>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                </div> 
+                
+                <div className="input" >
+                <div className="icone">
+                    <FaRegCalendarAlt color="action" style={{ fontSize: "27px" }} />
+                  </div>
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={["DatePicker", "DatePicker"]}>
+                 
                     <DatePicker
                       label="From Date"
                       format="DD/MM/YYYY"
                       value={fromDate}
                       onChange={(date) => setFromDate(date)}
                     />
-                    <DatePicker
-                      label="To Date"
-                      format="DD/MM/YYYY"
-                      value={toDate}
-                      onChange={(date) => setToDate(date)}
-                    />
+                   
                   </DemoContainer>
                 </LocalizationProvider>
+                
+                </div>
+
+                <div className="input" >
+                <div className="icone">
+                                    <FaRegCalendarAlt color="action" style={{ fontSize: "27px" }} />
+                                  </div>
+
+                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                
+                                  <DatePicker
+                                      label="To Date"
+                                      format="DD/MM/YYYY"
+                                      value={toDate}
+                                      onChange={(date) => setToDate(date)}
+                                    />
+                                  
+                                  </DemoContainer>
+                                </LocalizationProvider>
+
+                </div>
+                              
+ 
               </div>
               <div className="input-field" style={{ justifyContent: 'center' }}>
                 <div className="input" style={{ width: "140px" }}>

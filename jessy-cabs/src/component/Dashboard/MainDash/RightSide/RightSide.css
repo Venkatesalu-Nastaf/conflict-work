@@ -124,10 +124,25 @@
     position: relative;
     left: 5px;
   }
-
 }
 
 
 .area-chart-text{
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  /* color: black !important; */
+  padding: 1rem;
+}
+.area-chart{
+  margin-top: 5px;
+
+  /* background-color: #fff; */
+  /* border-radius: 0.7rem; */
+}
+
+@media screen and (min-width:769px) and (max-width: 1219px) {
+
+
+.RightSide {
+  align-items: center !important;
+}
 }

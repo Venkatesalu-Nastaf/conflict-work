@@ -17,11 +17,10 @@ import Logo from "../../../assets/img/logonas.png"
 import { PiWarningCircleBold } from "react-icons/pi";
 // import { FaPowerOff } from "react-icons/fa";
 import { IoPower } from "react-icons/io5";
-import { FaUser } from "react-icons/fa";
 import { PermissionContext } from "../../context/permissionContext";
 import update from "../../../assets/img/update.png"
 import { FaTimes } from 'react-icons/fa'; // Import the close icon from react-icons/fa
-
+import { FaBell } from "react-icons/fa";
 // import axios from "axios";
 
 //dialog box
@@ -347,7 +346,7 @@ const MainDashboard = () => {
               {/* <div className="user-icon-update"> */}
 
               <div className="user-icon-update" onClick={handleIconClick}>
-                <FaUser />
+                <FaBell />
                 <div className="user-icon-update-dot"></div>
               </div>
 

@@ -31,7 +31,7 @@ const BookingMain = ({ stationName }) => {
             <TabPanel value="booking">
               <Booking stationName={stationName} />
             </TabPanel>
-            <TabPanel value="bookingchart">
+            <TabPanel value="bookingchart" className="BokkingChart-render">
               <BokkingChart />
             </TabPanel>
           </TabContext>

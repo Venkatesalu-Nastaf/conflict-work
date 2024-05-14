@@ -613,9 +613,9 @@ const handleButtonClickTripsheet = async () => {
         const customerdata = encodeURIComponent(customer || selectedCustomerDatas.customer || tripData.customer || localStorage.getItem('selectedcustomer'));
 
         // Sending PUT requests
-        // const response = await axios.put(`${apiUrl}/statusChangeTransfer/${invoiceno}`);
-        // const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
-        // console.log(response,Tripresponse,'check response');
+        const response = await axios.put(`${apiUrl}/statusChangeTransfer/${invoiceno}`);
+        const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
+        console.log(response,Tripresponse,'check response');
         // Setting selected customer data in local storage
         localStorage.setItem('selectedcustomer', customerdata);
         const storedCustomer = localStorage.getItem('selectedcustomer');

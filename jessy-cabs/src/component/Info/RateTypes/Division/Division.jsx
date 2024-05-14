@@ -96,7 +96,7 @@ const Division = () => {
           <div className="container-left">
             <div className="copy-title-btn-Division">
               <div className="input-field divisionform-inputfeilds">
-                <div className="input">
+                <div className="input" style={{paddingRight: '15px'}}>
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -108,10 +108,11 @@ const Division = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.driverid || book.driverid}
                     onChange={handleChange}
+                    style={{width: '100%'}}
                   />
                 </div>
 
-                <div className="input division-form-size" style={{ width: "300px" }}>
+                <div className="input division-form-size" style={{paddingRight: '15px'}}>
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -123,11 +124,12 @@ const Division = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.DivisionName || book.DivisionName}
                     onChange={handleChange}
+                    style={{width: '100%'}}
                   />
                 </div>
                 {/* </div>
               <div className="input-field"> */}
-                <div className="input division-form-size" style={{ width: "300px" }}>
+                <div className="input division-form-size" style={{paddingRight: '15px'}}>
                   <div className="icone">
                     <WarehouseIcon color="action" />
                   </div>

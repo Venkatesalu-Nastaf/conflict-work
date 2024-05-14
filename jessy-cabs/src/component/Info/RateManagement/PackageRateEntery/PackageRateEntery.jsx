@@ -102,7 +102,7 @@ const PackageRateEntery = () => {
           <div className="container-left">
             <div className="copy-title-btn-PackageRateEntery">
               <div className="input-field PackageRateEntery-input-feild">
-                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
+                <div className="input PackageRateEntery-input" style={{paddingRight: '15px'}}>
                   <div className="icone">
                     <TypeSpecimenOutlinedIcon color="action" />
                   </div>
@@ -127,7 +127,7 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
+                <div className="input PackageRateEntery-input" style={{paddingRight: '15px'}}>
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
@@ -136,7 +136,7 @@ const PackageRateEntery = () => {
                     size="small"
                     id="free-solo-demo-pricetag"
                     freeSolo
-                    sx={{ width: "20ch" }}
+                    sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "OrganizationName")}
                     value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
 
@@ -152,7 +152,7 @@ const PackageRateEntery = () => {
                 </div>
 
 
-                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
+                <div className="input PackageRateEntery-input" style={{paddingRight: '15px'}}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -161,7 +161,7 @@ const PackageRateEntery = () => {
                     size="small"
                     id="free-solo-demo-vehicleType"
                     freeSolo
-                    sx={{ width: "20ch" }}
+                    sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "vehicleType")}
                     value={VehicleType.find((option) => option.optionvalue)?.label || commonData?.vehicleType || ''}
                     options={VehicleType.map((option) => ({
@@ -182,7 +182,7 @@ const PackageRateEntery = () => {
                 {/* </div>
 
               <div className="input-field"> */}
-                <div className="input PackageRateEntery-input" style={{ width: "300px" }}>
+                <div className="input PackageRateEntery-input" style={{paddingRight: '15px'}}>
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -247,7 +247,7 @@ const PackageRateEntery = () => {
               <div>
                 <div className='first'>
 
-                  <div className="input">
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       size="small"
                       id="id"
@@ -258,10 +258,11 @@ const PackageRateEntery = () => {
                       value={fieldSet.package || ""}
                       onChange={(e) => handleChange(e, index)}
                       variant="standard"
+                      style={{width: '100%'}}
                     />
                   </div>
 
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       type='number'
                       size="small"
@@ -271,9 +272,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.Hours || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{width: '100%'}}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       type='number'
                       size="small"
@@ -283,9 +285,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.KMS || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{width: '100%'}}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       type='number'
                       size="small"
@@ -295,10 +298,11 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.Rate || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{width: '100%'}}
                     />
                   </div>
 
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       type='number'
                       size="small"
@@ -308,9 +312,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.UptoHours || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{width: '100%'}}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       type='number'
                       size="small"
@@ -320,12 +325,13 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.UptoKMS || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{width: '100%'}}
                     />
                   </div>
                   {/* </div>
                 <div className='first'> */}
 
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       type='number'
                       size="small"
@@ -335,10 +341,11 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.extraHours || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{width: '100%'}}
                     />
                   </div>
 
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       type='number'
                       size="small"
@@ -348,9 +355,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.extraKMS || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{width: '100%'}}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       type='number'
                       size="small"
@@ -360,9 +368,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.AKMS || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{width: '100%'}}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       type='number'
                       size="small"
@@ -372,9 +381,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.NHalt || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{width: '100%'}}
                     />
                   </div>
-                  <div className="input" style={{ width: "200px" }}>
+                  <div className="input" style={{paddingRight: '15px'}}>
                     <TextField
                       type='number'
                       size="small"
@@ -384,6 +394,7 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.Bata || ""}
                       onChange={(e) => handleChange(e, index)}
+                      style={{width: '100%'}}
                     />
                   </div>
                   {/* {index > 0 && <button onClick={() => handleCancel(index)}>R</button>} */}

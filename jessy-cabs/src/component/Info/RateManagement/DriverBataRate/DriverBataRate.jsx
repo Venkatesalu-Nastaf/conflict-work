@@ -93,7 +93,7 @@ const DriverBataRate = () => {
           <div className="container-left">
             <div className="copy-title-btn-DriverBataRate">
               <div className="input-field DriverBataRate-inputfeild">
-                <div className="input DriverBataRate-input">
+                <div className="input DriverBataRate-input" style={{paddingRight: '15px'}}>
                   <div className="icone">
                     <DateRangeIcon color="action" />
                   </div>
@@ -110,7 +110,7 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input DriverBataRate-input">
+                <div className="input DriverBataRate-input" style={{paddingRight: '15px'}}>
 
                   <div className="icone">
                     <DateRangeIcon color="action" />
@@ -128,7 +128,7 @@ const DriverBataRate = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input DriverBataRate-input" style={{ width: "300px" }}>
+                <div className="input DriverBataRate-input" style={{paddingRight: '15px'}}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -156,10 +156,10 @@ const DriverBataRate = () => {
                 </div>
               </div>
               <div className="input-field DriverBataRate-inputfeild">
-                <div className="input" style={{ width: "200px" }}>
-                  <div className="icone">
+                <div className="input" style={{paddingRight: '15px'}}>
+                  {/* <div className="icone">
                     <EngineeringIcon color="action" />
-                  </div>
+                  </div> */}
                   <Autocomplete
                     fullWidth
                     size="small"
@@ -179,7 +179,7 @@ const DriverBataRate = () => {
                     }
                   />
                 </div>
-                <div className="input">
+                <div className="input" style={{paddingRight: '15px'}}>
                   <TextField
                     type='number'
                     size="small"
@@ -189,9 +189,10 @@ const DriverBataRate = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraHours || book.ExtraHours}
                     onChange={handleChange}
+                    style={{width: '100%'}}
                   />
                 </div>
-                <div className="input">
+                <div className="input" style={{paddingRight: '15px'}}>
                   <TextField
                     type='number'
                     size="small"
@@ -201,11 +202,12 @@ const DriverBataRate = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.ExtraDays || book.ExtraDays}
                     onChange={handleChange}
+                    style={{width: '100%'}}
                   />
                 </div>
                 {/* </div>
               <div className="input-field"> */}
-                <div className="input">
+                <div className="input" style={{paddingRight: '15px'}}>
                   <TextField
                     type='number'
                     size="small"
@@ -223,7 +225,7 @@ const DriverBataRate = () => {
                     }}
                   />
                 </div>
-                <div className="input" >
+                <div className="input" style={{paddingRight: '15px'}}>
                   <TextField
                     type='number'
                     size="small"
@@ -241,7 +243,7 @@ const DriverBataRate = () => {
                     }}
                   />
                 </div>
-                <div className="input" style={{ width: "111px" }}>
+                <div className="input" style={{paddingRight: '15px'}}>
                   <TextField
                     type='number'
                     size="small"
@@ -251,6 +253,7 @@ const DriverBataRate = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.Bata || book.Bata}
                     onChange={handleChange}
+                    style={{width: '100%'}}
                   />
                 </div>
                 <div className="input" style={{ width: "160px" }}>

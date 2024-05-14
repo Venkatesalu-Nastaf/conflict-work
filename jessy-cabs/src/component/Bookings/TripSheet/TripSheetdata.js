@@ -89,6 +89,10 @@ export const HireTypes = [
     option: "Out Side Travels",
     optionvalue: "outsidetravels",
   },
+  {
+    option: "Own  Vehicle",
+    optionvalue: "ownvehicle",
+  },
 ];
 // Department
 export const Department = [

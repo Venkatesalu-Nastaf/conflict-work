@@ -312,8 +312,12 @@ const useTripsheet = () => {
 
         const formData = {};
 
+        // const parameterKeys = [
+        //     'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups'
+        // ];
+
         const parameterKeys = [
-            'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups'
+            'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups'
         ];
         parameterKeys.forEach(key => {
             const value = params.get(key);
@@ -328,9 +332,11 @@ const useTripsheet = () => {
 
         if (formData['dispatchcheck'] === 'true' && formData['status'] === "pending") {
             formData['status'] = "Opened"
-            setIsEditMode(true);
-        } else {
+            // setIsEditMode(true);
             setIsEditMode(false);
+        } else {
+            // setIsEditMode(false);
+            setIsEditMode(true);
         }
 
         // Remove dispatchcheck from formData
@@ -383,8 +389,8 @@ const useTripsheet = () => {
         guestmobileno: '',
         email: '',
         address1: '',
-        streetno: '',
-        city: '',
+        // streetno: '',
+        // city: '',
         hireTypes: '',
         department: '',
         vehRegNo: '',
@@ -500,8 +506,8 @@ const useTripsheet = () => {
             additionaltime: '',
             email: '',
             address1: '',
-            streetno: '',
-            city: '',
+            // streetno: '',
+            // city: '',
             hireTypes: '',
             department: '',
             vehRegNo: '',
@@ -1288,6 +1294,17 @@ const useTripsheet = () => {
                     const response = await axios.get(`${apiUrl}/tripsheet/${tripid}`);
                     const bookingDetails = response.data;
                     if (response.status === 200 && bookingDetails) {
+                        console.log(bookingDetails.status,"datatatata")
+
+                        if(bookingDetails.status === "Cancelled"){
+                            setError(true)
+                            setErrorMessage("Trip Cancelled")
+                            setSelectedCustomerData({});
+                            setSelectedCustomerId({});
+                            return
+                        }
+                        else{
+                        
 
                         setSelectedCustomerData(bookingDetails);
                         setSelectedCustomerId(bookingDetails.tripid);
@@ -1318,6 +1335,7 @@ const useTripsheet = () => {
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                         setIsEditMode(true);
+                        }
                     } else {
                         setError(true);
                         setErrorMessage("No data found");
@@ -1487,6 +1505,7 @@ const useTripsheet = () => {
     const [attachedImage, setAttachedImage] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
     const [routeData, setRouteData] = useState('');
+   
 
     useEffect(() => {
         const fetchData = async () => {
@@ -1555,6 +1574,7 @@ const useTripsheet = () => {
             try {
                 // const tripid = localStorage.getItem('selectedTripid');
                 const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+              
 
                 if (tripid !== null && tripid && tripid !== "undefined") {
 
@@ -1577,6 +1597,8 @@ const useTripsheet = () => {
         };
         fetchData();
     }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
+
+    
 
 
     // llllllll

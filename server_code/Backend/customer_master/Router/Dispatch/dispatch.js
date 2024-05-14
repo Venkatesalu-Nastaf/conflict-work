@@ -146,96 +146,92 @@ const moment = require('moment');
 // });
 
 
-
 router.get('/pending_tripsheet-show', (req, res) => {
-  const { department, fromDate, toDate, status } = req.query;
-
- 
+  const { fromDate, toDate, status, department } = req.query;
   const formattedFromDate = moment(fromDate).format('YYYY-MM-DD');
   const formattedToDate = moment(toDate).format('YYYY-MM-DD');
-  
 
-  let tripsheetQuery = 'SELECT * FROM tripsheet WHERE 1=1';
-  let bookingQuery = 'SELECT * FROM booking WHERE 1=1';
-  let tripsheetParams = [];
-  let bookingParams = [];
+  let sqlQuery = '';
+  let queryParams = [];
 
-  // Tripsheet query construction
-  if (status) {
-    tripsheetQuery += ' AND status = ?';
-    bookingQuery += ' AND status = ?';
-    bookingParams.push(status);
-    tripsheetParams.push(status);
-  } else {
-    tripsheetQuery += ' AND (status = "Opened" OR status = "Cancelled" OR status = "Closed" OR status = "Billed" )';
-  }
-
-  if (department) {
-    tripsheetQuery += ' AND department = ?';
-    bookingQuery += ' AND servicestation = ?';
-    tripsheetParams.push(department);
-    bookingParams.push(department);
-  }
-
-  // if (fromDate && toDate) {
-  //   tripsheetQuery += ' AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)';
-  //   bookingQuery += ' AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
-  //   bookingParams.push(fromDate);
-  //   bookingParams.push(toDate);
-  //   tripsheetParams.push(fromDate);
-  //   tripsheetParams.push(toDate);
-  // }
-  if (formattedFromDate && formattedToDate) {
-    tripsheetQuery += ' AND tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) AND tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY)';
-    bookingQuery += ' AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
-    bookingParams.push(formattedFromDate );
-    bookingParams.push(formattedToDate);
-    tripsheetParams.push(formattedFromDate );
-    tripsheetParams.push(formattedToDate);
-  }
-
-  tripsheetQuery += ' AND apps != "Be_Closed"'; // Exclude rows where "apps" is "Be_closed"
-
-  // Booking query construction
-  // if (status) {
-  //   bookingQuery += ' AND status = ?';
-  //   bookingParams.push(status);
-  // }
-
-  // if (fromDate && toDate) {
-  //   bookingQuery += ' AND bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY)';
-  //   bookingParams.push(fromDate);
-  //   bookingParams.push(toDate);
-  // }
-
-
-  console.log(tripsheetParams,tripsheetQuery)
-  console.log(bookingParams,"d",bookingQuery)
-
-
-  db.query(tripsheetQuery, tripsheetParams, (err, tripsheetResult) => {
-    if (err) {
-      return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
+  if (status === 'pending' || status === 'Cancelled') {
+    // Query booking table
+    sqlQuery = `
+      SELECT *
+      FROM booking
+      WHERE bookingdate >= ? AND bookingdate <= ? AND status = ?
+    `;
+    queryParams = [formattedFromDate, formattedToDate, status];
+    if (department) {
+      sqlQuery += ' AND servicestation = ?';
+      queryParams.push(department);
     }
+  } else {
+    // Query tripsheet table
+    // sqlQuery = `
+    //   SELECT 
+    //       booking.*,
+    //       tripsheet.toll,
+    //       tripsheet.totalkm1,
+    //       tripsheet.totalcalcAmount,
+    //       tripsheet.permit,
+    //       tripsheet.parking,
+    //       tripsheet.totaltime
+    //   FROM 
+    //       tripsheet
+    //   LEFT JOIN 
+    //       booking ON tripsheet.bookingno = booking.bookingno
+    //   WHERE 
+    //       tripsheet.tripsheetdate >= ? 
+    //       AND tripsheet.tripsheetdate <= ? 
+    //       AND tripsheet.status = ? 
+    // `;
 
-    db.query(bookingQuery, bookingParams, (err, bookingResult) => {
-      if (err) {
-        return res.status(500).json({ error: 'Failed to retrieve booking details from MySQL' });
-      }
+    sqlQuery = `
+    SELECT 
+        booking.*,
+        tripsheet.*
+    FROM 
+        tripsheet
+    LEFT JOIN 
+        booking ON tripsheet.bookingno = booking.bookingno
+    WHERE 
+        tripsheet.tripsheetdate >= ? 
+        AND tripsheet.tripsheetdate <= ? 
+        
+  `;
+    queryParams = [formattedFromDate, formattedToDate];
+    if(status === "Billed"){
+      sqlQuery += ' AND (tripsheet.status = "Transfer_Billed" OR tripsheet.status = "Covering_Billed")';
+      // queryParams.push(status);
+    }
+    else if(status === "Closed"){
 
-       console.log(tripsheetResult.length,bookingResult.length)
+      sqlQuery += ' AND (tripsheet.status = "Transfer_Closed" OR tripsheet.status = "Covering_Closed")';
+    }
+    else{
+      sqlQuery += ' AND tripsheet.status = ?';
+      queryParams.push(status);
 
-      const combinedResult = {
-        tripsheet: tripsheetResult,
-        booking: bookingResult
-      };
-     
-   
+    }
+    if (department) {
+      sqlQuery += ' AND tripsheet.department = ?';
+      queryParams.push(department);
+    }
+  }
 
-      return res.status(200).json(combinedResult);
-    });
+
+
+  db.query(sqlQuery, queryParams, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to retrieve data from MySQL' });
+    }
+ 
+    return res.status(200).json(result);
   });
 });
+
 
 
 
@@ -260,14 +256,14 @@ router.get('/tripsheet-showall', (req, res) => {
   let tripsheetResults, bookingResults;
 
   // Query to fetch tripsheet data
-  db.query("SELECT * FROM tripsheet WHERE apps != 'Be_Closed'", (err, tripsheetData) => {
+  db.query("SELECT * FROM tripsheet where status != 'Cancelled'", (err, tripsheetData) => {
     if (err) {
       return res.status(500).json({ error: "Failed to fetch tripsheet data from MySQL" });
     }
     tripsheetResults = tripsheetData;
 
     // Query to fetch booking data with status 'pending'
-    db.query("SELECT * FROM booking WHERE status = 'pending' or status='Cancelled' or status ='Opened' ", (err, bookingData) => {
+    db.query("SELECT * FROM booking WHERE status = 'pending' or status='Cancelled'", (err, bookingData) => {
       if (err) {
         return res.status(500).json({ error: "Failed to fetch booking data from MySQL" });
       }
@@ -279,10 +275,14 @@ router.get('/tripsheet-showall', (req, res) => {
         tripsheet: tripsheetResults,
         booking: bookingResults
       };
+     
     
       return res.status(200).json(combinedResults);
     });
   });
 });
+
+
+
 
 module.exports = router;  

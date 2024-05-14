@@ -271,10 +271,10 @@ const EmployeeCreation = ({ stationName }) => {
                 {isEditMode ? (
                   <Button variant="contained" disabled={!UserCreation_modify} onClick={handleEdit}>Edit</Button>
                 ) : (
-                  <>
-                    <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} >Add</Button>
-                    <Button variant="contained" disabled={!UserCreation_new} style={{ marginLeft: 10 }} onClick={togglePermission} >Give Permission</Button>
-                  </>
+                  <div className='add-permission'>
+                    <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Add</Button>
+                    <Button variant="contained" disabled={!UserCreation_new} onClick={togglePermission} className='user-permission-button' >Give Permission</Button>
+               </div>
                 )}
               </div>
             </div>

@@ -129,3 +129,20 @@
   margin: 0px;
   width: 200px;
 }
+
+.add-permission{
+  display: flex;
+  gap: 20px;
+}
+
+.add-user-button{
+  padding: 10px 20px !important;
+  /* color: red;
+  background-color: red; */
+  /* height: 20px !important; */
+}
+
+.user-permission-button{
+  padding: 10px 20px !important;
+
+}

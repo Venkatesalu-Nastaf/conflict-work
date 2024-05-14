@@ -29,6 +29,12 @@
 }
 
 
+/* .button-container{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+} */
+
 
 .graph-all-button {
     
@@ -67,7 +73,7 @@
 
 @media only screen and  (min-width:1219px) {
     .weekly-chart{
-        width: 94% !important;
+        width: 86% !important;
     }}
 @media only screen and  (max-width:768px) {
 .weekly-chart{
@@ -76,29 +82,42 @@
 }
 @media only screen and (min-width:855px) and (max-width:888px) {
     .weekly-chart{
-        width: 390px;
+        width: 360px;
     }
 }
 
 @media only screen and (min-width:888.99px) and (max-width:960px) {
     .weekly-chart{
-        width: 430px;
+        width: 385px;
     }
 }
 
-@media only screen and (min-width:960.99px) and (max-width:1021px) {
+@media only screen and (min-width:960.99px) and (max-width:1020px) {
     .weekly-chart{
-        width: 470px;
+        width: 453px;
     }
 }
-@media only screen and (min-width:1021.99px) and (max-width:1103px) {
+@media only screen and (min-width:1021px) and (max-width:1102.99px) {
     .weekly-chart{
         width: 500px;
     }
 }
 
-@media only screen and (min-width:1103.99px) and (max-width:1219px) {
+@media only screen and (min-width:1103px) and (max-width:1218px) {
     .weekly-chart{
-        width: 600px;
+        width: 558px;
+    }
+}
+
+
+@media only screen and (min-width:769px) and (max-width: 800px)  {
+    .weekly-chart {
+        width: 285px !important;
+    }
+}
+
+@media  screen and (min-width:801px) and (max-width: 855px)  {
+    .weekly-chart {
+        width: 300px !important;
     }
 }

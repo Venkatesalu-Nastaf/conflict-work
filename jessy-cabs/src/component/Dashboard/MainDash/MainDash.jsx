@@ -8,7 +8,7 @@ const MainDash = () => {
   const [isBelow768px, setIsBelow768px] = useState(false);
   useEffect(() => {
     const handleResize = () => {
-      setIsBelow768px(window.innerWidth < 768);
+      setIsBelow768px(window.innerWidth < 768.99);
     };
 
     // Call handleResize initially to set the initial state

@@ -73,7 +73,7 @@
   grid-template-columns: 11rem auto 20rem;
   grid-auto-flow: row;
   overflow: hidden;
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
 }
 
 @media (max-width: 1219px) {
@@ -134,6 +134,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* gap: 10px; */
   margin: 5px 5px 20px 5px;
   padding: 0px 10px;
   right: 30px;
@@ -164,7 +165,7 @@
   cursor: pointer;
   padding: 5px;
   border-radius: 10px;
-  background-color: #cccccc21;
+  /* background-color: #cccccc21; */
   transition: .1s;
 }
 
@@ -234,6 +235,7 @@
  position: relative;
   display: inline-block;
  margin-right: 10px;
+ margin-left: 10px;
 }
 
 .user-icon-update-dot{

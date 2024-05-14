@@ -70,8 +70,8 @@
   /* padding-top: 28px; */
   border-radius: 20px;
   color: #000;
-  /* background-color: var(--glass); */
-  background-color: #f0ece2;
+  background-color: var(--glass);
+  /* background-color: #f0ece2; */
 }
 
 @media screen and (min-width: 1113px) and (max-width: 1267px) {
@@ -242,10 +242,10 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
-  border-bottom: 1px solid;
-  justify-content: space-around;
-  padding: 30px 0px;
-  width: 81vw;
+  border-bottom: 1px solid #ccc;
+  justify-content: left;
+  padding: 30px 0px 30px 20px;
+  width: 79vw;
 }
 
 @media screen and (min-width: 1113px) and (max-width: 1266px) {
@@ -256,19 +256,21 @@
 
 @media screen and (min-width: 909px) and (max-width: 1112.99px) {
   .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
-    width: 76vw;
+    width: 73vw;
   }
 }
 
 @media screen and (min-width: 769px) and (max-width: 910px) {
   .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
-    width: 70vw;
+    width: 66vw;
+    justify-content: center;
   }
 }
 
 @media screen and (min-width: 320px) and (max-width: 768.99px) {
   .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
-    width: 81vw;
+    width: 76vw;
+    justify-content: center;
   }
 }
 

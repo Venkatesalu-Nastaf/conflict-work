@@ -32,7 +32,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
 
@@ -169,7 +169,7 @@ const DriverCreation = ({ stationName }) => {
                     <div className="DriverCreation-header">
 
                         <div className="input-field driver-info-inputs">
-                            <div className="input driver-input">
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <BadgeIcon color="action" />
                                 </div>
@@ -183,10 +183,11 @@ const DriverCreation = ({ stationName }) => {
                                     value={selectedCustomerData.driverid || book.driverid || ''}
                                     onChange={handleChange}
                                     variant="standard"
+                                    style={{width: '100%'}}
                                 />
                             </div>
 
-                            <div className="input driver-input">
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
@@ -198,9 +199,10 @@ const DriverCreation = ({ stationName }) => {
                                     name="drivername"
                                     value={selectedCustomerData?.drivername || book.drivername}
                                     onChange={handleChange}
+                                    style={{width: '100%'}}
                                 />
                             </div>
-                            <div className="input driver-input">
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                                 </div>
@@ -212,9 +214,10 @@ const DriverCreation = ({ stationName }) => {
                                     name="username"
                                     value={selectedCustomerData?.username || book.username}
                                     onChange={handleChange}
+                                    style={{width: '100%'}}
                                 />
                             </div>
-                            <div className="input driver-input">
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                                 </div>
@@ -223,7 +226,7 @@ const DriverCreation = ({ stationName }) => {
                                     size="small"
                                     id="free-solo-demo-stationname"
                                     freeSolo
-                                    sx={{ width: "20ch" }}
+                                    sx={{ width: "100%" }}
                                     value={stationName.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
                                     onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
                                     options={stationName.map((option) => ({
@@ -239,11 +242,11 @@ const DriverCreation = ({ stationName }) => {
                                 />
                             </div>
 
-                            <div className="input driver-input" >
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                                 </div>
-                                <FormControl sx={{ m: 1, width: '35ch' }}     >
+                                <FormControl sx={{ m: 1, width: '100%' }}     >
                                     <InputLabel htmlFor="password">Password</InputLabel>
                                     <Input
                                         name="userpassword"
@@ -269,7 +272,7 @@ const DriverCreation = ({ stationName }) => {
                             {/* </div>
                       
                         <div className="input-field"> */}
-                            <div className="input driver-input" style={{ width: "400px" }}>
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <AddHomeWorkIcon color="action" />
                                 </div>
@@ -280,7 +283,7 @@ const DriverCreation = ({ stationName }) => {
                                     onChange={handleChange}
                                     label="Address"
                                     id="address1"
-                                    sx={{ m: 1, width: "200ch" }}
+                                    sx={{ m: 1, width: "100%" }}
                                     variant="standard"
                                 />
                             </div>
@@ -299,7 +302,7 @@ const DriverCreation = ({ stationName }) => {
                                     onChange={handleChange}
                                 />
                             </div> */}
-                            <div className="input driver-input">
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <PostAddIcon color="action" />
                                 </div>
@@ -310,9 +313,14 @@ const DriverCreation = ({ stationName }) => {
                                     onChange={handleChange}
                                     label="Badge No"
                                     id="badgeno"
+                                    style={{width: '100%'}}
                                 />
                             </div>
-                            <div className="input driver-input" >
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
+                                <div className='icone'>
+                                    <CalendarMonthIcon />
+                                </div>
+
                                 {/* <TextField
                                     size="small"
                                     name="badgeexpdate"
@@ -325,7 +333,7 @@ const DriverCreation = ({ stationName }) => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
 
                                     <DatePicker
-                                        label="Badge Expdate "
+                                        label="Badge Exp date "
                                         value={
                                             selectedCustomerData.badgeexpdate
                                                 ? dayjs(selectedCustomerData.badgeexpdate)
@@ -349,7 +357,7 @@ const DriverCreation = ({ stationName }) => {
                             </div>
 
 
-                            <div className="input driver-input">
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <AddIcCallTwoToneIcon color="action" />
                                 </div>
@@ -365,6 +373,7 @@ const DriverCreation = ({ stationName }) => {
                                     label="Mobile No"
                                     id="mobile"
                                     variant="standard"
+                                    style={{width: '100%'}}
                                 />
                             </div>
                             {/* </div>
@@ -385,7 +394,7 @@ const DriverCreation = ({ stationName }) => {
                                     variant="standard"
                                 /> */}
 
-                            <div className="input driver-input" style={{ width: "400px" }}>
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <LocationCityIcon color="action" />
                                 </div>
@@ -396,7 +405,7 @@ const DriverCreation = ({ stationName }) => {
                                     onChange={handleChange}
                                     id="address3"
                                     label="City"
-                                    sx={{ m: 1, width: "200ch" }}
+                                    sx={{ width: "100%" }}
                                     variant="standard"
                                 />
                             </div>
@@ -415,7 +424,7 @@ const DriverCreation = ({ stationName }) => {
                                 />
                             </div> */}
 
-                            <div className="input driver-input" >
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <AssignmentIndIcon color="action" />
                                 </div>
@@ -426,11 +435,12 @@ const DriverCreation = ({ stationName }) => {
                                     onChange={handleChange}
                                     label="Aadhar-card No"
                                     id="aadharno"
-                                // sx={{ m: 1, width: "230ch" }}
-                                // variant="standard"
+                                    // sx={{ m: 1, width: "230ch" }}
+                                    // variant="standard"
+                                    style={{width: '100%'}}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ width: "160px" }}>
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 {/* {selectedCustomerData?.driverid || book.driverid ? ( */}
                                 <Button color="primary" variant="contained" component="label">
                                     aadhar card
@@ -451,7 +461,10 @@ const DriverCreation = ({ stationName }) => {
                                     </Button>
                                 )} */}
                             </div>
-                            <div className="input driver-input">
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
+                                <div className='icone'>
+                                    <CalendarMonthIcon />
+                                </div>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="joining Date"
@@ -505,7 +518,7 @@ const DriverCreation = ({ stationName }) => {
                                     id="PFNo"
                                 />
                             </div> */}
-                            <div className="input driver-input">
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <TaxiAlertIcon color="action" />
                                 </div>
@@ -516,9 +529,13 @@ const DriverCreation = ({ stationName }) => {
                                     onChange={handleChange}
                                     label="License No"
                                     id="licenseno"
+                                    style={{width: '100%'}}
                                 />
                             </div>
-                            <div className="input driver-input" style={{ width: "200px" }}>
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
+                                <div className='icone'>
+                                    <CalendarMonthIcon />
+                                </div>
                                 {/* <TextField
                                     size="small"
                                     name="licenseexpdate"
@@ -554,7 +571,7 @@ const DriverCreation = ({ stationName }) => {
 
                                 </LocalizationProvider>
                             </div>
-                            <div className="input driver-input" style={{ width: "160px" }}>
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
 
                                 {/* {selectedCustomerData?.driverid || book.driverid ? ( */}
                                 <Button color="primary" variant="contained" component="label">
@@ -627,7 +644,7 @@ const DriverCreation = ({ stationName }) => {
                             <div className="container-left">
                                 <div className="copy-title-btn-Booking">
                                     <div className="input-field" style={{ justifyContent: "center", flexWrap: 'wrap' }}>
-                                        <div className="input" style={{ width: "230px" }}>
+                                        <div className="input" style={{paddingRight: '15px'}}>
                                             <div className="icone">
                                                 <AiOutlineFileSearch
                                                     color="action"
@@ -644,7 +661,10 @@ const DriverCreation = ({ stationName }) => {
                                                 onChange={(e) => setSearchText(e.target.value)}
                                             />
                                         </div>
-                                        <div className="input">
+                                        <div className="input" style={{paddingRight: '15px'}}>
+                                            <div className='icone'>
+                                                <CalendarMonthIcon />
+                                            </div>
                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
                                                     label="From Date"
@@ -655,7 +675,10 @@ const DriverCreation = ({ stationName }) => {
                                                 />
                                             </LocalizationProvider>
                                         </div>
-                                        <div className="input">
+                                        <div className="input" style={{paddingRight: '15px'}}>
+                                            <div className='icone'>
+                                                <CalendarMonthIcon />
+                                            </div>
                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
                                                     label="To Date"

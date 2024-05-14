@@ -26,7 +26,7 @@ const BookingChart = () => {
   const [clickedSegment, setClickedSegment] = useState('Active');
 
   const chartData = {
-    series: [40,40,20],
+    series: [43,37,20],
     options: {
       chart: {
         type: 'pie',
@@ -44,7 +44,8 @@ const BookingChart = () => {
           },
         },
       },
-      labels: ['Active', 'Inactive', 'Offline'],
+      labels: [ 'Active','Inactive', 'Offline'],
+      colors: ['#28a745','#007bff',  '#ff0000'], //  Green,Blue, Red colors respectively
       responsive: [{
         breakpoint: 480,
         options: {
@@ -161,8 +162,11 @@ const BookingChart = () => {
       },
       xAxis: { type: 'category' },
       yAxis: {},
-      series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }]
-    };
+      series: [
+        { type: 'bar', name: 'Active', color: '#28a745' }, // Green color for Active
+        { type: 'bar', name: 'Inactive', color: '#007bff' }, // Blue color for Inactive
+        { type: 'bar', name: 'Offline', color: '#ff0000' }, // Red color for Offline
+      ]    };
     chart.setOption(option);
 
     chart.on('click', (params) => {

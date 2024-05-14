@@ -99,8 +99,8 @@ const BankAccount = () => {
           </div>
           {showAddBankForm && (
             <div className="AddBankContainer-BankAccount">
-              <div className="input-field">
-                <div className="input">
+              <div className="input-field input-field-bankaccount">
+                <div className="input input-bankaccount">
                   <div className="icone">
                     <AiFillBank color="action" style={{ fontSize: "27px" }} />
                   </div>
@@ -113,7 +113,7 @@ const BankAccount = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input">
+                <div className="input input-bankaccount">
                   <div className="icone">
                     <FontAwesomeIcon icon={faSackDollar} size="xl" />
                   </div>
@@ -126,7 +126,7 @@ const BankAccount = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input" style={{ width: "230px" }}>
+                <div className="input input-bankaccount" style={{ width: "230px" }}>
                   <div className="icone">
                     <ListAltIcon color="action" style={{ fontSize: "27px" }} />
                   </div>
@@ -150,12 +150,12 @@ const BankAccount = () => {
                     }
                   />
                 </div>
-                <div className="input" style={{ width: "100px" }}>
+                <div className="inpu" style={{ width: "fit-content",marginTop:'10px' }}>
                   <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
                     Add
                   </Button>
                 </div>
-                <div className="input" style={{ width: "100px" }}>
+                <div className="inpu" style={{ width: "fit-content",marginTop:'10px'  }}>
                   <Button variant="contained" onClick={() => setShowAddBankForm(false)}>
                     <CancelIcon />
                   </Button>
@@ -167,8 +167,9 @@ const BankAccount = () => {
         <div className="BankDetails-mainContainer">
           {bankDetails.map((bankDetail, index) => (
             <div className="addedbanks-Details-BankAccount" key={index}>
-              <div className="input-field">
-                <div className="input">
+              <div className="input-field input-field-bankaccount input-Field-bank-account">
+                
+                <div className="input input-bankname">
                   {/* <input  name="id" value={bankDetails[index]?.id} /> */}
                   <div className="icone">
                     <AiFillBank color="action" style={{ fontSize: "27px" }} />
@@ -183,7 +184,7 @@ const BankAccount = () => {
                     disabled={editingIndex !== index}
                   />
                 </div>
-                <div className="input">
+                <div className="input input-bankname">
               
                   <div className="icone">
                     <AiFillBank color="action" style={{ fontSize: "27px" }} />
@@ -201,8 +202,8 @@ const BankAccount = () => {
                     disabled={editingIndex !== index}
                   />
                 </div>
-                <div className="bank-btn-amount-main" id={`bank-btn-amountIN`}>
-                  <label htmlFor={`totalin-${index}`}>Total-In</label>
+                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountIN`} style={{display:'flex',gap:"10px", alignItems:'center'}}>
+                  <label htmlFor={`totalin-${index}`}>TotalIn:</label>
                   <input
                     className="bank-amount-input"
                     name="totalin"
@@ -216,8 +217,8 @@ const BankAccount = () => {
                     disabled={editingIndex !== index}
                   />
                 </div>
-                <div className="bank-btn-amount-main" id={`bank-btn-amountOUT`}>
-                  <label htmlFor={`totalout-${index}`}>Total-Out</label>
+                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountOUT`} style={{display:'flex',gap:"10px", alignItems:'center'}}>
+                  <label htmlFor={`totalout-${index}`}>TotalOut:</label>
                   <input
                     className="bank-amount-input"
                     name="totalout"
@@ -231,7 +232,7 @@ const BankAccount = () => {
                 
                 </div>
                 <div className="button-container-bankAccount">
-                  <div className="input" style={{ width: "80px" }}>
+                  <div className="inpt input-bank-account-icon">
                     {editingIndex === index ? (
                       <IconButton color="primary" variant="contained" onClick={() => handleSaveEdit(index)}>
                         <SaveIcon />
@@ -242,7 +243,7 @@ const BankAccount = () => {
                       </IconButton>
                     )}
                   </div>
-                  <div className="input" style={{ width: "80px" }}>
+                  <div className="inpt input-bank-account-icon">
                     
                     {/* <IconButton color="error" variant="contained" onClick={handleDelete}> */}
                     <IconButton color="error" variant="contained" onClick={() => handleDelete(index)}>

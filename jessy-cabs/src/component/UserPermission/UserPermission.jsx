@@ -1,15 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './UserPermission.css'
 import Switch from '@mui/material/Switch';
 
-export const UserPermission = ({ userid, permissionsData, handleSwitchChange, handleCheckboxChange, }) => {
+export const UserPermission = ({ userid, permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState }) => {
+
+  const [BOOKING, setBOOKING] = useState(false);
+  const [BILLING, setBILLING] = useState(false);
+  const [REGISTER, setREGISTER] = useState(false);
+  const [SETTING, setSETTING] = useState(false);
+  const [INFO, setINFO] = useState(false);
 
 
-  //-----------------------------------------------------
+  const togglerow = (headdername) => {
+    if (headdername === "BOOKING") {
+      setBOOKING((prev) => !prev)
+    } else if (headdername === "BILLING") {
+      setBILLING((prev) => !prev)
+
+    } else if (headdername === "REGISTER") {
+      setREGISTER((prev) => !prev)
+
+    } else if (headdername === "SETTING") {
+      setSETTING((prev) => !prev)
+
+    } else if (headdername === "INFO") {
+      setINFO((prev) => !prev)
+    }
+  }
+
+  //-------------------------------------------------
 
   return (
-
-
 
     <div className='permission-table'>
       <div className="table-containerr">
@@ -25,38 +46,38 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
           </thead>
           <tbody className='table-body'>
             <tr>
-              <td className='td-content'>Full Permission</td>
-              <td className='td-content'>
-                <Switch checked={permissionsData?.read} onChange={handleSwitchChange('read')} />
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9", fontWeight: "bold" }} >Full Permission</td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}>
+                <Switch checked={readState} onChange={handleSwitchChange('read')} />
               </td>
-              <td className='td-content'>
-                <Switch checked={permissionsData?.new} onChange={handleSwitchChange('new')} />
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}>
+                <Switch checked={newState} onChange={handleSwitchChange('new')} />
               </td>
-              <td className='td-content'>
-                <Switch checked={permissionsData?.modify} onChange={handleSwitchChange('modify')} />
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}>
+                <Switch checked={modifyState} onChange={handleSwitchChange('modify')} />
               </td>
-              <td className='td-content'>
-                <Switch checked={permissionsData?.delete} onChange={handleSwitchChange('delete')} />
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}>
+                <Switch checked={deleteState} onChange={handleSwitchChange('delete')} />
 
               </td>
             </tr>
 
-            <tr >
-              <td className='td-content Booking-table'>Dashbord </td>
+            <tr style={{ backgroundColor: "#E0F1F9" }}>
+              <td className='td-content Booking-table' style={{ backgroundColor: "#E0F1F9", fontWeight: "bold" }} >Dashbord </td>
               <td className='td-content'><input type="checkbox" checked={permissionsData[20]?.read} onChange={handleCheckboxChange(20, 'read')} /></td>
             </tr>
 
 
             <tr >
               {/* <td className='td-content Booking-table' onClick={toggleDropdown}> <span>BOOKING</span>{isDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)} */}
-              <td className='td-content Booking-table'>BOOKING </td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[0]?.read} onChange={handleCheckboxChange(0, 'read')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[0]?.new} onChange={handleCheckboxChange(0, 'new')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[0]?.modify} onChange={handleCheckboxChange(0, 'modify')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[0]?.delete} onChange={handleCheckboxChange(0, 'delete')} /></td>
+              <td className='td-content Booking-table' style={{ backgroundColor: "#E0F1F9", fontWeight: "bold" }} onClick={() => togglerow("BOOKING")}>BOOKING </td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[0]?.read} onChange={handleCheckboxChange(0, 'read')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[0]?.new} onChange={handleCheckboxChange(0, 'new')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[0]?.modify} onChange={handleCheckboxChange(0, 'modify')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[0]?.delete} onChange={handleCheckboxChange(0, 'delete')} /></td>
             </tr>
 
-            <>
+            {BOOKING && <>
               <tr>
                 <td className='td-content'>Booking</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[1]?.read} onChange={handleCheckboxChange(1, 'read')} /></td>
@@ -80,22 +101,19 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[3]?.modify} onChange={handleCheckboxChange(3, 'modify')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[3]?.delete} onChange={handleCheckboxChange(3, 'delete')} /></td>
               </tr>
-            </>
-
+            </>}
 
 
             <tr >
-              <td className='td-content Booking-table'>BILLING </td>
+              <td className='td-content Booking-table' style={{ backgroundColor: "#E0F1F9", fontWeight: "bold" }} onClick={() => togglerow("BILLING")}>BILLING </td>
               {/* <td className='td-content  Booking-table'  ><span>BILLING</span>{isbillingDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
-              <td className='td-content'><input type="checkbox" checked={permissionsData[4]?.read} onChange={handleCheckboxChange(4, 'read')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[4]?.new} onChange={handleCheckboxChange(4, 'new')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[4]?.modify} onChange={handleCheckboxChange(4, 'modify')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[4]?.delete} onChange={handleCheckboxChange(4, 'delete')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[4]?.read} onChange={handleCheckboxChange(4, 'read')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[4]?.new} onChange={handleCheckboxChange(4, 'new')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[4]?.modify} onChange={handleCheckboxChange(4, 'modify')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[4]?.delete} onChange={handleCheckboxChange(4, 'delete')} /></td>
             </tr>
 
-
-            {/* {isbillingDropdownVisible && ( */}
-            <>
+            {BILLING && <>
               <tr>
                 <td className='td-content'>Billing</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[5]?.read} onChange={handleCheckboxChange(5, 'read')} /></td>
@@ -120,20 +138,18 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[7]?.delete} onChange={handleCheckboxChange(7, 'delete')} /></td>
               </tr>
 
-            </>
-            {/* )} */}
+            </>}
 
             <tr >
               {/* <td className='td-content Booking-table'  ><span>REGISTER</span>{isregisterDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
-              <td className='td-content Booking-table'>REGISTER </td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[8]?.read} onChange={handleCheckboxChange(8, 'read')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[8]?.new} onChange={handleCheckboxChange(8, 'new')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[8]?.modify} onChange={handleCheckboxChange(8, 'modify')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[8]?.delete} onChange={handleCheckboxChange(8, 'delete')} /></td>
+              <td className='td-content Booking-table' style={{ backgroundColor: "#E0F1F9", fontWeight: "bold" }} onClick={() => togglerow("REGISTER")}>REGISTER </td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[8]?.read} onChange={handleCheckboxChange(8, 'read')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[8]?.new} onChange={handleCheckboxChange(8, 'new')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[8]?.modify} onChange={handleCheckboxChange(8, 'modify')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[8]?.delete} onChange={handleCheckboxChange(8, 'delete')} /></td>
             </tr>
 
-            {/* {isregisterDropdownVisible && ( */}
-            <>
+            {REGISTER && <>
               <tr>
                 <td className='td-content'>Customer</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[9]?.read} onChange={handleCheckboxChange(9, 'read')} /></td>
@@ -158,20 +174,19 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[11]?.delete} onChange={handleCheckboxChange(11, 'delete')} /></td>
               </tr>
 
-            </>
-            {/* )} */}
+            </>}
+
 
             <tr >
               {/* <td className='td-content Booking-table'  ><span>REGISTER</span>{issettingDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
-              <td className='td-content'>SETTING</td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[12]?.read} onChange={handleCheckboxChange(12, 'read')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[12]?.new} onChange={handleCheckboxChange(12, 'new')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[12]?.modify} onChange={handleCheckboxChange(12, 'modify')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[12]?.delete} onChange={handleCheckboxChange(12, 'delete')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9", fontWeight: "bold" }} onClick={() => togglerow("SETTING")}>SETTING</td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[12]?.read} onChange={handleCheckboxChange(12, 'read')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[12]?.new} onChange={handleCheckboxChange(12, 'new')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[12]?.modify} onChange={handleCheckboxChange(12, 'modify')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[12]?.delete} onChange={handleCheckboxChange(12, 'delete')} /></td>
             </tr>
 
-            {/* {issettingDropdownVisible && ( */}
-            <>
+            {SETTING && <>
               <tr>
                 <td className='td-content'>User Creation</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[13]?.read} onChange={handleCheckboxChange(13, 'read')} /></td>
@@ -196,18 +211,20 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[15]?.delete} onChange={handleCheckboxChange(15, 'delete')} /></td>
               </tr>
 
-            </>
-            {/* )} */}
+            </>}
+
+
 
             <tr >
               {/* <td className='td-content Booking-table'  ><span>Info</span>{isinfoDropdownVisible ? (<span> <CiCircleChevUp className='table-up-down-icon' style={{ color: 'red' }} />  </span>) : (<span><CiCircleChevDown className='table-up-down-icon' /></span>)}</td> */}
-              <td className='td-content'>INFO</td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[16]?.read} onChange={handleCheckboxChange(16, 'read')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[16]?.new} onChange={handleCheckboxChange(16, 'new')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[16]?.modify} onChange={handleCheckboxChange(16, 'modify')} /></td>
-              <td className='td-content'><input type="checkbox" checked={permissionsData[16]?.delete} onChange={handleCheckboxChange(16, 'delete')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9", fontWeight: "bold" }} onClick={() => togglerow("INFO")}>INFO</td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[16]?.read} onChange={handleCheckboxChange(16, 'read')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[16]?.new} onChange={handleCheckboxChange(16, 'new')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[16]?.modify} onChange={handleCheckboxChange(16, 'modify')} /></td>
+              <td className='td-content' style={{ backgroundColor: "#E0F1F9" }}><input type="checkbox" checked={permissionsData[16]?.delete} onChange={handleCheckboxChange(16, 'delete')} /></td>
             </tr>
-            <>
+
+            {INFO && <>
               <tr>
                 <td className='td-content'>Rate Type</td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[17]?.read} onChange={handleCheckboxChange(17, 'read')} /></td>
@@ -231,8 +248,9 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[19]?.modify} onChange={handleCheckboxChange(19, 'modify')} /></td>
                 <td className='td-content'><input type="checkbox" checked={permissionsData[19]?.delete} onChange={handleCheckboxChange(19, 'delete')} /></td>
               </tr>
-            </>
-            {/* )} */}
+            </>}
+
+
 
           </tbody>
         </table>

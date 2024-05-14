@@ -3,15 +3,9 @@ import axios from 'axios';
 import { APIURL } from "../../../url";
 
 
-
-
-
-
 const useEmplyeecreation = () => {
     const apiUrl = APIURL;
-    // const user_id = localStorage.getItem('useridno');
     const [showPasswords, setShowPasswords] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
     const [actionName] = useState('');
@@ -24,22 +18,6 @@ const useEmplyeecreation = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [warning, setWarning] = useState(false);
     const [warningMessage] = useState({});
-    // const [infoMessage, setInfoMessage] = useState({});
-
-
-
-    // TABLE START
-    const columns = [
-        { field: "id", headerName: "Sno", width: 70 },
-        { field: "userid", headerName: "User Id", width: 110 },
-        { field: "username", headerName: "User_Name", width: 130 },
-        { field: "userpassword", headerName: "Password", width: 130 },
-        { field: "active", headerName: "Active", width: 100 },
-        { field: "stationname", headerName: "Station", width: 130 },
-        // { field: "viewfor", headerName: "Access", width: 130 },
-        { field: "designation", headerName: "Designation", width: 150 },
-        { field: "organizationname", headerName: "Organization", width: 130 }
-    ];
 
 
     ////-------------permission --------------------------
@@ -71,25 +49,86 @@ const useEmplyeecreation = () => {
         { id: 18, name: 'Mailers', read: false, new: false, modify: false, delete: false },
         { id: 19, name: 'Fuel Info', read: false, new: false, modify: false, delete: false },
         { id: 20, name: 'Dashbord', read: false },
-
     ];
 
 
     const [permissionsData, setPermissionsData] = useState(initialPermissionsData);
 
+    const [readState, setReadState] = useState(false);
+    const [newState, setNewState] = useState(false);
+    const [modifyState, setModifyState] = useState(false);
+    const [deleteState, setDeleteState] = useState(false);
+
+
+    //-------------------------------------------------------------------------
+    // Function to update state based on permissions
+    const updatePermissionsState = () => {
+        setReadState(checkPermission('read'));
+        setNewState(checkPermission('new'));
+        setModifyState(checkPermission('modify'));
+        setDeleteState(checkPermission('delete'));
+    };
+
+    // Function to check if any object in the array has the property set to true
+    const checkPermission = (property) => {
+        const data = permissionsData.some(permission => permission[property]);
+        return data;
+    }
+
     const handleSwitchChange = (permissionType) => () => {
+
+        switch (permissionType) {
+            case 'read':
+                setReadState(prevState => !prevState);
+                break;
+            case 'new':
+                setNewState(prevState => !prevState);
+                break;
+            case 'modify':
+                setModifyState(prevState => !prevState);
+                break;
+            case 'delete':
+                setDeleteState(prevState => !prevState);
+                break;
+            default:
+                break;
+        }
+
+        // Use the corresponding state variable directly based on the permission type
+        let newStateValue;
+        switch (permissionType) {
+            case 'read':
+                newStateValue = readState;
+                break;
+            case 'new':
+                newStateValue = newState;
+                break;
+            case 'modify':
+                newStateValue = modifyState;
+                break;
+            case 'delete':
+                newStateValue = deleteState;
+                break;
+            default:
+                break;
+        }
+
+        // Update permissions data using the correct state value for the permission type
         setPermissionsData(prevData =>
             prevData.map(permission => ({
                 ...permission,
-                [permissionType]: !permission[permissionType],
+                [permissionType]: !newStateValue
             }))
         );
     };
 
 
-
+    //----------------------------------------------------
 
     const handleCheckboxChange = (index, field) => (event) => {
+        if (index === 0 || index === 4 || index === 8 || index === 12 || index === 16) {
+            handleMainCheckboxChange(index, field)
+        }
         const { checked } = event.target;
         setPermissionsData(prevData =>
             prevData.map((permission, i) => {
@@ -101,8 +140,27 @@ const useEmplyeecreation = () => {
         );
     }
 
+    // its for set main checkbox state 
+    const handleMainCheckboxChange = (index, field) => {
+        setPermissionsData(prevData => {
+            const newState = prevData.map((item, idx) => {
+                if (idx >= index && idx < index + 4) {
+                    return {
+                        ...item,
+                        [field]: !item[field]
+                    };
+                }
+                return item;
+            });
 
-
+            const checked = newState[index][field];
+            // Set all checkboxes within the range to match the checked state of the main checkbox
+            for (let i = index + 1; i < index + 4; i++) {
+                newState[i][field] = checked;
+            }
+            return newState;
+        });
+    };
 
     ///----------------------------------------------------
 
@@ -139,6 +197,7 @@ const useEmplyeecreation = () => {
         }
     };
 
+
     const handleAutocompleteChange = (event, value, name) => {
         const selectedOption = value ? value.label : '';
         setBook((prevBook) => ({
@@ -161,9 +220,13 @@ const useEmplyeecreation = () => {
             userpassword: '',
             active: '',
         }));
-        // setBook({});
-        setIsEditMode(false);
+
         setPermissionsData(initialPermissionsData);
+        setReadState(false)
+        setDeleteState(false)
+        setModifyState(false)
+        setNewState(false);
+        setIsEditMode(false)
     };
 
     // add
@@ -215,7 +278,6 @@ const useEmplyeecreation = () => {
     const handleDelete = async () => {
         try {
             await axios.delete(`${apiUrl}/usercreation-delete/${book.userid}`);
-            // await axios.delete(`${apiUrl}/permission-delete/${book.userid}`)
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
             handleCancel();
@@ -307,12 +369,10 @@ const useEmplyeecreation = () => {
 
     const permissiondata = async (userId) => {
         const userid = userId;
-        // console.log("userid,set", userid)
         if (userid) {
             try {
                 const response = await axios.get(`${apiUrl}/user-permissionget/${userid}`);
                 const permissiondata = response?.data;
-                // console.log("permission9999", permissiondata)
                 if (permissiondata.length > 0) {
                     return permissiondata;
                 }
@@ -333,15 +393,9 @@ const useEmplyeecreation = () => {
 
         setSelectedCustomerId(params.customerId);
         setIsEditMode(true);
+        updatePermissionsState();
     };
 
-
-    const handleRowClick = useCallback((params) => {
-        const customerData = params?.row;
-        setBook(customerData)
-        setSelectedCustomerId(params.row.customerId);
-        setIsEditMode(true);
-    }, []);
 
     const handleClickShowPasswords = () => {
         setShowPasswords((show) => !show);
@@ -351,13 +405,6 @@ const useEmplyeecreation = () => {
         event.preventDefault();
     };
 
-    const handleClickShowPassword = () => {
-        setShowPassword((show) => !show);
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
 
     return {
 
@@ -374,23 +421,18 @@ const useEmplyeecreation = () => {
         book,
         handleClick,
         handleChange,
-        handleRowClick, handleRowClickUser,
+        handleRowClickUser,
         handleAdd,
         hidePopup,
         handleAutocompleteChange,
         showPasswords,
         handleClickShowPasswords,
         handleMouseDownPasswords,
-        handleMouseDownPassword,
-        showPassword,
-        handleClickShowPassword,
-
-        columns,
         isEditMode,
         handleEdit,
 
         //ffor permission
-        permissionsData, handleSwitchChange, handleCheckboxChange
+        permissionsData, handleSwitchChange, handleCheckboxChange, setReadState, readState, newState, modifyState, deleteState,
     };
 };
 

@@ -135,6 +135,7 @@ const PaymentDetail = () => {
             </div>
           </div>
         </div>
+        <div className='alert-popup-main'>
         {error &&
           <div className='alert-popup Error' >
             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -164,6 +165,7 @@ const PaymentDetail = () => {
             <p>{successMessage}</p>
           </div>
         }
+        </div>
         <div className='total-container'>
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">

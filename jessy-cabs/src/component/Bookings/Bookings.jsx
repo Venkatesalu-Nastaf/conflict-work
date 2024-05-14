@@ -21,6 +21,7 @@ const MenuItem = ({ label, to, alt, activeMenuItem, handleMenuItemClick }) => {
 
 const Bookings = () => {
 
+
   const { permissions } = useContext(PermissionContext);
 
   // const BOOKING = permissions[0]?.read;

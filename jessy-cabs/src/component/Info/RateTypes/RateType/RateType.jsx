@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import Menu from '@mui/material/Menu';
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import { Stations } from "./RateTypeData.js";
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -54,7 +53,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     },
 }));
 
-const RateType = () => {
+const RateType = ({ stationName }) => {
 
     const {
         selectedCustomerData,
@@ -76,8 +75,6 @@ const RateType = () => {
         handleAdd,
         hidePopup,
         handleAutocompleteChange,
-        // formData,
-        // setBook,
         handleExcelDownload,
         handlePdfDownload,
         columns,
@@ -139,9 +136,9 @@ const RateType = () => {
                                         id="free-solo-demo-customerType"
                                         freeSolo
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "stations")}
-                                        value={Stations.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
-                                        options={Stations.map((option) => ({
-                                            label: option.Option,
+                                        value={stationName.find((option) => option.Option)?.label || selectedCustomerData?.stations || ''}
+                                        options={stationName.map((option) => ({
+                                            label: option.Stationname,
                                         }))}
                                         getOptionLabel={(option) => option.label || selectedCustomerData?.stations || ''}
                                         renderInput={(params) => {

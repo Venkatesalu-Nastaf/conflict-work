@@ -6,7 +6,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import { Menu, TextField } from "@mui/material";
 import { Autocomplete } from "@mui/material";
-import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -24,7 +23,7 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import useCoversubmit from './useCoversubmit';
 import { PermissionContext } from '../../../context/permissionContext';
 
-const CoveringSubmit = () => {
+const CoveringSubmit = ({ stationName }) => {
 
     const {
         rows,
@@ -67,7 +66,7 @@ const CoveringSubmit = () => {
     const { permissions } = useContext(PermissionContext)
 
     const CoveringBill_read = permissions[7]?.read;
-    const CoveringBill_new = permissions[7]?.new;
+
 
     return (
         <div className="CoveringSubmit-form Scroll-Style-hide">
@@ -147,8 +146,8 @@ const CoveringSubmit = () => {
                                         freeSolo
                                         size="small"
                                         value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                                        options={Stations.map((option) => ({
-                                            label: option.optionvalue,
+                                        options={stationName.map((option) => ({
+                                            label: option.Stationname,
                                         }))}
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {
@@ -192,6 +191,7 @@ const CoveringSubmit = () => {
                     </div>
                 </div>
             </form>
+            <div className='alert-popup-main'>
             {error &&
                 <div className='alert-popup Error' >
                     <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -213,6 +213,7 @@ const CoveringSubmit = () => {
                     <p>{warningMessage}</p>
                 </div>
             }
+            </div>
         </div>
     )
 }

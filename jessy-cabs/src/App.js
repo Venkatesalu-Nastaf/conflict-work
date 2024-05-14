@@ -42,8 +42,11 @@ import TemplateSelection from "./component/Info/Mailer/TemplateSelection/Templat
 import TemplateCreation from "./component/Info/Mailer/TemplateCreation/TemplateCreation";
 import TripStatusMain from "./component/Bookings/TripStatusMain/TripStatusMain";
 import { PermissionContext } from "./component/context/permissionContext";
+import axios from "axios";
+import { APIURL } from "../src/component/url";
 
 function App() {
+  const apiUrl = APIURL;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -80,6 +83,21 @@ function App() {
   const INFO_FuelInfo = permissions[19]?.read;
   const Dashbord_read = permissions[20]?.read;
 
+  // fetch station name 
+  const [stationName, setStationName] = useState([]);
+
+
+  useEffect(() => {
+    const fetchSattionName = async () => {
+
+      const response = await axios.get(`${apiUrl}/getStation-name`)
+      const stationName = response.data;
+      setStationName(stationName);
+    }
+
+    fetchSattionName();
+  }, [apiUrl])
+
 
 
 
@@ -101,35 +119,35 @@ function App() {
               <Route path="/home/bookings" element={<Bookings />}>
                 <Route
                   path="/home/bookings/booking"
-                  element={BOOKING !== 0 ? <BookingMain /> : "You dont have  permission for Booking"}
+                  element={BOOKING !== 0 ? <BookingMain stationName={stationName} /> : "You dont have  permission for Booking"}
                 />
                 <Route
                   path="/home/bookings/tripsheet"
-                  element={TriSheet !== 0 ? <TripSheet /> : "You dont have  permission for TriSheet"}
+                  element={TriSheet !== 0 ? <TripSheet stationName={stationName} /> : "You dont have  permission for TriSheet"}
                 />
                 <Route path="/home/bookings/received" element={<Received />} />
                 <Route
                   path="/home/bookings/tripstatus"
-                  element={TripStatus !== 0 ? <TripStatusMain /> : "You dont have  permission for TripStatus"}
+                  element={TripStatus !== 0 ? <TripStatusMain stationName={stationName} /> : "You dont have  permission for TripStatus"}
                 />
               </Route>
               <Route path="/home/registration" element={<Registration />}>
                 <Route
                   path="/home/registration/customer"
-                  element={REGISTER !== 0 ? <Customer /> : "You dont have  permission for REGISTER"}
+                  element={REGISTER !== 0 ? <Customer stationName={stationName} /> : "You dont have  permission for REGISTER"}
                 />
                 <Route
                   path="/home/registration/supplier"
-                  element={R_Supllier !== 0 ? <Suppliers /> : "You dont have  permission for Supllier"}
+                  element={R_Supllier !== 0 ? <Suppliers stationName={stationName} /> : "You dont have  permission for Supllier"}
                 />
                 <Route
                   path="/home/registration/employes"
-                  element={R_Employee !== 0 ? <Employes /> : "You dont have  permission for Employee"}
+                  element={R_Employee !== 0 ? <Employes stationName={stationName} /> : "You dont have  permission for Employee"}
                 />
               </Route>
 
               <Route path="/home/info" element={<Info />}>
-                <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes /> : "INFO"} />
+                <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes stationName={stationName} /> : "INFO"} />
                 <Route path="/home/info/ratemanagement" element={<RateManagement />} />
                 <Route path="/home/info/mailer" element={Mailers !== 0 ? <Mailer /> : "You dont have  permission for Mailers"} />
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
@@ -139,10 +157,10 @@ function App() {
               <Route path="/home/billing" element={<Billings />}>
 
                 <Route path="/home/billing/billing" element={BILLING !== 0 ? <BillingMain /> : "You dont have  permission for Billing "} />
-                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 ? <Transfer /> : "You dont have  permission for Transfer "} />
+                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 ? <Transfer stationName={stationName} /> : "You dont have  permission for Transfer "} />
                 <Route
                   path="/home/billing/coveringbill"
-                  element={Billing_CoveringBill !== 0 ? <CoveringBill /> : "You dont have  permission for CoveringBill "}
+                  element={Billing_CoveringBill !== 0 ? <CoveringBill stationName={stationName} /> : "You dont have  permission for CoveringBill "}
                 />
               </Route>
               <Route path="/home/accounts" element={<Accounts />}>
@@ -151,7 +169,7 @@ function App() {
               <Route path="/home/settings" element={<Settings />}>
                 <Route
                   path="/home/settings/usercreation"
-                  element={SETTING !== 0 ? <UserCreation /> : "You dont have  permission for SETTING"}
+                  element={SETTING !== 0 ? <UserCreation stationName={stationName} /> : "You dont have  permission for SETTING"}
                 />
                 <Route
                   path="/home/settings/stationcreation"

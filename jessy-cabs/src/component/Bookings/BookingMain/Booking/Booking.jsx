@@ -20,7 +20,6 @@ import {
   Hire,
   PayType,
   Report,
-  Service_Station,
   GroupTypes,
   vehicaleinfos
 } from "./Booking";
@@ -56,8 +55,6 @@ import RateReviewIcon from "@mui/icons-material/RateReview";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import EmailIcon from "@mui/icons-material/Email";
-
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
@@ -108,7 +105,9 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const Booking = () => {
+const Booking = ({ stationName }) => {
+
+
   const apiUrl = APIURL;
   const {
     selectedCustomerData,
@@ -148,12 +147,9 @@ const Booking = () => {
     setGuestSms,
     sendEmail,
     setSendEmail,
-
     lastBookingNo,
     currentYear,
-    setTripTime,
     handleClickHide,
-    actions,
     searchText,
     setSearchText,
     setreporttime,
@@ -348,7 +344,7 @@ const Booking = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input" style={{width:'200px', display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+              <div className="input" style={{ width: '200px', display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -384,15 +380,15 @@ const Booking = () => {
                     handleAutocompleteChange(event, value, "servicestation")
                   }
                   value={
-                    Service_Station.find((option) => option.optionvalue)
+                    stationName.find((option) => option.optionvalue)
                       ?.label ||
                     formData.servicestation ||
                     selectedCustomerData.servicestation ||
                     book.servicestation ||
                     ""
                   }
-                  options={Service_Station.map((option) => ({
-                    label: option.optionvalue,
+                  options={stationName.map((option) => ({
+                    label: option.Stationname,
                   }))}
                   getOptionLabel={(option) =>
                     option.label ||
@@ -745,8 +741,8 @@ const Booking = () => {
                 label="No.Street Name"
                 name="address1"
                 multiline
-                  rows={2}
-                  sx={{ m: 2, width: "400ch" }}
+                rows={2}
+                sx={{ m: 2, width: "400ch" }}
                 autoComplete="new-password"
                 style={{ width: '300px' }}
                 value={
@@ -758,7 +754,7 @@ const Booking = () => {
                 onChange={handleChange}
               />
               {/* <Textarea aria-label="minimum height" minRows={} placeholder="Minimum 3 rows" /> */}
- 
+
             </div>
             {/* <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
               <div className="icone">

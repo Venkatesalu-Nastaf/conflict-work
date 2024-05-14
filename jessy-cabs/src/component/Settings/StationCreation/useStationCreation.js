@@ -45,6 +45,8 @@ const useStationCreation = () => {
         shortname: '',
         active: '',
         ownbranch: '',
+        address: '',
+        invoiceNo: '',
 
     });
     const handleChange = (event) => {
@@ -79,6 +81,8 @@ const useStationCreation = () => {
             shortname: '',
             active: '',
             ownbranch: '',
+            address: '',
+            invoiceNo: '',
 
         }));
         setSelectedCustomerData({});
@@ -212,7 +216,6 @@ const useStationCreation = () => {
         successMessage,
         errorMessage,
         warningMessage,
-        // infoMessage,
         book,
         handleClick,
         handleChange,

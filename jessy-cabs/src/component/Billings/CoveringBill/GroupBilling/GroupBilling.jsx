@@ -11,7 +11,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import Modal from '@mui/material/Modal';
 import { Box } from '@mui/material';
@@ -29,7 +28,8 @@ import { RefPdfData } from './GroupBillingContext';
 import RefPdfParticularData from './RefPdfParticularData';
 import { PermissionContext } from '../../../context/permissionContext';
 
-const GroupBilling = () => {
+const GroupBilling = ({ stationName }) => {
+    const apiurl = APIURL;
 
     const {
         rows,
@@ -94,7 +94,7 @@ const GroupBilling = () => {
     useEffect(() => {
         const fetchdata = async () => {
             try {
-                const response = await fetch(`${APIURL}/organisationpdfdata`);
+                const response = await fetch(`${apiurl}/organisationpdfdata`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -107,7 +107,7 @@ const GroupBilling = () => {
         };
 
         fetchdata();
-    }, [APIURL, customer]);
+    }, [apiurl, customer]);
 
 
     useEffect(() => {
@@ -147,17 +147,7 @@ const GroupBilling = () => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
-                                    {/* <TextField
-                                        size="small"
-                                        id="id"
-                                        label="Reference No"
-                                        name="invoiceno"
-                                        value={invoiceno || book.invoiceno || selectedCustomerDatas.invoiceno || ''}
-                                        options={referenceNo}
-                                        onChange={(event,value)=>setInvoiceno(value)}
-                                        autoComplete='off'
-                                        onKeyDown={handleKeyenter}
-                                    /> */}
+
                                     <Autocomplete
                                         fullWidth
                                         id="free-solo-demo"
@@ -257,8 +247,8 @@ const GroupBilling = () => {
                                         freeSolo
                                         size="small"
                                         value={servicestation || selectedCustomerDatas.station || (tripData.length > 0 ? tripData[0].department : '') || ''}
-                                        options={Stations.map((option) => ({
-                                            label: option.optionvalue,
+                                        options={stationName.map((option) => ({
+                                            label: option.Stationname,
                                         }))}
 
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
@@ -321,6 +311,7 @@ const GroupBilling = () => {
                             disableRowSelectionOnClick
                         />
                     </div>
+                    <div className='alert-popup-main'>
                     {error &&
                         <div className='alert-popup Error' >
                             <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -342,6 +333,7 @@ const GroupBilling = () => {
                             <p>{warningMessage}</p>
                         </div>
                     }
+                    </div>
                 </div>
                 <Modal
                     open={refPdfPrint}

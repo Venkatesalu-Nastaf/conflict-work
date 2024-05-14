@@ -20,7 +20,7 @@
 
 .DriverCreation-header {
     border-top: solid 1px #ccc;
-    background: var(--glass);
+    /* background: var(--glass); */
     padding: 10px;
     margin-bottom: -10px;
 }

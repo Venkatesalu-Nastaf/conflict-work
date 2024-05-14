@@ -8,7 +8,7 @@ import TabContext from "@mui/lab/TabContext";
 import BokkingChart from "./BookingChart/BookingChart.jsx";
 import "./BookingMain.css";
 
-const BookingMain = () => {
+const BookingMain = ({ stationName }) => {
   const [value, setValue] = React.useState("booking");
 
   const handleChange = (event, newValue) => {
@@ -29,7 +29,7 @@ const BookingMain = () => {
               </TabList>
             </Box>
             <TabPanel value="booking">
-              <Booking />
+              <Booking stationName={stationName} />
             </TabPanel>
             <TabPanel value="bookingchart">
               <BokkingChart />

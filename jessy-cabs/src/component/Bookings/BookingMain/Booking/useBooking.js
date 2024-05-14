@@ -126,7 +126,7 @@ const useBooking = () => {
   });
 
   const { user } = useUser();
-  
+
 
   const [selectedCustomerDatas, setSelectedCustomerDatas] = useState({
     customer: "",
@@ -134,26 +134,26 @@ const useBooking = () => {
   const [selectedCustomerdriver, setSelectedCustomerdriver] = useState({
     // driverName: "",
     // vehRegNo:"",
-  
+
 
   });
   const transformRow = (originalRow) => {
     return {
-       driverName:originalRow.driverName,
-       vehRegNo:originalRow.vehRegNo,
-       hireTypes:originalRow.hiretypes,
-       vehType:originalRow.vehiclename,
-       vehiclemodule:originalRow.vechtype,
-       mobileNo:originalRow.driverno,
-       active:originalRow.active,
-       Groups:originalRow.Groups
+      driverName: originalRow.driverName,
+      vehRegNo: originalRow.vehRegNo,
+      hireTypes: originalRow.hiretypes,
+      vehType: originalRow.vehiclename,
+      vehiclemodule: originalRow.vechtype,
+      mobileNo: originalRow.driverno,
+      active: originalRow.active,
+      Groups: originalRow.Groups
 
 
 
-    
-    
+
+
     };
-};
+  };
 
   const hidePopup = () => {
     setSuccess(false);
@@ -299,7 +299,7 @@ const useBooking = () => {
     driverName: "",
     mobileNo: "",
     travelsemail: "",
-    Groups:""
+    Groups: ""
   });
 
   const handleCancel = () => {
@@ -350,14 +350,14 @@ const useBooking = () => {
       driverName: "",
       mobileNo: "",
       travelsemail: "",
-      Groups:""
+      Groups: ""
     }));
     setFormValues({});
     setSelectedCustomerData({});
     setSelectedCustomerDatas({});
     setFormData({});
     setSelectedCustomerdriver({})
-  
+
     setIsEditMode(false);
   };
   // const convertToCSV = (data) => {
@@ -376,98 +376,96 @@ const useBooking = () => {
   const handleExcelDownload = async () => {
     const workbook = new Excel.Workbook();
     const workSheetName = 'Worksheet-1';
-    console.log(rows,"exceldata")
+
 
     try {
 
-        const fileName = "BookingStatement Reports"
-        // creating one worksheet in workbook
-        const worksheet = workbook.addWorksheet(workSheetName);
-        const headers = Object.keys(row[0]);
-//         console.log(headers,"hed")
-        const columns = headers.map(key => ({ key, header: key }));
-//         worksheet.columns = columnsexcel
-      
-        worksheet.columns = columns;
+      const fileName = "BookingStatement Reports"
+      // creating one worksheet in workbook
+      const worksheet = workbook.addWorksheet(workSheetName);
+      const headers = Object.keys(row[0]);
+      const columns = headers.map(key => ({ key, header: key }));
+      //         worksheet.columns = columnsexcel
+
+      worksheet.columns = columns;
 
 
-        // updated the font for first row.
-        worksheet.getRow(1).font = { bold: true };
+      // updated the font for first row.
+      worksheet.getRow(1).font = { bold: true };
 
-        // Set background color for header cells
-        worksheet.getRow(1).eachCell((cell, colNumber) => {
-            cell.fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: '9BB0C1' } // Green background color
-            };
-        });
+      // Set background color for header cells
+      worksheet.getRow(1).eachCell((cell, colNumber) => {
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: '9BB0C1' } // Green background color
+        };
+      });
 
 
-        worksheet.getRow(1).height = 30;
-        // loop through all of the columns and set the alignment with width.
+      worksheet.getRow(1).height = 30;
+      // loop through all of the columns and set the alignment with width.
+      worksheet.columns.forEach((column) => {
+        column.width = column.header.length + 5;
+        column.alignment = { horizontal: 'center', vertical: 'middle' };
+      });
+
+      row.forEach((singleData, index) => {
+
+
+        worksheet.addRow(singleData);
+
+        // Adjust column width based on the length of the cell values in the added row
         worksheet.columns.forEach((column) => {
-            column.width = column.header.length + 5;
-            column.alignment = { horizontal: 'center', vertical: 'middle' };
+          const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
+          const cellLength = cellValue.toString().length; // Get length of cell value as a string
+          const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
+
+          // Set column width to the maximum of current width and cell length plus extra space
+          column.width = Math.max(currentColumnWidth, cellLength + 5);
         });
+      });
 
-        row.forEach((singleData, index) => {
+      // loop through all of the rows and set the outline style.
+      worksheet.eachRow({ includeEmpty: false }, (row) => {
+        // store each cell to currentCell
+        const currentCell = row._cells;
 
+        // loop through currentCell to apply border only for the non-empty cell of excel
+        currentCell.forEach((singleCell) => {
 
-            worksheet.addRow(singleData);
+          const cellAddress = singleCell._address;
 
-            // Adjust column width based on the length of the cell values in the added row
-            worksheet.columns.forEach((column) => {
-                const cellValue = singleData[column.key] || ''; // Get cell value from singleData or use empty string if undefined
-                const cellLength = cellValue.toString().length; // Get length of cell value as a string
-                const currentColumnWidth = column.width || 0; // Get current column width or use 0 if undefined
-
-                // Set column width to the maximum of current width and cell length plus extra space
-                column.width = Math.max(currentColumnWidth, cellLength + 5);
-            });
+          // apply border
+          worksheet.getCell(cellAddress).border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+          };
         });
+      });
+      // write the content using writeBuffer
+      const buf = await workbook.xlsx.writeBuffer();
 
-        // loop through all of the rows and set the outline style.
-        worksheet.eachRow({ includeEmpty: false }, (row) => {
-            // store each cell to currentCell
-            const currentCell = row._cells;
-
-            // loop through currentCell to apply border only for the non-empty cell of excel
-            currentCell.forEach((singleCell) => {
-
-                const cellAddress = singleCell._address;
-
-                // apply border
-                worksheet.getCell(cellAddress).border = {
-                    top: { style: 'thin' },
-                    left: { style: 'thin' },
-                    bottom: { style: 'thin' },
-                    right: { style: 'thin' },
-                };
-            });
-        });
-        // write the content using writeBuffer
-        const buf = await workbook.xlsx.writeBuffer();
-
-        // download the processed file
-        saveAs(new Blob([buf]), `${fileName}.xlsx`);
+      // download the processed file
+      saveAs(new Blob([buf]), `${fileName}.xlsx`);
     } catch (error) {
-        console.error('<<<ERRROR>>>', error);
-        console.error('Something Went Wrong', error.message);
+      console.error('<<<ERRROR>>>', error);
+      console.error('Something Went Wrong', error.message);
     } finally {
-        // removing worksheet's instance to create new one
-        workbook.removeWorksheet(workSheetName);
+      // removing worksheet's instance to create new one
+      workbook.removeWorksheet(workSheetName);
     }
 
-}
-console.log(row,"bookdata")
+  }
 
 
-const handlePdfDownload = () => {
+  const handlePdfDownload = () => {
     const pdf = new jsPDF({
-        orientation: "landscape",
-        unit: "mm",
-        format: "tabloid" // [width, height] in inches
+      orientation: "landscape",
+      unit: "mm",
+      format: "tabloid" // [width, height] in inches
     });
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
@@ -475,90 +473,85 @@ const handlePdfDownload = () => {
     //  const header = Object.keys(row[0]);
     const keysToRemove = ["orderedby", "useage", "mobile", "username"];
 
-const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
-
-     console.log(header,"remove")
+    const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
 
 
     // Extracting body
     const body = row.map(row => Object.values(row));
-    console.log(header.length)
 
     let fontdata = 1;
-        if (header.length <= 13) {
-            fontdata = 16;
-        }
-        else if (header.length >= 14 && header.length <= 18) {
-            fontdata = 11;
-        }
-        else if (header.length >= 19 && header.length <= 20) {
-          fontdata = 10;
-      } else if (header.length >= 21 && header.length <= 23) {
-            fontdata = 9;
-        }
-        else if (header.length >= 24 && header.length <= 26) {
-            fontdata = 7;
-        }
-        else if (header.length >= 27 && header.length <= 30) {
-            fontdata = 6;
-        }
-        else if (header.length >= 31 && header.length <= 33) {
-            fontdata = 4;
-        }else if (header.length >= 34 && header.length <= 35) {
-          fontdata = 3;
-      }
-        else if (header.length >= 36 && header.length <= 40) {
-            fontdata = 3;
-        }
-        else if (header.length >= 41 && header.length <= 46) {
-            fontdata = 2;
-        }
-        else if (header.length >= 47 && header.length <= 50) {
-          fontdata = 2;
-      }
+    if (header.length <= 13) {
+      fontdata = 16;
+    }
+    else if (header.length >= 14 && header.length <= 18) {
+      fontdata = 11;
+    }
+    else if (header.length >= 19 && header.length <= 20) {
+      fontdata = 10;
+    } else if (header.length >= 21 && header.length <= 23) {
+      fontdata = 9;
+    }
+    else if (header.length >= 24 && header.length <= 26) {
+      fontdata = 7;
+    }
+    else if (header.length >= 27 && header.length <= 30) {
+      fontdata = 6;
+    }
+    else if (header.length >= 31 && header.length <= 33) {
+      fontdata = 4;
+    } else if (header.length >= 34 && header.length <= 35) {
+      fontdata = 3;
+    }
+    else if (header.length >= 36 && header.length <= 40) {
+      fontdata = 3;
+    }
+    else if (header.length >= 41 && header.length <= 46) {
+      fontdata = 2;
+    }
+    else if (header.length >= 47 && header.length <= 50) {
+      fontdata = 2;
+    }
 
-        console.log(fontdata,"data")
-    
+
     pdf.autoTable({
-        head: [header],
-        body: body,
-        startY: 20,
+      head: [header],
+      body: body,
+      startY: 20,
 
-        headStyles: {
-            // fontSize: 5,
-            fontSize: fontdata,
-            cellPadding: 1.5, // Decrease padding in header
+      headStyles: {
+        // fontSize: 5,
+        fontSize: fontdata,
+        cellPadding: 1.5, // Decrease padding in header
 
-            minCellHeigh: 8,
-            valign: 'middle',
+        minCellHeigh: 8,
+        valign: 'middle',
 
-            font: 'helvetica', // Set font type for body
+        font: 'helvetica', // Set font type for body
 
-            cellWidth: 'wrap',
-            // cellWidth: 'auto'
-        },
+        cellWidth: 'wrap',
+        // cellWidth: 'auto'
+      },
 
-        bodyStyles: {
-            // fontSize:4,
-            // fontSize: fontdata-1
-            fontSize: fontdata,
-            valign: 'middle',
-            //  cellWidth: 'wrap',
-            cellWidth: 'auto'
-            // Adjust the font size for the body
+      bodyStyles: {
+        // fontSize:4,
+        // fontSize: fontdata-1
+        fontSize: fontdata,
+        valign: 'middle',
+        //  cellWidth: 'wrap',
+        cellWidth: 'auto'
+        // Adjust the font size for the body
 
-        },
-        columnWidth: 'auto'
+      },
+      columnWidth: 'auto'
 
-});
+    });
     const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
-    console.log(scaleFactor, "SCALE")
 
     // Scale content
     pdf.scale(scaleFactor, scaleFactor);
     const pdfBlob = pdf.output('blob');
     saveAs(pdfBlob, 'BookingStatement Reports.pdf');
-};
+  };
 
 
   // const handlePdfDownload = () => {
@@ -727,23 +720,23 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
 
   const [vehileName, setVehicleName] = useState([])
 
-   
-    useEffect(() => {
-      const fetchgetvehicleName = async () => {
-          try {
-            const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
-              const data = response.data
-              const name = data?.map((res) => res.vehiclename)
 
-              setVehicleName(name)
+  useEffect(() => {
+    const fetchgetvehicleName = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/ge-tVehicleName`);
+        const data = response.data
+        const name = data?.map((res) => res.vehiclename)
+
+        setVehicleName(name)
 
 
-          }
-          catch (error) {
-              console.log(error, "error");
-          }
-      };
-      fetchgetvehicleName()
+      }
+      catch (error) {
+        console.log(error, "error");
+      }
+    };
+    fetchgetvehicleName()
   }, [apiUrl])
 
   // ------its for dialog--------------------
@@ -956,7 +949,7 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
       setErrorMessage("Enter Email Field")
       return
     }
-    if ( !selectedCustomerData.vehType) {
+    if (!selectedCustomerData.vehType) {
       setError(true)
       setErrorMessage("Enter VehicleType")
       return
@@ -993,7 +986,6 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
 
       const selectedBookingDate =
         selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
-        console.log(selectedBookingDate,"dateeeeee")
 
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       // Create a new object without the 'id' field from selectedCustomerData
@@ -1021,7 +1013,7 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
         // streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
         // city: formData.city || selectedCustomerData.city || book.city,
         report: formData.report || selectedCustomerData.report || book.report,
-        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType|| selectedCustomerdriver.vehType,
+        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
         startdate: bookingstartdate,
         duty: formData.duty || selectedCustomerData.duty || book.duty,
@@ -1034,17 +1026,17 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
         remarks: formData.remarks || selectedCustomerData.remarks || book.remarks,
         servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation,
         advance: formData.advance || selectedCustomerData.advance || book.advance,
-        hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes|| selectedCustomerdriver.hireTypes,
+        hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
-        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo|| selectedCustomerdriver.vehRegNo,
-        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule|| selectedCustomerdriver.vehiclemodule,
-        driverName: formData.driverName || selectedCustomerData.driverName || book.driverName|| selectedCustomerdriver.driverName,
-        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo||selectedCustomerdriver.mobileNo,
+        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
+        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || selectedCustomerdriver.vehiclemodule,
+        driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
+        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
         reporttime: restSelectedCustomerData.reporttime,
         // triptime: triptime,
         username: storedUsername,
-        Groups:selectedCustomerData.Groups||book.Groups||formData.Groups||selectedCustomerdriver.Groups,
+        Groups: selectedCustomerData.Groups || book.Groups || formData.Groups || selectedCustomerdriver.Groups,
 
         orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
         customer: restSelectedCustomerData.customer
@@ -1092,7 +1084,7 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
 
       const selectedBookingDate =
         selectedCustomerData.bookingdate || formData.bookingdate || dayjs();
-         
+
       const bookingstartdate = selectedCustomerData.startdate || formData.startdate || book.startdate || dayjs();
       const { id, ...restSelectedCustomerData } = selectedCustomerData;
       let { customerId, customerType, ...restSelectedCustomerDatas } = selectedCustomerDatas;
@@ -1117,7 +1109,7 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
         // streetno: formData.streetno || selectedCustomerData.streetno || book.streetno,
         // city: formData.city || selectedCustomerData.city || book.city,
         report: formData.report || selectedCustomerData.report || book.report,
-        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType|| selectedCustomerdriver.vehType,
+        vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
         paymenttype: formData.paymenttype || selectedCustomerData.paymenttype || book.paymenttype,
         startdate: bookingstartdate,
         duty: formData.duty || selectedCustomerData.duty || book.duty,
@@ -1130,17 +1122,17 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
         remarks: formData.remarks || selectedCustomerData.remarks || book.remarks,
         servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation,
         advance: formData.advance || selectedCustomerData.advance || book.advance,
-        hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes||selectedCustomerdriver.hireTypes,
+        hireTypes: formData.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || selectedCustomerdriver.hireTypes,
         travelsname: formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
-        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo|| selectedCustomerdriver.vehRegNo,
-        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule|| selectedCustomerdriver.vehiclemodule,
-        driverName: formData.driverName || selectedCustomerData.driverName || book.driverName|| selectedCustomerdriver.driverName,
-        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo|| selectedCustomerdriver.mobileNo,
+        vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
+        vehiclemodule: formData.vehiclemodule || selectedCustomerData.vehiclemodule || book.vehiclemodule || selectedCustomerdriver.vehiclemodule,
+        driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
+        mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
         travelsemail: formData.travelsemail || selectedCustomerData.travelsemail || book.travelsemail,
         reporttime: restSelectedCustomerData.reporttime,
         // triptime: triptime,
         username: storedUsername,
-        Groups:formData.Groups || selectedCustomerData.Groups || book.Groups|| selectedCustomerdriver.Groups,
+        Groups: formData.Groups || selectedCustomerData.Groups || book.Groups || selectedCustomerdriver.Groups,
 
 
         orderedby: restSelectedCustomerData.orderedby || formData.orderedby || book.orderedby || restSelectedCustomerDatas.name,
@@ -1279,7 +1271,7 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
               `${apiUrl}/name-customers/${event.target.value}`
             );
             const vehicleData = response.data;
-           
+
             setRows([vehicleData]);
           } catch (error) {
             setError(true);
@@ -1307,25 +1299,25 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
     async (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
-    
-          try {
-            const response = await axios.get(
-              `${apiUrl}/drivername-details/${event.target.value}`
-            );
-            const vehicleData = response.data;
-             const transformedRows = vehicleData.map(transformRow);
-             
-         
-            setRowsdriver(transformedRows)
-            setSuccess(true);
-            setSuccessMessage("successfully listed");
-         
-          } catch (error) {
-            setError(true);
-            setErrorMessage("Error retrieving vehicle details.");
-          }
-        } 
-     
+
+        try {
+          const response = await axios.get(
+            `${apiUrl}/drivername-details/${event.target.value}`
+          );
+          const vehicleData = response.data;
+          const transformedRows = vehicleData.map(transformRow);
+
+
+          setRowsdriver(transformedRows)
+          setSuccess(true);
+          setSuccessMessage("successfully listed");
+
+        } catch (error) {
+          setError(true);
+          setErrorMessage("Error retrieving vehicle details.");
+        }
+      }
+
     },
     [apiUrl]
   );
@@ -1338,22 +1330,22 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
     [handleChange]
   );
   const handleRowClickdriver = (params) => {
-    
-      setSelectedCustomerdriver(params);
-      setSelectedCustomerDatas(params);
-      const keys = Object.keys(params);
-  
-      // Iterate over the keys using forEach
-      keys.forEach(key => {
-        const value = params[key];
-       
-        handleChange({ target: { name: key, value: value } });
-      });
-    
-      // handleChange({ target: { name: "driverName", value: params.driverName } });
-      // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
-    }
-    
+
+    setSelectedCustomerdriver(params);
+    setSelectedCustomerDatas(params);
+    const keys = Object.keys(params);
+
+    // Iterate over the keys using forEach
+    keys.forEach(key => {
+      const value = params[key];
+
+      handleChange({ target: { name: key, value: value } });
+    });
+
+    // handleChange({ target: { name: "driverName", value: params.driverName } });
+    // handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
+  }
+
 
 
   const handletableClick = useCallback((params) => {
@@ -1368,9 +1360,6 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
 
   const reversedRows = [...row].reverse();
   const reversedRows1 = [...row]
-  console.log(reversedRows1,"reverrse");
-  console.log(reversedRows,"rowsreveres")
-
 
   const handleShowAll = async () => {
 
@@ -1384,7 +1373,7 @@ const header = Object.keys(row[0]).filter(key => !keysToRemove.includes(key));
           ...row,
           id: index + 1,
         }));
-        console.log(rowsWithUniqueId,"rowsdata")
+
         setRow(rowsWithUniqueId);
         setSuccess(true);
         setSuccessMessage("successfully listed");

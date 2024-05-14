@@ -6,9 +6,6 @@ import {
     VehicleRate,
 } from "./TripSheetdata";
 import { APIURL } from "../../url";
-// import Invoice from '../Invoice/Invoice';
-// import { saveAs } from 'file-saver';
-// import { pdf } from '@react-pdf/renderer';
 
 const useTripsheet = () => {
     const apiUrl = APIURL;
@@ -326,8 +323,6 @@ const useTripsheet = () => {
         });
 
         let appsValue = params.get('apps') || 'Waiting';
-
-        console.log(formData['status'], "form")
 
         // Check if dispatchcheck is 
 
@@ -1518,7 +1513,7 @@ const useTripsheet = () => {
         };
 
         fetchData();
-    }, [apiUrl, tripiddata]);
+    }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
 
 
 
@@ -1550,7 +1545,7 @@ const useTripsheet = () => {
         fetchData();
         return () => {
         };
-    }, [apiUrl, tripiddata]);
+    }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
 
 
     useEffect(() => {
@@ -1581,7 +1576,7 @@ const useTripsheet = () => {
             }
         };
         fetchData();
-    }, [apiUrl, tripiddata]);
+    }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
 
 
     // llllllll
@@ -1607,7 +1602,7 @@ const useTripsheet = () => {
             }
         };
         fetchData();
-    }, [apiUrl, statechange]);
+    }, [apiUrl, statechange, book.tripid, formData.tripid, selectedCustomerData.tripid]);
 
     const [selectedImage, setSelectedImage] = useState(null);
 

@@ -12,8 +12,6 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
-import { Stations } from "../../../Bookings/Receiveds/Pending/PendingData";
-
 // ICONS
 import { faBuilding, faNewspaper } from '@fortawesome/free-solid-svg-icons';
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
@@ -26,7 +24,7 @@ import { PermissionContext } from '../../../context/permissionContext';
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
-const TransferList = () => {
+const TransferList = ({ stationName }) => {
 
     const {
         rows,
@@ -136,8 +134,8 @@ const TransferList = () => {
                                         freeSolo
                                         size="small"
                                         value={servicestation}
-                                        options={Stations.map((option) => ({
-                                            label: option.optionvalue,
+                                        options={stationName.map((option) => ({
+                                            label: option.Stationname,
                                         }))}
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {
@@ -183,6 +181,7 @@ const TransferList = () => {
                     </div>
                 </div>
             </form>
+            <div className='alert-popup-main'>
             {error &&
                 <div className='alert-popup Error'>
                     <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
@@ -204,6 +203,7 @@ const TransferList = () => {
                     <p>{warningMessage}</p>
                 </div>
             }
+            </div>
         </div>
     )
 }

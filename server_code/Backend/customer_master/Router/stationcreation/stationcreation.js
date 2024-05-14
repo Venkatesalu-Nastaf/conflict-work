@@ -48,4 +48,14 @@ router.get('/stationcreation', (req, res) => {
   });
 });
 
+
+router.get('/getStation-name', (req, res) => {
+  db.query('select Stationname from stationcreation', (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: "Faild to fetch data" });
+    }
+    return res.status(200).json(results);
+  })
+})
+
 module.exports = router;

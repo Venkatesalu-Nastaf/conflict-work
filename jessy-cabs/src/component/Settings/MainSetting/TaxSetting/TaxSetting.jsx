@@ -249,6 +249,7 @@ const TaxSetting = () => {
                         </div>
                     </div>
                 </div>
+                <div className='alert-popup-main'>
                 {error &&
                     <div className='alert-popup Error' >
                         <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
@@ -277,6 +278,7 @@ const TaxSetting = () => {
                         <p>{infoMessage}</p>
                     </div>
                 }
+                </div>
                 <div className="TaxSetting-table-container">
                     <div className="SpeedDial" style={{ padding: '26px', }}>
                         <Box sx={{ position: "relative", mt: 3, height: 320 }}>

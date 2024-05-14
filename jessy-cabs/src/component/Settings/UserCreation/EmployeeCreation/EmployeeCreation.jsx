@@ -11,7 +11,6 @@ import InputLabel from '@mui/material/InputLabel';
 import Autocomplete from "@mui/material/Autocomplete";
 import Visibility from '@mui/icons-material/Visibility';
 import InputAdornment from '@mui/material/InputAdornment';
-import { StationName } from "./EmployeeCreationData";      //Branch Name
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import Avatar from "../../../../assets/img/avatar.png"
@@ -60,7 +59,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const EmployeeCreation = () => {
+const EmployeeCreation = ({ stationName }) => {
 
   const {
 
@@ -173,9 +172,9 @@ const EmployeeCreation = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
-                  value={StationName.find((option) => option.Option)?.label || book?.stationname || ''}
-                  options={StationName.map((option) => ({
-                    label: option.Option,
+                  value={stationName.find((option) => option.Option)?.label || book?.stationname || ''}
+                  options={stationName.map((option) => ({
+                    label: option.Stationname,
                   }))}
                   getOptionLabel={(option) => option.label || book?.stationname || ''}
                   renderInput={(params) => {

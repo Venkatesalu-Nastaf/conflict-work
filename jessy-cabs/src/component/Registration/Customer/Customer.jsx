@@ -17,7 +17,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import { UnderGroup, states, Customertype, Select, Service_Station } from "./Customerdata";
+import { UnderGroup, states, Customertype, Select } from "./Customerdata";
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, Checkbox, Switch } from "@mui/material";
 
 // ICONS
@@ -56,8 +56,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-
-const Customer = () => {
+const Customer = ({ stationName }) => {
 
   const {
     selectedCustomerData,
@@ -367,9 +366,9 @@ const Customer = () => {
                   freeSolo
                   sx={{ width: "20ch" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "servicestation")}
-                  value={Service_Station.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
-                  options={Service_Station.map((option) => ({
-                    label: option.optionvalue,
+                  value={stationName?.find((option) => option.optionvalue)?.label || selectedCustomerData.servicestation || book.servicestation || ''}
+                  options={stationName?.map((option) => ({
+                    label: option.Stationname,
                   }))}
                   getOptionLabel={(option) => option.label || selectedCustomerData.servicestation || book.servicestation || ''}
                   renderInput={(params) => {
@@ -490,8 +489,8 @@ const Customer = () => {
           </div>
           <div className="detail-container-main-customer">
             <div className="input-field customer-input-feild-add">
-              <div className="input" style={{display: 'grid'}}>
-                <div style={{display: 'flex', alignItems: 'center'}}>
+              <div className="input" style={{ display: 'grid' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                   <FormLabel>BillingGroup</FormLabel>
                   <Switch label='' onClick={handleButtonClick} />
                 </div>

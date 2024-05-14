@@ -5,7 +5,8 @@
 .TripDetails-container .field-item {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly !important;
+    flex-wrap: wrap !important;
 }
 
 .TripDetails-container .field-item .input label {
@@ -15,6 +16,7 @@
 
 .TripDetails-container .field-item .input {
     padding: 10px 15px;
+    width: 200px !important;
 }
 .dialog-status{
     padding: 5px 10px;

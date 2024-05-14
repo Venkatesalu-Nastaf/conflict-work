@@ -167,6 +167,7 @@
     display: flex;
     border-radius: 10px;
     padding: 10px 20px;
+    flex-wrap: wrap;
 }
 
 .total-account .total-inputs {

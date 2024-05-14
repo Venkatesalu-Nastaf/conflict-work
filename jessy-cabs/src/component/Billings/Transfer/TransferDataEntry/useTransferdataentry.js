@@ -426,7 +426,7 @@ const useTransferdataentry = () => {
         setEndDate(updatedFormData.EndDate);
         setBillingdate(updatedFormData.Billdate);
         setTotalValue(parseInt(updatedFormData.Amount));
-        setBillingPage(updatedFormData.billingsheet)
+        setBillingPage(updatedFormData?.billingsheet)
   
 
         return () => {
@@ -452,7 +452,6 @@ const useTransferdataentry = () => {
         setRowSelectionModel([])
         }
     },[billingPage,setBillingPage])
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -476,7 +475,7 @@ const useTransferdataentry = () => {
             }
         }
         fetchData()
-    }, [transferId, apiUrl,location])
+    }, [transferId,billingPage, apiUrl,location])
 
     //calculate total amount in column
     useEffect(() => {
@@ -618,13 +617,13 @@ const handleButtonClickTripsheet = async () => {
         const Tripresponse = await axios.put(`${apiUrl}/statusChangeTripsheet/${id}`);
         console.log(response,Tripresponse,'check response');
         // Setting selected customer data in local storage
-        // localStorage.setItem('selectedcustomer', customername);
+        localStorage.setItem('selectedcustomer', customerdata);
         const storedCustomer = localStorage.getItem('selectedcustomer');
         const decodedCustomer = decodeURIComponent(storedCustomer);
         localStorage.setItem('selectedcustomerdata', decodedCustomer);
 
         // Constructing billing page URL
-        const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&BillDate=${Billingdate}`;
+        const billingPageUrl = `/home/billing/transfer?tab=TransferReport&Invoice_no=${invoiceno}&Group_id=${groupId}&Customer=${customer}&FromDate=${fromDate}&EndDate=${endDate}&TripId=${id}&BillDate=${Billingdate}&TransferReport=true`;
 
         // Redirecting to billing page
         window.location.href = billingPageUrl;

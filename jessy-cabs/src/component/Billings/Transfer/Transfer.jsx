@@ -13,7 +13,7 @@ import { PdfData } from './TransferReport/PdfContext';
 
 const Transfer = ({ stationName }) => {
   const [value, setValue] = useState("transferlist");
-  const { setBillingPage } = PdfData()
+  const { setBillingPage,setTransferReport } = PdfData()
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -26,6 +26,12 @@ const Transfer = ({ stationName }) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setBillingPage(false)
+    
+    setTransferReport(false)
+    localStorage.removeItem('selectedrowcount');
+    localStorage.removeItem('selectedtripsheetid');
+    localStorage.removeItem('selectedcustomerdata');
+
   };
   return (
     <div className="form-container-Transfer">

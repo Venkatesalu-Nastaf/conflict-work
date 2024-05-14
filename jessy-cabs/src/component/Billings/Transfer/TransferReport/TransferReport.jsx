@@ -146,10 +146,12 @@ const TransferReport = ({ stationName }) => {
     const fetchdata = async () => {
       try {
         const response = await fetch(`${apiUrl}/customeraddress/${customer}`);
+        console.log(response,'response');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const addressdetail = await response.json();
+        console.log(addressdetail,'details');
         setAddressDetails(addressdetail);
       } catch (err) {
         console.error('Error fetching customer address:', err);
@@ -365,19 +367,27 @@ const TransferReport = ({ stationName }) => {
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
-                  <Autocomplete
+                  {/* <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
                     size="small"
                     value={customer}
                     options={bankOptions}
-                    onChange={(event, value) => setCustomer(value)}
+                    // onChange={(event, value) => setCustomer(value)}
                     renderInput={(params) => {
                       return (
-                        <TextField {...params} label="Organization" inputRef={params.inputRef} />
+                        <TextField {...params} label="Organization" inputRef={params.inputRef} autoComplete='off' />
                       );
                     }}
+                  /> */}
+                    <TextField
+                    size="small"
+                    id="free-solo-demo"
+                    label="Organization"
+                    value={customer}
+                    name="customer"
+                    autoComplete='off'
                   />
                 </div>
                 <div className="input">
@@ -385,7 +395,7 @@ const TransferReport = ({ stationName }) => {
                     size="small"
                     id="id"
                     label="Rate Type"
-                    value={ratetypeforpage || ''}
+                    value={ratetypeforpage}
                     name="ratetype"
                     autoComplete='off'
                   />

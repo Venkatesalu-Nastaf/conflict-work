@@ -110,3 +110,7 @@
   padding: 0px 15px 0px 12px;
   margin-left: 13px;
 }
+
+.input-feild-booking{
+  flex-wrap: wrap;
+}

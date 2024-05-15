@@ -242,8 +242,6 @@ const useEmplyeecreation = () => {
                 const data = { book, permissionsData }
                 await axios.post(`${apiUrl}/usercreation-add`, data);
                 handleCancel();
-                setRows([]);
-                // setBook({})
                 setSuccess(true);
                 setSuccessMessage("Successfully Added");
             } catch (error) {
@@ -267,7 +265,7 @@ const useEmplyeecreation = () => {
             setSuccess(true);
             setSuccessMessage("Successfully updated");
             handleCancel();
-            setRows([]);
+
         } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
@@ -281,14 +279,14 @@ const useEmplyeecreation = () => {
             setSuccess(true);
             setSuccessMessage("Successfully Deleted");
             handleCancel();
-            setRows([]);
+
         }
         catch (err) {
             setError(true);
             setErrorMessage("Error in deleting");
         }
-
     }
+
 
     // show list
     const handleList = useCallback(async () => {
@@ -307,14 +305,12 @@ const useEmplyeecreation = () => {
 
     //------------------------------------------------------
 
-    // to show list automatically
-    useEffect(() => {
-        handleList();
-    }, [apiUrl, handleList]);
+
 
     /// list of options ---------------------------------
     const handleClick = async (event, actionName, userid) => {
         event.preventDefault();
+
         try {
             if (actionName === 'List') {
                 handleList().then((showlist) => {
@@ -323,27 +319,35 @@ const useEmplyeecreation = () => {
                         setSuccess(true);
                         setSuccessMessage("Successfully listed");
                     } else {
-                        setRows([]);
+
                         setError(true);
                         setErrorMessage("No data found");
                     }
                 })
             } else if (actionName === 'Cancel') {
+
                 handleCancel();
-                setRows([]);
+                handleList();
             } else if (actionName === 'Delete') {
+
                 handleDelete();
+                handleList();
             } else if (actionName === 'Edit') {
                 handleEdit();
+                handleList();
             }
             else if (actionName === 'Add') {
                 handleAdd();
+                handleList();
             }
         } catch {
             setError(true);
             setErrorMessage("Check your Network Connection");
         }
     };
+
+
+    // its for notification-----------
     const hidePopup = () => {
         setSuccess(false);
         setError(false);
@@ -359,7 +363,7 @@ const useEmplyeecreation = () => {
             return () => clearTimeout(timer);
         }
     }, [error, success, warning, info]);
-
+    //-------------------------------------------------
 
     useEffect(() => {
         if (actionName === 'List') {
@@ -382,6 +386,11 @@ const useEmplyeecreation = () => {
         }
         return;
     }
+
+    // to show list automatically
+    useEffect(() => {
+        handleList();
+    }, [apiUrl, handleList]);
 
     const handleRowClickUser = async (params) => {
         setBook(params)

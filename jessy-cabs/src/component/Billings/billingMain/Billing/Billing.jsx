@@ -47,6 +47,14 @@ import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import { faArrowRightArrowLeft, faMoneyBillTransfer, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
 import useBilling from './useBilling';
 import { PermissionContext } from '../../../context/permissionContext';
+import { FaCalendarDays } from "react-icons/fa6";
+import { RiPinDistanceLine } from "react-icons/ri";
+import { IoIosTime } from "react-icons/io";
+
+
+
+
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -138,13 +146,15 @@ const Billing = () => {
     return (
         <div className="form-container">
             <div className="Billing-form">
+            
                 <form onSubmit={handleClick}>
                     <div className="Billing-page-header">
-                        <div className="input-field">
+                        <div className="input-field input-feild-booking">
                             <div className="input">
                                 <div className="icone">
                                     <ListAltIcon color="action" />
                                 </div>
+                                
                                 <TextField
                                     margin="normal"
                                     size="small"
@@ -193,6 +203,10 @@ const Billing = () => {
                             </div>
 
                             <div className="input">
+                                <div className="icone">
+                                    <FaCalendarDays color="action" />
+                                </div>
+
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Billing Date"
@@ -207,6 +221,11 @@ const Billing = () => {
                                 </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "120px" }}>
+
+                                <div className="icone">
+                                    <RiPinDistanceLine color="action" style={{fontSize:'20px'}} />
+                                </div>
+
                                 <TextField
                                     type='number'
                                     margin="normal"
@@ -219,6 +238,11 @@ const Billing = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "120px" }}>
+
+                            <div className="icone">
+                                    <IoIosTime color="action" />
+                                </div>
+
                                 <TextField
                                     margin="normal"
                                     size="small"
@@ -230,8 +254,8 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                        </div>
-                        <div className="input-field" >
+                        {/* </div>
+                        <div className="input-field" > */}
                             <div className="input" style={{ width: "300px" }}>
                                 <div className="icone">
                                     <HailOutlinedIcon color="action" />
@@ -291,8 +315,8 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                        </div>
-                        <div className="input-field" >
+                        {/* </div>
+                        <div className="input-field" > */}
                             <div className="input" style={{ width: "300px" }}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faPersonCircleCheck} size="lg" />

@@ -982,11 +982,11 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     size="small"
-                    name="Request No"
+                    name="Request"
                     value={request || ''}
                     // onChange={handleChange}
                     onChange={(e) => { setRequest(e.target.value) }}
-                    label="Request"
+                    label="Request No"
                     id="request"
                     autoComplete="password"
                   />

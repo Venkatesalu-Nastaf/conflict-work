@@ -156,11 +156,14 @@ router.get('/pending_tripsheet-show', (req, res) => {
 
   if (status === 'pending' || status === 'Cancelled') {
     // Query booking table
+  
     sqlQuery = `
       SELECT *
       FROM booking
-      WHERE bookingdate >= ? AND bookingdate <= ? AND status = ?
+      WHERE bookingdate >= DATE_ADD(?, INTERVAL 0 DAY) AND bookingdate <= DATE_ADD(?, INTERVAL 1 DAY) AND status = ?
     `;
+
+    
     queryParams = [formattedFromDate, formattedToDate, status];
     if (department) {
       sqlQuery += ' AND servicestation = ?';
@@ -196,8 +199,8 @@ router.get('/pending_tripsheet-show', (req, res) => {
     LEFT JOIN 
         booking ON tripsheet.bookingno = booking.bookingno
     WHERE 
-        tripsheet.tripsheetdate >= ? 
-        AND tripsheet.tripsheetdate <= ? 
+        tripsheet.tripsheetdate >= DATE_ADD(?, INTERVAL 0 DAY) 
+        AND tripsheet.tripsheetdate <= DATE_ADD(?, INTERVAL 1 DAY) 
         
   `;
     queryParams = [formattedFromDate, formattedToDate];

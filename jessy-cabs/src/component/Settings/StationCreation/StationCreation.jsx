@@ -42,7 +42,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 const columns = [
   { field: "id", headerName: "Sno", width: 70 },
   { field: "stationid", headerName: "Station_Id", width: 130 },
-  { field: "invoiceNo", headerName: "Invoice No", width: 130 },
+  { field: "gstno", headerName: "GST No", width: 130 },
   { field: "Stationname", headerName: "Station_Name", width: 140 },
   { field: "active", headerName: "Active", width: 80 },
   { field: "shortname", headerName: "Station", width: 130 },
@@ -165,10 +165,10 @@ const StationCreation = () => {
               <TextField
                 margin="normal"
                 size="small"
-                id="invoiceNo"
-                label="Invoice No"
-                name="invoiceNo"
-                value={selectedCustomerData?.invoiceNo || book.invoiceNo}
+                id="gstno"
+                label="GST No"
+                name="gstno"
+                value={selectedCustomerData?.gstno || book.gstno}
                 autoComplete="new-password"
                 onChange={handleChange}
                 variant="standard"

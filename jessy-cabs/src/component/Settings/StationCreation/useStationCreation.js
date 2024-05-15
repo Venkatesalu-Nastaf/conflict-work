@@ -46,7 +46,7 @@ const useStationCreation = () => {
         active: '',
         ownbranch: '',
         address: '',
-        invoiceNo: '',
+        gstno: '',
 
     });
     const handleChange = (event) => {
@@ -82,7 +82,7 @@ const useStationCreation = () => {
             active: '',
             ownbranch: '',
             address: '',
-            invoiceNo: '',
+            gstno: '',
 
         }));
         setSelectedCustomerData({});

@@ -236,7 +236,7 @@ const Booking = ({ stationName }) => {
                   onKeyDown={handleKeyDown}
                   variant="standard"
                   autoFocus
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
 
@@ -270,12 +270,12 @@ const Booking = ({ stationName }) => {
               </div>
 
               <div className="" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
-                
-                <div className="input time" style={{display: 'flex', alignItems: 'center'}}>
+
+                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
-                    <MdOutlineAccessTimeFilled style={{fontSize: '25px'}}/>
+                    <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
                   </div>
-                  <div style={{display: 'grid', width: '100%'}}>
+                  <div style={{ display: 'grid', width: '100%' }}>
                     <label>Booking Time</label>
                     <input
                       type="time"
@@ -355,7 +355,7 @@ const Booking = ({ stationName }) => {
                   label="Trip Id"
                   id="standard-size-normal"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
               <div className="input" style={{ width: '200px', display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
@@ -384,7 +384,10 @@ const Booking = ({ stationName }) => {
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
-                <Autocomplete
+                {/**
+                 * 
+                 * 
+                 * <Autocomplete
                   fullWidth
                   size="small"
                   id="free-solo-demo"
@@ -422,6 +425,29 @@ const Booking = ({ stationName }) => {
                     );
                   }}
                 />
+                 * 
+                 */}
+
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  id="free-solo-demo-stationname"
+                  freeSolo
+                  sx={{ width: "20ch" }}
+                  onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
+                  value={stationName.find((option) => option.Option)?.label || book?.stationname || ''}
+                  options={stationName.map((option) => ({
+                    label: option.Stationname,
+                  }))}
+                  getOptionLabel={(option) => option.label || book?.stationname || ''}
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Service Station" name="servicestation" />
+                    )
+                  }
+                  }
+                />
+
               </div>
               <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>
                 <div className="icone">
@@ -440,7 +466,7 @@ const Booking = ({ stationName }) => {
                   label="Remarks"
                   id="remarks"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
 
@@ -593,7 +619,7 @@ const Booking = ({ stationName }) => {
                 label="Ordered by"
                 id="orderedby"
                 variant="standard"
-                style={{width: '100%'}}
+                style={{ width: '100%' }}
               />
             </div>
 
@@ -615,7 +641,7 @@ const Booking = ({ stationName }) => {
                 label="Mobile No"
                 id="mobile"
                 variant="standard"
-                style={{width: '100%'}}
+                style={{ width: '100%' }}
               />
             </div>
 
@@ -638,13 +664,13 @@ const Booking = ({ stationName }) => {
                 id="guestname"
                 variant="standard"
                 required
-                style={{width: '100%'}}
+                style={{ width: '100%' }}
               />
             </div>
 
-            <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
               <div className="icone">
-                <MdDataUsage style={{fontSize: '25px'}}/>
+                <MdDataUsage style={{ fontSize: '25px' }} />
               </div>
               <TextField
                 margin="normal"
@@ -686,7 +712,7 @@ const Booking = ({ stationName }) => {
                 label="Guest Mobile No"
                 id="guestmobileno"
                 variant="standard"
-                style={{width: '100%'}}
+                style={{ width: '100%' }}
               />
             </div>
             <div className="input radio" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
@@ -707,7 +733,7 @@ const Booking = ({ stationName }) => {
                 label="Email"
                 id="email"
                 variant="standard"
-                style={{width: '100%'}}
+                style={{ width: '100%' }}
               />
             </div>
             <div className="input radio" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
@@ -727,11 +753,11 @@ const Booking = ({ stationName }) => {
                 label="Employee No"
                 id="employeeno"
                 variant="standard"
-                style={{width: '100%'}}
+                style={{ width: '100%' }}
               />
             </div>
 
-            <div className="input" style={{display: 'flex', alignItems: 'center', paddingRight: '15px'}}>
+            <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
               <div className="icone">
                 <PermIdentityIcon color="action" />
               </div>
@@ -1046,9 +1072,9 @@ const Booking = ({ stationName }) => {
             <div className="" style={{ paddingRight: '15px' }}>
               <div className="input time" style={{ marginTop: '0px', display: 'flex', alignItems: 'center' }}>
                 <div className="icone">
-                  <MdOutlineAccessTimeFilled style={{fontSize: '25px'}}/>
+                  <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
                 </div>
-                <div style={{display: 'grid', width: '100%'}}>
+                <div style={{ display: 'grid', width: '100%' }}>
                   <label>Start Time</label>
                   <input
                     type="time"
@@ -1076,9 +1102,9 @@ const Booking = ({ stationName }) => {
             <div className="" style={{ paddingRight: '15px' }}>
               <div className="input time" style={{ marginTop: '0px', display: 'flex', alignItems: 'center' }}>
                 <div className="icone">
-                  <MdOutlineAccessTimeFilled style={{fontSize: '25px'}}/>
+                  <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
                 </div>
-                <div style={{display: 'grid', width: '100%'}}>
+                <div style={{ display: 'grid', width: '100%' }}>
                   <label>Report Time</label>
                   <input
                     type="time"
@@ -1256,7 +1282,7 @@ const Booking = ({ stationName }) => {
                   label="Customer code"
                   id="customercode"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
 
@@ -1277,7 +1303,7 @@ const Booking = ({ stationName }) => {
                   label="Request No"
                   id="registerno"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
 
@@ -1302,7 +1328,7 @@ const Booking = ({ stationName }) => {
                   label="Flight No"
                   id="flight"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
               <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
@@ -1323,7 +1349,7 @@ const Booking = ({ stationName }) => {
                   label="Order By Email"
                   id="orederbyemail"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
               {/* <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px', marginTop: '10px' }}>

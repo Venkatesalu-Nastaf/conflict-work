@@ -386,7 +386,7 @@ const EmployeeCreation = ({ stationName }) => {
 
                 {filteruser.map((row, index) => (
 
-                  <div className='user-table-permission' onClick={() => {
+                  <div className='user-table-permission' style={{ cursor: "pointer" }} onClick={() => {
                     togglePermission(row);
                     handleRowClickUser(row)
                   }}

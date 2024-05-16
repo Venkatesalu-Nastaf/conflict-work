@@ -93,6 +93,7 @@ const MainDashboard = () => {
       localStorage.removeItem("profileimages")
       localStorage.removeItem("organizationimages")
       localStorage.removeItem("selectedusertheme")
+      localStorage.removeItem("username")
 
       setPermission([]);
       setExpanded(true);

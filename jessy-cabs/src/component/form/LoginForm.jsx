@@ -65,7 +65,9 @@ const Login = () => {
       const response = await axios.post(`${apiUrl}/login`, input);
       if (response.status === 200) {
         setUserdashboard(true)
+
         loginUser(input.username);
+        localStorage.setItem("username", input.username);
         setSuccessMessage("Successfully Added");
         navigate("/home/dashboard");
         localStorage.setItem("auth", true);

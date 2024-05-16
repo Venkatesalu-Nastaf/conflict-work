@@ -546,6 +546,7 @@ const Sidebar = () => {
                 {storedUsername ? (
                   <div>
                     <p onClick={navigateToUserSettings}>{storedUsername}</p>
+                    <div className="alert-popup-main">
                     {success && (
                       <div className="alert-popup Success">
                         <div className="popup-icon">
@@ -563,6 +564,7 @@ const Sidebar = () => {
                         <p>{success}</p>
                       </div>
                     )}
+                    </div>
                   </div>
                 ) : (
                   <div>
@@ -585,6 +587,7 @@ const Sidebar = () => {
             </div>
           </div>
         </div>
+        <div className="alert-popup-main">
         {info && (
           <div className="alert-popup Info">
             <div className="popup-icon">
@@ -597,6 +600,7 @@ const Sidebar = () => {
             <p>{infoMessage}</p>
           </div>
         )}
+        </div>
       </motion.div>
 
 
@@ -667,14 +671,18 @@ const Sidebar = () => {
               <MenuItem
                 // label="Register "
                 label={
-                  <span style={{ display: 'flex', alignItems: "center", gap: '14px' }}>
+                  <span style={{ display: 'flex', alignItems: "center" }}>
 
                     <span>
                       Register
                     </span>
-                    <span style={{ marginTop: '10px' }}>
-                      {isRegisterdropdownclicked ? <FaChevronUp /> : <FaChevronDown />}
+                    <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                      <FaChevronDown className={isRegisterdropdownclicked ? 'isRegisterdropdownclicked' : ''} />
                     </span>
+                    {/* <span style={{ marginTop: '10px' }}>
+                        {isRegisterdropdownclicked ? <FaChevronUp /> : <FaChevronDown />}
+                      </span> */}
+                    
 
                   </span>
                 }
@@ -792,17 +800,17 @@ const Sidebar = () => {
               <MenuItem
                 // label="Settings "
                 label={
-                  <span style={{ display: 'flex', alignItems: "center", gap: '14px' }}>
+                  <span style={{ display: 'flex', alignItems: "center" }}>
 
                     <span>
                       Settings
                     </span>
-                    <span style={{ marginTop: '10px' }}>
-                      {issettingdropdownclicked ? <FaChevronUp /> : <FaChevronDown />}
-
-                      {/* <FaChevronDown/>  */}
+                    <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                      <FaChevronDown className={issettingdropdownclicked ? 'issettingdropdownclicked' : ''} />
                     </span>
-
+                    {/* <span style={{ marginTop: '10px' }}>
+                      {issettingdropdownclicked ? <FaChevronUp /> : <FaChevronDown />}
+                    </span> */}
                   </span>
                 }
                 value="/home/settings"
@@ -911,16 +919,19 @@ const Sidebar = () => {
               <MenuItem
                 // label="info "
                 label={
-                  <span style={{ display: 'flex', alignItems: "center", gap: '14px' }}>
+                  <span style={{ display: 'flex', alignItems: "center" }}>
 
                     <span>
                       info
+                      
                     </span>
-                    <span style={{ marginTop: '10px' }}>
+
+                      <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                        <FaChevronDown className={isinfodropdownclicked ? 'isinfodropdownclicked' : ''} />
+                      </span>
+                    {/* <span style={{ marginTop: '10px' }}>
                       {isinfodropdownclicked ? <FaChevronUp /> : <FaChevronDown />}
-
-                    </span>
-
+                    </span> */}
                   </span>
                 }
                 // to={"/home/settings"}
@@ -1079,6 +1090,7 @@ const Sidebar = () => {
                   {storedUsername ? (
                     <div>
                       <p onClick={navigateToUserSettings}>{storedUsername}</p>
+                      <div className="alert-popup-main">
                       {success && (
                         <div className="alert-popup Success">
                           <div className="popup-icon">
@@ -1096,6 +1108,7 @@ const Sidebar = () => {
                           <p>{success}</p>
                         </div>
                       )}
+                      </div>
                     </div>
                   ) : (
                     <div>
@@ -1124,6 +1137,7 @@ const Sidebar = () => {
               </div>
             </div>
           </div>
+          <div className="alert-popup-main">
           {info && (
             <div className="alert-popup Info">
               <div className="popup-icon">
@@ -1136,6 +1150,7 @@ const Sidebar = () => {
               <p>{infoMessage}</p>
             </div>
           )}
+          </div>
         </motion.div>
       )}
 

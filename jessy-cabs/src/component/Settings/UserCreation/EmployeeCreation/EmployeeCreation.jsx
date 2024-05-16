@@ -101,8 +101,13 @@ const EmployeeCreation = ({ stationName }) => {
   const [selectedUserId, setSelectedUserId] = useState('');
 
   const togglePermission = (row) => {
+    // if (book.username && (book?.stationname) && book.designation && book.organizationname) {
     setShowPermission(!showPermission);
     setSelectedUserId(row.userid)
+    // } else {
+    //   alert("Fill all feilds ")
+    // }
+
   };
   //table completed
 
@@ -141,7 +146,7 @@ const EmployeeCreation = ({ stationName }) => {
                   label="ID"
                   name="userid"
                   value={book.userid}
-                  onChange={handleChange}
+                  // onChange={handleChange}
                   variant="standard"
                 />
               </div>
@@ -270,7 +275,7 @@ const EmployeeCreation = ({ stationName }) => {
                   <Button variant="contained" disabled={!UserCreation_modify} onClick={handleEdit}>Edit</Button>
                 ) : (
                   <div className='add-permission'>
-                    <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Add</Button>
+                    {/* <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Add</Button> */}
                     <Button variant="contained" disabled={!UserCreation_new} onClick={togglePermission} className='user-permission-button' >Give Permission</Button>
                   </div>
                 )}
@@ -342,7 +347,8 @@ const EmployeeCreation = ({ stationName }) => {
                   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                 />
               )}
-              {UserCreation_new === 1 && (
+
+              {UserCreation_new === 1 && !isEditMode && (
                 <SpeedDialAction
                   key="Add"
                   icon={<BookmarkAddedIcon />}
@@ -381,12 +387,9 @@ const EmployeeCreation = ({ stationName }) => {
                 {filteruser.map((row, index) => (
 
                   <div className='user-table-permission' onClick={() => {
-
                     togglePermission(row);
                     handleRowClickUser(row)
-
-                  }
-                  }
+                  }}
 
                     key={index}>
                     <img src={Avatar} alt="profile" width="50" />
@@ -395,13 +398,9 @@ const EmployeeCreation = ({ stationName }) => {
                       <p className="user-details-text">{row.designation}</p>
                     </div>
                   </div>
-
                 ))}
 
-
-
               </div>
-
               {showPermission && <UserPermission
                 userid={selectedUserId}
                 permissionsData={permissionsData}
@@ -412,9 +411,15 @@ const EmployeeCreation = ({ stationName }) => {
                 newState={newState}
                 modifyState={modifyState}
                 deleteState={deleteState}
-
               />}
             </div>
+
+            {!isEditMode &&
+              <div style={{ display: "flex", justifyContent: "end" }}>
+                <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
+              </div>
+            }
+
 
           </div>
         </form>

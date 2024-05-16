@@ -587,7 +587,10 @@ const Sidebar = () => {
             </div>
           </div>
         </div>
-        <div className="alert-popup-main">
+        
+      </motion.div>
+
+      <div className="alert-popup-main">
         {info && (
           <div className="alert-popup Info">
             <div className="popup-icon">
@@ -601,7 +604,6 @@ const Sidebar = () => {
           </div>
         )}
         </div>
-      </motion.div>
 
 
       {expanded && (

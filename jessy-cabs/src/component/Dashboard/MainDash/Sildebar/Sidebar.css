@@ -351,6 +351,10 @@
         box-shadow: rgba(255, 0, 0, 0.5) 0px 0px 6px 0px;
     }
 
+    .isRegisterdropdownclicked, .issettingdropdownclicked, .isinfodropdownclicked{
+      transform: scaleY(-1);
+    }
+
     
 
 

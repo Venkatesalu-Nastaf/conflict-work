@@ -43,6 +43,10 @@ import { faBuilding, faFileInvoiceDollar, faNewspaper, faTags } from "@fortaweso
 import useTransferreport from './useTransferreport';
 import useExeclpage from './ExcelPage';
 import { PdfData } from './PdfContext';
+import { PiMoneyBold } from "react-icons/pi";
+import { IoCalendarSharp } from "react-icons/io5";
+import { FaFileInvoice } from "react-icons/fa";
+import { FaCalendarPlus , FaCalendarMinus } from "react-icons/fa";
 
 
 
@@ -294,11 +298,11 @@ const TransferReport = ({ stationName }) => {
     <div className="TransferReport-form Scroll-Style-hide">
 
       <form >
-        <div className="detail-container-main">
-          <div className="container-left">
+        <div className="detail-container-main detail-container-main-tfreport">
+          <div className="container-left-transfer-report">
             <div className="copy-title-btn-TransferReport">
-              <div className="input-field" style={{ justifyContent: 'center' }}>
-                <div className="input" style={{ width: "230px" }}>
+              <div className="input-field input-field-transfer-report" style={{flexWrap:'wrap'}}>
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faTags} size="lg" />
                   </div>
@@ -311,7 +315,7 @@ const TransferReport = ({ stationName }) => {
                     value={groupTripid}
                   />
                 </div>
-                <div className="input" style={{ width: "230px" }}>
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                   </div>
@@ -324,7 +328,7 @@ const TransferReport = ({ stationName }) => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input" style={{ width: "230px" }}>
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                   </div>
@@ -348,7 +352,10 @@ const TransferReport = ({ stationName }) => {
 
 
                 </div>
-                <div className="input">
+                <div className="input input-transfer-report" >
+                <div className="icone">
+                    <IoCalendarSharp color="action"  style={{fontSize:"23px"}}/>
+                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
 
@@ -361,9 +368,9 @@ const TransferReport = ({ stationName }) => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-              </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "400px" }}>
+              {/* </div>
+              <div className="input-field"> */}
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
@@ -390,7 +397,10 @@ const TransferReport = ({ stationName }) => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input">
+                <div className="input input-transfer-report" >
+                <div className="icone">
+                    <PiMoneyBold color="action" style={{fontSize:"23px"}} />
+                  </div>
                   <TextField
                     size="small"
                     id="id"
@@ -400,7 +410,11 @@ const TransferReport = ({ stationName }) => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input">
+                <div className="input input-transfer-report" >
+
+                <div className="icone">
+                    <FaFileInvoice color="action" style={{fontSize:"23px"}} />
+                  </div>
                   <TextField
                     size="small"
                     id="id"
@@ -410,9 +424,13 @@ const TransferReport = ({ stationName }) => {
                     autoComplete='off'
                   />
                 </div>
-              </div>
-              <div className="input-field">
-                <div className="input" >
+              {/* </div>
+              <div className="input-field"> */}
+                <div className="input input-transfer-report" >
+                <div className="icone">
+                    <FaCalendarPlus color="action" style={{fontSize:"23px"}} />
+                  </div>
+
                   <TextField
                     size="small"
                     id="id"
@@ -422,7 +440,10 @@ const TransferReport = ({ stationName }) => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input" >
+                <div className="input input-transfer-report" >
+                <div className="icone">
+                    <FaCalendarMinus  color="action" style={{fontSize:"23px"}} />
+                  </div>
                   <TextField
                     size="small"
                     id="id"
@@ -432,7 +453,7 @@ const TransferReport = ({ stationName }) => {
                     autoComplete='off'
                   />
                 </div>
-                <div className="input" >
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faBuilding} size="xl" />
                   </div>
@@ -453,9 +474,9 @@ const TransferReport = ({ stationName }) => {
                     }}
                   />
                 </div>
-              </div>
-              <div className="input-field">
-                <div className="input" style={{ width: "230px" }}>
+              {/* </div>
+              <div className="input-field"> */}
+                <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                   </div>
@@ -478,7 +499,7 @@ const TransferReport = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ width: "180px" }}>
+                <div className="input input-transfer-report" >
                   <FormControlLabel
                     value="bookingmail"
                     control={
@@ -491,7 +512,7 @@ const TransferReport = ({ stationName }) => {
 
                 </div>
 
-                <div className="input">
+                <div className="input input-transfer-report" >
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
                       Invoice With
@@ -516,7 +537,7 @@ const TransferReport = ({ stationName }) => {
                     />
                   </FormControl>
                 </div>
-                <div className="input">
+                <div className="input input-transfer-report" >
                   <div className="Download-btn">
                     <PopupState variant="popover" popupId="demo-popup-menu">
                       {(popupState) => (

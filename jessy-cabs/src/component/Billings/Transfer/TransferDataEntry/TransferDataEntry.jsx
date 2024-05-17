@@ -27,6 +27,14 @@ import { faBuilding, faFileInvoiceDollar, faTags } from "@fortawesome/free-solid
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferdataentry from './useTransferdataentry';
 import { useData } from '../../../Dashboard/Maindashboard/DataContext';
+import { FaCalendar } from "react-icons/fa";
+import { FaCalendarPlus } from "react-icons/fa";
+import { FaCalendarMinus } from "react-icons/fa";
+
+
+
+
+
 
 const TransferDataEntry = ({ stationName }) => {
 
@@ -97,12 +105,12 @@ const TransferDataEntry = ({ stationName }) => {
   return (
     <div className="TransferDataEntry-form Scroll-Style-hide">
       <form >
-        <div className="detail-container-main">
+        <div className="detail-container-main detail-container-main-transfer-data">
           <div className="TransferDataEntry">
-            <div className="container-left">
+            <div className="container-left-transferdata">
               <div className="copy-title-btn-TransferDataEntry">
-                <div className="input-field" >
-                  <div className="input" style={{ width: "230px" }}>
+                <div className="input-field input-feild-transferdata" style={{flexWrap:'wrap'}} >
+                  <div className="input"  style={{ width: "230px" }}>
                     <div className="icone">
                       <FontAwesomeIcon icon={faTags} size="lg" />
                     </div>
@@ -116,7 +124,48 @@ const TransferDataEntry = ({ stationName }) => {
                       autoComplete='off'
                     />
                   </div>
+
+                  <div className='input'>
+
+                  <div className="icone">
+                      <FaCalendar color="action" />
+                    </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                      <DatePicker
+                        label="Date"
+                        name="date"
+                        value={date}
+                        format="DD/MM/YYYY"
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+
+                  </div>
+
+
+                  <div className='input'>
+                  <div className="icone">
+                      <FaCalendar color="action" />
+                    </div>
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+                    <DatePicker
+                      label="Bill Date"
+                      name="Billingdate"
+                      // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate || formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate) : null}
+                      value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
+
+                      format="DD/MM/YYYY"
+                    />
+                    </DemoContainer>
+                  </LocalizationProvider>
+
+                  </div>
+
+
+                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
                         label="Date"
@@ -133,9 +182,9 @@ const TransferDataEntry = ({ stationName }) => {
                         format="DD/MM/YYYY"
                       />
                     </DemoContainer>
-                  </LocalizationProvider>
-                </div>
-                <div className="input-field" >
+                  </LocalizationProvider> */}
+                {/* </div>
+                <div className="input-field" > */}
                   <div className="input" >
                     <div className="icone">
                       <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
@@ -173,9 +222,12 @@ const TransferDataEntry = ({ stationName }) => {
                       }}
                     />
                   </div>
-                </div>
-                <div className="input-field">
+                {/* </div>
+                <div className="input-field"> */}
                   <div className="input" >
+                  <div className="icone">
+                      <FaCalendarPlus color="action" />
+                    </div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
@@ -195,7 +247,10 @@ const TransferDataEntry = ({ stationName }) => {
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
-                  <div className="input" >
+                  <div className="input">
+                  <div className="icone">
+                      <FaCalendarMinus color="action" />
+                    </div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
@@ -236,8 +291,8 @@ const TransferDataEntry = ({ stationName }) => {
                       }}
                     />
                   </div>
-                </div>
-                <div className="input-field" >
+                {/* </div>
+                <div className="input-field" > */}
                   <div className="input">
                     <Button variant="contained" disabled={!Transfer_read} onClick={handleShow} >List</Button>
                   </div>
@@ -248,13 +303,13 @@ const TransferDataEntry = ({ stationName }) => {
                     <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button>
                   </div>
                 </div>
-                <div className="input-field">
-                </div>
+                {/* <div className="input-field">
+                </div> */}
               </div>
             </div>
           </div>
         </div>
-        <div className="total-container-TransferDataEntry">
+        <div className="total-container-TransferDataEntry" style={{flexWrap:'wrap', alignItems:'center', justifyContent:'center'}}>
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">
               {(popupState) => (
@@ -270,7 +325,7 @@ const TransferDataEntry = ({ stationName }) => {
               )}
             </PopupState>
           </div>
-          <div className='amount-calculator'>
+          <div className='amount-calculator' style={{flexWrap:'wrap', gap:'20px'}}>
             <div className="total-inputs" style={{ marginTop: '25px' }}>
               <Button variant="contained" disabled={!Transfer_new} onClick={handleAddOrganization} >Add To List</Button>
             </div>

@@ -21,6 +21,10 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import useTransferlist from './useTransferlist';
 import { useData } from '../../../Dashboard/Maindashboard/DataContext';
 import { PermissionContext } from '../../../context/permissionContext';
+import { FaCalendar } from "react-icons/fa";
+
+
+
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
@@ -73,10 +77,10 @@ const TransferList = ({ stationName }) => {
         <div className="TransferList-form Scroll-Style-hide">
             <form >
                 <div className="detail-container-main">
-                    <div className="container-left">
+                    <div className="container-left-transferlist">
                         <div className="copy-title-btn-TransferList">
-                            <div className="input-field" style={{ justifyContent: 'center' }}>
-                                <div className="input" style={{ width: "230px" }}>
+                            <div className="input-field input-field-transferlist" style={{flexWrap:'wrap'}} >
+                                <div className="input input-transferlist" style={{ width: "230px" }}>
                                     <div className="icone">
                                         <HailOutlinedIcon color="action" />
                                     </div>
@@ -95,6 +99,12 @@ const TransferList = ({ stationName }) => {
                                         }}
                                     />
                                 </div>
+
+                                <div className="input input-transferlist">
+                                <div className="icone">
+                                        <FaCalendar color="action" />
+                                    </div>
+
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                                         <DatePicker
@@ -103,15 +113,34 @@ const TransferList = ({ stationName }) => {
                                             value={fromDate}
                                             onChange={(date) => setFromDate(date)}
                                         />
-                                        <DatePicker
-                                            label="To Date"
-                                            format="DD/MM/YYYY"
-                                            value={toDate}
-                                            onChange={(date) => setToDate(date)}
-                                        />
+                                       
                                     </DemoContainer>
                                 </LocalizationProvider>
-                                <div className="input">
+
+                                </div>
+                              
+
+                                    <div className='input input-transferlist'>
+
+                                        <div className="icone">
+                                            <FaCalendar color="action" />
+                                        </div>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DemoContainer components={["DatePicker", "DatePicker"]}>                                      
+                                                <DatePicker
+                                                    label="To Date"
+                                                    format="DD/MM/YYYY"
+                                                    value={toDate}
+                                                    onChange={(date) => setToDate(date)}
+                                                />
+                                            </DemoContainer>
+                                        </LocalizationProvider>
+
+                                    </div>
+                                
+
+
+                                <div className="input input-transferlist">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faNewspaper} size="xl" />
                                     </div>
@@ -122,9 +151,9 @@ const TransferList = ({ stationName }) => {
                                         <option value="notbilled">Not Billed</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div className="input-field">
-                                <div className="input" >
+                            {/* </div>
+                            <div className="input-field"> */}
+                                <div className="input input-transferlist" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />
                                     </div>

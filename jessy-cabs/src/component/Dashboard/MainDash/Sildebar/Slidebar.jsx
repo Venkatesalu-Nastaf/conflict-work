@@ -32,7 +32,13 @@ import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 import { GiDuration } from "react-icons/gi";
 import { SiMinutemailer } from "react-icons/si";
 import { BsFillFuelPumpFill } from "react-icons/bs";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { FaMoneyBillWheat } from "react-icons/fa6";
+import { BiTransfer } from "react-icons/bi";
+import { FaBookmark } from "react-icons/fa";
+import { MdOutlineMoving } from "react-icons/md";
+import { BiSpreadsheet } from "react-icons/bi";
 
 
 
@@ -120,6 +126,9 @@ const Sidebar = () => {
     setIsRegisterdropdownclicked(false);
     setIssettingdropdownclicked(false);
     setIsinfodropdownclicked(false);
+   
+     setIsbillingdropdownclicked(false);
+    setIsbookingdropdownclicked(false);
   }
 
   document.addEventListener('click', function (event) {
@@ -137,6 +146,8 @@ const Sidebar = () => {
   const [settingsDropdownVisible, setSettingsDropdownVisible] = useState(false);
   const [infoDropdownVisible, setInfoDropdownVisible] = useState(false);
   const [registrationDropdownVisible, setRegistrationDropdownVisible] = useState(false);
+  const [billingDropdownVisible, setBillingDropdownVisible] = useState(false);
+  const [bookingDropdownVisible, setBookingDropdownVisible] = useState(false);
 
   useEffect(() => {
     setSelectedImage(sharedData)
@@ -176,9 +187,12 @@ const Sidebar = () => {
 
   const handleSettingsClick = () => {
     setSettingsDropdownVisible(!settingsDropdownVisible);
-    setInfoDropdownVisible(false)
+    setInfoDropdownVisible(false);
     setRegistrationDropdownVisible(false);
+    setBookingDropdownVisible(false);
     setIssettingdropdownclicked((prevExpanded) => !prevExpanded);
+    setBillingDropdownVisible(false)
+
   };
 
 
@@ -187,6 +201,10 @@ const Sidebar = () => {
     setSettingsDropdownVisible(false);
     setRegistrationDropdownVisible(false);
     setIsinfodropdownclicked((prevExpanded) => !prevExpanded);
+    setBillingDropdownVisible(false);
+    setBookingDropdownVisible(false);
+
+
   }
 
   const handleRegisterClick = () => {
@@ -194,10 +212,44 @@ const Sidebar = () => {
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false)
     setIsRegisterdropdownclicked((prevExpanded) => !prevExpanded);
+    setBillingDropdownVisible(false);
+    setBookingDropdownVisible(false);
+
   }
+
+  const handleBillingClick = () => {
+    setBillingDropdownVisible(!billingDropdownVisible);
+    setRegistrationDropdownVisible(false);
+    setSettingsDropdownVisible(false);
+    setInfoDropdownVisible(false)
+    setIsbillingdropdownclicked((prevExpanded) => !prevExpanded);
+    setBookingDropdownVisible(false);
+
+    
+  }
+
+  const handleBookingClick = () => {
+    setBookingDropdownVisible(!bookingDropdownVisible);
+    setBillingDropdownVisible(false);
+    setRegistrationDropdownVisible(false);
+    setSettingsDropdownVisible(false);
+    setInfoDropdownVisible(false)
+    setIsbookingdropdownclicked((prevExpanded) => !prevExpanded);
+  }
+
+
+
 
   const handleRegistermenuClick = () => {
     setRegistrationDropdownVisible(false);
+  }
+
+  const handleBillingmenuClick = () => {
+    setBillingDropdownVisible(false);
+  }
+
+  const handleBookingmenuClick = () => {
+    setBookingDropdownVisible(false);
   }
 
 
@@ -214,6 +266,7 @@ const Sidebar = () => {
     setSettingsDropdownVisible(false);
     setInfoDropdownVisible(false);
     setRegistrationDropdownVisible(false);
+    
     setExpanded(false)
     e.preventDefault();
 
@@ -381,6 +434,8 @@ const Sidebar = () => {
   const [isRegisterdropdownclicked, setIsRegisterdropdownclicked] = useState(false);
   const [issettingdropdownclicked, setIssettingdropdownclicked] = useState(false);
   const [isinfodropdownclicked, setIsinfodropdownclicked] = useState(false);
+  const [isbillingdropdownclicked, setIsbillingdropdownclicked] = useState(false);
+  const [isbookingdropdownclicked, setIsbookingdropdownclicked] = useState(false);
 
   const [popupOpen, setPopupOpen] = useState(false);
 
@@ -606,6 +661,7 @@ const Sidebar = () => {
         </div>
 
 
+
       {expanded && (
 
         <motion.div
@@ -645,7 +701,7 @@ const Sidebar = () => {
               handleMenuItemClick={handleMenuItemClick}
               icon={BiHomeAlt}
             />}
-            <MenuItem
+            {/* <MenuItem
               label="Booking"
               to={"/home/bookings/booking"}
               alt="/home/bookings/booking"
@@ -655,9 +711,131 @@ const Sidebar = () => {
               isActive={isActive}
               handleMenuItemClick={handleMenuItemClick}
               icon={HiOutlineUsers}
-            />
+            /> */}
 
-            <MenuItem
+
+
+<motion.div>
+              <MenuItem
+                // label="Register "
+                label={
+                  <span style={{ display: 'flex', alignItems: "center" }}>
+
+                    <span>
+                      Booking
+                    </span>
+                    <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                      <FaChevronDown className={isbookingdropdownclicked ? 'isbookingdropdownclicked' : ''} />
+                    </span>              
+                  </span>
+                }
+
+                value="/home/bookings"
+                menuItemKey="/home/bookings"
+                name="Booking page"
+                isActive={isActive}
+                handleMenuItemClick={handleBookingClick}
+                icon={HiOutlineUsers}
+              />
+            </motion.div>
+
+            {bookingDropdownVisible && (
+              <div className="settings-dropdown">
+                <div className="settings-dropdown-links">
+                  <Link
+                    label="Bookings "
+                    to="/home/bookings/booking"
+                    alt="/home/bookings/booking"
+                    value="/home/bookings"
+                    menuItemKey="/home/bookings/booking"
+                    name="Bookings "
+                    isActive={isActive}
+                    handleMenuItemClick={handleBookingClick}
+                    icon={AiOutlineSetting}
+                    onClick={handleBookingmenuClick}
+                    className="dropdown-links"
+                  >
+
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                      <span>
+                        <FaBookmark />
+                      </span>
+                      <span className="menu-items-registration">
+                        Booking
+                      </span>
+                    </p>
+
+
+                  </Link>
+                </div>
+
+
+
+
+                <div className="settings-dropdown-links">
+                  <Link
+                    label="Trip Status"
+                    to="/home/bookings/tripstatus"
+                    alt="/home/bookings/tripstatus"
+                    value="/home/bookings"
+                    menuItemKey="/home/bookings/tripstatus"
+                    name="Trip Status"
+                    className="dropdown-links"
+                    isActive={isActive}
+                    handleMenuItemClick={handleBookingClick}
+                    icon={AiOutlineSetting}
+                    onClick={handleBookingmenuClick}
+
+                  >
+
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                      <span>
+                        <MdOutlineMoving />
+                      </span>
+
+                      <span className="menu-items-registration">
+                        Trip status
+                      </span>
+                    </p>
+                  </Link>
+                </div>
+
+                <div className="settings-dropdown-links">
+                  <Link
+                    label="Trip sheet"
+                    to="/home/bookings/tripsheet"
+                    alt="/home/bookings/tripsheet"
+                    value="/home/bookings"
+                    menuItemKey="/home/bookings/tripsheet"
+                    name="Trip sheet"
+                    className="dropdown-links"
+                    isActive={isActive}
+                    handleMenuItemClick={handleBookingClick}
+                    icon={AiOutlineSetting}
+                    onClick={handleBookingmenuClick}
+
+                  >
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                      <span>
+                        <BiSpreadsheet />
+                      </span>
+
+                      <span className="menu-items-registration">
+                        Trip sheet
+                      </span>
+                    </p>
+
+
+
+
+                  </Link>
+                </div>
+
+              </div>
+            )}
+
+
+            {/* <MenuItem
               label="Billing"
               to={"/home/billing/billing"}
               alt="/home/billing/billing"
@@ -667,7 +845,135 @@ const Sidebar = () => {
               isActive={isActive}
               handleMenuItemClick={handleMenuItemClick}
               icon={BiBarChartSquare}
-            />
+            /> */}
+
+
+
+<motion.div>
+              <MenuItem
+                // label="Register "
+                label={
+                  <span style={{ display: 'flex', alignItems: "center" }}>
+
+                    <span>
+                      Billing
+                    </span>
+                    <span style={{ marginTop: '5px', paddingLeft: '10px' }}>
+                      <FaChevronDown className={isbillingdropdownclicked ? 'isbillingdropdownclicked' : ''} />
+                    </span>
+                    
+                    
+
+                  </span>
+                }
+
+
+               
+              value="/home/billing"
+              menuItemKey="/home/billing"
+              name="Billing page"
+              isActive={isActive}
+              handleMenuItemClick={handleBillingClick}
+              icon={BiBarChartSquare}
+              />
+            </motion.div>
+
+            {billingDropdownVisible && (
+              <div className="settings-dropdown">
+                <div className="settings-dropdown-links">
+                  <Link
+                    label="Billing"
+                    to="/home/billing/billing"
+                    alt="/home/billing/billing"
+                    value="/home/billing/"
+                    menuItemKey="/home/billing/billing"
+                    name="Billing"
+                    isActive={isActive}
+                    handleMenuItemClick={handleBillingClick}
+                    icon={AiOutlineSetting}
+                    onClick={handleBillingmenuClick}
+                    className="dropdown-links"
+                  >
+
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                      <span>
+                        <FaMoneyBillTransfer />
+                      </span>
+                      <span className="menu-items-registration">
+                        Billing
+                      </span>
+                    </p>
+
+
+                  </Link>
+                </div>
+
+
+
+
+                <div className="settings-dropdown-links">
+                  <Link
+                    label="Transfer Billing"
+                    to="/home/billing/transfer"
+                    alt="/home/billing/transfer"
+                    value="/home/billing/"
+                    menuItemKey="/home/billing/transfer"
+                    name="Transfer Billing"
+                    className="dropdown-links"
+                    isActive={isActive}
+                    handleMenuItemClick={handleBillingClick}
+                    icon={AiOutlineSetting}
+                    onClick={handleBillingmenuClick}
+
+                  >
+
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                      <span>
+                        <BiTransfer />
+                      </span>
+
+                      <span className="menu-items-registration">
+                        Transfer
+                      </span>
+                    </p>
+                  </Link>
+                </div>
+
+                <div className="settings-dropdown-links">
+                  <Link
+                    label="Covering Bill "
+                    to="/home/billing/coveringbill"
+                    alt="/home/billing/coveringbill"
+                    value="/home/billing/"
+                    menuItemKey="/home/billing/coveringbill"
+                    name="Covering Bill "
+                    className="dropdown-links"
+                    isActive={isActive}
+                    handleMenuItemClick={handleBillingClick}
+                    icon={AiOutlineSetting}
+                    onClick={handleBillingmenuClick}
+
+                  >
+                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                      <span>
+                        <FaMoneyBillWheat />
+                      </span>
+
+                      <span className="menu-items-registration">
+                        Covering Bill
+                      </span>
+                    </p>
+
+
+
+
+                  </Link>
+                </div>
+
+              </div>
+            )}
+
+
 
             <motion.div>
               <MenuItem
@@ -792,8 +1098,6 @@ const Sidebar = () => {
 
               </div>
             )}
-
-
 
 
 

@@ -101,7 +101,7 @@ const StationCreation = () => {
           </p>
           <div className="stationcreation-header">
             <div className="input-field station-creation-inputfeilds">
-              <div className="input">
+              <div className="input input-station-creaton">
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -117,7 +117,7 @@ const StationCreation = () => {
                   variant="standard"
                 />
               </div>
-              <div className="input" style={{ width: "380px" }}>
+              <div className="input input-station-creaton" style={{ width: "380px" }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                 </div>
@@ -133,7 +133,7 @@ const StationCreation = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{ width: "300px" }}>
+              <div className="input input-station-creaton" style={{ width: "300px" }}>
                 <div className="icone">
                   <ListAltIcon color="action" />
                 </div>
@@ -175,7 +175,7 @@ const StationCreation = () => {
               />
               {/* </div>
             <div className="input-field"> */}
-              <div className="input radio">
+              <div className="input radio input-station-creaton">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Active
@@ -201,7 +201,7 @@ const StationCreation = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-              <div className="input radio">
+              <div className="input radio input-station-creaton">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
                     Own Branch
@@ -227,7 +227,7 @@ const StationCreation = () => {
                   </RadioGroup>
                 </FormControl>
               </div>
-              <div className="input" style={{ width: "160px" }}>
+              <div className="input input-station-creaton" style={{ width: "160px" }}>
                 {isEditMode ? (
                   <Button variant="contained" disabled={!StationCreation_modify} onClick={handleEdit}>Edit</Button>
                 ) : (

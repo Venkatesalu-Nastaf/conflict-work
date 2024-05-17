@@ -60,3 +60,56 @@
     background-color: #457cdc;
     /* Adjust color as needed */
 }
+
+@media screen and (max-width:1164px) {
+    
+    .input-field-transferlist{
+        justify-content: center !important;
+    }
+}
+
+@media screen and (min-width:701px) and (max-width:930px){
+
+    .copy-title-btn-TransferList 
+    {
+        width: 95%;
+    }
+    
+}
+
+@media screen and (min-width:380px) and (max-width:700.99px){
+
+    .copy-title-btn-TransferList 
+    {
+        width: 75%;
+    }
+    
+}
+
+
+@media screen and (max-width:380px) {
+
+    .copy-title-btn-TransferList {
+        /* width: 100%; */
+        margin-top: 30px;
+        background: none !important;
+        padding: 10px 20px 35px;
+        border: none !important;
+        border-radius: 15px;
+    }
+
+    .detail-container-main {
+        padding: 0px !important;;
+    }
+    .container-left-transferlist{
+        position: relative;
+        left: 20px;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+    .input-field.input-transferlist {
+        width: 205px !important;
+    }}
+
+

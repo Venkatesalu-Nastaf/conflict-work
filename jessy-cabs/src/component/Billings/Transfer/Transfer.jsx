@@ -35,7 +35,7 @@ const Transfer = ({ stationName }) => {
   };
   return (
     <div className="form-container-Transfer">
-      <div className="container-main">
+      <div className="container-main container-main-transfer">
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
             <Box className='head-tab-transfer' sx={{ borderBottom: 1, borderColor: "divider" }}>

@@ -22,6 +22,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useCoversubmit from './useCoversubmit';
 import { PermissionContext } from '../../../context/permissionContext';
+import { FaCalendar } from "react-icons/fa";
+
 
 const CoveringSubmit = ({ stationName }) => {
 
@@ -74,8 +76,8 @@ const CoveringSubmit = ({ stationName }) => {
                 <div className="detail-container-main">
                     <div className="container-left">
                         <div className="copy-title-btn-CoveringSubmit">
-                            <div className="input-field" style={{ justifyContent: 'center' }}>
-                                <div className="input" style={{ width: "230px" }}>
+                            <div className="input-field" style={{flexWrap:'wrap'}}>
+                                <div className="input">
                                     <div className="icone">
                                         <HailOutlinedIcon color="action" />
                                     </div>
@@ -94,7 +96,12 @@ const CoveringSubmit = ({ stationName }) => {
                                         }}
                                     />
                                 </div>
-                                <div className="input" >
+                                <div className="input">
+                                    <div className="icone">
+                                        <FaCalendar color="action" />
+                                    </div>
+
+
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
@@ -114,7 +121,11 @@ const CoveringSubmit = ({ stationName }) => {
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input" >
+                                <div className="input">
+                                <div className="icone">
+                                        <FaCalendar color="action" />
+                                    </div>
+
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
@@ -134,8 +145,8 @@ const CoveringSubmit = ({ stationName }) => {
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </div>
-                            </div>
-                            <div className="input-field" >
+                            {/* </div>
+                            <div className="input-field" > */}
                                 <div className="input" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />

@@ -279,6 +279,7 @@
   text-decoration: none !important;
   color: #000;
   margin-left: 50px;
+  cursor: pointer;
 }
 
 
@@ -351,7 +352,7 @@
         box-shadow: rgba(255, 0, 0, 0.5) 0px 0px 6px 0px;
     }
 
-    .isRegisterdropdownclicked, .issettingdropdownclicked, .isinfodropdownclicked{
+    .isRegisterdropdownclicked, .issettingdropdownclicked, .isinfodropdownclicked, .isbillingdropdownclicked,.isbookingdropdownclicked{
       transform: scaleY(-1);
     }
 

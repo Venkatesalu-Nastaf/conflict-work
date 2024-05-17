@@ -1283,58 +1283,64 @@ const useTripsheet = () => {
         }
     }, [setSelectedCustomerData, setFormData, setTripSheetData, setPackageDetails]);
 
+
+
     const handleKeyDown = useCallback(async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             const tripid = event.target.value;
+            console.log(tripid, "222tripsheet tripid")
+
+            const loginUserName = await localStorage.getItem("username")
+
             try {
 
-                if (tripid !== null && tripid !== "undefined" && tripid) {
+                if (tripid !== null && tripid !== "undefined" && tripid && loginUserName) {
 
-                    const response = await axios.get(`${apiUrl}/tripsheet/${tripid}`);
+                    const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
                     const bookingDetails = response.data;
                     if (response.status === 200 && bookingDetails) {
-                        console.log(bookingDetails.status,"datatatata")
 
-                        if(bookingDetails.status === "Cancelled"){
+
+                        if (bookingDetails.status === "Cancelled") {
                             setError(true)
                             setErrorMessage("Trip Cancelled")
                             setSelectedCustomerData({});
                             setSelectedCustomerId({});
                             return
                         }
-                        else{
-                        
+                        else {
 
-                        setSelectedCustomerData(bookingDetails);
-                        setSelectedCustomerId(bookingDetails.tripid);
 
-                        //--------------calc---------
+                            setSelectedCustomerData(bookingDetails);
+                            setSelectedCustomerId(bookingDetails.tripid);
 
-                        setcalcPackage(bookingDetails.calcPackage);
-                        setExtraHR(bookingDetails.extraHR);
-                        setExtraKM(bookingDetails.extraKM);
-                        setpackage_amount(bookingDetails.package_amount);
-                        setextrakm_amount(bookingDetails.extrakm_amount);
-                        setextrahr_amount(bookingDetails.extrahr_amount);
-                        setEx_kmAmount(bookingDetails.ex_kmAmount);
-                        setEx_HrAmount(bookingDetails.ex_hrAmount);
-                        setNightBeta(Number(bookingDetails.nightBta));
-                        setNightCount(bookingDetails.nightCount);
-                        setnight_totalAmount(bookingDetails.night_totalAmount);
-                        setdriverBeta(bookingDetails.driverBeta);
-                        setdriverbeta_Count(bookingDetails.driverbeta_Count);
-                        setdriverBeta_amount(bookingDetails.driverBeta_amount);
-                        setTotalcalcAmount(bookingDetails.totalcalcAmount);
+                            //--------------calc---------
 
-                        //---------------------------
-                        setRequest(bookingDetails.request)
-                        setEscort(bookingDetails.escort)
-                        setTransferreport(bookingDetails.transferreport)
-                        //----------
-                        setSuccess(true);
-                        setSuccessMessage("Successfully listed");
-                        setIsEditMode(true);
+                            setcalcPackage(bookingDetails.calcPackage);
+                            setExtraHR(bookingDetails.extraHR);
+                            setExtraKM(bookingDetails.extraKM);
+                            setpackage_amount(bookingDetails.package_amount);
+                            setextrakm_amount(bookingDetails.extrakm_amount);
+                            setextrahr_amount(bookingDetails.extrahr_amount);
+                            setEx_kmAmount(bookingDetails.ex_kmAmount);
+                            setEx_HrAmount(bookingDetails.ex_hrAmount);
+                            setNightBeta(Number(bookingDetails.nightBta));
+                            setNightCount(bookingDetails.nightCount);
+                            setnight_totalAmount(bookingDetails.night_totalAmount);
+                            setdriverBeta(bookingDetails.driverBeta);
+                            setdriverbeta_Count(bookingDetails.driverbeta_Count);
+                            setdriverBeta_amount(bookingDetails.driverBeta_amount);
+                            setTotalcalcAmount(bookingDetails.totalcalcAmount);
+
+                            //---------------------------
+                            setRequest(bookingDetails.request)
+                            setEscort(bookingDetails.escort)
+                            setTransferreport(bookingDetails.transferreport)
+                            //----------
+                            setSuccess(true);
+                            setSuccessMessage("Successfully listed");
+                            setIsEditMode(true);
                         }
                     } else {
                         setError(true);
@@ -1505,7 +1511,7 @@ const useTripsheet = () => {
     const [attachedImage, setAttachedImage] = useState('');
     const [GmapimageUrl, setGMapImageUrl] = useState('');
     const [routeData, setRouteData] = useState('');
-   
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -1574,7 +1580,7 @@ const useTripsheet = () => {
             try {
                 // const tripid = localStorage.getItem('selectedTripid');
                 const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-              
+
 
                 if (tripid !== null && tripid && tripid !== "undefined") {
 
@@ -1598,7 +1604,7 @@ const useTripsheet = () => {
         fetchData();
     }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
 
-    
+
 
 
     // llllllll
@@ -1926,7 +1932,7 @@ const useTripsheet = () => {
         }
         getvehicleName()
 
-    }, [apiUrl, vehileName])
+    }, [apiUrl])
 
 
     const [escort, setEscort] = useState('No');

@@ -363,13 +363,14 @@ const useBilling = () => {
 
 
     // from tripsheet
-    const handleKeyDown = useCallback(async (event) => {
+    const handleKeyDown = async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             const tripid = event.target.value;
+            const loginUserName = await localStorage.getItem("username")
             try {
                 if (tripid) {
-                    const response = await axios.get(`${apiUrl}/tripsheet/${tripid}`);
+                    const response = await axios.get(`${apiUrl}/tripsheet-keydown/${tripid}`, { params: { loginUserName } });
                     const bookingDetails = response.data;
                     setBook(() => ({ ...bookingDetails, rateType: customerData?.rateType }))
                 } else {
@@ -381,7 +382,7 @@ const useBilling = () => {
                 setErrorMessage('Error retrieving booking details.');
             }
         }
-    }, [apiUrl, customerData]);
+    };
 
 
     // from  Billing

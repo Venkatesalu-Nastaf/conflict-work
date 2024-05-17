@@ -240,17 +240,17 @@ const Sidebar = () => {
 
 
 
-  const handleRegistermenuClick = () => {
-    setRegistrationDropdownVisible(false);
-  }
+  // const handleRegistermenuClick = () => {
+  //   setRegistrationDropdownVisible(false);
+  // }
 
-  const handleBillingmenuClick = () => {
-    setBillingDropdownVisible(false);
-  }
+  // const handleBillingmenuClick = () => {
+  //   setBillingDropdownVisible(false);
+  // }
 
-  const handleBookingmenuClick = () => {
-    setBookingDropdownVisible(false);
-  }
+  // const handleBookingmenuClick = () => {
+  //   setBookingDropdownVisible(false);
+  // }
 
 
   const { permissions } = useContext(PermissionContext)
@@ -479,6 +479,71 @@ const Sidebar = () => {
   const handleClosemodal = () => {
     setOpenmodal(false);
   };
+
+  
+
+
+
+
+  const bookingSubMenu = (path) =>{
+    if (BOOKING !== 0) {
+      navigate(path);
+      closeMenuFunction();
+    }
+    else{
+      setInfo(true);
+      setInfoMessage("You do not have Permission for this page ..!");
+      return;
+    }
+  }
+
+  const billingSubMenu = (path) =>{
+    if (BILLING !== 0) {
+      navigate(path);
+      closeMenuFunction();
+    }
+    else{
+      setInfo(true);
+      setInfoMessage("You do not have Permission for this page ..!");
+      return;
+    }
+  }
+
+  const registerSubMenu = (path) =>{
+    if (REGISTER !== 0) {
+      navigate(path);
+      closeMenuFunction();
+    }
+    else{
+      setInfo(true);
+      setInfoMessage("You do not have Permission for this page ..!");
+      return;
+    }
+  }
+
+  const settingSubMenu = (path) =>{
+    if (SETTING !== 0) {
+      navigate(path);
+      closeMenuFunction();
+    }
+    else{
+      setInfo(true);
+      setInfoMessage("You do not have Permission for this page ..!");
+      return;
+    }
+  }
+
+  const infoSubMenu = (path) =>{
+    if (INFO !== 0) {
+      navigate(path);
+      closeMenuFunction();
+    }
+    else{
+      setInfo(true);
+      setInfoMessage("You do not have Permission for this page ..!");
+      return;
+    }
+  }
 
   return (
     <>
@@ -742,7 +807,7 @@ const Sidebar = () => {
             {bookingDropdownVisible && (
               <div className="settings-dropdown">
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="Bookings "
                     to="/home/bookings/booking"
                     alt="/home/bookings/booking"
@@ -754,9 +819,9 @@ const Sidebar = () => {
                     icon={AiOutlineSetting}
                     onClick={handleBookingmenuClick}
                     className="dropdown-links"
-                  >
+                  > */}
 
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                    <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/booking')}>
                       <span>
                         <FaBookmark />
                       </span>
@@ -766,14 +831,14 @@ const Sidebar = () => {
                     </p>
 
 
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
 
 
 
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="Trip Status"
                     to="/home/bookings/tripstatus"
                     alt="/home/bookings/tripstatus"
@@ -786,9 +851,9 @@ const Sidebar = () => {
                     icon={AiOutlineSetting}
                     onClick={handleBookingmenuClick}
 
-                  >
+                  > */}
 
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                    <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/tripstatus')}>
                       <span>
                         <MdOutlineMoving />
                       </span>
@@ -797,11 +862,11 @@ const Sidebar = () => {
                         Trip status
                       </span>
                     </p>
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="Trip sheet"
                     to="/home/bookings/tripsheet"
                     alt="/home/bookings/tripsheet"
@@ -813,9 +878,8 @@ const Sidebar = () => {
                     handleMenuItemClick={handleBookingClick}
                     icon={AiOutlineSetting}
                     onClick={handleBookingmenuClick}
-
-                  >
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                  > */}
+                    <p className="dropdown-icon" onClick={() => bookingSubMenu('/home/bookings/tripsheet')}>
                       <span>
                         <BiSpreadsheet />
                       </span>
@@ -824,11 +888,7 @@ const Sidebar = () => {
                         Trip sheet
                       </span>
                     </p>
-
-
-
-
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
               </div>
@@ -849,7 +909,7 @@ const Sidebar = () => {
 
 
 
-<motion.div>
+            <motion.div>
               <MenuItem
                 // label="Register "
                 label={
@@ -881,7 +941,7 @@ const Sidebar = () => {
             {billingDropdownVisible && (
               <div className="settings-dropdown">
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="Billing"
                     to="/home/billing/billing"
                     alt="/home/billing/billing"
@@ -893,9 +953,9 @@ const Sidebar = () => {
                     icon={AiOutlineSetting}
                     onClick={handleBillingmenuClick}
                     className="dropdown-links"
-                  >
+                  > */}
 
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                    <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/billing')}>
                       <span>
                         <FaMoneyBillTransfer />
                       </span>
@@ -905,14 +965,14 @@ const Sidebar = () => {
                     </p>
 
 
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
 
 
 
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="Transfer Billing"
                     to="/home/billing/transfer"
                     alt="/home/billing/transfer"
@@ -924,10 +984,9 @@ const Sidebar = () => {
                     handleMenuItemClick={handleBillingClick}
                     icon={AiOutlineSetting}
                     onClick={handleBillingmenuClick}
+                  > */}
 
-                  >
-
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                    <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/transfer')}>
                       <span>
                         <BiTransfer />
                       </span>
@@ -936,11 +995,11 @@ const Sidebar = () => {
                         Transfer
                       </span>
                     </p>
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="Covering Bill "
                     to="/home/billing/coveringbill"
                     alt="/home/billing/coveringbill"
@@ -952,9 +1011,8 @@ const Sidebar = () => {
                     handleMenuItemClick={handleBillingClick}
                     icon={AiOutlineSetting}
                     onClick={handleBillingmenuClick}
-
-                  >
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                  > */}
+                    <p className="dropdown-icon" onClick={() => billingSubMenu('/home/billing/coveringbill')}>
                       <span>
                         <FaMoneyBillWheat />
                       </span>
@@ -963,11 +1021,7 @@ const Sidebar = () => {
                         Covering Bill
                       </span>
                     </p>
-
-
-
-
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
               </div>
@@ -1007,7 +1061,7 @@ const Sidebar = () => {
             {registrationDropdownVisible && (
               <div className="settings-dropdown">
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="Customer Registration"
                     to="/home/registration/customer"
                     alt="/home/registration/customer"
@@ -1019,9 +1073,11 @@ const Sidebar = () => {
                     icon={AiOutlineSetting}
                     onClick={handleRegistermenuClick}
                     className="dropdown-links"
-                  >
+                  > */}
 
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                    {/* <p className="dropdown-icon" onClick={closeMenuFunction}> */}
+                    <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/customer')}>
+                    
                       <span>
                         <MdGroup />
                       </span>
@@ -1031,14 +1087,14 @@ const Sidebar = () => {
                     </p>
 
 
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
 
 
 
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="Supplier Registration"
                     to="/home/registration/supplier"
                     alt="/home/registration/supplier"
@@ -1051,9 +1107,9 @@ const Sidebar = () => {
                     icon={AiOutlineSetting}
                     onClick={handleRegistermenuClick}
 
-                  >
+                  > */}
 
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                    <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/supplier')}>
                       <span>
                         <MdGroupRemove />
                       </span>
@@ -1062,11 +1118,11 @@ const Sidebar = () => {
                         Supplier
                       </span>
                     </p>
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="Supplier Registration"
                     to="/home/registration/employes"
                     alt="/home/registration/employes"
@@ -1078,9 +1134,8 @@ const Sidebar = () => {
                     handleMenuItemClick={handleRegisterClick}
                     icon={AiOutlineSetting}
                     onClick={handleRegistermenuClick}
-
-                  >
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                  > */}
+                    <p className="dropdown-icon" onClick={() => registerSubMenu('/home/registration/employes')}>
                       <span>
                         <HiOutlineUserGroup />
                       </span>
@@ -1090,10 +1145,7 @@ const Sidebar = () => {
                       </span>
                     </p>
 
-
-
-
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
               </div>
@@ -1135,7 +1187,7 @@ const Sidebar = () => {
             {settingsDropdownVisible && (
               <div className="settings-dropdown">
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="User"
                     to="settings/usercreation"
                     alt="settings/usercreation"
@@ -1146,9 +1198,9 @@ const Sidebar = () => {
                     handleMenuItemClick={handleSettingsClick}
                     icon={AiOutlineSetting}
                     className="dropdown-links"
-                  >
+                  > */}
 
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                    <p className="dropdown-icon" onClick={() => settingSubMenu('settings/usercreation')}>
                       <span>
                         <GrUserSettings />
                       </span>
@@ -1157,10 +1209,10 @@ const Sidebar = () => {
                         user Creation
                       </span>
                     </p>
-                  </Link>
+                  {/* </Link> */}
                 </div>
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="Station Creation"
                     to="settings/stationcreation"
                     alt="home/settings/stationcreation"
@@ -1171,8 +1223,8 @@ const Sidebar = () => {
                     isActive={isActive}
                     handleMenuItemClick={handleSettingsClick}
                     icon={AiOutlineSetting}
-                  >
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                  > */}
+                    <p className="dropdown-icon" onClick={() => settingSubMenu('settings/stationcreation')}>
                       <span>
                         <FaCodeBranch />
                       </span>
@@ -1181,15 +1233,13 @@ const Sidebar = () => {
                         Station Creation
                       </span>
                     </p>
-
-
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
 
 
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     to="settings/mainsetting"
                     label="User"
                     // to="/home/usersettings/usersetting"
@@ -1200,9 +1250,9 @@ const Sidebar = () => {
                     handleMenuItemClick={handleSettingsClick}
                     icon={AiOutlineSetting}
                     className="dropdown-links "
-                  >
+                  > */}
 
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                    <p className="dropdown-icon" onClick={() => settingSubMenu('settings/mainsetting')}>
                       <span>
                         <GrSettingsOption />
                       </span>
@@ -1212,7 +1262,7 @@ const Sidebar = () => {
                       </span>
                     </p>
 
-                  </Link>
+                  {/* </Link> */}
 
                 </div>
               </div>
@@ -1258,7 +1308,7 @@ const Sidebar = () => {
             {infoDropdownVisible && (
               <div className="settings-dropdown">
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="User"
                     to="info/ratetype"
                     alt="info/ratetype"
@@ -1269,9 +1319,8 @@ const Sidebar = () => {
                     handleMenuItemClick={handleinfoClick}
                     icon={AiOutlineSetting}
                     className="dropdown-links"
-
-                  >
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                  > */}
+                    <p className="dropdown-icon" onClick={() => infoSubMenu('info/ratetype')}>
                       <span>
                         <GiDuration />
                       </span>
@@ -1280,13 +1329,11 @@ const Sidebar = () => {
                         Rate Type
                       </span>
                     </p>
-
-
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="ratemanagement"
                     to="/home/info/ratemanagement"
                     alt="/home/info/ratemanagement"
@@ -1297,9 +1344,9 @@ const Sidebar = () => {
                     isActive={isActive}
                     handleMenuItemClick={handleinfoClick}
                     icon={AiOutlineSetting}
-                  >
+                  > */}
 
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                    <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/ratemanagement')}>
                       <span>
                         <GiReceiveMoney />
                       </span>
@@ -1308,13 +1355,11 @@ const Sidebar = () => {
                         Rate Management
                       </span>
                     </p>
-
-
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="mailer"
                     to="/home/info/mailer"
                     alt="/home/info/mailer"
@@ -1325,9 +1370,9 @@ const Sidebar = () => {
                     isActive={isActive}
                     handleMenuItemClick={handleinfoClick}
                     icon={AiOutlineSetting}
-                  >
+                  > */}
 
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                    <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/mailer')}>
                       <span>
                         <SiMinutemailer />
                       </span>
@@ -1336,15 +1381,11 @@ const Sidebar = () => {
                         Mailer
                       </span>
                     </p>
-
-
-
-
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
                 <div className="settings-dropdown-links">
-                  <Link
+                  {/* <Link
                     label="fuelinfo"
                     to="/home/info/fuelinfo"
                     alt="/home/info/fuelinfo"
@@ -1355,8 +1396,8 @@ const Sidebar = () => {
                     isActive={isActive}
                     handleMenuItemClick={handleinfoClick}
                     icon={AiOutlineSetting}
-                  >
-                    <p className="dropdown-icon" onClick={closeMenuFunction}>
+                  > */}
+                    <p className="dropdown-icon" onClick={() => infoSubMenu('/home/info/fuelinfo')}>
                       <span>
                         <BsFillFuelPumpFill />
                       </span>
@@ -1365,9 +1406,7 @@ const Sidebar = () => {
                         Fuel Info
                       </span>
                     </p>
-
-
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
 
@@ -1474,7 +1513,7 @@ const Sidebar = () => {
           p: 4,
         }}>
           <div>
-            <img src={update} alt="update-image" style={{ width: '100%' }} />
+            <img src={update} alt="update-img" style={{ width: '100%' }} />
           </div>
           <Button onClick={handleClosemodal} variant="contained">
             Close

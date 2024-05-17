@@ -73,10 +73,10 @@ const CoveringSubmit = ({ stationName }) => {
     return (
         <div className="CoveringSubmit-form Scroll-Style-hide">
             <form >
-                <div className="detail-container-main">
-                    <div className="container-left">
+                <div className="detail-container-main detail-container-main-coveringbill">
+                    <div className="container-left-coveringbill">
                         <div className="copy-title-btn-CoveringSubmit">
-                            <div className="input-field" style={{flexWrap:'wrap'}}>
+                            <div className="input-field input-feild-coveringbill" style={{flexWrap:'wrap'}}>
                                 <div className="input">
                                     <div className="icone">
                                         <HailOutlinedIcon color="action" />

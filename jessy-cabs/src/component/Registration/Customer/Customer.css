@@ -184,7 +184,7 @@
   z-index: 1051;
   background-color: #ffffff;
   /* background-color: var(--glass); */
-  padding: 40px 10px 10px 10px;
+  padding: 40px 10px 10px 0px;
   margin: 0px;
 
 }
@@ -193,7 +193,7 @@
   content: "";
   position: absolute;
   bottom: -10px;
-  left: -10px;
+  left: 0px !important;
   width: 113px !important;
   border-radius: 20px;
   height: 3px;

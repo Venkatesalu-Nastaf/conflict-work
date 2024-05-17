@@ -27,7 +27,7 @@ import useGroupbilling from './useGroupbilling';
 import { RefPdfData } from './GroupBillingContext';
 import RefPdfParticularData from './RefPdfParticularData';
 import { PermissionContext } from '../../../context/permissionContext';
-
+import { FaCalendarAlt } from "react-icons/fa";
 const GroupBilling = ({ stationName }) => {
     const apiurl = APIURL;
 
@@ -139,10 +139,10 @@ const GroupBilling = ({ stationName }) => {
     return (
         <div className="GroupBilling-form Scroll-Style-hide">
             <form >
-                <div className="detail-container-main">
-                    <div className="container-left">
+                <div className="detail-container-main detail-container-main-groupbilling">
+                    <div className="container-left-groupbilling">
                         <div className="copy-title-btn-GroupBilling">
-                            <div className="input-field" >
+                            <div className="input-field inputfeild-group-billing"  style={{flexWrap:'wrap'}}>
                                 <div className="input" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
@@ -184,6 +184,9 @@ const GroupBilling = ({ stationName }) => {
                                     />
                                 </div>
                                 <div className="input">
+                                <div className="icone">
+                                        <FaCalendarAlt  color="action" />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
@@ -195,9 +198,13 @@ const GroupBilling = ({ stationName }) => {
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </div>
-                            </div>
-                            <div className="input-field">
+                            {/* </div>
+                            <div className="input-field"> */}
+                           
                                 <div className="input" >
+                                <div className="icone">
+                                        <FaCalendarAlt  color="action" />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
@@ -218,6 +225,10 @@ const GroupBilling = ({ stationName }) => {
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input" >
+
+                                <div className="icone">
+                                        <FaCalendarAlt  color="action" />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker

@@ -307,3 +307,14 @@
 .booking-form .input:hover{
   transform: translateY(-5px) scale(1.05);
 }
+
+.table-head-booking{
+  background-color: #76757d !important;
+  color: #fff;
+  font-size: larger;
+}
+@media screen and (max-width:1118px) {
+  .sub-section1 .first-division  , .second-division, .sub-section-second-division , .input-feild-vehicle-confirm{
+    justify-content: space-evenly !important;
+  }
+}

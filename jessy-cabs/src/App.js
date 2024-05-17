@@ -10,9 +10,7 @@ import Settings from "./component/Settings/Settings";
 import Billings from "./component/Billings/Billings";
 import Bookings from "./component/Bookings/Bookings";
 import Accounts from "./component/Accounts/Accounts";
-// import Income from "./component/Billings/Income/Income";
 import FuelInfo from "./component/Info/FuelInfo/FuelInfo";
-// import Expense from "./component/Billings/Expense/Expense";
 import RateTypes from "./component/Info/RateTypes/RateTypes";
 import Transfer from "./component/Billings/Transfer/Transfer";
 import MainDash from "./component/Dashboard/MainDash/MainDash";
@@ -28,7 +26,6 @@ import Permission from "./component/Settings/Permission/Permission";
 import UserSetting from "./component/UserSettings/UserInfo/UserInfo";
 import BookingMain from "./component/Bookings/BookingMain/BookingMain";
 import MainSetting from "./component/Settings/MainSetting/MainSetting";
-// import ProfiteLoss from "./component/Billings/ProfiteLoss/ProfiteLoss";
 import BillingMain from "./component/Billings/billingMain/billingMain";
 import CoveringBill from "./component/Billings/CoveringBill/CoveringBill";
 import UserCreation from "./component/Settings/UserCreation/UserCreation";
@@ -56,13 +53,13 @@ function App() {
   }, []);
 
 
+  // Permission ----------------------------------------
 
   const { permissions } = useContext(PermissionContext)
 
   const BOOKING = permissions[0]?.read || permissions[1]?.read;;
   const TripStatus = permissions[2]?.read;
   const TriSheet = permissions[3]?.read;
-
 
   const BILLING = permissions[4]?.read || permissions[5]?.read;;
   const Billing_Transfer = permissions[6]?.read;
@@ -72,31 +69,39 @@ function App() {
   const R_Supllier = permissions[10]?.read;
   const R_Employee = permissions[11]?.read;
 
-
   const SETTING = permissions[12]?.read || permissions[13]?.read;
   const Station_Creation = permissions[14]?.read;
   const Main_Setting = permissions[15]?.read;
-
 
   const INFO = permissions[16]?.read || permissions[17]?.read;
   const Mailers = permissions[18]?.read;
   const INFO_FuelInfo = permissions[19]?.read;
   const Dashbord_read = permissions[20]?.read;
 
-  // fetch station name 
-  const [stationName, setStationName] = useState([]);
 
+  //--------   fetch station name ------------------------------------------------------------
+
+  const loginUserName = localStorage.getItem("username")
+
+  const [stationName, setStationName] = useState([]);
 
   useEffect(() => {
     const fetchSattionName = async () => {
+      try {
 
-      const response = await axios.get(`${apiUrl}/getStation-name`)
-      const stationName = response.data;
-      setStationName(stationName);
+        const response = await axios.get(`${apiUrl}/getStation-name`, { params: { username: loginUserName } })
+        const station = response.data;
+        setStationName(station);
+
+      } catch (error) {
+        console.log("error occur ", error);
+      }
     }
-
     fetchSattionName();
-  }, [apiUrl])
+  }, [apiUrl, loginUserName])
+
+
+  //---------------------------------------------------------------------
 
 
 

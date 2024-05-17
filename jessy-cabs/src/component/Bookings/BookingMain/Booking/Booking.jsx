@@ -483,12 +483,12 @@ const Booking = ({ stationName }) => {
                 >
                   <table>
                     <thead id="update-header">
-                      <tr>
-                        <th>Organization_Name</th>
-                        <th>Organizer</th>
-                        <th>Email_Id</th>
-                        <th>Address</th>
-                        <th>Phone_No</th>
+                      <tr >
+                        <th className="table-head-booking" style={{borderTopLeftRadius:'10px'}}>Organization_Name</th>
+                        <th className="table-head-booking">Organizer</th>
+                        <th className="table-head-booking">Email_Id</th>
+                        <th className="table-head-booking">Address</th>
+                        <th className="table-head-booking" style={{borderTopRightRadius:'10px'}}>Phone_No</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1458,11 +1458,11 @@ const Booking = ({ stationName }) => {
                     <table>
                       <thead id="update-header">
                         <tr>
-                          <th>Driver_NAME</th>
-                          <th>VEHICLE_Name</th>
-                          <th>VEHICLE NO</th>
-                          <th>HIRE TYPES</th>
-                          <th>ACTIVE</th>
+                          <th className="table-head-booking" style={{borderTopLeftRadius:'10px'}}>Driver_NAME</th>
+                          <th className="table-head-booking">VEHICLE_Name</th>
+                          <th className="table-head-booking">VEHICLE NO</th>
+                          <th className="table-head-booking">HIRE TYPES</th>
+                          <th className="table-head-booking" style={{borderTopRightRadius:'10px'}}>ACTIVE</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -2650,7 +2650,7 @@ const Booking = ({ stationName }) => {
 
 
         <div className="vehicle-confirm" style={{ marginTop: '25px' }}>
-          <div className="input-field" style={{ flexWrap: 'wrap' }}>
+          <div className="input-field input-feild-vehicle-confirm" style={{ flexWrap: 'wrap' }}>
 
             <div className="input">
               <div className="icone">

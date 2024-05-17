@@ -106,8 +106,8 @@ const TripStatus = ({ stationName }) => {
   return (
     <div className="TripStatus-form Scroll-Style-hide">
       <form action="">
-        <div className="detail-container-main">
-          <div className="container-left">
+        <div className="detail-container-main detail-container-main-tripstatus">
+          <div className="container-left-tripstatus">
             <div className="copy-title-btn-TripStatus">
               <div className="input-field TripStatus-input-feilds">
                 <div className="input">

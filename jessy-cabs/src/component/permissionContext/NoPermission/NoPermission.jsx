@@ -1,10 +1,10 @@
 import React from 'react';
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import noPermission from "../../../assets/img/no-permission-img.png";
 import "./NoPermission.css";
 
 const NoPermission = () => {
-    const location = useLocation();
+    // const location = useLocation();
 
     // Get the pathname part of the current URL
     const pathnames = window.location.pathname;

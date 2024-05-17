@@ -49,13 +49,43 @@ router.get('/stationcreation', (req, res) => {
 });
 
 
+// Fetch all station names
 router.get('/getStation-name', (req, res) => {
-  db.query('select Stationname from stationcreation', (err, results) => {
+  const { username } = req.query;
+
+  db.query("SELECT Stationname FROM usercreation WHERE username=?", [username], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: "Faild to fetch data" });
+      return res.status(500).json({ error: "Failed to fetch data" });
     }
-    return res.status(200).json(results);
-  })
-})
+
+    if (result && result.length > 0) {
+
+      const station = result[0]?.Stationname;
+
+      if (station?.toLowerCase() === "all") {
+
+        db.query('SELECT Stationname FROM stationcreation', (err, results) => {
+          if (err) {
+            return res.status(500).json({ error: "Failed to fetch data" });
+          }
+
+          return res.status(200).json(results);
+        });
+      }
+      else {
+        return res.status(200).json(result);
+      }
+    }
+    else {
+      return res.status(200).json([]);
+    }
+  });
+});
+
+
+
+
+
+
 
 module.exports = router;

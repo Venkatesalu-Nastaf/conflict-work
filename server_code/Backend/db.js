@@ -13,7 +13,7 @@ db.connect((err) => {
     console.error('Error connecting to MySQL:', err);
     return;
   }
-  console.log('Connected to MySQL database');
+  console.log('Connected to BlueHost database');
 });
 
 module.exports = db;
@@ -36,7 +36,7 @@ module.exports = db;
 //     console.error('Error connecting to MySQL:', err);
 //     return;
 //   }
-//   console.log('Connected to MySQL database');
+//   console.log('Connected Hostinger  database');
 // });
 
 // module.exports = db;
@@ -59,7 +59,7 @@ module.exports = db;
 //     console.error('Error connecting to MySQL:', err);
 //     return;
 //   }
-//   console.log('Connected to MySQL database');
+//   console.log('Connected Local MySQL database');
 // });
 
 // module.exports = db;

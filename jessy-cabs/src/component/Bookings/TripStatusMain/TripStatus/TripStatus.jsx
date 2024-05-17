@@ -53,6 +53,8 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 const TripStatus = ({ stationName }) => {
 
+  // console.log("1111---", stationName, typeof (stationName));
+
   const {
     statusvalue, handlestatusChange,
     fromDate,
@@ -197,7 +199,7 @@ const TripStatus = ({ stationName }) => {
                     freeSolo
                     size="small"
                     value={department}
-                    options={stationName.map((option) => ({
+                    options={stationName?.map((option) => ({
                       label: option.Stationname,
                     }))}
                     onChange={(event, value) => handleInputChange(event, value)}
@@ -297,7 +299,7 @@ const TripStatus = ({ stationName }) => {
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={reversedRows}
-              columns={ columnshowall?columns:filteredColumns}
+              columns={columnshowall ? columns : filteredColumns}
               onRowClick={(event) => handleButtonClick(event.row)}
               pageSize={5}
             />

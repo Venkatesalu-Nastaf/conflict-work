@@ -700,7 +700,23 @@ const DriverCreation = ({ stationName }) => {
                                 </div>
                             </div>
                         </div>
+                        <div className="Download-btn">
+                            <PopupState variant="popover" popupId="demo-popup-menu">
+                                {(popupState) => (
+                                    <React.Fragment>
+                                        <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
+                                            Download
+                                        </Button>
+                                        <Menu {...bindMenu(popupState)}>
+                                            <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
+                                            <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
+                                        </Menu>
+                                    </React.Fragment>
+                                )}
+                            </PopupState>
+                        </div>
                     </div>
+                    
                     <div className='alert-popup-main'>
                         {error &&
                             <div className='alert-popup Error' >
@@ -738,7 +754,7 @@ const DriverCreation = ({ stationName }) => {
                         </div>
                     } */}
 
-
+                        
 
                     </div>
                     <Box sx={{ position: "relative", mt: 3, height: 320 }}>
@@ -805,21 +821,7 @@ const DriverCreation = ({ stationName }) => {
 
                         </StyledSpeedDial>
                     </Box>
-                    <div className="Download-btn">
-                        <PopupState variant="popover" popupId="demo-popup-menu">
-                            {(popupState) => (
-                                <React.Fragment>
-                                    <Button variant="contained" endIcon={<ExpandCircleDownOutlinedIcon />} {...bindTrigger(popupState)}>
-                                        Download
-                                    </Button>
-                                    <Menu {...bindMenu(popupState)}>
-                                        <MenuItem onClick={handleExcelDownload}>Excel</MenuItem>
-                                        <MenuItem onClick={handlePdfDownload}>PDF</MenuItem>
-                                    </Menu>
-                                </React.Fragment>
-                            )}
-                        </PopupState>
-                    </div>
+                    
 
 
                     <div className="DriverCreation-table-container">

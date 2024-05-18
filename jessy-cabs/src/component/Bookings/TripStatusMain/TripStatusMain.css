@@ -144,7 +144,7 @@ align-items: center;
     }
    
     .TripStatus-input-feilds .input{
-      width: 200px !important;
+      width: 255px !important;
       justify-content: space-around;
       /* gap: 2px; */
     }

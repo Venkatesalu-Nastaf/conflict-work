@@ -223,7 +223,7 @@
 
 .tripsheet-table1 {
   width: 500px;
-  padding: 10px;
+  /* padding: 10px; */
   background-color: #fff;
   border-radius: 10px;
   border: 2px solid #ccc;
@@ -269,7 +269,7 @@
 
 @media screen and (min-width: 320px) and (max-width: 768.99px) {
   .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
-    width: 76vw;
+    width: 71vw;
     justify-content: center;
   }
 }
@@ -357,5 +357,18 @@
 @media screen and (max-width: 600px) {
   .remark-textfield{
     width: 400px !important;
+  }
+}
+
+/* .table-head-booking{
+  background-color: #76757d !important;
+  color: #fff !important;
+  font-size: larger;
+} */
+
+
+@media screen and (max-width:1080px) {
+  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+    justify-content: center;
   }
 }

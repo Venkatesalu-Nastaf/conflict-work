@@ -25,7 +25,7 @@ import { PermissionContext } from '../../../context/permissionContext';
 import { FaCalendar } from "react-icons/fa";
 
 
-const CoveringSubmit = ({ stationName }) => {
+const CoveringSubmit = ({ stationName, organizationNames }) => {
 
     const {
         rows,
@@ -40,7 +40,6 @@ const CoveringSubmit = ({ stationName }) => {
         hidePopup,
         customer,
         tripData,
-        bankOptions,
         setCustomer,
         selectedCustomerDatas,
         fromDate,
@@ -76,7 +75,7 @@ const CoveringSubmit = ({ stationName }) => {
                 <div className="detail-container-main detail-container-main-coveringbill">
                     <div className="container-left-coveringbill">
                         <div className="copy-title-btn-CoveringSubmit">
-                            <div className="input-field input-feild-coveringbill" style={{flexWrap:'wrap'}}>
+                            <div className="input-field input-feild-coveringbill" style={{ flexWrap: 'wrap' }}>
                                 <div className="input">
                                     <div className="icone">
                                         <HailOutlinedIcon color="action" />
@@ -87,7 +86,7 @@ const CoveringSubmit = ({ stationName }) => {
                                         freeSolo
                                         size="small"
                                         value={customer || (tripData.length > 0 ? tripData[0].customer : '') || ''}
-                                        options={bankOptions}
+                                        options={organizationNames}
                                         onChange={(event, value) => setCustomer(value)}
                                         renderInput={(params) => {
                                             return (
@@ -122,7 +121,7 @@ const CoveringSubmit = ({ stationName }) => {
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input">
-                                <div className="icone">
+                                    <div className="icone">
                                         <FaCalendar color="action" />
                                     </div>
 
@@ -145,7 +144,7 @@ const CoveringSubmit = ({ stationName }) => {
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </div>
-                            {/* </div>
+                                {/* </div>
                             <div className="input-field" > */}
                                 <div className="input" >
                                     <div className="icone">
@@ -203,27 +202,27 @@ const CoveringSubmit = ({ stationName }) => {
                 </div>
             </form>
             <div className='alert-popup-main'>
-            {error &&
-                <div className='alert-popup Error' >
-                    <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{errorMessage}</p>
-                </div>
-            }
-            {success &&
-                <div className='alert-popup Success'>
-                    <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{successMessage}</p>
-                </div>
-            }
-            {warning &&
-                <div className='alert-popup Warning' >
-                    <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{warningMessage}</p>
-                </div>
-            }
+                {error &&
+                    <div className='alert-popup Error' >
+                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{errorMessage}</p>
+                    </div>
+                }
+                {success &&
+                    <div className='alert-popup Success'>
+                        <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{successMessage}</p>
+                    </div>
+                }
+                {warning &&
+                    <div className='alert-popup Warning' >
+                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{warningMessage}</p>
+                    </div>
+                }
             </div>
         </div>
     )

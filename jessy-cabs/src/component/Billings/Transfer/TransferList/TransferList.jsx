@@ -19,12 +19,15 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferlist from './useTransferlist';
-import { useData } from '../../../Dashboard/Maindashboard/DataContext';
 import { PermissionContext } from '../../../context/permissionContext';
+import { FaCalendar } from "react-icons/fa";
+
+
+
 
 // Assuming you have unique IDs in your data, you can set the `id` field dynamically
 
-const TransferList = ({ stationName }) => {
+const TransferList = ({ stationName, organizationNames }) => {
 
     const {
         rows,
@@ -38,7 +41,6 @@ const TransferList = ({ stationName }) => {
         handleClick,
         hidePopup,
         customer,
-        // bankOptions,
         setCustomer,
         fromDate,
         setFromDate,
@@ -55,7 +57,7 @@ const TransferList = ({ stationName }) => {
         handleButtonClickTripsheet,
 
     } = useTransferlist();
-    const { organizationName } = useData()
+
     useEffect(() => {
         if (actionName === 'List') {
             handleClick(null, 'List');
@@ -73,10 +75,10 @@ const TransferList = ({ stationName }) => {
         <div className="TransferList-form Scroll-Style-hide">
             <form >
                 <div className="detail-container-main">
-                    <div className="container-left">
+                    <div className="container-left-transferlist">
                         <div className="copy-title-btn-TransferList">
-                            <div className="input-field" style={{ justifyContent: 'center' }}>
-                                <div className="input" style={{ width: "230px" }}>
+                            <div className="input-field input-field-transferlist" style={{ flexWrap: 'wrap' }} >
+                                <div className="input input-transferlist" style={{ width: "230px" }}>
                                     <div className="icone">
                                         <HailOutlinedIcon color="action" />
                                     </div>
@@ -86,7 +88,7 @@ const TransferList = ({ stationName }) => {
                                         freeSolo
                                         size="small"
                                         value={customer}
-                                        options={organizationName}
+                                        options={organizationNames}
                                         onChange={(event, value) => setCustomer(value)}
                                         renderInput={(params) => {
                                             return (
@@ -95,23 +97,48 @@ const TransferList = ({ stationName }) => {
                                         }}
                                     />
                                 </div>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={["DatePicker", "DatePicker"]}>
-                                        <DatePicker
-                                            label="From Date"
-                                            format="DD/MM/YYYY"
-                                            value={fromDate}
-                                            onChange={(date) => setFromDate(date)}
-                                        />
-                                        <DatePicker
-                                            label="To Date"
-                                            format="DD/MM/YYYY"
-                                            value={toDate}
-                                            onChange={(date) => setToDate(date)}
-                                        />
-                                    </DemoContainer>
-                                </LocalizationProvider>
-                                <div className="input">
+
+                                <div className="input input-transferlist">
+                                    <div className="icone">
+                                        <FaCalendar color="action" />
+                                    </div>
+
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                            <DatePicker
+                                                label="From Date"
+                                                format="DD/MM/YYYY"
+                                                value={fromDate}
+                                                onChange={(date) => setFromDate(date)}
+                                            />
+
+                                        </DemoContainer>
+                                    </LocalizationProvider>
+
+                                </div>
+
+
+                                <div className='input input-transferlist'>
+
+                                    <div className="icone">
+                                        <FaCalendar color="action" />
+                                    </div>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoContainer components={["DatePicker", "DatePicker"]}>
+                                            <DatePicker
+                                                label="To Date"
+                                                format="DD/MM/YYYY"
+                                                value={toDate}
+                                                onChange={(date) => setToDate(date)}
+                                            />
+                                        </DemoContainer>
+                                    </LocalizationProvider>
+
+                                </div>
+
+
+
+                                <div className="input input-transferlist">
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faNewspaper} size="xl" />
                                     </div>
@@ -122,9 +149,9 @@ const TransferList = ({ stationName }) => {
                                         <option value="notbilled">Not Billed</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div className="input-field">
-                                <div className="input" >
+                                {/* </div>
+                            <div className="input-field"> */}
+                                <div className="input input-transferlist" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />
                                     </div>
@@ -182,27 +209,27 @@ const TransferList = ({ stationName }) => {
                 </div>
             </form>
             <div className='alert-popup-main'>
-            {error &&
-                <div className='alert-popup Error'>
-                    <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{errorMessage}</p>
-                </div>
-            }
-            {success &&
-                <div className='alert-popup Success'>
-                    <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{successMessage}</p>
-                </div>
-            }
-            {warning &&
-                <div className='alert-popup Warning' >
-                    <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                    <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                    <p>{warningMessage}</p>
-                </div>
-            }
+                {error &&
+                    <div className='alert-popup Error'>
+                        <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{errorMessage}</p>
+                    </div>
+                }
+                {success &&
+                    <div className='alert-popup Success'>
+                        <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{successMessage}</p>
+                    </div>
+                }
+                {warning &&
+                    <div className='alert-popup Warning' >
+                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                        <p>{warningMessage}</p>
+                    </div>
+                }
             </div>
         </div>
     )

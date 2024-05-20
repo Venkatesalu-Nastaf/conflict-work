@@ -55,7 +55,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     },
 }));
 
-const RateType = ({ stationName }) => {
+const RateType = ({ stationName, organizationNames }) => {
 
     const {
         selectedCustomerData,
@@ -83,7 +83,7 @@ const RateType = ({ stationName }) => {
         isEditMode,
         handleEdit,
         handleDateChange,
-        organizationNames,
+
 
     } = useRatype();
 
@@ -113,7 +113,7 @@ const RateType = ({ stationName }) => {
                     <div className="container-left">
                         <div className="copy-title-btn-RateType">
                             <div className="input-field rate-type-inputs">
-                                <div className="input" style={{paddingRight: '15px'}}>
+                                <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <BadgeIcon color="action" />
                                     </div>
@@ -125,10 +125,10 @@ const RateType = ({ stationName }) => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.driverid || book.driverid}
                                         onChange={handleChange}
-                                        style={{width: '100%'}}
+                                        style={{ width: '100%' }}
                                     />
                                 </div>
-                                <div className="input" style={{paddingRight: '15px'}}>
+                                <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
@@ -152,19 +152,11 @@ const RateType = ({ stationName }) => {
                                         }
                                     />
                                 </div>
-                                <div className="input" style={{paddingRight: '15px'}}>
+                                <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
-                                    {/* <TextField
-                                        size="small"
-                                        id="id"
-                                        label="Organization Name"
-                                        name="ratename"
-                                        autoComplete="new-password"
-                                        value={selectedCustomerData?.ratename || book.ratename}
-                                        onChange={handleChange}
-                                    /> */}
+
                                     <Autocomplete
                                         fullWidth
                                         size="small"
@@ -172,11 +164,7 @@ const RateType = ({ stationName }) => {
                                         freeSolo
                                         sx={{ width: "100%" }}
                                         onChange={(event, value) => handleAutocompleteChange(event, value, "ratename")}
-                                        // value={drivername.find((option) => option.optionvalue)?.label || selectedCustomerData?.driverName || ''}
                                         value={selectedCustomerData?.ratename || book.selectedCustomerData || ""}
-                                        // options={PriceTag.map((option) => ({
-                                        //   label: option.option,
-                                        // }))}
                                         options={organizationNames?.map((option) => ({ label: option }))} // Use organizationName here
                                         getOptionLabel={(option) => option.label || selectedCustomerData?.ratename || ''}
                                         renderInput={(params) => {
@@ -187,9 +175,7 @@ const RateType = ({ stationName }) => {
                                         }
                                     />
                                 </div>
-                                {/* </div>
-                            <div className="input-field"> */}
-                                <div className="input" style={{paddingRight: '15px'}}>
+                                <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className="icone">
                                         <FactCheckIcon color="action" />
                                     </div>
@@ -201,7 +187,7 @@ const RateType = ({ stationName }) => {
                                         autoComplete="new-password"
                                         value={selectedCustomerData?.validity || book.validity}
                                         onChange={handleChange}
-                                        style={{width: '100%'}}
+                                        style={{ width: '100%' }}
                                     />
                                 </div>
                                 <div className="input radio" style={{ width: "120px", paddingLeft: '10px' }}>
@@ -232,7 +218,7 @@ const RateType = ({ stationName }) => {
                                 </div>
 
 
-                                <div className="input" style={{paddingRight: '15px'}}>
+                                <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className='icone'>
                                         <CalendarMonthIcon />
                                     </div>
@@ -260,7 +246,7 @@ const RateType = ({ stationName }) => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input" style={{paddingRight: '15px'}}>
+                                <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className='icone'>
                                         <CalendarMonthIcon />
                                     </div>

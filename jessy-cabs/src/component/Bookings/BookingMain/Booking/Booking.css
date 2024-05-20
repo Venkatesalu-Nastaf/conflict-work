@@ -307,3 +307,57 @@
 .booking-form .input:hover{
   transform: translateY(-5px) scale(1.05);
 }
+
+.table-head-booking{
+  background-color: #76757d !important;
+  color: #fff;
+  font-size: larger;
+}
+@media screen and (max-width:1118px) {
+  .sub-section1 .first-division  , .second-division, .sub-section-second-division , .input-feild-vehicle-confirm{
+    justify-content: space-evenly !important;
+  }
+}
+
+
+@media screen and (min-width:1244px) and (max-width:1300px) {
+
+  .sub-section2 {
+    width: 42% !important;
+}
+}
+
+@media screen and (min-width:1301px) and (max-width:1350px) {
+
+  .sub-section2 {
+    width: 44% !important;
+}
+}
+
+@media screen and (min-width:1351px) and (max-width:1400px) {
+
+  .sub-section2 {
+    width: 46% !important;
+}
+}
+
+@media screen and (min-width:1401px) and (max-width:1450px) {
+
+  .sub-section2 {
+    width: 50% !important;
+}
+}
+
+@media screen and (min-width:1451px) and (max-width:1500px) {
+
+  .sub-section2 {
+    width: 60% !important;
+}
+}
+
+@media screen  and (min-width:1501px) {
+
+  .sub-section2 {
+    width: 70% !important;
+}
+}

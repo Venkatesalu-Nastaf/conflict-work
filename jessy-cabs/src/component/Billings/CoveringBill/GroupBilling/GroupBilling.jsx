@@ -27,8 +27,11 @@ import useGroupbilling from './useGroupbilling';
 import { RefPdfData } from './GroupBillingContext';
 import RefPdfParticularData from './RefPdfParticularData';
 import { PermissionContext } from '../../../context/permissionContext';
+import { FaCalendarAlt } from "react-icons/fa";
 
-const GroupBilling = ({ stationName }) => {
+
+
+const GroupBilling = ({ stationName, organizationNames }) => {
     const apiurl = APIURL;
 
     const {
@@ -48,7 +51,6 @@ const GroupBilling = ({ stationName }) => {
         selectedCustomerDatas,
         customer,
         tripData,
-        bankOptions,
         setCustomer,
         Billingdate,
         fromDate,
@@ -139,10 +141,10 @@ const GroupBilling = ({ stationName }) => {
     return (
         <div className="GroupBilling-form Scroll-Style-hide">
             <form >
-                <div className="detail-container-main">
-                    <div className="container-left">
+                <div className="detail-container-main detail-container-main-groupbilling">
+                    <div className="container-left-groupbilling">
                         <div className="copy-title-btn-GroupBilling">
-                            <div className="input-field" >
+                            <div className="input-field inputfeild-group-billing" style={{ flexWrap: 'wrap' }}>
                                 <div className="input" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
@@ -174,7 +176,7 @@ const GroupBilling = ({ stationName }) => {
                                         freeSolo
                                         size="small"
                                         value={customer || selectedCustomerDatas.customer || (tripData.length > 0 ? tripData[0].customer : '') || ''}
-                                        options={bankOptions}
+                                        options={organizationNames}
                                         onChange={(event, value) => setCustomer(value)}
                                         renderInput={(params) => {
                                             return (
@@ -184,6 +186,9 @@ const GroupBilling = ({ stationName }) => {
                                     />
                                 </div>
                                 <div className="input">
+                                    <div className="icone">
+                                        <FaCalendarAlt color="action" />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
@@ -195,9 +200,13 @@ const GroupBilling = ({ stationName }) => {
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </div>
-                            </div>
-                            <div className="input-field">
+                                {/* </div>
+                            <div className="input-field"> */}
+
                                 <div className="input" >
+                                    <div className="icone">
+                                        <FaCalendarAlt color="action" />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
@@ -218,6 +227,10 @@ const GroupBilling = ({ stationName }) => {
                                     </LocalizationProvider>
                                 </div>
                                 <div className="input" >
+
+                                    <div className="icone">
+                                        <FaCalendarAlt color="action" />
+                                    </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
@@ -312,27 +325,27 @@ const GroupBilling = ({ stationName }) => {
                         />
                     </div>
                     <div className='alert-popup-main'>
-                    {error &&
-                        <div className='alert-popup Error' >
-                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                            <p>{errorMessage}</p>
-                        </div>
-                    }
-                    {success &&
-                        <div className='alert-popup Success' >
-                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                            <p>{successMessage}</p>
-                        </div>
-                    }
-                    {warning &&
-                        <div className='alert-popup Warning' >
-                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                            <p>{warningMessage}</p>
-                        </div>
-                    }
+                        {error &&
+                            <div className='alert-popup Error' >
+                                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <p>{errorMessage}</p>
+                            </div>
+                        }
+                        {success &&
+                            <div className='alert-popup Success' >
+                                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <p>{successMessage}</p>
+                            </div>
+                        }
+                        {warning &&
+                            <div className='alert-popup Warning' >
+                                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <p>{warningMessage}</p>
+                            </div>
+                        }
                     </div>
                 </div>
                 <Modal

@@ -438,12 +438,12 @@ const Vehicaleinfo = ({ stationName }) => {
                       <table>
                         <thead id="update-header">
                           <tr>
-                            <th>ID</th>
-                            <th>Vehicle_Name</th>
-                            <th>Owner</th>
-                            <th>Vehicle_Type</th>
-                            <th>status</th>
-                            <th>Group</th>
+                            <th className="table-head-booking" style={{borderTopLeftRadius:'10px'}}>ID</th>
+                            <th className="table-head-booking">Vehicle_Name</th>
+                            <th className="table-head-booking">Owner</th>
+                            <th className="table-head-booking">Vehicle_Type</th>
+                            <th className="table-head-booking">status</th>
+                            <th className="table-head-booking" style={{borderTopRightRadius:'10px'}}>Group</th>
                           </tr>
                         </thead>
                         <tbody>

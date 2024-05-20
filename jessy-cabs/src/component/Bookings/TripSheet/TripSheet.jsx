@@ -13,7 +13,7 @@ import {
   GroupTypes
 } from "./TripSheetdata";
 import dayjs from "dayjs";
-import { Table } from "@mui/joy";
+// import { Table } from "@mui/joy";
 import Tabs from "@mui/joy/Tabs";
 import Box from "@mui/material/Box";
 import TabList from "@mui/joy/TabList";
@@ -58,7 +58,7 @@ import DataUsageIcon from "@mui/icons-material/DataUsage";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+// import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import EngineeringIcon from "@mui/icons-material/Engineering";
@@ -66,7 +66,7 @@ import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import LocationCityIcon from "@mui/icons-material/LocationCity";
+// import LocationCityIcon from "@mui/icons-material/LocationCity";
 import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
@@ -628,7 +628,7 @@ const TripSheet = ({ stationName }) => {
                 </div>
 
                 <div style={{margin: '0px 10px'}}>
-                  <div className="Scroll-Style tripsheet-table1">
+                  {/* <div className="Scroll-Style tripsheet-table1">
                     <Table hoverRow borderAxis="y">
                       <thead>
                         <tr>
@@ -659,7 +659,38 @@ const TripSheet = ({ stationName }) => {
                         )}
                       </tbody>
                     </Table>
-                  </div>
+                  </div> */}
+
+                  <div className="Scroll-Style tripsheet-table1 ">
+                      <thead>
+                        <tr>
+                          <th  className="table-head-booking" style={{borderTopLeftRadius:'10px'}}>Vehicle_Name</th>
+                          <th className="table-head-booking">Vehicle_Type</th>
+                          <th className="table-head-booking">Driver_name</th>
+                          <th className="table-head-booking">Driver_phone</th>
+                          <th className="table-head-booking">Supplier</th>
+                          <th  className="table-head-booking" style={{borderTopRightRadius:'10px'}}>Online_Access</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rows.length === 0 ? (
+                          <tr>
+                            <td colSpan={7}>No data available.</td>
+                          </tr>
+                        ) : (
+                          rows.map((row) => (
+                            <tr key={row.id} onClick={() => handleRowClick(row)}>
+                              <td>{row.vehRegNo}</td>
+                              <td>{row.vehType}</td>
+                              <td>{row.driverName}</td>
+                              <td>{row.mobileNo}</td>
+                              <td>{row.supplier}</td>
+                              <td>{row.onlineAccess}</td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                  </div>      
                 </div>
 
               </div>

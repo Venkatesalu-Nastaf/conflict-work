@@ -62,7 +62,7 @@ const useCustomer = () => {
             }
         };
         organizationNames();
-    }, [rows, apiUrl, setOrganizationName])
+    }, [apiUrl, setOrganizationName])
 
 
     const handleButtonClick = () => {
@@ -79,13 +79,13 @@ const useCustomer = () => {
     //     saveAs(blob, "customer_details.csv");
     // };
 
-  
+
 
 
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
-        console.log(rows,"exceldata")
+        console.log(rows, "exceldata")
 
         try {
 
@@ -93,10 +93,10 @@ const useCustomer = () => {
             // creating one worksheet in workbook
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
-    //         console.log(headers,"hed")
+            //         console.log(headers,"hed")
             const columns = headers.map(key => ({ key, header: key }));
-    //         worksheet.columns = columnsexcel
-          
+            //         worksheet.columns = columnsexcel
+
             worksheet.columns = columns;
 
 
@@ -180,7 +180,7 @@ const useCustomer = () => {
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         pdf.text("Customer Details", 10, 10);
-         const header = Object.keys(rows[0]);
+        const header = Object.keys(rows[0]);
 
         // Extracting body
         const body = rows.map(row => Object.values(row));
@@ -209,7 +209,7 @@ const useCustomer = () => {
         else if (header.length >= 41 && header.length <= 46) {
             fontdata = 2;
         }
-        
+
         pdf.autoTable({
             head: [header],
             body: body,
@@ -232,7 +232,7 @@ const useCustomer = () => {
             bodyStyles: {
                 // fontSize:4,
                 // fontSize: fontdata-1
-                fontSize: fontdata-1,
+                fontSize: fontdata - 1,
                 valign: 'middle',
                 //  cellWidth: 'wrap',
                 cellWidth: 'auto'
@@ -241,7 +241,7 @@ const useCustomer = () => {
             },
             columnWidth: 'auto'
 
- });
+        });
         const scaleFactor = pdf.internal.pageSize.getWidth() / pdf.internal.scaleFactor * 1.5;
         console.log(scaleFactor, "SCALE")
 

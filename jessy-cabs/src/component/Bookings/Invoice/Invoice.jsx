@@ -7,6 +7,7 @@ import generatePDF from 'react-to-pdf';
 const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData, totalhour }) => {
   const targetRef = useRef();
 
+  // console.log("selectedImage", selectedImage, organizationdata)
   return (
     <>
 
@@ -15,15 +16,17 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
 
           <div className='invoice-container-header'>
             <div className="logo-image-invoice">
-              <img src={selectedImage[0]} alt={"Logo"} />
+              {selectedImage && <img src={selectedImage[0]} alt={"Logo"} />}
+              {/* {console.log("selected image ", selectedImage)} */}
+
             </div>
             <div className="invoice-address">
               <address >
-                <p className='invoice-address-detials'>{organizationdata.addressLine1}
-                  {organizationdata.addressLine2}
-                  {organizationdata.city}<br />
-                  {organizationdata.contactEmail}</p>
-                <p className='invoice-contact-details'>Contact:-{organizationdata.contactPhoneNumber}</p>
+                <p className='invoice-address-detials'>{organizationdata?.addressLine1}
+                  {organizationdata?.addressLine2}
+                  {organizationdata?.city}<br />
+                  {organizationdata?.contactEmail}</p>
+                <p className='invoice-contact-details'>Contact:-{organizationdata?.contactPhoneNumber}</p>
               </address>
             </div>
           </div>
@@ -59,10 +62,7 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                   <th id='table-header'><span >Reporting @</span></th>
                   <td id='table-data'><span>{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}</span></td>
                 </tr>
-                {/* <tr>
-                <th id='table-header'><span>Remarks:</span></th>
-                <td id='table-data'><span>{tripSheetData.remark || selectedCustomerData.remark || selectedCustomerDatas.remark || book.remark}</span></td>
-              </tr> */}
+
 
 
               </table>
@@ -147,11 +147,6 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                 </div>
 
 
-                {/* <div className="guest-sign">
-                <img className='dialogboximg' src={signimageUrl} alt='Signature' />
-                <p>Guest Signature</p>
-              </div> */}
-
                 <div className="guest-sign">
                   {signimageUrl !== "" ?
                     <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}
@@ -171,14 +166,14 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
           <div className="tripsheet-RouteSummary">
             <h2>Route Summary</h2>
             <ol type="1">
-              {routeData.length > 0 && routeData.map((data, index) => (
+              {routeData.length > 0 && routeData?.map((data, index) => (
                 <li><p key={index}><strong>{data.trip_type}</strong>: {data.place_name}</p></li>
               ))}
             </ol>
           </div>
           <div className='attached-toll'>
             <ol type="1">
-              {Array.isArray(attachedImage) && attachedImage.map((image, index) => (
+              {Array.isArray(attachedImage) && attachedImage?.map((image, index) => (
                 <img className='attached-image' key={index} src={image} alt={`image_${index}`} />
                 // <embed key={index} style={{ width: "100%", height: "350px", }} type="application/pdf" src={image} alt={`image_${index}`} />
               ))}

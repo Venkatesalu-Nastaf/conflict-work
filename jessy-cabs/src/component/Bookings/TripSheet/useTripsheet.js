@@ -140,6 +140,8 @@ const useTripsheet = () => {
 
     const [mapimageUrls, setMapImageUrls] = useState([]);
 
+
+    // map1
     const handleTripmapClick = async () => {
         try {
             const tripid = selectedRow?.tripid || book?.tripid || selectedCustomerData?.tripid || formData?.tripid;
@@ -153,6 +155,7 @@ const useTripsheet = () => {
             const responseData = await response.blob();
             // Assuming you want to display the image directly
             const imageUrl = URL.createObjectURL(responseData);
+            console.log("url", imageUrl)
             setMapImageUrls(imageUrl);
             setMapimgPopupOpen(true);
         } catch {
@@ -637,6 +640,7 @@ const useTripsheet = () => {
             localStorage.setItem('selectedTripid', tripid);
             setTripiddata(tripid)
             setPopupOpen(true);
+
         }
     };
 
@@ -1728,6 +1732,7 @@ const useTripsheet = () => {
                         const data = await response.json();
                         const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/public/org_logo/${path}`);
                         localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
+                        console.log("log", attachedImageUrls)
                         setSelectedImage(attachedImageUrls);
                     } else {
                         const timer = setTimeout(fetchData, 2000);

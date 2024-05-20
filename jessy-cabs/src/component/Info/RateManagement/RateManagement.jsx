@@ -8,7 +8,7 @@ import DriverBataRate from './DriverBataRate/DriverBataRate';
 import PackageRateEntery from './PackageRateEntery/PackageRateEntery';
 import './RateManagement.css'
 
-const RateManagement = () => {
+const RateManagement = ({ stationName, organizationNames }) => {
 
   const [value, setValue] = React.useState("packagerateentery");
 
@@ -27,7 +27,7 @@ const RateManagement = () => {
                 <Tab label="Driver Bata Rate" value="driverbatarate" />
               </TabList>
             </Box>
-            <TabPanel value="packagerateentery"><PackageRateEntery /></TabPanel>
+            <TabPanel value="packagerateentery"><PackageRateEntery organizationNames={organizationNames} /></TabPanel>
             <TabPanel value="driverbatarate"><DriverBataRate /></TabPanel>
           </TabContext>
         </Box>

@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import ReactDOMServer from 'react-dom/server';
 import Coverpdf from './coverpdf/Coverpdf';
 import { saveAs } from 'file-saver';
-import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
+// import { Organization } from '../../billingMain/PaymentDetail/PaymentDetailData';
 import { APIURL } from "../../../url";
 import { useLocation } from 'react-router-dom';
 import { ReferenceNo } from './RefenceNo';
@@ -24,7 +24,7 @@ const useGroupbilling = () => {
     const [invoiceno, setInvoiceno] = useState("");
     const [totalValue, setTotalValue] = useState("");
     const [fromDate, setFromDate] = useState(dayjs());
-    const [bankOptions, setBankOptions] = useState([]);
+    // const [bankOptions, setBankOptions] = useState([]);
     const [errorMessage, setErrorMessage] = useState({});
     const [roundedAmount, setRoundedAmount] = useState('');
     const [successMessage, setSuccessMessage] = useState({});
@@ -189,17 +189,17 @@ const useGroupbilling = () => {
         station: '',
     });
 
-    useEffect(() => {
-        Organization()
-            .then((data) => {
-                if (data) {
-                    setBankOptions(data);
-                } else {
-                }
-            })
-            .catch(() => {
-            });
-    }, []);
+    // useEffect(() => {
+    //     Organization()
+    //         .then((data) => {
+    //             if (data) {
+    //                 setBankOptions(data);
+    //             } else {
+    //             }
+    //         })
+    //         .catch(() => {
+    //         });
+    // }, []);
 
     const calculateNetAmountSum = useCallback((data) => {
         return data.reduce((sum, item) => {
@@ -643,7 +643,7 @@ const useGroupbilling = () => {
         handleKeyenter,
         customer,
         tripData,
-        bankOptions,
+        // bankOptions,
         setCustomer,
         Billingdate,
         fromDate,

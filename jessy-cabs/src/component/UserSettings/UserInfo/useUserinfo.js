@@ -22,7 +22,6 @@ const useUserinfo = () => {
     const [infoMessage] = useState({});
 
     useEffect(() => {
-        // console.log("1234555", sharedData)
         setSelectedImage(sharedData)
     }, [sharedData])
 
@@ -107,22 +106,7 @@ const useUserinfo = () => {
         }
     };
 
-    // useEffect(() => {
-    //     const handleImageView = () => {
-    //         const userid = localStorage.getItem('useridno');
-    //         axios.get(`${apiUrl}/userprofileview/${userid}`)
-    //             .then(res => {
-    //                 if (res.status === 200) {
-    //                     setSelectedImage(res.data[0]?.filename);
-    //                     // console.log("image fetch name :", res.data[0]?.filename)
-    //                 } else {
-    //                     const timer = setTimeout(handleImageView, 100);
-    //                     return () => clearTimeout(timer);
-    //                 }
-    //             })
-    //     };
-    //     handleImageView();
-    // }, [selectedImage, apiUrl]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -131,7 +115,6 @@ const useUserinfo = () => {
                 if (userid === "undefined") {
                     return;
                 }
-
                 const response = await fetch(`${apiUrl}/userdataforuserinfo/${userid}`);
                 if (response.status === 200) {
 
@@ -142,9 +125,6 @@ const useUserinfo = () => {
                         setErrorMessage('User data not found.');
                         setError(true);
                     }
-                } else {
-                    const timer = setTimeout(fetchData, 50);
-                    return () => clearTimeout(timer);
                 }
             } catch {
                 setErrorMessage('Something Went Wrong');
@@ -152,7 +132,7 @@ const useUserinfo = () => {
             }
         };
         fetchData();
-    }, [selectedCustomerData, apiUrl]);
+    }, [apiUrl]);
 
     const hidePopup = () => {
         setSuccess(false);
@@ -160,14 +140,6 @@ const useUserinfo = () => {
         setInfo(false);
         setWarning(false);
     };
-    // useEffect(() => {
-    //     if (error) {
-    //         const timer = setTimeout(() => {
-    //             hidePopup();
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [error]);
 
     useEffect(() => {
         if (success || warning || info || error) {
@@ -177,22 +149,6 @@ const useUserinfo = () => {
             return () => clearTimeout(timer);
         }
     }, [success, warning, error, info]);
-    // useEffect(() => {
-    //     if (warning) {
-    //         const timer = setTimeout(() => {
-    //             hidePopup();
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [warning]);
-    // useEffect(() => {
-    //     if (info) {
-    //         const timer = setTimeout(() => {
-    //             hidePopup();
-    //         }, 3000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [info]);
 
     const toggleEditMode = () => {
         setEditMode((prevEditMode) => !prevEditMode);

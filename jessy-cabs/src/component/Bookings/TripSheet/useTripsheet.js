@@ -140,6 +140,8 @@ const useTripsheet = () => {
 
     const [mapimageUrls, setMapImageUrls] = useState([]);
 
+
+    // map1
     const handleTripmapClick = async () => {
         try {
             const tripid = selectedRow?.tripid || book?.tripid || selectedCustomerData?.tripid || formData?.tripid;
@@ -153,6 +155,7 @@ const useTripsheet = () => {
             const responseData = await response.blob();
             // Assuming you want to display the image directly
             const imageUrl = URL.createObjectURL(responseData);
+            console.log("url", imageUrl)
             setMapImageUrls(imageUrl);
             setMapimgPopupOpen(true);
         } catch {
@@ -637,6 +640,7 @@ const useTripsheet = () => {
             localStorage.setItem('selectedTripid', tripid);
             setTripiddata(tripid)
             setPopupOpen(true);
+
         }
     };
 
@@ -1284,8 +1288,8 @@ const useTripsheet = () => {
     }, [setSelectedCustomerData, setFormData, setTripSheetData, setPackageDetails]);
 
 
-
-    const handleKeyDown = useCallback(async (event) => {
+    // prob004
+    const handleKeyDown = async (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             const tripid = event.target.value;
@@ -1352,6 +1356,12 @@ const useTripsheet = () => {
                     setErrorMessage("Enter tripid");
                 }
 
+
+                getMapImaage();
+                getSignatureImage();
+                invoiceRouteData();
+                getAttachedImage();
+
             } catch (error) {
                 if (error.response && error.response.status === 404) {
                     setError(true);
@@ -1362,7 +1372,7 @@ const useTripsheet = () => {
                 }
             }
         }
-    }, [apiUrl]);
+    }
 
     const [enterPressCount, setEnterPressCount] = useState(0);
 
@@ -1513,124 +1523,197 @@ const useTripsheet = () => {
     const [routeData, setRouteData] = useState('');
 
 
-    useEffect(() => {
-        const fetchData = async () => {
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    //         try {
+    //             if (tripid !== null && tripid !== "undefined" && tripid) {
+    //                 const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);  /// pob004
+
+    //                 if (response.status === 200) {
+    //                     const routeData = await response.json();
+    //                     console.log("routeData", routeData)
+    //                     setRouteData(routeData);
+    //                 }
+    //                 else {
+    //                     setRouteData("")
+    //                     const timer = setTimeout(fetchData, 2000);
+    //                     return () => clearTimeout(timer);
+    //                 }
+    //                 return
+    //             }
+    //         } catch {
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
+
+
+    const invoiceRouteData = async () => {
+        const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+        try {
+            if (tripid !== null && tripid !== "undefined" && tripid) {
+                const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);  /// pob004
+
+                if (response.status === 200) {
+                    const routeData = await response.json();
+                    setRouteData(routeData);
+                }
+                return;
+            }
+        } catch (error) {
+            console.log("Error", error)
+        }
+    };
+
+
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         // const tripid = localStorage.getItem('selectedTripid');
+    //         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+    //         setTripiddata(tripid);
+
+    //         try {
+    //             if (tripid !== null && tripid && tripid !== "undefined") {
+    //                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
+    //                 if (response.status === 200) {
+    //                     const imageUrl = URL.createObjectURL(await response.blob());
+    //                     setSignImageUrl(imageUrl);
+    //                 }
+
+    //                 else {
+    //                     const timer = setTimeout(fetchData, 500);
+    //                     setSignImageUrl("");
+    //                     return () => clearTimeout(timer);
+    //                 }
+    //             }
+
+    //         } catch (err) {
+    //             console.log(err, 'error');
+    //         }
+    //     };
+    //     fetchData();
+    //     return () => {
+    //     };
+    // }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
+
+
+
+    const getSignatureImage = async () => {
+        const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+        setTripiddata(tripid);
+
+        try {
+            if (tripid !== null && tripid && tripid !== "undefined") {
+                const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
+                if (response.status === 200) {
+                    const imageUrl = URL.createObjectURL(await response.blob());
+                    setSignImageUrl(imageUrl);
+                }
+            }
+        } catch (err) {
+            console.log(err, 'error');
+        }
+    };
+
+
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+
+    //         try {
+
+    //             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
+
+
+    //             if (tripid !== null && tripid && tripid !== "undefined") {
+
+    //                 const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);   /// prob004
+    //                 if (response.status === 200) {
+    //                     const responseData = await response.blob();
+    //                     const imageUrl = URL.createObjectURL(responseData);
+    //                     setGMapImageUrl(imageUrl);
+    //                 }
+    //                 else {
+    //                     setGMapImageUrl("")
+    //                     const timer = setTimeout(fetchData, 2000);
+    //                     return () => clearTimeout(timer);
+    //                 }
+    //             }
+
+    //             return '';
+    //         } catch {
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
+
+
+
+
+    const getMapImaage = async () => {
+        try {
             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-            try {
-                if (tripid !== null && tripid !== "undefined" && tripid) {
-                    const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);
-
-                    if (response.status === 200) {
-                        const routeData = await response.json();
-                        setRouteData(routeData);
-                    }
-                    else {
-                        setRouteData("")
-                        const timer = setTimeout(fetchData, 2000);
-                        return () => clearTimeout(timer);
-                    }
-                    return
-
+            if (tripid !== null && tripid && tripid !== "undefined") {
+                const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
+                if (response.status === 200) {
+                    const responseData = await response.blob();
+                    const imageUrl = URL.createObjectURL(responseData);
+                    setGMapImageUrl(imageUrl);
                 }
-
-            } catch {
             }
-        };
+            return '';
+        } catch (error) {
+            console.log("Error", error)
+        }
+    };
 
-        fetchData();
-    }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
 
 
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             // const tripid = localStorage.getItem('selectedTripid');
+    //             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            // const tripid = localStorage.getItem('selectedTripid');
+    //             if (tripid !== null && tripid && tripid !== "undefined") {
+    //                 const response = await fetch(`${apiUrl}/get-attachedimage/${tripid}`);
+    //                 if (response.status === 200) {
+    //                     const data = await response.json();
+    //                     const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
+    //                     setAttachedImage(attachedImageUrls);
+    //                 }
+    //                 else {
+    //                     const timer = setTimeout(fetchData, 2000);
+    //                     return () => clearTimeout(timer);
+    //                 }
+    //             }
+    //         } catch {
+    //         }
+    //     };
+    //     fetchData();
+    // }, [apiUrl, statechange, book.tripid, formData.tripid, selectedCustomerData.tripid]);
+
+
+    const getAttachedImage = async () => {
+        try {
             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-            setTripiddata(tripid);
 
-            try {
-                if (tripid !== null && tripid && tripid !== "undefined") {
-                    const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);
-                    if (response.status === 200) {
-                        const imageUrl = URL.createObjectURL(await response.blob());
-                        setSignImageUrl(imageUrl);
-                    }
-
-                    else {
-                        const timer = setTimeout(fetchData, 500);
-                        setSignImageUrl("");
-                        return () => clearTimeout(timer);
-                    }
+            if (tripid !== null && tripid && tripid !== "undefined") {
+                const response = await fetch(`${apiUrl}/get-attachedimage/${tripid}`);
+                if (response.status === 200) {
+                    const data = await response.json();
+                    const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
+                    setAttachedImage(attachedImageUrls);
                 }
-
-            } catch (err) {
-                console.log(err, 'error');
             }
-        };
-        fetchData();
-        return () => {
-        };
-    }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
+        } catch (error) {
+            console.log("Error", error)
+        }
+    };
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            // const tripid = localStorage.getItem('selectedTripid');
-
-            try {
-                // const tripid = localStorage.getItem('selectedTripid');
-                const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-
-
-                if (tripid !== null && tripid && tripid !== "undefined") {
-
-                    const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);
-                    if (response.status === 200) {
-                        const responseData = await response.blob();
-                        const imageUrl = URL.createObjectURL(responseData);
-                        setGMapImageUrl(imageUrl);
-                    }
-                    else {
-                        setGMapImageUrl("")
-                        const timer = setTimeout(fetchData, 2000);
-                        return () => clearTimeout(timer);
-                    }
-                }
-
-                return '';
-            } catch {
-            }
-        };
-        fetchData();
-    }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
-
-
-
-
-    // llllllll
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // const tripid = localStorage.getItem('selectedTripid');
-                const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-
-                if (tripid !== null && tripid && tripid !== "undefined") {
-                    const response = await fetch(`${apiUrl}/get-attachedimage/${tripid}`);
-                    if (response.status === 200) {
-                        const data = await response.json();
-                        const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
-                        setAttachedImage(attachedImageUrls);
-                    }
-                    else {
-                        const timer = setTimeout(fetchData, 2000);
-                        return () => clearTimeout(timer);
-                    }
-                }
-            } catch {
-            }
-        };
-        fetchData();
-    }, [apiUrl, statechange, book.tripid, formData.tripid, selectedCustomerData.tripid]);
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -1649,15 +1732,15 @@ const useTripsheet = () => {
                         const data = await response.json();
                         const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/public/org_logo/${path}`);
                         localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
+                        console.log("log", attachedImageUrls)
                         setSelectedImage(attachedImageUrls);
                     } else {
                         const timer = setTimeout(fetchData, 2000);
                         return () => clearTimeout(timer);
                     }
-
                 }
-
-            } catch {
+            } catch (error) {
+                console.log("Error", error)
             }
         };
 
@@ -1692,7 +1775,8 @@ const useTripsheet = () => {
                     const timer = setTimeout(fetchData, 2000);
                     return () => clearTimeout(timer);
                 }
-            } catch {
+            } catch (error) {
+                console.log("Error", error)
             }
         };
 

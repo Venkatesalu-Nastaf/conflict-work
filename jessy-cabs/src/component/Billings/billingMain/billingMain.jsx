@@ -10,7 +10,7 @@ import BankAccount from './BankAccount/BankAccount';
 import PaymentDetail from './PaymentDetail/PaymentDetail';
 
 
-const BillingMain = () => {
+const BillingMain = ({ organizationNames }) => {
   const [value, setValue] = React.useState("billing");
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -28,11 +28,11 @@ const BillingMain = () => {
               </TabList>
             </Box>
             <TabPanel value="billing"><Billing /></TabPanel>
-            <TabPanel value="payment"><PaymentDetail /></TabPanel>
+            <TabPanel value="payment"><PaymentDetail organizationNames={organizationNames} /></TabPanel>
             <TabPanel value="bankAccountdetails"><BankAccount /></TabPanel>
           </TabContext>
         </Box>
-       
+
       </div>
     </div >
   )

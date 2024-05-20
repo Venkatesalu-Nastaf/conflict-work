@@ -11,9 +11,10 @@ import TransferReport from './TransferReport/TransferReport';
 import { PdfData } from './TransferReport/PdfContext';
 
 
-const Transfer = ({ stationName }) => {
+const Transfer = ({ stationName, organizationNames }) => {
+
   const [value, setValue] = useState("transferlist");
-  const { setBillingPage,setTransferReport } = PdfData()
+  const { setBillingPage, setTransferReport } = PdfData()
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -26,7 +27,7 @@ const Transfer = ({ stationName }) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setBillingPage(false)
-    
+
     setTransferReport(false)
     localStorage.removeItem('selectedrowcount');
     localStorage.removeItem('selectedtripsheetid');
@@ -45,8 +46,8 @@ const Transfer = ({ stationName }) => {
                 <Tab label="Transfer Report" value="TransferReport" />
               </TabList>
             </Box>
-            <TabPanel value="transferlist"><TransferList stationName={stationName} /></TabPanel>
-            <TabPanel value="dataentry"><TransferDataEntry stationName={stationName} /></TabPanel>
+            <TabPanel value="transferlist"><TransferList stationName={stationName} organizationNames={organizationNames} /></TabPanel>
+            <TabPanel value="dataentry"><TransferDataEntry stationName={stationName} organizationNames={organizationNames} /></TabPanel>
             <TabPanel value="TransferReport"><TransferReport stationName={stationName} /></TabPanel>
           </TabContext>
         </Box>

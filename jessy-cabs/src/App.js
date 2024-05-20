@@ -103,6 +103,26 @@ function App() {
 
 
   //---------------------------------------------------------------------
+  //  fetching Organisation name (Customer )
+  const [organizationNames, setOrganizationName] = useState([])
+
+  useEffect(() => {
+    const organizationName = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/customers`);
+        const organisationData = response?.data;
+        const names = organisationData.map(res => res.customer);
+        setOrganizationName(names);
+      } catch (error) {
+        console.error('Error fetching organization names:', error);
+      }
+    };
+    organizationName();
+
+  }, [apiUrl]); // Empty dependency array to ensure it runs only once
+
+  //--------------------------------------------------------
+
 
 
 
@@ -153,8 +173,8 @@ function App() {
               </Route>
 
               <Route path="/home/info" element={<Info />}>
-                <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes stationName={stationName} /> : "INFO"} />
-                <Route path="/home/info/ratemanagement" element={<RateManagement />} />
+                <Route path="/home/info/ratetype" element={INFO !== 0 ? <RateTypes stationName={stationName} organizationNames={organizationNames} /> : "INFO"} />
+                <Route path="/home/info/ratemanagement" element={<RateManagement stationName={stationName} organizationNames={organizationNames} />} />
                 <Route path="/home/info/mailer" element={Mailers !== 0 ? <Mailer /> : <NoPermission />} />
                 <Route path="/home/info/mailer/TemplateSelection" element={<TemplateSelection />} />
                 <Route path="/home/info/mailer/TemplateCreation" element={<TemplateCreation />} />
@@ -162,11 +182,11 @@ function App() {
               </Route>
               <Route path="/home/billing" element={<Billings />}>
 
-                <Route path="/home/billing/billing" element={BILLING !== 0 ? <BillingMain /> : <NoPermission />} />
-                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 ? <Transfer stationName={stationName} /> : <NoPermission />} />
+                <Route path="/home/billing/billing" element={BILLING !== 0 ? <BillingMain organizationNames={organizationNames} /> : <NoPermission />} />
+                <Route path="/home/billing/transfer" element={Billing_Transfer !== 0 ? <Transfer stationName={stationName} organizationNames={organizationNames} /> : <NoPermission />} />
                 <Route
                   path="/home/billing/coveringbill"
-                  element={Billing_CoveringBill !== 0 ? <CoveringBill stationName={stationName} /> : <NoPermission />}
+                    element={Billing_CoveringBill !== 0 ? <CoveringBill stationName={stationName} organizationNames={organizationNames }/> : <NoPermission />}
                 />
               </Route>
               <Route path="/home/accounts" element={<Accounts />}>

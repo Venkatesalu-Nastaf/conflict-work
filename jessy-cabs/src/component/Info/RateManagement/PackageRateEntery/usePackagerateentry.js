@@ -30,12 +30,7 @@ const columns = [
 ];
 // TABLE END
 
-
-
 const usePackagerateentry = () => {
-
-    ///ayyanar------------------
-
 
     const [fieldSets, setFieldSets] = useState([{
         // dinamic data
@@ -103,7 +98,7 @@ const usePackagerateentry = () => {
             }
         };
         fetchOrganizationnames()
-    }, [apiUrl, setOrganizationName, validitydata])
+    }, [apiUrl, setOrganizationName])
 
 
     //// popup-----------------------------------------
@@ -291,7 +286,6 @@ const usePackagerateentry = () => {
             setSuccessMessage("Successfully Added");
             handleCancel()
         } catch (error) {
-            // If an error occurs, handle it
             setError(true);
             setErrorMessage("Check your Network Connection");
         }

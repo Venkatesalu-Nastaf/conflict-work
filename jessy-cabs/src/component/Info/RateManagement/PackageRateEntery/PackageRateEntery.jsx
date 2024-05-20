@@ -28,7 +28,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import TypeSpecimenOutlinedIcon from '@mui/icons-material/TypeSpecimenOutlined';
 import usePackagerateentry from './usePackagerateentry.js';
-import { useData } from '../../../Dashboard/Maindashboard/DataContext.js';
+// import { useData } from '../../../Dashboard/Maindashboard/DataContext.js';
 import dayjs from 'dayjs';
 import { MdCancelPresentation } from "react-icons/md";
 
@@ -44,7 +44,7 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   },
 }));
 
-const PackageRateEntery = () => {
+const PackageRateEntery = ({ organizationNames }) => {
 
   const {
     selectedCustomerId,
@@ -72,7 +72,7 @@ const PackageRateEntery = () => {
 
   } = usePackagerateentry();
 
-  const { organizationName } = useData()
+  const organizationName = organizationNames;
 
   useEffect(() => {
     if (actionName === 'List') {
@@ -102,7 +102,7 @@ const PackageRateEntery = () => {
           <div className="container-left">
             <div className="copy-title-btn-PackageRateEntery">
               <div className="input-field PackageRateEntery-input-feild">
-                <div className="input PackageRateEntery-input" style={{paddingRight: '15px'}}>
+                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <TypeSpecimenOutlinedIcon color="action" />
                   </div>
@@ -127,7 +127,7 @@ const PackageRateEntery = () => {
                     }
                   />
                 </div>
-                <div className="input PackageRateEntery-input" style={{paddingRight: '15px'}}>
+                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <LocalOfferOutlinedIcon color="action" />
                   </div>
@@ -152,7 +152,7 @@ const PackageRateEntery = () => {
                 </div>
 
 
-                <div className="input PackageRateEntery-input" style={{paddingRight: '15px'}}>
+                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -182,7 +182,7 @@ const PackageRateEntery = () => {
                 {/* </div>
 
               <div className="input-field"> */}
-                <div className="input PackageRateEntery-input" style={{paddingRight: '15px'}}>
+                <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -247,7 +247,7 @@ const PackageRateEntery = () => {
               <div>
                 <div className='first'>
 
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       size="small"
                       id="id"
@@ -258,11 +258,11 @@ const PackageRateEntery = () => {
                       value={fieldSet.package || ""}
                       onChange={(e) => handleChange(e, index)}
                       variant="standard"
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
 
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -272,10 +272,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.Hours || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -285,10 +285,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.KMS || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -298,11 +298,11 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.Rate || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
 
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -312,10 +312,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.UptoHours || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -325,13 +325,13 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.UptoKMS || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
                   {/* </div>
                 <div className='first'> */}
 
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -341,11 +341,11 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.extraHours || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
 
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -355,10 +355,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.extraKMS || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -368,10 +368,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.AKMS || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -381,10 +381,10 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.NHalt || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
-                  <div className="input" style={{paddingRight: '15px'}}>
+                  <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
                       size="small"
@@ -394,7 +394,7 @@ const PackageRateEntery = () => {
                       autoComplete="new-password"
                       value={fieldSet.Bata || ""}
                       onChange={(e) => handleChange(e, index)}
-                      style={{width: '100%'}}
+                      style={{ width: '100%' }}
                     />
                   </div>
                   {/* {index > 0 && <button onClick={() => handleCancel(index)}>R</button>} */}

@@ -3,7 +3,7 @@ import axios from "axios";
 import jsPDF from "jspdf";
 import dayjs from "dayjs";
 import { saveAs } from "file-saver";
-import { Organization } from "./PaymentDetailData";
+// import { Organization } from "./PaymentDetailData";
 import { APIURL } from "../../../url";
 
 const columns = [
@@ -37,7 +37,7 @@ const usePaymentdetails = () => {
   const [successMessage, setSuccessMessage] = useState({});
   const [errorMessage, setErrorMessage] = useState({});
   const [warningMessage] = useState({});
-  const [bankOptions, setBankOptions] = useState([]);
+  // const [bankOptions, setBankOptions] = useState([]);
   const [infoMessage] = useState({});
 
 
@@ -111,6 +111,7 @@ const usePaymentdetails = () => {
       setBillingNo(event.target.value);
     }
   };
+
   const handleShow = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -141,21 +142,21 @@ const usePaymentdetails = () => {
     }
   }, [billingno, customer, fromDate, toDate, apiUrl]);
 
-  useEffect(() => {
-    Organization()
-      .then((data) => {
-        if (data) {
-          setBankOptions(data);
-        } else {
-          setError(true);
-          setErrorMessage("Failed to fetch organization options.");
-        }
-      })
-      .catch(() => {
-        setError(true);
-        setErrorMessage("Failed to fetch organization options.");
-      });
-  }, []);
+  // useEffect(() => {
+  //   Organization()
+  //     .then((data) => {
+  //       if (data) {
+  //         setBankOptions(data);
+  //       } else {
+  //         setError(true);
+  //         setErrorMessage("Failed to fetch organization options.");
+  //       }
+  //     })
+  //     .catch(() => {
+  //       setError(true);
+  //       setErrorMessage("Failed to fetch organization options.");
+  //     });
+  // }, []);
 
   //calculate total amount in column
   useEffect(() => {
@@ -241,7 +242,7 @@ const usePaymentdetails = () => {
     billingno,
     handleInputChange,
     customer,
-    bankOptions,
+    // bankOptions,
     fromDate,
     setFromDate,
     toDate,

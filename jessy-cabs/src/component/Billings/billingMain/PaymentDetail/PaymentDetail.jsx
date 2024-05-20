@@ -24,7 +24,7 @@ import { PermissionContext } from '../../../context/permissionContext';
 import { FaRegCalendarAlt } from "react-icons/fa";
 
 
-const PaymentDetail = () => {
+const PaymentDetail = ({ organizationNames }) => {
 
   const {
     actionName,
@@ -41,7 +41,7 @@ const PaymentDetail = () => {
     billingno,
     handleInputChange,
     customer,
-    bankOptions,
+    // bankOptions,
     fromDate,
     setFromDate,
     toDate,
@@ -73,12 +73,12 @@ const PaymentDetail = () => {
 
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
-      
+
       <form >
         <div className="detail-container-main detail-container-main-payment">
           <div className="container-left">
             <div className="copy-title-btn-PaymentDetail">
-              <div className="input-field input-field-payment" style={{ flexWrap:'wrap', alignItems:'baseline' }}>
+              <div className="input-field input-field-payment" style={{ flexWrap: 'wrap', alignItems: 'baseline' }}>
                 <div className="input input-payment"  >
                   <div className="icone">
                     <ListAltIcon color="action" style={{ fontSize: "27px" }} />
@@ -103,7 +103,8 @@ const PaymentDetail = () => {
                     freeSolo
                     size="small"
                     value={customer}
-                    options={bankOptions}
+                    // options={bankOptions}
+                    options={organizationNames}
                     onChange={handleInputChange}
                     renderInput={(params) => {
                       return (
@@ -111,49 +112,49 @@ const PaymentDetail = () => {
                       );
                     }}
                   />
-                </div> 
-                
+                </div>
+
                 <div className="input" >
-                <div className="icone">
+                  <div className="icone">
                     <FaRegCalendarAlt color="action" style={{ fontSize: "27px" }} />
                   </div>
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker", "DatePicker"]}>
-                 
-                    <DatePicker
-                      label="From Date"
-                      format="DD/MM/YYYY"
-                      value={fromDate}
-                      onChange={(date) => setFromDate(date)}
-                    />
-                   
-                  </DemoContainer>
-                </LocalizationProvider>
-                
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+
+                      <DatePicker
+                        label="From Date"
+                        format="DD/MM/YYYY"
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
+                      />
+
+                    </DemoContainer>
+                  </LocalizationProvider>
+
                 </div>
 
                 <div className="input" >
-                <div className="icone">
-                                    <FaRegCalendarAlt color="action" style={{ fontSize: "27px" }} />
-                                  </div>
+                  <div className="icone">
+                    <FaRegCalendarAlt color="action" style={{ fontSize: "27px" }} />
+                  </div>
 
-                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                  <DemoContainer components={["DatePicker", "DatePicker"]}>
-                                
-                                  <DatePicker
-                                      label="To Date"
-                                      format="DD/MM/YYYY"
-                                      value={toDate}
-                                      onChange={(date) => setToDate(date)}
-                                    />
-                                  
-                                  </DemoContainer>
-                                </LocalizationProvider>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker", "DatePicker"]}>
+
+                      <DatePicker
+                        label="To Date"
+                        format="DD/MM/YYYY"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
+                      />
+
+                    </DemoContainer>
+                  </LocalizationProvider>
 
                 </div>
-                              
- 
+
+
               </div>
               <div className="input-field" style={{ justifyContent: 'center' }}>
                 <div className="input" style={{ width: "140px" }}>
@@ -164,35 +165,35 @@ const PaymentDetail = () => {
           </div>
         </div>
         <div className='alert-popup-main'>
-        {error &&
-          <div className='alert-popup Error' >
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{errorMessage}</p>
-          </div>
-        }
-        {warning &&
-          <div className='alert-popup Warning' >
-            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{warningMessage}</p>
+          {error &&
+            <div className='alert-popup Error' >
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errorMessage}</p>
+            </div>
+          }
+          {warning &&
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
 
-          </div>
-        }
-        {info &&
-          <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{infoMessage}</p>
-          </div>
-        }
-        {success &&
-          <div className='alert-popup Success' >
-            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{successMessage}</p>
-          </div>
-        }
+            </div>
+          }
+          {info &&
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
+            </div>
+          }
+          {success &&
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          }
         </div>
         <div className='total-container'>
           <div className="Download-btn">

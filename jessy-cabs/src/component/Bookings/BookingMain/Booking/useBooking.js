@@ -969,7 +969,7 @@ const useBooking = () => {
       setErrorMessage("Enter GuestName")
       return
     }
-    if (!selectedCustomerData.address1 || !selectedCustomerData.streetno || !selectedCustomerData.city) {
+    if (!selectedCustomerData.address1 ) {
       setError(true);
       setErrorMessage("Enter Address Details");
       return;

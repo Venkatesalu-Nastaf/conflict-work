@@ -111,7 +111,6 @@ const useDrivercreation = () => {
         address1: '',
         licenseno: '',
         licenseexpdate: '',
-        city: '',
         badgeno: '',
         badgeexpdate: '',
         aadharno: '',
@@ -373,7 +372,6 @@ const useDrivercreation = () => {
             licenseexpdate: '',
             badgeno: '',
             badgeexpdate: '',
-            city: '',
             aadharno: '',
             Email:''
         }));

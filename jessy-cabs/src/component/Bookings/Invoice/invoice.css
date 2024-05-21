@@ -18,31 +18,11 @@
   padding: 20;
   text-decoration: none;
   vertical-align: top;
-
-
-
 }
 
 .artical-top {
-
-  /* margin: 35px 20px 10px 20px; */
   margin-left: 20px;
-  /* padding: 5px; */
-
 }
-
-/* .attached-toll {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 10px auto;
-} */
-
-/* .attached-toll img.attached-image {
-  width: 95%;
-  max-width: 100%;
-  height: 300px;
-} */
 
 .invoice-container-header {
   display: flex;
@@ -53,8 +33,6 @@
 .logo-image-invoice img {
   width: 130px;
   margin-left: 20px;
-
-
 }
 
 .invoice-address {
@@ -71,7 +49,6 @@
 }
 
 /* heading */
-
 .invoice-wrapper header {
   margin: 0 0 3em;
 }
@@ -93,10 +70,6 @@
 
 .invoice-wrapper header address {
   float: left;
-  /* font-size: 75%; */
-  /* font-style: normal; */
-  /* line-height: 1.25; */
-  /* margin: 0 1em 1em 0; */
 }
 
 .dialogboximg {
@@ -124,8 +97,6 @@ header img {
 
 /* article */
 
-
-
 .invoice-wrapper article h1 {
   clip: rect(0 0 0 0);
   position: absolute;
@@ -140,8 +111,6 @@ header img {
 /* table */
 .main-invoice-container {
   border: 1px solid #000;
-
-
 }
 
 .first-table-invoice-container {
@@ -169,7 +138,6 @@ header img {
   display: flex;
   width: 40%;
   padding: 5px;
-
 }
 
 .guest-signature-details .instruction {
@@ -218,7 +186,6 @@ header img {
 .invoice-wrapper #table-data {
   padding: 6px;
   border: none;
-  /* width: 100px; */
 }
 
 /* table firstTable */
@@ -245,7 +212,6 @@ header img {
   content: "";
   display: table;
 }
-
 
 /* table firstTable */
 
@@ -318,10 +284,7 @@ header img {
 }
 
 .tripsheet-location-img img {
-  /* width: 320px; */
-  /* width: 714.33px; */
   height: 300px;
-  /* or you can use 90% directly */
   width: 100%;
 }
 
@@ -338,8 +301,6 @@ header img {
   font-size: 12px;
   font-weight: 500;
 }
-
-
 
 .attached-toll {
   margin-top: 110px;

@@ -12,7 +12,6 @@
 .detail-container-main {
     display: flex;
     padding: 20px;
-    /* width: 70%; */
 }
 
 
@@ -22,7 +21,6 @@
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    /* padding: 20px; */
     color: #000;
     background-color: var(--glass);
 }
@@ -38,7 +36,6 @@
 .Download-btn {
     padding: 20px;
 }
-
 
 .copy-title-btn-TransferList {
     width: 100%;
@@ -58,39 +55,29 @@
     border-radius: 20px;
     height: 3px;
     background-color: #457cdc;
-    /* Adjust color as needed */
 }
 
 @media screen and (max-width:1164px) {
-    
-    .input-field-transferlist{
+    .input-field-transferlist {
         justify-content: center !important;
     }
 }
 
-@media screen and (min-width:701px) and (max-width:930px){
-
-    .copy-title-btn-TransferList 
-    {
+@media screen and (min-width:701px) and (max-width:930px) {
+    .copy-title-btn-TransferList {
         width: 95%;
     }
-    
 }
 
-@media screen and (min-width:380px) and (max-width:700.99px){
-
-    .copy-title-btn-TransferList 
-    {
+@media screen and (min-width:380px) and (max-width:700.99px) {
+    .copy-title-btn-TransferList {
         width: 75%;
     }
-    
 }
 
 
 @media screen and (max-width:380px) {
-
     .copy-title-btn-TransferList {
-        /* width: 100%; */
         margin-top: 30px;
         background: none !important;
         padding: 10px 20px 35px;
@@ -99,9 +86,10 @@
     }
 
     .detail-container-main {
-        padding: 0px !important;;
+        padding: 0px !important;
     }
-    .container-left-transferlist{
+
+    .container-left-transferlist {
         position: relative;
         left: 20px;
     }
@@ -110,6 +98,5 @@
 @media screen and (min-width: 320px) and (max-width: 480px) {
     .input-field.input-transferlist {
         width: 205px !important;
-    }}
-
-
+    }
+}

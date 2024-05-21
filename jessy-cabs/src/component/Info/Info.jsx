@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from 'react';
 import "./Info.css";
 import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { PermissionContext } from '../context/permissionContext';
-
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -26,55 +25,32 @@ const Info = () => {
 
   //------------------popup------------------------
 
-  // const [info, setInfo] = useState(false);
-  // // const [infoMessage, setInfoMessage] = useState({});
-
-  // const hidePopup = () => {
-  //   setInfo(false);
-  //   // setInfoMessage("");
-  // };
-
-  // useEffect(() => {
-  //   if (info) {
-  //     const timer = setTimeout(() => {
-  //       hidePopup();
-  //     }, 3000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [info]);
-
   const [warning, setWarning] = useState(false);
-
   const hidePopup = () => {
-      setWarning(false);
+    setWarning(false);
   };
-
   useEffect(() => {
     if (warning) {
-        const timer = setTimeout(() => {
-            hidePopup();
-        }, 3000);
-        return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-    }, [warning]);
+  }, [warning]);
 
   //end-----------------------------------
 
   // permission -----------------
 
   const { permissions } = useContext(PermissionContext)
-
   const INFO = permissions[16]?.read;
   const Rate_Management = permissions[17]?.read;
   const Mailers = permissions[18]?.read;
   const Fuel_Info = permissions[19]?.read;
-
   const handleMenuItemClick = (menuItem, alt, e) => {
     localStorage.setItem('activeMenuItem', menuItem);
     setActiveMenuItem(menuItem);
-
     let hasPermission = 0;
-
     switch (menuItem) {
       case "Rate Management":
         hasPermission = Rate_Management;
@@ -91,24 +67,19 @@ const Info = () => {
       default:
         break;
     }
-
     try {
       if (hasPermission === 1) {
         Navigate(alt)
       }
-      else if (hasPermission === 0)
+      else if (hasPermission === 0) {
         e.preventDefault();
-      // setInfo(true);
-      setWarning(true);
-
-      // setInfoMessage("You do not have Permission ..!")
-      // alert("You do not have Permission ..!");
+        setWarning(true);
+        // setInfoMessage("You do not have Permission ..!")
+        // alert("You do not have Permission ..!");
+      }
     }
     catch {
-
     }
-
-
   };
 
   //---------------------------------------
@@ -125,11 +96,7 @@ const Info = () => {
     myTo = '/home/info/mailer';
   }
 
-
-
-
   return (
-
     <div className="Info-conatiner" id="menu">
       <div className="menu-bar">
         <MenuItem
@@ -165,23 +132,19 @@ const Info = () => {
           handleMenuItemClick={handleMenuItemClick}
         />
       </div>
-
       <div className='alert-popup-main'>
-          {warning &&
-              <div className='alert-popup Warning' >
-                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                  <p>You do not have Permission ..!</p>
-              </div>
-          }
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>You do not have Permission ..!</p>
+          </div>
+        }
       </div>
 
       <Outlet />
-
-
-
+      
     </div>
-
   );
 };
 

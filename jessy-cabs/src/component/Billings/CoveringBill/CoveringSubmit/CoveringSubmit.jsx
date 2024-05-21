@@ -22,7 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useCoversubmit from './useCoversubmit';
 import { PermissionContext } from '../../../context/permissionContext';
-import { FaCalendar } from "react-icons/fa";
+// import { FaCalendar } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
@@ -63,12 +63,9 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
         }
     }, [actionName, handleClick]);
 
-
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-
     const CoveringBill_read = permissions[7]?.read;
-
 
     return (
         <div className="CoveringSubmit-form Scroll-Style-hide">
@@ -100,8 +97,6 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     <div className="icone">
                                         <CalendarMonthIcon color="action" />
                                     </div>
-
-
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
@@ -125,7 +120,6 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                     <div className="icone">
                                         <CalendarMonthIcon color="action" />
                                     </div>
-
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
                                             <DatePicker
@@ -145,8 +139,6 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </div>
-                                {/* </div>
-                            <div className="input-field" > */}
                                 <div className="input" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faBuilding} size="xl" />

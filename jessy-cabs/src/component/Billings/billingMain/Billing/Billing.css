@@ -1,9 +1,6 @@
 /* HEADER CONTAINER */
 .Billing-page-header {
-  /* border-top: solid 1px #ccc; */
-  /* background: var(--glass); */
   padding: 20px;
-  /* margin-top: 10px; */
   margin-bottom: -10px;
 }
 
@@ -11,13 +8,10 @@
 .Billing-page-secend-container {
   display: flex;
   border-top: solid 1px #ccc;
-  /* background-color: var(--glass); */
   padding: 20px;
-  /* margin-top: 10px; */
 }
 
 /* Button */
-
 .Download-btn {
   padding: 20px 10px;
 }
@@ -26,7 +20,6 @@
 .customer-list-table-container {
   border: 1px solid #ccc;
   padding: 20px;
-  /* background-color: var(--glass); */
 }
 
 .table-customer-list {
@@ -54,7 +47,6 @@
 
 .detail-container-main-customer {
   border-top: 1px solid #ccc;
-  /* background-color: var(--glass); */
   padding: 20px;
 }
 
@@ -77,7 +69,6 @@
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-  /* Adjust color as needed */
 }
 
 .form-container .Billing-form::-webkit-scrollbar-track {
@@ -90,21 +81,19 @@
 }
 
 .form-container .Billing-form {
-  /* border: 2px solid #ccc; */
   overflow: scroll;
   height: 75vh;
   width: 81vw;
   display: flex;
   flex-direction: column;
-  /* padding-top: 28px; */
-  /* border-radius: 20px; */
   color: #000;
   background-color: var(--glass);
 }
-.input-field .input-mobile{
+
+.input-field .input-mobile {
   width: 100% !important;
   margin-top: 0px !important;
-  
+
 }
 
 
@@ -118,23 +107,19 @@
   margin-top: 30px;
 }
 
-.input-feild-booking{
+.input-feild-booking {
   flex-wrap: wrap;
 }
 
-.Billing-secend-left{
+.Billing-secend-left {
   width: 50%;
 }
 
-.input-billing{
+.input-billing {
   width: 200px !important;
 }
 
-/* .input-feild-left-bottom{
-  flex-wrap: wrap;
-} */
-
-.inputfeild-billing-right{
+.inputfeild-billing-right {
   justify-content: center;
 }
 
@@ -145,95 +130,92 @@
 }
 
 @media screen and (min-width:967.99px) and (max-width:1031.99px) {
-  .Billing-page-secend-container{
+  .Billing-page-secend-container {
     flex-wrap: wrap;
   }
 
-  .inputfeild-billing-right{
+  .inputfeild-billing-right {
     justify-content: center;
   }
 
-  .Billing-secend-left{
+  .Billing-secend-left {
     width: 90%;
 
   }
 
-  .Billing-secend-right{
+  .Billing-secend-right {
     width: 90%;
   }
 
   .input-feild-booking {
     flex-wrap: wrap;
     justify-content: center;
-}
-  
+  }
+
 }
 
-@media screen  and (max-width:968px) {
-  .Billing-page-secend-container{
+@media screen and (max-width:968px) {
+  .Billing-page-secend-container {
     flex-wrap: wrap;
   }
-  .Billing-secend-right{
+
+  .Billing-secend-right {
     width: 80%;
   }
 
-  .Billing-secend-left{
+  .Billing-secend-left {
     width: 80%;
 
   }
 
 }
 
-@media screen  and (max-width:600px) {
-  /* style={{flexWrap:'wrap', justifyContent:'center'}} */
-  .inputfeild-billing-right{
-flex-wrap: wrap;
-justify-content: center;
+@media screen and (max-width:600px) {
+  .inputfeild-billing-right {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
-  .Billing-secend-left{
+  .Billing-secend-left {
     width: 100%;
 
   }
 
-  .input-feild-left-bottom{
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-}
-
-@media screen  and (max-width:698.99px) {
-.input-feild-booking {
+  .input-feild-left-bottom {
     flex-wrap: wrap;
     justify-content: center;
+  }
+
 }
 
-
+@media screen and (max-width:698.99px) {
+  .input-feild-booking {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
-
-.input-field .input-mobile{
+.input-field .input-mobile {
   width: 100% !important;
 }
 
-
-
 @media screen and (max-width:500px) {
-  .desktop-division-one{
+  .desktop-division-one {
     display: none !important;
   }
-  .mobile-division-two{
+
+  .mobile-division-two {
     display: block !important;
 
   }
 }
 
 @media screen and (min-width:501px) {
-  .desktop-division-one{
+  .desktop-division-one {
     display: block !important;
   }
-  .mobile-division-two{
+
+  .mobile-division-two {
     display: none !important;
 
   }

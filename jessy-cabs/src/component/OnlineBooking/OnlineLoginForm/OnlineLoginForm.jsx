@@ -6,7 +6,6 @@ const OnlineLoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-
     const handleLogin = (e) => {
         e.preventDefault();
         // Here, you can perform authentication logic. For simplicity, we'll use mock data.
@@ -14,7 +13,7 @@ const OnlineLoginForm = () => {
             // Save login status to local storage
             localStorage.setItem('isLoggedIn', true);
             navigate('/onlinebooking'); // Redirect to the Online Booking form if login is successful
-            
+
         } else {
             alert('Invalid credentials. Please try again.');
         }

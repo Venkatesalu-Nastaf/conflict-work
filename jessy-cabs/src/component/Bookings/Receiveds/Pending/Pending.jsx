@@ -176,7 +176,6 @@ const Pending = () => {
           </div>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              // rows={rows}
               rows={reversedRows}
               columns={columns}
               onRowClick={(event) => handleButtonClick(event.row)}

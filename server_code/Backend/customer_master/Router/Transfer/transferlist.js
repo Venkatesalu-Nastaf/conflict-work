@@ -61,7 +61,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
         vehicleDataMap[row.vehiclename] = { fueltype: row.fueltype, segement: row.segement, Groups: row.Groups };
 
       });
-      db.query('select customer,gstTax,address1,address2,city from customers where customer=?', [customer], (err, result2) => {
+      db.query('select customer,gstTax,address1 from customers where customer=?', [customer], (err, result2) => {
         if (err) {
           return res.status(500).json({ error: 'Failed to retrieve tripsheet details from MySQL' });
         }
@@ -73,7 +73,7 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
 
         result2.forEach(row => {
           // vehicleDataMap[row.customer]={gsttax:row.gstTax}
-          vehicleDataMap[row.customer] = { gsttax: row.gstTax,Customeraddress1:row.address1,Customeraddress2:row.address2,Customercity:row.city };
+          vehicleDataMap[row.customer] = { gsttax: row.gstTax,Customeraddress1:row.address1 };
 
         })
 
@@ -88,8 +88,6 @@ router.get('/tripsheetcustomertripid/:customer/:tripid', async (req, res) => {
           obj.Groups = vehicleData ? vehicleData.Groups : 'unknown';
           obj.gstTax = customerdetails ? customerdetails.gsttax : 'unknown'
           obj.CustomerAddress1 = customerdetails ? customerdetails.Customeraddress1 : 'unknown'
-          obj.CustomerAddress2= customerdetails ? customerdetails.Customeraddress2 : 'unknown'
-          obj.Customercity= customerdetails ? customerdetails.Customercity : 'unknown'
         });
 
 
@@ -460,8 +458,6 @@ router.get('/pdfdatatransferreporttripid2/:customer/:tripid', async (req, res) =
         vi.Groups AS Groups, 
         c.gstTax AS gstTax,
         c.address1 AS Customeraddress1,
-        c.address2 AS Customeraddress2,
-        c.city AS Customeraddress3,
         JSON_ARRAYAGG(JSON_OBJECT('imagees',tri.name)) AS bookattachedimage,
         JSON_ARRAYAGG(JSON_OBJECT('attachedimageurl', us.path)) AS Attachedimage,
         JSON_ARRAYAGG(JSON_OBJECT('trip_type', gd.trip_type, 'place_name', gd.place_name)) AS gmapdata,

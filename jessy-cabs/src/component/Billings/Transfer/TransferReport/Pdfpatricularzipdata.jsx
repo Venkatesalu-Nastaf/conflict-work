@@ -325,11 +325,8 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
   const [orgname, setOrgname] = useState('')
   const [orgaddress1, setOrgaddress1] = useState('')
-  const [orgaddress2, setOrgaddress2] = useState('')
   const [orgaddress3, setOrgaddress3] = useState('')
   const [address1, setAddress1] = useState('')
-  const [address2, setAddress2] = useState('')
-  const [address3, setAddress3] = useState('')
   const [customer, setCustomer] = useState('')
   const [empno, setEmpno] = useState('')
   const [customermobile, setCustomermobile] = useState()
@@ -366,8 +363,6 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
   const [tripCustomercode, setTripCustomercode] = useState('')
   const [category, setCategory] = useState('')
   const [addresscustomer, setAddresscustomer] = useState('')
-  const [addresscustomer1, setAddresscustomer1] = useState('')
-  const [addresscustomer2, setAddresscustomer2] = useState('')
   const [bookimage,setBookingimage]=useState([])
  
 
@@ -380,25 +375,20 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
   useEffect(() => {
     let addressone = ''
-    let addresstwo = ''
     let addressthree = ''
     let organisationname = ''
     organisationdetail?.forEach((li) => {
       addressone = li.addressLine1
-      addresstwo = li.addressLine2
       addressthree = li.location
       organisationname = li.organizationname
     })
     setOrgaddress1(addressone)
-    setOrgaddress2(addresstwo)
     setOrgaddress3(addressthree)
     setOrgname(organisationname)
   }, [organisationdetail])
 
   useEffect(() => {
     let addressone = ''
-    let addresstwo = ''
-    let addressthree = ""
     let customers = ''
     let fueltype = ''
     let employeeno = ''
@@ -436,14 +426,11 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     let routemapdata = []
     let attachedimagedata = []
     let customeraddress1 = ""
-    let customeraddress2 = ''
-    let customeraddress3 = ""
+   
     let bookingimagedata=[]
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
         addressone = li.address1
-        addresstwo = li.city
-        addressthree = li.streetno
         customers = li.customer
         fueltype = li.fueltype
         employeeno = li.employeeno
@@ -482,8 +469,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
         CustomerCode = li.customercode
         Categorygroups = li.Groups
         customeraddress1 = li.Customeraddress1
-        customeraddress2 = li.Customeraddress2
-        customeraddress3 = li.Customeraddress3
+    
 
 
 
@@ -508,8 +494,6 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     const { signature_path } = signatureimage
     const { map_path } = mapimage
     setAddress1(addressone)
-    setAddress2(addresstwo)
-    setAddress3(addressthree)
     setCustomer(customers)
     setFuel(fueltype)
     setEmpno(employeeno)
@@ -545,8 +529,6 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
     setTripCustomercode(CustomerCode)
     setCategory(Categorygroups)
     setAddresscustomer(customeraddress1)
-    setAddresscustomer1(customeraddress2)
-    setAddresscustomer2(customeraddress3)
 
     setCalcPackages(packages)
     setBookingimage(JSON.parse(uniqueJsonStringbook))
@@ -567,7 +549,6 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                   <View>
                     <Text style={styles.text1}>{orgname}</Text>
                     <Text style={styles.text2}> {orgaddress1}</Text>
-                    <Text style={styles.text2}> {orgaddress2}</Text>
                     <Text style={styles.text2}>{orgaddress3} </Text>
                   </View>
                   <View>
@@ -607,7 +588,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
 
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Address        :</Text>
-                      <Text style={styles.clientName}> {addresscustomer},{'\n'} {addresscustomer1},{addresscustomer2}</Text>
+                      <Text style={styles.clientName}> {addresscustomer}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Category      :</Text>
@@ -627,7 +608,7 @@ const PdfzipParticularData = ({ particularPdf, organisationdetail, imagename, })
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Report Add    :</Text>
-                      <Text style={styles.clientName}> {address1},{'\n'} {address3},{address2}</Text>
+                      <Text style={styles.clientName}> {address1}</Text>
                     </View>
                     <View style={styles.deatilssection1}>
                       <Text style={styles.labeltag}>Client Mobile :</Text>

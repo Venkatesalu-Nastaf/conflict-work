@@ -54,11 +54,9 @@
     width: 81vw;
     display: flex;
     flex-direction: column;
-    /* padding-top: 20px; */
     border-radius: 20px;
     color: #000;
     background-color: var(--glass);
-    /* background-color: #f0ece2; */
 }
 
 .RateValidity-form .Title-Name {
@@ -66,7 +64,6 @@
 }
 
 .copy-title-btn-RateValidity {
-    /* width: 100%; */
     margin-top: 30px;
     background-color: var(--glass);
     padding: 20px 20px;
@@ -90,25 +87,23 @@
     border-radius: 20px;
     height: 3px;
     background-color: #457cdc;
-    /* Adjust color as needed */
 }
 
-.RateValidity-input-feilds{
+.RateValidity-input-feilds {
     flex-wrap: wrap;
-    /* justify-content: center; */
 }
 
-@media only screen  and (max-width:977px) {
-.RateValidity-input-feilds{
-    flex-wrap: wrap;
-    justify-content: center;
+@media only screen and (max-width:977px) {
+    .RateValidity-input-feilds {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
-}
+
 @media only screen and (min-width:320px) and (max-width:1240px) {
-    .RateValidity-input{
+    .RateValidity-input {
         width: 200px !important;
-       
-    } 
+    }
 }
 
 @media only screen and (min-width:320px) and (max-width:380px) {
@@ -118,6 +113,6 @@
     }
 }
 
-.box-mui-icons{
+.box-mui-icons {
     top: 30px;
 }

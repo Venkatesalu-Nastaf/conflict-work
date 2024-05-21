@@ -30,11 +30,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import MinorCrashIcon from "@mui/icons-material/MinorCrash";
 import RateReviewIcon from "@mui/icons-material/RateReview";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+// import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import LocationCityIcon from "@mui/icons-material/LocationCity";
+// import LocationCityIcon from "@mui/icons-material/LocationCity";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
@@ -306,7 +306,7 @@ const Accuntinfo = () => {
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input" style={{ paddingRight: "15px" }}>
+              {/* <div className="input" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <LocationCityIcon color="action" />
                 </div>
@@ -320,7 +320,7 @@ const Accuntinfo = () => {
                   sx={{ width: "100%" }}
                   variant="standard"
                 />
-              </div>
+              </div> */}
               <div className="input radio" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <StoreIcon color="action" />
@@ -364,28 +364,7 @@ const Accuntinfo = () => {
           </div>
         </div>
         <div className="input-field account-info-label">
-          <div className="input">
-            <FormControl>
-              <FormLabel id="demo-row-radio-buttons-group-label">
-                Is Runing
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="isRunning"
-                autoComplete="new-password"
-                onChange={handleChange}
-                value={selectedCustomerData?.isRunning || book.isRunning}
-              >
-                <FormControlLabel
-                  value="yes"
-                  control={<Radio />}
-                  label="Yes"
-                />
-                <FormControlLabel value="no" control={<Radio />} label="No" />
-              </RadioGroup>
-            </FormControl>
-          </div>
+         
           <div className="input radio">
             <FormControl>
               <FormLabel id="demo-row-radio-buttons-group-label">

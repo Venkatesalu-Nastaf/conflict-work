@@ -13,7 +13,7 @@ const SMSFormat = () => {
             <form action="">
                 <div className="SMSFormat-header">
                     <div className="input-field sms-input-field">
-                        <div className="inputs" style={{display: 'grid'}}>
+                        <div className="inputs" style={{ display: 'grid' }}>
                             <span className="Title-Name">Booking Confirmtion SMS</span>
                             <TextField
                                 className='sms-box'
@@ -24,7 +24,7 @@ const SMSFormat = () => {
                                 defaultValue="Greetings from JESSY CABS Booking confirmation for <GN>  Vehicle Type <VT> on <RD> @<RP>. by <RT> Booking No <BN> For Asst. Ph no.044 49105959"
                             />
                         </div>
-                        <div className="inputs" style={{display: 'grid'}}>
+                        <div className="inputs" style={{ display: 'grid' }}>
                             <span className="Title-Name">Booking Vehicle Confirm</span>
                             <TextField
                                 className='sms-box'
@@ -36,8 +36,8 @@ const SMSFormat = () => {
                             />
                         </div>
                     </div>
-                    <div className="input-field sms-input-field" style={{display: 'flex', textAlign: 'center'}}>
-                        <div className="inputs" style={{display: 'grid'}}>
+                    <div className="input-field sms-input-field" style={{ display: 'flex', textAlign: 'center' }}>
+                        <div className="inputs" style={{ display: 'grid' }}>
                             <span className="Title-Name">Booking Cancelled</span>
                             <TextField
                                 className='sms-box'
@@ -48,7 +48,7 @@ const SMSFormat = () => {
                                 defaultValue=""
                             />
                         </div>
-                        <div className="inputs" style={{display: 'grid'}}>
+                        <div className="inputs" style={{ display: 'grid' }}>
                             <span className="Title-Name">Trip Sheet SMS</span>
                             <TextField
                                 className='sms-box'
@@ -60,8 +60,8 @@ const SMSFormat = () => {
                             />
                         </div>
                     </div>
-                    <div className="input-field sms-input-field" style={{display: 'flex', textAlign: 'center'}}>
-                        <div className="inputs" style={{display: 'grid'}}>
+                    <div className="input-field sms-input-field" style={{ display: 'flex', textAlign: 'center' }}>
+                        <div className="inputs" style={{ display: 'grid' }}>
                             <span className="Title-Name">Trip Sheet Driver</span>
                             <TextField
                                 className='sms-box'
@@ -72,7 +72,7 @@ const SMSFormat = () => {
                                 defaultValue="Trip details from JESSY CABS Guest Name <GN> contact no <GM> T.S no <TN> Reporting Date:<RD>  Reporting Time <RT> Reporting Address <RA>"
                             />
                         </div>
-                        <div className="inputs" style={{display: 'grid'}}>
+                        <div className="inputs" style={{ display: 'grid' }}>
                             <span className="Title-Name">URL Trip Closing</span>
                             <TextField
                                 className='sms-box'
@@ -91,7 +91,7 @@ const SMSFormat = () => {
                             </Button>
                         </div>
                     </div>
-                    <div className="input-field" style={{width: '100%'}}>
+                    <div className="input-field" style={{ width: '100%' }}>
                         <div className="inputs" style={{
                             width: "1430px", display: 'flex',
                             flexDirection: 'column',

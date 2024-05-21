@@ -24,11 +24,8 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
 
   const [orgname, setOrgname] = useState('')
   const [orgaddress1, setOrgaddress1] = useState('')
-  const [orgaddress2, setOrgaddress2] = useState('')
   const [orgaddress3, setOrgaddress3] = useState('')
   const [address1, setAddress1] = useState('')
-  const [address2, setAddress2] = useState('')
-  const [address3, setAddress3] = useState('')
   const [customer, setCustomer] = useState('')
   const [empno, setEmpno] = useState('')
   const [customermobile, setCustomermobile] = useState()
@@ -65,8 +62,6 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
   const [tripCustomercode, setTripCustomercode] = useState('')
   const [category, setCategory] = useState('')
   const [addressCustomer, setAddresscustomer] = useState('')
-  const [addressCustomer1, setAddresscustomer1] = useState('')
-  const [addresscity, setAddressCity] = useState('')
   const [bookmailiamge, setBookmailimage] = useState('')
   const [remark, setRemark] = useState('')
   const apiUrl = APIURL;
@@ -75,25 +70,20 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
 
   useEffect(() => {
     let addressone = ''
-    let addresstwo = ''
     let addressthree = ''
     let organisationname = ''
     organisationdetail?.forEach((li) => {
       addressone = li.addressLine1
-      addresstwo = li.addressLine2
       addressthree = li.location
       organisationname = li.organizationname
     })
     setOrgaddress1(addressone)
-    setOrgaddress2(addresstwo)
     setOrgaddress3(addressthree)
     setOrgname(organisationname)
   }, [organisationdetail])
 
   useEffect(() => {
     let addressone = ''
-    let addresstwo = ''
-    let addressthree = ""
     let customers = ''
     let fueltype = ''
     let employeeno = ''
@@ -128,14 +118,11 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
     let CustomerCode = ''
     let Categorygroups = ''
     let AddressCustomer1 = ''
-    let AddressCustomer2 = ''
-    let AddressCustomer3 = ''
 
     if (Array.isArray(particularPdf)) {
       particularPdf.forEach((li) => {
         addressone = li.address1
-        addresstwo = li.city
-        addressthree = li.streetno
+      
         customers = li.customer
         fueltype = li.fueltype
         employeeno = li.employeeno
@@ -170,15 +157,11 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
         CustomerCode = li.customercode
         Categorygroups = li.Groups
         AddressCustomer1 = li.CustomerAddress1
-        AddressCustomer2 = li.CustomerAddress2
-        AddressCustomer3 = li.Customercity
 
       })
     }
     console.log(segment, "seg")
     setAddress1(addressone)
-    setAddress2(addresstwo)
-    setAddress3(addressthree)
     setCustomer(customers)
     setFuel(fueltype)
     setEmpno(employeeno)
@@ -215,8 +198,6 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
     setTripCustomercode(CustomerCode)
     setCategory(Categorygroups)
     setAddresscustomer(AddressCustomer1)
-    setAddresscustomer1(AddressCustomer2)
-    setAddressCity(AddressCustomer3)
 
     setCalcPackages(packages)
   }, [particularPdf,segment])
@@ -362,7 +343,6 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
             <div className="customerdiv">
               <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{orgname}</h2>
               <h2 className="organisationtext">{orgaddress1}</h2>
-              <h2 className="organisationtext">{orgaddress2}</h2>
               <h2 className="organisationtext">{orgaddress3}</h2>
             </div>
             <div className="Taxinvoicediv">
@@ -388,12 +368,12 @@ const PdfParticularData = ({ addressDetails, particularPdf, organisationdetail, 
             <div className="clientFistDiv">
 
               <p className="detailstext"><span className="labeltag">Client Name </span><p className="colontag">:</p> <span className="clientName">{customer}</span></p>
-              <p className="detailstext"><span className="labeltag">Address </span><p className="colontag">:</p><span className="clientName">{addressCustomer}  , {addressCustomer1}{'\n'}{addresscity}</span></p>
+              <p className="detailstext"><span className="labeltag">Address </span><p className="colontag">:</p><span className="clientName">{addressCustomer}</span></p>
               <p className="detailstext"><span className="labeltag">Category </span><p className="colontag">:</p><span className="clientName">{category}</span></p>
               <p className="detailstext"> <span className="labeltag">Fuel Type </span><p className="colontag">:</p><span className="clientName">{fuel}</span></p>
               <p className="detailstext"> <span className="labeltag">Emp.No </span><p className="colontag">:</p><span className="clientName">{empno}</span></p>
               <p className="detailstext"><span className="labeltag">Emp.Name </span ><p className="colontag">:</p><span className="clientName"> {guestname}</span></p>
-              <p className="detailstext"><span className="labeltag">Report Add</span><p className="colontag">:</p><span className="clientName">{address1}, {address3}{'\n'}{address2}</span></p>
+              <p className="detailstext"><span className="labeltag">Report Add</span><p className="colontag">:</p><span className="clientName">{address1}</span></p>
               <p className="detailstext"><span className="labeltag">Client Mobile</span><p className="colontag">:</p><span className="clientName">{customermobile}</span></p>
               <p className="detailstext"><span className="labeltag">Drop Address</span><p className="colontag">:</p><span>{dropaddress}</span></p>
             </div>

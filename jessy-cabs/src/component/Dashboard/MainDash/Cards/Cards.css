@@ -3,7 +3,8 @@
   gap: 10px;
 }
 
-.Cards .apexcharts-toolbar,.apexcharts-theme-light {
+.Cards .apexcharts-toolbar,
+.apexcharts-theme-light {
   color: #000;
   color: #c7c7c7b0;
 }
@@ -14,33 +15,31 @@
 
 @media screen and (min-width:769px) and (max-width: 815px) {
   .cards-container {
-    /* margin-top: 20px; */
     width: 84%;
-}
+  }
 
-.cards-dashboard{
-  width: 200px !important;
-}
+  .cards-dashboard {
+    width: 200px !important;
+  }
 }
 
 
 @media screen and (min-width:815.99px) and (max-width: 881px) {
   .cards-container {
-    /* margin-top: 20px; */
     width: 89%;
-}
+  }
 
-.cards-dashboard{
-  width: 250px !important;
-}
+  .cards-dashboard {
+    width: 250px !important;
+  }
 }
 
 @media screen and (max-width: 1200px) {
   .Cards {
-    /* flex-direction: column; */
     flex-wrap: wrap;
     justify-content: space-around;
   }
+
   .parentContainer {
     height: 9rem;
   }
@@ -52,17 +51,16 @@
   }
 }
 
-
-.cards-container{
+.cards-container {
   margin-top: 20px;
 }
 
-.cards-dashboard{
+.cards-dashboard {
   width: 100%;
 }
 
 @media screen and (max-width: 1219px) {
-  .cards-dashboard{
-    width: 300px ;
+  .cards-dashboard {
+    width: 300px;
   }
 }

@@ -39,7 +39,7 @@ import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
+// import LocationCityIcon from "@mui/icons-material/LocationCity";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
@@ -53,7 +53,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import TransgenderRoundedIcon from "@mui/icons-material/TransgenderRounded";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import { APIURL } from "../../../url";
-import DateRangeIcon from '@mui/icons-material/DateRange';
+// import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from "../../../context/permissionContext";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
@@ -332,22 +332,7 @@ const Employe = () => {
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input input-address" style={{ paddingRight: '15px' }}>
-                <div className="icone">
-                  <LocationCityIcon color="action" />
-                </div>
-                <TextField
-                  sx={{ width: "415px" }}
-                  size="small"
-                  id="address2"
-                  name="address2"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.address2 || book.address2}
-                  onChange={handleChange}
-                  variant="standard"
-                  style={{ width: '100%' }}
-                />
-              </div>
+              
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <EscalatorWarningIcon color="action" />

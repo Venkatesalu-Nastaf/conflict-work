@@ -19,9 +19,9 @@ const styles = StyleSheet.create({
         border: '2px solid #000000',
         padding: '20px'
     },
-    text2: {
-        fontSize: '12px',
-    },
+    // text2: {
+    //     fontSize: '12px',
+    // },
     text1: {
         fontSize: '17px',
         fontWeight:'bold'
@@ -100,9 +100,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: '5px'
     },
-    lastdiv: {
-        border: '1px solid #000000'
-    },
+    // lastdiv: {
+    //     border: '1px solid #000000'
+    // },
     lastamount: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -152,8 +152,6 @@ const styles = StyleSheet.create({
 
 const PdfContent2 = ({ invdata, customeraddress, invoiceno, customer, invoiceDate, fromDate, enddate,organisationname,imagename  }) => {
     const [address1, setAddress1] = useState('')
-    const [address2, setAddress2] = useState('')
-    const [address3, setAddress3] = useState('')
     const [totalAmount, setTotalAmount] = useState('')
     const [extraKmAmount, setExtraKmAmount] = useState('')
     const [parking, setParking] = useState('')
@@ -185,20 +183,14 @@ const PdfContent2 = ({ invdata, customeraddress, invoiceno, customer, invoiceDat
     useEffect(() => {
         if (customeraddress) {
             let address1 = ""
-            let address2 = ""
-            let city = ""
             let gstno = ""
             customeraddress?.map((li) => {
                 address1 = li.address1
-                address2 = li.address2
-                city = li.city
                 gstno = li.gstnumber
                 return null
             })
 
             setAddress1(address1)
-            setAddress2(address2)
-            setAddress3(city)
             setGst(gstno)
         }
     }, [apiUrl, customeraddress])
@@ -208,7 +200,7 @@ const PdfContent2 = ({ invdata, customeraddress, invoiceno, customer, invoiceDat
     const sgst = fullAmount * 2.5 / 100
     const park = parseInt(parking)
     const permitcharge = parseInt(permit)
-    const parkpermit = park + permitcharge
+    // const parkpermit = park + permitcharge
     const FullAmount = fullAmount + cgst + sgst + park + permitcharge
     const formattedFullAmount = FullAmount.toFixed(2);
     const tripsheetnos = invdata?.length
@@ -229,7 +221,7 @@ const PdfContent2 = ({ invdata, customeraddress, invoiceno, customer, invoiceDat
                             <Text style={styles.text2}>Tel:044-24354247,Mob:9841505689 </Text> */}
                             <Text style={styles.text1}> {organisationdetailfill[0].organizationname}</Text>
         <Text style={styles.text2}> {organisationdetailfill[0].addressLine1}</Text>
-        <Text style={styles.text2}> {organisationdetailfill[0].addressLine2}{organisationdetailfill[0].location}</Text>
+        <Text style={styles.text2}> {organisationdetailfill[0].location}</Text>
         <Text style={styles.text2}>{organisationdetailfill[0].contactEmail} </Text>
         <Text style={styles.text2}>Tel:{organisationdetailfill[0].telephone},Mob:{organisationdetailfill[0].contactPhoneNumber} </Text>
 
@@ -254,8 +246,7 @@ const PdfContent2 = ({ invdata, customeraddress, invoiceno, customer, invoiceDat
                                     <View style={{ flexDirection: 'column' }}>
                                         <Text style={styles.clientsubtext}>{customer}</Text>
                                         <Text style={styles.clientsubtext}>{address1}</Text>
-                                        <Text style={styles.clientsubtext}>{address2}</Text>
-                                        <Text style={styles.clientsubtext}>{address3}</Text>
+
                                     </View>
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>

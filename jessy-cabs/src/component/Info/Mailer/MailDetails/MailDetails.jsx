@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./MailDetails.css";
 import { Table } from "@mui/joy";
 import Box from "@mui/material/Box";
@@ -10,14 +10,14 @@ import { useNavigate } from "react-router-dom";
 // ICONS
 import SmsIcon from '@mui/icons-material/Sms';
 import SendIcon from '@mui/icons-material/Send';
-import BookIcon from '@mui/icons-material/Book';
+// import BookIcon from '@mui/icons-material/Book';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import AttachEmailIcon from "@mui/icons-material/AttachEmail";
+// import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 
@@ -30,9 +30,7 @@ const rows = [
   // createData('3', "Michael Johnson", "73421288938"),
   // createData('4', "Sarah Davis", "62779165285"),
   // createData('5', "Robert Wilson", "7729734456"),
-
 ];
-
 
 // const rowsTemplate = [
 // createDataTemplate('1', '123', 'Hello, how are you?'),
@@ -40,7 +38,6 @@ const rows = [
 // createDataTemplate('3', '125', 'Congratulations! You won a prize.'),
 // createDataTemplate('4', '126', 'URGENT: Action required. Please respond.'),
 // createDataTemplate('5', '127', 'Thank you for your purchase.'),
-
 // ];
 // TABLE END
 
@@ -68,7 +65,6 @@ const actions = [
 const MailDetails = () => {
 
   const handleIconClick = () => {
-    // Trigger click event of the input field
     document.getElementById('fileInput').click();
   };
 
@@ -79,12 +75,11 @@ const MailDetails = () => {
     const selectedFile = e.target.files[0].name;
     console.log(selectedFile);
     setFile(selectedFile);
-    // Perform any additional actions with the selected file, such as uploading to a server
   };
 
   const navigate = useNavigate();
 
-  const handleTemplateCreation = () =>{
+  const handleTemplateCreation = () => {
     navigate("/home/info/mailer/TemplateSelection");
   }
 
@@ -99,7 +94,7 @@ const MailDetails = () => {
                   <div className="input" style={{ width: "180px" }}>
                     <a href={xlsx} download><Button variant="outlined">Excel Format</Button></a>
                   </div>
-                  <div className="input" style={{ width: "100px" }}  onClick={handleIconClick}>
+                  <div className="input" style={{ width: "100px" }} onClick={handleIconClick}>
                     <Button variant="contained">Upload</Button>
                   </div>
                   <input
@@ -109,7 +104,7 @@ const MailDetails = () => {
                     style={{ display: 'none' }}
                   />
                 </div>
-                <div style={{textAlign: "center", marginTop: '10px', color: 'green', fontWeight: '600'}}>{file}</div>
+                <div style={{ textAlign: "center", marginTop: '10px', color: 'green', fontWeight: '600' }}>{file}</div>
                 <div className="input-field ">
                   <div className="input" style={{ width: "400px" }}>
                     <div className="icone">
@@ -142,7 +137,7 @@ const MailDetails = () => {
               <div className="textbox">
                 <div className="textboxlist">
                   <div className="textboxlist-customer ">
-                    <div className="input-field" style={{justifyContent: 'center', flexWrap: 'wrap'}}>
+                    <div className="input-field" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
                       <div>
                         <div className="input template-input" style={{ width: "300px" }}>
                           <div className="icone">
@@ -157,7 +152,7 @@ const MailDetails = () => {
                           />
                         </div>
                       </div>
-                      <div className="template-search-btn" style={{display: 'flex'}}>
+                      <div className="template-search-btn" style={{ display: 'flex' }}>
                         <div className="input" style={{ width: "100px" }}>
                           <Button variant="contained">Search</Button>
                         </div>
@@ -191,60 +186,6 @@ const MailDetails = () => {
               </div>
             </div>
           </div>
-          {/* <div className="detail-container-main-mailDetails">
-            <div className="container-left-mailDetails">
-              <div className="mailDetails-header">
-                <div className="input-field" style={{ justifyContent: "center" }}>
-                  <div className="input" style={{ width: "350px" }}>
-                    <div className="icone">
-                      <AttachEmailIcon color="action" />
-                    </div>
-                    <TextField
-                      size="small"
-                      id="templatename"
-                      label="Template Name"
-                      name="templatename"
-                      sx={{ width: "200ch" }}
-                    />
-                  </div>
-                  <div className="input">
-                    <div className="icone">
-                      <BookIcon />
-                    </div>
-                    <TextField
-                      size="small"
-                      id="usedfor"
-                      label="Used For"
-                      name="usedfor"
-                    />
-                  </div>
-                </div>
-                <div className="input-field ">
-                  <div className="input" style={{ width: "630px" }}>
-                    <div className="icone">
-                      <SmsIcon color="action" />
-                    </div>
-                    <TextField
-                      multiline
-                      rows={4}
-                      name="CreateMailTemplate"
-                      label="Create Mail Template"
-                      id="CreateMailTemplate"
-                      sx={{ m: 1, width: "200ch" }}
-                    />
-                  </div>
-                </div>
-                <div className="input-field">
-                  <div className="input" style={{ width: "230px" }}>
-                    <Button variant="contained">Update List</Button>
-                  </div>
-                  <div className="input" style={{ width: "20px" }}>
-                    <Button variant="outlined">Clear</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"

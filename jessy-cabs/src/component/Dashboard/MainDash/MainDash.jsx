@@ -11,13 +11,10 @@ const MainDash = () => {
       setIsBelow768px(window.innerWidth < 768.99);
     };
 
-    // Call handleResize initially to set the initial state
     handleResize();
 
-    // Add event listener for window resize
     window.addEventListener('resize', handleResize);
 
-    // Cleanup function to remove event listener
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -25,7 +22,7 @@ const MainDash = () => {
   return (
     <>
       {isBelow768px ? (
-        <div style={{height: '93vh', width: '100%', overflowY: 'scroll', overflowX: 'hidden', paddingBottom: '20px'}}>
+        <div style={{ height: '93vh', width: '100%', overflowY: 'scroll', overflowX: 'hidden', paddingBottom: '20px' }}>
           <div className="MainDash">
             <Cards />
             <Table />
@@ -39,8 +36,7 @@ const MainDash = () => {
             <Table />
           </div>
           <div>
-          <RightSide />
-            
+            <RightSide />
           </div>
         </>
       )}

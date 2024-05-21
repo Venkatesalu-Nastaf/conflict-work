@@ -18,27 +18,28 @@
     border: 2px solid #ccc;
     border-radius: 10px;
     background: var(--glass);
-    padding: 20px ;
+    padding: 20px;
 }
 
 @media screen and (max-width: 560px) {
     .mailDetails-header {
-       width: 65vw;
+        width: 65vw;
     }
 }
 
 @media screen and (max-width: 561px) {
-    .mail-textarea1{
+    .mail-textarea1 {
         width: 100% !important;
     }
-    .mail-textarea1-btn{
+
+    .mail-textarea1-btn {
         position: relative;
         left: -25px;
     }
 }
 
 @media screen and (max-width: 650px) {
-    .textbox{
+    .textbox {
         width: 69vw !important;
         padding-left: 0px !important;
     }
@@ -79,8 +80,6 @@
     color: #000;
 }
 
-
-
 /* TextBox */
 .textbox-mailDetails {
     width: 90%;
@@ -100,7 +99,6 @@
 
 .mailDetails-list-update {
     margin-top: 10px;
-    /* overflow: scroll; */
     height: 190px;
 }
 
@@ -139,14 +137,16 @@
 }
 
 @media screen and (max-width: 410px) {
-    .template-input{
+    .template-input {
         width: 200px !important;
     }
-    .template-search-btn{
+
+    .template-search-btn {
         flex-wrap: wrap;
         justify-content: center;
     }
-    .textboxlist{
+
+    .textboxlist {
         height: 285px;
     }
 }

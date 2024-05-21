@@ -62,7 +62,6 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 // import RateReviewIcon from "@mui/icons-material/RateReview";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 
-import LocationCityIcon from "@mui/icons-material/LocationCity";
 // import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
@@ -294,15 +293,20 @@ const DriverCreation = ({ stationName }) => {
                                     <AddHomeWorkIcon color="action" />
                                 </div>
                                 <TextField
-                                    size="small"
+                                  margin="normal"
+                                    // size="small"
                                     name="address1"
+                                    multiline
+                                    rows={2}
+                                    sx={{ width: "100%" }}
                                     value={selectedCustomerData?.address1 || book.address1}
                                     onChange={handleChange}
                                     label="Address"
                                     id="address1"
-                                    sx={{ m: 1, width: "100%" }}
-                                    variant="standard"
+                                    style={{ width: '100%' }}
+                                    
                                 />
+                          
                             </div>
 
                             {/* <div className="input">
@@ -411,7 +415,7 @@ const DriverCreation = ({ stationName }) => {
                                     variant="standard"
                                 /> */}
 
-                            <div className="input driver-input" style={{paddingRight: '15px'}}>
+                            {/* <div className="input driver-input" style={{paddingRight: '15px'}}>
                                 <div className="icone">
                                     <LocationCityIcon color="action" />
                                 </div>
@@ -425,7 +429,7 @@ const DriverCreation = ({ stationName }) => {
                                     sx={{ width: "100%" }}
                                     variant="standard"
                                 />
-                            </div>
+                            </div> */}
 
                             {/* <div className="input">
                                 <div className="icone">

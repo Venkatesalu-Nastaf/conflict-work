@@ -260,7 +260,6 @@ router.get('/searchfordriver', (req, res) => {
     const columnsToSearch = [
       'drivername',
       'driverid',
-      'city',
       'Mobileno',
       'stations',
       'username',

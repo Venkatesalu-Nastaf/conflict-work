@@ -31,10 +31,10 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import RateReviewIcon from "@mui/icons-material/RateReview";
-import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+// import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
+// import LocationCityIcon from "@mui/icons-material/LocationCity";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
@@ -453,7 +453,7 @@ const Customer = ({ stationName }) => {
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input" style={{ paddingRight: '15px' }}>
+              {/* <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <LocationCityIcon color="action" />
                 </div>
@@ -461,14 +461,14 @@ const Customer = ({ stationName }) => {
                   size="small"
                   name="city"
                   id="address3"
-                  value={selectedCustomerData?.city || book.city}
+                  // value={selectedCustomerData?.city || book.city}
                   autoComplete="new-password"
                   onChange={handleChange}
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
                   style={{ width: '100%' }}
                 />
-              </div>
+              </div> */}
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className='icone'>
                   <GrSelect style={{ fontSize: '25px' }} />

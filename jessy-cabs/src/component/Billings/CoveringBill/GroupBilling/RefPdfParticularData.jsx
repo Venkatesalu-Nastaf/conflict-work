@@ -10,11 +10,9 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
     const targetRef = useRef()
     const [orgname, setOrgname] = useState('')
     const [orgaddress1, setOrgaddress1] = useState('')
-    const [orgaddress2, setOrgaddress2] = useState('')
+    // const [orgaddress2, setOrgaddress2] = useState('')
     const [orgaddress3, setOrgaddress3] = useState('')
     const [customerAddress, setCustomerAddress] = useState('')
-    const [customerAddress1, setCustomerAddress1] = useState('')
-    const [customerAddress2, setCustomerAddress2] = useState('')
     const [customer, setCustomer] = useState('')
     const [gst,setGst] = useState('')
     const [fullAmount,setFullAmount] = useState('')
@@ -41,25 +39,28 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
 
     useEffect(() => {
          let address = ""
-         let address1 = ""
-         let city = ""
+        //  let address1 = ""
+        //  let city = ""
          let customer = ""
          let totalamount = 0
          let totalcgst = 0
          let fullamount = 0
-         pdfData?.map((li) => {
-             address = li.address1
-             address1 = li.city
-             city = li.streetno
-             customer = li.customer
-             totalamount+=parseInt(li.netamount)
-             totalcgst+=parseInt(li.netamount)*Gst/100
-             fullamount+=parseInt(li.netamount)+parseInt(li.netamount)*Gst/100+parseInt(li.netamount)*Gst/100
-         })
+        //  pdfData?.map((li) => {
+        //      address = li.address1
+        //      customer = li.customer
+        //      totalamount+=parseInt(li.netamount)
+        //      totalcgst+=parseInt(li.netamount)*Gst/100
+        //      fullamount+=parseInt(li.netamount)+parseInt(li.netamount)*Gst/100+parseInt(li.netamount)*Gst/100
+        //  })
+        pdfData?.forEach((li) => {
+            address = li.address1
+            customer = li.customer
+            totalamount+=parseInt(li.netamount)
+            totalcgst+=parseInt(li.netamount)*Gst/100
+            fullamount+=parseInt(li.netamount)+parseInt(li.netamount)*Gst/100+parseInt(li.netamount)*Gst/100
+        })
          setCustomerAddress(address)
-         setCustomerAddress1(address1)
-         setCustomerAddress2(city)
-         setCustomer(customer)
+          setCustomer(customer)
          setFullAmount(totalamount)
          setTotalCgst(totalcgst)
          setFullTotal(fullamount)
@@ -68,17 +69,20 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
 
     useEffect(() => {
         let addressone = ''
-        let addresstwo = ''
+        // let addresstwo = ''
         let addressthree = ''
         let organisationname = ''
-        organizationdetails?.map((li) => {
+        // organizationdetails?.map((li) => {
+        //     addressone = li.addressLine1
+        //     addressthree = li.location
+        //     organisationname = li.organizationname
+        // })
+        organizationdetails?.forEach((li) => {
             addressone = li.addressLine1
-            addresstwo = li.addressLine2
             addressthree = li.location
             organisationname = li.organizationname
         })
         setOrgaddress1(addressone)
-        setOrgaddress2(addresstwo)
         setOrgaddress3(addressthree)
         setOrgname(organisationname)
     }, [organizationdetails])
@@ -92,8 +96,6 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
                     <div >
                         <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{orgname}</h2>
                         <h2 className="organisationtext">{customerAddress}</h2>
-                        <h2 className="organisationtext">{customerAddress1}</h2>
-                        <h2 className="organisationtext">{customerAddress2}</h2>
                     </div>
                     <div className="Taxinvoicediv">
                         <h3 className="Taxinvoicetext">
@@ -102,7 +104,7 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
                         </h3>
                     </div>
                     <div className="imagediv">
-                        <img src={`${apiUrl}/public/org_logo/${organisationimage}`} className="image" />
+                        <img src={`${apiUrl}/public/org_logo/${organisationimage}`} className="image" alt="organisationimage"/>
                         {/* <h2 className="organisationtext"> GST : {organisationdetails[0].gstnumber}</h2> */}
                     </div>
                 </div>
@@ -117,7 +119,6 @@ const RefPdfParticularData = ({ pdfData, organizationdetails, imagename, refFrom
                     <div >
                         <h2 className="organisationnametext" style={{ textTransform: 'uppercase' }}>{customer}</h2>
                         <h2 className="organisationtext">{orgaddress1}</h2>
-                        <h2 className="organisationtext">{orgaddress2}</h2>
                         <h2 className="organisationtext">{orgaddress3}</h2>
                     </div>
                     <div className="Taxinvoicediv">

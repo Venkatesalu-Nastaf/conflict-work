@@ -83,7 +83,7 @@ const useBooking = () => {
   const [displayCopy, setDisplayCopy] = useState(false);
   const [toDate, setToDate] = useState(dayjs());
   const [fromDate, setFromDate] = useState(dayjs());
-  const [triptime, setTripTime] = useState("");
+  // const [triptime, setTripTime] = useState("");
   const [reporttime, setreporttime] = useState("");
   const [starttime, setStartTime] = useState("");
   const [bookingtime, setBookingTime] = useState("");
@@ -886,7 +886,7 @@ const useBooking = () => {
       }
     }
   };
-  const handlecheck = async () => {
+  const handlecheck = async (lastBookingno) => {
     // if (sendEmail || formData.sendemail || book.sendemail) {
     if (sendEmail || sendmailguestsms) {
       try {
@@ -903,8 +903,20 @@ const useBooking = () => {
             formData.guestmobileno,
           email: formValues.email || selectedCustomerData.email || book.email,
           pickup: formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup,
-          useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage
-        };
+          useage: formData.useage || selectedCustomerData.useage || formValues.useage || book.useage,
+          starttime:formValues.reporttime ||formData.reporttime ||selectedCustomerData.reporttime ||book.reporttime ||"",
+          startdate:formValues.startdate ||formData.startdate ||selectedCustomerData.startdate ||book.startdate || dayjs() ||"",
+          driverName: formData.driverName || selectedCustomerData.driverName || book.driverName || selectedCustomerdriver.driverName,
+          vehType: formData.vehType || selectedCustomerData.vehType || book.vehType || selectedCustomerdriver.vehType,
+          mobileNo: formData.mobileNo || selectedCustomerData.mobileNo || book.mobileNo || selectedCustomerdriver.mobileNo,
+          vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || book.vehRegNo || selectedCustomerdriver.vehRegNo,
+          tripid:formData.tripid || selectedCustomerData.tripid || book.tripid ,
+          servicestation: formData.servicestation || selectedCustomerData.servicestation || book.servicestation,
+          status: book.status||formData.status|| selectedCustomerData.status,
+          requestno: formData.registerno || selectedCustomerData.registerno || book.registerno||"",
+          duty: formData.duty || selectedCustomerData.duty || book.duty||"",
+          bookingno:lastBookingno||''
+ };
         await axios.post(`${apiUrl}/send-email`, dataToSend);
         setSuccess(true);
         setSuccessMessage("Mail Sent Successfully");
@@ -1056,7 +1068,8 @@ const useBooking = () => {
       setRows([]);
       setSuccess(true);
       setSuccessMessage("Successfully Added");
-      handlecheck();
+      // handlecheck();
+      handlecheck(lastBookingno);
       handleSendSMS(lastBookingno);
       setEdit(false)
     } catch (error) {
@@ -1069,8 +1082,8 @@ const useBooking = () => {
 
 
   const handleEdit = async (userid) => {
-    setSendEmail(false);
-    setGuestSms(false)
+    // setSendEmail(false);
+    // setGuestSms(false)
     try {
 
 
@@ -1149,11 +1162,15 @@ const useBooking = () => {
 
       setEdit(false)
 
-      handleCancel();
+      // handleCancel();
       addPdf();
       setRow([]);
       setRowsdriver([])
       setRows([]);
+      handleCancel();
+      if (sendEmail) {
+        handlecheck();
+      }
       setSuccess(true);
 
       setSuccessMessage("Successfully Updated");
@@ -1243,6 +1260,9 @@ const useBooking = () => {
         setSelectedCustomerData(bookingDetails);
         setSelectedCustomerId(bookingDetails.tripid);
         setIsEditMode(true);
+        setEdit(true)
+        setSendEmail(false);
+    setGuestSms(false)
       } catch {
         setError(true);
         setErrorMessage("Error retrieving booking details");
@@ -1359,7 +1379,7 @@ const useBooking = () => {
   }, []);
 
   const reversedRows = [...row].reverse();
-  const reversedRows1 = [...row]
+  // const reversedRows1 = [...row]
 
   const handleShowAll = async () => {
 
@@ -1513,7 +1533,7 @@ const useBooking = () => {
     setSendEmail,
     displayCopy,
     currentYear,
-    setTripTime,
+    // setTripTime,
     handleClickHide,
     actions,
     searchText,

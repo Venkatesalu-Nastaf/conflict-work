@@ -2,22 +2,92 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../../db');
 const moment = require('moment');
+const multer = require('multer');
+const path = require('path');
+router.use(express.static('customer_master'));
 
 // user creation database
 // add user creation database
 
 
-router.post('/drivercreation', (req, res) => {
-  const bookData = req.body;
+// router.post('/drivercreation', (req, res) => {
+//   const bookData = req.body;
 
-  db.query('INSERT INTO drivercreation SET ?', bookData, (err, result) => {
+//   db.query('INSERT INTO drivercreation SET ?', bookData, (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ error: "Failed to insert data into MySQL" });
+
+//     }
+//     return res.status(200).json({ message: "Data inserted successfully" });
+//   });
+// });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './customer_master/public/driver_doc')
+  },
+  filename: (req, file, cb) => {
+
+    
+    cb(null, `${file.fieldname}_${Date.now()}-${file.originalname}`);
+},
+    
+  
+
+})
+
+const uploadfile = multer({ storage: storage });
+
+// Endpoint to handle file upload
+router.post('/drivercreation', uploadfile.single('Profile_image'), (req, res) => {
+  const profile_image = req.file.filename;
+  console.log(profile_image)
+  const {
+    drivername,
+    username,
+    stations,
+    Mobileno,
+    userpassword,
+    joiningdate,
+    active,
+    address1,
+    licenseno,
+    licenseexpdate,
+    city,
+    badgeno,
+    badgeexpdate,
+    aadharno,
+    Email
+  } = req.body;
+  console.log(drivername,
+    username,
+    stations,
+    Mobileno,
+    userpassword,
+    joiningdate,
+    active,
+    address1,
+    licenseno,
+    licenseexpdate,
+    city,
+    badgeno,
+    badgeexpdate,
+    aadharno,
+    Email)
+ 
+
+  const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, city, Email,Profile_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+  db.query(sql, [drivername, username, stations, Mobileno,joiningdate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, city, Email,profile_image], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: "Failed to insert data into MySQL" });
-
-    }
-    return res.status(200).json({ message: "Data inserted successfully" });
+      console.log(err)
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+      
+          }
+          
+          return res.status(200).json({ message: "Data inserted successfully" });
   });
 });
+
 
 
 router.get('/lastdrivergetid', (req, res) => {
@@ -55,9 +125,29 @@ router.delete('/drivercreation/:driverid', (req, res) => {
   });
 });
 // update user creation details
-router.put('/drivercreation/:driverid', (req, res) => {
+// router.put('/drivercreation/:driverid', (req, res) => {
+//   const userid = req.params.driverid;
+//   const updatedCustomerData = req.body;
+//   db.query('UPDATE drivercreation SET ? WHERE driverid = ?', [updatedCustomerData, userid], (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ error: "Failed to update data in MySQL" });
+//     }
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ error: "Customer not found" });
+//     }
+//     return res.status(200).json({ message: "Data updated successfully" });
+//   });
+
+// });
+
+router.put('/drivercreation/:driverid',uploadfile.single('Profile_image'), (req, res) => {
   const userid = req.params.driverid;
   const updatedCustomerData = req.body;
+  if (req.file) {
+    console.log(req.file)
+    updatedCustomerData.Profile_image = req.file.filename;
+  }
+ 
   db.query('UPDATE drivercreation SET ? WHERE driverid = ?', [updatedCustomerData, userid], (err, result) => {
     if (err) {
       return res.status(500).json({ error: "Failed to update data in MySQL" });
@@ -65,6 +155,7 @@ router.put('/drivercreation/:driverid', (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Customer not found" });
     }
+    // console.log(result,"updatedriver")
     return res.status(200).json({ message: "Data updated successfully" });
   });
 
@@ -74,7 +165,7 @@ router.put('/drivercreation/:driverid', (req, res) => {
 router.get('/getDriverDetails', (req, res) => {
   db.query('SELECT * FROM drivercreation', (err, result) => {
     if (err) {
-      console.log(err, 'error');
+      // console.log(err, 'error');
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
 
     }
@@ -86,7 +177,7 @@ router.get('/getDriverDetails', (req, res) => {
 router.get('/getVehicleDetails', (req, res) => {
   db.query('SELECT * FROM vehicleinfo WHERE active ="yes" ', (err, result) => {
     if (err) {
-      console.log(err, 'error');
+      // console.log(err, 'error');
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
     return res.status(200).json(result);
@@ -97,7 +188,7 @@ router.get('/getVehicleDetails', (req, res) => {
 router.get('/getNotVehicleDetails', (req, res) => {
   db.query('SELECT * FROM vehicleinfo WHERE active ="no" ', (err, result) => {
     if (err) {
-      console.log(err, 'error');
+      // console.log(err, 'error');
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
     return res.status(200).json(result);
@@ -108,7 +199,7 @@ router.get('/getNotVehicleDetails', (req, res) => {
 router.get('/checkAssign', (req, res) => {
   db.query('SELECT * FROM driver_trip_assign', (err, result) => {
     if (err) {
-      console.log(err, 'error');
+      // console.log(err, 'error');
       return res.status(500).json({ error: 'Failed to fetch data from MySQL' });
     }
     return res.status(200).json(result);
@@ -119,7 +210,7 @@ router.post('/removeAssign', (req, res) => {
   const { driverName } = req.body;
   db.query('UPDATE drivercreation SET driverApp="online" WHERE drivername IN (?)', [driverName], (err, result) => {
     if (err) {
-      console.log(err, 'error');
+      // console.log(err, 'error');
       return res.status(500).json({ error: 'Failed to update status' });
     }
     return res.status(200).json({ message: 'update successful' });
@@ -132,7 +223,7 @@ router.post('/driverAssign', (req, res) => {
 
   db.query('UPDATE drivercreation SET driverApp="assigned" WHERE drivername IN (?)', [driverName], (err, result) => {
     if (err) {
-      console.log(err, 'error');
+      // console.log(err, 'error');
       return res.status(500).json({ error: 'Failed to update status' });
     }
     return res.status(200).json({ message: 'Update successful' });

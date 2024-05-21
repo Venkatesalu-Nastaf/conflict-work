@@ -24,11 +24,10 @@ const CoveringBill = ({ stationName, organizationNames }) => {
                 <Tab label="Covering Submit" value="coveringsubmit" />
               </TabList>
             </Box>
-            <TabPanel value="groupbilling"><GroupBilling stationName={stationName} organizationNames={organizationNames }/></TabPanel>
+            <TabPanel value="groupbilling"><GroupBilling stationName={stationName} organizationNames={organizationNames} /></TabPanel>
             <TabPanel value="coveringsubmit"><CoveringSubmit stationName={stationName} organizationNames={organizationNames} /></TabPanel>
           </TabContext>
         </Box>
-
       </div>
     </div >
   )

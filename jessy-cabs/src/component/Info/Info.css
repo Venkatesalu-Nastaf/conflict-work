@@ -1,10 +1,9 @@
 .Info-conatiner {
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    grid-gap: 1rem;
-    gap: 1rem;
-    margin-top: 80px;
-    align-items: center;
-  }
-  
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+  gap: 1rem;
+  margin-top: 80px;
+  align-items: center;
+}

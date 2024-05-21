@@ -79,15 +79,12 @@ const Division = () => {
     }
   }, [actionName, handleClick]);
 
-
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
-
   const INFO_read = permissions[16]?.read;
   const INFO_new = permissions[16]?.new;
   const INFO_modify = permissions[16]?.modify;
   const INFO_delete = permissions[16]?.delete;
-
 
   return (
     <div className="division-form Scroll-Style-hide">
@@ -96,7 +93,7 @@ const Division = () => {
           <div className="container-left">
             <div className="copy-title-btn-Division">
               <div className="input-field divisionform-inputfeilds">
-                <div className="input" style={{paddingRight: '15px'}}>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -108,11 +105,10 @@ const Division = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.driverid || book.driverid}
                     onChange={handleChange}
-                    style={{width: '100%'}}
+                    style={{ width: '100%' }}
                   />
                 </div>
-
-                <div className="input division-form-size" style={{paddingRight: '15px'}}>
+                <div className="input division-form-size" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <RateReviewIcon color="action" />
                   </div>
@@ -124,22 +120,18 @@ const Division = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.DivisionName || book.DivisionName}
                     onChange={handleChange}
-                    style={{width: '100%'}}
+                    style={{ width: '100%' }}
                   />
                 </div>
-                {/* </div>
-              <div className="input-field"> */}
-                <div className="input division-form-size" style={{paddingRight: '15px'}}>
+                <div className="input division-form-size" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <WarehouseIcon color="action" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo-customername"
                     freeSolo
-                    // sx={{ width: "20ch" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "customername")}
                     value={CustomerName.find((option) => option.optionvalue)?.label || selectedCustomerData?.customername || ''}
                     options={CustomerName.map((option) => ({
@@ -188,7 +180,6 @@ const Division = () => {
                   )}
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -236,7 +227,6 @@ const Division = () => {
                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
               />
             ))} */}
-
             {INFO_read === 1 && (
               <SpeedDialAction
                 key="list"
@@ -245,7 +235,6 @@ const Division = () => {
                 onClick={(event) => handleClick(event, "List", selectedCustomerId)}
               />
             )}
-
             {INFO_modify === 1 && (
               <SpeedDialAction
                 key="edit"
@@ -262,7 +251,6 @@ const Division = () => {
                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
               />
             )}
-
             {INFO_new === 1 && (
               <SpeedDialAction
                 key="Add"
@@ -271,17 +259,12 @@ const Division = () => {
                 onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
               />
             )}
-
-
             <SpeedDialAction
               key="Cancel"
               icon={<CancelPresentationIcon />}
               tooltipTitle="Cancel"
               onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
             />
-
-
-
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-Division">

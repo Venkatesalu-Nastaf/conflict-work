@@ -55,7 +55,6 @@
     width: 81vw;
     display: flex;
     flex-direction: column;
-    /* padding-top: 20px; */
     border-radius: 20px;
     color: #000;
     background-color: var(--glass);
@@ -75,9 +74,7 @@
 }
 
 .PackageRateEntery-container-bottom {
-    /* border-bottom: solid 1px #ccc; */
     padding-bottom: 20px;
-    /* margin: 10px; */
 }
 
 .PackageRateEntery-form .Title-Name::after {
@@ -89,38 +86,37 @@
     border-radius: 20px;
     height: 3px;
     background-color: #457cdc;
-    /* Adjust color as needed */
 }
 
-.buttons-inputs{
+.buttons-inputs {
     display: flex;
     gap: 10px;
 }
 
 
-.add-details{
+.add-details {
     margin-top: 20px;
 }
 
 
-.icon-cancel{
+.icon-cancel {
     font-size: 25px;
     color: rgb(186, 19, 19);
 }
 
-.cancel-icon{
+.cancel-icon {
     margin-left: 10px;
     margin-top: 24px;
 }
 
-.PackageRateEntery-input-feild{
+.PackageRateEntery-input-feild {
     flex-wrap: wrap;
 }
 
 @media only screen and (min-width:800px) and (max-width:1066px) {
-   .PackageRateEntery-input{
-    width: 200px !important;
-   } 
+    .PackageRateEntery-input {
+        width: 200px !important;
+    }
 }
 
 @media only screen and (max-width:799.99px) {
@@ -131,44 +127,46 @@
 
 
 @media only screen and (min-width:300px) and (max-width:380px) {
-.copy-title-btn-PackageRateEntery {
-    width: 100%;
-    margin-top: 0px !important;
-    border: none !important;
-}}
+    .copy-title-btn-PackageRateEntery {
+        width: 100%;
+        margin-top: 0px !important;
+        border: none !important;
+    }
+}
 
 
-.feild-inputs{
+.feild-inputs {
     display: flex;
-    /* flex-wrap: wrap; */
     align-items: center;
     margin-top: 40px;
     gap: 30px;
 }
 
-@media screen and (max-width:1122px){
-    .feild-inputs{
+@media screen and (max-width:1122px) {
+    .feild-inputs {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         margin-top: 20px;
         justify-content: center;
     }
-    .first{
+
+    .first {
         display: flex;
         flex-wrap: wrap;
-        gap :10px;
-        justify-content: center;  
-      }
+        gap: 10px;
+        justify-content: center;
+    }
 }
-.first{
+
+.first {
     display: flex;
     flex-wrap: wrap;
-    gap :10px;
-    /* justify-content: center; */
+    gap: 10px;
 }
-@media screen and (max-width:1122px){
-.PackageRateEntery-input-feild {
-    justify-content: center !important;
-}
+
+@media screen and (max-width:1122px) {
+    .PackageRateEntery-input-feild {
+        justify-content: center !important;
+    }
 }

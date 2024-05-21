@@ -7,7 +7,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import SMSReport from './SMSReport/SMSReport';
 import SMSFormat from './SMSFromat/SMSFormat';
-import MailDetails from './MailDetails/MailDetails'; 
+import MailDetails from './MailDetails/MailDetails';
 
 const Mailer = () => {
 

@@ -1,17 +1,14 @@
-.MuiTableRow-root > * {
+.MuiTableRow-root>* {
   padding: 10px;
 }
 
-/* .MuiTableRow-root.MuiTableRow-head > * {
-  font-weight: bold !important;
-} */
 .Table {
   padding: 0px 10px;
 }
+
 .Table .MuiPaper-root {
   height: 280px;
 }
-
 
 .Table thead th {
   top: 0;
@@ -19,9 +16,11 @@
   color: #fff;
   position: sticky;
 }
-.Table tbody tr{
+
+.Table tbody tr {
   overflow: scroll;
 }
+
 .Table td,
 th {
   border: none !important;
@@ -30,6 +29,7 @@ th {
 .Table:first-child {
   border-radius: 0.7rem !important;
 }
+
 .status {
   padding: 8px;
   border-radius: 9px;
@@ -38,27 +38,27 @@ th {
 .Details {
   color: #00b5ff !important;
 }
+
 @media screen and (min-width:769px) and (max-width: 804px) {
-  .Table{
+  .Table {
     width: 79% !important;
   }
 }
 
 @media screen and (min-width:804.99px) and (max-width: 840px) {
-  .Table{
+  .Table {
     width: 83% !important;
   }
 }
 
 @media screen and (min-width:841px) and (max-width: 881px) {
-  .Table{
+  .Table {
     width: 87% !important;
   }
 }
 
 @media screen and (max-width: 1200px) {
   .Table {
-    /* width: 170%; */
     width: 97%;
     margin-top: 2rem;
   }
@@ -73,43 +73,39 @@ th {
     width: 95%;
   }
 }
-.dialog-close-btn{
+
+.dialog-close-btn {
   position: absolute;
   right: 0;
 }
 
-.driverdetails-table-head{
-  /* background-color: #d2c8c8 !important; */
+.driverdetails-table-head {
   background-color: rgb(255, 255, 255) !important;
-  /* color: #9f9fa8 !important; */
-  /* color: rgba(255, 255, 255, 0.87) !important; */
   color: rgba(0, 0, 0, 0.87) !important;
   font-size: 15px !important;
   z-index: 2;
   font-weight: 600 !important;
   text-align: center !important;
-  /* box-shadow: 10px 13px #888888 !important; */
-
 }
 
-.driverdetails-table-header{
-  /* box-shadow: 3px 3px red !important; */
+.driverdetails-table-header {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-
 }
 
-.driver-name{
+.driver-name {
   background-color: transparent;
   color: #168bff !important;
   text-align: center !important;
   font-weight: 700 !important;
 }
 
-.driver-trip-id , .driver-trip-date{
+.driver-trip-id,
+.driver-trip-date {
   color: #9f9fa8 !important;
   text-align: center !important;
 }
 
-.driver-tripstatus , .driver-details{
+.driver-tripstatus,
+.driver-details {
   text-align: center !important;
 }

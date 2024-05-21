@@ -2,10 +2,6 @@
 
 .portal-container {
   height: 100vh;
-  /* background: linear-gradient(106.37deg,
-      #aeb3ca 29.63%,
-      #7e31d6 51.55%,
-      #a3e792 90.85%); */
   background-image: url("https://images.pexels.com/photos/712618/pexels-photo-712618.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
   background-repeat: no-repeat, repeat;
   background-size: 100%;
@@ -354,5 +350,4 @@ a.social .icons {
   .group {
     margin-top: 1rem;
   }
-
 }

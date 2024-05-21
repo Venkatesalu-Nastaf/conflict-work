@@ -10,7 +10,6 @@
     display: flex;
     flex-direction: column;
     color: #000;
-    /* background-color: var(--glass); */
 }
 
 .SMSFormat-header {
@@ -24,19 +23,19 @@
 }
 
 .input-field .inputs {
-    /* width: 200px; */
     margin-top: 20px;
 }
-.input-field .inputs .sms-box{
+
+.input-field .inputs .sms-box {
     background-color: var(--glass);
 }
 
 @media screen and (max-width: 650px) {
-    .input-field .inputs{
+    .input-field .inputs {
         width: 100% !important;
     }
 
-    .input-field .inputs .sms-box{
+    .input-field .inputs .sms-box {
         width: 100% !important;
     }
 }
@@ -73,20 +72,20 @@
     border-color: #456ddc !important;
 }
 
-.sms-input-field{
+.sms-input-field {
     display: flex;
     justify-content: center;
     text-align: center;
 }
 
 @media screen and (max-width: 1277px) {
-    .sms-input-field{
+    .sms-input-field {
         flex-wrap: wrap;
     }
 }
 
 @media screen and (min-width: 769px) and (max-width: 910px) {
-    .sms-input-field{
+    .sms-input-field {
         position: relative;
         left: -35px;
     }

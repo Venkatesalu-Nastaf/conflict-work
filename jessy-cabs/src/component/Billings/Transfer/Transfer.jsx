@@ -10,7 +10,6 @@ import TransferList from './TransferList/TransferList';
 import TransferReport from './TransferReport/TransferReport';
 import { PdfData } from './TransferReport/PdfContext';
 
-
 const Transfer = ({ stationName, organizationNames }) => {
 
   const [value, setValue] = useState("transferlist");
@@ -27,13 +26,12 @@ const Transfer = ({ stationName, organizationNames }) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setBillingPage(false)
-
     setTransferReport(false)
     localStorage.removeItem('selectedrowcount');
     localStorage.removeItem('selectedtripsheetid');
     localStorage.removeItem('selectedcustomerdata');
-
   };
+
   return (
     <div className="form-container-Transfer">
       <div className="container-main container-main-transfer">
@@ -51,7 +49,6 @@ const Transfer = ({ stationName, organizationNames }) => {
             <TabPanel value="TransferReport"><TransferReport stationName={stationName} /></TabPanel>
           </TabContext>
         </Box>
-
       </div>
     </div >
   )

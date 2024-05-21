@@ -60,15 +60,13 @@ const BankAccount = () => {
 
     // ... (other state variables and functions)
   } = useBankaccount();
- 
+
 
   useEffect(() => {
     if (actionName === 'List') {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
- 
-
 
   return (
     <div className="BankAccount-form Scroll-Style-hide">
@@ -150,12 +148,12 @@ const BankAccount = () => {
                     }
                   />
                 </div>
-                <div className="inpu" style={{ width: "fit-content",marginTop:'10px' }}>
+                <div className="inpu" style={{ width: "fit-content", marginTop: '10px' }}>
                   <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAdd}>
                     Add
                   </Button>
                 </div>
-                <div className="inpu" style={{ width: "fit-content",marginTop:'10px'  }}>
+                <div className="inpu" style={{ width: "fit-content", marginTop: '10px' }}>
                   <Button variant="contained" onClick={() => setShowAddBankForm(false)}>
                     <CancelIcon />
                   </Button>
@@ -168,7 +166,7 @@ const BankAccount = () => {
           {bankDetails.map((bankDetail, index) => (
             <div className="addedbanks-Details-BankAccount" key={index}>
               <div className="input-field input-field-bankaccount input-Field-bank-account">
-                
+
                 <div className="input input-bankname">
                   {/* <input  name="id" value={bankDetails[index]?.id} /> */}
                   <div className="icone">
@@ -185,7 +183,6 @@ const BankAccount = () => {
                   />
                 </div>
                 <div className="input input-bankname">
-              
                   <div className="icone">
                     <AiFillBank color="action" style={{ fontSize: "27px" }} />
                   </div>
@@ -196,13 +193,12 @@ const BankAccount = () => {
                     type="number"
                     // value={bankDetails[index]?.netbalance || book.netbalance || ''}
                     // value={editingIndex === index ? bankDetail.netbalance : (bankDetail.netbalance || book.netbalance || '')}
-                    value={editingIndex === index ? (bankDetail.totalin-bankDetail.totalout)  :(bankDetail.totalin-bankDetail.totalout) }
-                    // onChange={handleChange}
+                    value={editingIndex === index ? (bankDetail.totalin - bankDetail.totalout) : (bankDetail.totalin - bankDetail.totalout)}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
                   />
                 </div>
-                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountIN`} style={{display:'flex',gap:"10px", alignItems:'center'}}>
+                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountIN`} style={{ display: 'flex', gap: "10px", alignItems: 'center' }}>
                   <label htmlFor={`totalin-${index}`}>TotalIn:</label>
                   <input
                     className="bank-amount-input"
@@ -212,12 +208,11 @@ const BankAccount = () => {
                     // value={bankDetails[index]?.totalin || book.netbalance || ''}
                     // value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || book.netbalance || '')}
                     value={editingIndex === index ? bankDetail.totalin : (bankDetail.totalin || '')}
-                    // onChange={handleChange}
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
                   />
                 </div>
-                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountOUT`} style={{display:'flex',gap:"10px", alignItems:'center'}}>
+                <div className="bank-btn-amount-main input-bankname" id={`bank-btn-amountOUT`} style={{ display: 'flex', gap: "10px", alignItems: 'center' }}>
                   <label htmlFor={`totalout-${index}`}>TotalOut:</label>
                   <input
                     className="bank-amount-input"
@@ -229,7 +224,7 @@ const BankAccount = () => {
                     onChange={(event) => handleChange(event, index)}
                     disabled={editingIndex !== index}
                   />
-                
+
                 </div>
                 <div className="button-container-bankAccount">
                   <div className="inpt input-bank-account-icon">
@@ -244,8 +239,7 @@ const BankAccount = () => {
                     )}
                   </div>
                   <div className="inpt input-bank-account-icon">
-                    
-                    {/* <IconButton color="error" variant="contained" onClick={handleDelete}> */}
+
                     <IconButton color="error" variant="contained" onClick={() => handleDelete(index)}>
                       <DeleteIcon />
                     </IconButton>
@@ -255,7 +249,6 @@ const BankAccount = () => {
                       Are you sure you want to Delete this
                     </DialogContent>
                     <DialogActions>
-                      {/* <Button onClick={() => handleDeleteBank(bankDetail.id)} variant="contained" color="primary"> */}
                       <Button onClick={() => handlesuredelete(bankDetail.id)} variant="contained" color="primary">
                         Yes
                       </Button>
@@ -270,38 +263,38 @@ const BankAccount = () => {
           ))}
         </div>
         <div className='alert-popup-main'>
-        {error && (
-          <div className='alert-popup Error' >
-            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{errorMessage}</p>
-          </div>
-        )
-        }
-        {warning && (
-          <div className='alert-popup Warning' >
-            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{warningMessage}</p>
-          </div>
-        )
-        }
-        {info && (
-          <div className='alert-popup Info' >
-            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{infoMessage}</p>
-          </div>
-        )
-        }
-        {success && (
-          <div className='alert-popup Success' >
-            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-            <p>{successMessage}</p>
-          </div>
-        )
-        }
+          {error && (
+            <div className='alert-popup Error' >
+              <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{errorMessage}</p>
+            </div>
+          )
+          }
+          {warning && (
+            <div className='alert-popup Warning' >
+              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{warningMessage}</p>
+            </div>
+          )
+          }
+          {info && (
+            <div className='alert-popup Info' >
+              <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{infoMessage}</p>
+            </div>
+          )
+          }
+          {success && (
+            <div className='alert-popup Success' >
+              <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+              <p>{successMessage}</p>
+            </div>
+          )
+          }
         </div>
       </form>
     </div>

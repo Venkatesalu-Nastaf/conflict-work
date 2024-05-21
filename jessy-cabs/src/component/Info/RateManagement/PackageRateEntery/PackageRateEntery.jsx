@@ -82,16 +82,11 @@ const PackageRateEntery = ({ organizationNames }) => {
 
   const startdate = dayjs(datevalidity?.startdate).format(" MMMM YYYY");
   const enddate = dayjs(datevalidity?.enddate).format(" MMMM YYYY");
-
-
   const { permissions } = useContext(PermissionContext)
-
   const RateManagement_read = permissions[17]?.read;
   const RateManagement_new = permissions[17]?.new;
   const RateManagement_modify = permissions[17]?.modify;
   const RateManagement_delete = permissions[17]?.delete;
-
-
 
   //--------------------------------------------------------------------
 
@@ -112,12 +107,10 @@ const PackageRateEntery = ({ organizationNames }) => {
                     id="free-solo-demo-ratetype"
                     freeSolo
                     onChange={(event, value) => handleAutocompleteChange(event, value, "ratetype")}
-
                     value={RateType?.find((option) => option.optionvalue)?.label || commonData?.ratetype || ''}
                     options={RateType?.map((option) => ({
                       label: option.Option,
                     }))}
-
                     getOptionLabel={(option) => option.label || commonData?.ratetype || ''}
                     renderInput={(params) => {
                       return (
@@ -139,7 +132,6 @@ const PackageRateEntery = ({ organizationNames }) => {
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "OrganizationName")}
                     value={PriceTag.find((option) => option.optionvalue)?.label || commonData?.OrganizationName || ''}
-
                     options={organizationName.map((option) => ({ label: option }))} // Use organizationName here
                     getOptionLabel={(option) => option.label || commonData?.OrganizationName || ''}
                     renderInput={(params) => {
@@ -150,8 +142,6 @@ const PackageRateEntery = ({ organizationNames }) => {
                     }
                   />
                 </div>
-
-
                 <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
@@ -175,13 +165,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                     }
                     }
                   />
-                </div>
-
-
-
-                {/* </div>
-
-              <div className="input-field"> */}
+                </div>                
                 <div className="input PackageRateEntery-input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <RateReviewIcon color="action" />
@@ -198,7 +182,6 @@ const PackageRateEntery = ({ organizationNames }) => {
                     variant="standard"
                   />
                 </div>
-
               </div>
             </div>
           </div>
@@ -208,13 +191,9 @@ const PackageRateEntery = ({ organizationNames }) => {
 
         <div className='PackageRateEntery-container-bottom add-details'>
 
-          {!isEditMode && <Button variant="contained" onClick={handleAddExtra} >Add Packages</Button>}
-
-
-          {/* //-------------------- */}
+          {!isEditMode && <Button variant="contained" onClick={handleAddExtra} >Add Packages</Button>}         
 
           {fieldSets.map((fieldSet, index) => (
-
             <div key={index} className="input-field feild-inputs">
               <div>
                 <div className="input" style={{ width: "200px" }}>
@@ -242,11 +221,8 @@ const PackageRateEntery = ({ organizationNames }) => {
                   />
                 </div>
               </div>
-
-
               <div>
                 <div className='first'>
-
                   <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       size="small"
@@ -261,7 +237,6 @@ const PackageRateEntery = ({ organizationNames }) => {
                       style={{ width: '100%' }}
                     />
                   </div>
-
                   <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
@@ -301,7 +276,6 @@ const PackageRateEntery = ({ organizationNames }) => {
                       style={{ width: '100%' }}
                     />
                   </div>
-
                   <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
@@ -327,10 +301,7 @@ const PackageRateEntery = ({ organizationNames }) => {
                       onChange={(e) => handleChange(e, index)}
                       style={{ width: '100%' }}
                     />
-                  </div>
-                  {/* </div>
-                <div className='first'> */}
-
+                  </div>             
                   <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
@@ -344,7 +315,6 @@ const PackageRateEntery = ({ organizationNames }) => {
                       style={{ width: '100%' }}
                     />
                   </div>
-
                   <div className="input" style={{ paddingRight: '15px' }}>
                     <TextField
                       type='number'
@@ -401,21 +371,14 @@ const PackageRateEntery = ({ organizationNames }) => {
                   {index > 0 && <div onClick={() => handleCancelUI(index)} className='cancel-icon'>
                     <MdCancelPresentation className='icon-cancel' />
                   </div>}
-
-
-
                 </div>
               </div>
             </div>
-
-          ))}
-
-          {/* //-------------------------------- */}
+          ))}         
 
           {/* {details.map((detail, index) => (
             <React.Fragment key={index}>{detail}</React.Fragment>
           ))} */}
-
 
           <div className="input" style={{ width: "100px", marginTop: '10px', marginLeft: '10px' }}>
             {isEditMode ? (
@@ -423,11 +386,9 @@ const PackageRateEntery = ({ organizationNames }) => {
             ) : (
               <Button variant="contained" disabled={!RateManagement_new} onClick={handleAdd} >Save</Button>
             )}
-
           </div>
         </div>
 
-        {/* //--------------------------------------------------------------------------------------- */}
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >
@@ -471,8 +432,6 @@ const PackageRateEntery = ({ organizationNames }) => {
                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
               />
             ))} */}
-
-
             {RateManagement_read === 1 && (
               <SpeedDialAction
                 key="list"
@@ -497,7 +456,6 @@ const PackageRateEntery = ({ organizationNames }) => {
                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
               />
             )}
-
             <SpeedDialAction
               key="Cancel"
               icon={<CancelPresentationIcon />}
@@ -512,8 +470,6 @@ const PackageRateEntery = ({ organizationNames }) => {
                 onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
               />
             )}
-
-
           </StyledSpeedDial>
         </Box>
         <div className="table-bookingCopy-PackageRateEntery">

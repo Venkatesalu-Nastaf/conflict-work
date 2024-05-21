@@ -30,8 +30,6 @@ import { PermissionContext } from '../../../context/permissionContext';
 // import { FaCalendarAlt } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-
-
 const GroupBilling = ({ stationName, organizationNames }) => {
     const apiurl = APIURL;
 
@@ -132,12 +130,8 @@ const GroupBilling = ({ stationName, organizationNames }) => {
 
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-
     const CoveringBill_read = permissions[7]?.read;
     const CoveringBill_new = permissions[7]?.new;
-
-
-
 
     return (
         <div className="GroupBilling-form Scroll-Style-hide">
@@ -150,7 +144,6 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
                                     </div>
-
                                     <Autocomplete
                                         fullWidth
                                         id="free-solo-demo"
@@ -201,9 +194,6 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </div>
-                                {/* </div>
-                            <div className="input-field"> */}
-
                                 <div className="input" >
                                     <div className="icone">
                                         <CalendarMonthIcon color="action" />
@@ -227,8 +217,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </div>
-                                <div className="input" >
-
+                                <div className="input">
                                     <div className="icone">
                                         <CalendarMonthIcon color="action" />
                                     </div>
@@ -264,7 +253,6 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                         options={stationName.map((option) => ({
                                             label: option.Stationname,
                                         }))}
-
                                         onChange={(event, value) => handleserviceInputChange(event, value)}
                                         renderInput={(params) => {
                                             return (
@@ -307,7 +295,6 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                         </div>
                     </div>
                 </div>
-
                 <div className="table-bookingCopy-GroupBilling">
                     <div style={{ height: 400, width: "100%" }}>
                         <DataGrid
@@ -371,7 +358,6 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                         }}
                     >
                         <RefPdfParticularData pdfData={refPdfData} organizationdetails={organizationsdetail} imagename={imageorganisation} refFromDate={refFromDate} refToDate={refToDate} gstno={gstno} referenceno={referNo} />
-
                     </Box>
                 </Modal>
             </form>

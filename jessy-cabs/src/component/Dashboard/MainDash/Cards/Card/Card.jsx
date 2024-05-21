@@ -6,7 +6,6 @@ import { motion, AnimateSharedLayout } from "framer-motion";
 import { MdCancel } from "@react-icons/all-files/md/MdCancel";
 import Chart from "react-apexcharts";
 
-
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
   return (
@@ -20,45 +19,14 @@ const Card = (props) => {
   );
 };
 
-
-
-
 // Compact Card
 function CompactCard({ param, setExpanded }) {
 
   // const user_id = localStorage.getItem('useridno');
 
-
   const Png = param.png;
   return (
-    <div >
-      {/* {(
-        <div className="loading-spinners">
-          <motion.div
-            className="CompactCard"
-            style={{
-              background: param.color.backGround,
-              boxShadow: param.color.boxShadow,
-              border: '2px solid #c7c7c7c0',
-            }}
-            layoutId="expandableCard"
-          >
-            <div className="radialBar">
-              <CircularProgressbar
-                value='0'
-                text={`0%`}
-              />
-              <span>{param.title}</span>
-            </div>
-            <div className="detail">
-              <Png />
-              <span> &#8377; 0</span>
-              <span>Last 24 hours</span>
-            </div>
-          </motion.div>
-        </div>
-      )} */}
-     
+    <div>
       {(
         <motion.div
           className="CompactCard"
@@ -73,7 +41,6 @@ function CompactCard({ param, setExpanded }) {
           <div className="radialBar">
             <CircularProgressbar
               value={param.barValue}
-              // text={`${param.barValue}%`}
               text={param.title === 'Billing' ? '' : `${param.barValue}%`}
             />
             <span>{param.title}</span>

@@ -2,10 +2,8 @@ import { useState, useContext, useEffect } from 'react';
 import "./Billings.css";
 import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
 import { PermissionContext } from '../context/permissionContext';
-
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ClearIcon from '@mui/icons-material/Clear';
-
 const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
@@ -21,43 +19,33 @@ const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
   );
 };
 
-
 const Billings = () => {
-
   //permission --------------
 
   const [warning, setWarning] = useState(false);
 
-const hidePopup = () => {
+  const hidePopup = () => {
     setWarning(false);
-};
+  };
 
-useEffect(() => {
-  if (warning) {
+  useEffect(() => {
+    if (warning) {
       const timer = setTimeout(() => {
-          hidePopup();
+        hidePopup();
       }, 3000);
       return () => clearTimeout(timer);
-  }
+    }
   }, [warning]);
 
-
   const { permissions } = useContext(PermissionContext)
-
-
   const Billing = permissions[5]?.read || permissions[4]?.read;;
   const Transfer = permissions[6]?.read;
   const Covering_Bill = permissions[7]?.read;
-
   const [activeMenuItem, setActiveMenuItem] = useState('');
-
   const handleMenuItemClick = (label, alt, e) => {
-
     localStorage.setItem('activeMenuItem', label);
     setActiveMenuItem(label);
-
     let hasPermission = 0
-
     switch (label) {
       case "Billing":
         hasPermission = Billing;
@@ -71,21 +59,16 @@ useEffect(() => {
       default:
         break;
     }
-
     try {
-
       if (hasPermission === 1) {
         Navigate(alt);
       }
       else if (hasPermission === 0) {
         e.preventDefault();
         setWarning(true);
-        // alert("You do not have Permission ..!");
       }
-
     }
     catch {
-
     }
   };
 
@@ -96,7 +79,6 @@ useEffect(() => {
         <MenuItem
           label="Billing"
           to={Billing && ("/home/billing/billing")}
-          // to={("/home/billing/billing")}
           alt="/home/billing/billing"
           menuItemKey="Billing"
           activeMenuItem={activeMenuItem}
@@ -119,15 +101,14 @@ useEffect(() => {
           handleMenuItemClick={handleMenuItemClick}
         />
       </div>
-
       <div className='alert-popup-main'>
-          {warning &&
-              <div className='alert-popup Warning' >
-                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                  <p>You do not have Permission ..!</p>
-              </div>
-          }
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>You do not have Permission ..!</p>
+          </div>
+        }
       </div>
 
       <Outlet />

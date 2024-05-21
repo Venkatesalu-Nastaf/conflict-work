@@ -27,7 +27,6 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { PermissionContext } from '../../../context/permissionContext.js';
 
-
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
@@ -36,7 +35,6 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -52,8 +50,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 
 
 const TripStatus = ({ stationName }) => {
-
-  // console.log("1111---", stationName, typeof (stationName));
 
   const {
     statusvalue, handlestatusChange,
@@ -96,12 +92,8 @@ const TripStatus = ({ stationName }) => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
-
-
   const { permissions } = useContext(PermissionContext)
-
   const TripStatus_read = permissions[2]?.read;
-
 
   return (
     <div className="TripStatus-form Scroll-Style-hide">
@@ -111,11 +103,9 @@ const TripStatus = ({ stationName }) => {
             <div className="copy-title-btn-TripStatus">
               <div className="input-field TripStatus-input-feilds">
                 <div className="input">
-
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <MdOutlineCalendarMonth color="action" />
                   </div>
-
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
@@ -127,17 +117,12 @@ const TripStatus = ({ stationName }) => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-
-
-                <div className="input dispatch-input" >
-
+                <div className="input dispatch-input">
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <MdOutlineCalendarMonth color="action" />
                   </div>
-
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
-
                       <DatePicker
                         label="To Date"
                         format="DD/MM/YYYY"
@@ -147,28 +132,20 @@ const TripStatus = ({ stationName }) => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-
-
-
                 <div className='show-all-button'>
                   <div className="input" >
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                   </div>
                   <div className="input">
-                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{whiteSpace: 'nowrap'}}>Show All</Button>
+                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{ whiteSpace: 'nowrap' }}>Show All</Button>
                   </div>
                 </div>
               </div>
               <div className="input-field TripStatus-input-feilds">
-
-
                 <div className="input" style={{ width: "300px" }}>
-
-
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <SiStatuspal color="action" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -185,14 +162,11 @@ const TripStatus = ({ stationName }) => {
                       );
                     }}
                   />
-
                 </div>
                 <div className="input" style={{ width: "300px" }}>
-
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <GiMatterStates color="action" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -210,7 +184,6 @@ const TripStatus = ({ stationName }) => {
                     }}
                   />
                 </div>
-
               </div>
             </div>
             <div className='alert-popup-main'>
@@ -245,9 +218,6 @@ const TripStatus = ({ stationName }) => {
             </div>
           </div>
         </div>
-
-
-
         <div className="SpeedDial" style={{ padding: '26px', margin: '14px -35px 0px 0px' }}>
           <Box sx={{ position: "relative", mt: 2, }}>
             <StyledSpeedDial
@@ -263,23 +233,15 @@ const TripStatus = ({ stationName }) => {
                   onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                 />
               )}
-
               <SpeedDialAction
                 key="Cancel"
                 icon={<CancelPresentationIcon />}
                 tooltipTitle="Cancel"
                 onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
               />
-
-
-
-
             </StyledSpeedDial>
           </Box>
         </div>
-
-
-
         <div className="table-bookingCopy-TripStatus">
           <div className="Download-btn">
             <PopupState variant="popover" popupId="demo-popup-menu">

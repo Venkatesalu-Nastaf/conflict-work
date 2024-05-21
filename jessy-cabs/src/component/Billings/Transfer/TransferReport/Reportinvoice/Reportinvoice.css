@@ -16,13 +16,10 @@
     padding: 10px 0px;
     display: flex;
     align-items: center;
-    /* justify-content: start; */
-
 }
 
 .page-title .sheet-logo img {
     width: 80px;
-
 }
 
 .page-title .sheet-type {
@@ -31,10 +28,8 @@
     justify-content: flex-end;
 }
 
-
 .Reportinvoice-description-table th {
     padding: 10px;
-
 }
 
 .Reportinvoice-description-table thead {
@@ -44,7 +39,6 @@
 
 .Reportinvoice-description-table-header span {
     font-weight: 600;
-
 }
 
 .Reportinvoice-description-table .Reportinvoice-description-table-header {
@@ -55,7 +49,6 @@
 .Reportinvoice-description-table td {
     text-align: left !important;
     border: 1px solid #000;
-    /* border-bottom: 1px solid #ddd; */
     padding: 20px 10px;
 }
 
@@ -63,13 +56,11 @@
     text-align: center;
     width: 100%;
     border-bottom: 1.5px solid #000;
-
 }
 
 .header-title {
     padding: 0px 10px;
     display: flex;
-    /* align-items: center; */
     justify-content: space-between;
     border-bottom: 1.5px solid #000;
 }
@@ -117,7 +108,6 @@
 
 .Reportinvoice-total-details .Reportinvoice-amount {
     width: 60%;
-
 }
 
 .Reportinvoice-total-details .Reportinvoice-Total-details {
@@ -155,11 +145,13 @@
     bottom: 0;
     left: 10px;
 }
+
 .Reportinvoice-details-report .Reportinvoice-signature .Reportinvoice-signature-title {
     display: flex;
     justify-content: center;
     font-weight: 600;
 }
+
 .Reportinvoice-details-report .Reportinvoice-signature {
     position: relative;
     width: 30%;

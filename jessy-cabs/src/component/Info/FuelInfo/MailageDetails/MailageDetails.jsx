@@ -37,7 +37,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useMailagedetails from './useMailagedetails';
-import DateRangeIcon from '@mui/icons-material/DateRange';
+// import DateRangeIcon from '@mui/icons-material/DateRange';
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
@@ -52,13 +52,13 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-const actions = [
-  { icon: <ChecklistIcon />, name: "List" },
-  { icon: <CancelPresentationIcon />, name: "Cancel" },
-  { icon: <DeleteIcon />, name: "Delete" },
-  { icon: <ModeEditIcon />, name: "Edit" },
-  { icon: <BookmarkAddedIcon />, name: "Add" },
-];
+// const actions = [
+//   { icon: <ChecklistIcon />, name: "List" },
+//   { icon: <CancelPresentationIcon />, name: "Cancel" },
+//   { icon: <DeleteIcon />, name: "Delete" },
+//   { icon: <ModeEditIcon />, name: "Edit" },
+//   { icon: <BookmarkAddedIcon />, name: "Add" },
+// ];
 
 const MailageDetails = () => {
 
@@ -102,11 +102,8 @@ const MailageDetails = () => {
     }
   }, [actionName, handleClick]);
 
-
   // Permission ---------------------
   const { permissions } = useContext(PermissionContext)
-
-
   const FuelInfo_read = permissions[19]?.read;
   const FuelInfo_new = permissions[19]?.new;
   const FuelInfo_modify = permissions[19]?.modify;
@@ -120,7 +117,7 @@ const MailageDetails = () => {
           <div className="MailageDetails-page-header">
             <div className="detailsFuel">
               <div className="input-field detailsFuel-inputs">
-                <div className="input" style={{paddingRight: '15px'}}>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -132,10 +129,10 @@ const MailageDetails = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.VehicleNo || book.VehicleNo}
                     onChange={handleChange}
-                    style={{width: '100%'}}
+                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{paddingRight: '15px'}}>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <CommuteIcon color="action" />
                   </div>
@@ -147,11 +144,10 @@ const MailageDetails = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.VehicleName || book.VehicleName}
                     onChange={handleChange}
-                    style={{width: '100%'}}
+                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{paddingRight: '15px'}}>
-
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -168,8 +164,7 @@ const MailageDetails = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                <div className="input" style={{paddingRight: '15px'}}>
-
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -186,9 +181,7 @@ const MailageDetails = () => {
                     </DatePicker>
                   </LocalizationProvider>
                 </div>
-                {/* </div>
-              <div className="input-field"> */}
-                <div className="input" style={{paddingRight: '15px'}}>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <BadgeIcon color="action" />
                   </div>
@@ -200,10 +193,10 @@ const MailageDetails = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.DriverName || book.DriverName}
                     onChange={handleChange}
-                    style={{width: '100%'}}
+                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{paddingRight: '15px'}}>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <CurrencyRupeeIcon color='action' />
                   </div>
@@ -215,10 +208,10 @@ const MailageDetails = () => {
                     autoComplete="new-password"
                     value={selectedCustomerData?.FuelPrice || book.FuelPrice}
                     onChange={handleChange}
-                    style={{width: '100%'}}
+                    style={{ width: '100%' }}
                   />
                 </div>
-                <div className="input" style={{paddingRight: '15px'}}>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faGaugeSimple} size="lg" />
                   </div>
@@ -237,7 +230,7 @@ const MailageDetails = () => {
                     }}
                   />
                 </div>
-                <div className="input" style={{paddingRight: '15px'}}>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faGaugeHigh} size="lg" />
                   </div>
@@ -254,12 +247,10 @@ const MailageDetails = () => {
                       handleChange(e);
                       setFinalOdometer(e.target.value);
                     }}
-                    style={{width: '100%'}}
+                    style={{ width: '100%' }}
                   />
                 </div>
-                {/* </div>
-              <div className="input-field"> */}
-                <div className="input" style={{paddingRight: '15px'}}>
+                <div className="input" style={{ paddingRight: '15px' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faGasPump} size="xl" />
                   </div>
@@ -347,7 +338,6 @@ const MailageDetails = () => {
                     onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                   />
                 ))} */}
-
                 {FuelInfo_read === 1 && (
                   <SpeedDialAction
                     key="list"
@@ -386,7 +376,6 @@ const MailageDetails = () => {
                   tooltipTitle="Cancel"
                   onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                 />
-
               </StyledSpeedDial>
             </Box>
             <div className="Download-btn">
@@ -415,9 +404,7 @@ const MailageDetails = () => {
               </div>
             </div>
           </div>
-
         </form>
-
       </div>
     </div>
   )

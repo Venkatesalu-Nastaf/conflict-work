@@ -9,7 +9,6 @@ import TabContext from "@mui/lab/TabContext";
 import BankAccount from './BankAccount/BankAccount';
 import PaymentDetail from './PaymentDetail/PaymentDetail';
 
-
 const BillingMain = ({ organizationNames }) => {
   const [value, setValue] = React.useState("billing");
   const handleChange = (event, newValue) => {
@@ -32,7 +31,6 @@ const BillingMain = ({ organizationNames }) => {
             <TabPanel value="bankAccountdetails"><BankAccount /></TabPanel>
           </TabContext>
         </Box>
-
       </div>
     </div >
   )

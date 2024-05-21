@@ -49,7 +49,6 @@ import { PiMoneyBold } from "react-icons/pi";
 // import { FaCalendarPlus , FaCalendarMinus } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-
 export const PDFbill = [
   {
     Option: "PDF 1",
@@ -150,12 +149,12 @@ const TransferReport = ({ stationName }) => {
     const fetchdata = async () => {
       try {
         const response = await fetch(`${apiUrl}/customeraddress/${customer}`);
-        console.log(response,'response');
+        console.log(response, 'response');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const addressdetail = await response.json();
-        console.log(addressdetail,'details');
+        console.log(addressdetail, 'details');
         setAddressDetails(addressdetail);
       } catch (err) {
         console.error('Error fetching customer address:', err);
@@ -164,7 +163,6 @@ const TransferReport = ({ stationName }) => {
 
     fetchdata();
   }, [apiUrl, customer]);
-
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -207,11 +205,6 @@ const TransferReport = ({ stationName }) => {
     }
     fetchData()
   }, [apiUrl])
-  // useEffect(()=>{
-  //   const fetchData = async () =>{
-  //     const response = await fetch(`${apiUrl}/tripsheetcustomertripid/${customer}/${tripid}`);
-  //   }
-  // })
 
   const handleDownloadPdf = async () => {
     if (!pdfBillList) {
@@ -291,17 +284,13 @@ const TransferReport = ({ stationName }) => {
     handleDownloadPdf();
   };
 
-
-
-
   return (
     <div className="TransferReport-form Scroll-Style-hide">
-
       <form >
         <div className="detail-container-main detail-container-main-tfreport">
           <div className="container-left-transfer-report">
             <div className="copy-title-btn-TransferReport">
-              <div className="input-field input-field-transfer-report" style={{flexWrap:'wrap'}}>
+              <div className="input-field input-field-transfer-report" style={{ flexWrap: 'wrap' }}>
                 <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faTags} size="lg" />
@@ -332,7 +321,6 @@ const TransferReport = ({ stationName }) => {
                   <div className="icone">
                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -348,17 +336,13 @@ const TransferReport = ({ stationName }) => {
                       );
                     }}
                   />
-
-
-
                 </div>
                 <div className="input input-transfer-report" >
-                <div className="icone">
+                  <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
-
                       <DatePicker
                         label="Month"
                         name="month"
@@ -368,27 +352,11 @@ const TransferReport = ({ stationName }) => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-              {/* </div>
-              <div className="input-field"> */}
                 <div className="input input-transfer-report" >
                   <div className="icone">
                     <HailOutlinedIcon color="action" />
                   </div>
-                  {/* <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={customer}
-                    options={bankOptions}
-                    // onChange={(event, value) => setCustomer(value)}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Organization" inputRef={params.inputRef} autoComplete='off' />
-                      );
-                    }}
-                  /> */}
-                    <TextField
+                  <TextField
                     size="small"
                     id="free-solo-demo"
                     label="Organization"
@@ -398,8 +366,8 @@ const TransferReport = ({ stationName }) => {
                   />
                 </div>
                 <div className="input input-transfer-report" >
-                <div className="icone">
-                    <PiMoneyBold color="action" style={{fontSize:"23px"}} />
+                  <div className="icone">
+                    <PiMoneyBold color="action" style={{ fontSize: "23px" }} />
                   </div>
                   <TextField
                     size="small"
@@ -411,8 +379,7 @@ const TransferReport = ({ stationName }) => {
                   />
                 </div>
                 <div className="input input-transfer-report" >
-
-                <div className="icone">
+                  <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
                   <TextField
@@ -424,13 +391,10 @@ const TransferReport = ({ stationName }) => {
                     autoComplete='off'
                   />
                 </div>
-              {/* </div>
-              <div className="input-field"> */}
                 <div className="input input-transfer-report" >
-                <div className="icone">
-                    <CalendarMonthIcon color="action" style={{fontSize:"23px"}} />
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" style={{ fontSize: "23px" }} />
                   </div>
-
                   <TextField
                     size="small"
                     id="id"
@@ -441,8 +405,8 @@ const TransferReport = ({ stationName }) => {
                   />
                 </div>
                 <div className="input input-transfer-report" >
-                <div className="icone">
-                    <CalendarMonthIcon  color="action" style={{fontSize:"23px"}} />
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" style={{ fontSize: "23px" }} />
                   </div>
                   <TextField
                     size="small"
@@ -474,13 +438,10 @@ const TransferReport = ({ stationName }) => {
                     }}
                   />
                 </div>
-              {/* </div>
-              <div className="input-field"> */}
                 <div className="input input-transfer-report" >
                   <div className="icone">
                     <FontAwesomeIcon icon={faNewspaper} size="xl" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -489,7 +450,7 @@ const TransferReport = ({ stationName }) => {
                     options={PDFbill.map((option) => ({
                       label: option.Option,
                     }))}
-                    value={pdfBillList} // Set the value to the state variable pdfBillList
+                    value={pdfBillList}
                     onChange={(event, value) => setPdfBillList(value.label)}
                     renderInput={(params) => {
                       return (
@@ -498,7 +459,6 @@ const TransferReport = ({ stationName }) => {
                     }}
                   />
                 </div>
-
                 <div className="input input-transfer-report" >
                   <FormControlLabel
                     value="bookingmail"
@@ -509,9 +469,7 @@ const TransferReport = ({ stationName }) => {
                     }
                     label="Booking Mail"
                   />
-
                 </div>
-
                 <div className="input input-transfer-report" >
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
@@ -591,7 +549,6 @@ const TransferReport = ({ stationName }) => {
                 </Button>
               </DialogActions>
             </Dialog>
-
             {/* mapinnvoice */}
             <Dialog open={npopupOpen} onClose={handlePopupClose}>
               <DialogContent>
@@ -653,10 +610,7 @@ const TransferReport = ({ stationName }) => {
                 }}
                 checkboxSelection
                 disableRowSelectionOnClick
-                selectionModel={rowSelectionModel} // Pass the selection model to maintain selection
-
-
-
+                selectionModel={rowSelectionModel}
               />
             </div>
           </div>
@@ -687,49 +641,38 @@ const TransferReport = ({ stationName }) => {
                 </div>
               </div>
             </div> */}
-
           </div>
           <div className='alert-popup-main'>
-          {error &&
-            <div className='alert-popup Error'>
-              <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errorMessage}</p>
-            </div>
-          }
-          {error1 &&
-            <div className='alert-popup Error'>
-              <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{errormessage1}</p>
-            </div>
-          }
-          {success &&
-            <div className='alert-popup Success'>
-              <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{successMessage}</p>
-            </div>
-          }
-          {warning &&
-            <div className='alert-popup Warning' >
-              <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-              <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-              <p>{warningMessage}</p>
-            </div>
-          }
+            {error &&
+              <div className='alert-popup Error'>
+                <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{errorMessage}</p>
+              </div>
+            }
+            {error1 &&
+              <div className='alert-popup Error'>
+                <div className="popup-icon"><ClearIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{errormessage1}</p>
+              </div>
+            }
+            {success &&
+              <div className='alert-popup Success'>
+                <div className="popup-icon"><FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{successMessage}</p>
+              </div>
+            }
+            {warning &&
+              <div className='alert-popup Warning' >
+                <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                <p>{warningMessage}</p>
+              </div>
+            }
           </div>
         </div>
-        {/* <Dialog open={popup} onClose={handlePopup}>
-                <DialogContent style={{ width: 1000 }}>
-                  <PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handlePopup} variant="contained" color="primary">
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog> */}
         <Modal
           open={pdfPrint}
           onClose={handlePopup}
@@ -751,15 +694,9 @@ const TransferReport = ({ stationName }) => {
               overflowY: 'auto'
             }}
           >
-
             <PdfParticularData addressDetails={addressDetails} particularPdf={particularPdf} organisationdetail={organizationsdetail1} imagename={imageorganisation} tripno={tripno} />
-
-            {/* <Button onClick={handlePopup} variant="contained" color="primary">
-                    Cancel
-                  </Button> */}
           </Box>
         </Modal>
-
       </form>
     </div>
   )

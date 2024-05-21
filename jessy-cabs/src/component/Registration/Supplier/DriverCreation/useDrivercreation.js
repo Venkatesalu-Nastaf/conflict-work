@@ -35,6 +35,8 @@ const useDrivercreation = () => {
     const [checkbox, setCheckbox] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
     const [edit, setEdit] = useState(false)
+    // const [profileimage,setProfileimage]=useState('')
+    // console.log(profileimage,"imagedata")
     // venkat
 
 
@@ -113,7 +115,21 @@ const useDrivercreation = () => {
         badgeno: '',
         badgeexpdate: '',
         aadharno: '',
+        Email:'',
+        Profile_image:null,
     });
+
+    const handleFileChange = (e) => {
+        setBook({
+          ...book,
+          Profile_image: e.target.files[0]
+        });
+        setSelectedCustomerData((prevValues) => ({
+            ...prevValues,
+            Profile_image: e.target.files[0],
+        }));
+      };
+    
 
     const handleExcelDownload=async()=>{
         const workbook = new Excel.Workbook();
@@ -359,6 +375,7 @@ const useDrivercreation = () => {
             badgeexpdate: '',
             city: '',
             aadharno: '',
+            Email:''
         }));
         setSelectedCustomerData({});
         setIsEditMode(false);
@@ -396,6 +413,7 @@ const useDrivercreation = () => {
         if (licencepdf !== null) {
             const formData = new FormData();
             formData.append("file", licencepdf);
+            
             try {
                 await axios.post(`${apiUrl}/driver-licencepdf/${driveruserid}`, formData);
                 setFile(null);
@@ -476,9 +494,19 @@ const useDrivercreation = () => {
 
         try {
 
-            const data = { ...book }
+            const formData = new FormData();
+            for (const key in book) {
+                console.log(key,book[key])
+                formData.append(key, book[key]);
+              }
+
+             
+
+            // const data = { ...book }
             // console.log(data, "bookadd")
-            await axios.post(`${apiUrl}/drivercreation`, data);
+            // await axios.post(`${apiUrl}/drivercreation`, data);
+            await axios.post(`${apiUrl}/drivercreation`, formData)
+            
             const response = await axios.get(`${apiUrl}/lastdrivergetid`);
             const lastdriveridno = response.data.driverid;
             licenceSubmit(lastdriveridno);
@@ -554,24 +582,34 @@ const useDrivercreation = () => {
     const handleEdit = async (userid) => {
         setEdit(true)
         const data = selectedCustomerData.driverid
-        const updatedriver = {
-            drivername: selectedCustomerData.drivername,
-            username: selectedCustomerData.username,
-            stations: selectedCustomerData.stations,
-            Mobileno: selectedCustomerData.Mobileno,
-            userpassword: selectedCustomerData.userpassword,
-            joiningdate: selectedCustomerData.joiningdate,
-            active: selectedCustomerData.active,
-            address1: selectedCustomerData.address1,
-            licenseno: selectedCustomerData.licenseno,
-            licenseexpdate: selectedCustomerData.licenseexpdate,
-            badgeno: selectedCustomerData.badgeno,
-            badgeexpdate: selectedCustomerData.badgeexpdate,
-            city: selectedCustomerData.city,
-            aadharno: selectedCustomerData.aadharno,
-        }
+        const formData = new FormData();
+        const {id,driverid,...restselected}=selectedCustomerData
+        console.log(restselected,"data")
 
-        await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`, updatedriver);
+        for (const key in restselected) {
+            console.log(key,restselected[key])
+            formData.append(key, restselected[key]);
+          }
+        // const updatedriver = {
+        //     drivername: selectedCustomerData.drivername,
+        //     username: selectedCustomerData.username,
+        //     stations: selectedCustomerData.stations,
+        //     Mobileno: selectedCustomerData.Mobileno,
+        //     userpassword: selectedCustomerData.userpassword,
+        //     joiningdate: selectedCustomerData.joiningdate,
+        //     active: selectedCustomerData.active,
+        //     address1: selectedCustomerData.address1,
+        //     licenseno: selectedCustomerData.licenseno,
+        //     licenseexpdate: selectedCustomerData.licenseexpdate,
+        //     badgeno: selectedCustomerData.badgeno,
+        //     badgeexpdate: selectedCustomerData.badgeexpdate,
+        //     city: selectedCustomerData.city,
+        //     aadharno: selectedCustomerData.aadharno,
+        // }
+
+
+        await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,formData);
+        // await axios.put(`${apiUrl}/drivercreation/${selectedCustomerId}`,updatedriver);
         setSuccess(true);
         setSuccessMessage('Successfully updated');
         handleCancel();
@@ -884,7 +922,8 @@ const useDrivercreation = () => {
         handleDocumentDownload,
         searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll, edit,
         handlePdfDownload,
-        handleExcelDownload
+        handleExcelDownload,
+        handleFileChange
         
         // venkat
     };

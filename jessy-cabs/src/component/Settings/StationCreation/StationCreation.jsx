@@ -105,8 +105,8 @@ const StationCreation = () => {
 
           </p>
           <div className="stationcreation-header">
-            <div className="input-field station-creation-inputfeilds">
-              <div className="input input-station-creaton" style={{paddingRight: '15px'}}>
+            <div className="input-field station-creation-inputfeilds" style={{ padding: '10px' }}>
+              <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -120,10 +120,10 @@ const StationCreation = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input input-station-creaton" style={{paddingRight: '15px'}}>
+              <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                 </div>
@@ -139,7 +139,7 @@ const StationCreation = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input input-station-creaton" style={{paddingRight: '15px'}}>
+              <div className="input input-station-creaton" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <ListAltIcon color="action" />
                 </div>
@@ -154,14 +154,12 @@ const StationCreation = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                 />
-
               </div>
-
-              <div className='input' style={{paddingRight: '15px'}}>
+              <div className='input' style={{ paddingRight: '15px' }}>
                 <div className='icone'>
                   <AddHomeWorkIcon color='action' />
                 </div>
-                  <TextField
+                <TextField
                   size="small"
                   name="remark"
                   className='address-field'
@@ -174,7 +172,6 @@ const StationCreation = () => {
                   autoComplete="password"
                 />
               </div>
-
               {/* <TextField
                 margin="normal"
                 size="small"
@@ -186,8 +183,7 @@ const StationCreation = () => {
                 onChange={handleChange}
                 variant="standard"
               /> */}
-
-              <div className='input' style={{paddingRight: '15px'}}>
+              <div className='input' style={{ paddingRight: '15px' }}>
                 <div className='icone'>
                   <MdNumbers color='action' />
                 </div>
@@ -201,11 +197,9 @@ const StationCreation = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                   variant="standard"
+                  style={{ width: '100%' }}
                 />
               </div>
-              
-              {/* </div>
-            <div className="input-field"> */}
               <div className="input radio input-station-creaton">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -297,7 +291,6 @@ const StationCreation = () => {
               </div>
             }
           </div>
-
           <Box sx={{ position: "relative", mt: 3, height: 320 }}>
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
@@ -351,8 +344,6 @@ const StationCreation = () => {
                 tooltipTitle="Cancel"
                 onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
               />
-
-
             </StyledSpeedDial>
           </Box>
           <div className="stationcreation-table-container">

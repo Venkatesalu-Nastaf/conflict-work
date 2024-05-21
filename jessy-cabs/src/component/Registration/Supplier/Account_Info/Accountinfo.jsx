@@ -115,7 +115,7 @@ const Accuntinfo = () => {
         <div className="detail-container-main-account">
           <div className="container-left-account">
             <div className="input-field account-info-input-feild">
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <SwitchAccountIcon color="action" />
                 </div>
@@ -129,10 +129,10 @@ const Accuntinfo = () => {
                   value={selectedCustomerData?.accountNo || book.accountNo}
                   onChange={handleChange}
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <CalendarMonthIcon color="action" />
                 </div>
@@ -149,7 +149,7 @@ const Accuntinfo = () => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <MinorCrashIcon color="action" />
                 </div>
@@ -161,10 +161,10 @@ const Accuntinfo = () => {
                   label="Vehicle/Travels"
                   id="standard-size-normal"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <ContactPhoneIcon color="action" />
                 </div>
@@ -176,16 +176,16 @@ const Accuntinfo = () => {
                   label="Phone"
                   id="phone"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
-                <TextField
+                {/* <TextField
                   size="small"
                   name="address1"
                   autoComplete="new-password"
@@ -195,9 +195,24 @@ const Accuntinfo = () => {
                   id="remark"
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
+                /> */}
+
+                <TextField
+                  margin="normal"
+                  // size="small"
+                  id="remark"
+                  label="Address"
+                  name="address1"
+                  multiline
+                  rows={2}
+                  sx={{ width: "100%" }}
+                  autoComplete="new-password"
+                  style={{ width: '100%' }}
+                  value={selectedCustomerData?.address1 || book.address1}
+                  onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -209,12 +224,12 @@ const Accuntinfo = () => {
                   label="C Person"
                   id="cperson"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input radio" style={{paddingRight: '15px'}}>
+              <div className="input radio" style={{ paddingRight: '15px' }}>
                 <div className='icone'>
-                  <GrSelect style={{fontSize: '25px'}}/>
+                  <GrSelect style={{ fontSize: '25px' }} />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -238,7 +253,7 @@ const Accuntinfo = () => {
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input" style={{ paddingRight: "15px" }}>
+              {/* <div className="input" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <HomeTwoToneIcon color="action" />
                 </div>
@@ -252,7 +267,7 @@ const Accuntinfo = () => {
                   sx={{ width: "100%" }}
                   variant="standard"
                 />
-              </div>
+              </div> */}
               <div className="input" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <AttachEmailIcon color="action" />
@@ -270,7 +285,7 @@ const Accuntinfo = () => {
               </div>
               <div className="input" style={{ paddingRight: "15px" }}>
                 <div className='icone'>
-                  <FaCarOn style={{fontSize: '25px'}} />
+                  <FaCarOn style={{ fontSize: '25px' }} />
                 </div>
                 <TextField
                   type="number"
@@ -321,9 +336,9 @@ const Accuntinfo = () => {
                   style={{ width: "100%" }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className='icone'>
-                  <FaCarOn style={{fontSize: '25px'}} />
+                  <FaCarOn style={{ fontSize: '25px' }} />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -389,7 +404,7 @@ const Accuntinfo = () => {
               </RadioGroup>
             </FormControl>
           </div>
-          <div className="input" style={{paddingRight: '15px'}}>
+          <div className="input" style={{ paddingRight: '15px' }}>
             <div className="icone">
               <RateReviewIcon color="action" />
             </div>
@@ -401,7 +416,7 @@ const Accuntinfo = () => {
               label="Rate Type"
               id="standard-size-normal"
               variant="standard"
-              style={{width: '100%'}}
+              style={{ width: '100%' }}
             />
           </div>
           <div className="input" style={{ width: "160px" }}>

@@ -28,7 +28,6 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
     }
   }
 
-  //-------------------------------------------------
 
   return (
 
@@ -249,14 +248,9 @@ export const UserPermission = ({ userid, permissionsData, handleSwitchChange, ha
                 <td className='td-content'><input type="checkbox" checked={permissionsData[19]?.delete} onChange={handleCheckboxChange(19, 'delete')} /></td>
               </tr>
             </>}
-
-
-
           </tbody>
         </table>
       </div>
     </div>
-
-
   )
 }

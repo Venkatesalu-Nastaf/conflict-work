@@ -199,7 +199,6 @@ const EmployeeCreation = ({ stationName }) => {
                   onChange={handleChange}
                   label="Designation"
                   id="designation"
-                // variant="standard"
                 />
               </div>
               <div className="input" style={{ width: "200px" }}>
@@ -216,8 +215,6 @@ const EmployeeCreation = ({ stationName }) => {
                   variant="standard"
                 />
               </div>
-
-
               <div className="input" style={{ width: "240px" }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
@@ -244,7 +241,6 @@ const EmployeeCreation = ({ stationName }) => {
                   />
                 </FormControl>
               </div>
-
               <div className="input radio">
                 <FormControl>
                   <FormLabel id="demo-row-radio-buttons-group-label">
@@ -281,7 +277,6 @@ const EmployeeCreation = ({ stationName }) => {
                 )}
               </div>
             </div>
-
           </div>
           <div className='alert-popup-main'>
             {error &&
@@ -313,16 +308,13 @@ const EmployeeCreation = ({ stationName }) => {
               </div>
             }
           </div>
-
           <Box sx={{ mt: 3, }}
             className="add-icon">
             <StyledSpeedDial
               ariaLabel="SpeedDial playground example"
               icon={<SpeedDialIcon />}
               direction="left"
-
             >
-
               {UserCreation_read === 1 && (
                 <SpeedDialAction
                   key="list"
@@ -332,12 +324,12 @@ const EmployeeCreation = ({ stationName }) => {
                 />
               )}
               {UserCreation_modify === 1 && (
-              <SpeedDialAction
-                key="edit"
-                icon={<ModeEditIcon />}
-                tooltipTitle="Edit"
-                onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
-              />
+                <SpeedDialAction
+                  key="edit"
+                  icon={<ModeEditIcon />}
+                  tooltipTitle="Edit"
+                  onClick={(event) => handleClick(event, "Edit", selectedCustomerId)}
+                />
               )}
               {UserCreation_delete === 1 && (
                 <SpeedDialAction
@@ -347,7 +339,6 @@ const EmployeeCreation = ({ stationName }) => {
                   onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                 />
               )}
-
               {UserCreation_new === 1 && !isEditMode && (
                 <SpeedDialAction
                   key="Add"
@@ -362,16 +353,11 @@ const EmployeeCreation = ({ stationName }) => {
                 tooltipTitle="Cancel"
                 onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
               />
-
-
             </StyledSpeedDial>
           </Box>
-
           <div className="EmployeeCreation-table-container" style={{ marginTop: '20px' }}>
             <div className='search-profile'>
-
               <div className="search-input-container" style={{ marginBottom: '20px' }}>
-
                 <TextField
                   id="search-input"
                   label="Search"
@@ -382,15 +368,11 @@ const EmployeeCreation = ({ stationName }) => {
                     endAdornment: <AiOutlineSearch />,
                   }}
                 />
-
-
                 {filteruser.map((row, index) => (
-
                   <div className='user-table-permission' style={{ cursor: "pointer" }} onClick={() => {
                     togglePermission(row);
                     handleRowClickUser(row)
                   }}
-
                     key={index}>
                     <img src={Avatar} alt="profile" width="50" />
                     <div>
@@ -399,7 +381,6 @@ const EmployeeCreation = ({ stationName }) => {
                     </div>
                   </div>
                 ))}
-
               </div>
               {showPermission && <UserPermission
                 userid={selectedUserId}
@@ -413,14 +394,11 @@ const EmployeeCreation = ({ stationName }) => {
                 deleteState={deleteState}
               />}
             </div>
-
             {!isEditMode &&
               <div style={{ display: "flex", justifyContent: "end" }}>
                 <Button variant="contained" disabled={!UserCreation_new} onClick={handleAdd} className='add-user-button'>Done</Button>
               </div>
             }
-
-
           </div>
         </form>
       </div>

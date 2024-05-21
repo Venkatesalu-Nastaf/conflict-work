@@ -206,6 +206,10 @@
   width: 40%;
 }
 
+.sub-section2-driver{
+  width: 40%;
+}
+
 @media screen and (max-width: 1240px) {
   .booking-main-section1, .booking-main-section2{
     display: grid !important;
@@ -215,6 +219,10 @@
   }
   
   .sub-section2{
+    width: 100%;
+  }
+  .sub-section2-driver
+  {
     width: 100%;
   }
 }

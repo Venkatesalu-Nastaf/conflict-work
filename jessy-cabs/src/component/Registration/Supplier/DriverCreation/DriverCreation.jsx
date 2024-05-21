@@ -141,7 +141,9 @@ const DriverCreation = ({ stationName }) => {
         selectAll,
         handleSelectAll,
         handleDocumentDownload,
-        searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll
+        searchText, setSearchText, fromDate, setFromDate, toDate, setToDate, handleenterSearch, handleShowAll,
+        handleFileChange
+
     } = useDrivercreation();
 
     useEffect(() => {
@@ -178,7 +180,7 @@ const DriverCreation = ({ stationName }) => {
                                     margin="normal"
                                     size="small"
                                     id="id"
-                                    label="driverID"
+                                    label="Driver ID"
                                     name="driverid"
                                     value={selectedCustomerData.driverid || book.driverid || ''}
                                     onChange={handleChange}
@@ -210,9 +212,24 @@ const DriverCreation = ({ stationName }) => {
                                     margin="normal"
                                     size="small"
                                     id="username"
-                                    label="User Mail-Id"
+                                    label="User Name"
                                     name="username"
                                     value={selectedCustomerData?.username || book.username}
+                                    onChange={handleChange}
+                                    style={{width: '100%'}}
+                                />
+                            </div>
+                            <div className="input driver-input" style={{paddingRight: '15px'}}>
+                                <div className="icone">
+                                    <FontAwesomeIcon icon={faImagePortrait} size="lg" />
+                                </div>
+                                <TextField
+                                    margin="normal"
+                                    size="small"
+                                    id="Email"
+                                    label="Email Id"
+                                    name="Email"
+                                    value={selectedCustomerData?.Email || book.Email}
                                     onChange={handleChange}
                                     style={{width: '100%'}}
                                 />
@@ -451,6 +468,20 @@ const DriverCreation = ({ stationName }) => {
 
                                     />
                                 </Button>
+                                </div>
+                                <div className="input driver-input" style={{paddingRight: '15px'}}>
+                                {/* {selectedCustomerData?.driverid || book.driverid ? ( */}
+                                <Button color="primary" variant="contained" component="label">
+                                    PROFILE IMAGE
+                                    <input
+                                        type="file"
+                                        name="Profile_image"
+                                        style={{ display: "none" }}
+                                        onChange={handleFileChange}
+
+                                    />
+                                </Button>
+                                {/* </div> */}
 
                                 {/* ) : (
                                     <Button color="primary" variant="contained" onClick={() => {

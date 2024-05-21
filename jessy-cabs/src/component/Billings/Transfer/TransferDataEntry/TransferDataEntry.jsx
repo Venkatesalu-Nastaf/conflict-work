@@ -27,11 +27,11 @@ import { faBuilding, faFileInvoiceDollar, faTags } from "@fortawesome/free-solid
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useTransferdataentry from './useTransferdataentry';
 // import { useData } from '../../../Dashboard/Maindashboard/DataContext';
-import { FaCalendar } from "react-icons/fa";
-import { FaCalendarPlus } from "react-icons/fa";
-import { FaCalendarMinus } from "react-icons/fa";
+// import { FaCalendar } from "react-icons/fa";
+// import { FaCalendarPlus } from "react-icons/fa";
+// import { FaCalendarMinus } from "react-icons/fa";
 
-
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
 
@@ -128,7 +128,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                   <div className='input'>
 
                     <div className="icone">
-                      <FaCalendar color="action" />
+                      <CalendarMonthIcon color="action" />
                     </div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
@@ -146,7 +146,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
 
                   <div className='input'>
                     <div className="icone">
-                      <FaCalendar color="action" />
+                      <CalendarMonthIcon color="action" />
                     </div>
 
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -206,7 +206,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                 <div className="input-field"> */}
                   <div className="input" >
                     <div className="icone">
-                      <FaCalendarPlus color="action" />
+                      <CalendarMonthIcon color="action" />
                     </div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
@@ -229,7 +229,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                   </div>
                   <div className="input">
                     <div className="icone">
-                      <FaCalendarMinus color="action" />
+                      <CalendarMonthIcon color="action" />
                     </div>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>

@@ -39,7 +39,7 @@ import { MdDateRange } from "react-icons/md";
 
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -155,7 +155,7 @@ const VehicleStatement = () => {
 
                 <div className="input vehiecle-date" style={{ width: "250px" }}>
                   <div className="icone" style={{ fontSize: '25px' }}>
-                    <MdDateRange color="action" />
+                    <CalendarMonthIcon color="action" />
                   </div>
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -172,7 +172,7 @@ const VehicleStatement = () => {
 
                 <div className="input vehiecle-date" style={{ width: "250px" }}>
                   <div className="icone" style={{ fontSize: '25px' }}>
-                    <MdDateRange color="action" />
+                    <CalendarMonthIcon color="action" />
                   </div>
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>

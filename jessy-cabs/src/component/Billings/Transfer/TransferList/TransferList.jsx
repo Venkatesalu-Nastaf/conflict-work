@@ -21,6 +21,7 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import useTransferlist from './useTransferlist';
 import { PermissionContext } from '../../../context/permissionContext';
 import { FaCalendar } from "react-icons/fa";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
 
@@ -100,7 +101,7 @@ const TransferList = ({ stationName, organizationNames }) => {
 
                                 <div className="input input-transferlist">
                                     <div className="icone">
-                                        <FaCalendar color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
 
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -121,7 +122,7 @@ const TransferList = ({ stationName, organizationNames }) => {
                                 <div className='input input-transferlist'>
 
                                     <div className="icone">
-                                        <FaCalendar color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>

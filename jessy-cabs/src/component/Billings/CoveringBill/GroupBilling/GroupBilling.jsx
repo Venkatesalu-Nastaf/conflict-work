@@ -27,7 +27,8 @@ import useGroupbilling from './useGroupbilling';
 import { RefPdfData } from './GroupBillingContext';
 import RefPdfParticularData from './RefPdfParticularData';
 import { PermissionContext } from '../../../context/permissionContext';
-import { FaCalendarAlt } from "react-icons/fa";
+// import { FaCalendarAlt } from "react-icons/fa";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
 
@@ -187,7 +188,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                 </div>
                                 <div className="input">
                                     <div className="icone">
-                                        <FaCalendarAlt color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
@@ -205,7 +206,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
 
                                 <div className="input" >
                                     <div className="icone">
-                                        <FaCalendarAlt color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>
@@ -229,7 +230,7 @@ const GroupBilling = ({ stationName, organizationNames }) => {
                                 <div className="input" >
 
                                     <div className="icone">
-                                        <FaCalendarAlt color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={["DatePicker", "DatePicker"]}>

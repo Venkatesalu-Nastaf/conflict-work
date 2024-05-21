@@ -283,7 +283,8 @@ const Sidebar = () => {
         hasPermission = REGISTER;
         break;
       case "Settings page":
-        hasPermission = 1;
+        // hasPermission = 1;
+        hasPermission = SETTING;
         break;
       case "Info page":
         hasPermission = INFO;

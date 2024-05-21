@@ -23,6 +23,9 @@ import usePaymentdetails from './usePaymentdetails';
 import { PermissionContext } from '../../../context/permissionContext';
 import { FaRegCalendarAlt } from "react-icons/fa";
 
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
+
 
 const PaymentDetail = ({ organizationNames }) => {
 
@@ -116,7 +119,7 @@ const PaymentDetail = ({ organizationNames }) => {
 
                 <div className="input" >
                   <div className="icone">
-                    <FaRegCalendarAlt color="action" style={{ fontSize: "27px" }} />
+                    <CalendarMonthIcon color="action" />
                   </div>
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -136,7 +139,7 @@ const PaymentDetail = ({ organizationNames }) => {
 
                 <div className="input" >
                   <div className="icone">
-                    <FaRegCalendarAlt color="action" style={{ fontSize: "27px" }} />
+                    <CalendarMonthIcon color="action" />
                   </div>
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>

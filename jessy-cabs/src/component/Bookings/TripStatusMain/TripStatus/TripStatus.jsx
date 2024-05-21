@@ -155,7 +155,7 @@ const TripStatus = ({ stationName }) => {
                     <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShow} >Show</Button>
                   </div>
                   <div className="input">
-                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} >Show All</Button>
+                    <Button variant="outlined" disabled={!TripStatus_read} onClick={handleShowAll} style={{whiteSpace: 'nowrap'}}>Show All</Button>
                   </div>
                 </div>
               </div>

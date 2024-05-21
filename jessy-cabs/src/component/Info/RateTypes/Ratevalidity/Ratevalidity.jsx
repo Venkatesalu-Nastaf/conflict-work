@@ -30,6 +30,8 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -125,7 +127,7 @@ const Ratevalidity = () => {
                                 </div>
                                 <div className="input RateValidity-input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
-                                        <DateRangeIcon color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
 
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -143,7 +145,7 @@ const Ratevalidity = () => {
                                 </div>
                                 <div className="input RateValidity-input" style={{paddingRight: '15px'}}>
                                     <div className="icone">
-                                        <DateRangeIcon color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker

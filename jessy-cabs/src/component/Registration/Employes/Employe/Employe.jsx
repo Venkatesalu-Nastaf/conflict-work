@@ -55,6 +55,7 @@ import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOu
 import { APIURL } from "../../../url";
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from "../../../context/permissionContext";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
 
@@ -213,7 +214,7 @@ const Employe = () => {
               <div className="input" style={{paddingRight: '15px'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <div className="icone">
-                    <DateRangeIcon color="action" />
+                    <CalendarMonthIcon color="action" />
                   </div>
                   <DatePicker
                     label="Joining Date"

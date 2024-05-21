@@ -44,10 +44,10 @@ import useTransferreport from './useTransferreport';
 import useExeclpage from './ExcelPage';
 import { PdfData } from './PdfContext';
 import { PiMoneyBold } from "react-icons/pi";
-import { IoCalendarSharp } from "react-icons/io5";
-import { FaFileInvoice } from "react-icons/fa";
-import { FaCalendarPlus , FaCalendarMinus } from "react-icons/fa";
-
+// import { IoCalendarSharp } from "react-icons/io5";
+// import { FaFileInvoice } from "react-icons/fa";
+// import { FaCalendarPlus , FaCalendarMinus } from "react-icons/fa";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
 export const PDFbill = [
@@ -354,7 +354,7 @@ const TransferReport = ({ stationName }) => {
                 </div>
                 <div className="input input-transfer-report" >
                 <div className="icone">
-                    <IoCalendarSharp color="action"  style={{fontSize:"23px"}}/>
+                    <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
@@ -413,7 +413,7 @@ const TransferReport = ({ stationName }) => {
                 <div className="input input-transfer-report" >
 
                 <div className="icone">
-                    <FaFileInvoice color="action" style={{fontSize:"23px"}} />
+                    <CalendarMonthIcon color="action" />
                   </div>
                   <TextField
                     size="small"
@@ -428,7 +428,7 @@ const TransferReport = ({ stationName }) => {
               <div className="input-field"> */}
                 <div className="input input-transfer-report" >
                 <div className="icone">
-                    <FaCalendarPlus color="action" style={{fontSize:"23px"}} />
+                    <CalendarMonthIcon color="action" style={{fontSize:"23px"}} />
                   </div>
 
                   <TextField
@@ -442,7 +442,7 @@ const TransferReport = ({ stationName }) => {
                 </div>
                 <div className="input input-transfer-report" >
                 <div className="icone">
-                    <FaCalendarMinus  color="action" style={{fontSize:"23px"}} />
+                    <CalendarMonthIcon  color="action" style={{fontSize:"23px"}} />
                   </div>
                   <TextField
                     size="small"

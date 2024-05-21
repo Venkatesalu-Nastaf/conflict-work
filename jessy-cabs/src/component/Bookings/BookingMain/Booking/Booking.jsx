@@ -242,7 +242,7 @@ const Booking = ({ stationName }) => {
 
               <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
                 <div className="icone">
-                  <CalendarMonthIcon color="action" />
+                  <CalendarMonthIcon color="action" style={{paddingTop: '20px'}} />
                 </div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoItem label="Booking Date">

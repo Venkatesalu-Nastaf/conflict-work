@@ -39,6 +39,8 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import useMailagedetails from './useMailagedetails';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -152,7 +154,7 @@ const MailageDetails = () => {
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div className="icone">
-                      <DateRangeIcon color="action" />
+                      <CalendarMonthIcon color="action" />
                     </div>
                     <DatePicker
                       label="Fill Date"
@@ -170,7 +172,7 @@ const MailageDetails = () => {
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <div className="icone">
-                      <DateRangeIcon color="action" />
+                      <CalendarMonthIcon color="action" />
                     </div>
                     <DatePicker
                       label="Empty Date"

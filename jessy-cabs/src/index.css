@@ -343,6 +343,10 @@ body {
   color: #6c6868;
 }
 
+.icone svg{
+  font-size: 23px;
+}
+
 .download-container {
   display: flex;
   align-items: center;

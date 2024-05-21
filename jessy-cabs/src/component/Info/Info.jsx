@@ -3,6 +3,9 @@ import "./Info.css";
 import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { PermissionContext } from '../context/permissionContext';
 
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ClearIcon from '@mui/icons-material/Clear';
+
 const MenuItem = ({ label, to, alt, activeMenuItem, handleMenuItemClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
@@ -23,22 +26,37 @@ const Info = () => {
 
   //------------------popup------------------------
 
-  const [info, setInfo] = useState(false);
-  // const [infoMessage, setInfoMessage] = useState({});
+  // const [info, setInfo] = useState(false);
+  // // const [infoMessage, setInfoMessage] = useState({});
+
+  // const hidePopup = () => {
+  //   setInfo(false);
+  //   // setInfoMessage("");
+  // };
+
+  // useEffect(() => {
+  //   if (info) {
+  //     const timer = setTimeout(() => {
+  //       hidePopup();
+  //     }, 3000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [info]);
+
+  const [warning, setWarning] = useState(false);
 
   const hidePopup = () => {
-    setInfo(false);
-    // setInfoMessage("");
+      setWarning(false);
   };
 
   useEffect(() => {
-    if (info) {
-      const timer = setTimeout(() => {
-        hidePopup();
-      }, 3000);
-      return () => clearTimeout(timer);
+    if (warning) {
+        const timer = setTimeout(() => {
+            hidePopup();
+        }, 3000);
+        return () => clearTimeout(timer);
     }
-  }, [info]);
+    }, [warning]);
 
   //end-----------------------------------
 
@@ -80,9 +98,11 @@ const Info = () => {
       }
       else if (hasPermission === 0)
         e.preventDefault();
-      setInfo(true);
+      // setInfo(true);
+      setWarning(true);
+
       // setInfoMessage("You do not have Permission ..!")
-      alert("You do not have Permission ..!");
+      // alert("You do not have Permission ..!");
     }
     catch {
 
@@ -144,6 +164,16 @@ const Info = () => {
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
+      </div>
+
+      <div className='alert-popup-main'>
+          {warning &&
+              <div className='alert-popup Warning' >
+                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>You do not have Permission ..!</p>
+              </div>
+          }
       </div>
 
       <Outlet />

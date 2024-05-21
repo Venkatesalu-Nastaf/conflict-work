@@ -35,6 +35,8 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useTaxsettings from './useTaxsettings.js';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
 
 
 
@@ -101,7 +103,10 @@ const TaxSetting = () => {
             <form onSubmit={handleClick}>
                 <div className="TaxSetting-header">
                     <div className="input-field tax-setting-input" style={{ padding: '0px 15px' }}>
-                        <div className="input">
+                        <div className="input" style={{paddingRight: '15px'}}>
+                            <div className='icone'>
+                                <CalendarMonthIcon color='action' />
+                            </div>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     label="Date Tax From"
@@ -115,7 +120,10 @@ const TaxSetting = () => {
                                 </DatePicker>
                             </LocalizationProvider>
                         </div>
-                        <div className="input">
+                        <div className="input" style={{paddingRight: '15px'}}>
+                            <div className='icone'>
+                                <CalendarMonthIcon color='action' />
+                            </div>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     label="Date Tax To"
@@ -129,7 +137,7 @@ const TaxSetting = () => {
                                 </DatePicker>
                             </LocalizationProvider>
                         </div>
-                        <div className="input">
+                        <div className="input" style={{paddingRight: '15px'}}>
                             <div className="icone">
                                 <FontAwesomeIcon icon={faNewspaper} size="xl" />
                             </div>
@@ -143,9 +151,13 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.STax || book.STax}
                                 onChange={handleChange}
                                 variant="standard"
+                                style={{width: '100%'}}
                             />
                         </div>
-                        <div className="input">
+                        <div className="input" style={{paddingRight: '15px'}}>
+                            <div className="icone">
+                                <FontAwesomeIcon icon={faNewspaper} size="xl" />
+                            </div>
                             <TextField
                                 margin="normal"
                                 size="small"
@@ -156,9 +168,13 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.SBCess || book.SBCess}
                                 onChange={handleChange}
                                 variant="standard"
+                                style={{width: '100%'}}
                             />
                         </div>
-                        <div className="input">
+                        <div className="input" style={{paddingRight: '15px'}}>
+                            <div className="icone">
+                                <FontAwesomeIcon icon={faNewspaper} size="xl" />
+                            </div>
                             <TextField
                                 margin="normal"
                                 size="small"
@@ -169,11 +185,12 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.KKCess || book.KKCess}
                                 onChange={handleChange}
                                 variant="standard"
+                                style={{width: '100%'}}
                             />
                         </div>
                         {/* </div>
                     <div className="input-field" style={{ padding: '0px 15px' }}> */}
-                        <div className="input">
+                        <div className="input" style={{paddingRight: '15px'}}>
                             <div className="icone">
                                 <FontAwesomeIcon icon={faNewspaper} size="xl" />
                             </div>
@@ -187,9 +204,13 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.STax_Des || book.STax_Des}
                                 onChange={handleChange}
                                 variant="standard"
+                                style={{width: '100%'}}
                             />
                         </div>
-                        <div className="input">
+                        <div className="input" style={{paddingRight: '15px'}}>
+                            <div className="icone">
+                                <FontAwesomeIcon icon={faNewspaper} size="xl" />
+                            </div>
                             <TextField
                                 margin="normal"
                                 size="small"
@@ -200,9 +221,13 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.SBCess_Des || book.SBCess_Des}
                                 onChange={handleChange}
                                 variant="standard"
+                                style={{width: '100%'}}
                             />
                         </div>
-                        <div className="input">
+                        <div className="input" style={{paddingRight: '15px'}}>
+                            <div className="icone">
+                                <FontAwesomeIcon icon={faNewspaper} size="xl" />
+                            </div>
                             <TextField
                                 margin="normal"
                                 size="small"
@@ -213,9 +238,10 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.KKCess_Des || book.KKCess_Des}
                                 onChange={handleChange}
                                 variant="standard"
+                                style={{width: '100%'}}
                             />
                         </div>
-                        <div className="input">
+                        <div className="input" style={{paddingRight: '15px'}}>
                             <div className="icone">
                                 <QuizOutlinedIcon color="action" />
                             </div>
@@ -224,7 +250,7 @@ const TaxSetting = () => {
                                 size="small"
                                 id="free-solo-demo-taxtype"
                                 freeSolo
-                                sx={{ width: "20ch" }}
+                                sx={{ width: "100%" }}
                                 onChange={(event, value) => handleAutocompleteChange(event, value, "taxtype")}
                                 value={TaxType.find((option) => option.Option)?.label || selectedCustomerData.taxtype || book.taxtype || ''}
                                 options={TaxType.map((option) => ({

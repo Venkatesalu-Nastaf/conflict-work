@@ -47,11 +47,12 @@ import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import { faArrowRightArrowLeft, faMoneyBillTransfer, faBoxesPacking, faCloudMoon, faCoins, faEquals, faFileContract, faFileInvoiceDollar, faMagnifyingGlassChart, faMoneyBill1Wave, faNewspaper, faPercent, faPersonCircleCheck, faRoad, faSackDollar, faShapes, faStopwatch, faTags, faWindowRestore, faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
 import useBilling from './useBilling';
 import { PermissionContext } from '../../../context/permissionContext';
-import { FaCalendarDays } from "react-icons/fa6";
+// import { FaCalendarDays } from "react-icons/fa6";
 import { RiPinDistanceLine } from "react-icons/ri";
 import { IoIosTime } from "react-icons/io";
-import { FaCalendarDay } from "react-icons/fa";
+// import { FaCalendarDay } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
 
@@ -205,7 +206,7 @@ const Billing = () => {
 
                             <div className="input">
                                 <div className="icone">
-                                    <FaCalendarDays color="action" />
+                                    <CalendarMonthIcon color="action" />
                                 </div>
 
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -291,7 +292,7 @@ const Billing = () => {
                             </div>
                             <div className="input">
                                 <div className="icone">
-                                    <FaCalendarDay color="action" />
+                                    <CalendarMonthIcon color="action" />
                                 </div>
 
 
@@ -310,7 +311,7 @@ const Billing = () => {
                             </div>
                             <div className="input" style={{ width: "111px" }}>
                                 <div className="icone">
-                                    <FaCalendarDay color="action" />
+                                    <CalendarMonthIcon color="action" />
                                 </div>
 
                                 <TextField

@@ -26,6 +26,11 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import useStationCreation from './useStationCreation';
 import { PermissionContext } from '../../context/permissionContext';
 
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import { MdNumbers } from "react-icons/md";
+
+
+
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -101,7 +106,7 @@ const StationCreation = () => {
           </p>
           <div className="stationcreation-header">
             <div className="input-field station-creation-inputfeilds">
-              <div className="input input-station-creaton">
+              <div className="input input-station-creaton" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -115,9 +120,10 @@ const StationCreation = () => {
                   autoComplete="new-password"
                   onChange={handleChange}
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input input-station-creaton" style={{ width: "380px" }}>
+              <div className="input input-station-creaton" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                 </div>
@@ -133,7 +139,7 @@ const StationCreation = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input input-station-creaton" style={{ width: "300px" }}>
+              <div className="input input-station-creaton" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <ListAltIcon color="action" />
                 </div>
@@ -151,7 +157,25 @@ const StationCreation = () => {
 
               </div>
 
-              <TextField
+              <div className='input' style={{paddingRight: '15px'}}>
+                <div className='icone'>
+                  <AddHomeWorkIcon color='action' />
+                </div>
+                  <TextField
+                  size="small"
+                  name="remark"
+                  className='address-field'
+                  value={selectedCustomerData?.address || book.address}
+                  onChange={handleChange}
+                  label="Address"
+                  id="remark"
+                  multiline
+                  rows={4}
+                  autoComplete="password"
+                />
+              </div>
+
+              {/* <TextField
                 margin="normal"
                 size="small"
                 id="address"
@@ -161,18 +185,25 @@ const StationCreation = () => {
                 autoComplete="new-password"
                 onChange={handleChange}
                 variant="standard"
-              />
-              <TextField
-                margin="normal"
-                size="small"
-                id="gstno"
-                label="GST No"
-                name="gstno"
-                value={selectedCustomerData?.gstno || book.gstno}
-                autoComplete="new-password"
-                onChange={handleChange}
-                variant="standard"
-              />
+              /> */}
+
+              <div className='input' style={{paddingRight: '15px'}}>
+                <div className='icone'>
+                  <MdNumbers color='action' />
+                </div>
+                <TextField
+                  margin="normal"
+                  size="small"
+                  id="gstno"
+                  label="GST No"
+                  name="gstno"
+                  value={selectedCustomerData?.gstno || book.gstno}
+                  autoComplete="new-password"
+                  onChange={handleChange}
+                  variant="standard"
+                />
+              </div>
+              
               {/* </div>
             <div className="input-field"> */}
               <div className="input radio input-station-creaton">

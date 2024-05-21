@@ -81,7 +81,8 @@
     top: 10px;
     left: 800px; */
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
+
 }
 
 .bankaddbtn Button {

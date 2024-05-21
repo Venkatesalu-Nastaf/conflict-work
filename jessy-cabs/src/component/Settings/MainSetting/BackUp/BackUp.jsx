@@ -119,11 +119,12 @@ const BackUp = () => {
         setSuccessMessage("Data Downloaded!");
     }
     return (
-        <div className="BackUp-form">
+        <div className="BackUp-form" style={{width: '100%'}}>
             <form action="">
                 <div className="BackUp-header">
                     <div className="input-field backup-inputs"  style={{ justifyContent: 'center', marginTop: '20px' }}>
                         <div className="input">
+                            
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoItem label="Start Date">
                                     <DatePicker

@@ -220,7 +220,7 @@ const RateType = ({ stationName, organizationNames }) => {
 
                                 <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className='icone'>
-                                        <CalendarMonthIcon />
+                                        <CalendarMonthIcon style={{paddingTop: '20px'}} />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
@@ -248,7 +248,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                 </div>
                                 <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className='icone'>
-                                        <CalendarMonthIcon />
+                                        <CalendarMonthIcon style={{paddingTop: '20px'}} />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">

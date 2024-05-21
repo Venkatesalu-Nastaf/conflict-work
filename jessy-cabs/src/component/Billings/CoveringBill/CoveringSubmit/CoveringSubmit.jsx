@@ -23,6 +23,7 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import useCoversubmit from './useCoversubmit';
 import { PermissionContext } from '../../../context/permissionContext';
 import { FaCalendar } from "react-icons/fa";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 
 const CoveringSubmit = ({ stationName, organizationNames }) => {
@@ -97,7 +98,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                 </div>
                                 <div className="input">
                                     <div className="icone">
-                                        <FaCalendar color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
 
 
@@ -122,7 +123,7 @@ const CoveringSubmit = ({ stationName, organizationNames }) => {
                                 </div>
                                 <div className="input">
                                     <div className="icone">
-                                        <FaCalendar color="action" />
+                                        <CalendarMonthIcon color="action" />
                                     </div>
 
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -30,6 +30,7 @@ import CurrencyRupeeRoundedIcon from '@mui/icons-material/CurrencyRupeeRounded';
 import useDriverbatarate from './useDriverbatarate.js';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from '../../../context/permissionContext.js';
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -95,7 +96,7 @@ const DriverBataRate = () => {
               <div className="input-field DriverBataRate-inputfeild">
                 <div className="input DriverBataRate-input" style={{paddingRight: '15px'}}>
                   <div className="icone">
-                    <DateRangeIcon color="action" />
+                    <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
@@ -113,7 +114,7 @@ const DriverBataRate = () => {
                 <div className="input DriverBataRate-input" style={{paddingRight: '15px'}}>
 
                   <div className="icone">
-                    <DateRangeIcon color="action" />
+                    <CalendarMonthIcon color="action" />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker

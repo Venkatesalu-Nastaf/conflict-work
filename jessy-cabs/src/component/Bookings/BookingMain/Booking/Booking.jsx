@@ -542,7 +542,7 @@ const Booking = ({ stationName }) => {
                   <Checkbox
                     size="small"
                     checked={guestsms}
-                    defaultChecked
+                    // defaultChecked
                     onChange={(event) => setGuestSms(event.target.checked)}
                   />
                 }
@@ -583,7 +583,7 @@ const Booking = ({ stationName }) => {
                   <Checkbox
                     size="small"
                     checked={sendEmail}
-                    defaultChecked
+                    // defaultChecked
                     onChange={(event) => setSendEmail(event.target.checked)}
                   />
                 }
@@ -1447,7 +1447,7 @@ const Booking = ({ stationName }) => {
 
             </div>
 
-            <div className="sub-section2">
+            <div className="sub-section2-driver">
 
               <div className="booking-update-main driver-table" style={{ marginTop: '20px' }}>
                 <div className="booking-update">

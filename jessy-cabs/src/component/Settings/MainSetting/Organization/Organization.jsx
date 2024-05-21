@@ -222,6 +222,138 @@ const Organization = () => {
                         {/* <div className="input" style={{ width: "160px" }}>
                             <p className='input-title'>Type of Organization</p>
                         </div> */}
+
+
+                        <div style={{display: 'flex', flexWrap: 'wrap', alignItems: 'start', justifyContent: 'center', width: '68vw', gap: '10px'}}>
+
+                            <div className="input organization-input">
+                                <label htmlFor="">Type of Organization:</label>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    id="organizationType"
+                                    name="organizationtype"
+                                    className='organisation-input-field'
+                                    value={selectedCustomerData?.organizationtype || book.organizationtype}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                            <div className="input organization-input">
+                                <label htmlFor="">Website:</label>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    id="website"
+                                    name="website"
+                                    className='organisation-input-field'
+                                    value={selectedCustomerData?.website || book.website}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                            <div className="input " style={{ width: "100%", display: 'flex', gap: '10px' }}>
+                                <TextField
+                                    size="small"
+                                    name="remark"
+                                    className='address-field'
+                                    value={selectedCustomerData?.addressLine1 || book.addressLine1}
+                                    onChange={handleChange}
+                                    label="Address"
+                                    id="remark"
+                                    multiline
+                                    rows={5}
+                                    style={{width: '87%'}}
+                                    autoComplete="password"
+                                />
+                            </div>
+
+                            <div className="input organization-input">
+                                <label htmlFor="">PAN Number:</label>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    id="taxIDNumber"
+                                    name="pannumber"
+                                    className='organisation-input-field'
+                                    value={selectedCustomerData?.pannumber || book.pannumber}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                            <div className="input organization-input">
+                                <label htmlFor="">Location:</label>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    id="location"
+                                    name="location"
+                                    className='organisation-input-field'
+                                    value={selectedCustomerData?.location || book.location}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                            <div className="input organization-input">
+                                <label htmlFor="">Employees:</label>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    id="employees"
+                                    name="employees"
+                                    className='organisation-input-field'
+                                    value={selectedCustomerData?.employees || book.employees}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                            <div className="input organization-input">
+                                <label htmlFor="">Organisation Type: </label>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    id="partnershipsAlliances"
+                                    name="partnershipsAlliances"
+                                    className='organisation-input-field'
+                                    value={selectedCustomerData?.partnershipsAlliances || book.partnershipsAlliances}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                            <div className="input organization-input">
+                                <label htmlFor="">GST Number:</label>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    id="taxIDNumber"
+                                    name="gstnumber"
+                                    className='organisation-input-field'
+                                    value={selectedCustomerData?.gstnumber || book.gstnumber}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                            <div className="input organization-input">
+                                <label htmlFor="">Telephone no:</label>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    size="small"
+                                    id="telephone"
+                                    name="telephone"
+                                    className='organisation-input-field'
+                                    value={selectedCustomerData.telephone || book.telephone || ''}
+                                    // value={ book.telephone||''}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+
+                        </div>
+
+
+
+
+{/* 
                         <div className='organisation-input-row'>
                             <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <div className="input organization-input">
@@ -236,11 +368,11 @@ const Organization = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                             {/* <div className="input" style={{ width: "150px" }}>
                                 <p className='input-title'>Website</p>
                             </div> */}
-                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                            {/* <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <div className="input organization-input">
                                     <label htmlFor="">Website:</label>
 
@@ -255,20 +387,20 @@ const Organization = () => {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         {/* </div>
                     <div className="input-field"> */}
                         {/* <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>Office Address</p>
                         </div> */}
-                        <div className='organisation-input-row'>
+                        {/* <div className='organisation-input-row'>
                             <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                                <div className='office-address'>
+                                <div className='office-address'> */}
                                     {/* <label htmlFor="">Office Address:</label> */}
-                                    <div className='address-block'>
+                                    {/* <div className='address-block'>
 
-                                        <div className="input " style={{ width: "100%", display: 'flex', gap: '10px' }}>
-                                            <TextField
+                                        <div className="input " style={{ width: "100%", display: 'flex', gap: '10px' }}> */}
+                                            {/* <TextField
                                                 sx={{ width: "300px" }}
                                                 size="small"
                                                 id="addressLine1"
@@ -278,9 +410,22 @@ const Organization = () => {
                                                 onChange={handleChange}
                                                 label="Office Address"
                                                 variant="standard"
+                                            /> */}
+                                            {/* <TextField
+                                                size="small"
+                                                name="remark"
+                                                className='address-field'
+                                                value={selectedCustomerData?.addressLine1 || book.addressLine1}
+                                                onChange={handleChange}
+                                                label="Address"
+                                                id="remark"
+                                                multiline
+                                                rows={5}
+                                                sx={{ m: 2 }}
+                                                autoComplete="password"
                                             />
-                                        </div>
-                                        <div className="input" style={{ width: "100%", display: 'flex', gap: '10px', }}>
+                                        </div> */}
+                                        {/* <div className="input" style={{ width: "100%", display: 'flex', gap: '10px', }}>
                                             <TextField
                                                 sx={{ width: "300px" }}
                                                 size="small"
@@ -291,15 +436,15 @@ const Organization = () => {
                                                 onChange={handleChange}
                                                 variant="standard"
                                             />
-                                        </div>
-                                    </div>
+                                        </div> */}
+                                    {/* </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>Organization PAN Number</p>
                         </div> */}
-                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                            {/* <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <div className="input organization-input">
                                     <label htmlFor="">PAN Number:</label>
 
@@ -314,7 +459,7 @@ const Organization = () => {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* </div>
                     <div className="input-field"> */}
@@ -322,7 +467,7 @@ const Organization = () => {
                             <p className='input-title'>Location</p>
                         </div> */}
 
-                        <div className='organisation-input-row'>
+                        {/* <div className='organisation-input-row'>
                             <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <div className="input organization-input">
                                     <label htmlFor="">Location:</label>
@@ -336,15 +481,14 @@ const Organization = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>Employees</p>
                         </div> */}
-                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                            {/* <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <div className="input organization-input">
                                     <label htmlFor="">Employees:</label>
-
                                     <TextField
                                         sx={{ width: "300px" }}
                                         size="small"
@@ -356,17 +500,16 @@ const Organization = () => {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         {/* </div>                 
                     <div className="input-field"> */}
                         {/* <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>Organisation Type</p>
                         </div> */}
-                        <div className='organisation-input-row'>
+                        {/* <div className='organisation-input-row'>
                             <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <div className="input organization-input">
                                     <label htmlFor="">Organisation Type: </label>
-
                                     <TextField
                                         sx={{ width: "300px" }}
                                         size="small"
@@ -377,15 +520,14 @@ const Organization = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>GST Number</p>
                         </div> */}
-                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                            {/* <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <div className="input organization-input">
                                     <label htmlFor="">GST Number:</label>
-
                                     <TextField
                                         sx={{ width: "300px" }}
                                         size="small"
@@ -397,18 +539,17 @@ const Organization = () => {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         {/* </div>
                     <div className="input-field" style={{ justifyContent: "center" }}> */}
 
                         {/* <div className="input" style={{ width: "150px" }}>
                             <p className='input-title'>Telephone no</p>
                         </div> */}
-                        <div className='organisation-input-row'>
-                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                        <div className='organisation-input-row' style={{paddingBottom: '20px'}}>
+                            {/* <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <div className="input organization-input">
                                     <label htmlFor="">Telephone no:</label>
-
                                     <TextField
                                         sx={{ width: "300px" }}
                                         size="small"
@@ -420,7 +561,7 @@ const Organization = () => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                             {selectedCustomerData?.length === 0 ?
                                 <div className='organisation-btn-row' style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                                     <div className="input organisation-btn" style={{ width: "150px" }}>

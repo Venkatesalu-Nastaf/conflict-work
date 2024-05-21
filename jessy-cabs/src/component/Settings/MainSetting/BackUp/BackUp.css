@@ -13,9 +13,10 @@
 } */
 
 .BackUp-header {
-    height: fit-content;
+    height: 60.7vh;
     background: var(--glass);
     padding: 20px;
+    width: 100%;
     /* margin-bottom: -10px; */
 }
 

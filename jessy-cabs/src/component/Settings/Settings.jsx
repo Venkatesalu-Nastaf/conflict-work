@@ -1,7 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import "./Settings.css";
 import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { PermissionContext } from '../context/permissionContext';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const MenuItem = ({ label, to, alt, handleMenuItemClick }) => {
   const location = useLocation();
@@ -30,7 +32,20 @@ const Settings = () => {
   const Station_Creation = permissions[14]?.read;
   const Main_Setting = permissions[15]?.read;
 
+  const [warning, setWarning] = useState(false);
 
+  const hidePopup = () => {
+      setWarning(false);
+  };
+
+  useEffect(() => {
+    if (warning) {
+        const timer = setTimeout(() => {
+            hidePopup();
+        }, 3000);
+        return () => clearTimeout(timer);
+    }
+    }, [warning]);
 
 
   const handleMenuItemClick = (menuItem, alt, e) => {
@@ -62,7 +77,8 @@ const Settings = () => {
       }
       else if (hasPermission === 0) {
         e.preventDefault();
-        alert("You do not have Permission ..!");
+        setWarning(true);
+        // alert("You do not have Permission ..!");
       }
 
     }
@@ -107,6 +123,15 @@ const Settings = () => {
           activeMenuItem={activeMenuItem}
           handleMenuItemClick={handleMenuItemClick}
         />
+      </div>
+      <div className='alert-popup-main'>
+          {warning &&
+              <div className='alert-popup Warning' >
+                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                  <p>You do not have Permission ..!</p>
+              </div>
+          }
       </div>
       <Outlet />
     </div>

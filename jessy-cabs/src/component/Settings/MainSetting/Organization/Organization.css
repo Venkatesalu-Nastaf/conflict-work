@@ -59,6 +59,7 @@
 }
 .organisation-details .input {
     /* margin-left: 20px; */
+    display: grid;
     justify-content: start !important;
 }
 .organisation-details .address-block{

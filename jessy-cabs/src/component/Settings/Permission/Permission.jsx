@@ -139,7 +139,6 @@ const Permission = () => {
                       <th>Modify</th>
                       <th>Delete</th>
                     </tr> */}
-
                     <tr>
                       <th>ID</th>
                       <th>Form Name</th>
@@ -149,7 +148,6 @@ const Permission = () => {
                           onChange={(e) => handleHeaderCheckboxChange('read', e.target.checked)}
                         />
                       </th>
-
                       <th>New
                         <Checkbox
                           checked={isActionChecked('new')}

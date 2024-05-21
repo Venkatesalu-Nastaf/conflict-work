@@ -115,7 +115,7 @@ const Customer = ({ stationName }) => {
           </p>
           <div className="Customer-page-header">
             <div className="input-field Customer-page-input-field">
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <AccountBalanceWalletIcon color="action" />
                 </div>
@@ -127,10 +127,10 @@ const Customer = ({ stationName }) => {
                   value={selectedCustomerData?.customerId || book.customerId}
                   onChange={handleChange}
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -144,10 +144,10 @@ const Customer = ({ stationName }) => {
                   variant="standard"
                   onChange={handleChange}
                   name="customer"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -162,7 +162,7 @@ const Customer = ({ stationName }) => {
                   name="name"
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <PermIdentityIcon color="action" />
                 </div>
@@ -186,7 +186,7 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <CalendarMonthIcon color="action" />
                 </div>
@@ -205,7 +205,7 @@ const Customer = ({ stationName }) => {
               </div>
               {/* </div>
             <div className="input-field"> */}
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <AttachEmailIcon color="action" />
                 </div>
@@ -217,10 +217,10 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <RateReviewIcon color="action" />
                 </div>
@@ -232,10 +232,10 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <AccountBalanceWalletIcon color="action" />
                 </div>
@@ -247,10 +247,10 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   id="standard-size-normal"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <LocalPhoneIcon color="action" />
                 </div>
@@ -262,7 +262,7 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   id="Phone"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
               <div className="input radio">
@@ -299,7 +299,7 @@ const Customer = ({ stationName }) => {
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
-                <TextField
+                {/* <TextField
                   size="small"
                   name="address1"
                   value={selectedCustomerData?.address1 || book.address1}
@@ -309,6 +309,20 @@ const Customer = ({ stationName }) => {
                   id="remark"
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
+                /> */}
+
+                <TextField
+                  margin="normal"
+                  id="remark"
+                  label="Address"
+                  name="address1"
+                  multiline
+                  rows={2}
+                  sx={{ width: "100%" }}
+                  autoComplete="new-password"
+                  style={{ width: '100%' }}
+                  value={selectedCustomerData?.address1 || book.address1}
+                  onChange={handleChange}
                 />
               </div>
               <FormControlLabel
@@ -359,7 +373,7 @@ const Customer = ({ stationName }) => {
               />
               {/* </div>
             <div className="input-field"> */}
-              <div className="input input-address" style={{ width: "400px" }}>
+              {/* <div className="input input-address" style={{ width: "400px" }}>
                 <div className="icone">
                   <HomeTwoToneIcon color="action" />
                 </div>
@@ -373,8 +387,8 @@ const Customer = ({ stationName }) => {
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
                 />
-              </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              </div> */}
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <DomainAddIcon color="action" />
                 </div>
@@ -398,9 +412,9 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className='icone'>
-                  <GrSelect style={{fontSize: '25px'}}/>
+                  <GrSelect style={{ fontSize: '25px' }} />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -422,7 +436,7 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <StoreIcon color="action" />
                 </div>
@@ -434,7 +448,7 @@ const Customer = ({ stationName }) => {
                   label="Entity"
                   id="standard-size-normal"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
               {/* </div>
@@ -452,12 +466,12 @@ const Customer = ({ stationName }) => {
                   onChange={handleChange}
                   sx={{ m: 1, width: "200ch" }}
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className='icone'>
-                  <GrSelect style={{fontSize: '25px'}}/>
+                  <GrSelect style={{ fontSize: '25px' }} />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -478,9 +492,9 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className='icone'>
-                  <GrSelect style={{fontSize: '25px'}}/>
+                  <GrSelect style={{ fontSize: '25px' }} />
                 </div>
                 <Autocomplete
                   fullWidth
@@ -501,14 +515,14 @@ const Customer = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input dropdown" style={{paddingRight: '15px'}}>
+              <div className="input dropdown" style={{ paddingRight: '15px' }}>
                 <label htmlFor="">GST</label>
                 {/* <select name="" id="">
                   <option value="">None</option>
                   <option value="">5%</option>
                   <option value="">12.5%</option>
                 </select> */}
-                <select name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange} style={{width: '100%'}}>
+                <select name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange} style={{ width: '100%' }}>
                   {/* <option value="" disabled>Select GST</option> */}
                   <option value="" >None</option>
                   <option value="5%">5%</option>

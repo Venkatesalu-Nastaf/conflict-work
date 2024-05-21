@@ -1,50 +1,44 @@
-.permission-table{
+.permission-table {
     width: -webkit-fill-available;
     overflow-y: auto;
     height: 400px !important;
 }
 
-.permission-table::-webkit-scrollbar  {
-    width: 4px !important; /* Adjust the width of the scrollbar */
+.permission-table::-webkit-scrollbar {
+    width: 4px !important;
     background-color: #457ddd;
-  }
+}
 
-  .table-header{
+.table-header {
     position: sticky;
     top: 0;
     z-index: 111;
-  }
+}
 
-.td-content{
+.td-content {
     text-align: center;
 }
 
-.table-header > .th-content{
+.table-header>.th-content {
     text-align: center;
     background-color: #fff8f0;
 }
 
-.table-container{
-    /* overflow-x: scroll; */
+@media only screen and (max-width:969px) {
+    .search-profile {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 
-@media only screen and (max-width:969px){
-   .search-profile{
+.Booking-table {
     display: flex;
-    flex-wrap: wrap; 
-justify-content:center;
-} 
-    
-    
-}
-
-.Booking-table{
-    display: flex;
-    gap : 8px;
+    gap: 8px;
     align-items: center;
     justify-content: center;
 }
 
-.table-up-down-icon{
+.table-up-down-icon {
     font-size: 20px;
 }

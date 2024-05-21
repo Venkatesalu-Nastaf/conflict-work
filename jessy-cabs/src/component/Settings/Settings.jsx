@@ -35,17 +35,17 @@ const Settings = () => {
   const [warning, setWarning] = useState(false);
 
   const hidePopup = () => {
-      setWarning(false);
+    setWarning(false);
   };
 
   useEffect(() => {
     if (warning) {
-        const timer = setTimeout(() => {
-            hidePopup();
-        }, 3000);
-        return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-    }, [warning]);
+  }, [warning]);
 
 
   const handleMenuItemClick = (menuItem, alt, e) => {
@@ -125,13 +125,13 @@ const Settings = () => {
         />
       </div>
       <div className='alert-popup-main'>
-          {warning &&
-              <div className='alert-popup Warning' >
-                  <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                  <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                  <p>You do not have Permission ..!</p>
-              </div>
-          }
+        {warning &&
+          <div className='alert-popup Warning' >
+            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+            <p>You do not have Permission ..!</p>
+          </div>
+        }
       </div>
       <Outlet />
     </div>

@@ -3,7 +3,6 @@
   width: 100%;
   overflow-x: hidden;
   display: flex;
-  /* flex-direction: column; */
   color: #000;
 }
 
@@ -11,7 +10,6 @@
 .EmployeeCreation-main .EmployeeCreation-form-container {
   overflow: scroll;
   height: 75vh;
-  /* width: 81vw; */
   width: 81vw;
   display: flex;
   flex-direction: column;
@@ -43,7 +41,6 @@
 
 /* TABLE */
 .EmployeeCreation-table-container {
-  /* margin-top: 10px; */
   border: 1px solid #ccc;
   padding: 20px;
   background-color: var(--glass);
@@ -58,21 +55,21 @@
   overflow: hidden;
 }
 
-.employee-creation-inputfeilds{
+.employee-creation-inputfeilds {
   flex-wrap: wrap;
 }
-@media screen  and (max-width: 1141px){
-  .employee-creation-inputfeilds{
+
+@media screen and (max-width: 1141px) {
+  .employee-creation-inputfeilds {
     flex-wrap: wrap;
     justify-content: center;
   }
 }
 
-@media screen  and (max-width: 767.99px){
+@media screen and (max-width: 767.99px) {
   .EmployeeCreation-main .EmployeeCreation-form-container {
     overflow: scroll;
     height: 75vh;
-    /* width: 81vw; */
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -81,68 +78,59 @@
   }
 }
 
-
-.add-icon{
+.add-icon {
   position: relative;
   right: 0px;
   height: 60px !important;
   background-color: #fff !important;
   margin-top: 0px !important;
-
 }
 
-
 @media only screen and (min-width: 850px) and (max-width: 1230px) {
-  .add-icon{
+  .add-icon {
     position: relative !important;
     right: 0px !important;
     height: 60px !important;
     background-color: #fff;
   }
-  
 }
 
 @media only screen and (min-width: 768.99px) and (max-width: 849.99px) {
- .add-icon{
+  .add-icon {
     position: relative !important;
     right: 0px !important;
     height: 60px !important;
-  
   }
-  
 }
 
-.user-table-permission{
+.user-table-permission {
   display: flex;
   align-items: center;
   margin-top: 15px;
 }
 
-.search-profile{
+.search-profile {
   display: flex;
 }
-.user-name-text{
+
+.user-name-text {
   margin: 0px;
 }
 
-.user-details-text{
+.user-details-text {
   margin: 0px;
   width: 200px;
 }
 
-.add-permission{
+.add-permission {
   display: flex;
   gap: 20px;
 }
 
-.add-user-button{
+.add-user-button {
   padding: 10px 20px !important;
-  /* color: red;
-  background-color: red; */
-  /* height: 20px !important; */
 }
 
-.user-permission-button{
+.user-permission-button {
   padding: 10px 20px !important;
-
 }

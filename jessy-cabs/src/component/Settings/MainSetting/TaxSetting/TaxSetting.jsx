@@ -14,13 +14,10 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { PermissionContext } from '../../../context/permissionContext.js';
-
-
 // FontAwesomeIcon Link
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { faNewspaper } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 // ICONS
 import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -34,11 +31,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import useTaxsettings from './useTaxsettings.js';
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
-
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
-
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -55,7 +48,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 // Table End
 
 const TaxSetting = () => {
-
     const {
         selectedCustomerData,
         selectedCustomerId,
@@ -89,10 +81,8 @@ const TaxSetting = () => {
         }
     }, [actionName, handleClick]);
 
-
     // Permission-------------------------------------------
     const { permissions } = useContext(PermissionContext)
-
     const MainSetting_read = permissions[15]?.read;
     const MainSetting_new = permissions[15]?.new;
     const MainSetting_modify = permissions[15]?.modify;
@@ -103,7 +93,7 @@ const TaxSetting = () => {
             <form onSubmit={handleClick}>
                 <div className="TaxSetting-header">
                     <div className="input-field tax-setting-input" style={{ padding: '0px 15px' }}>
-                        <div className="input" style={{paddingRight: '15px'}}>
+                        <div className="input" style={{ paddingRight: '15px' }}>
                             <div className='icone'>
                                 <CalendarMonthIcon color='action' />
                             </div>
@@ -120,7 +110,7 @@ const TaxSetting = () => {
                                 </DatePicker>
                             </LocalizationProvider>
                         </div>
-                        <div className="input" style={{paddingRight: '15px'}}>
+                        <div className="input" style={{ paddingRight: '15px' }}>
                             <div className='icone'>
                                 <CalendarMonthIcon color='action' />
                             </div>
@@ -137,7 +127,7 @@ const TaxSetting = () => {
                                 </DatePicker>
                             </LocalizationProvider>
                         </div>
-                        <div className="input" style={{paddingRight: '15px'}}>
+                        <div className="input" style={{ paddingRight: '15px' }}>
                             <div className="icone">
                                 <FontAwesomeIcon icon={faNewspaper} size="xl" />
                             </div>
@@ -151,10 +141,10 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.STax || book.STax}
                                 onChange={handleChange}
                                 variant="standard"
-                                style={{width: '100%'}}
+                                style={{ width: '100%' }}
                             />
                         </div>
-                        <div className="input" style={{paddingRight: '15px'}}>
+                        <div className="input" style={{ paddingRight: '15px' }}>
                             <div className="icone">
                                 <FontAwesomeIcon icon={faNewspaper} size="xl" />
                             </div>
@@ -168,10 +158,10 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.SBCess || book.SBCess}
                                 onChange={handleChange}
                                 variant="standard"
-                                style={{width: '100%'}}
+                                style={{ width: '100%' }}
                             />
                         </div>
-                        <div className="input" style={{paddingRight: '15px'}}>
+                        <div className="input" style={{ paddingRight: '15px' }}>
                             <div className="icone">
                                 <FontAwesomeIcon icon={faNewspaper} size="xl" />
                             </div>
@@ -185,12 +175,10 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.KKCess || book.KKCess}
                                 onChange={handleChange}
                                 variant="standard"
-                                style={{width: '100%'}}
+                                style={{ width: '100%' }}
                             />
                         </div>
-                        {/* </div>
-                    <div className="input-field" style={{ padding: '0px 15px' }}> */}
-                        <div className="input" style={{paddingRight: '15px'}}>
+                        <div className="input" style={{ paddingRight: '15px' }}>
                             <div className="icone">
                                 <FontAwesomeIcon icon={faNewspaper} size="xl" />
                             </div>
@@ -204,10 +192,10 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.STax_Des || book.STax_Des}
                                 onChange={handleChange}
                                 variant="standard"
-                                style={{width: '100%'}}
+                                style={{ width: '100%' }}
                             />
                         </div>
-                        <div className="input" style={{paddingRight: '15px'}}>
+                        <div className="input" style={{ paddingRight: '15px' }}>
                             <div className="icone">
                                 <FontAwesomeIcon icon={faNewspaper} size="xl" />
                             </div>
@@ -221,10 +209,10 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.SBCess_Des || book.SBCess_Des}
                                 onChange={handleChange}
                                 variant="standard"
-                                style={{width: '100%'}}
+                                style={{ width: '100%' }}
                             />
                         </div>
-                        <div className="input" style={{paddingRight: '15px'}}>
+                        <div className="input" style={{ paddingRight: '15px' }}>
                             <div className="icone">
                                 <FontAwesomeIcon icon={faNewspaper} size="xl" />
                             </div>
@@ -238,10 +226,10 @@ const TaxSetting = () => {
                                 value={selectedCustomerData?.KKCess_Des || book.KKCess_Des}
                                 onChange={handleChange}
                                 variant="standard"
-                                style={{width: '100%'}}
+                                style={{ width: '100%' }}
                             />
                         </div>
-                        <div className="input" style={{paddingRight: '15px'}}>
+                        <div className="input" style={{ paddingRight: '15px' }}>
                             <div className="icone">
                                 <QuizOutlinedIcon color="action" />
                             </div>
@@ -265,7 +253,6 @@ const TaxSetting = () => {
                                 }
                             />
                         </div>
-
                         <div className="input" style={{ width: "70px" }}>
                             {isEditMode ? (
                                 <Button variant="contained" disabled={!MainSetting_modify} onClick={handleEdit}>Edit</Button>
@@ -276,34 +263,34 @@ const TaxSetting = () => {
                     </div>
                 </div>
                 <div className='alert-popup-main'>
-                {error &&
-                    <div className='alert-popup Error' >
-                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{errorMessage}</p>
-                    </div>
-                }
-                {warning &&
-                    <div className='alert-popup Warning' >
-                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{warningMessage}</p>
-                    </div>
-                }
-                {success &&
-                    <div className='alert-popup Success' >
-                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{successMessage}</p>
-                    </div>
-                }
-                {info &&
-                    <div className='alert-popup Info' >
-                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{infoMessage}</p>
-                    </div>
-                }
+                    {error &&
+                        <div className='alert-popup Error' >
+                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{errorMessage}</p>
+                        </div>
+                    }
+                    {warning &&
+                        <div className='alert-popup Warning' >
+                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{warningMessage}</p>
+                        </div>
+                    }
+                    {success &&
+                        <div className='alert-popup Success' >
+                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{successMessage}</p>
+                        </div>
+                    }
+                    {info &&
+                        <div className='alert-popup Info' >
+                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{infoMessage}</p>
+                        </div>
+                    }
                 </div>
                 <div className="TaxSetting-table-container">
                     <div className="SpeedDial" style={{ padding: '26px', }}>
@@ -321,8 +308,6 @@ const TaxSetting = () => {
                                         onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                                     />
                                 ))} */}
-
-
                                 {MainSetting_read === 1 && (
                                     <SpeedDialAction
                                         key="list"
@@ -361,7 +346,6 @@ const TaxSetting = () => {
                                     tooltipTitle="Cancel"
                                     onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                                 />
-
                             </StyledSpeedDial>
                         </Box>
                     </div>
@@ -370,7 +354,6 @@ const TaxSetting = () => {
                             rows={rows}
                             columns={columns}
                             onRowClick={handleRowClick}
-
                         />
                     </div>
                     <div className="input-field" style={{ marginTop: '-20px', marginLeft: '-25px', marginBottom: '25px' }}>
@@ -387,10 +370,8 @@ const TaxSetting = () => {
                     </div>
                 </div>
             </form>
-
-
         </div>
     )
 }
 
-export default TaxSetting
+export default TaxSetting;

@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import "./Themes.css";
-import { useThemes } from "./ThemesContext"; 
+import { useThemes } from "./ThemesContext";
 import { APIURL } from "../../url";
 
 const Themes = () => {

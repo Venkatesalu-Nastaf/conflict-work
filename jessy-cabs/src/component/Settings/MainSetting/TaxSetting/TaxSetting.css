@@ -22,33 +22,35 @@
     margin-top: 0px !important;
     height: 0px !important;
 }
+
 /* TABLE */
 .TaxSetting-table-container {
     margin-top: 10px;
-    padding-bottom:40px;
+    padding-bottom: 40px;
     border: 1px solid #ccc;
     padding: 20px;
     background-color: var(--glass);
-  }
-  .table-TaxSetting {
+}
+
+.table-TaxSetting {
     background-color: var(--glass);
     border: 2px solid #ccc;
     border-radius: 10px;
     height: 400px;
     width: 100%;
-  }
+}
+
 /* Date */
 .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
     border-color: #456ddc !important;
 }
 
-.tax-setting-input{
+.tax-setting-input {
     flex-wrap: wrap;
-    /* justify-content: center; */
 }
 
 @media screen and (max-width:1325px) {
-    .tax-setting-input{
+    .tax-setting-input {
         flex-wrap: wrap;
         justify-content: center;
     }

@@ -89,7 +89,6 @@ router.get('/table-for-employee', (req, res) => {
             'address1',
             'aadharcard',
             'pancard',
-            'address2',
             'guardian',
             'fixedsalary',
             'uanid',

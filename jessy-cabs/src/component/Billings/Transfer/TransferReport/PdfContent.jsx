@@ -239,8 +239,6 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
   const [parking, setParking] = useState('')
   const [permit, setPermit] = useState('')
   const [address1, setAddress1] = useState('')
-  const [address2, setAddress2] = useState('')
-  const [address3, setAddress3] = useState('')
   const [gst, setGst] = useState('')
   const [extraKmAmount, setExtraKmAmount] = useState('')
   const organizationname = customer
@@ -272,20 +270,20 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
   useEffect(() => {
     if (customeraddress) {
       let address1 = ""
-      let address2 = ""
-      let city = ""
+      // let address2 = ""
+      // let city = ""
       let gstno = ""
       customeraddress?.map((li) => {
         address1 = li.address1
-        address2 = li.address2
-        city = li.city
+        // address2 = li.address2
+        // city = li.city
         gstno = li.gstnumber
         return null
       })
 
       setAddress1(address1)
-      setAddress2(address2)
-      setAddress3(city)
+      // setAddress2(address2)
+      // setAddress3(city)
       setGst(gstno)
     }
   }, [apiUrl, customeraddress])
@@ -315,7 +313,7 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
                     <Text style={styles.text2}> booking@jessycabs.in</Text> */}
                     <Text style={styles.text1}> {organisationdetailfill[0].organizationname}</Text>
         <Text style={styles.text2}> {organisationdetailfill[0].addressLine1}</Text>
-        <Text style={styles.text2}> {organisationdetailfill[0].addressLine2}{organisationdetailfill[0].location}</Text>
+        <Text style={styles.text2}> {organisationdetailfill[0].location}</Text>
         <Text style={styles.text2}>{organisationdetailfill[0].contactEmail} </Text>
                   </View>
                   <View style={styles.logodiv}>
@@ -355,8 +353,6 @@ const PdfContent = ({ invdata, invoiceno, invoiceDate, groupTripid, customeraddr
                     </Text>
                     <Text style={styles.customername}>{organizationname}</Text>
                     <Text style={styles.text2}>{address1}</Text>
-                    <Text style={styles.text2}>{address2}</Text>
-                    <Text style={styles.text2}>{address3}</Text>
                     <Text style={styles.text2}>GSTIN: {gst} </Text>
 
                   </View>

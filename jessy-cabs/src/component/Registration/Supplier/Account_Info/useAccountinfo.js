@@ -285,7 +285,6 @@ const handlePdfDownload = () => {
     { field: "accountNo", headerName: "Vehicle_No", width: 130 },
     { field: "address1", headerName: "Address", width: 130 },
     { field: "phone", headerName: "Phone", width: 130 },
-    { field: "isRunning", headerName: "Active", width: 160 },
     { field: "vehicleInfo", headerName: "Owner_Type", width: 130 },
     { field: "vehCommission", headerName: "Percentage", width: 130 },
     { field: "rateType", headerName: "Rate_Type", width: 130 },
@@ -298,19 +297,19 @@ const handlePdfDownload = () => {
     vehicleTravels: '',
     address1: '',
     cperson: '',
-    streetNo: '',
+  
     email: '',
-    city: '',
+  
     phone: '',
     vehCommission: '',
     rateType: '',
-    printBill: '',
+  
     underGroup: '',
-    isRunning: '',
+  
     entity: '',
     acType: '',
     vehicleInfo: '',
-    autoRefresh: '',
+   
   });
 
   const handleChange = (event) => {
@@ -369,20 +368,19 @@ const handlePdfDownload = () => {
       Accdate: '',
       vehicleTravels: '',
       address1: '',
-      cperson: '',
-      streetNo: '',
+    
       email: '',
-      city: '',
+     
       phone: '',
       vehCommission: '',
       rateType: '',
-      printBill: '',
+     
       underGroup: '',
       isRunning: '',
       entity: '',
       acType: '',
       vehicleInfo: '',
-      autoRefresh: '',
+      
     }));
     setSelectedCustomerData({});
     setIsEditMode(false);

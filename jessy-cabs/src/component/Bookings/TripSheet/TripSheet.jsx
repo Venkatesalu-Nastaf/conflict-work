@@ -23,7 +23,6 @@ import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import Tab, { tabClasses } from "@mui/joy/Tab";
-
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -98,14 +97,10 @@ import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 import { PermissionContext } from '../../context/permissionContext';
-
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ChecklistIcon from "@mui/icons-material/Checklist";
-
-
 import useTripsheet from './useTripsheet';
-
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
 // UpdateTbaleRowsGPSSlider TABLE START
@@ -263,20 +258,14 @@ const TripSheet = ({ stationName }) => {
 
   // Permission ------------ayyan
   const { permissions } = useContext(PermissionContext)
-
   const Tripsheet_read = permissions[3]?.read;
   const Tripsheet_new = permissions[3]?.new;
   const Tripsheet_modify = permissions[3]?.modify;
   const Tripsheet_delete = permissions[3]?.delete;
-
-
   // No chnage ----------
-
 
   const handleNoChange = (e) => {
     const { name } = e.target;
-
-
     if (name === 'tripid' && !nocchangeData.tripid) {
       handleChange(e);
     }
@@ -392,19 +381,13 @@ const TripSheet = ({ stationName }) => {
     if (name === 'additionaltime' && !nocchangeData.additionaltime) {
       handleChange(e);
     };
-
-
-
   }
-
-
   return (
     <div className="form-container">
       <div className="Tripsheet-form">
         <form action="">
           <p className="Title-Name head-tab-tripsheet">Trip Sheet</p>
           <div className="Tripsheet-header">
-
             <div>
               <div className='tripsheet-division1'>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
@@ -424,7 +407,6 @@ const TripSheet = ({ stationName }) => {
                     autoFocus
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -440,13 +422,11 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
                   </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-
                     <DatePicker
                       value={nocchangeData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
                       format="DD/MM/YYYY"
@@ -457,10 +437,8 @@ const TripSheet = ({ stationName }) => {
                         <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripsheetdate} />
                       )}
                     </DatePicker>
-
                   </LocalizationProvider>
                 </div>
-
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <QuizOutlinedIcon color="action" />
@@ -485,7 +463,6 @@ const TripSheet = ({ stationName }) => {
                     }
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AccountBalanceWalletIcon color="action" />
@@ -502,7 +479,6 @@ const TripSheet = ({ stationName }) => {
                     required
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <AppsOutageOutlinedIcon color="action" />
@@ -560,7 +536,6 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
                 <div className='input'>
-
                   <FormControlLabel
                     value="smsguest"
                     control={
@@ -572,7 +547,6 @@ const TripSheet = ({ stationName }) => {
                     }
                     label="Guest SMS"
                   />
-
                   <FormControlLabel
                     value="email"
                     control={
@@ -585,7 +559,6 @@ const TripSheet = ({ stationName }) => {
                     label="Email"
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <PhoneIphoneIcon color="action" />
@@ -601,7 +574,6 @@ const TripSheet = ({ stationName }) => {
                     required
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AssignmentIndIcon color="action" />
@@ -617,7 +589,6 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <CallIcon color="action" />
@@ -632,7 +603,6 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <AttachEmailIcon color="action" />
@@ -647,11 +617,8 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-
               </div>
-
               <div className='tripsheet-division2'>
-
                 <div>
                   <div className="" style={{ display: 'flex', alignItems: 'center' }}>
                     <div className="icone">
@@ -671,12 +638,8 @@ const TripSheet = ({ stationName }) => {
                       autoComplete="password"
                     />
                   </div>
-
                 </div>
-
                 <div style={{ margin: '0px 10px' }}>
-
-
                   <div className="Scroll-Style tripsheet-table1 ">
                     <thead>
                       <tr>
@@ -708,16 +671,12 @@ const TripSheet = ({ stationName }) => {
                     </tbody>
                   </div>
                 </div>
-
               </div>
-
               <div className='tripsheet-division3'>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <HowToRegIcon color="action" />
                   </div>
-
                   {nocchangeData.hireTypes ? <TextField
                     margin="normal"
                     size="small"
@@ -748,17 +707,11 @@ const TripSheet = ({ stationName }) => {
                     }
                     }
                   />}
-
-
-
-
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <StoreIcon color="action" />
                   </div>
-
                   {nocchangeData.department ? <TextField
                     margin="normal"
                     size="small"
@@ -788,10 +741,7 @@ const TripSheet = ({ stationName }) => {
                     }
                     }
                   />}
-
-
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: '240px' }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
@@ -808,12 +758,10 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: '150px' }}>
                   <div className="icone">
                     <EmailIcon color="action" />
                   </div>
-
                   {nocchangeData.Groups ? <TextField
                     margin="normal"
                     size="small"
@@ -840,15 +788,11 @@ const TripSheet = ({ stationName }) => {
                       );
                     }}
                   />}
-
-
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <NoCrashIcon color="action" />
                   </div>
-
                   {nocchangeData.vehType ? <TextField
                     margin="normal"
                     size="small"
@@ -875,11 +819,7 @@ const TripSheet = ({ stationName }) => {
                       <TextField {...params} label="Vehicle Rate" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                     )}
                   />}
-
-
-
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <SensorOccupiedIcon color="action" />
@@ -910,10 +850,7 @@ const TripSheet = ({ stationName }) => {
                     style={{ width: '100%' }}
                   />
                 </div>
-
-
                 <div className="input radio">
-
                   <FormControlLabel
                     value="DriverSMS"
                     control={
@@ -924,10 +861,8 @@ const TripSheet = ({ stationName }) => {
                       />
                     }
                     label="Driver SMS"
-
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AttachEmailIcon color="action" />
@@ -953,12 +888,10 @@ const TripSheet = ({ stationName }) => {
                     }
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <EngineeringIcon color="action" />
                   </div>
-
                   {nocchangeData.duty ? <TextField
                     margin="normal"
                     size="small"
@@ -988,13 +921,11 @@ const TripSheet = ({ stationName }) => {
                     }
                     }
                   />}
-
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AirlineStopsIcon color="action" />
                   </div>
-
                   {nocchangeData.pickup ? <TextField
                     margin="normal"
                     size="small"
@@ -1024,7 +955,6 @@ const TripSheet = ({ stationName }) => {
                     }
                     }
                   />}
-
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
@@ -1054,7 +984,6 @@ const TripSheet = ({ stationName }) => {
                     id="request"
                     autoComplete="password"
                   />
-
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
@@ -1070,12 +999,10 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
-
                   {nocchangeData?.startdate ? (
                     <LocalizationProvider dateAdapter={AdapterDayjs} style={{ width: '100%' }}>
                       <DatePicker
@@ -1095,7 +1022,6 @@ const TripSheet = ({ stationName }) => {
                         )}
                       />
                     </LocalizationProvider>
-
                   ) : (
                     <LocalizationProvider dateAdapter={AdapterDayjs} style={{ width: '100%' }}>
                       <DatePicker
@@ -1123,9 +1049,6 @@ const TripSheet = ({ stationName }) => {
                       />
                     </LocalizationProvider>
                   )}
-
-
-
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
@@ -1191,7 +1114,6 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-
                 <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
@@ -1215,19 +1137,14 @@ const TripSheet = ({ stationName }) => {
                         setBook({ ...book, starttime: event.target.value });
                         setStartTime(event.target.value);
                         setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
-
-                        // }
                       }}
                     />
                   </div>)}
-
                 </div>
-
                 <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
                   </div>
-
                   {nocchangeData.reporttime ? (<div style={{ display: 'grid', width: '100%' }}>
                     <label>Report Time</label>
                     <input
@@ -1247,11 +1164,9 @@ const TripSheet = ({ stationName }) => {
                         setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
                         setBook({ ...book, reporttime: event.target.value });
                         setreporttime(event.target.value);
-
                       }}
                     />
                   </div>)}
-
                 </div>
                 <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
@@ -1291,7 +1206,6 @@ const TripSheet = ({ stationName }) => {
                     />
                   </div>
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
@@ -1374,7 +1288,6 @@ const TripSheet = ({ stationName }) => {
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
                   <TextField
-
                     // ayyanar total km
                     name="totalkm1"
                     value={nocchangeData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''}
@@ -1386,7 +1299,6 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
@@ -1474,7 +1386,6 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
                 <div className="input">
-
                   <Button style={{ marginLeft: "10px" }} variant="contained"
                     onClick={() => {
                       handleCalc();
@@ -1484,10 +1395,7 @@ const TripSheet = ({ stationName }) => {
                     calculate
                   </Button>
                 </div>
-
-
                 <React.Fragment>
-
                   <Dialog
                     open={open}
                     onClose={handleClose}
@@ -1505,7 +1413,6 @@ const TripSheet = ({ stationName }) => {
                               <div className="icone">
                                 <Inventory2Icon color="action" />
                               </div>
-
                               <TextField
                                 name="pack"
                                 value={calcPackage || nocchangeData.calcPackage || ''}
@@ -1605,8 +1512,6 @@ const TripSheet = ({ stationName }) => {
                                 value={extrahr_amount || nocchangeData.calcPackage || ''}
                                 variant="standard"
                               />
-
-
                             </div>
                             <div className="input">
                               <div className="icone">
@@ -1629,7 +1534,6 @@ const TripSheet = ({ stationName }) => {
                               <div className="icone">
                                 <FontAwesomeIcon icon={faCloudMoon} />
                               </div>
-
                               <TextField
                                 name="night1"
                                 className='customer-bill-input'
@@ -1719,7 +1623,6 @@ const TripSheet = ({ stationName }) => {
                               />
                             </div>
                           </div>
-
                           <TextField
                             name="amount9"
                             value={totalcalcAmount || 0}
@@ -1750,7 +1653,6 @@ const TripSheet = ({ stationName }) => {
                     </DialogActions>
                   </Dialog>
                 </React.Fragment>
-
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: "250px" }}>
                   <div className="icone">
                     <BackupTableSharpIcon color="action" />
@@ -1812,7 +1714,6 @@ const TripSheet = ({ stationName }) => {
                     E-Tripsheet
                   </Button>
                 </div>
-
                 <div className="remark-textfield" style={{ display: 'flex' }}>
                   <div className="icone">
                     <MarkChatReadIcon color="action" />
@@ -1834,7 +1735,6 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-
                 <div className='input' style={{ display: 'grid' }}>
                   <label>Escort</label>
                   <span>
@@ -1858,7 +1758,6 @@ const TripSheet = ({ stationName }) => {
                     </label>
                   </span>
                 </div>
-
                 <div className='input' style={{ display: 'grid' }}>
                   <label>Airport Transfer</label>
                   <span>
@@ -1882,8 +1781,6 @@ const TripSheet = ({ stationName }) => {
                     </label>
                   </span>
                 </div>
-
-
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                   <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
                     <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} nocchangeData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={nocchangeData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
@@ -1894,7 +1791,6 @@ const TripSheet = ({ stationName }) => {
                     </Button>
                   </DialogActions>
                 </Dialog>
-
                 {/* // ayyanar calc */}
                 <div className="input" style={{ width: "160px" }}>
                   {isEditMode ? (<>
@@ -1905,13 +1801,9 @@ const TripSheet = ({ stationName }) => {
                   ) : (
                     <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
                   )}
-                  {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
-                  {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""} */}
                 </div>
-
               </div>
             </div>
-
             <div>
               <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                 <StyledSpeedDial
@@ -1919,15 +1811,6 @@ const TripSheet = ({ stationName }) => {
                   icon={<SpeedDialIcon />}
                   direction="left"
                 >
-                  {/* {filteredActions.map((action) => (
-                      <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                        onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                      />
-                  ))} */}
-
                   {Tripsheet_read === 1 && (
                     <SpeedDialAction
                       key="list"
@@ -1966,16 +1849,12 @@ const TripSheet = ({ stationName }) => {
                     tooltipTitle="Cancel"
                     onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                   />
-
-
                 </StyledSpeedDial>
               </Box>
             </div>
-
             <div className="Tipsheet-content-table-main">
               <Tabs
                 className='Scroll-Style'
-                // size="sm"
                 aria-label="Pricing plan"
                 defaultValue={0}
                 sx={(theme) => ({
@@ -2489,9 +2368,7 @@ const TripSheet = ({ stationName }) => {
                           id="exkmTkm"
                           variant="standard"
                           autoComplete="password" />
-
                       </div>
-
                       <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faEquals} />
@@ -2582,7 +2459,6 @@ const TripSheet = ({ stationName }) => {
                           variant="standard"
                           autoComplete="password"
                         />
-
                       </div>
                       <div className="input" style={{ width: "187px" }}>
                         <div className="icone">
@@ -2669,12 +2545,8 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
-
                       <div className="input">
-                        <div
-                          className="icone"
-                          style={{ padding: "0px 10px 0px 10px" }}
-                        >
+                        <div className="icone" style={{ padding: "0px 10px 0px 10px" }}>
                           <FontAwesomeIcon icon={faMoneyBillTrendUp} size="lg" />
                         </div>
                         <TextField
@@ -2736,12 +2608,9 @@ const TripSheet = ({ stationName }) => {
                         <div className="icone">
                           <Inventory2Icon color="action" />
                         </div>
-
                         <TextField
                           name="pack"
                           value={calcPackage || nocchangeData.calcPackage || ''}
-
-
                           label="Pack"
                           id="pack"
                           size="small"
@@ -3302,9 +3171,7 @@ const TripSheet = ({ stationName }) => {
                 </TabPanel>
               </Tabs>
             </div>
-
           </div>
-
           <div className='alert-popup-main'>
             {error &&
               <div className='alert-popup Error' >
@@ -3335,7 +3202,6 @@ const TripSheet = ({ stationName }) => {
               </div>
             }
           </div>
-
         </form>
       </div>
     </div>

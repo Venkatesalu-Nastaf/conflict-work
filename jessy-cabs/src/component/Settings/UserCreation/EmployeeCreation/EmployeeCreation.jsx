@@ -134,8 +134,8 @@ const EmployeeCreation = ({ stationName }) => {
       <div className="EmployeeCreation-form-container">
         <form onSubmit={handleClick}>
           <div className="EmployeeCreation-header">
-            <div className="input-field employee-creation-inputfeilds">
-              <div className="input">
+            <div className="input-field employee-creation-inputfeilds" style={{padding: '10px'}}>
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -148,9 +148,10 @@ const EmployeeCreation = ({ stationName }) => {
                   value={book.userid}
                   // onChange={handleChange}
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                 </div>
@@ -164,7 +165,7 @@ const EmployeeCreation = ({ stationName }) => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input">
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                 </div>
@@ -173,7 +174,7 @@ const EmployeeCreation = ({ stationName }) => {
                   size="small"
                   id="free-solo-demo-stationname"
                   freeSolo
-                  sx={{ width: "20ch" }}
+                  sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
                   value={stationName.find((option) => option.Option)?.label || book?.stationname || ''}
                   options={stationName.map((option) => ({
@@ -188,7 +189,7 @@ const EmployeeCreation = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input" style={{ width: "200px" }}>
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <ListAltIcon color="action" />
                 </div>
@@ -201,7 +202,7 @@ const EmployeeCreation = ({ stationName }) => {
                   id="designation"
                 />
               </div>
-              <div className="input" style={{ width: "200px" }}>
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -213,9 +214,10 @@ const EmployeeCreation = ({ stationName }) => {
                   label="Organization"
                   id="organizationname"
                   variant="standard"
+                  style={{width: '100%'}}
                 />
               </div>
-              <div className="input" style={{ width: "240px" }}>
+              <div className="input" style={{paddingRight: '15px'}}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                 </div>
@@ -355,9 +357,9 @@ const EmployeeCreation = ({ stationName }) => {
               />
             </StyledSpeedDial>
           </Box>
-          <div className="EmployeeCreation-table-container" style={{ marginTop: '20px' }}>
+          <div className="EmployeeCreation-table-container">
             <div className='search-profile'>
-              <div className="search-input-container" style={{ marginBottom: '20px' }}>
+              <div className="search-input-container" style={{ marginBottom: '20px', height: '300px', overflow: 'auto', padding: '15px' }}>
                 <TextField
                   id="search-input"
                   label="Search"

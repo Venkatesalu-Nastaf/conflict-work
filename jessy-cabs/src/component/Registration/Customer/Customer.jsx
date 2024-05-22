@@ -46,8 +46,6 @@ import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { GrSelect } from "react-icons/gr";
 
-
-
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -111,7 +109,6 @@ const Customer = ({ stationName }) => {
         <form onSubmit={handleClick}>
           <p className="head-tab-customer">
             <span className="Title-Name">Customer</span>
-
           </p>
           <div className="Customer-page-header">
             <div className="input-field Customer-page-input-field">
@@ -203,8 +200,6 @@ const Customer = ({ stationName }) => {
                   </DatePicker>
                 </LocalizationProvider>
               </div>
-              {/* </div>
-            <div className="input-field"> */}
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <AttachEmailIcon color="action" />
@@ -299,18 +294,6 @@ const Customer = ({ stationName }) => {
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
-                {/* <TextField
-                  size="small"
-                  name="address1"
-                  value={selectedCustomerData?.address1 || book.address1}
-                  label="Address"
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                  id="remark"
-                  sx={{ m: 1, width: "200ch" }}
-                  variant="standard"
-                /> */}
-
                 <TextField
                   margin="normal"
                   id="remark"
@@ -371,23 +354,6 @@ const Customer = ({ stationName }) => {
                 onChange={handleChange}
                 checked={Boolean(selectedCustomerData?.hourRoundedOff || book.hourRoundedOff)}
               />
-              {/* </div>
-            <div className="input-field"> */}
-              {/* <div className="input input-address" style={{ width: "400px" }}>
-                <div className="icone">
-                  <HomeTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  name="address2"
-                  value={selectedCustomerData?.address2 || book.address2}
-                  id="remark"
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                  sx={{ m: 1, width: "200ch" }}
-                  variant="standard"
-                />
-              </div> */}
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <DomainAddIcon color="action" />
@@ -451,24 +417,6 @@ const Customer = ({ stationName }) => {
                   style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              {/* <div className="input" style={{ paddingRight: '15px' }}>
-                <div className="icone">
-                  <LocationCityIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  name="city"
-                  id="address3"
-                  // value={selectedCustomerData?.city || book.city}
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                  sx={{ m: 1, width: "200ch" }}
-                  variant="standard"
-                  style={{ width: '100%' }}
-                />
-              </div> */}
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className='icone'>
                   <GrSelect style={{ fontSize: '25px' }} />
@@ -517,13 +465,7 @@ const Customer = ({ stationName }) => {
               </div>
               <div className="input dropdown" style={{ paddingRight: '15px' }}>
                 <label htmlFor="">GST</label>
-                {/* <select name="" id="">
-                  <option value="">None</option>
-                  <option value="">5%</option>
-                  <option value="">12.5%</option>
-                </select> */}
                 <select name="gstTax" value={selectedCustomerData.gstTax || book.gstTax} onChange={handleChange} style={{ width: '100%' }}>
-                  {/* <option value="" disabled>Select GST</option> */}
                   <option value="" >None</option>
                   <option value="5%">5%</option>
                   <option value="12%">12%</option>
@@ -576,8 +518,6 @@ const Customer = ({ stationName }) => {
                   size='small'
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
                   <Button variant="contained" disabled={!Customer_modify} onClick={handleEdit}>Edit</Button>
@@ -623,15 +563,6 @@ const Customer = ({ stationName }) => {
                   icon={<SpeedDialIcon />}
                   direction="left"
                 >
-                  {/* {actions.map((action) => (
-                    <SpeedDialAction
-                      key={action.name}
-                      icon={action.icon}
-                      tooltipTitle={action.name}
-                      onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                    />
-                  ))} */}
-
                   {Customer_read === 1 && (
                     <SpeedDialAction
                       key="list"

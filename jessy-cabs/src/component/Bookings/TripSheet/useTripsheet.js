@@ -17,6 +17,7 @@ const useTripsheet = () => {
         mobileNo: '',
     });
     const [selectedCustomerId, setSelectedCustomerId] = useState({});
+
     const [rows, setRows] = useState([]);
     const [row, setRow] = useState([]);
     const [starttime, setStartTime] = useState('');
@@ -44,11 +45,9 @@ const useTripsheet = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    // const [infoMessage, setInfoMessage] = useState({});
     const [link, setLink] = useState('');
     const [isSignatureSubmitted] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    const [tripiddata, setTripiddata] = useState("");
     const [sign, setSign] = useState(false)
 
     //-------------------------calc-------------------
@@ -155,7 +154,6 @@ const useTripsheet = () => {
             const responseData = await response.blob();
             // Assuming you want to display the image directly
             const imageUrl = URL.createObjectURL(responseData);
-            console.log("url", imageUrl)
             setMapImageUrls(imageUrl);
             setMapimgPopupOpen(true);
         } catch {
@@ -280,15 +278,13 @@ const useTripsheet = () => {
 
     // data getting from dispatch --------------------------ayyanar
     const [request, setRequest] = useState("");
+    const [nocchangeData, setNoChangeData] = useState({});
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
 
-
-        // const statusValue =  'Opened';
         const request = params.get('request') || "";
         setRequest(request);
-
 
         //calc---------------
         const calcPackage = params.get('calcPackage');
@@ -315,10 +311,6 @@ const useTripsheet = () => {
 
         const formData = {};
 
-        // const parameterKeys = [
-        //     'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'streetno', 'city', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups'
-        // ];
-
         const parameterKeys = [
             'dispatchcheck', 'tripid', 'bookingno', 'billingno', 'apps', 'status', 'customer', 'orderedby', 'mobile', 'guestname', 'guestmobileno', 'email', 'address1', 'hireTypes', 'department', 'vehRegNo', 'vehType', 'driverName', 'mobileNo', 'driversmsexbetta', 'gps', 'duty', 'pickup', 'useage', 'request', 'startdate', 'closedate', 'totaldays', 'employeeno', 'reporttime', 'starttime', 'closetime', 'shedintime', 'additionaltime', 'advancepaidtovendor', 'customercode', 'request', 'startkm', 'closekm', 'shedkm', 'shedin', 'shedout', 'permit', 'parking', 'toll', 'vpermettovendor', 'vendortoll', 'customeradvance', 'email1', 'remark', 'smsguest', 'documentnotes', 'VendorTripNo', 'vehicles', 'duty1', 'startdate1', 'closedate1', 'totaldays1', 'locks', 'starttime2', 'closetime2', 'totaltime', 'startkm1', 'closekm1', 'totalkm1', 'remark1', 'escort', 'transferreport', 'calcPackage', 'extraHR', 'extraKM', 'package_amount', 'extrakm_amount', 'extrahr_amount', 'ex_kmAmount', 'ex_hrAmount', 'nightBta', 'nightCount', 'night_totalAmount', 'driverBeta', 'driverbeta_Count', 'driverBeta_amount', 'totalcalcAmount', 'nightThrs', 'dtc', 'dtc2', 'nightThrs2', 'exkmTkm2', 'exHrsTHrs2', 'netamount', 'vehcommission', 'caramount1', 'manualbills', 'pack', 'amount5', 'exkm1', 'amount6', 'exHrs1', 'amount7', 'night1', 'amount8', 'driverconvenience1', 'amount9', 'rud', 'netamount1', 'discount', 'ons', 'manualbills1', 'balance', 'fcdate', 'taxdate', 'insdate', 'stpermit', 'maintenancetype', 'kilometer', 'selects', 'documenttype', 'on1', 'smsgust', 'booker', 'emailcheck', 'manualbillss', 'reload', 'Groups'
         ];
@@ -335,21 +327,18 @@ const useTripsheet = () => {
 
         if (formData['dispatchcheck'] === 'true' && formData['status'] === "pending") {
             formData['status'] = "Opened"
-            // setIsEditMode(true);
             setIsEditMode(false);
         } else {
-            // setIsEditMode(false);
             setIsEditMode(true);
         }
 
         // Remove dispatchcheck from formData
         delete formData['dispatchcheck'];
 
-        // formData['status'] = statusValue;
         formData['apps'] = appsValue;
         setTripSheetData(formData);
-        setBook(formData);
         setFormData(formData);
+        setNoChangeData(formData)
 
         ///calc------
         setcalcPackage(calcPackage);
@@ -371,6 +360,8 @@ const useTripsheet = () => {
         ///------
 
     }, [location]);
+
+
 
     useEffect(() => {
         window.history.replaceState(null, document.title, window.location.pathname);
@@ -621,6 +612,7 @@ const useTripsheet = () => {
         setMinHour();
         setMinKM();
         setTransferreport("No");
+        setNoChangeData({})
 
         localStorage.removeItem('selectedTripid');
 
@@ -630,7 +622,6 @@ const useTripsheet = () => {
     //607
     const handleETripsheetClick = async (row) => {
         const tripid = book.tripid || selectedCustomerData.tripid || selectedCustomerDatas.tripid || formData.tripid;
-        setTripiddata(tripid)
 
         if (!tripid) {
             setError(true);
@@ -638,7 +629,6 @@ const useTripsheet = () => {
         }
         else {
             localStorage.setItem('selectedTripid', tripid);
-            setTripiddata(tripid)
             setPopupOpen(true);
 
         }
@@ -733,9 +723,6 @@ const useTripsheet = () => {
                 handleCancel();
                 setShedKilometers("")
                 setAdditionalTime("")
-                // book()
-                // book.additionaltime = "";
-                // additionalTime.additionaltime = "";
 
                 setRow([]);
                 setRows([]);
@@ -812,9 +799,6 @@ const useTripsheet = () => {
                 handleCancel();
                 setShedKilometers("")
                 setAdditionalTime("")
-                // book()
-                // book.additionaltime = "";
-                // additionalTime.additionaltime = "";
 
                 setRow([]);
                 setRows([]);
@@ -833,12 +817,14 @@ const useTripsheet = () => {
         }
     };
 
+
     const handleAdd = async () => {
-        const customer = book.customer || "";
-        const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
-        const vehType = formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
-        const driverName = formData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '';
-        const mobileNo = formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
+
+        const customer = book.customer || nocchangeData.customer;
+        const vehRegNo = nocchangeData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
+        const vehType = nocchangeData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || '';
+        const driverName = nocchangeData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || '';
+        const mobileNo = nocchangeData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || '';
 
         if (!customer || !vehRegNo || !vehType || !driverName || !mobileNo) {
             setError(true);
@@ -846,19 +832,20 @@ const useTripsheet = () => {
             return;
         }
         try {
-            const selectedBookingDate = selectedCustomerData.tripsheetdate || formData.tripsheetdate || dayjs();
+            const selectedBookingDate = selectedCustomerData.tripsheetdate || nocchangeData.tripsheetdate || dayjs();
 
             const updatedBook = {
                 ...book,
-                starttime: starttime || book.starttime || formData.startTime || selectedCustomerData.startTime,
-                closetime: closetime || book.closetime || formData.closetime || selectedCustomerData.closetime,
-                reporttime: reporttime || book.reporttime || formData.reporttime || selectedCustomerData.reporttime,
-                shedintime: shedintime || book.shedintime || formData.shedintime || selectedCustomerData.shedintime,
-                starttime2: starttime2 || book.starttime2 || formData.startTime2 || selectedCustomerData.starttime2,
-                closetime2: closetime2 || book.closetime2 || formData.closetime2 || selectedCustomerData.closetime2,
-                additionaltime: additionalTime.additionaltime,
+                ...nocchangeData,
+                // starttime: starttime || book.starttime || nocchangeData.startTime || selectedCustomerData.startTime,
+                // closetime: closetime || book.closetime || nocchangeData.closetime || selectedCustomerData.closetime,
+                // reporttime: reporttime || book.reporttime || nocchangeData.nocchangeData || selectedCustomerData.reporttime,
+                // shedintime: shedintime || book.shedintime || nocchangeData.shedintime || selectedCustomerData.shedintime,
+                starttime2: starttime2 || book.starttime2 || nocchangeData.startTime2 || selectedCustomerData.starttime2,
+                closetime2: closetime2 || book.closetime2 || nocchangeData.closetime2 || selectedCustomerData.closetime2,
+                // additionaltime: additionalTime.additionaltime,
                 tripsheetdate: selectedBookingDate,
-                shedkm: shedKilometers.shedkm,
+                // shedkm: shedKilometers.shedkm,
                 totaldays: calculateTotalDays(),
                 totalkm1: calculateTotalKilometers(),
                 totaltime: calculateTotalTime(),
@@ -879,9 +866,36 @@ const useTripsheet = () => {
                 pack: packageDetails[0]?.package,
                 minhrs: packageDetails[0]?.Hours,
                 minkm: packageDetails[0]?.KMS,
+                Groups: book.Groups,
+                additionaltime: book.additionaltime || additionalTime.additionaltime,
+                billingno: book.billingno,
+                closedate: book.closedate,
+                closekm: book.closekm,
+                closetime: book.closetime,
+                customeradvance: book.customeradvance,
+                email1: book.email1,
+
+                parking: book.parking,
+                permit: book.permit,
+                remark: book.remark,
+                reporttime: nocchangeData.reporttime,
+                shedin: book.shedin,
+                shedintime: book.shedintime || nocchangeData.shedintime || selectedCustomerData.shedintime,
+                shedkm: book.shedkm || shedKilometers.shedkm,
+                shedout: nocchangeData.shedout || book.shedout || selectedCustomerData.shedout,
+                startdate: nocchangeData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate,
+                startkm: book.startkm,
+                starttime: nocchangeData.starttime || book.starttime || selectedBookingDate.starttime,
+                toll: book.toll,
+                vendortoll: book.vendortoll,
+                vpermettovendor: book.vpermettovendor,
+
+
                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
-                request, escort, minHour, minKM, transferreport
+                request, escort, minHour, minKM, transferreport,
             };
+
+
             await axios.post(`${apiUrl}/tripsheet-add`, updatedBook);
             handleCancel();
             setRow([]);
@@ -970,7 +984,7 @@ const useTripsheet = () => {
 
 
     // lllllllllll
-    const [statechange, setStateChange] = useState(false)
+    // const [statechange, setStateChange] = useState(false)
 
     const handleUpload = () => {
         const input = document.createElement('input');
@@ -984,7 +998,7 @@ const useTripsheet = () => {
         const documentType = formData.documenttype || selectedCustomerData.documenttype || book.documenttype || '';
         const tripid = book.tripid || selectedCustomerData.tripid || formData.tripid;
         const file = event.target.files[0];
-        setStateChange((prev) => !prev)
+        // setStateChange((prev) => !prev)
         if (!file) return;
         if (file) {
             const formData = new FormData();
@@ -997,16 +1011,17 @@ const useTripsheet = () => {
 
 
     const calculateTotalTime = useCallback(() => {
-        const startTime = formData.starttime || selectedCustomerData.starttime || book.starttime;
-        const closeTime = formData.closetime || selectedCustomerData.closetime || book.closetime;
-        if (startTime && closeTime) {
-            const startTimeObj = dayjs(startTime, 'HH:mm');
-            const closeTimeObj = dayjs(closeTime, 'HH:mm');
+        const shedoutTime = book?.starttime || nocchangeData?.starttime ? nocchangeData?.starttime : null || '';
+        const shedinTime = nocchangeData.closetime || selectedCustomerData.closetime || book.closetime || '';
+
+        if (shedoutTime && shedinTime) {
+            const startTimeObj = dayjs(shedoutTime, 'HH:mm');
+            const closeTimeObj = dayjs(shedinTime, 'HH:mm');
             let totalTimeMinutes = closeTimeObj.diff(startTimeObj, 'minutes');
             let additionalMinutes = 0;
 
             // Parse additional time value if available
-            const additionalTimeValue = additionalTime.additionaltime || formData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
+            const additionalTimeValue = additionalTime.additionaltime || nocchangeData.additionaltime || selectedCustomerData.additionaltime || book.additionaltime;
             if (additionalTimeValue) {
                 const hoursMatch = additionalTimeValue.match(/(\d+)h/);
                 const minutesMatch = additionalTimeValue.match(/(\d+)m/);
@@ -1024,7 +1039,7 @@ const useTripsheet = () => {
             return `${hours}h ${minutes}m`;
         }
         return '';
-    }, [formData, selectedCustomerData, book, additionalTime]);
+    }, [nocchangeData, selectedCustomerData, book, additionalTime]);
 
     const calculateExkmAmount = () => {
         const exkm = formData.exkm || selectedCustomerData.exkm || book.exkm || packageDetails[0]?.extraKMS;
@@ -1108,9 +1123,8 @@ const useTripsheet = () => {
     };
 
     const calculateTotalDays = () => {
-        const startDate = formData.startdate || selectedCustomerData.startdate || book.startdate;
+        const startDate = nocchangeData.startdate || formData.startdate || selectedCustomerData.startdate || book.startdate;
         const closeDate = formData.closedate || selectedCustomerData.closedate || book.closedate;
-
         if (startDate && closeDate) {
             const startDateObj = dayjs(startDate);
             const closeDateObj = dayjs(closeDate);
@@ -1201,10 +1215,10 @@ const useTripsheet = () => {
             ...prevData,
             [name]: value,
         }));
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        // setFormData((prevData) => ({
+        //     ...prevData,
+        //     [name]: value,
+        // }));
         setTripSheetData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -1219,10 +1233,10 @@ const useTripsheet = () => {
                 ...prevData,
                 [name]: checked,
             }));
-            setFormData((prevData) => ({
-                ...prevData,
-                [name]: checked,
-            }));
+            // setFormData((prevData) => ({
+            //     ...prevData,
+            //     [name]: checked,
+            // }));
             setFormValues((prevValues) => ({
                 ...prevValues,
                 [name]: checked,
@@ -1242,10 +1256,10 @@ const useTripsheet = () => {
                     ...prevData,
                     [name]: formattedTime,
                 }));
-                setFormData((prevData) => ({
-                    ...prevData,
-                    [name]: formattedTime,
-                }));
+                // setFormData((prevData) => ({
+                //     ...prevData,
+                //     [name]: formattedTime,
+                // }));
                 setTripSheetData((prevData) => ({
                     ...prevData,
                     [name]: formattedTime,
@@ -1263,10 +1277,10 @@ const useTripsheet = () => {
                     ...prevData,
                     [name]: value,
                 }));
-                setFormData((prevData) => ({
-                    ...prevData,
-                    [name]: value,
-                }));
+                // setFormData((prevData) => ({
+                //     ...prevData,
+                //     [name]: value,
+                // }));
                 setFormValues((prevValues) => ({
                     ...prevValues,
                     [name]: value,
@@ -1285,7 +1299,7 @@ const useTripsheet = () => {
                 }));
             }
         }
-    }, [setSelectedCustomerData, setFormData, setTripSheetData, setPackageDetails]);
+    }, [setSelectedCustomerData, setTripSheetData, setPackageDetails]);
 
 
     // prob004
@@ -1293,8 +1307,6 @@ const useTripsheet = () => {
         if (event.key === 'Enter') {
             event.preventDefault();
             const tripid = event.target.value;
-            console.log(tripid, "222tripsheet tripid")
-
             const loginUserName = await localStorage.getItem("username")
 
             try {
@@ -1304,7 +1316,6 @@ const useTripsheet = () => {
                     const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
                     const bookingDetails = response.data;
                     if (response.status === 200 && bookingDetails) {
-
 
                         if (bookingDetails.status === "Cancelled") {
                             setError(true)
@@ -1410,37 +1421,6 @@ const useTripsheet = () => {
         handleChange({ target: { name: "vehRegNo", value: params.vehRegNo } });
     }, [handleChange]);
 
-    // const totalKilometers = Number(packageData.totalkm1 || selectedCustomerData.totalkm1 || selectedCustomerDatas.totalkm1 || book.totalkm1 || formData.totalkm1 || calculateTotalKilometers());
-    // const totalTime = Number(packageData.totaltime || selectedCustomerData.totaltime || selectedCustomerDatas.totaltime || book.totaltime || formData.totaltime || calculateTotalTime());
-
-    // // useEffect(() => {
-    //     async function fetchData() {
-    //         try {
-
-    //             const response = await axios.get(`${apiUrl}/getPackageDetails`, {
-    //                 params: {
-    //                     totalkm1: totalKilometers,
-    //                     totaltime: totalTime,
-    //                     vehType: packageData.vehType || selectedCustomerData.vehType || selectedCustomerDatas.vehType || book.vehType || formData.vehType,
-    //                     customer: packageData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer || formData.customer,
-    //                     duty: packageData.duty || selectedCustomerData.duty || selectedCustomerDatas.duty || book.duty || formData.duty,
-    //                 },
-    //             });
-    //             const packagedet = response.data;
-    //             setPackageDetails(packagedet);
-
-    //         } catch {
-    //         }
-    //     }
-    //     fetchData();
-    // }, [
-    //     book.duty, book.vehType, book.customer,
-    //     formData.duty, formData.vehType, formData.customer,
-    //     packageData.duty, packageData.vehType, packageData.customer,
-    //     selectedCustomerData.customer, selectedCustomerData.duty, selectedCustomerData.vehType,
-    //     selectedCustomerDatas.customer, selectedCustomerDatas.duty, selectedCustomerDatas.vehType,
-    //     totalKilometers, totalTime, apiUrl
-    // ]);
 
     const [smsguest, setSmsGuest] = useState(false);
 
@@ -1523,33 +1503,6 @@ const useTripsheet = () => {
     const [routeData, setRouteData] = useState('');
 
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-    //         try {
-    //             if (tripid !== null && tripid !== "undefined" && tripid) {
-    //                 const response = await fetch(`${apiUrl}/routedata/${encodeURIComponent(tripid)}`);  /// pob004
-
-    //                 if (response.status === 200) {
-    //                     const routeData = await response.json();
-    //                     console.log("routeData", routeData)
-    //                     setRouteData(routeData);
-    //                 }
-    //                 else {
-    //                     setRouteData("")
-    //                     const timer = setTimeout(fetchData, 2000);
-    //                     return () => clearTimeout(timer);
-    //                 }
-    //                 return
-    //             }
-    //         } catch {
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
-
-
     const invoiceRouteData = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
         try {
@@ -1568,43 +1521,8 @@ const useTripsheet = () => {
     };
 
 
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         // const tripid = localStorage.getItem('selectedTripid');
-    //         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-    //         setTripiddata(tripid);
-
-    //         try {
-    //             if (tripid !== null && tripid && tripid !== "undefined") {
-    //                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
-    //                 if (response.status === 200) {
-    //                     const imageUrl = URL.createObjectURL(await response.blob());
-    //                     setSignImageUrl(imageUrl);
-    //                 }
-
-    //                 else {
-    //                     const timer = setTimeout(fetchData, 500);
-    //                     setSignImageUrl("");
-    //                     return () => clearTimeout(timer);
-    //                 }
-    //             }
-
-    //         } catch (err) {
-    //             console.log(err, 'error');
-    //         }
-    //     };
-    //     fetchData();
-    //     return () => {
-    //     };
-    // }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
-
-
-
     const getSignatureImage = async () => {
         const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-        setTripiddata(tripid);
-
         try {
             if (tripid !== null && tripid && tripid !== "undefined") {
                 const response = await fetch(`${apiUrl}/get-signimage/${tripid}`);   /// prob004
@@ -1617,40 +1535,6 @@ const useTripsheet = () => {
             console.log(err, 'error');
         }
     };
-
-
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-
-    //         try {
-
-    //             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-
-
-    //             if (tripid !== null && tripid && tripid !== "undefined") {
-
-    //                 const response = await fetch(`${apiUrl}/getmapimages/${tripid}`);   /// prob004
-    //                 if (response.status === 200) {
-    //                     const responseData = await response.blob();
-    //                     const imageUrl = URL.createObjectURL(responseData);
-    //                     setGMapImageUrl(imageUrl);
-    //                 }
-    //                 else {
-    //                     setGMapImageUrl("")
-    //                     const timer = setTimeout(fetchData, 2000);
-    //                     return () => clearTimeout(timer);
-    //                 }
-    //             }
-
-    //             return '';
-    //         } catch {
-    //         }
-    //     };
-    //     fetchData();
-    // }, [apiUrl, tripiddata, book.tripid, formData.tripid, selectedCustomerData.tripid]);
-
-
 
 
     const getMapImaage = async () => {
@@ -1671,30 +1555,6 @@ const useTripsheet = () => {
     };
 
 
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             // const tripid = localStorage.getItem('selectedTripid');
-    //             const tripid = formData.tripid || selectedCustomerData.tripid || book.tripid;
-
-    //             if (tripid !== null && tripid && tripid !== "undefined") {
-    //                 const response = await fetch(`${apiUrl}/get-attachedimage/${tripid}`);
-    //                 if (response.status === 200) {
-    //                     const data = await response.json();
-    //                     const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/images/${path}`);
-    //                     setAttachedImage(attachedImageUrls);
-    //                 }
-    //                 else {
-    //                     const timer = setTimeout(fetchData, 2000);
-    //                     return () => clearTimeout(timer);
-    //                 }
-    //             }
-    //         } catch {
-    //         }
-    //     };
-    //     fetchData();
-    // }, [apiUrl, statechange, book.tripid, formData.tripid, selectedCustomerData.tripid]);
 
 
     const getAttachedImage = async () => {
@@ -1732,7 +1592,6 @@ const useTripsheet = () => {
                         const data = await response.json();
                         const attachedImageUrls = data.imagePaths.map(path => `${apiUrl}/public/org_logo/${path}`);
                         localStorage.setItem('selectedImage', JSON.stringify(attachedImageUrls));
-                        console.log("log", attachedImageUrls)
                         setSelectedImage(attachedImageUrls);
                     } else {
                         const timer = setTimeout(fetchData, 2000);
@@ -2149,7 +2008,7 @@ const useTripsheet = () => {
         handleEdit,
         SignPage,
         sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, handleConfirm,
-        setNightBeta, setNightCount, request, setRequest, calcCheck, handleTransferChange, transferreport
+        setNightBeta, setNightCount, request, setRequest, calcCheck, handleTransferChange, transferreport, nocchangeData
 
 
 

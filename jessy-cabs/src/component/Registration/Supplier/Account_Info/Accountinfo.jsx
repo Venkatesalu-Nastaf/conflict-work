@@ -47,10 +47,6 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { GrSelect } from "react-icons/gr";
 import { FaCarOn } from "react-icons/fa6";
 
-
-
-
-
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
   "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -99,15 +95,12 @@ const Accuntinfo = () => {
     }
   }, [actionName, handleClick]);
 
-
   // Permission ------------
   const { permissions } = useContext(PermissionContext)
-
   const Supllier_read = permissions[10]?.read;
   const Supllier_new = permissions[10]?.new;
   const Supllier_modify = permissions[10]?.modify;
   const Supllier_delete = permissions[10]?.delete;
-
 
   return (
     <div className="account-form">
@@ -179,27 +172,12 @@ const Accuntinfo = () => {
                   style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
-                {/* <TextField
-                  size="small"
-                  name="address1"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.address1 || book.address1}
-                  onChange={handleChange}
-                  label="Address"
-                  id="remark"
-                  sx={{ m: 1, width: "200ch" }}
-                  variant="standard"
-                /> */}
-
                 <TextField
                   margin="normal"
-                  // size="small"
                   id="remark"
                   label="Address"
                   name="address1"
@@ -251,23 +229,6 @@ const Accuntinfo = () => {
                   }
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              {/* <div className="input" style={{ paddingRight: "15px" }}>
-                <div className="icone">
-                  <HomeTwoToneIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  name="streetNo"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.streetNo || book.streetNo}
-                  onChange={handleChange}
-                  id="remark"
-                  sx={{ width: "100%" }}
-                  variant="standard"
-                />
-              </div> */}
               <div className="input" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <AttachEmailIcon color="action" />
@@ -304,23 +265,6 @@ const Accuntinfo = () => {
                   }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              {/* <div className="input" style={{ paddingRight: "15px" }}>
-                <div className="icone">
-                  <LocationCityIcon color="action" />
-                </div>
-                <TextField
-                  size="small"
-                  name="city"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.city || book.city}
-                  onChange={handleChange}
-                  id="address3"
-                  sx={{ width: "100%" }}
-                  variant="standard"
-                />
-              </div> */}
               <div className="input radio" style={{ paddingRight: "15px" }}>
                 <div className="icone">
                   <StoreIcon color="action" />
@@ -364,7 +308,6 @@ const Accuntinfo = () => {
           </div>
         </div>
         <div className="input-field account-info-label">
-         
           <div className="input radio">
             <FormControl>
               <FormLabel id="demo-row-radio-buttons-group-label">
@@ -443,15 +386,6 @@ const Accuntinfo = () => {
               icon={<SpeedDialIcon />}
               direction="left"
             >
-              {/* {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                  onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
-                />
-              ))} */}
-
               {Supllier_read === 1 && (
                 <SpeedDialAction
                   key="list"
@@ -490,12 +424,9 @@ const Accuntinfo = () => {
                 tooltipTitle="Cancel"
                 onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
               />
-
-
             </StyledSpeedDial>
           </Box>
         </div>
-
         <div className="Download-btn">
           <PopupState variant="popover" popupId="demo-popup-menu">
             {(popupState) => (

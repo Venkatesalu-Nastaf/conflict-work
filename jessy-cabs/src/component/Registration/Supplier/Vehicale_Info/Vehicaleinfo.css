@@ -1,42 +1,46 @@
-
 .css-13xfq8m-MuiTabPanel-root {
   display: flex;
   padding: 0px !important;
 }
+
 .form-container .Title-Name {
   font-size: 20px;
   font-weight: 500;
 }
+
 .form-container {
   display: flex;
   border-radius: 10px;
 }
+
 .form-container .container-main::-webkit-scrollbar {
   width: 0px;
   height: 0px;
   overflow-x: hidden;
 }
+
 .vehicale-form {
   width: 100%;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  /* border-radius: 10px; */
   color: #000;
   background-color: var(--glass);
 }
+
 .vehicaleinfo-container {
   display: flex;
 }
+
 .list-update {
   overflow: scroll;
   height: 90%;
 }
+
 .list-update::-webkit-scrollbar {
   width: 5px;
   height: 0px;
-  /* overflow-x: hidden; */
   cursor: pointer;
   position: absolute;
 }
@@ -44,12 +48,14 @@
 .list-update::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
+
 .textbox .list-update::-webkit-scrollbar-thumb {
   background-color: #457cdc;
   width: 50px;
   cursor: pointer;
   border-radius: 20px;
 }
+
 .form-container .container-main::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
@@ -58,6 +64,7 @@
   background-color: rgb(217, 212, 212);
   outline: 1px solid slategrey;
 }
+
 .form-container .container-main {
   border: 2px solid #ccc;
   overflow: scroll;
@@ -65,11 +72,9 @@
   width: 81vw;
   display: flex;
   flex-direction: column;
-  /* padding-top: 20px; */
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
-  /* background-color: #f0ece2; */
 }
 
 /* TextBox */
@@ -80,7 +85,6 @@
 }
 
 .textboxupdate .textbox-container {
-  /* position: relative; */
   border-radius: 5px;
   overflow: scroll;
   color: #3d3b3b;
@@ -99,23 +103,27 @@
   background-color: #f8f8f8;
   z-index: +9999;
 }
+
 .css-1c4hl6u {
   position: relative;
   margin-top: 0px !important;
   height: 0px !important;
 }
+
 /* Date */
-.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-error
-  .MuiOutlinedInput-notchedOutline {
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
   border-color: #456ddc !important;
 }
-.vehicaleinfo-container-left{
+
+.vehicaleinfo-container-left {
   width: 99%;
 }
+
 .vehicaleinfo-container-right {
   margin: 20px 0px;
   width: 100%;
 }
+
 .vehicaleinfo-update-main {
   border-radius: 10px;
   border: 2px solid #ccc;
@@ -150,66 +158,56 @@
   border-radius: 20px;
 }
 
-.vehicleinfo-inputfeild{
+.vehicleinfo-inputfeild {
   flex-wrap: wrap;
-  /* justify-content: center; */
 }
 
-.vehicaleinfo-container-left{
+.vehicaleinfo-container-left {
   display: flex;
-  /* flex-wrap: wrap; */
-  /* justify-content: center; */
 }
 
-@media screen  and (max-width:701px){
+@media screen and (max-width:701px) {
   .copy-title-btn-Booking {
     width: 86% !important;
   }
 }
 
-@media screen  and (min-width:320px)  and (max-width:380px){
+@media screen and (min-width:320px) and (max-width:380px) {
   .copy-title-btn-Booking {
-   border: none !important;
-   background-color: transparent !important;
+    border: none !important;
+    background-color: transparent !important;
   }
 }
 
-/* @media screen and (max-width:1168px) {
-  .vehicleinfo-inputfeild{
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-} */
-
-
 @media screen and (max-width:1168px) {
-  .vehicaleinfo-container-left{
+  .vehicaleinfo-container-left {
     flex-wrap: wrap;
     justify-content: center;
   }
-  .vehicleinfo-inputfeild{
-justify-content: center;
+
+  .vehicleinfo-inputfeild {
+    justify-content: center;
   }
 }
 
 .button-29 {
-    align-items: center;
-    background-image: radial-gradient(100% 100% at 100% 0, #7199ff 0, #1976d2 100%);
-    border-radius: 6px;
-    box-shadow: rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, rgba(58, 65, 111, .5) 0 -3px 0 inset;
-    color: #fff;
-    cursor: pointer;
-    display: inline-flex;
-    height: 48px;
-    justify-content: center;
-    padding: 0px 16px;
-    transition: box-shadow .15s, transform .15s;
-    user-select: none;
-    white-space: nowrap;
-    font-size: 14px;
+  align-items: center;
+  background-image: radial-gradient(100% 100% at 100% 0, #7199ff 0, #1976d2 100%);
+  border-radius: 6px;
+  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, rgba(58, 65, 111, .5) 0 -3px 0 inset;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  height: 48px;
+  justify-content: center;
+  padding: 0px 16px;
+  transition: box-shadow .15s, transform .15s;
+  user-select: none;
+  white-space: nowrap;
+  font-size: 14px;
 }
 
-.button-29 span{
+.button-29 span {
   padding-left: 10px;
 }
 
@@ -227,7 +225,7 @@ justify-content: center;
   transform: translateY(2px);
 }
 
-.table-head-booking{
+.table-head-booking {
   background-color: #76757d !important;
   color: #fff;
   font-size: larger;

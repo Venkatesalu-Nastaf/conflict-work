@@ -32,7 +32,6 @@
   border-radius: 10px;
   height: 400px;
   width: 100%;
-  /* overflow: scroll; */
 }
 
 .form-container .Title-Name {
@@ -93,17 +92,14 @@
   width: 81vw;
   display: flex;
   flex-direction: column;
-  /* padding-top: 28px; */
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
-  /* background-color: #f0ece2; */
 }
 
 /* Drop-Down */
 .dropdown {
   display: flex;
-  /* flex-direction: column; */
 }
 
 .dropdown label {
@@ -120,48 +116,44 @@
 }
 
 @media screen and (min-width:970px) and (max-width:1240px) {
-  .form-container .customer-form{ 
+  .form-container .customer-form {
     width: 76vw !important;
   }
 }
 
 @media screen and (min-width:769px) and (max-width:969.99px) {
-  .form-container .customer-form { 
+  .form-container .customer-form {
     width: 70vw !important;
   }
 }
 
-.customer-input-feild{
+.customer-input-feild {
   flex-wrap: wrap;
-  /* justify-content: center; */
 }
 
-.Customer-page-input-field{
+.Customer-page-input-field {
   flex-wrap: wrap;
-/* justify-content: center; */
 }
 
-.customer-input-feild-add{
+.customer-input-feild-add {
   flex-wrap: wrap;
-  /* justify-content: center; */
-
 }
 
 @media screen and (max-width:969px) {
-  .customer-input-feild{
+  .customer-input-feild {
     flex-wrap: wrap;
     justify-content: center;
   }
-  
-  .Customer-page-input-field{
-    flex-wrap: wrap;
-  justify-content: center;
-  }
-  
-  .customer-input-feild-add{
+
+  .Customer-page-input-field {
     flex-wrap: wrap;
     justify-content: center;
-  
+  }
+
+  .customer-input-feild-add {
+    flex-wrap: wrap;
+    justify-content: center;
+
   }
 }
 
@@ -169,21 +161,20 @@
   .form-container.form-container {
     width: 85% !important;
   }
-  
+
 }
 
 @media screen and (max-width:400px) {
-  .input-address{
+  .input-address {
     width: 200px !important;
   }
 }
 
-.head-tab-customer{
+.head-tab-customer {
   position: sticky;
   top: 0px;
   z-index: 1051;
   background-color: #ffffff;
-  /* background-color: var(--glass); */
   padding: 40px 10px 10px 0px;
   margin: 0px;
 
@@ -198,7 +189,6 @@
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-  /* Adjust color as needed */
 }
 
 .form-container .Title-Name {

@@ -24,7 +24,6 @@ const Suppliers = ({ stationName }) => {
                                 <Tab label="Accounting Info" className='tab-content' value="accounting_info" />
                                 <Tab label="Vehicle Info" className='tab-content' value="vehicle_info" />
                                 <Tab label="Driver Info" className='tab-content' value="driverinfo" />
-
                             </TabList>
                         </Box>
                         <TabPanel value="accounting_info"><Accountinfo /></TabPanel>

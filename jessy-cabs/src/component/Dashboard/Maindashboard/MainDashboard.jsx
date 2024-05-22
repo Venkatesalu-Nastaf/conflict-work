@@ -35,9 +35,6 @@ import Tooltip from '@mui/material/Tooltip';
 
 const MainDashboard = () => {
 
-
-
-
   const apiUrl = APIURL;
   const { sharedData, setFilteredData } = useData();
   const navigate = useNavigate();
@@ -48,8 +45,6 @@ const MainDashboard = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const { user, setUserdashboard, userdashboard } = useUser();
-
-
   const data1 = localStorage.getItem("useridno")
   const data2 = localStorage.getItem("usercompany")
   const data4 = localStorage.getItem("username");
@@ -244,13 +239,8 @@ const MainDashboard = () => {
     setPopupVisible(false);
   };
 
-
   return (
     <>
-
-
-
-
       {isPopupVisible && (
         <div className="popup" onClick={handlePopupmodalClose}>
           <div className="update-card ">
@@ -269,13 +259,6 @@ const MainDashboard = () => {
           </div>
         </div>
       )}
-
-
-
-
-
-
-
       {userdashboard ? (
         <div className={userdashboard ? "loading-container" : ""}>
           <div className="loading-spinners">
@@ -286,11 +269,8 @@ const MainDashboard = () => {
         </div>
       ) :
         <section
-          className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme
-            }`}
+          className={`dash-board ${storedusertheme ? storedusertheme : selectedTheme}`}
         >
-
-
           <div className="glass">
             <Sidebar expanded={expanded} />
             <div className="header-user">
@@ -300,18 +280,13 @@ const MainDashboard = () => {
                     overlap="circular"
                     anchorOrigin={{ vertical: "top", horizontal: "right" }}
                     variant="dot"
-
                   >
                     <Avatar
                       alt="userimage"
                       src={`${apiUrl}/public/user_profile/${selectedImage}`}
                     />
                   </StyledBadge>
-
                 </Tooltip>
-
-
-
                 { }
               </div>
               <div className="user-name-item">
@@ -340,27 +315,16 @@ const MainDashboard = () => {
                 )}
               </div>
               <div className="logout-item">
-                {/* <FiLogOut className="logout-icon" onClick={handleLogout} /> */}
                 <IoPower className="logout-icon" onClick={handleLogout} />
               </div>
-
-              {/* <div className="user-icon-update"> */}
-
               <div className="user-icon-update" onClick={handleIconClick}>
                 <FaBell />
                 <div className="user-icon-update-dot"></div>
               </div>
-
             </div>
             <Outlet />
           </div>
-
-
-
-
-
           <Dialog open={popupOpen} onClose={handlePopupClose}>
-            {/* <p>sdfghjkl;'</p> */}
             <DialogContent>
               <p className="modal-warning-icon">< PiWarningCircleBold className="warning-icon" /></p>
               <p className="modal-warning-text">Are you sure want to logout from this <br /> application ?</p>
@@ -382,8 +346,6 @@ const MainDashboard = () => {
               </Button>
             </DialogActions>
           </Dialog>
-
-
         </section>
       }
     </>

@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import "./RateType.css";
 import "jspdf-autotable";
-
 import Box from "@mui/material/Box";
 import Menu from '@mui/material/Menu';
 import Button from "@mui/material/Button";
@@ -26,22 +25,18 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import { TextField, FormControlLabel, FormControl, FormLabel, Radio, RadioGroup, } from "@mui/material";
 import useRatype from './useRatype.js';
-
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
-
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
-
 import { PermissionContext } from '../../../context/permissionContext.js';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
@@ -83,8 +78,6 @@ const RateType = ({ stationName, organizationNames }) => {
         isEditMode,
         handleEdit,
         handleDateChange,
-
-
     } = useRatype();
 
     useEffect(() => {
@@ -93,18 +86,12 @@ const RateType = ({ stationName, organizationNames }) => {
         }
     }, [actionName, handleClick]);
 
-
-
     // Permission ------------
     const { permissions } = useContext(PermissionContext)
-
     const INFO_read = permissions[16]?.read;
     const INFO_new = permissions[16]?.new;
     const INFO_modify = permissions[16]?.modify;
     const INFO_delete = permissions[16]?.delete;
-
-
-
 
     return (
         <div className="ratetype-form Scroll-Style-hide">
@@ -132,7 +119,6 @@ const RateType = ({ stationName, organizationNames }) => {
                                     <div className="icone">
                                         <WarehouseIcon color="action" />
                                     </div>
-
                                     <Autocomplete
                                         fullWidth
                                         size="small"
@@ -156,7 +142,6 @@ const RateType = ({ stationName, organizationNames }) => {
                                     <div className="icone">
                                         <RateReviewIcon color="action" />
                                     </div>
-
                                     <Autocomplete
                                         fullWidth
                                         size="small"
@@ -216,11 +201,9 @@ const RateType = ({ stationName, organizationNames }) => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-
-
                                 <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className='icone'>
-                                        <CalendarMonthIcon style={{paddingTop: '20px'}} />
+                                        <CalendarMonthIcon style={{ paddingTop: '20px' }} />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
@@ -248,7 +231,7 @@ const RateType = ({ stationName, organizationNames }) => {
                                 </div>
                                 <div className="input" style={{ paddingRight: '15px' }}>
                                     <div className='icone'>
-                                        <CalendarMonthIcon style={{paddingTop: '20px'}} />
+                                        <CalendarMonthIcon style={{ paddingTop: '20px' }} />
                                     </div>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoItem label="startDate">
@@ -274,8 +257,6 @@ const RateType = ({ stationName, organizationNames }) => {
                                         </DemoItem>
                                     </LocalizationProvider>
                                 </div>
-                                {/* </div>
-                            <div className="input-field"> */}
                                 <div className="input" style={{ width: "160px" }}>
                                     {isEditMode ? (
                                         <Button variant="contained" disabled={INFO_modify} onClick={handleEdit}>Edit</Button>
@@ -348,8 +329,6 @@ const RateType = ({ stationName, organizationNames }) => {
                                 onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                             />
                         ))} */}
-
-
                         {INFO_read === 1 && (
                             <SpeedDialAction
                                 key="list"
@@ -358,7 +337,6 @@ const RateType = ({ stationName, organizationNames }) => {
                                 onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                             />
                         )}
-
                         {INFO_modify === 1 && (
                             <SpeedDialAction
                                 key="edit"
@@ -375,7 +353,6 @@ const RateType = ({ stationName, organizationNames }) => {
                                 onClick={(event) => handleClick(event, "Delete", selectedCustomerId)}
                             />
                         )}
-
                         {INFO_new === 1 && (
                             <SpeedDialAction
                                 key="Add"
@@ -384,17 +361,12 @@ const RateType = ({ stationName, organizationNames }) => {
                                 onClick={(event) => handleClick(event, "Add", selectedCustomerId)}
                             />
                         )}
-
-
                         <SpeedDialAction
                             key="Cancel"
                             icon={<CancelPresentationIcon />}
                             tooltipTitle="Cancel"
                             onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                         />
-
-
-
                     </StyledSpeedDial>
                 </Box>
                 <div className="table-bookingCopy-RateType">

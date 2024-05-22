@@ -3,14 +3,11 @@ import { useRef } from 'react';
 import { Button } from '@material-ui/core';
 import generatePDF from 'react-to-pdf';
 
-
 const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCustomerData, attachedImage, signimageUrl, routeData, GmapimageUrl, selectedCustomerDatas, book, formData, totalhour }) => {
   const targetRef = useRef();
-
   // console.log("selectedImage", selectedImage, organizationdata)
   return (
     <>
-
       <div className="invoice-wrapper" ref={targetRef}>
         <article className='artical-top'>
 
@@ -18,7 +15,6 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
             <div className="logo-image-invoice">
               {selectedImage && <img src={selectedImage[0]} alt={"Logo"} />}
               {/* {console.log("selected image ", selectedImage)} */}
-
             </div>
             <div className="invoice-address">
               <address >
@@ -30,7 +26,6 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
               </address>
             </div>
           </div>
-
           <div className="main-invoice-container">
             <div className='first-table-invoice-container'>
               <table id='table-invoice' className="firstleftTable">
@@ -62,9 +57,6 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                   <th id='table-header'><span >Reporting @</span></th>
                   <td id='table-data'><span>{tripSheetData.customer || selectedCustomerData.customer || selectedCustomerDatas.customer || book.customer}</span></td>
                 </tr>
-
-
-
               </table>
               <table id='table-invoice' className="firstTable">
                 <tr>
@@ -97,14 +89,10 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                 </tr>
               </table>
             </div>
-
-
             <div >
               <label >  <span style={{ fontWeight: 600, fontSize: '75%', backgroundColor: '#E8EAE9' }}>Remarks : </span><span style={{ fontSize: 13, padding: 10 }}>{tripSheetData.remark || selectedCustomerData.remark || selectedCustomerDatas.remark || book.remark}</span>
               </label>
             </div>
-
-
             <div className="secondTable">
               <div className='vehicale-details-table'>
                 <table id='table-invoice' >
@@ -129,7 +117,6 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                       <td id='table-datas'><span >{tripSheetData.closetime || selectedCustomerData.closetime || selectedCustomerDatas.closetime || book.closetime}</span></td>
                       <td id='table-datas'><span >{tripSheetData.closekm || selectedCustomerData.closekm || selectedCustomerDatas.closekm || book.closekm}</span></td>
                     </tr>
-
                     <tr>
                       <td id='table-datas'><span >Total</span></td>
                       <td id='table-datas'><span >{tripSheetData.totaldays || selectedCustomerData.totaldays || selectedCustomerDatas.totaldays || book.totaldays}</span>days</td>
@@ -145,8 +132,6 @@ const Invoice = ({ tripSheetData, organizationdata, selectedImage, selectedCusto
                   <p id='line'>------------------</p>
                   <p id='line'>------------------</p>
                 </div>
-
-
                 <div className="guest-sign">
                   {signimageUrl !== "" ?
                     <img className='dialogboximg' src={signimageUrl} alt=" " /> : <div className='dialogboximg' ></div>}

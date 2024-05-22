@@ -54,10 +54,6 @@ import { IoIosTime } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-
-
-
-
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     position: "absolute",
     "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
@@ -137,9 +133,7 @@ const Billing = () => {
         }
     }, [actionName, handleClick]);
 
-
     const { permissions } = useContext(PermissionContext)
-
     const Billing_read = permissions[5]?.read;
     const Billing_new = permissions[5]?.new;
     const Billing_modify = permissions[5]?.modify;
@@ -148,7 +142,6 @@ const Billing = () => {
     return (
         <div className="form-container form-container-billing">
             <div className="Billing-form">
-            
                 <form onSubmit={handleClick}>
                     <div className="Billing-page-header">
                         <div className="input-field input-feild-booking">
@@ -156,7 +149,6 @@ const Billing = () => {
                                 <div className="icone">
                                     <ListAltIcon color="action" />
                                 </div>
-                                
                                 <TextField
                                     margin="normal"
                                     size="small"
@@ -168,7 +160,6 @@ const Billing = () => {
                                     value={book.tripid || ''}
                                     onChange={handleChange}
                                     onKeyDown={handleKeyDown}
-
                                 />
                             </div>
                             <div className="input">
@@ -187,7 +178,6 @@ const Billing = () => {
                                     onKeyDown={handleKeyenterBilling}
                                 />
                             </div>
-
                             <div className="input">
                                 <div className="icone">
                                     <BadgeIcon color="action" />
@@ -203,12 +193,10 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-
                             <div className="input">
                                 <div className="icone">
                                     <CalendarMonthIcon color="action" />
                                 </div>
-
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Billing Date"
@@ -223,11 +211,9 @@ const Billing = () => {
                                 </LocalizationProvider>
                             </div>
                             <div className="input" style={{ width: "120px" }}>
-
                                 <div className="icone">
-                                    <RiPinDistanceLine color="action" style={{fontSize:'20px'}} />
+                                    <RiPinDistanceLine color="action" style={{ fontSize: '20px' }} />
                                 </div>
-
                                 <TextField
                                     type='number'
                                     margin="normal"
@@ -240,11 +226,9 @@ const Billing = () => {
                                 />
                             </div>
                             <div className="input" style={{ width: "120px" }}>
-
-                            <div className="icone" style={{fontSize:'20px'}} >
+                                <div className="icone" style={{ fontSize: '20px' }} >
                                     <IoIosTime color="action" />
                                 </div>
-
                                 <TextField
                                     margin="normal"
                                     size="small"
@@ -256,8 +240,6 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                        {/* </div>
-                        <div className="input-field" > */}
                             <div className="input" style={{ width: "300px" }}>
                                 <div className="icone">
                                     <HailOutlinedIcon color="action" />
@@ -294,8 +276,6 @@ const Billing = () => {
                                 <div className="icone">
                                     <CalendarMonthIcon color="action" />
                                 </div>
-
-
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                         label="Trip Date"
@@ -313,7 +293,6 @@ const Billing = () => {
                                 <div className="icone">
                                     <CalendarMonthIcon color="action" />
                                 </div>
-
                                 <TextField
                                     type='number'
                                     margin="normal"
@@ -326,8 +305,6 @@ const Billing = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-                        {/* </div>
-                        <div className="input-field" > */}
                             <div className="input" style={{ width: "300px" }}>
                                 <div className="icone">
                                     <FontAwesomeIcon icon={faPersonCircleCheck} size="lg" />
@@ -358,10 +335,8 @@ const Billing = () => {
                                     autoComplete="new-password"
                                     value={book.rateType || customerData?.rateType || ''}
                                     onChange={handleChange}
-                                // customerData.rateType || 
                                 />
                             </div>
-
                             <div className="input">
                                 <div className="icone">
                                     <DirectionsCarFilledIcon color="action" />
@@ -444,8 +419,6 @@ const Billing = () => {
                                         sx={{ m: 1, width: "60ch" }}
                                     />
                                 </div>
-
-
                                 <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faEquals} />
@@ -461,83 +434,72 @@ const Billing = () => {
                                     />
                                 </div>
                             </div>
-
-
-
-
-                                {/* for desktop view */}
-                                <div  className="desktop-division-one">
+                            {/* for desktop view */}
+                            <div className="desktop-division-one">
                                 <div className="input-field">
-                                                                <div className="input" style={{ width: "170px" }}>
-                                                                    <div className="icone">
-                                                                        <FontAwesomeIcon icon={faRoad} />
-                                                                    </div>
-
-
-                                                                    <TextField
-                                                                        type='number'
-                                                                        name="extraKM"
-                                                                        autoComplete="new-password"
-                                                                        value={book?.extraKM || ''}
-                                                                        onChange={handleChange}
-                                                                        label="Charges For Extra"
-                                                                        id="ChargesForExtra"
-                                                                        size="small"
-                                                                        variant="standard"
-                                                                        InputProps={{
-                                                                            startAdornment: (
-                                                                                <InputAdornment position="start">KMS</InputAdornment>
-                                                                            ),
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
-                                                                    <div className="icone">
-                                                                        <TollTwoToneIcon color="action" />
-                                                                    </div>
-                                                                    <TextField size="small"
-                                                                        type='number'
-                                                                        name='extrakm_amount'
-                                                                        autoComplete="new-password"
-                                                                        value={book.extrakm_amount || ''}
-                                                                        onChange={handleChange}
-                                                                        variant="standard"
-                                                                        InputProps={{
-                                                                            startAdornment: (
-                                                                                <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
-                                                                                </InputAdornment>
-                                                                            ),
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                                <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
-                                                                    <div className="icone">
-                                                                        <FontAwesomeIcon icon={faEquals} />
-                                                                    </div>
-                                                                    <TextField
-                                                                        name="ex_kmAmount"
-                                                                        autoComplete="new-password"
-                                                                        value={book.ex_kmAmount || ''}
-                                                                        onChange={handleChange}
-                                                                        size="small"
-                                                                        label="Amount1"
-                                                                        id="cfeamount"
-                                                                        variant="standard"
-                                                                    />
-                                                                </div>
+                                    <div className="input" style={{ width: "170px" }}>
+                                        <div className="icone">
+                                            <FontAwesomeIcon icon={faRoad} />
+                                        </div>
+                                        <TextField
+                                            type='number'
+                                            name="extraKM"
+                                            autoComplete="new-password"
+                                            value={book?.extraKM || ''}
+                                            onChange={handleChange}
+                                            label="Charges For Extra"
+                                            id="ChargesForExtra"
+                                            size="small"
+                                            variant="standard"
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">KMS</InputAdornment>
+                                                ),
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                        <div className="icone">
+                                            <TollTwoToneIcon color="action" />
+                                        </div>
+                                        <TextField size="small"
+                                            type='number'
+                                            name='extrakm_amount'
+                                            autoComplete="new-password"
+                                            value={book.extrakm_amount || ''}
+                                            onChange={handleChange}
+                                            variant="standard"
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                        <div className="icone">
+                                            <FontAwesomeIcon icon={faEquals} />
+                                        </div>
+                                        <TextField
+                                            name="ex_kmAmount"
+                                            autoComplete="new-password"
+                                            value={book.ex_kmAmount || ''}
+                                            onChange={handleChange}
+                                            size="small"
+                                            label="Amount1"
+                                            id="cfeamount"
+                                            variant="standard"
+                                        />
+                                    </div>
                                 </div>
-                                </div>
-
-                            
-
+                            </div>
                             {/* for mobile view */}
-                            <div className="input-field mobile-division-two" style={{flexWrap:'wrap', background:'#fff',gap:"1px",padding:'20px', borderRadius:"10px",marginTop:'20px',marginBottom:'20px'}}>
+                            <div className="input-field mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
                                 <div className="input input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faRoad} />
                                     </div>
-
-
                                     <TextField
                                         type='number'
                                         name="extraKM"
@@ -555,12 +517,9 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-
-                                <div style={{marginLeft:'50%',marginTop:'5px'}}>
-                                        <FaPlus  />
-                                    </div>
-
-
+                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                    <FaPlus />
+                                </div>
                                 <div className="input input-mobile" >
                                     <div className="icone">
                                         <TollTwoToneIcon color="action" />
@@ -580,15 +539,10 @@ const Billing = () => {
                                         }}
                                     />
                                 </div>
-
-                                <div style={{marginLeft:'50%',marginTop:'5px'}}>
-                                        <FontAwesomeIcon icon={faEquals} />
-                                    </div>
-
-                                <div className="input input-mobile" >
-                                    {/* <div className="icone">
-                                        <FontAwesomeIcon icon={faEquals} />
-                                    </div> */}
+                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                    <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <div className="input input-mobile">
                                     <TextField
                                         name="ex_kmAmount"
                                         autoComplete="new-password"
@@ -601,71 +555,10 @@ const Billing = () => {
                                     />
                                 </div>
                             </div>
-
-
-                                {/* for desktop view */}
-                                <div  className="desktop-division-one">
+                            {/* for desktop view */}
+                            <div className="desktop-division-one">
                                 <div className="input-field">
-                                                                <div className="input" style={{ width: "170px" }}>
-                                                                    <div className="icone">
-                                                                        <FontAwesomeIcon icon={faStopwatch} />
-                                                                    </div>
-                                                                    <TextField
-                                                                        name="extraHR"
-                                                                        autoComplete="new-password"
-                                                                        value={book.extraHR || ''}
-                                                                        onChange={handleChange}
-                                                                        label="Charges For Extra"
-                                                                        id="ChargesForExtra"
-                                                                        size="small"
-                                                                        variant="standard"
-                                                                        InputProps={{
-                                                                            startAdornment: (
-                                                                                <InputAdornment position="start">HRS</InputAdornment>
-                                                                            ),
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
-                                                                    <div className="icone">
-                                                                        <TollTwoToneIcon color="action" />
-                                                                    </div>
-                                                                    <TextField size="small"
-                                                                        type='number'
-                                                                        name='extrahr_amount'
-                                                                        autoComplete="new-password"
-                                                                        value={book.extrahr_amount || ''}
-                                                                        onChange={handleChange}
-                                                                        variant="standard"
-                                                                        InputProps={{
-                                                                            startAdornment: (
-                                                                                <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
-                                                                                </InputAdornment>
-                                                                            ),
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                                <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
-                                                                    <div className="icone">
-                                                                        <FontAwesomeIcon icon={faEquals} />
-                                                                    </div>
-                                                                    <TextField
-                                                                        name="ex_hrAmount"
-                                                                        autoComplete="new-password"
-                                                                        value={book.ex_hrAmount || ""}
-                                                                        onChange={handleChange}
-                                                                        size="small"
-                                                                        label="Amount2"
-                                                                        id="cfehamount"
-                                                                        variant="standard"
-                                                                    />
-                                                                </div>
-                                </div>
-                                </div>
-                            
-                                {/* for mobile view */}
-                                <div className="input-field mobile-division-two" style={{flexWrap:'wrap', background:'#fff',gap:"1px",padding:'20px', borderRadius:"10px",marginTop:'20px',marginBottom:'20px'}}>
-                                    <div className="input input-mobile" >
+                                    <div className="input" style={{ width: "170px" }}>
                                         <div className="icone">
                                             <FontAwesomeIcon icon={faStopwatch} />
                                         </div>
@@ -685,11 +578,7 @@ const Billing = () => {
                                             }}
                                         />
                                     </div>
-                                    <div style={{marginLeft:'50%',marginTop:'5px'}}>
-                                            <FaPlus  />
-                                        </div>
-
-                                    <div className="input input-mobile" >
+                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
                                         <div className="icone">
                                             <TollTwoToneIcon color="action" />
                                         </div>
@@ -708,15 +597,10 @@ const Billing = () => {
                                             }}
                                         />
                                     </div>
-
-                                    <div style={{marginLeft:'50%',marginTop:'5px'}}>
+                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                        <div className="icone">
                                             <FontAwesomeIcon icon={faEquals} />
                                         </div>
-
-                                    <div className="input input-mobile" >
-                                        {/* <div className="icone">
-                                            <FontAwesomeIcon icon={faEquals} />
-                                        </div> */}
                                         <TextField
                                             name="ex_hrAmount"
                                             autoComplete="new-password"
@@ -729,76 +613,123 @@ const Billing = () => {
                                         />
                                     </div>
                                 </div>
-
-
-
-
-
-
-
-
-
-                                {/* for desktop view */}
-                                <div  className="desktop-division-one">
+                            </div>
+                            {/* for mobile view */}
+                            <div className="input-field mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
+                                <div className="input input-mobile" >
+                                    <div className="icone">
+                                        <FontAwesomeIcon icon={faStopwatch} />
+                                    </div>
+                                    <TextField
+                                        name="extraHR"
+                                        autoComplete="new-password"
+                                        value={book.extraHR || ''}
+                                        onChange={handleChange}
+                                        label="Charges For Extra"
+                                        id="ChargesForExtra"
+                                        size="small"
+                                        variant="standard"
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">HRS</InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                    <FaPlus />
+                                </div>
+                                <div className="input input-mobile" >
+                                    <div className="icone">
+                                        <TollTwoToneIcon color="action" />
+                                    </div>
+                                    <TextField size="small"
+                                        type='number'
+                                        name='extrahr_amount'
+                                        autoComplete="new-password"
+                                        value={book.extrahr_amount || ''}
+                                        onChange={handleChange}
+                                        variant="standard"
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                    <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <div className="input input-mobile" >
+                                    <TextField
+                                        name="ex_hrAmount"
+                                        autoComplete="new-password"
+                                        value={book.ex_hrAmount || ""}
+                                        onChange={handleChange}
+                                        size="small"
+                                        label="Amount2"
+                                        id="cfehamount"
+                                        variant="standard"
+                                    />
+                                </div>
+                            </div>
+                            {/* for desktop view */}
+                            <div className="desktop-division-one">
                                 <div className="input-field">
-                                                                <div className="input" style={{ width: "170px" }}>
-                                                                    <div className="icone">
-                                                                        <FontAwesomeIcon icon={faCloudMoon} />
-                                                                    </div>
-                                                                    <TextField
-                                                                        type='number'
-                                                                        name="nightBta"
-                                                                        autoComplete="new-password"
-                                                                        value={book.nightBta || ''}
-                                                                        onChange={handleChange}
-                                                                        label="Night Halt"
-                                                                        id="NightHalt"
-                                                                        size="small"
-                                                                        variant="standard"
-                                                                    />
-                                                                </div>
-                                                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
-                                                                    <div className="icone">
-                                                                        <TollTwoToneIcon color="action" />
-                                                                    </div>
-                                                                    <TextField size="small" variant="standard"
-                                                                        type='number'
-                                                                        name='nightCount'
-                                                                        autoComplete="new-password"
-                                                                        value={book.nightCount || ''}
-                                                                        onChange={handleChange}
-                                                                        InputProps={{
-                                                                            startAdornment: (
-                                                                                <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
-                                                                                </InputAdornment>
-                                                                            ),
-                                                                        }} />
-                                                                </div>
-                                                                <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
-                                                                    <div className="icone">
-                                                                        <FontAwesomeIcon icon={faEquals} />
-                                                                    </div>
-                                                                    <TextField
-                                                                        type='number'
-                                                                        name="nhamount"
-                                                                        autoComplete="new-password"
-                                                                        value={total_Nighthalt_Amount() || book.nhamount || ''}
-                                                                        onChange={handleChange}
-                                                                        size="small"
-                                                                        label="Amount"
-                                                                        id="nhamount"
-                                                                        variant="standard"
-                                                                    />
-                                                                </div>
+                                    <div className="input" style={{ width: "170px" }}>
+                                        <div className="icone">
+                                            <FontAwesomeIcon icon={faCloudMoon} />
+                                        </div>
+                                        <TextField
+                                            type='number'
+                                            name="nightBta"
+                                            autoComplete="new-password"
+                                            value={book.nightBta || ''}
+                                            onChange={handleChange}
+                                            label="Night Halt"
+                                            id="NightHalt"
+                                            size="small"
+                                            variant="standard"
+                                        />
+                                    </div>
+                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                        <div className="icone">
+                                            <TollTwoToneIcon color="action" />
+                                        </div>
+                                        <TextField size="small" variant="standard"
+                                            type='number'
+                                            name='nightCount'
+                                            autoComplete="new-password"
+                                            value={book.nightCount || ''}
+                                            onChange={handleChange}
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
+                                                    </InputAdornment>
+                                                ),
+                                            }} />
+                                    </div>
+                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                        <div className="icone">
+                                            <FontAwesomeIcon icon={faEquals} />
+                                        </div>
+                                        <TextField
+                                            type='number'
+                                            name="nhamount"
+                                            autoComplete="new-password"
+                                            value={total_Nighthalt_Amount() || book.nhamount || ''}
+                                            onChange={handleChange}
+                                            size="small"
+                                            label="Amount"
+                                            id="nhamount"
+                                            variant="standard"
+                                        />
+                                    </div>
                                 </div>
-                                </div>
-    
-                            
-
-
-
-                                {/* for mobile view */}
-                            <div className="input-field  mobile-division-two" style={{flexWrap:'wrap', background:'#fff',gap:"1px",padding:'20px', borderRadius:"10px",marginTop:'20px',marginBottom:'20px'}}>
+                            </div>
+                            {/* for mobile view */}
+                            <div className="input-field  mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
                                 <div className="input  input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faCloudMoon} />
@@ -815,11 +746,9 @@ const Billing = () => {
                                         variant="standard"
                                     />
                                 </div>
-
-                                <div style={{marginLeft:'50%',marginTop:'5px'}}>
-                                        <FaPlus  />
-                                    </div>
-                                    
+                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                    <FaPlus />
+                                </div>
                                 <div className="input  input-mobile">
                                     <div className="icone">
                                         <TollTwoToneIcon color="action" />
@@ -837,17 +766,10 @@ const Billing = () => {
                                             ),
                                         }} />
                                 </div>
-
-                                <div style={{marginLeft:'50%',marginTop:'5px'}}>
-                                        <FontAwesomeIcon icon={faEquals} />
-                                    </div>
-
-
-
-                                <div className="input input-mobile" >
-                                    {/* <div className="icone">
-                                        <FontAwesomeIcon icon={faEquals} />
-                                    </div> */}
+                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                    <FontAwesomeIcon icon={faEquals} />
+                                </div>
+                                <div className="input input-mobile">
                                     <TextField
                                         type='number'
                                         name="nhamount"
@@ -861,76 +783,63 @@ const Billing = () => {
                                     />
                                 </div>
                             </div>
-
-
-
-
-
-
-
-
-
-
-
-                                {/* for desktop view */}
-                                <div className="desktop-division-one">
+                            {/* for desktop view */}
+                            <div className="desktop-division-one">
                                 <div className="input-field">
-                                <div className="input" style={{ width: "170px" }}>
-                                    <div className="icone">
-                                        <FontAwesomeIcon icon={faMoneyBill1Wave} />
-                                    </div>
-                                    <TextField
-                                        type='number'
-                                        label="Driver Bata"
-                                        name='driverBeta'
-                                        autoComplete="new-password"
+                                    <div className="input" style={{ width: "170px" }}>
+                                        <div className="icone">
+                                            <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                                        </div>
+                                        <TextField
+                                            type='number'
+                                            label="Driver Bata"
+                                            name='driverBeta'
+                                            autoComplete="new-password"
 
-                                        value={book.driverBeta || ''}
-                                        onChange={handleChange}
-                                        id="driverbata"
-                                        size="small"
-                                        variant="standard"
-                                    />
-                                </div>
-                                <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
-                                    <div className="icone">
-                                        <TollTwoToneIcon color="action" />
+                                            value={book.driverBeta || ''}
+                                            onChange={handleChange}
+                                            id="driverbata"
+                                            size="small"
+                                            variant="standard"
+                                        />
                                     </div>
-                                    <TextField size="small" variant="standard"
-                                        type='number'
-                                        name='driverbeta_Count'
-                                        autoComplete="new-password"
-                                        value={book.driverbeta_Count || ''}
-                                        onChange={handleChange}
-                                        InputProps={{
-                                            startAdornment: (
-                                                <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
-                                                </InputAdornment>
-                                            ),
-                                        }} />
-                                </div>
-                                <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
-                                    <div className="icone">
-                                        <FontAwesomeIcon icon={faEquals} />
+                                    <div className="input" style={{ width: "170px", paddingTop: "20px" }}>
+                                        <div className="icone">
+                                            <TollTwoToneIcon color="action" />
+                                        </div>
+                                        <TextField size="small" variant="standard"
+                                            type='number'
+                                            name='driverbeta_Count'
+                                            autoComplete="new-password"
+                                            value={book.driverbeta_Count || ''}
+                                            onChange={handleChange}
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">< CurrencyRupeeRoundedIcon color="action" />
+                                                    </InputAdornment>
+                                                ),
+                                            }} />
                                     </div>
-                                    <TextField
-                                        type='number'
-                                        name="driverBeta_amount"
-                                        autoComplete="new-password"
-                                        value={total_DriverBEta_Amount() || book.driverBeta_amount || ''}
-                                        onChange={handleChange}
-                                        size="small"
-                                        label="Amount"
-                                        id="dbamount"
-                                        variant="standard"
-                                    />
+                                    <div className="input" style={{ width: "170px", paddingTop: "10px" }}>
+                                        <div className="icone">
+                                            <FontAwesomeIcon icon={faEquals} />
+                                        </div>
+                                        <TextField
+                                            type='number'
+                                            name="driverBeta_amount"
+                                            autoComplete="new-password"
+                                            value={total_DriverBEta_Amount() || book.driverBeta_amount || ''}
+                                            onChange={handleChange}
+                                            size="small"
+                                            label="Amount"
+                                            id="dbamount"
+                                            variant="standard"
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                                </div>
-
-
-                                {/* for mobile view */}
-                            <div className="input-field  mobile-division-two" style={{flexWrap:'wrap', background:'#fff',gap:"1px",padding:'20px', borderRadius:"10px",marginTop:'20px',marginBottom:'20px'}}>
+                            {/* for mobile view */}
+                            <div className="input-field  mobile-division-two" style={{ flexWrap: 'wrap', background: '#fff', gap: "1px", padding: '20px', borderRadius: "10px", marginTop: '20px', marginBottom: '20px' }}>
                                 <div className="input input-mobile" >
                                     <div className="icone">
                                         <FontAwesomeIcon icon={faMoneyBill1Wave} />
@@ -948,13 +857,9 @@ const Billing = () => {
                                         variant="standard"
                                     />
                                 </div>
-
-                                <div style={{marginLeft:'50%',marginTop:'5px'}}>
-                                        <FaPlus  />
-                                    </div>
-
-                               
-
+                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                    <FaPlus />
+                                </div>
                                 <div className="input input-mobile">
                                     <div className="icone">
                                         <TollTwoToneIcon color="action" />
@@ -972,15 +877,10 @@ const Billing = () => {
                                             ),
                                         }} />
                                 </div>
-
-                                <div style={{marginLeft:'50%',marginTop:'5px'}}>
-                                        <FontAwesomeIcon icon={faEquals} />
-                                    </div>
-
+                                <div style={{ marginLeft: '50%', marginTop: '5px' }}>
+                                    <FontAwesomeIcon icon={faEquals} />
+                                </div>
                                 <div className="input input-mobile">
-                                    {/* <div className="icone">
-                                        <FontAwesomeIcon icon={faEquals} />
-                                    </div> */}
                                     <TextField
                                         type='number'
                                         name="driverBeta_amount"
@@ -994,10 +894,6 @@ const Billing = () => {
                                     />
                                 </div>
                             </div>
-
-
-
-
                             <div className="input-field">
                                 <div className="input" style={{ width: "355px" }}>
                                     <div className="icone">
@@ -1115,7 +1011,6 @@ const Billing = () => {
                             </div>
                         </div>
                         <div className="Billing-secend-right">
-                            {/* <div className="input-field" style={{flexWrap:'wrap', justifyContent:'center'}}> */}
                             <div className="input-field inputfeild-billing-right">
                                 <div className="input input-billing">
                                     <div className="icone">
@@ -1195,7 +1090,6 @@ const Billing = () => {
                                         autoComplete="new-password"
                                         // value={discound_PercentageCalc() || book.DiscountAmount || ''}
                                         value={book.DiscountAmount || discound_PercentageCalc() || ''}
-
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -1309,7 +1203,7 @@ const Billing = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="input-field inputfeild-billing-right" style={{marginBottom:'30px'}} >
+                            <div className="input-field inputfeild-billing-right" style={{ marginBottom: '30px' }} >
                                 <div className="input input-billing" >
                                     <div className="icone">
                                         <PendingActionsIcon />
@@ -1318,7 +1212,7 @@ const Billing = () => {
                                         margin="normal"
                                         size="small"
                                         id="pendingamount"
-                                        label="Pending Amount" 
+                                        label="Pending Amount"
                                         name="pendingamount"
                                         autoComplete="new-password"
                                         value={pendingAmountCalc() || book.pendingamount || ''}
@@ -1395,34 +1289,34 @@ const Billing = () => {
                     </Dialog>
                 </form>
                 <div className='alert-popup-main'>
-                {error &&
-                    <div className='alert-popup Error' >
-                        <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{errorMessage}</p>
-                    </div>
-                }
-                {info &&
-                    <div className='alert-popup Info' >
-                        <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{infoMessage}</p>
-                    </div>
-                }
-                {warning &&
-                    <div className='alert-popup Warning' >
-                        <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{warningMessage}</p>
-                    </div>
-                }
-                {success &&
-                    <div className='alert-popup Success' >
-                        <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
-                        <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
-                        <p>{successMessage}</p>
-                    </div>
-                }
+                    {error &&
+                        <div className='alert-popup Error' >
+                            <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{errorMessage}</p>
+                        </div>
+                    }
+                    {info &&
+                        <div className='alert-popup Info' >
+                            <div className="popup-icon"> <BsInfo style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{infoMessage}</p>
+                        </div>
+                    }
+                    {warning &&
+                        <div className='alert-popup Warning' >
+                            <div className="popup-icon"> <ErrorOutlineIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{warningMessage}</p>
+                        </div>
+                    }
+                    {success &&
+                        <div className='alert-popup Success' >
+                            <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                            <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                            <p>{successMessage}</p>
+                        </div>
+                    }
                 </div>
                 <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                     <StyledSpeedDial
@@ -1436,7 +1330,6 @@ const Billing = () => {
                                 icon={action.icon}
                                 tooltipTitle={action.name}
                                 onClick={(event) => handleClick(event, action.name)}
-
                             />
                         ))} */}
 
@@ -1448,7 +1341,6 @@ const Billing = () => {
                                 onClick={(event) => handleClick(event, "Add")}
                             />
                         )}
-
                         {Billing_modify === 1 && (
                             <SpeedDialAction
                                 key="edit"
@@ -1457,7 +1349,6 @@ const Billing = () => {
                                 onClick={(event) => handleClick(event, "Edit")}
                             />
                         )}
-
                         {Billing_delete === 1 && (
                             <SpeedDialAction
                                 key="delete"
@@ -1466,17 +1357,12 @@ const Billing = () => {
                                 onClick={(event) => handleClick(event, "Delete")}
                             />
                         )}
-
-
-
                         <SpeedDialAction
                             key="Cancel"
                             icon={<CancelPresentationIcon />}
                             tooltipTitle="Cancel"
                             onClick={(event) => handleClick(event, "Cancel")}
                         />
-
-
                         {Billing_read === 1 && (
                             <SpeedDialAction
                                 key="Print"
@@ -1485,7 +1371,6 @@ const Billing = () => {
                                 onClick={(event) => handleClick(event, "Print")}
                             />
                         )}
-
                     </StyledSpeedDial>
                 </Box>
             </div>

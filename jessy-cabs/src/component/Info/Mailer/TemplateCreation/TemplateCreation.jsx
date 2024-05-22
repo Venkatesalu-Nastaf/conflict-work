@@ -1,4 +1,4 @@
-import React, { Component, useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import "./TemplateCreation.css"
 import { IoChevronBack } from "react-icons/io5";
@@ -6,36 +6,30 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { TfiText } from "react-icons/tfi";
+// import { TfiText } from "react-icons/tfi";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
-
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { TiTick } from "react-icons/ti";
-import { AiOutlineClose } from "react-icons/ai";
+// import { TiTick } from "react-icons/ti";
+// import { AiOutlineClose } from "react-icons/ai";
 import { BsExclamationCircle } from "react-icons/bs";
-import { BiBorderRadius } from 'react-icons/bi';
+// import { BiBorderRadius } from 'react-icons/bi';
 
 const TemplateCreation = () => {
-
 
   const navigate = useNavigate();
   const BackToSelection = () => {
     navigate("/home/info/mailer/TemplateSelection");
   }
-
   const [anchorEl, setAnchorEl] = React.useState(null);
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const handleSave = () => {
     // Your save logic here
     handleClose();
@@ -49,9 +43,7 @@ const TemplateCreation = () => {
   };
 
   const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    // Handle the file upload logic here
-    // console.log('Selected file:', file);
+    // const file = e.target.files[0];
   };
 
   const [content, setContent] = useState('');
@@ -65,7 +57,6 @@ const TemplateCreation = () => {
     setOpenmodals(true);
   };
   const handleClosemodal = () => setOpenmodals(false);
-
   const style1 = {
     position: 'absolute',
     top: '50%',
@@ -81,13 +72,9 @@ const TemplateCreation = () => {
 
   return (
     <>
-
-
-
       <div className='word-head'>
         <div className='back-input'>
           <div style={{ cursor: 'pointer' }}><p className='back-section text-white' onClick={BackToSelection}> <IoChevronBack /></p></div>
-
           <div>
             <div>
               <input type="text" className='template-name' placeholder='Enter a template name' />
@@ -97,10 +84,7 @@ const TemplateCreation = () => {
             </div>
           </div>
         </div>
-
-
         <div className='right-header'>
-
           <div className='flex items-center'>
             <p onClick={handleFileUploadClick} className='attachments' style={{ cursor: 'pointer', textDecoration: 'underline', color: 'white' }}>
               Attachments
@@ -118,7 +102,6 @@ const TemplateCreation = () => {
             </button>
 
             <div>
-              {/* <button onClick={handleOpenmodal}>Modal</button> */}
               <Modal
                 keepMounted
                 open={openmodals}
@@ -142,7 +125,6 @@ const TemplateCreation = () => {
                     <button onClick={BackToSelection} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded">
                       Yes, I'm sure
                     </button>
-
                     <button onClick={handleClosemodal} className="border border-solid border-red-500 hover:bg-red-700 text-red-500 hover:text-white font-bold py-2 px-4 mx-2 rounded">
                       No, cancel
                     </button>
@@ -156,9 +138,6 @@ const TemplateCreation = () => {
               Preview
             </button>
           </div>
-
-
-
           <div>
             <Button
               variant="contained"
@@ -179,16 +158,8 @@ const TemplateCreation = () => {
               <MenuItem onClick={handleClose}>Save As Draft</MenuItem>
             </Menu>
           </div>
-
         </div>
-
-
-
       </div>
-
-
-
-
       <ReactQuill
         theme="snow"
         value={content}
@@ -205,11 +176,8 @@ const TemplateCreation = () => {
           ],
         }}
       />
-
     </>
-
   )
 }
-
 
 export default TemplateCreation;

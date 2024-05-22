@@ -1,10 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import "./PaymentDetail.css";
-
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
-
 import { Autocomplete, Menu, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -21,11 +19,8 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import usePaymentdetails from './usePaymentdetails';
 import { PermissionContext } from '../../../context/permissionContext';
-import { FaRegCalendarAlt } from "react-icons/fa";
-
+// import { FaRegCalendarAlt } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
-
 
 const PaymentDetail = ({ organizationNames }) => {
 
@@ -67,16 +62,11 @@ const PaymentDetail = ({ organizationNames }) => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
-
-
   const { permissions } = useContext(PermissionContext)
-
   const Billing_read = permissions[5]?.read;
-
 
   return (
     <div className="PaymentDetail-form Scroll-Style-hide">
-
       <form >
         <div className="detail-container-main detail-container-main-payment">
           <div className="container-left">
@@ -116,48 +106,36 @@ const PaymentDetail = ({ organizationNames }) => {
                     }}
                   />
                 </div>
-
                 <div className="input" >
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
-
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
-
                       <DatePicker
                         label="From Date"
                         format="DD/MM/YYYY"
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
                       />
-
                     </DemoContainer>
                   </LocalizationProvider>
-
                 </div>
-
                 <div className="input" >
                   <div className="icone">
                     <CalendarMonthIcon color="action" />
                   </div>
-
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
-
                       <DatePicker
                         label="To Date"
                         format="DD/MM/YYYY"
                         value={toDate}
                         onChange={(date) => setToDate(date)}
                       />
-
                     </DemoContainer>
                   </LocalizationProvider>
-
                 </div>
-
-
               </div>
               <div className="input-field" style={{ justifyContent: 'center' }}>
                 <div className="input" style={{ width: "140px" }}>

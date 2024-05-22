@@ -7,8 +7,7 @@ const RightSide = () => {
   return (
     <div className="RightSide">
       <div className="updates-comp">
-        {/* <h3>Updates</h3> */}
-        <Updates/>
+        <Updates />
       </div>
       <div className="area-chart">
         <h3 className="area-chart-text">Area Chart</h3>

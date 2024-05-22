@@ -13,7 +13,7 @@
   text-decoration: none;
   vertical-align: top;
 }
-                                    
+
 .invoice-wrapper header img {
   max-height: 50%;
   max-width: 50%;
@@ -44,13 +44,14 @@
   border: 1px solid #000;
 
 }
-        
-.attached-toll{
+
+.attached-toll {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 10px auto;
 }
+
 .attached-toll img {
   width: 500px;
 }

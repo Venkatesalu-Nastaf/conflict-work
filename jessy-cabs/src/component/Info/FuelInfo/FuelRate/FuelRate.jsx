@@ -5,7 +5,6 @@ import { TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { StationName } from "./FuelRateData";
 import Autocomplete from "@mui/material/Autocomplete";
-
 // FontAwesomeIcon Link
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGasPump } from "@fortawesome/free-solid-svg-icons";
@@ -15,7 +14,6 @@ const FuelRate = () => {
     const [selectedState, setSelectedState] = useState(StationName[0].optionvalue);
     const [fuelData, setFuelData] = useState({});
     const currentDate = new Date().toLocaleDateString();
-
     const handleStateChange = (event) => {
         const state = event.target.value;
         setSelectedState(state);
@@ -92,19 +90,15 @@ const FuelRate = () => {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        // sx={{ m: 1, width: "50ch" }}
                                         label="Select State"
-                                    
-
-                                    sx={{
-                                        m: 1,
-                                        width: "190px", // Set width to 100% for mobile devices
-                                        "@media (min-width: 667px)": {
-                                          width: "50ch", // Set width to 50ch for larger screens
-                                        },
-                                      }}
-
-                                      />
+                                        sx={{
+                                            m: 1,
+                                            width: "190px",
+                                            "@media (min-width: 667px)": {
+                                                width: "50ch",
+                                            },
+                                        }}
+                                    />
                                 )}
                             />
                         </div>

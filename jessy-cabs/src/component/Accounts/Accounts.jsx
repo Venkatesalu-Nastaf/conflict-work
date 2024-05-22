@@ -48,11 +48,9 @@ const Accounts = () => {
     return (
         <div className='Accounts-conatiner' id='menu'>
             <div className='menu-bar'>
-
                 <MenuItem label="Expense" menuItemKey="Cash Flow" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClickMsgInfo} />
                 <MenuItem label="Income" menuItemKey="Driver Master" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClickMsgInfo} />
                 <MenuItem label="Profit & Loss" menuItemKey="Profit & Loss" activeMenuItem={activeMenuItem} handleMenuItemClick={handleMenuItemClickMsgInfo} />
-
             </div>
             {info &&
                 <div className='alert-popup Info' >

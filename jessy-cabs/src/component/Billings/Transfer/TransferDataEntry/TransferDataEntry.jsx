@@ -11,12 +11,9 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
-
 import { Autocomplete } from "@mui/material";
 import { PermissionContext } from '../../../context/permissionContext';
-
 //for pdf
-
 
 // ICONS
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
@@ -32,9 +29,6 @@ import useTransferdataentry from './useTransferdataentry';
 // import { FaCalendarMinus } from "react-icons/fa";
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
-
-
 
 const TransferDataEntry = ({ stationName, organizationNames }) => {
 
@@ -96,9 +90,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
     }
   }, [actionName, handleClick]);
 
-
   const { permissions } = useContext(PermissionContext)
-
   const Transfer_read = permissions[6]?.read;
   const Transfer_new = permissions[6]?.new;
 
@@ -124,9 +116,7 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       autoComplete='off'
                     />
                   </div>
-
                   <div className='input'>
-
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
                     </div>
@@ -140,15 +130,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                         />
                       </DemoContainer>
                     </LocalizationProvider>
-
                   </div>
-
-
                   <div className='input'>
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
                     </div>
-
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={["DatePicker", "DatePicker"]}>
                         <DatePicker
@@ -156,15 +142,11 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                           name="Billingdate"
                           // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate || formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate) : null}
                           value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate) : null}
-
                           format="DD/MM/YYYY"
                         />
                       </DemoContainer>
                     </LocalizationProvider>
-
                   </div>
-
-
                   <div className="input" >
                     <div className="icone">
                       <FontAwesomeIcon icon={faFileInvoiceDollar} size="lg" />
@@ -176,7 +158,6 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       name="invoiceno"
                       value={invoiceno || ''}
                       // value={Billingdate || selectedCustomerDatas?.Billingdate ? dayjs(selectedCustomerDatas?.Billingdate||formDataTransfer.Billdate) : null || formDataTransfer.Billdate ? dayjs(formDataTransfer.Billdate):null}
-
                       onChange={(event) => handlechnageinvoice(event)}
                       autoComplete='off'
                       onKeyDown={handleKeyenter}
@@ -202,8 +183,6 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       }}
                     />
                   </div>
-                  {/* </div>
-                <div className="input-field"> */}
                   <div className="input" >
                     <div className="icone">
                       <CalendarMonthIcon color="action" />
@@ -271,8 +250,6 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                       }}
                     />
                   </div>
-                  {/* </div>
-                <div className="input-field" > */}
                   <div className="input">
                     <Button variant="contained" disabled={!Transfer_read} onClick={handleShow} >List</Button>
                   </div>
@@ -283,8 +260,6 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
                     <Button variant="outlined" disabled={!Transfer_new} onClick={handleClickGenerateBill} >Bill Generate</Button>
                   </div>
                 </div>
-                {/* <div className="input-field">
-                </div> */}
               </div>
             </div>
           </div>
@@ -329,7 +304,6 @@ const TransferDataEntry = ({ stationName, organizationNames }) => {
         <div className="table-bookingCopy-TransferDataEntry">
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              // rows={reversedRows}
               rows={rows}
               columns={columns}
               onRowSelectionModelChange={(newRowSelectionModel) => {

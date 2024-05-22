@@ -11,7 +11,6 @@ const PrintableInvoice = ({ tripSheetData, organizationdata, selectedImage, book
                 <div className="Individual-table-container">
                     <div className="page-title">
                         <div className="sheet-logo">
-                            {/* <img src={selectedImage} alt="logo" /> */}
                             <img src={Array.isArray(selectedImage) ? selectedImage[0] : selectedImage} alt={"Logo"} />
                         </div>
                         <div className="sheet-type">

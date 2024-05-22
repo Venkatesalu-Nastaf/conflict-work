@@ -1,5 +1,3 @@
-
-
 .head-tab-booking {
     position: sticky;
     top: 0px;
@@ -8,6 +6,6 @@
     background-color: #ffffff;
 }
 
-.BokkingChart-render{
+.BokkingChart-render {
     background-color: var(--glass);
 }

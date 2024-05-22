@@ -5,7 +5,6 @@
 
 .Luxuryinvoice-description-table {
     border-bottom: 1.5px solid #000;
-
 }
 
 .page-title {
@@ -13,13 +12,10 @@
     padding: 10px 0px;
     display: flex;
     align-items: center;
-    /* justify-content: start; */
-
 }
 
 .page-title .sheet-logo img {
     width: 80px;
-
 }
 
 .page-title .sheet-type {
@@ -34,7 +30,6 @@
 
 .Luxuryinvoice-description-table th {
     padding: 10px;
-
 }
 
 .Luxuryinvoice-description-table thead {
@@ -43,13 +38,10 @@
 }
 
 .Luxuryinvoice-description-table .Luxuryinvoice-description-table-header {
-    /* text-align: left !important; */
     padding: 10px;
 }
 
 .Luxuryinvoice-description-table td {
-    /* text-align: center; */
-    /* border-bottom: 1px solid #ddd; */
     padding: 20px 10px;
 }
 
@@ -57,13 +49,11 @@
     text-align: center;
     width: 100%;
     border-bottom: 1.5px solid #000;
-
 }
 
 .header-title {
     padding: 0px 10px;
     display: flex;
-    /* align-items: center; */
     justify-content: space-between;
     border-bottom: 1.5px solid #000;
 }
@@ -102,7 +92,6 @@
 
 .Luxuryinvoice-amountanddetails {
     display: flex;
-    /* align-items: center; */
     justify-content: space-around;
     padding: 0px 10px;
 }
@@ -145,7 +134,6 @@
 td {
     padding: 10px 5px;
     font-size: 13px;
-    /* border-bottom: 1px solid #000 !important; */
 }
 
 
@@ -165,6 +153,7 @@ td {
     display: flex;
     margin: 0px auto;
 }
+
 .Luxuryinvoice-RouteSummary {
     display: flex;
     align-items: flex-end;

@@ -1,13 +1,10 @@
 import React, { useEffect, useContext } from 'react';
 import "./VehicleStatement.css";
-
 import Menu from '@mui/material/Menu';
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-
-
 import { DataGrid } from "@mui/x-data-grid";
 import MenuItem from '@mui/material/MenuItem';
 import Dialog from '@material-ui/core/Dialog';
@@ -23,7 +20,6 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
-
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { PermissionContext } from '../../../context/permissionContext';
 
@@ -35,12 +31,10 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 import useVehiclestatement from './useVehiclestatement';
 import { IoBusinessSharp } from "react-icons/io5";
-import { MdDateRange } from "react-icons/md";
-
+// import { MdDateRange } from "react-icons/md";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -53,10 +47,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-
-
-
-
 
 const VehicleStatement = () => {
 
@@ -113,7 +103,6 @@ const VehicleStatement = () => {
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <IoBusinessSharp color="action" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -134,7 +123,6 @@ const VehicleStatement = () => {
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <IoBusinessSharp color="action" />
                   </div>
-
                   <Autocomplete
                     fullWidth
                     id="free-solo-demo"
@@ -151,13 +139,10 @@ const VehicleStatement = () => {
                     }
                   />
                 </div>
-
-
                 <div className="input vehiecle-date" style={{ width: "250px" }}>
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <CalendarMonthIcon color="action" />
                   </div>
-
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
                       <DatePicker
@@ -165,19 +150,15 @@ const VehicleStatement = () => {
                         value={fromDate}
                         onChange={(date) => setFromDate(date)}
                       />
-
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-
                 <div className="input vehiecle-date" style={{ width: "250px" }}>
                   <div className="icone" style={{ fontSize: '25px' }}>
                     <CalendarMonthIcon color="action" />
                   </div>
-
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker", "DatePicker"]}>
-
                       <DatePicker
                         label="To Date"
                         value={toDate}
@@ -186,8 +167,6 @@ const VehicleStatement = () => {
                     </DemoContainer>
                   </LocalizationProvider>
                 </div>
-
-
               </div>
               <div className="input-field show-btn-vehicle" style={{ justifyContent: "center" }}>
                 <div className="input" style={{ width: "130px" }} >
@@ -212,7 +191,6 @@ const VehicleStatement = () => {
             </div>
           </div>
         </div>
-
         <div className="SpeedDial" style={{ padding: '26px', margin: ' 15px 10px 0px 0px' }}>
           <Box sx={{ position: "relative", mt: 2, }}>
             <StyledSpeedDial
@@ -228,8 +206,6 @@ const VehicleStatement = () => {
                       onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
                     />
                   ))} */}
-
-
               {TripStatus_read === 1 && (
                 <SpeedDialAction
                   key="list"
@@ -238,19 +214,15 @@ const VehicleStatement = () => {
                   onClick={(event) => handleClick(event, "List", selectedCustomerId)}
                 />
               )}
-
               <SpeedDialAction
                 key="Cancel"
                 icon={<CancelPresentationIcon />}
                 tooltipTitle="Cancel"
                 onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
               />
-
-
             </StyledSpeedDial>
           </Box>
         </div>
-
         <div className='alert-popup-main'>
           {error &&
             <div className='alert-popup Error' >

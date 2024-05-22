@@ -125,7 +125,6 @@ const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, Bal
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div className="Luxuryinvoice-location-details">
                     <div className="location-img">
@@ -134,7 +133,6 @@ const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, Bal
                     <div className="Luxuryinvoice-total-details">
                         <table>
                             <thead>
-
                                 <tr>
                                     <th>Starting</th>
                                     <th>Closing</th>
@@ -165,7 +163,6 @@ const PrintableInvoice = ({ tripSheetData, book, roundOff, TotalAmountValue, Bal
                                 </tr>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
                 <div className="Luxuryinvoice-RouteSummary">

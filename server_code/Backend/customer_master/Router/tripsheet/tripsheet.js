@@ -234,6 +234,7 @@ router.post('/tripsheet-add', (req, res) => {
         transferreport
     };
 
+
     // Assuming 'startdate' is in ISO 8601 format
     const formattedStartDate = moment(startdate).format('YYYY-MM-DD');
     const driverTripAssign = {
@@ -243,21 +244,20 @@ router.post('/tripsheet-add', (req, res) => {
         reporttime,
         shedintime
     }
+
+
     db.query('INSERT INTO tripsheet SET ?', addCustomerData, (err, result) => {
 
         if (err) {
+            s
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
         }
-
         if (result.affectedRows > 0) {
-
-
             db.query('INSERT INTO driver_trip_assign SET ?', driverTripAssign, (err, result) => {
                 if (err) {
                     console.log(err, "error")
                     return res.status(500).json({ error: "Failed to insert data into MySQL" });
                 }
-                return res.status(200).json({ message: "Data inserted successfully" });
             })
             db.query(`UPDATE booking SET status = 'Opened' WHERE bookingno=${bookingno}; `, (err, result5) => {
                 if (err) {

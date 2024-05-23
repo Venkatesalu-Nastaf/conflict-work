@@ -17,7 +17,6 @@
   border-top: solid 1px #ccc;
   background: var(--glass);
   padding: 0px;
-  /* margin-top: 10px; */
   margin-bottom: -10px;
 }
 
@@ -48,7 +47,6 @@
   border-radius: 20px;
   height: 3px;
   background-color: #457cdc;
-  /* Adjust color as needed */
 }
 
 .form-container .Tripsheet-form::-webkit-scrollbar-track {
@@ -67,11 +65,9 @@
   width: 81vw;
   display: flex;
   flex-direction: column;
-  /* padding-top: 28px; */
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
-  /* background-color: #f0ece2; */
 }
 
 @media screen and (min-width: 1113px) and (max-width: 1267px) {
@@ -137,7 +133,6 @@
 /*Dialogbox image*/
 .dialogboximg {
   width: 535px;
-  /* height: 535px; */
 }
 
 .mapview {
@@ -167,16 +162,16 @@
   width: 150px;
 }
 
-.tripsheet-heading{
+.tripsheet-heading {
   position: sticky;
   top: -27px;
   z-index: 5;
   background-color: #f0ece2;
-  padding: 10px ;
+  padding: 10px;
   margin: 0px;
 }
 
-.head-tab-tripsheet{
+.head-tab-tripsheet {
   position: sticky !important;
   top: 0px;
   z-index: 1051;
@@ -196,12 +191,11 @@
   background-color: #457cdc;
 }
 
-.form-container .Title-Name{
+.form-container .Title-Name {
   padding-left: 10px !important;
 }
 
 .time input {
-  /* width: 181px; */
   margin-top: 10px;
   margin-bottom: 25px;
   background: transparent;
@@ -212,18 +206,17 @@
   font-size: 17px;
 }
 
-.icone{
+.icone {
   padding: 10px 8px 0px 0px !important;
   color: #737271 !important;
 }
 
-.input{
+.input {
   width: 255px !important;
 }
 
 .tripsheet-table1 {
   width: 500px;
-  /* padding: 10px; */
   background-color: #fff;
   border-radius: 10px;
   border: 2px solid #ccc;
@@ -237,7 +230,9 @@
   }
 }
 
-.tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+.tripsheet-division1,
+.tripsheet-division2,
+.tripsheet-division3 {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -249,126 +244,103 @@
 }
 
 @media screen and (min-width: 1113px) and (max-width: 1266px) {
-  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
     width: 79vw;
   }
 }
 
 @media screen and (min-width: 909px) and (max-width: 1112.99px) {
-  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
     width: 73vw;
   }
 }
 
 @media screen and (min-width: 769px) and (max-width: 910px) {
-  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
     width: 66vw;
     justify-content: center;
   }
 }
 
 @media screen and (min-width: 320px) and (max-width: 768.99px) {
-  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
     width: 71vw;
     justify-content: center;
   }
 }
 
-/* .tripsheet-division2{
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 12px;
-  border-bottom: 1px solid;
-  padding: 30px 0px;
-  width: 75vw;
-} */
-
-/* @media screen and (min-width: 769px) and (max-width: 910px) {
-  .tripsheet-division2{
-    width: 68vw;
-  }
-} */
-
-/* .tripsheet-division3{
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  border-bottom: 1px solid;
-  justify-content: space-around;
-  padding: 30px 0px;
-  width: 75vw;
-} */
-
-/* @media screen and (min-width: 769px) and (max-width: 910px) {
-  .tripsheet-division3{
-    width: 68vw;
-  }
-} */
-
 @media screen and (min-width: 910px) and (max-width: 956px) {
-  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
     width: 71vw;
   }
 }
 
-.tripsheet-address{
+.tripsheet-address {
   width: 20vw;
 }
 
 @media screen and (max-width: 1060px) {
-  .tripsheet-address{
+  .tripsheet-address {
     width: 40vw;
   }
 }
-.table-input-field{
+
+.table-input-field {
   flex-wrap: wrap;
   justify-content: space-around;
 }
 
 @media screen and (max-width: 673px) {
-  .tripsheet-tab{
+  .tripsheet-tab {
     width: 150vw;
   }
 }
 
-.address-field{
+.address-field {
   width: 25vw;
 }
 
 @media screen and (min-width: 600px) and (max-width: 1146.99px) {
-  .address-field{
+  .address-field {
     width: 40vw;
   }
 }
 
 @media screen and (max-width: 599.99px) {
-  .address-field{
+  .address-field {
     width: 55vw;
   }
 }
 
-.remark-textfield{
+.remark-textfield {
   width: 400px !important;
 }
 
 @media screen and (max-width: 600px) {
-  .remark-textfield{
+  .remark-textfield {
     width: 400px !important;
   }
 }
 
-/* .table-head-booking{
-  background-color: #76757d !important;
-  color: #fff !important;
-  font-size: larger;
-} */
-
-
 @media screen and (max-width:1080px) {
-  .tripsheet-division1, .tripsheet-division2, .tripsheet-division3{
+  .tripsheet-division1,
+  .tripsheet-division2,
+  .tripsheet-division3 {
     justify-content: center;
   }
 }

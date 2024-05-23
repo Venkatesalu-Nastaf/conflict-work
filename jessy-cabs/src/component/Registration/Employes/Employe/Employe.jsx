@@ -2,9 +2,7 @@ import React, { useEffect, useContext } from "react";
 import "./Employe.css";
 import "jspdf-autotable";
 import dayjs from "dayjs";
-
 import Box from "@mui/material/Box";
-
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -13,12 +11,10 @@ import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import { TextField } from "@mui/material";
 import { AiOutlineFileSearch } from "react-icons/ai";
-
 import { BsInfo } from "@react-icons/all-files/bs/BsInfo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
-
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 
@@ -56,8 +52,6 @@ import { APIURL } from "../../../url";
 // import DateRangeIcon from '@mui/icons-material/DateRange';
 import { PermissionContext } from "../../../context/permissionContext";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
-
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -122,7 +116,6 @@ const Employe = () => {
 
   // permissions
   const { permissions } = useContext(PermissionContext)
-
   const Employee_read = permissions[11]?.read;
   const Employee_new = permissions[11]?.new;
   const Employee_modify = permissions[11]?.modify;
@@ -194,8 +187,6 @@ const Employe = () => {
                   style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <WorkOutlineRoundedIcon color="action" />
@@ -266,28 +257,12 @@ const Employe = () => {
                   style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
               <div className="input input-address" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <AddHomeWorkIcon color="action" />
                 </div>
-                {/* <TextField
-                  sx={{ width: "415px" }}
-                  size="small"
-                  id="address1"
-                  label="Address"
-                  name="address1"
-                  autoComplete="new-password"
-                  value={selectedCustomerData?.address1 || book.address1}
-                  onChange={handleChange}
-                  variant="standard"
-                  style={{ width: '100%' }}
-                /> */}
-
                 <TextField
                   margin="normal"
-                  // size="small"
                   id="address1"
                   label="Address"
                   name="address1"
@@ -330,9 +305,6 @@ const Employe = () => {
                   style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
-              
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <EscalatorWarningIcon color="action" />
@@ -363,8 +335,6 @@ const Employe = () => {
                   style={{ width: '100%' }}
                 />
               </div>
-              {/* </div>
-            <div className="input-field"> */}
               <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <DeviceHubRoundedIcon color="action" />
@@ -429,26 +399,6 @@ const Employe = () => {
                   )}
                 </div>
               </div>
-
-              {/* <div className="input" style={{ width: "20px" }}>
-                {selectedCustomerData?.empid || book.empid ? (
-                  <Button component="label">
-                    <UploadFileIcon />
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={(e) => setFile(e.target.files[0])}
-                    />
-                  </Button>
-                ) : (
-                  <Button color="primary" variant="contained" onClick={() => {
-                    setError(true);
-                    setErrorMessage("Please Enter Booking No");
-                  }}>
-                    <UploadFileIcon />
-                  </Button>
-                )}
-              </div> */}
             </div>
             <div className="input-field">
               <div className="input" style={{ width: "160px" }}>
@@ -517,17 +467,6 @@ const Employe = () => {
             icon={<SpeedDialIcon />}
             direction="left"
           >
-            {/* {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={(event) =>
-                  handleClick(event, action.name, selectedCustomerId)
-                }
-              />
-            ))} */}
-
             {Employee_read === 1 && (
               <SpeedDialAction
                 key="list"
@@ -566,8 +505,6 @@ const Employe = () => {
               tooltipTitle="Cancel"
               onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
             />
-
-
           </StyledSpeedDial>
         </Box>
         <div className="Employe-search-container">

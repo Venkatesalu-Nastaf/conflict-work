@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./MailDetails.css";
-import { Table } from "@mui/joy";
+// import { Table } from "@mui/joy";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import { useNavigate } from "react-router-dom";
+import { DataGrid } from "@mui/x-data-grid";
 // ICONS
 import SmsIcon from '@mui/icons-material/Sms';
 import SendIcon from '@mui/icons-material/Send';
@@ -21,16 +22,12 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 
-import xlsx from "../../../../assets/files/SampleXLSXFile.xlsx"
+import xlsx from "../../../../assets/files/SampleXLSXFile.xlsx";
+import { APIURL } from "../../../url";
+import axios from 'axios'
 
 
-const rows = [
-  // createData('1', "John Doe", "9912277222"),
-  // createData('2', "Jane Smith", "9123317892"),
-  // createData('3', "Michael Johnson", "73421288938"),
-  // createData('4', "Sarah Davis", "62779165285"),
-  // createData('5', "Robert Wilson", "7729734456"),
-];
+
 
 // const rowsTemplate = [
 // createDataTemplate('1', '123', 'Hello, how are you?'),
@@ -40,6 +37,7 @@ const rows = [
 // createDataTemplate('5', '127', 'Thank you for your purchase.'),
 // ];
 // TABLE END
+
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -63,6 +61,110 @@ const actions = [
 
 
 const MailDetails = () => {
+  const apiurl=APIURL
+  const[templatedata,setTemplateData] =useState([])
+  const [triggerdata,setTriggerData]=useState(false)
+  const columns = [
+    { field: "idno", headerName: "Sno", width: 70 },
+    { field: "Templateid", headerName: "Templateid", width: 130 },
+    { field: "TemplateName", headerName: "Template Name", width: 130 },
+    { field: "TemplateSubject", headerName: "Template Subject", width: 130 },
+    {
+      field: 'TemplateMessageData',
+      headerName: 'Template Message',
+      width: 300,
+      renderCell: (params) => {
+        return (
+          <span>{convertToPlain(params.value)}</span>
+        );
+      }
+    },
+    {
+      field: 'Edit',
+      headerName: 'Edit',
+      width: 130,
+      renderCell: (params) => (
+          <Button
+              onClick={() => handleButtonEditClick(params)}
+              aria-label="open-dialog"
+          >
+              <Button variant="contained" color="primary">
+                  Edit
+              </Button>
+
+          </Button>
+      ),
+  },
+  {
+    field: 'Delete',
+    headerName: 'Delete',
+    width: 130,
+    renderCell: (params) => (
+        <Button
+            onClick={() => handleButtondeleteClick(params)}
+            aria-label="open-dialog"
+        >
+            <Button variant="contained" color="primary">
+                Delete
+            </Button>
+
+        </Button>
+    ),
+},
+  ]
+  useEffect(()=>{
+    const fetchdata=async()=>{
+      try{
+        const response=await axios.get(`${apiurl}/templatedataall`)
+        const data=response.data
+        console.log(data,"temp")
+        const rowuniqueid=data.map((row,index)=>({
+          ...row,
+          idno:index+1
+
+
+        }))
+        setTemplateData(rowuniqueid)
+        setTriggerData(false)
+      }
+      catch(err){
+        console.log(err)
+      }
+    }
+    fetchdata()
+  },[apiurl,triggerdata])
+
+  function convertToPlain(html) {
+    var tempDivElement = document.createElement("div");
+    tempDivElement.innerHTML = html;
+    return tempDivElement.textContent || tempDivElement.innerText || "";
+  }
+
+  const handleButtondeleteClick = async(params) => {
+    console.log(params, 'params');
+    const { Templateid } = params.row;
+    try{
+      const response=await axios.delete(`${apiurl}/templatedataypdate/${Templateid}`)
+      console.log(response)
+      setTriggerData(true)
+
+    }
+    catch(err){
+      console.log(err)
+    }
+  
+  }
+
+
+  const handleButtonEditClick = async(params) => {
+    console.log(params, 'params');
+    console.log(params.row)
+    const dispatchcheck="true"
+
+    const billingPageUrl = `/home/info/mailer/TemplateCreation??dispatchcheck=${dispatchcheck}`
+    
+  
+  }
 
   const handleIconClick = () => {
     document.getElementById('fileInput').click();
@@ -161,26 +263,43 @@ const MailDetails = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="mailDetails-list-update">
+                    {/* <div className="mailDetails-list-update">
                       <Table stickyHeader hoverRow borderAxis="y">
                         <thead>
                           <tr>
                             <th style={{ width: "5%" }}>Sno</th>
-                            <th style={{ width: "20%" }}>TemplateName</th>
+                            <th style={{ width: "20%" }}>Templateid</th>
                             <th style={{ width: "20%" }}>UsedFor</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {rows.map((row) => (
-                            <tr key={row.name}>
+                          {templatedata?.map((row) => (
+                            <tr key={row.id}>
                               <td>{row.Sno}</td>
+                              <td>{row.templateid}</td>
                               <td>{row.TemplateName}</td>
-                              <td>{row.UsedFor}</td>
+                              <td>{row.TemplateSubject}</td>
+                              <td>{row.TemplateMessageData}</td>
                             </tr>
                           ))}
                         </tbody>
                       </Table>
-                    </div>
+                    </div> */}
+
+          <div className="table-bookingCopy-TransferDataEntry">
+          <div style={{ height: 400, width: "100%" }}>
+            <DataGrid
+              rows={templatedata}
+              columns={columns}
+              // onRowSelectionModelChange={(newRowSelectionModel) => {
+              //   setRowSelectionModel(newRowSelectionModel);
+              //   handleRowSelection(newRowSelectionModel);
+              // }}
+           
+              
+            />
+          </div>
+          </div>
                   </div>
                 </div>
               </div>

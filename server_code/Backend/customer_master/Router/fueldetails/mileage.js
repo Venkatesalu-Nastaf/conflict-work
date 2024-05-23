@@ -50,4 +50,6 @@ router.post('/fueldetails', (req, res) => {
   });
   // End Fuel Details database
 
+  
+
 module.exports = router;

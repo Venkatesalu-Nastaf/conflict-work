@@ -322,7 +322,7 @@ const useBooking = () => {
       report: "",
       vehType: "",
       paymenttype: "",
-      // startdate: "",
+      startdate: "",
       starttime: "",
       reporttime: "",
       duty: "",

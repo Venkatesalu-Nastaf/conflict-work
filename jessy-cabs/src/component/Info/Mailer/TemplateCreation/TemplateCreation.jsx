@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState,useEffect } from 'react';
 
 import "./TemplateCreation.css"
 import { IoChevronBack } from "react-icons/io5";
@@ -12,12 +12,108 @@ import 'react-quill/dist/quill.snow.css'; // Import Quill styles
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import axios from 'axios'
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import ClearIcon from '@mui/icons-material/Clear';
 // import { TiTick } from "react-icons/ti";
 // import { AiOutlineClose } from "react-icons/ai";
 import { BsExclamationCircle } from "react-icons/bs";
 // import { BiBorderRadius } from 'react-icons/bi';
+import { APIURL }  from '../../../url'
+
 
 const TemplateCreation = () => {
+  const apiurl=APIURL
+ const[templatedata,setTemplateData]=useState({
+
+  TemplateName:'',
+  TemplateSubject:'',
+  TemplateMessageData:'',
+
+
+ })
+ const [error,setError]=useState(false);
+ const[errorMessage,setErrorMessage]=useState({})
+ const [success,setSuccess]=useState(false)
+ const[successMessage,setSuccessMessage]=useState({})
+
+ const handleChange = (event) => {
+  const { name, value } = event.target;
+  setTemplateData(prevData => ({
+    ...prevData,
+    [name]: value,
+  }));
+};
+
+// const convertToPlain = (html) => {
+//   // Create a new div element
+//   var tempDivElement = document.createElement("div");
+//   // Set the HTML content with the given value
+//   tempDivElement.innerHTML = html;
+//   // Retrieve the text property of the element 
+//   return tempDivElement.textContent || tempDivElement.innerText || "";
+// };
+
+const handleQuillChange = (content) => {
+  
+  setTemplateData(prevData => ({
+    ...prevData,
+    TemplateMessageData:content,
+  }));
+};
+
+ const hidePopup = () => {
+  setSuccess(false);
+  setError(false);
+
+};
+
+useEffect(() => {
+  if (error || success ) {
+      const timer = setTimeout(() => {
+          hidePopup();
+      }, 3000);
+      return () => clearTimeout(timer);
+  }
+}, [error, success]);
+
+ const handleADD=async()=>{
+  if(!templatedata.TemplateName){
+    setError(true);
+    setErrorMessage("PLease fill TemplateName");
+    return;
+    
+  }
+  if(!templatedata.TemplateSubject){
+    setError(true);
+    setErrorMessage("PLease FILL TemplateSubject");
+    return;
+    
+  }
+  if(!templatedata.TemplateMessageData){
+    setError(true);
+    setErrorMessage("PLease FILL TemplateSubject");
+    return;
+    
+  }
+  try{
+    
+    const data={...templatedata}
+    console.log(data,"ddd")
+    await axios.post(`${apiurl}/templatedatainsert`,data)
+    setSuccess(true);
+    setSuccessMessage("Successfully Added");
+
+
+  }
+  catch(err){
+    console.log(err)
+
+  }
+ }
+
+
+
 
   const navigate = useNavigate();
   const BackToSelection = () => {
@@ -30,10 +126,10 @@ const TemplateCreation = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleSave = () => {
-    // Your save logic here
-    handleClose();
-  };
+  // const handleSave = () => {
+  //   // Your save logic here
+  //   handleClose();
+  // };
 
 
   const fileInputRef = useRef(null);
@@ -42,15 +138,23 @@ const TemplateCreation = () => {
     fileInputRef.current.click();
   };
 
+  // const handleFileInputChange = (e) => {
+  //   setTemplateData({
+  //     ...templatedata,
+  //     Attachmentdata: e.target.files[0]
+  //   });
+  // };
   const handleFileInputChange = (e) => {
-    // const file = e.target.files[0];
+    const files = Array.from(e.target.files);
+    setTemplateData(prevData => ({
+      ...prevData,
+      Attachmentdata: [...prevData.Attachmentdata, ...files] // Append new files to the existing array
+    }));
   };
 
-  const [content, setContent] = useState('');
+  
 
-  const handleChange = (value) => {
-    setContent(value);
-  };
+ 
 
   const [openmodals, setOpenmodals] = React.useState(false);
   const handleOpenmodal = () => {
@@ -77,10 +181,10 @@ const TemplateCreation = () => {
           <div style={{ cursor: 'pointer' }}><p className='back-section text-white' onClick={BackToSelection}> <IoChevronBack /></p></div>
           <div>
             <div>
-              <input type="text" className='template-name' placeholder='Enter a template name' />
+              <input type="text" className='template-name' name="TemplateName"value={templatedata.TemplateName} onChange={handleChange} placeholder='Enter a template name' />
             </div>
             <div>
-              <input type="text" className='template-subject' placeholder='Enter a template subject' />
+              <input type="text" className='template-subject' name="TemplateSubject" value={templatedata.TemplateSubject} onChange={handleChange} placeholder='Enter a template subject' />
             </div>
           </div>
         </div>
@@ -154,17 +258,19 @@ const TemplateCreation = () => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleSave}>Save</MenuItem>
-              <MenuItem onClick={handleClose}>Save As Draft</MenuItem>
+              {/* <MenuItem onClick={handleSave}>Save</MenuItem> */}
+              <MenuItem onClick={handleADD}>Save</MenuItem>
+              {/* <MenuItem onClick={handleClose}>Save As Draft</MenuItem> */}
             </Menu>
           </div>
         </div>
       </div>
       <ReactQuill
         theme="snow"
-        value={content}
-        onChange={handleChange}
+        value={templatedata.TemplateMessageData}
+        onChange={(e)=>handleQuillChange(e)}
         className='quill-editor'
+    
         modules={{
           toolbar: [
             [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
@@ -176,6 +282,25 @@ const TemplateCreation = () => {
           ],
         }}
       />
+
+
+<div className='alert-popup-main'>
+                        {error &&
+                            <div className='alert-popup Error' >
+                                <div className="popup-icon"> <ClearIcon style={{ color: '#fff' }} /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <p>{errorMessage}</p>
+                            </div>
+                        }
+
+                        {success &&
+                            <div className='alert-popup Success' >
+                                <div className="popup-icon"> <FileDownloadDoneIcon style={{ color: '#fff' }} /> </div>
+                                <span className='cancel-btn' onClick={hidePopup}><ClearIcon color='action' style={{ fontSize: '14px' }} /> </span>
+                                <p>{successMessage}</p>
+                            </div>
+                        }
+                        </div>
     </>
   )
 }

@@ -68,7 +68,7 @@
 .form-container .container-main {
   border: 2px solid #ccc;
   overflow: scroll;
-  height: 77vh;
+  height: 71vh;
   width: 81vw;
   display: flex;
   flex-direction: column;

@@ -476,14 +476,6 @@ const useDrivercreation = () => {
             setErrorMessage("All fields are mandatory");
             return
         }
-
-        if (!book.city) {
-
-            setError(true)
-            setErrorMessage("All fields are mandatory");
-            return
-
-        }
         if (!book.licenseexpdate) {
             setError(true)
             setErrorMessage("All fields are mandatory");

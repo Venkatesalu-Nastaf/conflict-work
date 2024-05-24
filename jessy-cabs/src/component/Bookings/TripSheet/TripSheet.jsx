@@ -13,7 +13,6 @@ import {
   GroupTypes
 } from "./TripSheetdata";
 import dayjs from "dayjs";
-// import { Table } from "@mui/joy";
 import Tabs from "@mui/joy/Tabs";
 import Box from "@mui/material/Box";
 import TabList from "@mui/joy/TabList";
@@ -23,6 +22,7 @@ import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import Tab, { tabClasses } from "@mui/joy/Tab";
+
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -57,7 +57,7 @@ import DataUsageIcon from "@mui/icons-material/DataUsage";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
-// import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
+import HomeTwoToneIcon from "@mui/icons-material/HomeTwoTone";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import EngineeringIcon from "@mui/icons-material/Engineering";
@@ -65,7 +65,7 @@ import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-// import LocationCityIcon from "@mui/icons-material/LocationCity";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import MarkChatReadIcon from "@mui/icons-material/MarkChatRead";
@@ -97,11 +97,18 @@ import { faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { faSuitcaseRolling } from "@fortawesome/free-solid-svg-icons";
 import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 import { PermissionContext } from '../../context/permissionContext';
+
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ChecklistIcon from "@mui/icons-material/Checklist";
+
+import {
+  vehicaleinfos
+} from "../../Bookings/BookingMain/Booking/Booking";
+import { PiCarSimpleFill } from 'react-icons/pi';
+
+
 import useTripsheet from './useTripsheet';
-import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
 // UpdateTbaleRowsGPSSlider TABLE START
 const columns = [
@@ -158,10 +165,13 @@ const maplogcolumns = [
 
 const TripSheet = ({ stationName }) => {
 
+  // console.log("333", stationName)
+
+
   const {
     selectedCustomerData, handleConfirm, driverBeta, driverbeta_Count, nightBta, nightCount,
     selectedCustomerId, setNightBeta, setNightCount, request, setRequest, calcCheck, vehileName,
-    rows,
+    rows, handleKeyEnterDriverDetails,
     actionName,
     error,
     success,
@@ -177,6 +187,7 @@ const TripSheet = ({ stationName }) => {
     handleRowClick,
     handleAdd,
     hidePopup,
+    formData,
     handleKeyDown,
     handleDateChange,
     handleAutocompleteChange,
@@ -191,19 +202,19 @@ const TripSheet = ({ stationName }) => {
     calculateTotalDays,
     setStartTime,
     setBook,
-
+    setFormData,
     setSelectedCustomerData,
     setCloseTime,
     calculateTotalTime,
     organizationdata,
     popupOpen,
     setSmsGuest,
-    handleKeyEnter,
     setSelectedCustomerDatas,
     setreporttime,
     setshedintime,
     shedKilometers,
     calculateTotalKilometers,
+    additionalTime,
     handleETripsheetClick,
     handlePopupClose,
     tripSheetData,
@@ -239,11 +250,10 @@ const TripSheet = ({ stationName }) => {
     isSignatureSubmitted,
     isEditMode,
     handleEdit,
-    SignPage,
+    SignPage, driverdetails,
     sign, handleCalc, calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount,
     ex_kmAmount, ex_hrAmount, night_totalAmount, driverBeta_calc, driverbeta_Count_calc, driverBeta_amount,
-    totalcalcAmount, escort, handleEscortChange, handleClickOpen, open, handleClose, handleTransferChange, transferreport,
-    nocchangeData,
+    totalcalcAmount, escort, handleEscortChange, handleClickOpen, open, handleClose, handleTransferChange, transferreport
 
   } = useTripsheet();
 
@@ -256,136 +266,21 @@ const TripSheet = ({ stationName }) => {
 
   // Permission ------------ayyan
   const { permissions } = useContext(PermissionContext)
+
   const Tripsheet_read = permissions[3]?.read;
   const Tripsheet_new = permissions[3]?.new;
   const Tripsheet_modify = permissions[3]?.modify;
   const Tripsheet_delete = permissions[3]?.delete;
-  // No chnage ----------
 
-  const handleNoChange = (e) => {
-    const { name } = e.target;
-    if (name === 'tripid' && !nocchangeData.tripid) {
-      handleChange(e);
-    }
 
-    if (name === 'bookingno' && !nocchangeData.bookingno) {
-      handleChange(e);
-    };
 
-    if (name === 'billingno' && !nocchangeData.billingno) {
-      handleChange(e);
-    };
-
-    if (name === 'customer' && !nocchangeData.customer) {
-      handleChange(e);
-    };
-
-    if (name === 'orderedby' && !nocchangeData.orderedby) {
-      handleChange(e);
-    };
-
-    if (name === 'mobile' && !nocchangeData.mobile) {
-      handleChange(e);
-    };
-
-    if (name === 'guestname' && !nocchangeData.guestname) {
-      handleChange(e);
-    };
-
-    if (name === 'guestmobileno' && !nocchangeData.guestmobileno) {
-      handleChange(e);
-    };
-
-    if (name === 'email' && !nocchangeData.email) {
-      handleChange(e);
-    };
-
-    if (name === 'remark' && !nocchangeData.remark) {
-      handleChange(e);
-    };
-
-    if (name === 'vehRegNo' && !nocchangeData.vehRegNo) {
-      handleChange(e);
-    };
-
-    if (name === 'driverName' && !nocchangeData.driverName) {
-      handleChange(e);
-    };
-
-    if (name === 'mobileNo' && !nocchangeData.mobileNo) {
-      handleChange(e);
-    };
-
-    if (name === 'useage' && !nocchangeData.useage) {
-      handleChange(e);
-    };
-
-    if (name === 'customercode' && !nocchangeData.customercode) {
-      handleChange(e);
-    };
-
-    if (name === 'employeeno' && !nocchangeData.employeeno) {
-      handleChange(e);
-    };
-
-    if (name === 'employeeno' && !nocchangeData.employeeno) {
-      handleChange(e);
-    };
-
-    if (name === 'advancepaidtovendor' && !nocchangeData.advancepaidtovendor) {
-      handleChange(e);
-    };
-
-    if (name === 'employeeno' && !nocchangeData.employeeno) {
-      handleChange(e);
-    };
-
-    if (name === 'shedout' && !nocchangeData.shedout) {
-      handleChange(e);
-    };
-
-    if (name === 'startkm' && !nocchangeData.startkm) {
-      handleChange(e);
-    };
-
-    if (name === 'closekm' && !nocchangeData.closekm) {
-      handleChange(e);
-    };
-
-    if (name === 'shedin' && !nocchangeData.shedin) {
-      handleChange(e);
-    };
-
-    if (name === 'shedkm' && !nocchangeData.shedkm) {
-      handleChange(e);
-    };
-
-    if (name === 'totalkm1' && !nocchangeData.totalkm1) {
-      handleChange(e);
-    };
-
-    if (name === 'additionaltime' && !nocchangeData.additionaltime) {
-      handleChange(e);
-    };
-
-    if (name === 'totaltime' && !nocchangeData.totaltime) {
-      handleChange(e);
-    };
-
-    if (name === 'permit' && !nocchangeData.permit) {
-      handleChange(e);
-    };
-
-    if (name === 'additionaltime' && !nocchangeData.additionaltime) {
-      handleChange(e);
-    };
-  }
   return (
     <div className="form-container">
       <div className="Tripsheet-form">
         <form action="">
           <p className="Title-Name head-tab-tripsheet">Trip Sheet</p>
           <div className="Tripsheet-header">
+
             <div>
               <div className='tripsheet-division1'>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
@@ -398,13 +293,14 @@ const TripSheet = ({ stationName }) => {
                     id="tripid"
                     label="Trip Sheet No"
                     name="tripid"
-                    value={nocchangeData.tripid || selectedCustomerData.tripid || book.tripid || ''}
-                    onChange={handleNoChange}
+                    value={formData.tripid || selectedCustomerData.tripid || book.tripid || ''}
+                    onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     autoComplete="password"
                     autoFocus
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <BadgeIcon color="action" />
@@ -415,18 +311,17 @@ const TripSheet = ({ stationName }) => {
                     id="bookingid"
                     label="Booking ID"
                     name="bookingno"
-                    value={nocchangeData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
-                    onChange={handleNoChange}
+                    value={formData.bookingno || selectedCustomerData.bookingno || book.bookingno || ''}
+                    onChange={handleChange}
                     autoComplete="password"
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex' }}>
-                  <div className="icone">
-                    <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
-                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
+
                     <DatePicker
-                      value={nocchangeData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
+                      value={formData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
                       format="DD/MM/YYYY"
                       label='Tripsheet Date'
                       onChange={(date) => handleDateChange(date, 'tripsheetdate')}
@@ -435,8 +330,10 @@ const TripSheet = ({ stationName }) => {
                         <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.tripsheetdate} />
                       )}
                     </DatePicker>
+
                   </LocalizationProvider>
                 </div>
+
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <QuizOutlinedIcon color="action" />
@@ -448,11 +345,11 @@ const TripSheet = ({ stationName }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "status")}
-                    value={Status.find((option) => option.optionvalue)?.label || nocchangeData.status || selectedCustomerData.status || book.status || 'Opened'}
+                    value={Status.find((option) => option.optionvalue)?.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                     options={Status.map((option) => ({
                       label: option.Option,
                     }))}
-                    getOptionLabel={(option) => option.label || nocchangeData.status || selectedCustomerData.status || book.status || 'Opened'}
+                    getOptionLabel={(option) => option.label || formData.status || selectedCustomerData.status || book.status || 'Opened'}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Status" autoComplete="password" name="status" inputRef={params.inputRef} />
@@ -461,6 +358,7 @@ const TripSheet = ({ stationName }) => {
                     }
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AccountBalanceWalletIcon color="action" />
@@ -471,12 +369,13 @@ const TripSheet = ({ stationName }) => {
                     id="billingno"
                     label="Billing No"
                     name="billingno"
-                    value={nocchangeData.billingno || selectedCustomerData.billingno || book.billingno || ''}
-                    onChange={handleNoChange}
+                    value={formData.billingno || selectedCustomerData.billingno || book.billingno || ''}
+                    onChange={handleChange}
                     autoComplete="password"
                     required
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <AppsOutageOutlinedIcon color="action" />
@@ -488,11 +387,11 @@ const TripSheet = ({ stationName }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "apps")}
-                    value={Apps.find((option) => option.optionvalue)?.label || nocchangeData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
+                    value={Apps.find((option) => option.optionvalue)?.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
                     options={Apps.map((option) => ({
                       label: option.Option,
                     }))}
-                    getOptionLabel={(option) => option.label || nocchangeData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
+                    getOptionLabel={(option) => option.label || formData.apps || selectedCustomerData.apps || book.apps || 'Waiting'}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Apps" autoComplete="password" name="apps" inputRef={params.inputRef} />
@@ -507,14 +406,13 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     name="customer"
-                    value={nocchangeData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
-                    onChange={handleNoChange}
+                    value={formData.customer || selectedCustomerData.customer || book.customer || packageData.customer || ''}
+                    onChange={handleChange}
                     label="Customer"
                     id="standard-size-normal"
                     variant="standard"
                     required
                     autoComplete="password"
-                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
@@ -523,17 +421,32 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     name="orderedby"
-                    value={nocchangeData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
-                    onChange={handleNoChange}
+                    value={formData.orderedby || selectedCustomerData.orderedby || book.orderedby || ''}
+                    onChange={handleChange}
                     label="Ordered By"
                     id="standard-size-normal"
                     variant="standard"
                     autoComplete="password"
                     required
-                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className='input'>
+                  {/* <FormControlLabel
+                    value="smsguest"
+                    control={
+                      <Checkbox
+                        size="small"
+                        name="smsguest"
+                        checked={smsguest || formData.smsguest || book.smsguest}
+                        onChange={(event) => {
+                          setBook({ ...book, smsguest: event.target.checked });
+                          setFormData({ ...formData, guestsms: event.target.checked });
+                          setSmsGuest(event.target.checked);
+                        }}
+                      />
+                    }
+                    label="Guest SMS"
+                  /> */}
                   <FormControlLabel
                     value="smsguest"
                     control={
@@ -545,6 +458,24 @@ const TripSheet = ({ stationName }) => {
                     }
                     label="Guest SMS"
                   />
+                  {/* <FormControlLabel
+                    name="booker"
+                    value="booker"
+                    control={<Checkbox size="small" />}
+                    label="Booker"
+                    autoComplete="new-password"
+                    onChange={handleChange}
+                    checked={Boolean(formData.booker || selectedCustomerData?.booker || book.booker)}
+                  /> */}
+                  {/* <FormControlLabel
+                    name="emailcheck"
+                    value="email"
+                    label="Email"
+                    autoComplete="new-password"
+                    onChange={handleChange}
+                    checked={Boolean(formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck)}
+                    control={<Checkbox size="small" checked={sendEmail || formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck} onChange={(event) => setSendEmail(event.target.checked)} />}
+                  /> */}
                   <FormControlLabel
                     value="email"
                     control={
@@ -557,14 +488,15 @@ const TripSheet = ({ stationName }) => {
                     label="Email"
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <PhoneIphoneIcon color="action" />
                   </div>
                   <TextField
                     name="mobile"
-                    value={nocchangeData.mobile || selectedCustomerData.mobile || book.mobile || ''}
-                    onChange={handleNoChange}
+                    value={formData.mobile || selectedCustomerData.mobile || book.mobile || ''}
+                    onChange={handleChange}
                     label="Mobile"
                     id="standard-size-normal"
                     size="small"
@@ -572,6 +504,7 @@ const TripSheet = ({ stationName }) => {
                     required
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AssignmentIndIcon color="action" />
@@ -581,42 +514,47 @@ const TripSheet = ({ stationName }) => {
                     id="username"
                     label="Guest Name"
                     name="guestname"
-                    value={nocchangeData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
-                    onChange={handleNoChange}
+                    value={formData.guestname || selectedCustomerData.guestname || formValues.guestname || book.guestname || ''}
+                    onChange={handleChange}
                     size="small"
                     autoComplete="password"
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <CallIcon color="action" />
                   </div>
                   <TextField
                     name="guestmobileno"
-                    value={nocchangeData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
-                    onChange={handleNoChange}
+                    value={formData.guestmobileno || selectedCustomerData.guestmobileno || formValues.guestmobileno || book.guestmobileno || ''}
+                    onChange={handleChange}
                     label="Phone (Cell)"
                     id="Phonecell"
                     size="small"
                     autoComplete="password"
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex' }}>
                   <div className="icone">
                     <AttachEmailIcon color="action" />
                   </div>
                   <TextField
                     name="email"
-                    value={nocchangeData.email || selectedCustomerData.email || formValues.email || book.email || ''}
-                    onChange={handleNoChange}
+                    value={formData.email || selectedCustomerData.email || formValues.email || book.email || ''}
+                    onChange={handleChange}
                     label="Email"
                     id="email"
                     size="small"
                     autoComplete="password"
                   />
                 </div>
+
               </div>
+
               <div className='tripsheet-division2'>
+
                 <div>
                   <div className="" style={{ display: 'flex', alignItems: 'center' }}>
                     <div className="icone">
@@ -624,68 +562,137 @@ const TripSheet = ({ stationName }) => {
                     </div>
                     <TextField
                       size="small"
-                      name="remark"
-                      className='address-field'
-                      value={nocchangeData.address1 || selectedCustomerData.address1 || book.address1 || ''}
-                      onChange={handleNoChange}
+                      name="address1"
+                      className='tripsheet-address'
+                      value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
+                      onChange={handleChange}
                       label="Address"
                       id="remark"
-                      multiline
-                      rows={5}
-                      sx={{ m: 2 }}
+                      sx={{ m: 1 }}
+                      variant="standard"
+                      autoComplete="password"
+                    />
+                  </div>
+
+                  <div className="" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className="icone">
+                      <HomeTwoToneIcon color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      name="streetno"
+                      className='tripsheet-address'
+                      value={formData.streetno || selectedCustomerData.streetno || book.streetno || ''}
+                      onChange={handleChange}
+                      id="remark"
+                      sx={{ m: 1 }}
+                      variant="standard"
+                      autoComplete="password"
+                    />
+                  </div>
+
+                  <div className="" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className="icone">
+                      <LocationCityIcon color="action" />
+                    </div>
+                    <TextField
+                      size="small"
+                      name="city"
+                      className='tripsheet-address'
+                      value={formData.city || selectedCustomerData.city || book.city || ''}
+                      onChange={handleChange}
+                      id="address3"
+                      sx={{ m: 1 }}
+                      variant="standard"
                       autoComplete="password"
                     />
                   </div>
                 </div>
-                <div style={{ margin: '0px 10px' }}>
-                  <div className="Scroll-Style tripsheet-table1 ">
-                    <thead>
-                      <tr>
-                        <th className="table-head-booking" style={{ borderTopLeftRadius: '10px' }}>Vehicle_Name</th>
-                        <th className="table-head-booking">Vehicle_Type</th>
-                        <th className="table-head-booking">Driver_name</th>
-                        <th className="table-head-booking">Driver_phone</th>
-                        <th className="table-head-booking">Supplier</th>
-                        <th className="table-head-booking" style={{ borderTopRightRadius: '10px' }}>Online_Access</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rows.length === 0 ? (
+
+                <div>
+                  {/* <div className="Scroll-Style tripsheet-table1">
+                    <Table hoverRow borderAxis="y">
+                      <thead>
                         <tr>
-                          <td colSpan={7}>No data available.</td>
+                          <th>Vehicle_Name</th>
+                          <th>Vehicle_Type</th>
+                          <th>Driver_name</th>
+                          <th>Driver_phone</th>
+                          <th>Supplier</th>
+                          <th>Online_Access</th>
                         </tr>
-                      ) : (
-                        rows.map((row) => (
-                          <tr key={row.id} onClick={() => handleRowClick(row)}>
-                            <td>{row.vehRegNo}</td>
-                            <td>{row.vehType}</td>
-                            <td>{row.driverName}</td>
-                            <td>{row.mobileNo}</td>
-                            <td>{row.supplier}</td>
-                            <td>{row.onlineAccess}</td>
+                      </thead>
+                      <tbody>
+                        {rows.length === 0 ? (
+                          <tr>
+                            <td colSpan={7}>No data available.</td>
                           </tr>
-                        ))
-                      )}
-                    </tbody>
+                        ) : (
+                          rows.map((row) => (
+                            <tr key={row.id} onClick={() => handleRowClick(row)}>
+                              <td>{row.vehRegNo}</td>
+                              <td>{row.vehType}</td>
+                              <td>{row.driverName}</td>
+                              <td>{row.mobileNo}</td>
+                              <td>{row.supplier}</td>
+                              <td>{row.onlineAccess}</td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </Table>
+                  </div> */}
+                  <div style={{ margin: '0px 10px', }}>
+                    <div className="Scroll-Style tripsheet-table1 ">
+                      <thead>
+                        <tr>
+                          <th className="table-head-booking" style={{ borderTopLeftRadius: '10px' }}> Driver name</th>
+                          <th className="table-head-booking">Driver phone</th>
+                          <th className="table-head-booking">Vehicle Name</th>
+                          <th className="table-head-booking">Vehicle Type</th>
+                          <th className="table-head-booking">Vehicle Reg No</th>
+                          <th className="table-head-booking">HireTypes</th>
+                          <th className="table-head-booking">Grouphs</th>
+                          {/* <th className="table-head-booking">Supplier</th> */}
+                          <th className="table-head-booking">Active</th>
+                          {/* <th className="table-head-booking" style={{ borderTopRightRadius: '10px' }}>Online_Access</th> */}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {driverdetails.length === 0 ? (
+                          <tr>
+                            <td colSpan={7}>No data available.</td>
+                          </tr>
+                        ) : (
+                          driverdetails.map((row) => (
+                            <tr key={row.id} onClick={() => handleRowClick(row)}>
+                              <td>{row.driverName}</td>
+                              <td>{row.mobileNo}</td>
+                              <td>{row.vehiclename}</td>
+                              <td>{row.vechtype}</td>
+                              <td>{row.vehRegNo}</td>
+                              <td>{row.hiretypes}</td>
+                              <td>{row.Groups}</td>
+
+                              <td>{row.active}</td>
+                              {/* <td>{row.onlineAccess}</td> */}
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </div>
                   </div>
                 </div>
+
               </div>
+
               <div className='tripsheet-division3'>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <HowToRegIcon color="action" />
                   </div>
-                  {nocchangeData.hireTypes ? <TextField
-                    margin="normal"
-                    size="small"
-                    id="hireTypes"
-                    label="HireTypes"
-                    name="hireTypes"
-                    value={nocchangeData.hireTypes || ''}
-                    onChange={handleNoChange}
-                    autoComplete="password"
-                    required
-                  /> : <Autocomplete
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo"
@@ -693,53 +700,45 @@ const TripSheet = ({ stationName }) => {
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
 
-                    value={HireTypes.find((option) => option.option)?.label || nocchangeData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                    value={selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                     options={HireTypes.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || nocchangeData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                    getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerDatas.hiretypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
                       )
                     }
                     }
-                  />}
+                  />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <StoreIcon color="action" />
                   </div>
-                  {nocchangeData.department ? <TextField
-                    margin="normal"
-                    size="small"
-                    id="department"
-                    label="Department"
-                    name="department"
-                    value={nocchangeData.department || ''}
-                    onChange={handleNoChange}
-                    autoComplete="password"
-                    required
-                  /> : <Autocomplete
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "department")}
-                    value={stationName.find((option) => option.optionvalue)?.label || nocchangeData.department || formValues.department || selectedCustomerData.department || book.department || ''}
+                    value={stationName.find((option) => option.optionvalue)?.label || selectedCustomerDatas.department || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                     options={stationName.map((option) => ({
                       label: option.Stationname,
                     }))}
-                    getOptionLabel={(option) => option.label || nocchangeData.department || formValues.department || selectedCustomerData.department || book.department || ''}
+                    getOptionLabel={(option) => option.label || formData.department || formValues.department || selectedCustomerData.department || book.department || ''}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Department" autoComplete="password" name="department" inputRef={params.inputRef} />
                       )
                     }
                     }
-                  />}
+                  />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: '240px' }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
@@ -750,32 +749,23 @@ const TripSheet = ({ stationName }) => {
                     id="vehiclerigsterno"
                     label="Vehicle Rigster No"
                     name="vehRegNo"
-                    value={nocchangeData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
-                    onChange={handleNoChange}
-                    onKeyDown={handleKeyEnter}
+                    value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
+                    onChange={handleChange}
+                    // onKeyDown={handleKeyEnter}
                     autoComplete="password"
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: '150px' }}>
                   <div className="icone">
                     <EmailIcon color="action" />
                   </div>
-                  {nocchangeData.Groups ? <TextField
-                    margin="normal"
-                    size="small"
-                    id="Groups"
-                    label="Groups"
-                    name="Groups"
-                    value={nocchangeData.Groups || ''}
-                    onChange={handleNoChange}
-                    autoComplete="password"
-                    required
-                  /> : <Autocomplete
+                  <Autocomplete
                     fullWidth
                     id="free-solo-demo"
                     freeSolo
                     size="small"
-                    value={(nocchangeData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) ? (nocchangeData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
+                    value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
                     options={GroupTypes?.map((option) => ({
                       label: option?.Option,
                     }))}
@@ -785,62 +775,88 @@ const TripSheet = ({ stationName }) => {
                         <TextField {...params} label="Groups" inputRef={params.inputRef} />
                       );
                     }}
-                  />}
+                  />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <NoCrashIcon color="action" />
                   </div>
-                  {nocchangeData.vehType ? <TextField
-                    margin="normal"
-                    size="small"
-                    id="billingno"
-                    label="VehType"
-                    name="vehType"
-                    value={nocchangeData.vehType || ''}
-                    onChange={handleNoChange}
-                    autoComplete="password"
-                    required
-                  /> : <Autocomplete
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                    value={(nocchangeData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType) ? (nocchangeData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType) : null}
+                    value={(selectedCustomerDatas.vehiclename || formData.vehType || selectedCustomerData.vehType || formValues.vehType || packageData.vehType || book.vehType) ? (formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType) : null}
                     options={vehileName?.map((option) => ({
                       label: option,
                     }))}
-                    getOptionLabel={(option) => option.label || nocchangeData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
+                    getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehiclename || packageData.vehType || book.vehType || ''}
                     renderInput={(params) => (
-                      <TextField {...params} label="Vehicle Rate" autoComplete="password" name="vehType" inputRef={params.inputRef} />
+                      <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehType" inputRef={params.inputRef} />
                     )}
-                  />}
+                  />
+
+
                 </div>
+
+
+                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                  <div className="icone">
+                    <PiCarSimpleFill color="action" />
+                  </div>
+                  <Autocomplete
+                    fullWidth
+                    id="free-solo-demo"
+                    freeSolo
+                    size="small"
+                    value={
+                      formData.vehiclemodule ||
+                      selectedCustomerData.vehiclemodule ||
+                      book.vehiclemodule || selectedCustomerDatas.vechtype ||
+                      ""
+                    }
+                    options={vehicaleinfos?.map((option) => ({
+                      label: option?.Option,
+                    }))}
+                    onChange={(event, value) =>
+                      handleAutocompleteChange(event, value, "vehiclemodule")
+                    }
+                    renderInput={(params) => {
+                      return (
+                        <TextField {...params} label="Vehicle Type" inputRef={params.inputRef} />
+                      );
+                    }}
+                  />
+                </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <SensorOccupiedIcon color="action" />
                   </div>
                   <TextField
                     name="driverName"
-                    value={nocchangeData.driverName || selectedCustomerData.driverName || formValues.driverName || selectedCustomerDatas.driverName || book.driverName || ''}
-                    onChange={handleNoChange}
+                    value={selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName || ''}
+                    onChange={handleChange}
                     label="Driver Name"
                     id="drivername"
                     variant="standard"
                     autoComplete="password"
+                    onKeyDown={handleKeyEnterDriverDetails}
                     style={{ width: '100%' }}
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <PhoneIphoneIcon color="action" />
                   </div>
                   <TextField
                     name="mobileNo"
-                    value={nocchangeData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
-                    onChange={handleNoChange}
+                    value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
+                    onChange={handleChange}
                     label="Cell"
                     id="cell"
                     variant="standard"
@@ -848,7 +864,9 @@ const TripSheet = ({ stationName }) => {
                     style={{ width: '100%' }}
                   />
                 </div>
+
                 <div className="input radio">
+
                   <FormControlLabel
                     value="DriverSMS"
                     control={
@@ -859,8 +877,27 @@ const TripSheet = ({ stationName }) => {
                       />
                     }
                     label="Driver SMS"
+
                   />
                 </div>
+                {/* <div className="input radio">
+                  <FormControlLabel
+                    id="DriverSMS"
+                    value="DriverSMS"
+                    control={
+                      <Checkbox
+                        size="small"
+                        checked={formData.gps || book.gps}
+                        onChange={(event) => {
+                          setBook({ ...book, gps: event.target.checked });
+                          setFormData({ ...formData, gps: event.target.checked });
+                        }}
+                      />
+                    }
+                    label="GPS"
+                  />
+
+                </div> */}
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AttachEmailIcon color="action" />
@@ -872,13 +909,13 @@ const TripSheet = ({ stationName }) => {
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "email1")}
-                    value={Email.find((option) => option.optionvalue)?.label || nocchangeData.email1 || selectedCustomerData.email1 || book.email1 || ''}
+                    value={Email.find((option) => option.optionvalue)?.label || formData.email1 || selectedCustomerData.email1 || book.email1 || ''}
                     options={Email.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || nocchangeData.email1 || selectedCustomerData.email1 || book.email1 || ''}
+                    getOptionLabel={(option) => option.label || formData.email1 || selectedCustomerData.email1 || book.email1 || ''}
                     renderInput={(params) => {
-                      params.inputProps.value = nocchangeData.email1 || selectedCustomerData.email1 || book.email1 || ''
+                      params.inputProps.value = formData.email1 || selectedCustomerData.email1 || book.email1 || ''
                       return (
                         <TextField {...params} label="Email" autoComplete="new-password" name="email1" inputRef={params.inputRef} />
                       )
@@ -886,73 +923,54 @@ const TripSheet = ({ stationName }) => {
                     }
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <EngineeringIcon color="action" />
                   </div>
-                  {nocchangeData.duty ? <TextField
-                    margin="normal"
-                    size="small"
-                    id="duty"
-                    label="Duty"
-                    name="duty"
-                    value={nocchangeData.duty || ''}
-                    onChange={handleNoChange}
-                    autoComplete="password"
-                    required
-                  /> : <Autocomplete
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "duty")}
-                    value={Duty.find((option) => option.optionvalue)?.label || nocchangeData.duty || selectedCustomerData.duty || book.duty || ''}
+                    value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                     options={Duty.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || nocchangeData.duty || selectedCustomerData.duty || book.duty || ''}
+                    getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Duty" autoComplete="password" name="duty" inputRef={params.inputRef} />
                       )
                     }
                     }
-                  />}
+                  />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <AirlineStopsIcon color="action" />
                   </div>
-                  {nocchangeData.pickup ? <TextField
-                    margin="normal"
-                    size="small"
-                    id="pickup"
-                    label="Pickup"
-                    name="pickup"
-                    value={nocchangeData.pickup || ''}
-                    onChange={handleNoChange}
-                    autoComplete="password"
-                    required
-                  /> : <Autocomplete
+                  <Autocomplete
                     fullWidth
                     size="small"
                     id="free-solo-demo"
                     freeSolo
                     sx={{ width: "100%" }}
                     onChange={(event, value) => handleAutocompleteChange(event, value, "pickup")}
-                    value={Pickup.find((option) => option.optionvalue)?.label || nocchangeData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
+                    value={Pickup.find((option) => option.optionvalue)?.label || formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
                     options={Pickup.map((option) => ({
                       label: option.option,
                     }))}
-                    getOptionLabel={(option) => option.label || nocchangeData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
+                    getOptionLabel={(option) => option.label || formData.pickup || selectedCustomerData.pickup || formValues.pickup || book.pickup || ''}
                     renderInput={(params) => {
                       return (
                         <TextField {...params} label="Pickup" autoComplete="password" name="pickup" inputRef={params.inputRef} />
                       )
                     }
                     }
-                  />}
+                  />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
@@ -962,8 +980,8 @@ const TripSheet = ({ stationName }) => {
                     margin="normal"
                     size="small"
                     name="useage"
-                    value={nocchangeData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
-                    onChange={handleNoChange}
+                    value={formData.useage || selectedCustomerData.useage || formValues.useage || book.useage || ''}
+                    onChange={handleChange}
                     label="Usage"
                     id="usage"
                     autoComplete="password"
@@ -977,11 +995,13 @@ const TripSheet = ({ stationName }) => {
                     size="small"
                     name="Request"
                     value={request || ''}
+                    // onChange={handleChange}
                     onChange={(e) => { setRequest(e.target.value) }}
-                    label="Request No"
+                    label="Request"
                     id="request"
                     autoComplete="password"
                   />
+
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
@@ -990,72 +1010,33 @@ const TripSheet = ({ stationName }) => {
                   <TextField
                     size="small"
                     name="customercode"
-                    value={nocchangeData.customercode || selectedCustomerData.customercode || book.customercode || ''}
-                    onChange={handleNoChange}
+                    value={formData.customercode || selectedCustomerData.customercode || book.customercode || ''}
+                    onChange={handleChange}
                     label="Customer Code"
                     id="customer-code"
                     autoComplete="password"
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <CalendarMonthIcon color="action" />
-                  </div>
-                  {nocchangeData?.startdate ? (
-                    <LocalizationProvider dateAdapter={AdapterDayjs} style={{ width: '100%' }}>
-                      <DatePicker
-                        label="Start Date"
-                        value={dayjs(nocchangeData.startdate)}
-                        format="DD/MM/YYYY"
-                        readOnly
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            inputRef={params.inputRef}
-                            value={dayjs(nocchangeData.startdate).format('DD/MM/YYYY')}
-                            InputProps={{
-                              readOnly: true,
-                            }}
-                          />
-                        )}
-                      />
-                    </LocalizationProvider>
-                  ) : (
-                    <LocalizationProvider dateAdapter={AdapterDayjs} style={{ width: '100%' }}>
-                      <DatePicker
-                        label="Start Date"
-                        value={
-                          selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) :
-                            book.startdate ? dayjs(book.startdate) : null
-                        }
-                        format="DD/MM/YYYY"
-                        onChange={(date) => {
-                          if (!nocchangeData.startdate) {
-                            handleDateChange(date, 'startdate');
-                          }
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            inputRef={params.inputRef}
-                            value={
-                              selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate).format('DD/MM/YYYY') :
-                                book.startdate ? dayjs(book.startdate).format('DD/MM/YYYY') : ''
-                            }
-                          />
-                        )}
-                      />
-                    </LocalizationProvider>
-                  )}
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Start Date"
+                      value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
+                      format="DD/MM/YYYY"
+                      onChange={(date) => handleDateChange(date, 'startdate')}
+                    >
+                      {({ inputProps, inputRef }) => (
+                        <TextField {...inputProps} inputRef={inputRef} value={selectedCustomerData?.startdate} />
+                      )}
+                    </DatePicker>
+                  </LocalizationProvider>
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <CalendarMonthIcon color="action" />
-                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Close Date"
-                      value={nocchangeData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
+                      value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
                       format="DD/MM/YYYY"
                       onChange={(date) => handleDateChange(date, 'closedate')}
                     >
@@ -1072,14 +1053,13 @@ const TripSheet = ({ stationName }) => {
                   <DemoItem>
                     <TextField
                       name="totaldays"
-                      value={nocchangeData.totaldays || calculateTotalDays() || book.totaldays || ''}
+                      value={formData.totaldays || calculateTotalDays() || book.totaldays || ''}
                       label="Total Days"
                       size="small"
                       type="number"
                       id="total-days"
                       variant="standard"
                       autoComplete="password"
-                      style={{ width: '100%' }}
                     />
                   </DemoItem>
                 </div>
@@ -1089,8 +1069,8 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     size="small"
-                    value={nocchangeData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
-                    onChange={handleNoChange}
+                    value={formData.employeeno || selectedCustomerData.employeeno || book.employeeno || ''}
+                    onChange={handleChange}
                     name="employeeno"
                     label="Employee No"
                     id="employeeno"
@@ -1105,113 +1085,79 @@ const TripSheet = ({ stationName }) => {
                     margin="normal"
                     size="small"
                     name="advancepaidtovendor"
-                    value={nocchangeData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ''}
-                    onChange={handleNoChange}
+                    value={formData.advancepaidtovendor || selectedCustomerData.advancepaidtovendor || book.advancepaidtovendor || ''}
+                    onChange={handleChange}
                     label="Advance-Paid-To-Vendor"
                     id="advance-paid-to-vendor"
                     autoComplete="password"
                   />
                 </div>
-                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
-                  </div>
-                  {nocchangeData?.starttime ? (<div style={{ display: 'grid', width: '100%' }}>
-                    <label>Shed out Time</label>
-                    <input
-                      type="time"
-                      name="starttime"
-                      value={nocchangeData?.starttime || ''}
-                      readOnly
-                    />
-                  </div>) : (<div style={{ display: 'grid', width: '100%' }}>
-                    <label>shed out Time</label>
-                    <input
-                      type="time"
-                      name='starttime'
-                      value={book?.starttime || nocchangeData?.starttime || selectedCustomerData.starttime || ''}
-                      onChange={(event) => {
 
-                        setBook({ ...book, starttime: event.target.value });
-                        setStartTime(event.target.value);
-                        setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
-                      }}
-                    />
-                  </div>)}
+                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
+                  <label>shed out Time</label>
+                  <input
+                    type="time"
+                    name='starttime'
+                    value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
+                    onChange={(event) => {
+                      setBook({ ...book, starttime: event.target.value });
+                      setStartTime(event.target.value);
+                      setFormData({ ...formData, starttime: event.target.value });
+                      setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
+                    }}
+                  />
                 </div>
-                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
-                  </div>
-                  {nocchangeData.reporttime ? (<div style={{ display: 'grid', width: '100%' }}>
-                    <label>Report Time</label>
-                    <input
-                      type="time"
-                      name="starttime"
-                      value={nocchangeData?.reporttime || ''}
-                      readOnly
-                    />
-                  </div>) : (<div style={{ display: 'grid', width: '100%' }}>
-                    <label>Report Time</label>
-                    <input
-                      type="time"
-                      name="reporttime"
-                      value={nocchangeData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
-                      onChange={(event) => {
-                        setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
-                        setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
-                        setBook({ ...book, reporttime: event.target.value });
-                        setreporttime(event.target.value);
-                      }}
-                    />
-                  </div>)}
+                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
+                  <label>Report Time</label>
+                  <input
+                    type="time"
+                    name="reporttime"
+                    value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
+                    onChange={(event) => {
+                      setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                      setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
+                      setBook({ ...book, reporttime: event.target.value });
+                      setreporttime(event.target.value);
+                    }}
+                  />
                 </div>
-                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
-                  </div>
-                  <div style={{ display: 'grid', width: '100%' }}>
-                    <label>Close Time</label>
-                    <input
-                      type="time"
-                      name="shedintime"
-                      value={nocchangeData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
-                      onChange={(event) => {
-                        setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
-                        setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
-                        setBook({ ...book, shedintime: event.target.value });
-                        setshedintime(event.target.value);
-                      }}
-                    />
-                  </div>
+                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
+                  <label>Close Time</label>
+                  <input
+                    type="time"
+                    name="shedintime"
+                    value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
+                    onChange={(event) => {
+                      setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
+                      setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
+                      setBook({ ...book, shedintime: event.target.value });
+                      setshedintime(event.target.value);
+                    }}
+                  />
                 </div>
-                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <MdOutlineAccessTimeFilled style={{ fontSize: '25px' }} />
-                  </div>
-                  <div style={{ display: 'grid', width: '100%' }}>
-                    <label>Shed-In Time</label>
-                    <input
-                      type="time"
-                      name="closetime"
-                      value={nocchangeData.closetime || selectedCustomerData.closetime || book.closetime || ''}
-                      onChange={(event) => {
-                        setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
-                        setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
-                        setBook({ ...book, closetime: event.target.value });
-                        setCloseTime(event.target.value);
-                      }}
-                    />
-                  </div>
+                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
+                  <label>Shed-In Time</label>
+                  <input
+                    type="time"
+                    name="closetime"
+                    value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                    onChange={(event) => {
+                      setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
+                      setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
+                      setBook({ ...book, closetime: event.target.value });
+                      setCloseTime(event.target.value);
+                    }}
+                  />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
                   <TextField
                     name="shedout"
-                    value={nocchangeData.shedout || book.shedout || selectedCustomerData.shedout || ''}
-                    onChange={handleNoChange}
+                    value={formData.shedout || book.shedout || selectedCustomerData.shedout || ''}
+                    onChange={handleChange}
                     label="Shed Out"
                     id="shedout"
                     size='small'
@@ -1220,35 +1166,27 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faRoad} size="lg" />
-                  </div>
                   <TextField
                     name="startkm"
-                    value={nocchangeData.startkm || selectedCustomerData.startkm || book.startkm || ''}
-                    onChange={handleNoChange}
+                    value={formData.startkm || selectedCustomerData.startkm || book.startkm || ''}
+                    onChange={handleChange}
                     size="small"
                     label="Start KM"
                     type="number"
                     id="outlined-start-adornment"
                     autoComplete="password"
-                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
-                  <div className="icone">
-                    <FontAwesomeIcon icon={faRoad} size="lg" />
-                  </div>
                   <TextField
                     name="closekm"
-                    value={nocchangeData.closekm || selectedCustomerData.closekm || book.closekm || ''}
-                    onChange={handleNoChange}
+                    value={formData.closekm || selectedCustomerData.closekm || book.closekm || ''}
+                    onChange={handleChange}
                     label="Close KM"
                     size="small"
                     type="number"
                     id="outlined-start-adornment"
                     autoComplete="password"
-                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
@@ -1257,8 +1195,8 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     name="shedin"
-                    value={nocchangeData.shedin || book.shedin || selectedCustomerData.shedin || ''}
-                    onChange={handleNoChange}
+                    value={formData.shedin || book.shedin || selectedCustomerData.shedin || ''}
+                    onChange={handleChange}
                     label="Shed In"
                     type="number"
                     id="shedin"
@@ -1272,8 +1210,8 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     name="shedkm"
-                    value={book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
-                    onChange={handleNoChange}
+                    value={formData.shedkm || book.shedkm || selectedCustomerData.shedkm || shedKilometers.shedkm || ''}
+                    onChange={handleChange}
                     label="Add KM"
                     type="number"
                     id="shedkm"
@@ -1286,10 +1224,11 @@ const TripSheet = ({ stationName }) => {
                     <FontAwesomeIcon icon={faRoad} size="lg" />
                   </div>
                   <TextField
+
                     // ayyanar total km
                     name="totalkm1"
-                    value={nocchangeData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''}
-                    onChange={handleNoChange}
+                    value={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''}
+                    onChange={handleChange}
                     label="Total KM"
                     id="totalkm1"
                     type="number"
@@ -1297,19 +1236,19 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
                   <div className="icone">
                     <FontAwesomeIcon icon={faStopwatch} size="lg" />
                   </div>
                   <TextField
                     name="additionaltime"
-                    value={nocchangeData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || ''}
-                    onChange={handleNoChange}
+                    value={formData.additionaltime || book.additionaltime || selectedCustomerData.additionaltime || additionalTime.additionaltime || ''}
+                    onChange={handleChange}
                     label="Additional Time"
                     id="additionaltime"
                     variant="standard"
                     autoComplete="password"
-                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
@@ -1319,13 +1258,12 @@ const TripSheet = ({ stationName }) => {
                   <TextField
                     // ayyanar total time
                     name="totaltime"
-                    value={nocchangeData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || ''}
-                    onChange={handleNoChange}
+                    value={formData.totaltime || packageData.totaltime || book.totaltime || selectedCustomerData.totaltime || calculateTotalTime() || ''}
+                    onChange={handleChange}
                     label="Total Time"
                     id="totaltime"
                     variant="standard"
                     autoComplete="password"
-                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
@@ -1334,13 +1272,12 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     name="permit"
-                    value={nocchangeData.permit || selectedCustomerData.permit || book.permit || ''}
-                    onChange={handleNoChange}
+                    value={formData.permit || selectedCustomerData.permit || book.permit || ''}
+                    onChange={handleChange}
                     label="Permit"
                     id="permit"
                     variant="standard"
                     autoComplete="password"
-                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
@@ -1349,18 +1286,12 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     name="parking"
-                    value={nocchangeData.parking || selectedCustomerData.parking || book.parking || ''}
-                    // onChange={handleChange}
-                    onChange={(e) => {
-                      if (!nocchangeData.parking) {
-                        handleChange(e);
-                      }
-                    }}
+                    value={formData.parking || selectedCustomerData.parking || book.parking || ''}
+                    onChange={handleChange}
                     label="Parking"
                     id="parking"
                     variant="standard"
                     autoComplete="password"
-                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
@@ -1369,21 +1300,20 @@ const TripSheet = ({ stationName }) => {
                   </div>
                   <TextField
                     name="toll"
-                    value={nocchangeData.toll || selectedCustomerData.toll || book.toll || ''}
-                    onChange={(e) => {
-                      if (!nocchangeData.toll) {
-                        handleChange(e);
-                      }
-                    }}
-
+                    value={formData.toll || selectedCustomerData.toll || book.toll || ''}
+                    onChange={handleChange}
                     label="Toll"
                     id="Toll"
                     variant="standard"
                     autoComplete="password"
-                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className="input">
+
+                  {/* ggggggggg */}
+                  {/* <Button style={{ marginLeft: "10px" }} variant="contained" onClick={handleCalc} >
+                    calculate
+                  </Button> */}
                   <Button style={{ marginLeft: "10px" }} variant="contained"
                     onClick={() => {
                       handleCalc();
@@ -1393,7 +1323,10 @@ const TripSheet = ({ stationName }) => {
                     calculate
                   </Button>
                 </div>
+                {/* ////gggggggggggg */}
+
                 <React.Fragment>
+
                   <Dialog
                     open={open}
                     onClose={handleClose}
@@ -1411,9 +1344,17 @@ const TripSheet = ({ stationName }) => {
                               <div className="icone">
                                 <Inventory2Icon color="action" />
                               </div>
+                              {/* ayyanar */}
+                              {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
+
+
+
                               <TextField
                                 name="pack"
-                                value={calcPackage || nocchangeData.calcPackage || ''}
+                                // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
+                                value={calcPackage || formData.calcPackage || ''}
+                                // onChange={handleChange}
+
                                 label="Pack"
                                 id="pack"
                                 size="small"
@@ -1428,7 +1369,9 @@ const TripSheet = ({ stationName }) => {
                               </div>
                               <TextField
                                 name="amount5"
-                                value={package_amount || nocchangeData.calcPackage || ''}
+                                // value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate || ''}
+                                value={package_amount || formData.calcPackage || ''}
+                                // onChange={handleChange}
                                 size="small"
                                 label="Amount"
                                 autoComplete="password"
@@ -1445,7 +1388,9 @@ const TripSheet = ({ stationName }) => {
                               <TextField
                                 name="exkm1"
                                 className='customer-bill-input'
-                                value={extraKM || nocchangeData.calcPackage || 0}
+                                // value={book.exkm1 || packageDetails[0]?.extraKMS || ''}
+                                // onChange={handleChange} 
+                                value={extraKM || formData.calcPackage || 0}
                                 label="Ex.Km"
                                 id="ex-km"
                                 autoComplete="password"
@@ -1460,7 +1405,9 @@ const TripSheet = ({ stationName }) => {
                               <TextField size="small"
                                 name='exkmTkm2'
                                 className='customer-bill-input'
-                                value={extrakm_amount || nocchangeData.calcPackage || ''}
+                                // value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2 || ''}
+                                value={extrakm_amount || formData.calcPackage || ''}
+                                // onChange={handleChange}
                                 id="exkmTkm"
                                 variant="standard"
                                 autoComplete="password"
@@ -1473,7 +1420,8 @@ const TripSheet = ({ stationName }) => {
                               <TextField
                                 name="amount6"
                                 className='customer-bill-input'
-                                value={ex_kmAmount || nocchangeData.calcPackage || 0}
+                                // value={book.amount6 || calculateExkmAmount2() || ''}
+                                value={ex_kmAmount || formData.calcPackage || 0}
                                 size="small"
                                 label="Amount"
                                 autoComplete="password"
@@ -1491,7 +1439,9 @@ const TripSheet = ({ stationName }) => {
                               <TextField
                                 name="exHrs1"
                                 className='customer-bill-input'
-                                value={extraHR || nocchangeData.calcPackage || ''}
+                                // value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours || ''}
+                                value={extraHR || formData.calcPackage || ''}
+                                // onChange={handleChange}
                                 label="Ex.Hrs"
                                 id="ex-Hrs"
                                 size="small"
@@ -1507,9 +1457,14 @@ const TripSheet = ({ stationName }) => {
                                 size="small"
                                 name='exHrsTHrs2'
                                 className='customer-bill-input'
-                                value={extrahr_amount || nocchangeData.calcPackage || ''}
+                                // value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2 || ''}  extrahr_amount
+                                value={extrahr_amount || formData.calcPackage || ''}
+                                // onChange={handleChange}
                                 variant="standard"
                               />
+
+                              {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
+
                             </div>
                             <div className="input">
                               <div className="icone">
@@ -1518,7 +1473,9 @@ const TripSheet = ({ stationName }) => {
                               <TextField
                                 name="amount7"
                                 className='customer-bill-input'
-                                value={ex_hrAmount || nocchangeData.calcPackage || 0}
+                                // value={book.amount7 || calculateExHrsAmount2() || ''}
+                                // onChange={caculate_extraHR}
+                                value={ex_hrAmount || formData.calcPackage || 0}
                                 size="small"
                                 label="Amount"
                                 autoComplete="password"
@@ -1532,6 +1489,7 @@ const TripSheet = ({ stationName }) => {
                               <div className="icone">
                                 <FontAwesomeIcon icon={faCloudMoon} />
                               </div>
+
                               <TextField
                                 name="night1"
                                 className='customer-bill-input'
@@ -1582,7 +1540,7 @@ const TripSheet = ({ stationName }) => {
                               <TextField
                                 name="driverconvenience1"
                                 className='customer-bill-input'
-                                value={driverBeta || nocchangeData.driverBeta || ''}
+                                value={driverBeta || formData.driverBeta || ''}
                                 onChange={driverBeta_calc}
                                 label="Driver Convenience"
                                 autoComplete="password"
@@ -1599,7 +1557,7 @@ const TripSheet = ({ stationName }) => {
                                 size="small"
                                 name='dtc2'
                                 className='customer-bill-input'
-                                value={driverbeta_Count || nocchangeData.driverbeta_Count || ''}
+                                value={driverbeta_Count || formData.driverbeta_Count || ''}
                                 onChange={driverbeta_Count_calc}
                                 variant="standard"
                                 autoComplete="password"
@@ -1621,6 +1579,7 @@ const TripSheet = ({ stationName }) => {
                               />
                             </div>
                           </div>
+
                           <TextField
                             name="amount9"
                             value={totalcalcAmount || 0}
@@ -1632,14 +1591,120 @@ const TripSheet = ({ stationName }) => {
                             style={{ marginTop: '25px', marginLeft: '15px' }}
                           />
                           <div className="input-field">
-
+                            {/* <div className="input" style={{ width: "390px" }}>
+                        <div className="icone">
+                          <TollTwoToneIcon color="action" />
+                        </div>
+                        <TextField
+                          name="rud"
+                          value={formData.rud || selectedCustomerData.rud || book.rud || ''}
+                          onChange={handleChange}
+                          label="Rud"
+                          id="rud"
+                          size="small"
+                          autoComplete="password"
+                          variant="standard"
+                          sx={{ m: 1, width: "60ch" }}
+                        />
+                      </div> */}
+                            {/* <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="netamount1"
+                          value={book.netamount1 || calculateTotalAmount2() || ''}
+                          onChange={handleChange}
+                          size="small"
+                          label="Net Amount"
+                          id="net-amount"
+                          autoComplete="password"
+                          variant="standard"
+                        />
+                      </div> */}
                           </div>
                           <div className="input-field">
-
+                            {/* <div className="input" style={{ width: "186px" }}>
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faTags} />
+                        </div>
+                        <TextField
+                          name="discount"
+                          value={formData.discount || selectedCustomerData.discount || book.discount || ''}
+                          onChange={handleChange}
+                          label="Discount"
+                          id="discount"
+                          size="small"
+                          autoComplete="password"
+                          variant="standard"
+                        />
+                      </div> */}
+                            {/* <div className="input" style={{ width: "187px" }}>
+                        <div className="icone">
+                          <TollTwoToneIcon color="action" />
+                        </div>
+                        <TextField size="small" variant="standard" />
+                      </div> */}
+                            {/* <div className="input">
+                        <div className="icone">
+                          <FontAwesomeIcon icon={faEquals} />
+                        </div>
+                        <TextField
+                          name="ons"
+                          value={formData.ons || selectedCustomerData.ons || book.ons || ''}
+                          onChange={handleChange}
+                          size="small"
+                          label="On"
+                          autoComplete="password"
+                          id="on"
+                          variant="standard"
+                        />
+                      </div> */}
                           </div>
                           <div className="input-field">
-
+                            {/* <div className="input radio">
+                        <FormControlLabel
+                          name="manualbills"
+                          value="manualbills"
+                          control={<Checkbox size="small" />}
+                          label="Manual Bills"
+                          autoComplete="new-password"
+                          onChange={handleChange}
+                          checked={Boolean(formData.manualbills || selectedCustomerData?.manualbills || book.manualbills)}
+                        />
+                      </div> */}
+                            {/* <div className="input">
+                        <div className="icone">
+                          <AccountBalanceWalletIcon color="action" />
+                        </div>
+                        <TextField
+                          name="balance"
+                          value={formData.balance || selectedCustomerData.balance || book.balance || ''}
+                          onChange={handleChange}
+                          size="small"
+                          autoComplete="password"
+                          label="Balance"
+                          id="balance"
+                        />
+                      </div> */}
                           </div>
+                          {/* <div className="input-field">
+                      <div className="input">
+                        <TextField size="small" variant="standard" autoComplete="password" />
+                      </div>
+                      <div className="input">
+                        <div
+                          className="icone"
+                          style={{
+                            padding: "0px 10px 0px 0px",
+                            "font-size": "20px",
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faXmark} />
+                        </div>
+                        <TextField size="small" variant="standard" autoComplete="password" />
+                      </div>
+                    </div> */}
                         </div>
                       </DialogContentText>
                     </DialogContent>
@@ -1651,6 +1716,7 @@ const TripSheet = ({ stationName }) => {
                     </DialogActions>
                   </Dialog>
                 </React.Fragment>
+
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: "250px" }}>
                   <div className="icone">
                     <BackupTableSharpIcon color="action" />
@@ -1659,12 +1725,8 @@ const TripSheet = ({ stationName }) => {
                     margin="normal"
                     size="small"
                     name="vpermettovendor"
-                    value={nocchangeData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
-                    onChange={(e) => {
-                      if (!nocchangeData.vpermettovendor) {
-                        handleChange(e);
-                      }
-                    }}
+                    value={formData.vpermettovendor || selectedCustomerData.vpermettovendor || book.vpermettovendor || ''}
+                    onChange={handleChange}
                     label="v-permet-To-Vendor"
                     id="v-permet-to-vendor"
                     autoComplete="password"
@@ -1678,12 +1740,8 @@ const TripSheet = ({ stationName }) => {
                     margin="normal"
                     size="small"
                     name="vendortoll"
-                    value={nocchangeData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ''}
-                    onChange={(e) => {
-                      if (!nocchangeData.vendortoll) {
-                        handleChange(e);
-                      }
-                    }}
+                    value={formData.vendortoll || selectedCustomerData.vendortoll || book.vendortoll || ''}
+                    onChange={handleChange}
                     label="Vendor-Toll"
                     id="vendor-toll"
                     autoComplete="password"
@@ -1696,35 +1754,28 @@ const TripSheet = ({ stationName }) => {
                   <TextField
                     size="small"
                     name="customeradvance"
-                    value={nocchangeData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || ''}
-                    onChange={(e) => {
-                      if (!nocchangeData.customeradvance) {
-                        handleChange(e);
-                      }
-                    }}
+                    value={formData.customeradvance || selectedCustomerData.customeradvance || book.customeradvance || ''}
+                    onChange={handleChange}
                     label="Customer-Advance"
                     id="customer-advance"
                     autoComplete="password"
                   />
                 </div>
-                <div className="">
+                <div className="input">
                   <Button startIcon={<BorderColorIcon />} variant="outlined" onClick={handleETripsheetClick} >
                     E-Tripsheet
                   </Button>
                 </div>
-                <div className="remark-textfield" style={{ display: 'flex' }}>
+
+                <div className="input" style={{ display: 'flex', width: "400px" }}>
                   <div className="icone">
                     <MarkChatReadIcon color="action" />
                   </div>
                   <TextField
                     size="small"
                     name="remark"
-                    value={nocchangeData.remark || selectedCustomerData.remark || book.remark || ''}
-                    onChange={(e) => {
-                      if (!nocchangeData.remark) {
-                        handleChange(e);
-                      }
-                    }}
+                    value={formData.remark || selectedCustomerData.remark || book.remark || ''}
+                    onChange={handleChange}
                     label="Remark"
                     id="remark"
                     multiline
@@ -1733,6 +1784,7 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
+
                 <div className='input' style={{ display: 'grid' }}>
                   <label>Escort</label>
                   <span>
@@ -1756,6 +1808,7 @@ const TripSheet = ({ stationName }) => {
                     </label>
                   </span>
                 </div>
+
                 <div className='input' style={{ display: 'grid' }}>
                   <label>Airport Transfer</label>
                   <span>
@@ -1779,9 +1832,37 @@ const TripSheet = ({ stationName }) => {
                     </label>
                   </span>
                 </div>
+
+                {/* <div className="input radio">
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Active
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="active"
+                    onChange={handleChange}
+                    value={selectedCustomerData?.active || book.active}
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div> */}
+
+                {/* aaaaaaa */}
                 <Dialog open={popupOpen} onClose={handlePopupClose} maxWidth="md">
                   <DialogContent style={{ width: '210mm', maxWidth: 'none' }}>
-                    <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} nocchangeData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={nocchangeData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
+                    <Invoice tripSheetData={tripSheetData} organizationdata={organizationdata} selectedImage={selectedImage} attachedImage={attachedImage} routeData={routeData} formData={calculateTotalTime} book={book} signimageUrl={signimageUrl} GmapimageUrl={GmapimageUrl} selectedCustomerData={selectedCustomerData} selectedCustomerDatas={selectedCustomerDatas} selectedTripid={localStorage.getItem('selectedTripid')} totalhour={formData.totalkm1 || packageData.totalkm1 || book.totalkm1 || selectedCustomerData.totalkm1 || calculateTotalKilometers() || ''} />
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handlePopupClose} variant="contained" color="primary">
@@ -1789,6 +1870,7 @@ const TripSheet = ({ stationName }) => {
                     </Button>
                   </DialogActions>
                 </Dialog>
+
                 {/* // ayyanar calc */}
                 <div className="input" style={{ width: "160px" }}>
                   {isEditMode ? (<>
@@ -1799,9 +1881,13 @@ const TripSheet = ({ stationName }) => {
                   ) : (
                     <Button variant="contained" disabled={!Tripsheet_new} onClick={handleAdd} >Add</Button>
                   )}
+                  {/* <Button variant="contained" onClick={handleEdit}>Edit</Button>
+                  {calcCheck ? <Button variant="contained" style={{ marginLeft: "10px" }} onClick={handleConfirm}>Confirm</Button> : ""} */}
                 </div>
+
               </div>
             </div>
+
             <div>
               <Box sx={{ position: "relative", mt: 3, height: 320 }}>
                 <StyledSpeedDial
@@ -1809,6 +1895,15 @@ const TripSheet = ({ stationName }) => {
                   icon={<SpeedDialIcon />}
                   direction="left"
                 >
+                  {/* {filteredActions.map((action) => (
+                      <SpeedDialAction
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
+                        onClick={(event) => handleClick(event, action.name, selectedCustomerId)}
+                      />
+                  ))} */}
+
                   {Tripsheet_read === 1 && (
                     <SpeedDialAction
                       key="list"
@@ -1847,12 +1942,16 @@ const TripSheet = ({ stationName }) => {
                     tooltipTitle="Cancel"
                     onClick={(event) => handleClick(event, "Cancel", selectedCustomerId)}
                   />
+
+
                 </StyledSpeedDial>
               </Box>
             </div>
+
             <div className="Tipsheet-content-table-main">
               <Tabs
                 className='Scroll-Style'
+                // size="sm"
                 aria-label="Pricing plan"
                 defaultValue={0}
                 sx={(theme) => ({
@@ -1954,11 +2053,11 @@ const TripSheet = ({ stationName }) => {
                           freeSolo
                           sx={{ width: "20ch" }}
                           onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
-                          value={DocumentType.find((option) => option.optionvalue)?.label || nocchangeData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                          value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                           options={DocumentType.map((option) => ({
                             label: option.option,
                           }))}
-                          getOptionLabel={(option) => option.label || nocchangeData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                          getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                           renderInput={(params) => {
                             return (
                               <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
@@ -1973,12 +2072,8 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="documentnotes"
-                          value={nocchangeData.documentnotes || selectedCustomerData.documentnotes || book.documentnotes || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.documentnotes) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.documentnotes || selectedCustomerData.documentnotes || book.documentnotes || ''}
+                          onChange={handleChange}
                           label="Document Notes"
                           id="document-notes"
                           variant="standard"
@@ -2013,12 +2108,8 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="VendorTripNo"
-                          value={nocchangeData.tripid || selectedCustomerData.tripid || book.tripid || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.tripid) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.tripid || selectedCustomerData.tripid || book.tripid || ''}
+                          onChange={handleChange}
                           label="Vendor Trip No"
                           id="Vendor-Trip-No"
                           variant="standard"
@@ -2036,11 +2127,11 @@ const TripSheet = ({ stationName }) => {
                           freeSolo
                           sx={{ width: "20ch" }}
                           onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                          value={VehicleRate.find((option) => option.optionvalue)?.label || nocchangeData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
+                          value={VehicleRate.find((option) => option.optionvalue)?.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                           options={VehicleRate.map((option) => ({
                             label: option.option,
                           }))}
-                          getOptionLabel={(option) => option.label || nocchangeData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
+                          getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType || ''}
                           renderInput={(params) => {
                             return (
                               <TextField {...params} label="Vehicle type" autoComplete="password" name="vehType" inputRef={params.inputRef} />
@@ -2060,11 +2151,11 @@ const TripSheet = ({ stationName }) => {
                           freeSolo
                           sx={{ width: "20ch" }}
                           onChange={(event, value) => handleAutocompleteChange(event, value, "duty1")}
-                          value={Duty.find((option) => option.optionvalue)?.label || nocchangeData.duty || selectedCustomerData.duty || book.duty || ''}
+                          value={Duty.find((option) => option.optionvalue)?.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                           options={Duty.map((option) => ({
                             label: option.option,
                           }))}
-                          getOptionLabel={(option) => option.label || nocchangeData.duty || selectedCustomerData.duty || book.duty || ''}
+                          getOptionLabel={(option) => option.label || formData.duty || selectedCustomerData.duty || book.duty || ''}
                           renderInput={(params) => {
                             return (
                               <TextField {...params} label="Duty" autoComplete="password" name="duty1" inputRef={params.inputRef} />
@@ -2079,7 +2170,7 @@ const TripSheet = ({ stationName }) => {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoItem label="Start Date">
                             <DatePicker
-                              value={nocchangeData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
+                              value={formData.startdate || selectedCustomerData.startdate ? dayjs(selectedCustomerData.startdate) : null || book.startdate ? dayjs(book.startdate) : null}
                               onChange={(date) => handleDateChange(date, 'startdate1')}
                             >
                               {({ inputProps, inputRef }) => (
@@ -2093,7 +2184,7 @@ const TripSheet = ({ stationName }) => {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DemoItem label="Close Date">
                             <DatePicker
-                              value={nocchangeData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
+                              value={formData.closedate || selectedCustomerData.closedate ? dayjs(selectedCustomerData.closedate) : null || book.closedate ? dayjs(book.closedate) : null}
                               onChange={(date) => handleDateChange(date, 'closedate1')}
                             >
                               {({ inputProps, inputRef }) => (
@@ -2126,7 +2217,7 @@ const TripSheet = ({ stationName }) => {
                         <label>Start Time</label>
                         <input
                           type="time"
-                          value={nocchangeData.starttime || selectedCustomerData.starttime || book.starttime || ''}
+                          value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
                           onChange={(event) => {
                             setSelectedCustomerData({ ...selectedCustomerData, starttime2: event.target.value });
                             setSelectedCustomerDatas({ ...selectedCustomerDatas, starttime2: event.target.value });
@@ -2140,7 +2231,7 @@ const TripSheet = ({ stationName }) => {
                         <label>Close Time</label>
                         <input
                           type="time"
-                          value={nocchangeData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                          value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
                           onChange={(event) => {
                             setSelectedCustomerData({ ...selectedCustomerData, closetime2: event.target.value });
                             setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime2: event.target.value });
@@ -2156,7 +2247,7 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="totaltime"
-                          value={nocchangeData.totaltime || calculateTotalTime() || book.totaltime || selectedCustomerData.totaltime || ''}
+                          value={formData.totaltime || calculateTotalTime() || book.totaltime || selectedCustomerData.totaltime || ''}
                           label="Total Time"
                           id="total-time"
                           variant="standard"
@@ -2168,12 +2259,8 @@ const TripSheet = ({ stationName }) => {
                       <div className="input">
                         <TextField
                           name="startkm1"
-                          value={nocchangeData.startkm || selectedCustomerData.startkm || book.startkm || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.startkm) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.startkm || selectedCustomerData.startkm || book.startkm || ''}
+                          onChange={handleChange}
                           size="small"
                           label="Start KM"
                           type="number"
@@ -2185,12 +2272,8 @@ const TripSheet = ({ stationName }) => {
                       <div className="input">
                         <TextField
                           name="closekm1"
-                          value={nocchangeData.closekm || selectedCustomerData.closekm || book.closekm || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.closekm) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.closekm || selectedCustomerData.closekm || book.closekm || ''}
+                          onChange={handleChange}
                           label="Close KM"
                           size="small"
                           type="number"
@@ -2205,7 +2288,7 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="totalkm1"
-                          value={nocchangeData.totalkm1 || calculateTotalKilometers() || book.totalkm1 || packageData.totalkm1 || selectedCustomerData.totalkm1 || ''}
+                          value={formData.totalkm1 || calculateTotalKilometers() || book.totalkm1 || packageData.totalkm1 || selectedCustomerData.totalkm1 || ''}
                           label="Total KM"
                           id="total-km"
                           variant="standard"
@@ -2220,12 +2303,8 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="remark"
-                          value={nocchangeData.remark || selectedCustomerData.remark || book.remark || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.remark) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.remark || selectedCustomerData.remark || book.remark || ''}
+                          onChange={handleChange}
                           label="Remarks"
                           id="remark"
                           variant="standard"
@@ -2238,12 +2317,8 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="caramount"
-                          value={nocchangeData.caramount || selectedCustomerData.caramount || book.caramount || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.caramount) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.caramount || selectedCustomerData.caramount || book.caramount || ''}
+                          onChange={handleChange}
                           label="Car Amount"
                           id="car-amount"
                           variant="standard"
@@ -2265,12 +2340,8 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="minhrs"
-                          value={nocchangeData.minhrs || selectedCustomerData.minhrs || book.minhrs || packageDetails[0]?.Hours || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.minhrs) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.minhrs || selectedCustomerData.minhrs || book.minhrs || packageDetails[0]?.Hours || ''}
+                          onChange={handleChange}
                           label="Min.Hrs"
                           id="min-hrs"
                           size="small"
@@ -2286,7 +2357,7 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="minkm"
-                          value={nocchangeData.minkm || packageDetails[0]?.KMS || book.minkm || selectedCustomerData.minkm || ''}
+                          value={formData.minkm || packageDetails[0]?.KMS || book.minkm || selectedCustomerData.minkm || ''}
                           label="Min.Km"
                           id="minkm"
                           size="small"
@@ -2301,12 +2372,8 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="package"
-                          value={nocchangeData.package || selectedCustomerData.package || book.package || packageDetails[0]?.package || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.package) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.package || selectedCustomerData.package || book.package || packageDetails[0]?.package || ''}
+                          onChange={handleChange}
                           label="Package"
                           id="package"
                           size="small"
@@ -2321,12 +2388,8 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="amount"
-                          value={nocchangeData.amount || selectedCustomerData.amount || book.amount || packageDetails[0]?.Rate || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.amount) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.amount || selectedCustomerData.amount || book.amount || packageDetails[0]?.Rate || ''}
+                          onChange={handleChange}
                           size="small"
                           label="Amount"
                           id="amount"
@@ -2357,16 +2420,14 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField size="small"
                           name='exkmTkm'
-                          value={nocchangeData.exkmTkm || selectedCustomerData.exkmTkm || book.exkmTkm || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.exkmTkm) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.exkmTkm || selectedCustomerData.exkmTkm || book.exkmTkm || ''}
+                          onChange={handleChange}
                           id="exkmTkm"
                           variant="standard"
                           autoComplete="password" />
+
                       </div>
+
                       <div className="input">
                         <div className="icone">
                           <FontAwesomeIcon icon={faEquals} />
@@ -2390,12 +2451,8 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="exHrs"
-                          value={nocchangeData.exHrs || selectedCustomerData.exHrs || book.exHrs || packageDetails[0]?.extraHours || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.exHrs) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.exHrs || selectedCustomerData.exHrs || book.exHrs || packageDetails[0]?.extraHours || ''}
+                          onChange={handleChange}
                           label="Ex.Hrs"
                           id="ex-Hrs"
                           size="small"
@@ -2410,12 +2467,8 @@ const TripSheet = ({ stationName }) => {
                         <TextField
                           size="small"
                           name='exHrsTHrs'
-                          value={nocchangeData.exHrsTHrs || selectedCustomerData.exHrsTHrs || book.exHrsTHrs || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.exHrsTHrs) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.exHrsTHrs || selectedCustomerData.exHrsTHrs || book.exHrsTHrs || ''}
+                          onChange={handleChange}
                           variant="standard" />
                       </div>
                       <div className="input">
@@ -2425,11 +2478,7 @@ const TripSheet = ({ stationName }) => {
                         <TextField
                           name="amount2"
                           value={book.amount2 || calculateExHrsAmount() || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.amount2) {
-                              handleChange(e);
-                            }
-                          }}
+                          onChange={handleChange}
                           size="small"
                           label="Amount"
                           id="amount"
@@ -2445,18 +2494,15 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="night"
-                          value={nocchangeData.night || selectedCustomerData.night || book.night || packageDetails[0]?.NHalt || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.night) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.night || selectedCustomerData.night || book.night || packageDetails[0]?.NHalt || ''}
+                          onChange={handleChange}
                           label="Night"
                           id="night"
                           size="small"
                           variant="standard"
                           autoComplete="password"
                         />
+
                       </div>
                       <div className="input" style={{ width: "187px" }}>
                         <div className="icone">
@@ -2465,12 +2511,8 @@ const TripSheet = ({ stationName }) => {
                         <TextField
                           size="small"
                           name='nightThrs'
-                          value={nocchangeData.nightThrs || selectedCustomerData.nightThrs || book.nightThrs || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.nightThrs) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.nightThrs || selectedCustomerData.nightThrs || book.nightThrs || ''}
+                          onChange={handleChange}
                           variant="standard"
                           autoComplete="password" />
                       </div>
@@ -2497,12 +2539,8 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="driverconvenience"
-                          value={nocchangeData.driverconvenience || selectedCustomerData.driverconvenience || book.driverconvenience || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.driverconvenience) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.driverconvenience || selectedCustomerData.driverconvenience || book.driverconvenience || ''}
+                          onChange={handleChange}
                           label="Driver Convenience00"
                           id="driver-convenience"
                           size="small"
@@ -2517,12 +2555,8 @@ const TripSheet = ({ stationName }) => {
                         <TextField
                           size="small"
                           name='dtc'
-                          value={nocchangeData.dtc || selectedCustomerData.dtc || book.dtc || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.dtc) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.dtc || selectedCustomerData.dtc || book.dtc || ''}
+                          onChange={handleChange}
                           variant="standard"
                           autoComplete="password" />
                       </div>
@@ -2543,8 +2577,12 @@ const TripSheet = ({ stationName }) => {
                       </div>
                     </div>
                     <div className="input-field">
+
                       <div className="input">
-                        <div className="icone" style={{ padding: "0px 10px 0px 10px" }}>
+                        <div
+                          className="icone"
+                          style={{ padding: "0px 10px 0px 10px" }}
+                        >
                           <FontAwesomeIcon icon={faMoneyBillTrendUp} size="lg" />
                         </div>
                         <TextField
@@ -2562,12 +2600,8 @@ const TripSheet = ({ stationName }) => {
                       <div className="input">
                         <TextField
                           name="vehcommission"
-                          value={nocchangeData.vehcommission || selectedCustomerData.vehcommission || book.vehcommission || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.vehcommission) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.vehcommission || selectedCustomerData.vehcommission || book.vehcommission || ''}
+                          onChange={handleChange}
                           type="number"
                           label="Veh.Commission"
                           size="small"
@@ -2584,12 +2618,8 @@ const TripSheet = ({ stationName }) => {
                       <div className="input">
                         <TextField
                           name="caramount"
-                          value={nocchangeData.caramount || selectedCustomerData.caramount || book.caramount || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.caramount) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.caramount || selectedCustomerData.caramount || book.caramount || ''}
+                          onChange={handleChange}
                           size="small"
                           label="Car Amount"
                           id="car-amount"
@@ -2606,9 +2636,17 @@ const TripSheet = ({ stationName }) => {
                         <div className="icone">
                           <Inventory2Icon color="action" />
                         </div>
+                        {/* ayyanar */}
+                        {/* zzzz  calcPackage, hours, km, extraHR, extraKM, total_km, total_hr, package_amount, extrakm_amount, extrahr_amount */}
+
+
+
                         <TextField
                           name="pack"
-                          value={calcPackage || nocchangeData.calcPackage || ''}
+                          // value={formData.pack || selectedCustomerData.pack || book.pack || packageDetails[0]?.package || ''}
+                          value={calcPackage || formData.calcPackage || ''}
+                          // onChange={handleChange}
+
                           label="Pack"
                           id="pack"
                           size="small"
@@ -2623,7 +2661,9 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="amount5"
-                          value={package_amount || nocchangeData.calcPackage || ''}
+                          // value={formData.amount5 || selectedCustomerData.amount5 || book.amount5 || packageDetails[0]?.Rate || ''}
+                          value={package_amount || formData.calcPackage || ''}
+                          // onChange={handleChange}
                           size="small"
                           label="Amount"
                           autoComplete="password"
@@ -2639,7 +2679,9 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="exkm1"
-                          value={extraKM || nocchangeData.calcPackage || 0}
+                          // value={book.exkm1 || packageDetails[0]?.extraKMS || ''}
+                          // onChange={handleChange} 
+                          value={extraKM || formData.calcPackage || 0}
                           label="Ex.Km"
                           id="ex-km"
                           autoComplete="password"
@@ -2653,7 +2695,9 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField size="small"
                           name='exkmTkm2'
-                          value={extrakm_amount || nocchangeData.calcPackage || ''}
+                          // value={formData.exkmTkm2 || selectedCustomerData.exkmTkm2 || book.exkmTkm2 || ''}
+                          value={extrakm_amount || formData.calcPackage || ''}
+                          // onChange={handleChange}
                           id="exkmTkm"
                           variant="standard"
                           autoComplete="password"
@@ -2666,7 +2710,7 @@ const TripSheet = ({ stationName }) => {
                         <TextField
                           name="amount6"
                           // value={book.amount6 || calculateExkmAmount2() || ''}
-                          value={ex_kmAmount || nocchangeData.calcPackage || 0}
+                          value={ex_kmAmount || formData.calcPackage || 0}
                           size="small"
                           label="Amount"
                           autoComplete="password"
@@ -2683,7 +2727,9 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="exHrs1"
-                          value={extraHR || nocchangeData.calcPackage || ''}
+                          // value={formData.exHrs1 || selectedCustomerData.exHrs1 || book.exHrs1 || packageDetails[0]?.extraHours || ''}
+                          value={extraHR || formData.calcPackage || ''}
+                          // onChange={handleChange}
                           label="Ex.Hrs"
                           id="ex-Hrs"
                           size="small"
@@ -2698,9 +2744,13 @@ const TripSheet = ({ stationName }) => {
                         <TextField
                           size="small"
                           name='exHrsTHrs2'
-                          value={extrahr_amount || nocchangeData.calcPackage || ''}
+                          // value={formData.exHrsTHrs2 || selectedCustomerData.exHrsTHrs2 || book.exHrsTHrs2 || ''}  extrahr_amount
+                          value={extrahr_amount || formData.calcPackage || ''}
+                          // onChange={handleChange}
                           variant="standard"
                         />
+
+                        {/* hours, km, extraHR, extraKM, total_km, total_hr, package_amount */}
 
                       </div>
                       <div className="input">
@@ -2709,7 +2759,9 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="amount7"
-                          value={ex_hrAmount || nocchangeData.calcPackage || 0}
+                          // value={book.amount7 || calculateExHrsAmount2() || ''}
+                          // onChange={caculate_extraHR}
+                          value={ex_hrAmount || formData.calcPackage || 0}
                           size="small"
                           label="Amount"
                           autoComplete="password"
@@ -2770,7 +2822,7 @@ const TripSheet = ({ stationName }) => {
                         </div>
                         <TextField
                           name="driverconvenience1"
-                          value={driverBeta || nocchangeData.driverBeta || ''}
+                          value={driverBeta || formData.driverBeta || ''}
                           onChange={driverBeta_calc}
                           label="Driver Convenience"
                           autoComplete="password"
@@ -2786,7 +2838,7 @@ const TripSheet = ({ stationName }) => {
                         <TextField
                           size="small"
                           name='dtc2'
-                          value={driverbeta_Count || nocchangeData.driverbeta_Count || ''}
+                          value={driverbeta_Count || formData.driverbeta_Count || ''}
                           onChange={driverbeta_Count_calc}
                           variant="standard"
                           autoComplete="password"
@@ -2818,17 +2870,120 @@ const TripSheet = ({ stationName }) => {
                       variant="standard"
                     />
                     <div className="input-field">
-
+                      {/* <div className="input" style={{ width: "390px" }}>
+                      <div className="icone">
+                        <TollTwoToneIcon color="action" />
+                      </div>
+                      <TextField
+                        name="rud"
+                        value={formData.rud || selectedCustomerData.rud || book.rud || ''}
+                        onChange={handleChange}
+                        label="Rud"
+                        id="rud"
+                        size="small"
+                        autoComplete="password"
+                        variant="standard"
+                        sx={{ m: 1, width: "60ch" }}
+                      />
+                    </div> */}
+                      {/* <div className="input">
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faEquals} />
+                      </div>
+                      <TextField
+                        name="netamount1"
+                        value={book.netamount1 || calculateTotalAmount2() || ''}
+                        onChange={handleChange}
+                        size="small"
+                        label="Net Amount"
+                        id="net-amount"
+                        autoComplete="password"
+                        variant="standard"
+                      />
+                    </div> */}
                     </div>
                     <div className="input-field">
-
-
+                      {/* <div className="input" style={{ width: "186px" }}>
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faTags} />
+                      </div>
+                      <TextField
+                        name="discount"
+                        value={formData.discount || selectedCustomerData.discount || book.discount || ''}
+                        onChange={handleChange}
+                        label="Discount"
+                        id="discount"
+                        size="small"
+                        autoComplete="password"
+                        variant="standard"
+                      />
+                    </div> */}
+                      {/* <div className="input" style={{ width: "187px" }}>
+                      <div className="icone">
+                        <TollTwoToneIcon color="action" />
+                      </div>
+                      <TextField size="small" variant="standard" />
+                    </div> */}
+                      {/* <div className="input">
+                      <div className="icone">
+                        <FontAwesomeIcon icon={faEquals} />
+                      </div>
+                      <TextField
+                        name="ons"
+                        value={formData.ons || selectedCustomerData.ons || book.ons || ''}
+                        onChange={handleChange}
+                        size="small"
+                        label="On"
+                        autoComplete="password"
+                        id="on"
+                        variant="standard"
+                      />
+                    </div> */}
                     </div>
                     <div className="input-field">
-
-
+                      {/* <div className="input radio">
+                      <FormControlLabel
+                        name="manualbills"
+                        value="manualbills"
+                        control={<Checkbox size="small" />}
+                        label="Manual Bills"
+                        autoComplete="new-password"
+                        onChange={handleChange}
+                        checked={Boolean(formData.manualbills || selectedCustomerData?.manualbills || book.manualbills)}
+                      />
+                    </div> */}
+                      {/* <div className="input">
+                      <div className="icone">
+                        <AccountBalanceWalletIcon color="action" />
+                      </div>
+                      <TextField
+                        name="balance"
+                        value={formData.balance || selectedCustomerData.balance || book.balance || ''}
+                        onChange={handleChange}
+                        size="small"
+                        autoComplete="password"
+                        label="Balance"
+                        id="balance"
+                      />
+                    </div> */}
                     </div>
-
+                    {/* <div className="input-field">
+                    <div className="input">
+                      <TextField size="small" variant="standard" autoComplete="password" />
+                    </div>
+                    <div className="input">
+                      <div
+                        className="icone"
+                        style={{
+                          padding: "0px 10px 0px 0px",
+                          "font-size": "20px",
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                      </div>
+                      <TextField size="small" variant="standard" autoComplete="password" />
+                    </div>
+                  </div> */}
                   </div>
                 </TabPanel>
                 <TabPanel value={4} sx={{ p: 2 }}>
@@ -2902,12 +3057,8 @@ const TripSheet = ({ stationName }) => {
                       <div className="input" style={{ width: "390px" }}>
                         <TextField
                           name="maintenancetype"
-                          value={nocchangeData.maintenancetype || selectedCustomerData.maintenancetype || book.maintenancetype || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.maintenancetype) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.maintenancetype || selectedCustomerData.maintenancetype || book.maintenancetype || ''}
+                          onChange={handleChange}
                           label="Maintenance Type"
                           id="maintenance-type"
                           autoComplete="password"
@@ -2918,12 +3069,8 @@ const TripSheet = ({ stationName }) => {
                       <div className="input">
                         <TextField
                           name="kilometer"
-                          value={nocchangeData.kilometer || selectedCustomerData.kilometer || book.kilometer || ''}
-                          onChange={(e) => {
-                            if (!nocchangeData.kilometer) {
-                              handleChange(e);
-                            }
-                          }}
+                          value={formData.kilometer || selectedCustomerData.kilometer || book.kilometer || ''}
+                          onChange={handleChange}
                           size="small"
                           autoComplete="password"
                           label="Kilometer"
@@ -2975,13 +3122,13 @@ const TripSheet = ({ stationName }) => {
                           freeSolo
                           sx={{ width: "20ch" }}
                           onChange={(event, value) => handleAutocompleteChange(event, value, "selects")}
-                          value={Select.find((option) => option.optionvalue)?.label || nocchangeData.selects || selectedCustomerData.selects || book.selects || ''}
+                          value={Select.find((option) => option.optionvalue)?.label || formData.selects || selectedCustomerData.selects || book.selects || ''}
                           options={Select.map((option) => ({
                             label: option.option,
                           }))}
-                          getOptionLabel={(option) => option.label || nocchangeData.selects || selectedCustomerData.selects || book.selects || ''}
+                          getOptionLabel={(option) => option.label || formData.selects || selectedCustomerData.selects || book.selects || ''}
                           renderInput={(params) => {
-                            params.inputProps.value = nocchangeData.selects || selectedCustomerData.selects || book.selects || ''
+                            params.inputProps.value = formData.selects || selectedCustomerData.selects || book.selects || ''
                             return (
                               <TextField {...params} label="Select" autoComplete="password" name="selects" inputRef={params.inputRef} />
                             )
@@ -3045,11 +3192,11 @@ const TripSheet = ({ stationName }) => {
                           freeSolo
                           sx={{ width: "20ch" }}
                           onChange={(event, value) => handleAutocompleteChange(event, value, "documenttype")}
-                          value={DocumentType.find((option) => option.optionvalue)?.label || nocchangeData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                          value={DocumentType.find((option) => option.optionvalue)?.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                           options={DocumentType.map((option) => ({
                             label: option.option,
                           }))}
-                          getOptionLabel={(option) => option.label || nocchangeData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
+                          getOptionLabel={(option) => option.label || formData.documenttype || selectedCustomerData.documenttype || book.documenttype || ''}
                           renderInput={(params) => {
                             return (
                               <TextField {...params} label="Document Type" autoComplete="password" name="documenttype" inputRef={params.inputRef} />
@@ -3107,12 +3254,8 @@ const TripSheet = ({ stationName }) => {
                           control={<Checkbox size="small" />}
                           label="Reload"
                           autoComplete="new-password"
-                          onChange={(e) => {
-                            if (!nocchangeData.reload) {
-                              handleChange(e);
-                            }
-                          }}
-                          checked={Boolean(nocchangeData.reload || selectedCustomerData?.reload || book.reload)}
+                          onChange={handleChange}
+                          checked={Boolean(formData.reload || selectedCustomerData?.reload || book.reload)}
                         />
                       </div>
                     </div>
@@ -3169,7 +3312,9 @@ const TripSheet = ({ stationName }) => {
                 </TabPanel>
               </Tabs>
             </div>
+
           </div>
+
           <div className='alert-popup-main'>
             {error &&
               <div className='alert-popup Error' >
@@ -3200,6 +3345,7 @@ const TripSheet = ({ stationName }) => {
               </div>
             }
           </div>
+
         </form>
       </div>
     </div>

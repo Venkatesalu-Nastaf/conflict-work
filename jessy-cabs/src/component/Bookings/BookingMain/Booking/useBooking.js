@@ -147,11 +147,6 @@ const useBooking = () => {
       mobileNo: originalRow.driverno,
       active: originalRow.active,
       Groups: originalRow.Groups
-
-
-
-
-
     };
   };
 

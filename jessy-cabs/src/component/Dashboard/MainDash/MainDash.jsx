@@ -31,11 +31,13 @@ const MainDash = () => {
         </div>
       ) : (
         <>
-          <div className="MainDash">
-            <Cards />
-            <Table />
+          <div className="main-dash-first-section">
+            <div className="MainDash">
+              <Cards />
+              <Table />
+            </div>
           </div>
-          <div>
+          <div style={{height: '93vh', overflow: 'auto'}}>
             <RightSide />
           </div>
         </>

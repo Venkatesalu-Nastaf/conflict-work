@@ -40,7 +40,15 @@ const uploadfile = multer({ storage: storage });
 
 // Endpoint to handle file upload
 router.post('/drivercreation', uploadfile.single('Profile_image'), (req, res) => {
-  const profile_image = req.file.filename;
+  // const profile_image = req.file.filename;
+  let profile_image=null
+  if(!req.file){
+    profile_image=null
+
+  }
+  else{
+    profile_image = req.file.filename;
+  }
   console.log(profile_image)
   const {
     drivername,
@@ -53,7 +61,6 @@ router.post('/drivercreation', uploadfile.single('Profile_image'), (req, res) =>
     address1,
     licenseno,
     licenseexpdate,
-    city,
     badgeno,
     badgeexpdate,
     aadharno,
@@ -69,15 +76,14 @@ router.post('/drivercreation', uploadfile.single('Profile_image'), (req, res) =>
     address1,
     licenseno,
     licenseexpdate,
-    city,
     badgeno,
     badgeexpdate,
     aadharno,
     Email)
  
 
-  const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, city, Email,Profile_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
-  db.query(sql, [drivername, username, stations, Mobileno,joiningdate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, city, Email,profile_image], (err, result) => {
+  const sql = "INSERT INTO drivercreation (drivername, username, stations, Mobileno,joiningdate, licenseno,badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,Profile_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  db.query(sql, [drivername, username, stations, Mobileno,joiningdate,licenseno, badgeno,aadharno,licenseexpdate,badgeexpdate,userpassword, active, address1, Email,profile_image], (err, result) => {
     if (err) {
       console.log(err)
             return res.status(500).json({ error: "Failed to insert data into MySQL" });

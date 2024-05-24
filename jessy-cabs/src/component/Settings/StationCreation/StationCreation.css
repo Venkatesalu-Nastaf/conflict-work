@@ -33,7 +33,7 @@
 .stationcreation-main .stationcreation-form-container {
   border: 2px solid #ccc;
   overflow: scroll;
-  height: 75vh;
+  height: 71vh;
   width: 81vw;
   display: flex;
   flex-direction: column;

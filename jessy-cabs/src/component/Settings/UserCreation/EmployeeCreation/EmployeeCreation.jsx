@@ -359,7 +359,7 @@ const EmployeeCreation = ({ stationName }) => {
           </Box>
           <div className="EmployeeCreation-table-container">
             <div className='search-profile'>
-              <div className="search-input-container" style={{ marginBottom: '20px', height: '300px', overflow: 'auto', padding: '15px' }}>
+              <div className="search-input-container Scroll-Style-hide" style={{ marginBottom: '20px', height: '300px', overflow: 'auto', padding: '15px' }}>
                 <TextField
                   id="search-input"
                   label="Search"

@@ -41,6 +41,12 @@
   background-color: #f0ece2;
 }
 
+@media screen and (max-width: 768px) {
+  .FuelInfo-main .FuelInfo-form-container {
+      width: 93vw;
+  }
+}
+
 .stationcreation-header {
   border-top: solid 1px #ccc;
   background: var(--glass);

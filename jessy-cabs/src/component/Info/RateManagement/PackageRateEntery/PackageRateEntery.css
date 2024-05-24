@@ -60,6 +60,12 @@
     background-color: var(--glass);
 }
 
+@media screen and (max-width: 768px) {
+    .form-container-PackageRateEntery .container-main {
+        width: 93vw;
+    }
+}
+
 .PackageRateEntery-form .Title-Name {
     position: relative;
 }

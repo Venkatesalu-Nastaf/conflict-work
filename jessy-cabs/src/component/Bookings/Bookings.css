@@ -7,3 +7,9 @@
   margin-top: 70px;
   align-items: center;
 }
+
+@media screen and (max-width: 768px) {
+  .Bookings-main {
+    margin-top: 0px;
+  }
+}

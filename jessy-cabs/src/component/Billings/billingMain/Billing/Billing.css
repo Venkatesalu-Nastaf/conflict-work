@@ -90,6 +90,12 @@
   background-color: var(--glass);
 }
 
+@media screen and (max-width: 768px) {
+  .form-container .Billing-form {
+    width: 93vw;
+  }
+}
+
 .input-field .input-mobile {
   width: 100% !important;
   margin-top: 0px !important;

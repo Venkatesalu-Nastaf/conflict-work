@@ -25,6 +25,7 @@ import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import xlsx from "../../../../assets/files/SampleXLSXFile.xlsx";
 import { APIURL } from "../../../url";
 import axios from 'axios'
+import * as XLSX from 'xlsx';
 
 
 
@@ -63,7 +64,11 @@ const actions = [
 const MailDetails = () => {
   const apiurl=APIURL
   const[templatedata,setTemplateData] =useState([])
+  const [selecteddata,setSelectedData]=useState([])
+   const [file, setFile] = useState(null);
   const [triggerdata,setTriggerData]=useState(false)
+    const [data, setData] = useState({});
+  const navigate = useNavigate();
   const columns = [
     { field: "idno", headerName: "Sno", width: 70 },
     { field: "Templateid", headerName: "Templateid", width: 130 },
@@ -135,10 +140,43 @@ const MailDetails = () => {
   },[apiurl,triggerdata])
 
   function convertToPlain(html) {
+  
+    if(html){
     var tempDivElement = document.createElement("div");
     tempDivElement.innerHTML = html;
     return tempDivElement.textContent || tempDivElement.innerText || "";
+    }
+    return ""
   }
+
+
+  const handleFileUpload = (event) => {
+    const selectedFile = event.target.files[0].name;
+    const file = event.target.files[0];
+    setFile(selectedFile)
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const binaryStr = e.target.result;
+      const workbook = XLSX.read(binaryStr, { type: 'binary' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet,{header:1});
+      let indexToRemove = 0;
+        jsonData.splice(indexToRemove, 1);
+          let objects = jsonData.map(sublist => {
+            return {
+              Email: sublist[0],
+              CustomerName: sublist[1]
+            };
+          });
+      setData(objects);
+      console.log(objects,"onbbbb")
+     
+    };
+
+    reader.readAsBinaryString(file);
+  };
 
   const handleButtondeleteClick = async(params) => {
     console.log(params, 'params');
@@ -154,35 +192,87 @@ const MailDetails = () => {
     }
   
   }
+  // const handletableClick=async(params)=>{
+  //   console.log(params,"data")
+  //   setSelectedData(params.row)
+
+  // }
 
 
   const handleButtonEditClick = async(params) => {
-    console.log(params, 'params');
-    console.log(params.row)
-    const dispatchcheck="true"
+    // console.log(params, 'params');
+    // console.log(params.row,params.row.Templateid)
+    const Templatecheck="true"
 
-    const billingPageUrl = `/home/info/mailer/TemplateCreation??dispatchcheck=${dispatchcheck}`
+    const mailerPageUrl = `/home/info/mailer/TemplateCreation?Templatecheck=${Templatecheck}&Templateid=${params.row.Templateid}&TemplateName=${params.row.TemplateName}&TemplateSubject=${params.row.TemplateSubject}&TemplateMessageData=${params.row.TemplateMessageData}`
     
-  
+    window.location.href = mailerPageUrl
   }
 
   const handleIconClick = () => {
     document.getElementById('fileInput').click();
   };
 
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
 
-  const handleFileChange = (e) => {
+  // const handleFileChange = (e) => {
 
-    const selectedFile = e.target.files[0].name;
-    console.log(selectedFile);
-    setFile(selectedFile);
-  };
+  //   const selectedFile = e.target.files[0].name;
+  //   console.log(selectedFile);
+  //   setFile(selectedFile);
+  // };
 
-  const navigate = useNavigate();
+
+
 
   const handleTemplateCreation = () => {
     navigate("/home/info/mailer/TemplateSelection");
+  }
+
+  const handletableClick=async(params)=>{
+    console.log(params,"data")
+    setSelectedData(params.row)
+
+  }
+  console.log(selecteddata,"data")
+  const handlesendbulkemail=async()=>{
+    // const datatemplate=selecteddata
+    
+
+    if(selecteddata.length===0){
+      console.log("please select data")
+      return
+    }
+    if( file === null){
+      console.log("please select file")
+      return
+    }
+    try{
+      console.log(data,"fileeeee" )
+      const datatosend={
+        templatemessage:selecteddata,
+        emaildata:data
+      }
+      
+      console.log("finish",datatosend)
+      const response=await axios.post(`${apiurl}/send-emailtemplate`,datatosend)
+      console.log(response)
+      setData({})
+      setFile(null)
+      setSelectedData([])
+      
+    
+      // const mailMessageTextField = document.getElementById('MailMessage');
+     
+      //   mailMessageTextField.value = '';
+      
+      
+    
+
+    }
+    catch(err){
+      console.log(err)
+    }
   }
 
   return (
@@ -202,7 +292,8 @@ const MailDetails = () => {
                   <input
                     type="file"
                     id="fileInput"
-                    onChange={handleFileChange}
+                    onChange={handleFileUpload} 
+                    // onChange={handleFileChange}
                     style={{ display: 'none' }}
                   />
                 </div>
@@ -218,6 +309,7 @@ const MailDetails = () => {
                       name="MailMessage"
                       label="Mail Message"
                       id="MailMessage"
+                      value={convertToPlain(selecteddata.TemplateMessageData)||''}
                       className="mail-textarea1"
                       sx={{ m: 1, width: "200ch" }}
                     />
@@ -225,7 +317,7 @@ const MailDetails = () => {
                 </div>
                 <div className="input-field mail-textarea1-btn">
                   <div className="input" >
-                    <Button variant="contained" endIcon={<SendIcon />}>
+                    <Button variant="contained" onClick={handlesendbulkemail} endIcon={<SendIcon />}>
                       Send
                     </Button>
                   </div>
@@ -291,10 +383,7 @@ const MailDetails = () => {
             <DataGrid
               rows={templatedata}
               columns={columns}
-              // onRowSelectionModelChange={(newRowSelectionModel) => {
-              //   setRowSelectionModel(newRowSelectionModel);
-              //   handleRowSelection(newRowSelectionModel);
-              // }}
+              onRowClick={handletableClick}
            
               
             />

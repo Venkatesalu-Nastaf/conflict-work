@@ -19,6 +19,16 @@ const storage = multer.diskStorage({
     
   
   })
+  const uploadattachement = multer({ storage: storage });
+router.post('/templateattachmentimage',uploadattachement.single('attach'),(req,res)=>{
+    db.query('Insert into Templateattachment set ?',[],(err,result)=>{
+        if(err){
+            console.log(err)
+            return res.status(500).json({ error: "Failed to insert data into MySQL" });
+        }
+    })
+})
+  
 
 router.post('/templatedatainsert',(req,res)=>{
     const template=req.body;
@@ -54,7 +64,8 @@ router.get('/templatedataall', (req, res) => {
 
 router.put('/templatedataypdate/:templateid',(req,res)=>{
     const templateid=req.params.templateid;
-    const{template}=req.body;
+    const template=req.body;
+    console.log(template,templateid,"update")
     db.query('update TemplateMessage set  ? where templateid=?',[template,templateid],(err,result)=>{
         if(err){
             return res.status(500).json({ error: "Failed to insert data into MySQL" });
@@ -87,8 +98,7 @@ router.delete('/templatedataypdate/:templateid',(req,res)=>{
 
 router.post('/send-emailtemplate', async (req, res) => {
     try {
-        const {sub,email,paragrah} = req.body;
-        console.log(paragrah,"dd")
+        const {templatemessage,emaildata} = req.body;
     
 
         // Create a Nodemailer transporter
@@ -113,25 +123,47 @@ router.post('/send-emailtemplate', async (req, res) => {
         //     text: `Guest Name: ${guestname}\nEmail: ${email}\nGuest Mobile No: ${guestmobileno}\nStart Date: ${startdate}\nStart Time: ${starttime}\nUseage: ${useage}\nVehicle Type: ${vehType}`,
         // };
 
-        // Send email to the owner
-        // await transporter.sendMail(ownerMailOptions);
+        // // Send email to the owner
+        // // await transporter.sendMail(ownerMailOptions);
 
-        // Email content for the customer
+        // // Email content for the customer
+
+        const emailPromises = emaildata.map(async (data) => {
+            const personalizedMessage = templatemessage.TemplateMessageData.replace(
+                '</p>',
+                `${data.CustomerName}`
+            );
+            
+           
+            const customerMailOptions = {
+                from: 'foxfahad386@gmail.com',
+                to: data.Email, // Ensure the correct key is used here
+                subject: templatemessage.TemplateSubject,
+                html: personalizedMessage
+            };
+
+            // console.log(`Sending email to: ${data.EMAIL}`); // Log email addresses
+
+            return transporter.sendMail(customerMailOptions);
+        });
+
+        await Promise.all(emailPromises); // Await all email sending promises
 
    
-        const customerMailOptions = {
-            from: 'foxfahad386@gmail.com',
-            to: email,
-            subject: `${sub}`,
-            html: `${paragrah} `
-        }
+   
+        // const customerMailOptions = {
+        //     from: 'foxfahad386@gmail.com',
+        //     to: email,
+        //     subject: `${sub}`,
+        //     html: `${paragrah} `
+        // }
    
     
     
            
 
-        // Send greeting email to the customer
-        await transporter.sendMail(customerMailOptions);
+        // // Send greeting email to the customer
+        // await transporter.sendMail(customerMailOptions);
 
         res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {

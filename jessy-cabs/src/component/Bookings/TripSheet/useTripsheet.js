@@ -75,7 +75,6 @@ const useTripsheet = () => {
     let [driverbeta_Count, setdriverbeta_Count] = useState('')
     let [driverBeta_amount, setdriverBeta_amount] = useState(0)
     //--------------------------------------------------------------
-    console.log('data', formData)
 
     const [packageData, setPackageData] = useState({
         customer: '',
@@ -1011,9 +1010,9 @@ const useTripsheet = () => {
 
     const calculateTotalTime = () => {
         const shedoutTime = book?.starttime || formData?.starttime || '';
-        console.log("shedout888", shedoutTime)
+       
         const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
-        console.log("shedin888", shedinTime)
+      
         if (shedoutTime && shedinTime) {
             const startTimeObj = dayjs(shedoutTime, 'HH:mm');
             const closeTimeObj = dayjs(shedinTime, 'HH:mm');
@@ -1200,7 +1199,7 @@ const useTripsheet = () => {
         permit: '',
     });
 
-    // console.log("trip", tripSheetData)
+   
     const handleChange = useCallback((event) => {
         const { name, value, checked } = event.target;
 

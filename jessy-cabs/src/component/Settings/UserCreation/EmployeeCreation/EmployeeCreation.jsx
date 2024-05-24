@@ -96,18 +96,27 @@ const EmployeeCreation = ({ stationName }) => {
   }, [actionName, handleClick]);
 
 
+  const [stationNameforUSer, setSationNameforUser] = useState([])
+
+  useEffect(() => {
+    if (stationName.length > 1) {
+      setSationNameforUser([...stationName, { Stationname: "ALL" }]);
+    } else {
+      setSationNameforUser(stationName); // Set the original array when length is not greater than 1
+    }
+  }, [stationName]);
+
+
+
+
   //  for showing table
   const [showPermission, setShowPermission] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState('');
 
   const togglePermission = (row) => {
-    // if (book.username && (book?.stationname) && book.designation && book.organizationname) {
+
     setShowPermission(!showPermission);
     setSelectedUserId(row.userid)
-    // } else {
-    //   alert("Fill all feilds ")
-    // }
-
   };
   //table completed
 
@@ -134,8 +143,8 @@ const EmployeeCreation = ({ stationName }) => {
       <div className="EmployeeCreation-form-container">
         <form onSubmit={handleClick}>
           <div className="EmployeeCreation-header">
-            <div className="input-field employee-creation-inputfeilds" style={{padding: '10px'}}>
-              <div className="input" style={{paddingRight: '15px'}}>
+            <div className="input-field employee-creation-inputfeilds" style={{ padding: '10px' }}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -148,10 +157,10 @@ const EmployeeCreation = ({ stationName }) => {
                   value={book.userid}
                   // onChange={handleChange}
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faImagePortrait} size="lg" />
                 </div>
@@ -165,7 +174,7 @@ const EmployeeCreation = ({ stationName }) => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faBuildingFlag} size="lg" />
                 </div>
@@ -176,8 +185,8 @@ const EmployeeCreation = ({ stationName }) => {
                   freeSolo
                   sx={{ width: "100%" }}
                   onChange={(event, value) => handleAutocompleteChange(event, value, "stationname")}
-                  value={stationName.find((option) => option.Option)?.label || book?.stationname || ''}
-                  options={stationName.map((option) => ({
+                  value={stationNameforUSer.find((option) => option.Option)?.label || book?.stationname || ''}
+                  options={stationNameforUSer.map((option) => ({
                     label: option.Stationname,
                   }))}
                   getOptionLabel={(option) => option.label || book?.stationname || ''}
@@ -189,7 +198,7 @@ const EmployeeCreation = ({ stationName }) => {
                   }
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <ListAltIcon color="action" />
                 </div>
@@ -202,7 +211,7 @@ const EmployeeCreation = ({ stationName }) => {
                   id="designation"
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <BadgeIcon color="action" />
                 </div>
@@ -214,10 +223,10 @@ const EmployeeCreation = ({ stationName }) => {
                   label="Organization"
                   id="organizationname"
                   variant="standard"
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                 />
               </div>
-              <div className="input" style={{paddingRight: '15px'}}>
+              <div className="input" style={{ paddingRight: '15px' }}>
                 <div className="icone">
                   <FontAwesomeIcon icon={faUnlockKeyhole} size="lg" />
                 </div>

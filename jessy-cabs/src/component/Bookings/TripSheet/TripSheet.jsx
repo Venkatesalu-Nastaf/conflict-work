@@ -165,7 +165,6 @@ const maplogcolumns = [
 
 const TripSheet = ({ stationName }) => {
 
-  // console.log("333", stationName)
 
 
   const {

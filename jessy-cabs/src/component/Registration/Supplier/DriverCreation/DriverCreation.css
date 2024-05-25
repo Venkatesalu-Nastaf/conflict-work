@@ -16,6 +16,13 @@
   color: #000;
 }
 
+@media screen and (max-width: 768px) {
+  .DriverCreation-main .DriverCreation-form-container {
+    width: 93vw;
+  }
+}
+
+
 .DriverCreation-header {
   border-top: solid 1px #ccc;
   background: var(--glass);

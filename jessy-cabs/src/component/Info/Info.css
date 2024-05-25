@@ -7,3 +7,9 @@
   margin-top: 80px;
   align-items: center;
 }
+
+@media screen and (max-width: 768px) {
+  .Info-conatiner {
+    margin-top: 0px;
+  }
+}

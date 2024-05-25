@@ -101,6 +101,7 @@ import { PermissionContext } from '../../context/permissionContext';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ChecklistIcon from "@mui/icons-material/Checklist";
+import { MdOutlineAccessTimeFilled } from "react-icons/md";
 
 import {
   vehicaleinfos
@@ -165,7 +166,6 @@ const maplogcolumns = [
 
 const TripSheet = ({ stationName }) => {
 
-  // console.log("333", stationName)
 
 
   const {
@@ -275,7 +275,7 @@ const TripSheet = ({ stationName }) => {
 
 
   return (
-    <div className="form-container">
+    <div className="form-container form-container-tripsheet">
       <div className="Tripsheet-form">
         <form action="">
           <p className="Title-Name head-tab-tripsheet">Trip Sheet</p>
@@ -318,8 +318,10 @@ const TripSheet = ({ stationName }) => {
                 </div>
 
                 <div className="input" style={{ display: 'flex' }}>
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-
                     <DatePicker
                       value={formData.tripsheetdate || selectedCustomerData.tripsheetdate ? dayjs(selectedCustomerData.tripsheetdate) : null || book.tripsheetdate ? dayjs(book.tripsheetdate) : dayjs()}
                       format="DD/MM/YYYY"
@@ -1019,6 +1021,9 @@ const TripSheet = ({ stationName }) => {
                 </div>
 
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Start Date"
@@ -1033,6 +1038,9 @@ const TripSheet = ({ stationName }) => {
                   </LocalizationProvider>
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                  <div className="icone">
+                    <CalendarMonthIcon color="action" />
+                  </div>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Close Date"
@@ -1092,62 +1100,81 @@ const TripSheet = ({ stationName }) => {
                     autoComplete="password"
                   />
                 </div>
-
-                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
-                  <label>shed out Time</label>
-                  <input
-                    type="time"
-                    name='starttime'
-                    value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
-                    onChange={(event) => {
-                      setBook({ ...book, starttime: event.target.value });
-                      setStartTime(event.target.value);
-                      setFormData({ ...formData, starttime: event.target.value });
-                      setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
-                    }}
-                  />
+                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
+                  <div className='icone'>
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div style={{ width: '100%', display: 'grid' }}>
+                    <label>shed out Time</label>
+                    <input
+                      type="time"
+                      name='starttime'
+                      value={formData.starttime || selectedCustomerData.starttime || book.starttime || ''}
+                      onChange={(event) => {
+                        setBook({ ...book, starttime: event.target.value });
+                        setStartTime(event.target.value);
+                        setFormData({ ...formData, starttime: event.target.value });
+                        setSelectedCustomerData({ ...selectedCustomerData, starttime: event.target.value });
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
-                  <label>Report Time</label>
-                  <input
-                    type="time"
-                    name="reporttime"
-                    value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
-                    onChange={(event) => {
-                      setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
-                      setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
-                      setBook({ ...book, reporttime: event.target.value });
-                      setreporttime(event.target.value);
-                    }}
-                  />
+                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
+                  <div className='icone'>
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div style={{ width: '100%', display: 'grid' }}>
+                    <label>Report Time</label>
+                    <input
+                      type="time"
+                      name="reporttime"
+                      value={formData.reporttime || selectedCustomerData.reporttime || book.reporttime || ''}
+                      onChange={(event) => {
+                        setSelectedCustomerData({ ...selectedCustomerData, reporttime: event.target.value });
+                        setSelectedCustomerDatas({ ...selectedCustomerDatas, reporttime: event.target.value });
+                        setBook({ ...book, reporttime: event.target.value });
+                        setreporttime(event.target.value);
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
-                  <label>Close Time</label>
-                  <input
-                    type="time"
-                    name="shedintime"
-                    value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
-                    onChange={(event) => {
-                      setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
-                      setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
-                      setBook({ ...book, shedintime: event.target.value });
-                      setshedintime(event.target.value);
-                    }}
-                  />
+                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
+                  <div className='icone'>
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div style={{ width: '100%', display: 'grid' }}>
+                    <label>Close Time</label>
+                    <input
+                      type="time"
+                      name="shedintime"
+                      value={formData.shedintime || selectedCustomerData.shedintime || book.shedintime || ''}
+                      onChange={(event) => {
+                        setSelectedCustomerData({ ...selectedCustomerData, shedintime: event.target.value });
+                        setSelectedCustomerDatas({ ...selectedCustomerDatas, shedintime: event.target.value });
+                        setBook({ ...book, shedintime: event.target.value });
+                        setshedintime(event.target.value);
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="input time" style={{ display: 'grid', alignItems: 'center' }}>
-                  <label>Shed-In Time</label>
-                  <input
-                    type="time"
-                    name="closetime"
-                    value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
-                    onChange={(event) => {
-                      setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
-                      setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
-                      setBook({ ...book, closetime: event.target.value });
-                      setCloseTime(event.target.value);
-                    }}
-                  />
+                <div className="input time" style={{ display: 'flex', alignItems: 'center' }}>
+                  <div className='icone'>
+                    <MdOutlineAccessTimeFilled />
+                  </div>
+                  <div style={{ width: '100%', display: 'grid' }}>
+                    <label>Shed-In Time</label>
+                    <input
+                      type="time"
+                      name="closetime"
+                      value={formData.closetime || selectedCustomerData.closetime || book.closetime || ''}
+                      onChange={(event) => {
+                        setSelectedCustomerData({ ...selectedCustomerData, closetime: event.target.value });
+                        setSelectedCustomerDatas({ ...selectedCustomerDatas, closetime: event.target.value });
+                        setBook({ ...book, closetime: event.target.value });
+                        setCloseTime(event.target.value);
+                      }}
+                    />
+                  </div>
                 </div>
 
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
@@ -1166,6 +1193,9 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faRoad} size="lg" />
+                  </div>
                   <TextField
                     name="startkm"
                     value={formData.startkm || selectedCustomerData.startkm || book.startkm || ''}
@@ -1178,6 +1208,9 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: "180px" }}>
+                  <div className="icone">
+                    <FontAwesomeIcon icon={faRoad} size="lg" />
+                  </div>
                   <TextField
                     name="closekm"
                     value={formData.closekm || selectedCustomerData.closekm || book.closekm || ''}

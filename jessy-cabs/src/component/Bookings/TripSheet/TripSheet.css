@@ -58,6 +58,12 @@
   outline: 1px solid slategrey;
 }
 
+@media screen and (max-width: 768px) {
+ .form-container-tripsheet {
+      width: 97% !important;
+  }
+}
+
 .form-container .Tripsheet-form {
   border: 2px solid #ccc;
   overflow: scroll;
@@ -68,6 +74,12 @@
   border-radius: 20px;
   color: #000;
   background-color: var(--glass);
+}
+
+@media screen and (max-width: 768px) {
+  .form-container .Tripsheet-form {
+    width: 93vw;
+  }
 }
 
 @media screen and (min-width: 1113px) and (max-width: 1267px) {
@@ -276,7 +288,7 @@
   .tripsheet-division1,
   .tripsheet-division2,
   .tripsheet-division3 {
-    width: 71vw;
+    width: 79vw;
     justify-content: center;
   }
 }

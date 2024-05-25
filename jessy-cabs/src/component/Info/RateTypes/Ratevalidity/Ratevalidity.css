@@ -59,6 +59,12 @@
     background-color: var(--glass);
 }
 
+@media screen and (max-width: 768px) {
+    .form-container-ratetype .container-main {
+        width: 93vw;
+    }
+}
+
 .RateValidity-form .Title-Name {
     position: relative;
 }

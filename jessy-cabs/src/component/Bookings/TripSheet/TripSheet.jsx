@@ -542,7 +542,7 @@ const TripSheet = ({ stationName }) => {
               <div className='tripsheet-division2'>
 
                 <div>
-                  <div className="" style={{ display: 'flex', alignItems: 'center' }}>
+                  {/* <div className="" style={{ display: 'flex', alignItems: 'center' }}>
                     <div className="icone">
                       <AddHomeWorkIcon color="action" />
                     </div>
@@ -558,9 +558,28 @@ const TripSheet = ({ stationName }) => {
                       variant="standard"
                       autoComplete="password"
                     />
+                  </div> */}
+
+                  <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
+                    <div className="icone">
+                      <AddHomeWorkIcon color="action" />
+                    </div>
+                    <TextField
+                      margin="normal"
+                      id="streetname"
+                      label="Address"
+                      name="address1"
+                      multiline
+                      rows={2}
+                      sx={{ width: "100%" }}
+                      autoComplete="new-password"
+                      style={{ width: '100%' }}
+                      value={formData.address1 || selectedCustomerData.address1 || book.address1 || ''}
+                      onChange={handleChange}
+                    />
                   </div>
 
-                  <div className="" style={{ display: 'flex', alignItems: 'center' }}>
+                  {/* <div className="" style={{ display: 'flex', alignItems: 'center' }}>
                     <div className="icone">
                       <HomeTwoToneIcon color="action" />
                     </div>
@@ -575,9 +594,9 @@ const TripSheet = ({ stationName }) => {
                       variant="standard"
                       autoComplete="password"
                     />
-                  </div>
+                  </div> */}
 
-                  <div className="" style={{ display: 'flex', alignItems: 'center' }}>
+                  {/* <div className="" style={{ display: 'flex', alignItems: 'center' }}>
                     <div className="icone">
                       <LocationCityIcon color="action" />
                     </div>
@@ -592,7 +611,7 @@ const TripSheet = ({ stationName }) => {
                       variant="standard"
                       autoComplete="password"
                     />
-                  </div>
+                  </div> */}
                 </div>
 
                 <div>
@@ -639,9 +658,9 @@ const TripSheet = ({ stationName }) => {
                           <th className="table-head-booking">Vehicle Reg No</th>
                           <th className="table-head-booking">HireTypes</th>
                           <th className="table-head-booking">Grouphs</th>
-                          {/* <th className="table-head-booking">Supplier</th> */}
+
                           <th className="table-head-booking">Active</th>
-                          {/* <th className="table-head-booking" style={{ borderTopRightRadius: '10px' }}>Online_Access</th> */}
+
                         </tr>
                       </thead>
                       <tbody>
@@ -849,6 +868,8 @@ const TripSheet = ({ stationName }) => {
                         style={{ width: '100%' }}
                       />
                     </div>
+
+
 
                     <div className="input" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                       <div className="icone">

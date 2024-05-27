@@ -75,7 +75,7 @@ router.post('/driver-pdf/:id', uploadfile.single("file"), async (req, res) => {
   const userId = req.params.id;
   const fileName = req.file.filename;
   const fileType = req.file.mimetype;
-  // console.log(fileName,"driver pdf",fileType,userId)
+  console.log(fileName,"driver pdf",fileType,userId)
   if (fileName) {
 
     const sql = `insert into driver_proof(driverid,fileName,file_type	)values('${userId}','${fileName}','${fileType}')`;

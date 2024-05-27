@@ -74,7 +74,7 @@ const useTransferdataentry = () => {
     const [latestTripNo, setLatestTripNo] = useState([])
     const [latestGroupNo, setLatestGroupNo] = useState(0)
     const [lengthCheck, setLengthCheck] = useState()
-    const [formData, setFormData] = useState({})
+    // const [formData, setFormData] = useState({})
     const { billingPage, setBillingPage } = PdfData()
 
 
@@ -321,7 +321,7 @@ const useTransferdataentry = () => {
                 updatedFormData[key] = value; // Set the key-value pair in the new object
             }
         });
-        setFormData(updatedFormData); // Update formData state with the new object
+        // setFormData(updatedFormData); // Update formData state with the new object
         // Other state updates remain the same
         const transferlist = updatedFormData.Trip_id?.split(',');
         setTransferId(transferlist);
@@ -336,7 +336,7 @@ const useTransferdataentry = () => {
 
 
         return () => {
-            setFormData({}); // Reset formData state to an empty object
+            // setFormData({}); // Reset formData state to an empty object
         };
     }, [location, setBillingPage]);
 
@@ -353,7 +353,7 @@ const useTransferdataentry = () => {
             setGroupId('');
             setBook('')
             setSelectedCustomerDatas('');
-            setFormData({});
+            // setFormData({});
             setRows([])
             setRowSelectionModel([])
         }
@@ -555,7 +555,7 @@ const useTransferdataentry = () => {
                 setErrorMessage('Invalid tripids. Please check the selected rows and try again.');
                 return;
             }
-            handleAdd();
+            handleAdd(); 
             handleButtonClickTripsheet();
             const response = await axios.post(`${apiUrl}/updateStatus`, {
                 tripids: tripids.filter((tripid) => tripid !== null && tripid !== undefined),

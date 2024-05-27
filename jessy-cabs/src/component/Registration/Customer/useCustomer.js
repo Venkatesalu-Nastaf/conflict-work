@@ -2,12 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import jsPDF from 'jspdf';
 import axios from "axios";
 import Excel from 'exceljs';
-
 import dayjs from 'dayjs';
-
 import { saveAs } from 'file-saver';
 import { APIURL } from "../../url";
-import { useData } from '../../Dashboard/Maindashboard/DataContext';
 import 'jspdf-autotable'
 
 
@@ -30,7 +27,6 @@ const columns = [
 
 const useCustomer = () => {
     const apiUrl = APIURL;
-    // const user_id = localStorage.getItem('useridno');
     const [selectedCustomerData, setSelectedCustomerData] = useState({});
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const [rows, setRows] = useState([]);
@@ -42,45 +38,15 @@ const useCustomer = () => {
     const [successMessage, setSuccessMessage] = useState({});
     const [errorMessage, setErrorMessage] = useState({});
     const [warningMessage] = useState({});
-    // const [infoMessage, setInfoMessage] = useState({});
     const [isInputVisible, setIsInputVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
 
     //---------------------------------------
 
-    const { setOrganizationName } = useData()
-    // Fetching the Customers Table for getting the customer details
-    useEffect(() => {
-        const organizationNames = async () => {
-            try {
-                const response = await axios.get(`${apiUrl}/customers`);
-                const organisationData = response?.data;
-                const names = organisationData.map(res => res.customer);
-                setOrganizationName(names);
-            } catch (error) {
-                console.error('Error fetching organization names:', error);
-            }
-        };
-        organizationNames();
-    }, [apiUrl, setOrganizationName])
-
 
     const handleButtonClick = () => {
         setIsInputVisible(!isInputVisible);
     };
-    // const convertToCSV = (data) => {
-    //     const header = columns.map((column) => column.headerName).join(",");
-    //     const rows = data.map((row) => columns.map((column) => row[column.field]).join(","));
-    //     return [header, ...rows].join("\n");
-    // };
-    // const handleExcelDownload = () => {
-    //     const csvData = convertToCSV(rows);
-    //     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-    //     saveAs(blob, "customer_details.csv");
-    // };
-
-
-
 
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
@@ -93,12 +59,8 @@ const useCustomer = () => {
             // creating one worksheet in workbook
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
-            //         console.log(headers,"hed")
             const columns = headers.map(key => ({ key, header: key }));
-            //         worksheet.columns = columnsexcel
-
             worksheet.columns = columns;
-
 
             // updated the font for first row.
             worksheet.getRow(1).font = { bold: true };
@@ -226,15 +188,13 @@ const useCustomer = () => {
                 font: 'helvetica', // Set font type for body
 
                 cellWidth: 'wrap',
-                // cellWidth: 'auto'
+
             },
 
             bodyStyles: {
-                // fontSize:4,
-                // fontSize: fontdata-1
+
                 fontSize: fontdata - 1,
                 valign: 'middle',
-                //  cellWidth: 'wrap',
                 cellWidth: 'auto'
                 // Adjust the font size for the body
 
@@ -259,37 +219,14 @@ const useCustomer = () => {
         setWarning(false);
     };
     useEffect(() => {
-        if (error) {
+        if (error || warning || info || success) {
             const timer = setTimeout(() => {
                 hidePopup();
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-    useEffect(() => {
-        if (warning) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [warning]);
-    useEffect(() => {
-        if (info) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [info]);
-    useEffect(() => {
-        if (success) {
-            const timer = setTimeout(() => {
-                hidePopup();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [success]);
+    }, [error, warning, info, success]);
+
 
     const [book, setBook] = useState({
         customerId: '',
@@ -394,7 +331,6 @@ const useCustomer = () => {
             division: '',
             hourRoundedOff: '',
             selectOption: '',
-            // inclAddress: '',
             active: '',
             entity: '',
             state: '',

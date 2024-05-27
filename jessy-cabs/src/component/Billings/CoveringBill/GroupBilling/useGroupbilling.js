@@ -48,10 +48,10 @@ const useGroupbilling = () => {
     const [refFromDate, setRefFromDate] = useState('')
     const [refToDate, setRefToDate] = useState('')
     const [gstno, setGstno] = useState('')
-    const [selectedRow,setSelectedRow] = useState([])
-    const {  setRefPdfPrint, setRefCustomer, setReferNo } = RefPdfData()
-    const [groupBillAmount,setGroupBillAmount] = useState(0)
-    const [trips,setTrips] = useState(0)
+    const [selectedRow, setSelectedRow] = useState([])
+    const { setRefPdfPrint, setRefCustomer, setReferNo } = RefPdfData()
+    const [groupBillAmount, setGroupBillAmount] = useState(0)
+    const [trips, setTrips] = useState(0)
     // popup------------------------------
     const hidePopup = () => {
         setError(false);
@@ -112,6 +112,8 @@ const useGroupbilling = () => {
 
             try {
                 const id = groupBillId
+                if (!id || id?.length === 0) return
+
                 const response = await fetch(`${apiUrl}/ParticularLists/${id}`)
                 const tripData = await response.json();
                 // setRows(tripData)
@@ -233,7 +235,7 @@ const useGroupbilling = () => {
                 // const tripcount = parseInt(Trips)
                 // setTrips(tripcount)
                 const Tripsid = GroupReference.map((li) => li.Trip_id)
-            
+
             }
             catch (err) {
 
@@ -249,8 +251,11 @@ const useGroupbilling = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const id = particularId
+            const id = particularId;
+
             try {
+                if (!id || id?.length === 0) return
+                console.log("id", id)
                 const Tripresponse = await axios.get(`${apiUrl}/ParticularLists/${id}`);
                 const TripDetails = await Tripresponse.data;
 
@@ -334,7 +339,7 @@ const useGroupbilling = () => {
     const handleExcelDownload = async () => {
         const workbook = new Excel.Workbook();
         const workSheetName = 'Worksheet-1';
-      
+
 
         try {
 
@@ -342,10 +347,10 @@ const useGroupbilling = () => {
             // creating one worksheet in workbook
             const worksheet = workbook.addWorksheet(workSheetName);
             const headers = Object.keys(rows[0]);
-    //         console.log(headers,"hed")
+            //         console.log(headers,"hed")
             const columns = headers.map(key => ({ key, header: key }));
-    //         worksheet.columns = columnsexcel
-          
+            //         worksheet.columns = columnsexcel
+
             worksheet.columns = columns;
 
 
@@ -515,23 +520,25 @@ const useGroupbilling = () => {
 
 
 
-    useEffect(()=>{
-        const fetchData = async()=>{
-            try{
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (!invoiceno) return
+                console.log("invoiceno", invoiceno)
                 const response = await axios.get(`${apiUrl}/GroupReference/${invoiceno}`);
                 const GroupReference = response.data;
-                const Amount = GroupReference.map((li)=>li.Amount)
+                const Amount = GroupReference.map((li) => li.Amount)
                 setGroupBillAmount(Amount)
                 const Trips = GroupReference.map((li) => li.Trips)
                 const tripcount = parseInt(Trips)
                 setTrips(tripcount)
             }
-            catch(err){
-                console.log(err,'error');
+            catch (err) {
+                console.log(err, 'error');
             }
         }
         fetchData()
-    },[rowSelectionModel,apiUrl,invoiceno])
+    }, [rowSelectionModel, apiUrl, invoiceno])
 
 
 
@@ -559,27 +566,27 @@ const useGroupbilling = () => {
 
         const TripCount = trips - rowSelectionModel.length
         const Tripcounts = TripCount.toString()
-        const groupUpdateList = { 
-            Trips:Tripcounts,
-            Amount:Amount,
-            Trip_id:tripIds
+        const groupUpdateList = {
+            Trips: Tripcounts,
+            Amount: Amount,
+            Trip_id: tripIds
         }
         try {
-              const response = await axios.post(`${apiUrl}/tripsheetstatusupdate`, {
+            const response = await axios.post(`${apiUrl}/tripsheetstatusupdate`, {
                 tripids: tripid,
                 status: 'Opened',
             });
-            console.log(response,'response');
-          const updatelist =   await axios.put(`${apiUrl}/statusupdate`,groupUpdateList);
-          console.log(updatelist,'uplist');
-              const Details = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`)
-             const result = Details.data;
-             const tripno = result?.map((li)=>li.Trip_id)
-             const groupid = result?.map((li)=>li.id)
-            if(tripno[0] === ""){
+            console.log(response, 'response');
+            const updatelist = await axios.put(`${apiUrl}/statusupdate`, groupUpdateList);
+            console.log(updatelist, 'uplist');
+            const Details = await axios.get(`${apiUrl}/getGroupList/${invoiceno}`)
+            const result = Details.data;
+            const tripno = result?.map((li) => li.Trip_id)
+            const groupid = result?.map((li) => li.id)
+            if (tripno[0] === "") {
                 const getresponse = await axios.delete(`${apiUrl}/deleteGroup/${groupid}`)
-                console.log(getresponse,'Deleted Successfully');
-             }
+                console.log(getresponse, 'Deleted Successfully');
+            }
         } catch (error) {
             console.error('Error updating status:', error);
         }

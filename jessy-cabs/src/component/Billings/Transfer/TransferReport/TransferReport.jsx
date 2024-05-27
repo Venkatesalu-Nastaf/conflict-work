@@ -17,7 +17,6 @@ import Mailpdf from './Mailpdf/Mailpdf';
 import PdfPage from './PdfPage';
 import { saveAs } from 'file-saver';
 import { pdf } from '@react-pdf/renderer';
-// import PdfContent2 from './PdfContent2.';
 import PdfContent2 from './PdfContent2';
 import { useData } from "../../../Dashboard/MainDash/Sildebar/DataContext2"
 import PdfParticularData from './PdfParticularData';
@@ -44,9 +43,6 @@ import useTransferreport from './useTransferreport';
 import useExeclpage from './ExcelPage';
 import { PdfData } from './PdfContext';
 import { PiMoneyBold } from "react-icons/pi";
-// import { IoCalendarSharp } from "react-icons/io5";
-// import { FaFileInvoice } from "react-icons/fa";
-// import { FaCalendarPlus , FaCalendarMinus } from "react-icons/fa";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 export const PDFbill = [
@@ -137,6 +133,7 @@ const TransferReport = ({ stationName }) => {
   const [imageorganisation, setSelectedImageorganisation] = useState(null);
   const [tripno, setTripno] = useState('')
   const { pdfPrint, setPdfPrint } = PdfData()
+
   useEffect(() => {
     setSelectedImageorganisation(sharedData)
   }, [sharedData])
@@ -145,11 +142,16 @@ const TransferReport = ({ stationName }) => {
       handleClick(null, 'List');
     }
   }, [actionName, handleClick]);
+
+
   useEffect(() => {
     const fetchdata = async () => {
       try {
+
+        if (!customer) return
+
         const response = await fetch(`${apiUrl}/customeraddress/${customer}`);
-        console.log(response, 'response');
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -163,6 +165,7 @@ const TransferReport = ({ stationName }) => {
 
     fetchdata();
   }, [apiUrl, customer]);
+
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -191,6 +194,9 @@ const TransferReport = ({ stationName }) => {
         localStorage.setItem("selectedcustomer", encoded);
         const storedCustomer = localStorage.getItem("selectedcustomer");
         const customer = decodeURIComponent(storedCustomer);
+
+        if (!customer || !tripid) return
+
         const response = await fetch(
           `${apiUrl}/tripsheetcustomertripid/${encodeURIComponent(customer)}/${tripid}`);
         if (!response.ok) {

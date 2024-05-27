@@ -1169,6 +1169,8 @@ const Booking = ({ stationName }) => {
 
         <div className="vehicle-confirm" style={{ marginTop: '25px' }}>
           <div className="input-field input-feild-vehicle-confirm" style={{ flexWrap: 'wrap' }}>
+     
+     
             <div className="input">
               <div className="icone">
                 <AirportShuttleIcon color="action" />
@@ -1211,6 +1213,7 @@ const Booking = ({ stationName }) => {
                 }}
               />
             </div>
+
             <div className="input">
               <div className="icone">
                 <AltRouteIcon color="action" />
@@ -1230,6 +1233,7 @@ const Booking = ({ stationName }) => {
                 variant="standard"
               />
             </div>
+
             <div className="input">
               <div className="icone">
                 <CarCrashIcon color="action" />
@@ -1250,6 +1254,7 @@ const Booking = ({ stationName }) => {
                 variant="standard"
               />
             </div>
+
             <div className="input">
               <div className="icone">
                 <PiCarSimpleFill color="action" />
@@ -1278,6 +1283,7 @@ const Booking = ({ stationName }) => {
                 }}
               />
             </div>
+
             <div className="input" style={{ display: 'flex', alignItems: 'center', paddingRight: '15px' }}>
               <div className="icone">
                 <TaxiAlertTwoToneIcon color="action" />
@@ -1319,6 +1325,7 @@ const Booking = ({ stationName }) => {
                 }}
               />
             </div>
+
             <div className="input">
               <div className="icone">
                 <EmailIcon color="action" />
@@ -1347,6 +1354,7 @@ const Booking = ({ stationName }) => {
                 }}
               />
             </div>
+
             <div className="input">
               <div className="icone">
                 <NoCrashIcon color="action" />
@@ -1367,6 +1375,7 @@ const Booking = ({ stationName }) => {
                 variant="standard"
               />
             </div>
+
             <div className="input">
               <div className="icone">
                 <AddIcCallTwoToneIcon color="action" />
@@ -1386,6 +1395,7 @@ const Booking = ({ stationName }) => {
                 variant="standard"
               />
             </div>
+
             <div className="input">
               <div className="icone">
                 <AttachEmailIcon color="action" />
@@ -1405,6 +1415,7 @@ const Booking = ({ stationName }) => {
                 variant="standard"
               />
             </div>
+
             <div className="input" style={{ width: "100px" }}>
               <div className="input" style={{ width: "160px" }}>
                 {isEditMode ? (
@@ -1422,6 +1433,7 @@ const Booking = ({ stationName }) => {
                 )}
               </div>
             </div>
+
             <div>
               {
                 edit ?
@@ -1432,6 +1444,7 @@ const Booking = ({ stationName }) => {
                     Add New</Button> : <></>
               }
             </div>
+            
           </div>
         </div>
 

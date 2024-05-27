@@ -381,9 +381,6 @@ const useTripsheet = () => {
         guestmobileno: '',
         email: '',
         address1: '',
-        // streetno: '',
-        // city: '',
-        hireTypes: '',
         department: '',
         vehRegNo: '',
         vehType: '',
@@ -403,7 +400,6 @@ const useTripsheet = () => {
         closetime: '',
         shedintime: '',
         advancepaidtovendor: '',
-        // active: "No",
         customercode: '',
         shedkm: '',
         shedin: '',
@@ -479,6 +475,10 @@ const useTripsheet = () => {
         reload: '',
         locks: '',
         Groups: '',
+        travelsemail: '',
+        hireTypes: "",
+        vechtype: "",
+        travelsname: "",
     });
 
     const handleCancel = () => {
@@ -498,8 +498,7 @@ const useTripsheet = () => {
             additionaltime: '',
             email: '',
             address1: '',
-            // streetno: '',
-            // city: '',
+
             hireTypes: '',
             department: '',
             vehRegNo: '',
@@ -594,6 +593,9 @@ const useTripsheet = () => {
             reload: '',
             locks: '',
             Groups: '',
+            travelsemail: "",
+            travelsname: "",
+            vechtype: "",
 
         }));
         setSelectedCustomerDatas({});
@@ -663,6 +665,7 @@ const useTripsheet = () => {
 
 
     const handleEdit = async () => {
+
         try {
             try {
                 const selectedCustomer = rows.find((row) => row.tripid === selectedCustomerData.tripid || formData.tripid || book.tripid);
@@ -816,7 +819,9 @@ const useTripsheet = () => {
     };
 
 
+
     const handleAdd = async () => {
+
 
         const customer = book.customer || formData.customer;
         const vehRegNo = formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || '';
@@ -864,7 +869,7 @@ const useTripsheet = () => {
                 pack: packageDetails[0]?.package,
                 minhrs: packageDetails[0]?.Hours,
                 minkm: packageDetails[0]?.KMS,
-                Groups: book.Groups,
+                // Groups: book.Groups,
                 additionaltime: book.additionaltime || additionalTime.additionaltime,
                 billingno: book.billingno,
                 closedate: book.closedate,
@@ -872,9 +877,11 @@ const useTripsheet = () => {
                 closetime: book.closetime,
                 customeradvance: book.customeradvance,
                 email1: book.email1,
-
+                // hireTypes: selectedCustomerDatas.hireTypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes,
+                vechtype: selectedCustomerDatas.vechtype,
                 parking: book.parking,
                 permit: book.permit,
+                travelsname: selectedCustomerDatas.travelsname || formData.travelsname || selectedCustomerData.travelsname || book.travelsname,
                 remark: book.remark,
                 reporttime: formData.reporttime,
                 shedin: book.shedin,
@@ -887,8 +894,11 @@ const useTripsheet = () => {
                 toll: book.toll,
                 vendortoll: book.vendortoll,
                 vpermettovendor: book.vpermettovendor,
-
-
+                driverName: selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName,
+                vehRegNo: formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo,
+                Groups: selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups,
+                hireTypes: selectedCustomerDatas.hiretypes,
+                mobileNo: selectedCustomerDatas.mobileNo,
                 calcPackage, extraHR, extraKM, package_amount, extrakm_amount, extrahr_amount, ex_kmAmount, ex_hrAmount, nightBta, nightCount, night_totalAmount, driverBeta, driverbeta_Count, driverBeta_amount, totalcalcAmount,
                 request, escort, minHour, minKM, transferreport,
             };
@@ -1010,9 +1020,9 @@ const useTripsheet = () => {
 
     const calculateTotalTime = () => {
         const shedoutTime = book?.starttime || formData?.starttime || '';
-       
+
         const shedinTime = formData.closetime || selectedCustomerData.closetime || book.closetime || '';
-      
+
         if (shedoutTime && shedinTime) {
             const startTimeObj = dayjs(shedoutTime, 'HH:mm');
             const closeTimeObj = dayjs(shedinTime, 'HH:mm');
@@ -1199,7 +1209,7 @@ const useTripsheet = () => {
         permit: '',
     });
 
-   
+
     const handleChange = useCallback((event) => {
         const { name, value, checked } = event.target;
 
@@ -1315,6 +1325,7 @@ const useTripsheet = () => {
 
                     const response = await axios.get(`${apiUrl}/tripsheet-enter/${tripid}`, { params: { loginUserName } });
                     const bookingDetails = response.data;
+
                     if (response.status === 200 && bookingDetails) {
 
                         if (bookingDetails.status === "Cancelled") {
@@ -1915,8 +1926,6 @@ const useTripsheet = () => {
         }
 
     }
-
-    console.log("form--data", formData)
 
 
     return {

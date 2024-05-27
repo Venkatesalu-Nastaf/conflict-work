@@ -15,6 +15,8 @@ import { BsExclamationCircle } from "react-icons/bs";
 import { APIURL } from '../../../url';
 import { useLocation} from "react-router-dom";
 
+
+
 const TemplateCreation = () => {
   const apiurl = APIURL;
   const [templatedata, setTemplateData] = useState({
@@ -31,7 +33,9 @@ const TemplateCreation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const[imagedata,setImageData]=useState([])
+  const [imagedataedit,setImagedataedit]=useState([])
   const fileInputRef = useRef(null);
+  const [filedata,setFiledata]=useState(null)
 
 
   useEffect(() => {
@@ -50,10 +54,52 @@ const TemplateCreation = () => {
       setEditmode(true);
     } else {
       setEditmode(false);
-    }
+    } 
+    
 
+   
     setTemplateData(TemplateFormData);
-  }, [location]);
+    const attacheimagedataedit = async (templateid) => {
+      try {
+        if(templateid){
+        const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`);
+        const dataimage = response.data;
+        setImagedataedit(dataimage);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    // attacheimagedataedit(TemplateFormData["Templateid"]);
+    attacheimagedataedit(TemplateFormData["Templateid"])
+
+
+  }, [location,apiurl,setImageData]);
+
+  // const attacheimagedataedit = useCallback(async (templateid) => {
+  //   try {
+  //     const response = await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`);
+  //     const dataimage = response.data;
+  //     setImagedataedit(dataimage);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [apiurl, setImagedataedit]);
+
+//  async function attacheimagedataedit(templateid){
+//       try{
+//       const response=await axios.get(`${apiurl}/gettemplateattachimage/${templateid}`)
+//       const dataimage=response.data
+//       setImagedataedit(dataimage)
+
+//     }
+//     catch(err){
+//      console.log(err)
+//     }
+//   }
+
+  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -69,7 +115,16 @@ const TemplateCreation = () => {
       TemplateMessageData: content,
     }));
   };
+  const handleFileInputChange = (event) => {
+    const files = event.target.files;
+    setImageData((prevImages) => [...prevImages, ...files]);
+    if(editmode){
+      
+      setFiledata(files)
+      setImagedataedit((prevImages) => [...prevImages, ...files]);
+    }
 
+  };
  
 
   const hidePopup = () => {
@@ -103,8 +158,13 @@ const TemplateCreation = () => {
       return;
     }
     try {
-      const data = { ...templatedata };
+      const data = { ...templatedata }
+
       await axios.post(`${apiurl}/templatedatainsert`, data);
+      const response = await axios.get(`${apiurl}/lasttemplateid`);
+
+      const lasttempalateidno = response.data.Templateid;
+      Attacheimagedata(lasttempalateidno)
       setTemplateData({})
       setSuccess(true);
       setSuccessMessage("Successfully Added");
@@ -114,11 +174,54 @@ const TemplateCreation = () => {
     }
   };
 
-  const handleEdit=async()=>{
+  const Attacheimagedata=async(lastno)=>{
+    const formDataToSend = new FormData();
+    imagedata.forEach((file, index) => {
+      formDataToSend.append('imagestemplate', file); // Assuming imagedata is an array of File objects
+    });
+    
     try{
-      const{Templateid,Templatecheck,...restdatatemplate}=templatedata
-      const response=await axios.put(`${apiurl}/templatedataypdate/${templatedata.Templateid}`,restdatatemplate)
+      const response= await axios.post(`${apiurl}/templateattachmentimage/${lastno}`,formDataToSend)
       console.log(response)
+      setImageData([])
+    }
+    catch(err){
+      console.log(err)
+
+    }
+  }
+  // const handleSubmit = async () => {
+  //   try {
+  //     const formDataToSend = new FormData();
+  //     images.forEach((image) => {
+  //       formDataToSend.append('images', image);
+  //     });
+  //     for (const key in formData) {
+  //       formDataToSend.append(key, formData[key]);
+  //     }
+  //     await axios.post(`/templateattachmentimage/${formData.templateId}`, formDataToSend);
+  //     // Clear form and images after successful upload
+      
+  //   } catch (error) {
+  //     console.error('Error uploading images:', error);
+  //   }
+  // };
+
+  const handleEdit=async()=>{
+    const formDataeditToSend = new FormData();
+    imagedataedit.forEach((file, index) => {
+      formDataeditToSend.append('imagestemplate', file); // Assuming imagedata is an array of File objects
+    });
+    try{
+    
+      const{Templateid,Templatecheck,...restdatatemplate}=templatedata
+      await axios.put(`${apiurl}/templatedataypdate/${templatedata.Templateid}`,restdatatemplate)
+    
+      if(filedata){
+       await axios.post(`${apiurl}/templateattachmentimage/${templatedata.Templateid}`,formDataeditToSend)
+       
+      }
+        // console.log(response2)
       navigate("/home/info/mailer");
 
     }
@@ -154,6 +257,22 @@ const TemplateCreation = () => {
     p: 4,
     borderRadius: '15px',
   };
+ 
+  
+   
+    const handleCancel = (indexToRemove) => {
+      setImageData(prevImageData => prevImageData.filter((_, index) => index !== indexToRemove));
+    };
+    const handleeditCancel = async(data,indexToRemove) => {
+      const temaplateimage=data.templateimage
+
+      if (window.confirm('Are you sure you want to remove this image?')) {
+        setImagedataedit(prevImageData => prevImageData.filter((_, index) => index !== indexToRemove));
+        await axios.delete(`${apiurl}/templatesingledataimage/${templatedata.Templateid}/${temaplateimage}`)
+        
+      }
+    };
+  
 
   return (
     <>
@@ -176,9 +295,10 @@ const TemplateCreation = () => {
             </p>
             <input
               type="file"
+              name="imagestemplate"
               ref={fileInputRef}
               style={{ display: 'none' }}
-              // onChange={handleFileInputChange}
+              onChange={handleFileInputChange}
             />
           </div>
           <div>
@@ -258,6 +378,33 @@ const TemplateCreation = () => {
           ],
         }}
       />
+      {editmode?
+      <>
+   {imagedataedit.length > 0 && (
+  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+    {imagedataedit.map((data, index) => (
+      <div key={index} style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
+        <p>{data.templateimage||data.name}</p>
+        <Button onClick={() => handleeditCancel(data,index)}>cancel</Button>  {/* Cancel icon with onClick handler */}
+      </div>
+      
+    ))}
+  </div>
+)}
+</>:
+<>
+{imagedata.length > 0 && (
+  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+    {imagedata.map((data, index) => (
+      <div key={index} style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
+        <p>{data.name}</p>
+        <Button onClick={() => handleCancel(index)}>cancel</Button>  {/* Cancel icon with onClick handler */}
+      </div>
+    ))}
+  </div>
+)}</>
+}
+      
       <div className='alert-popup-main'>
         {error && (
           <div className='alert-popup Error'>

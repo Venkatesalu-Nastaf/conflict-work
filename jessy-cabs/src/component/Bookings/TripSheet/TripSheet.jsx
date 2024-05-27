@@ -22,6 +22,7 @@ import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import Tab, { tabClasses } from "@mui/joy/Tab";
+import AltRouteIcon from "@mui/icons-material/AltRoute";
 
 import SpeedDial from "@mui/material/SpeedDial";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -460,24 +461,7 @@ const TripSheet = ({ stationName }) => {
                     }
                     label="Guest SMS"
                   />
-                  {/* <FormControlLabel
-                    name="booker"
-                    value="booker"
-                    control={<Checkbox size="small" />}
-                    label="Booker"
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    checked={Boolean(formData.booker || selectedCustomerData?.booker || book.booker)}
-                  /> */}
-                  {/* <FormControlLabel
-                    name="emailcheck"
-                    value="email"
-                    label="Email"
-                    autoComplete="new-password"
-                    onChange={handleChange}
-                    checked={Boolean(formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck)}
-                    control={<Checkbox size="small" checked={sendEmail || formData.emailcheck || selectedCustomerData?.emailcheck || book.emailcheck} onChange={(event) => setSendEmail(event.target.checked)} />}
-                  /> */}
+
                   <FormControlLabel
                     value="email"
                     control={
@@ -690,30 +674,203 @@ const TripSheet = ({ stationName }) => {
 
               <div className='tripsheet-division3'>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <HowToRegIcon color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo"
-                    freeSolo
-                    sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
 
-                    value={selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
-                    options={HireTypes.map((option) => ({
-                      label: option.option,
-                    }))}
-                    getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerDatas.hiretypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
-                      )
-                    }
-                    }
-                  />
+                <div className="vehicle-confirm" style={{ marginBottom: '15px' }}>
+                  <div className="input-field input-feild-vehicle-confirm" style={{ flexWrap: 'wrap' }}>
+
+
+                    <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                      <div className="icone">
+                        <HowToRegIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-demo"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "hireTypes")}
+
+                        value={selectedCustomerDatas.hiretypes || formData.hireTypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                        options={HireTypes.map((option) => ({
+                          label: option.option,
+                        }))}
+                        getOptionLabel={(option) => option.label || formData.hireTypes || selectedCustomerDatas.hiretypes || formValues.hireTypes || selectedCustomerData.hireTypes || book.hireTypes || ''}
+                        renderInput={(params) => {
+                          return (
+                            <TextField {...params} label="Hire Types" autoComplete="password" name="hireTypes" inputRef={params.inputRef} />
+                          )
+                        }
+                        }
+                      />
+                    </div>
+
+                    <div className="input" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                      <div className="icone">
+                        <AltRouteIcon color="action" />
+                      </div>
+                      <TextField
+                        name="travelsname"
+                        autoComplete="new-password"
+                        value={
+                          selectedCustomerDatas.travelsname ||
+                          formData.travelsname ||
+                          selectedCustomerData.travelsname ||
+                          book.travelsname ||
+                          ""
+                        }
+                        onChange={handleChange}
+                        label="Travels Name"
+                        id="travelsname"
+                        variant="standard"
+                      />
+                    </div>
+
+
+                    <div className="input" style={{ display: 'flex', alignItems: 'center', width: '240px' }}>
+                      <div className="icone">
+                        <CarCrashIcon color="action" />
+                      </div>
+                      <TextField
+                        margin="normal"
+                        size="small"
+                        id="vehiclerigsterno"
+                        label="Vehicle Rigster No"
+                        name="vehRegNo"
+                        value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
+                        onChange={handleChange}
+                        autoComplete="password"
+                      />
+                    </div>
+
+                    <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                      <div className="icone">
+                        <PiCarSimpleFill color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        id="free-solo-demo"
+                        freeSolo
+                        size="small"
+                        value={
+                          selectedCustomerDatas.vechtype || formData.vechtype ||
+                          selectedCustomerData.vechtype ||
+                          book.vechtype || ""
+                        }
+                        options={vehicaleinfos?.map((option) => ({
+                          label: option?.Option,
+                        }))}
+                        onChange={(event, value) =>
+                          handleAutocompleteChange(event, value, "vehiclemodule")
+                        }
+                        renderInput={(params) => {
+                          return (
+                            <TextField {...params} name='vechtype' label="Vehicle Type" inputRef={params.inputRef} />
+                          );
+                        }}
+                      />
+                    </div>
+
+                    <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                      <div className="icone">
+                        <NoCrashIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        id="free-solo-demo"
+                        freeSolo
+                        sx={{ width: "100%" }}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
+                        value={(selectedCustomerDatas.vehiclename || formData.vehType || selectedCustomerData.vehType || formValues.vehType || packageData.vehType || book.vehType) ? (formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType) : null}
+                        options={vehileName?.map((option) => ({
+                          label: option,
+                        }))}
+                        getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehiclename || packageData.vehType || book.vehType || ''}
+                        renderInput={(params) => (
+                          <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehType" inputRef={params.inputRef} />
+                        )}
+                      />
+
+
+                    </div>
+
+                    <div className="input" style={{ display: 'flex', alignItems: 'center', width: '150px' }}>
+                      <div className="icone">
+                        <EmailIcon color="action" />
+                      </div>
+                      <Autocomplete
+                        fullWidth
+                        id="free-solo-demo"
+                        freeSolo
+                        size="small"
+                        value={(selectedCustomerDatas.Groups || formData.Groups || selectedCustomerData.Groups || formValues.Groups || packageData.Groups || book.Groups) ? (formData.Groups || selectedCustomerData.Groups || formValues.Groups || selectedCustomerDatas.Groups || packageData.Groups || book.Groups) : null}
+                        options={GroupTypes?.map((option) => ({
+                          label: option?.Option,
+                        }))}
+                        onChange={(event, value) => handleAutocompleteChange(event, value, "Groups")}
+                        renderInput={(params) => {
+                          return (
+                            <TextField {...params} label="Groups" inputRef={params.inputRef} />
+                          );
+                        }}
+                      />
+                    </div>
+
+                    <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                      <div className="icone">
+                        <SensorOccupiedIcon color="action" />
+                      </div>
+                      <TextField
+                        name="driverName"
+                        value={selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName || ''}
+                        onChange={handleChange}
+                        label="Driver Name"
+                        id="drivername"
+                        variant="standard"
+                        autoComplete="password"
+                        onKeyDown={handleKeyEnterDriverDetails}
+                        style={{ width: '100%' }}
+                      />
+                    </div>
+
+                    <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
+                      <div className="icone">
+                        <PhoneIphoneIcon color="action" />
+                      </div>
+                      <TextField
+                        name="mobileNo"
+                        value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
+                        onChange={handleChange}
+                        label="Cell"
+                        id="cell"
+                        variant="standard"
+                        autoComplete="password"
+                        style={{ width: '100%' }}
+                      />
+                    </div>
+
+                    <div className="input" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                      <div className="icone">
+                        <AttachEmailIcon color="action" />
+                      </div>
+                      <TextField
+                        name="travelsemail"
+                        autoComplete="new-password"
+                        value={
+                          formData.travelsemail ||
+                          selectedCustomerData.travelsemail ||
+                          book.travelsemail ||
+                          ""
+                        }
+                        onChange={handleChange}
+                        label="Travels Email"
+                        id="travelsemail"
+                        variant="standard"
+                      />
+                    </div>
+
+                  </div>
                 </div>
 
                 <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
@@ -741,7 +898,7 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center', width: '240px' }}>
+                {/* <div className="input" style={{ display: 'flex', alignItems: 'center', width: '240px' }}>
                   <div className="icone">
                     <CarCrashIcon color="action" />
                   </div>
@@ -753,10 +910,9 @@ const TripSheet = ({ stationName }) => {
                     name="vehRegNo"
                     value={formData.vehRegNo || selectedCustomerData.vehRegNo || formValues.vehRegNo || selectedCustomerDatas.vehRegNo || book.vehRegNo || ''}
                     onChange={handleChange}
-                    // onKeyDown={handleKeyEnter}
                     autoComplete="password"
                   />
-                </div>
+                </div> */}
 
                 <div className="input" style={{ display: 'flex', alignItems: 'center', width: '150px' }}>
                   <div className="icone">
@@ -780,92 +936,12 @@ const TripSheet = ({ stationName }) => {
                   />
                 </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <NoCrashIcon color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    id="free-solo-demo"
-                    freeSolo
-                    sx={{ width: "100%" }}
-                    onChange={(event, value) => handleAutocompleteChange(event, value, "vehType")}
-                    value={(selectedCustomerDatas.vehiclename || formData.vehType || selectedCustomerData.vehType || formValues.vehType || packageData.vehType || book.vehType) ? (formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehType || packageData.vehType || book.vehType) : null}
-                    options={vehileName?.map((option) => ({
-                      label: option,
-                    }))}
-                    getOptionLabel={(option) => option.label || formData.vehType || selectedCustomerData.vehType || formValues.vehType || selectedCustomerDatas.vehiclename || packageData.vehType || book.vehType || ''}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Vehicle Name" autoComplete="password" name="vehType" inputRef={params.inputRef} />
-                    )}
-                  />
 
 
-                </div>
 
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <PiCarSimpleFill color="action" />
-                  </div>
-                  <Autocomplete
-                    fullWidth
-                    id="free-solo-demo"
-                    freeSolo
-                    size="small"
-                    value={
-                      formData.vehiclemodule ||
-                      selectedCustomerData.vehiclemodule ||
-                      book.vehiclemodule || selectedCustomerDatas.vechtype ||
-                      ""
-                    }
-                    options={vehicaleinfos?.map((option) => ({
-                      label: option?.Option,
-                    }))}
-                    onChange={(event, value) =>
-                      handleAutocompleteChange(event, value, "vehiclemodule")
-                    }
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Vehicle Type" inputRef={params.inputRef} />
-                      );
-                    }}
-                  />
-                </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <SensorOccupiedIcon color="action" />
-                  </div>
-                  <TextField
-                    name="driverName"
-                    value={selectedCustomerDatas?.driverName || formData.driverName || selectedCustomerData.driverName || formValues.driverName || book.driverName || ''}
-                    onChange={handleChange}
-                    label="Driver Name"
-                    id="drivername"
-                    variant="standard"
-                    autoComplete="password"
-                    onKeyDown={handleKeyEnterDriverDetails}
-                    style={{ width: '100%' }}
-                  />
-                </div>
 
-                <div className="input" style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className="icone">
-                    <PhoneIphoneIcon color="action" />
-                  </div>
-                  <TextField
-                    name="mobileNo"
-                    value={formData.mobileNo || selectedCustomerData.mobileNo || formValues.mobileNo || selectedCustomerDatas.mobileNo || book.mobileNo || ''}
-                    onChange={handleChange}
-                    label="Cell"
-                    id="cell"
-                    variant="standard"
-                    autoComplete="password"
-                    style={{ width: '100%' }}
-                  />
-                </div>
 
                 <div className="input radio">
 

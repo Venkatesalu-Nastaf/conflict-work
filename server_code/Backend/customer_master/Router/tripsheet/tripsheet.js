@@ -117,7 +117,7 @@ router.post('/tripsheet-add', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, Groups, transferreport } = req.body;
+        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype } = req.body;
 
 
 
@@ -231,7 +231,7 @@ router.post('/tripsheet-add', (req, res) => {
         reload,
         manualbillss,
         Groups,
-        transferreport
+        transferreport, travelsemail, travelsname, vechtype
     };
 
 
@@ -400,7 +400,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, Groups, transferreport } = req.body;
+        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype } = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -511,7 +511,7 @@ router.put('/tripsheet-edit/:tripid', (req, res) => {
         reload,
         manualbillss,
         Groups,
-        transferreport
+        transferreport, travelsemail, travelsname, vechtype,
     };
 
 
@@ -649,7 +649,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         emailcheck,
         booker,
         reload,
-        manualbillss, Groups, transferreport } = req.body;
+        manualbillss, Groups, transferreport, travelsemail, travelsname, vechtype } = req.body;
 
     const updatedCustomerData = {
         bookingno,
@@ -760,7 +760,7 @@ router.put('/tripsheet-confirm/:tripid', (req, res) => {
         reload,
         manualbillss,
         Groups,
-        transferreport
+        transferreport, travelsemail, travelsname, vechtype,
     };
     db.query('UPDATE tripsheet SET ? WHERE tripid = ?', [updatedCustomerData, tripid], (err, result) => {
         if (err) {
